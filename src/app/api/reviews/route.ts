@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { slugify } from '@/lib/utils'
 import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
@@ -227,6 +228,16 @@ export async function GET(request: Request) {
 // POST /api/reviews - Submit a review
 export async function POST(request: Request) {
   try {
+    // Rate limiting (public endpoint — 5 requests per minute per IP)
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`reviews:${ip}`, { window: 60_000, max: 5 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.RATE_LIMIT_EXCEEDED, 'Trop de requêtes, veuillez réessayer plus tard'),
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     const body = await request.json()
 
     // Validate request body
@@ -246,8 +257,14 @@ export async function POST(request: Request) {
     const { bookingId, rating, comment, reviewToken } = validation.data
     const wouldRecommend = body.wouldRecommend ?? true
 
-    // Validate HMAC review token (prevents fake reviews)
-    if (process.env.REVIEW_HMAC_SECRET && reviewToken) {
+    // Validate HMAC review token (prevents fake reviews) — MANDATORY
+    if (!process.env.REVIEW_HMAC_SECRET || !reviewToken) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.REVIEW_TOKEN_INVALID, 'Token de vérification requis'),
+        { status: 403 }
+      )
+    }
+    {
       const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
         .update(bookingId)
         .digest('hex')
@@ -258,7 +275,6 @@ export async function POST(request: Request) {
         return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), { status: 401 })
       }
     }
-    // If no REVIEW_HMAC_SECRET configured, allow without token (backward compat)
 
     // Validate bookingId is a valid UUID to prevent enumeration
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i

@@ -65,7 +65,9 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ devis: quotes || [] })
+    return NextResponse.json({ devis: quotes || [] }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
+    })
   } catch (error) {
     logger.error('Artisan devis GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
@@ -171,6 +173,8 @@ export async function POST(request: Request) {
       success: true,
       devis: quote,
       message: 'Devis envoyé avec succès',
+    }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
     })
   } catch (error) {
     logger.error('Artisan devis POST error:', error)
@@ -265,7 +269,9 @@ export async function PUT(request: Request) {
       )
     }
 
-    return NextResponse.json({ success: true, devis: quote })
+    return NextResponse.json({ success: true, devis: quote }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
+    })
   } catch (error) {
     logger.error('Artisan devis PUT error:', error)
     return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })

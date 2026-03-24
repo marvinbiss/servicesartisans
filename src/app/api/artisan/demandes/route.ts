@@ -41,7 +41,9 @@ export async function GET(request: Request) {
       .maybeSingle()
 
     if (!provider) {
-      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } })
+      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } }, {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' }
+      })
     }
 
     // Get lead IDs assigned to this provider via lead_assignments
@@ -53,7 +55,9 @@ export async function GET(request: Request) {
     const leadIds = (assignments || []).map(a => a.lead_id)
 
     if (leadIds.length === 0) {
-      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } })
+      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } }, {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' }
+      })
     }
 
     // Fetch ALL devis_requests assigned to this provider (unfiltered) for accurate stats
@@ -104,6 +108,8 @@ export async function GET(request: Request) {
     return NextResponse.json({
       demandes: demandes || [],
       stats
+    }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
     })
   } catch (error) {
     logger.error('Demandes GET error:', error)

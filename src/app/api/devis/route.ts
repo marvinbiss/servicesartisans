@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getResendClient } from '@/lib/api/resend-client'
@@ -73,6 +74,16 @@ const urgencyLabels: Record<string, string> = {
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting (public endpoint — 10 requests per minute per IP)
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`devis:${ip}`, { window: 60_000, max: 10 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes, veuillez réessayer plus tard' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     const supabase = createAdminClient()
     const body = await request.json()
 

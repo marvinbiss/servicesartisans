@@ -138,7 +138,7 @@ export async function GET(
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(artisanId)
 
     // First, try a simple query to find the provider
-    const PROVIDER_COLUMNS = 'id,name,slug,email,phone,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form_code,description,meta_description,website,latitude,longitude'
+    const PROVIDER_COLUMNS = 'id,name,slug,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form_code,description,meta_description,website,latitude,longitude'
     let simpleQuery = supabase
       .from('providers')
       .select(PROVIDER_COLUMNS)
@@ -320,8 +320,8 @@ export async function GET(
         siren: provider.siren,
         legal_form: provider.legal_form_code,
         creation_date: null,
-        phone: provider.phone,
-        email: provider.email,
+        phone: null,
+        email: null,
         website: provider.website,
         latitude: provider.latitude,
         longitude: provider.longitude,
@@ -352,7 +352,7 @@ export async function GET(
     if (!artisan) {
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('id, full_name, email, phone_e164, average_rating, review_count, created_at, role')
+        .select('id, full_name, average_rating, review_count, created_at, role')
         .eq('id', artisanId)
         .eq('role', 'artisan')
         .single()
@@ -441,8 +441,8 @@ export async function GET(
           siren: null,
           legal_form: null,
           creation_date: null,
-          phone: profile.phone_e164,
-          email: profile.email,
+          phone: null,
+          email: null,
           website: null,
           latitude: null,
           longitude: null,

@@ -32,11 +32,7 @@ export default function AdminConnexionPage() {
         return
       }
 
-      // Store session
-      if (data.data?.session) {
-        localStorage.setItem('accessToken', data.data.session.accessToken)
-        localStorage.setItem('refreshToken', data.data.session.refreshToken)
-      }
+      // Session managed by Supabase SSR cookies — no localStorage storage needed
 
       // Redirect to admin dashboard
       router.push('/admin')

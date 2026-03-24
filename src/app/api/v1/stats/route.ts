@@ -3,7 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': '*', // CORS: public API endpoint, intentionally allows cross-origin
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 }

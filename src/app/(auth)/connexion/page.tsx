@@ -42,17 +42,12 @@ export default function ConnexionPage() {
         return
       }
 
-      // Store session
-      if (data.data?.session) {
-        localStorage.setItem('accessToken', data.data.session.accessToken)
-        if (rememberMe) {
-          localStorage.setItem('refreshToken', data.data.session.refreshToken)
-        }
-      }
+      // Session managed by Supabase SSR cookies — no localStorage storage needed
 
       // Redirect: honor ?redirect= param, else default to dashboard
-      if (redirectTo) {
-        router.push(redirectTo)
+      const safeRedirect = redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//') ? redirectTo : null
+      if (safeRedirect) {
+        router.push(safeRedirect)
       } else if (data.data?.user?.isArtisan) {
         router.push('/espace-artisan')
       } else {

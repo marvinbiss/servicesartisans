@@ -9,7 +9,6 @@ const bulkUpdateSchema = z.object({
   provider_ids: z.array(z.string().uuid()).min(1).max(100),
   updates: z.object({
     is_active: z.boolean().optional(),
-    is_verified: z.boolean().optional(),
   }),
 })
 

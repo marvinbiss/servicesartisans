@@ -227,8 +227,8 @@ export class TwoFactorAuthService {
       throw new Error('Too many failed attempts. Please try again later.')
     }
 
-    // Check if it's a backup code
-    if (code.length === 8 && code.includes('-')) {
+    // Check if it's a backup code (format: XXXXXXXX-XXXXXXXX, 17 chars)
+    if (code.length === 17 && code.includes('-')) {
       return this.verifyBackupCode(userId, code, twoFactor)
     }
 
@@ -274,7 +274,13 @@ export class TwoFactorAuthService {
     const hashedCode = this.hashCode(code)
     const backupCodes: string[] = twoFactor.backup_codes || []
 
-    const codeIndex = backupCodes.findIndex((bc) => bc === hashedCode)
+    const codeIndex = backupCodes.findIndex((bc) => {
+      try {
+        return crypto.timingSafeEqual(Buffer.from(bc, 'hex'), Buffer.from(hashedCode, 'hex'))
+      } catch {
+        return false
+      }
+    })
 
     if (codeIndex === -1) {
       await this.logEvent(userId, '2fa_backup_failed')
@@ -404,8 +410,8 @@ export class TwoFactorAuthService {
   private generateBackupCodes(count: number): string[] {
     const codes: string[] = []
     for (let i = 0; i < count; i++) {
-      const part1 = crypto.randomBytes(2).toString('hex').toUpperCase()
-      const part2 = crypto.randomBytes(2).toString('hex').toUpperCase()
+      const part1 = crypto.randomBytes(4).toString('hex').toUpperCase()
+      const part2 = crypto.randomBytes(4).toString('hex').toUpperCase()
       codes.push(`${part1}-${part2}`)
     }
     return codes

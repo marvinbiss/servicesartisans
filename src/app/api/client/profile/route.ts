@@ -46,7 +46,9 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ profile })
+    return NextResponse.json({ profile }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
+    })
   } catch (error) {
     logger.error('Profile GET error:', error)
     return NextResponse.json(
@@ -108,6 +110,8 @@ export async function PUT(request: Request) {
       success: true,
       profile,
       message: 'Profil mis à jour avec succès'
+    }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
     })
   } catch (error) {
     logger.error('Profile PUT error:', error)

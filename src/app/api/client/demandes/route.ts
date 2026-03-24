@@ -62,6 +62,8 @@ export async function GET() {
     return NextResponse.json({
       demandes: demandes || [],
       stats
+    }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
     })
   } catch (error) {
     logger.error('Client demandes GET error:', error)

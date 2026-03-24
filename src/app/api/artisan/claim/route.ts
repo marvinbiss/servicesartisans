@@ -148,7 +148,7 @@ export async function POST(request: Request) {
 
     if (!provider.siret) {
       return NextResponse.json(
-        { error: 'Cette fiche ne contient pas de numéro SIRET. Contactez-nous à support@servicesartisans.fr pour revendiquer cette fiche manuellement.' },
+        { error: 'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIRET ou contacter le support.' },
         { status: 400 }
       )
     }
@@ -168,7 +168,7 @@ export async function POST(request: Request) {
       })
 
       return NextResponse.json(
-        { error: 'Le numéro SIRET ne correspond pas à celui enregistré pour cet artisan' },
+        { error: 'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIRET ou contacter le support.' },
         { status: 403 }
       )
     }

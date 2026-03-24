@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     // Generate unique filename
     const fileExt = file.name.split('.').pop()
     const timestamp = Date.now()
-    const randomStr = Math.random().toString(36).substring(7)
+    const randomStr = crypto.randomUUID().replace(/-/g, '').substring(0, 16)
     const fileName = conversationId
       ? `${conversationId}/${timestamp}-${randomStr}.${fileExt}`
       : `${user.id}/${timestamp}-${randomStr}.${fileExt}`

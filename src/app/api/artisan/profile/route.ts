@@ -55,7 +55,9 @@ export async function GET() {
       .eq('user_id', user!.id)
       .single()
 
-    return NextResponse.json({ profile, provider })
+    return NextResponse.json({ profile, provider }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
+    })
   } catch (error) {
     logger.error('Profile GET error:', error)
     return NextResponse.json(
@@ -177,6 +179,8 @@ export async function PUT(request: Request) {
       profile,
       provider,
       message: 'Profil mis à jour avec succès'
+    }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
     })
   } catch (error) {
     logger.error('Profile PUT error:', error)

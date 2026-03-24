@@ -21,7 +21,7 @@ export const dynamic = 'force-dynamic'
 
 function generateFilePath(artisanId: string, fileName: string): string {
   const timestamp = Date.now()
-  const randomStr = Math.random().toString(36).substring(2, 8)
+  const randomStr = crypto.randomUUID().replace(/-/g, '').substring(0, 12)
   const extension = fileName.split('.').pop()?.toLowerCase() || 'jpg'
   const sanitizedName = fileName
     .replace(/\.[^/.]+$/, '')

@@ -50,6 +50,7 @@ export enum ErrorCode {
   CANCELLATION_TOO_LATE = 4003,
   PAYMENT_REQUIRED = 4004,
   REVIEW_ALREADY_EXISTS = 4005,
+  REVIEW_TOKEN_INVALID = 4006,
 
   // Payment errors (5xxx)
   PAYMENT_FAILED = 5001,
@@ -124,6 +125,7 @@ export const ErrorMessages: Record<ErrorCode, string> = {
   [ErrorCode.CANCELLATION_TOO_LATE]: 'Annulation tardive impossible',
   [ErrorCode.PAYMENT_REQUIRED]: 'Paiement requis',
   [ErrorCode.REVIEW_ALREADY_EXISTS]: 'Avis déjà déposé',
+  [ErrorCode.REVIEW_TOKEN_INVALID]: 'Token de vérification requis',
   [ErrorCode.PAYMENT_FAILED]: 'Paiement échoué',
   [ErrorCode.INVALID_PAYMENT_METHOD]: 'Méthode de paiement invalide',
   [ErrorCode.REFUND_FAILED]: 'Remboursement échoué',

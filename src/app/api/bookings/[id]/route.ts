@@ -78,6 +78,14 @@ export async function GET(
     const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; artisan_id: string }> | null
     const slot = slotData?.[0] || null
 
+    // Require authentication to view booking details
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Authentification requise' } },
+        { status: 401 }
+      )
+    }
+
     // Security check: If user is authenticated, verify they have access to this booking
     // (either as the client who made it, or as the artisan)
     if (user) {

@@ -123,6 +123,8 @@ export async function GET(request: NextRequest) {
         totalPages,
         totalItems,
       },
+    }, {
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
     })
   } catch (error) {
     logger.error('Artisan leads GET error:', error)

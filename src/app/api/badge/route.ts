@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
     headers: {
       'Content-Type': 'image/svg+xml',
       'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*', // CORS: public badge endpoint, intentionally allows cross-origin
     },
   })
 }

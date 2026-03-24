@@ -18,7 +18,7 @@ function escapeHtml(str: string): string {
 }
 
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': '*', // CORS: public widget endpoint, intentionally allows cross-origin
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 }

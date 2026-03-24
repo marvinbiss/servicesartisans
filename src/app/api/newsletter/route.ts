@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
@@ -18,6 +19,16 @@ const newsletterSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting (public endpoint — 3 requests per 5 min per IP)
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`newsletter:${ip}`, { window: 300_000, max: 3 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes, veuillez réessayer plus tard' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     const body = await request.json()
 
     // Validate input

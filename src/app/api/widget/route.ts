@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     headers: {
       'Content-Type': 'application/javascript; charset=utf-8',
       'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*', // CORS: public widget endpoint, intentionally allows cross-origin
     },
   })
 }
