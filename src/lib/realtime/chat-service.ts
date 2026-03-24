@@ -731,7 +731,7 @@ class ChatService {
     const fileName = `${conversationId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
     const { data, error } = await this.supabase.storage
-      .from('chat-attachments')
+      .from('messages')
       .upload(fileName, file, { contentType: file.type })
 
     if (error) {
@@ -740,7 +740,7 @@ class ChatService {
     }
 
     const { data: { publicUrl } } = this.supabase.storage
-      .from('chat-attachments')
+      .from('messages')
       .getPublicUrl(data.path)
 
     return { url: publicUrl }

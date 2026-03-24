@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
 
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('chat-attachments')
+      .from('messages')
       .upload(fileName, file, {
         contentType: file.type,
         upsert: false,
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
-      .from('chat-attachments')
+      .from('messages')
       .getPublicUrl(uploadData.path)
 
     // Create thumbnail for images

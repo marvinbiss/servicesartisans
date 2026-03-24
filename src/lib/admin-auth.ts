@@ -97,7 +97,11 @@ async function validateCsrf(): Promise<NextResponse | null> {
     }
 
     // If no origin header, allow (same-origin browser requests, API clients, curl)
+    // Session auth (verifyAdmin) provides primary protection against CSRF
     if (!origin) {
+      logger.warn('CSRF: request without Origin/Referer header', {
+        url: typeof globalThis.Request !== 'undefined' ? 'redacted' : undefined,
+      })
       return null
     }
 

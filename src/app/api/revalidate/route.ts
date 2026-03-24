@@ -108,10 +108,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, error: { message: 'Erreur de configuration serveur' } }, { status: 500 })
     }
 
-    const searchParams = request.nextUrl.searchParams
-    const secret = searchParams.get('secret')
+    const authHeader = request.headers.get('authorization')
+    const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
 
-    if (!secret || secret !== process.env.REVALIDATE_SECRET) {
+    if (!bearerToken || bearerToken !== process.env.REVALIDATE_SECRET) {
       return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
     }
 
