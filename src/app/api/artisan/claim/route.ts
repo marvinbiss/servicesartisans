@@ -231,7 +231,7 @@ export async function POST(request: Request) {
   } catch (err) {
     logger.error('Claim API unexpected error', { error: err })
     return NextResponse.json(
-      { error: 'Erreur serveur', debug: String(err) },
+      { error: 'Erreur serveur', ...(process.env.NODE_ENV === 'development' && { debug: String(err) }) },
       { status: 500 }
     )
   }

@@ -131,13 +131,13 @@ function sanitizeForPrompt(str: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // 0. Rate limiting (10 requests per minute per IP)
+    // 0. Rate limiting (5 requests per minute per IP — strict for this paid API endpoint)
     const headersList = await headers()
     const ip =
       headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
       headersList.get('x-real-ip') ||
       'unknown'
-    const rateLimitResult = rateLimit(ip, 10, 60_000)
+    const rateLimitResult = rateLimit(ip, 5, 60_000)
 
     if (!rateLimitResult.success) {
       return NextResponse.json(
@@ -163,11 +163,11 @@ export async function POST(request: NextRequest) {
     // Normalize metier to lowercase for DB lookup (widget sends display name like "Plombier")
     const metierLower = metier.toLowerCase()
 
-    // Guard: max 20 messages
+    // Guard: max 20 messages — prevents abuse via long conversations consuming API credits
     if (messages.length > 20) {
       return NextResponse.json(
-        { error: 'Conversation trop longue (max 20 messages)' },
-        { status: 400 },
+        { error: 'Conversation trop longue, veuillez recommencer.' },
+        { status: 429 },
       )
     }
 

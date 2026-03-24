@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     if (!verifyResendSignature(rawBody, svixHeaders)) {
       logger.warn('Signature webhook Resend invalide')
-      return new NextResponse('OK', { status: 200 })
+      return new NextResponse('Invalid signature', { status: 401 })
     }
 
     const event = JSON.parse(rawBody)

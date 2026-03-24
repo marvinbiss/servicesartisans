@@ -21,10 +21,7 @@ export async function GET() {
     env = (await import('@/lib/env')).env as unknown as Record<string, string | undefined>
     checks.environment = { status: 'healthy' }
   } catch (err) {
-    checks.environment = {
-      status: 'unhealthy',
-      error: err instanceof Error ? err.message : 'Env validation failed',
-    }
+    checks.environment = { status: 'unhealthy' }
   }
 
   // Check Supabase
@@ -36,17 +33,14 @@ export async function GET() {
     const dbLatency = Date.now() - dbStart
 
     if (error) {
-      checks.database = { status: 'unhealthy', latency: dbLatency, error: error.message }
+      checks.database = { status: 'unhealthy', latency: dbLatency }
     } else if (dbLatency > 5000) {
       checks.database = { status: 'degraded', latency: dbLatency, error: 'High latency' }
     } else {
       checks.database = { status: 'healthy', latency: dbLatency }
     }
   } catch (err) {
-    checks.database = {
-      status: 'unhealthy',
-      error: err instanceof Error ? err.message : 'Unknown database error',
-    }
+    checks.database = { status: 'unhealthy' }
   }
 
   // Check Stripe (config only)

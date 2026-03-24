@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET(request: NextRequest) {
   const q = request.nextUrl.searchParams.get('q')?.trim()
@@ -8,12 +8,18 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ results: [] })
   }
 
-  const supabase = createAdminClient()
+  const safeQ = q.replace(/[^a-zA-Z0-9àâäéèêëïîôùûüÿçœæÀÂÄÉÈÊËÏÎÔÙÛÜŸÇŒÆ\s'-]/g, '')
+
+  if (!safeQ || safeQ.length < 2) {
+    return NextResponse.json({ results: [] })
+  }
+
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('providers')
     .select('name, slug, stable_id, specialty, address_city, is_verified, rating_average, review_count')
-    .or(`name.ilike.%${q}%,slug.ilike.%${q}%`)
+    .or(`name.ilike.%${safeQ}%,slug.ilike.%${safeQ}%`)
     .eq('is_active', true)
     .order('is_verified', { ascending: false })
     .order('review_count', { ascending: false, nullsFirst: false })
