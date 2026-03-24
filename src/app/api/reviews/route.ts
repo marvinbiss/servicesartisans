@@ -310,7 +310,7 @@ export async function POST(request: Request) {
     }
 
     // Validate HMAC review token (prevents fake reviews) — MANDATORY
-    // HMAC includes both bookingId and client_id to prevent cross-user token reuse
+    // Auth check above already ensures reviewer === booking client
     if (!process.env.REVIEW_HMAC_SECRET || !reviewToken) {
       return NextResponse.json(
         createErrorResponse(ErrorCode.REVIEW_TOKEN_INVALID, 'Token de vérification requis'),
@@ -319,7 +319,7 @@ export async function POST(request: Request) {
     }
     {
       const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
-        .update(`${bookingId}:${booking.client_id}`)
+        .update(bookingId)
         .digest('hex')
         .slice(0, 32)
       const provided = Buffer.from(reviewToken, 'hex')
