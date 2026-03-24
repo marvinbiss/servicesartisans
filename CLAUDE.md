@@ -194,7 +194,7 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 
 ### IndexNow
 
-- Clé : `55e191c6b56d89e07bbf8fcba3552fcd` (fichier de vérification dans `/public/`)
+- Clé : via `INDEXNOW_API_KEY` env var, fallback `d438ef72ba5465680fecf42737f316b4` (fichier de vérification dans `/public/`)
 - `POST /api/indexnow` — soumission d'URLs à Bing/Yandex
 - Cron quotidien `/api/cron/indexnow-submit` — soumet ~212 URLs stratégiques
 

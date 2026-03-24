@@ -13,8 +13,8 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { getBreadcrumbSchema, getFAQSchema, getAvisHubSchema } from '@/lib/seo/jsonld'
+import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
@@ -32,11 +32,6 @@ export function generateStaticParams() {
   return tradeSlugs.map((service) => ({ service }))
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -48,21 +43,36 @@ export async function generateMetadata({
 
   const tradeLower = trade.name.toLowerCase()
 
-  const titleHash = Math.abs(hashCode(`avis-title-${service}`))
-  const titleTemplates = [
-    `Avis ${tradeLower} — Comment bien choisir`,
-    `Avis ${tradeLower} : conseils et tarifs`,
-    `Avis ${tradeLower} vérifiés — Guide`,
-    `${trade.name} : avis et recommandations`,
-    `Avis ${tradeLower} de confiance — Comparez`,
-  ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  // Fetch stats to enrich title with real rating data
+  const stats = await getServiceStats(service)
 
+  let title: string
+  if (stats.totalReviews > 0 && stats.avgRating > 0) {
+    const titleHash = Math.abs(hashCode(`avis-title-${service}`))
+    const titleTemplates = [
+      `Avis ${trade.name} \u2014 Note ${stats.avgRating}/5 (${stats.totalReviews} avis v\u00e9rifi\u00e9s) | ${SITE_NAME}`,
+      `Avis ${trade.name} \u2014 ${stats.avgRating}/5 sur ${stats.totalReviews} avis clients | ${SITE_NAME}`,
+      `${trade.name} : ${stats.avgRating}/5 \u2014 ${stats.totalReviews} avis v\u00e9rifi\u00e9s | ${SITE_NAME}`,
+    ]
+    title = titleTemplates[titleHash % titleTemplates.length]
+  } else {
+    const titleHash = Math.abs(hashCode(`avis-title-${service}`))
+    const titleTemplates = [
+      `Avis ${trade.name} \u2014 T\u00e9moignages clients v\u00e9rifi\u00e9s | ${SITE_NAME}`,
+      `Avis ${trade.name} \u2014 Comparez les professionnels | ${SITE_NAME}`,
+      `${trade.name} : avis et recommandations v\u00e9rifi\u00e9s | ${SITE_NAME}`,
+    ]
+    title = titleTemplates[titleHash % titleTemplates.length]
+  }
+
+  const ratingSnippet = stats.totalReviews > 0 && stats.avgRating > 0
+    ? `Note moyenne ${stats.avgRating}/5 sur ${stats.totalReviews} avis vérifiés. `
+    : ''
   const descHash = Math.abs(hashCode(`avis-desc-${service}`))
   const descTemplates = [
-    `Consultez les avis sur les ${tradeLower}s. Comparez les profils, vérifiez les certifications et choisissez un professionnel de confiance. ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
-    `Avis ${tradeLower} : comment bien choisir ? Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, conseils et retours clients vérifiés.`,
-    `Trouvez un ${tradeLower} de confiance grâce aux avis vérifiés. Prix : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite.`,
+    `${ratingSnippet}Consultez les avis sur les ${tradeLower}s. Comparez les profils, vérifiez les certifications et choisissez un professionnel de confiance. Tarifs : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    `${ratingSnippet}Avis ${tradeLower} : comment bien choisir ? Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, conseils et retours clients vérifiés sur ${SITE_NAME}.`,
+    `${ratingSnippet}Trouvez un ${tradeLower} de confiance grâce aux avis vérifiés. Prix : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite sur ${SITE_NAME}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -238,17 +248,22 @@ export default async function AvisServicePage({
 
   const faqSchema = getFAQSchema(allFaqItems)
 
-  const serviceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: `${trade.name} en France`,
+  const serviceSchema = getAvisHubSchema({
+    serviceName: trade.name,
+    serviceSlug: service,
     description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans référencés.`,
     url: `${SITE_URL}/avis/${service}`,
-    areaServed: {
-      '@type': 'Country',
-      name: 'France',
-    },
-    priceRange: `${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}`,
+    ratingValue: serviceStats.avgRating,
+    reviewCount: serviceStats.totalReviews,
+    reviews: serviceStats.reviews.slice(0, 3).map(r => ({
+      authorName: r.client_name || 'Client vérifié',
+      rating: r.rating,
+      comment: r.comment,
+      datePublished: r.created_at?.split('T')[0] || '',
+    })),
+  })
+
+  /* Removed: replaced by getAvisHubSchema `${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}`,
     ...(serviceStats.totalReviews > 0 ? {
       aggregateRating: {
         '@type': 'AggregateRating',
@@ -264,8 +279,34 @@ export default async function AvisServicePage({
         reviewBody: r.comment,
         datePublished: r.created_at?.split('T')[0],
       })),
-    } : {}),
-  }
+  */
+
+  // ---------------------------------------------------------------------------
+  // Editorial content (~300+ words, hash-varied per service)
+  // ---------------------------------------------------------------------------
+  const h = (seed: string) => Math.abs(hashCode(`avis-editorial-${service}-${seed}`))
+
+  const introVariants = [
+    `Choisir un ${tradeLower} de confiance est une étape déterminante pour la réussite de vos travaux. Les avis clients constituent aujourd'hui le premier réflexe des particuliers avant de contacter un professionnel. En consultant les retours d'expérience d'autres clients, vous pouvez évaluer la qualité du travail, le respect des délais et la transparence tarifaire de chaque artisan. Sur ServicesArtisans, chaque avis est associé à un profil vérifié via les données SIREN officielles, ce qui garantit l'authenticité des témoignages. Que vous ayez besoin d'une intervention ponctuelle ou d'un chantier complet, les retours d'expérience vous aident à identifier les artisans les plus fiables de votre région. Ne laissez pas le hasard décider : comparez les profils, lisez les commentaires détaillés et faites un choix éclairé.`,
+    `Trouver un ${tradeLower} fiable n'est pas toujours simple, surtout quand il s'agit de travaux importants. Les avis vérifiés jouent un rôle essentiel : ils vous permettent de comparer objectivement les professionnels avant de faire votre choix. Un artisan bien noté par ses clients précédents inspire confiance. Sur notre plateforme, les profils sont référencés à partir des registres officiels (SIREN), et les avis reflètent des interventions réelles. Consultez les retours clients pour faire un choix éclairé. Chaque témoignage vous apporte des informations concrètes sur la qualité de service, les tarifs pratiqués et le professionnalisme de l'artisan. C'est le meilleur moyen de trouver un prestataire à la hauteur de vos attentes.`,
+    `Les avis clients sont devenus un critère incontournable pour sélectionner un ${tradeLower}. Avant d'engager un professionnel, prendre le temps de lire les témoignages d'autres particuliers permet d'éviter les mauvaises surprises. Qualité des finitions, ponctualité, respect du devis initial : autant d'éléments que seuls les retours d'expérience peuvent révéler. ServicesArtisans référence les artisans via les données SIREN officielles et recueille des avis authentiques pour vous aider dans votre décision. En France, le secteur du bâtiment compte des centaines de milliers de professionnels : les avis clients sont votre meilleur filtre pour distinguer les artisans sérieux des autres.`,
+  ]
+
+  const analysisVariants = [
+    `Les clients qui recherchent un ${tradeLower} accordent une attention particulière à trois critères : la qualité du travail réalisé, le rapport qualité-prix et la communication tout au long du chantier. Les artisans les mieux notés se distinguent généralement par leur capacité à fournir un devis détaillé, à respecter les délais annoncés et à assurer un suivi après intervention. La note moyenne et le nombre d'avis sont des indicateurs fiables pour évaluer la constance d'un professionnel. Un artisan qui maintient une excellente note sur plusieurs dizaines d'interventions offre une garantie de sérieux bien supérieure à un professionnel avec seulement deux ou trois avis, même très positifs. Prenez aussi le temps de lire les commentaires les plus longs : ils contiennent souvent les détails les plus utiles.`,
+    `D'après les retours clients analysés, les facteurs de satisfaction pour un ${tradeLower} sont principalement la propreté du chantier, la clarté des explications techniques et le respect du budget initial. Les professionnels qui obtiennent les meilleures notes sont ceux qui communiquent régulièrement sur l'avancement des travaux et qui proposent des solutions adaptées aux contraintes de chaque projet. Le volume d'avis est aussi un signal important : un artisan avec de nombreux retours positifs offre plus de garanties. Portez une attention particulière aux avis qui mentionnent le suivi après travaux et la gestion des imprévus : c'est souvent là que se révèle le vrai professionnalisme d'un artisan.`,
+    `L'analyse des avis clients pour les ${tradeLower}s révèle des tendances claires. Les particuliers valorisent avant tout la fiabilité : un professionnel qui se présente à l'heure, qui respecte son devis et qui livre un travail soigné. La réactivité en cas de problème après intervention est également un critère différenciant. Les artisans qui accumulent des avis positifs dans la durée démontrent une constance de service qui rassure les futurs clients. Attention toutefois aux notes parfaites sans commentaire : un artisan avec une note de 4.5/5 accompagnée de retours détaillés est souvent un meilleur choix qu'un profil 5/5 sans explication.`,
+  ]
+
+  const conseilVariants = [
+    `Pour choisir votre ${tradeLower}, commencez par comparer les notes et le nombre d'avis de plusieurs professionnels. Privilégiez les artisans ayant au moins 5 avis avec une note supérieure à 4/5. Vérifiez systématiquement que le professionnel dispose d'une assurance décennale et d'une responsabilité civile professionnelle. Demandez toujours un devis écrit détaillé avant le début des travaux, et n'hésitez pas à solliciter des photos de réalisations précédentes. Un bon artisan n'hésitera jamais à fournir ces éléments. Méfiez-vous des tarifs anormalement bas qui cachent souvent des prestations incomplètes ou des matériaux de moindre qualité.`,
+    `Avant de faire appel à un ${tradeLower}, adoptez une démarche méthodique. Lisez attentivement les avis récents, car ils reflètent le niveau de service actuel du professionnel. Comparez au minimum trois devis pour la même prestation. Vérifiez les certifications spécifiques au métier et assurez-vous que l'artisan est bien immatriculé au registre des métiers. Enfin, privilégiez un professionnel qui prend le temps de se déplacer pour évaluer votre besoin avant d'établir son devis. Un devis réalisé après visite est toujours plus fiable qu'un tarif annoncé par téléphone.`,
+    `Pour sélectionner le bon ${tradeLower}, fiez-vous aux avis les plus détaillés plutôt qu'aux seules notes. Les retours qui décrivent précisément les travaux réalisés sont les plus utiles. Vérifiez que l'artisan est enregistré au répertoire SIREN et qu'il possède les assurances obligatoires. Demandez plusieurs devis et comparez non seulement les prix, mais aussi le détail des prestations incluses. Un professionnel sérieux vous fournira un planning prévisionnel et un descriptif précis des matériaux utilisés. Enfin, conservez toujours une trace écrite de tous les échanges avec votre artisan.`,
+  ]
+
+  const editorialIntro = introVariants[h('intro') % introVariants.length]
+  const editorialAnalysis = analysisVariants[h('analysis') % analysisVariants.length]
+  const editorialConseil = conseilVariants[h('conseil') % conseilVariants.length]
 
   // Related services
   const relatedSlugs = relatedServices[service] || []
@@ -384,6 +425,34 @@ export default async function AvisServicePage({
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Editorial content — SEO (~300+ words unique per service) */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="prose prose-gray max-w-none">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
+              Pourquoi consulter les avis avant de choisir un {tradeLower} ?
+            </h2>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              {editorialIntro}
+            </p>
+
+            <h2 className="font-heading text-xl font-bold text-gray-900 mb-3 mt-8">
+              Ce que les clients regardent chez un {tradeLower}
+            </h2>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              {editorialAnalysis}
+            </p>
+
+            <h2 className="font-heading text-xl font-bold text-gray-900 mb-3 mt-8">
+              Nos conseils pour bien choisir votre {tradeLower}
+            </h2>
+            <p className="text-gray-700 leading-relaxed">
+              {editorialConseil}
+            </p>
           </div>
         </div>
       </section>

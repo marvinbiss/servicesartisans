@@ -13,6 +13,7 @@ import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getCommuneBySlug, formatNumber, type CommuneData } from '@/lib/data/commune-data'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 
 // ---------------------------------------------------------------------------
@@ -1084,6 +1085,8 @@ export default async function ProblemeVillePage({
       />
 
       <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} ville={ville} villeName={villeData.name} />
+
+      <DeepPageLinks currentService={problem.primaryService} currentVille={ville} skipCrossIntent />
 
       {/* Editorial credibility */}
       <section className="mb-8">

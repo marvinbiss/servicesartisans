@@ -11,6 +11,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { hashCode } from '@/lib/seo/location-content'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 
 export const revalidate = 86400
@@ -507,6 +508,8 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
       <InContentLinks serviceSlug={problem.primaryService} serviceName={tradeName} currentIntent="problemes" />
 
       <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} />
+
+      <DeepPageLinks currentService={problem.primaryService} skipCrossIntent />
 
       {/* Editorial credibility */}
       <section className="mb-8">

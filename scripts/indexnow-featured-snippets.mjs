@@ -8,7 +8,7 @@
 import { readFileSync } from 'fs'
 
 const SITE_URL = 'https://servicesartisans.fr'
-const INDEXNOW_KEY = '55e191c6b56d89e07bbf8fcba3552fcd'
+const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || 'd438ef72ba5465680fecf42737f316b4'
 
 const ALL_SERVICES = [
   'plombier','electricien','serrurier','chauffagiste','peintre-en-batiment',

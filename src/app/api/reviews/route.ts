@@ -6,9 +6,9 @@
 
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
-import { createClient } from '@supabase/supabase-js'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { slugify } from '@/lib/utils'
@@ -58,7 +58,7 @@ function getSupabaseClient() {
     throw new Error('Supabase configuration missing')
   }
 
-  return createClient(supabaseUrl, supabaseKey)
+  return createSupabaseClient(supabaseUrl, supabaseKey)
 }
 
 // Helper to get artisan display name
@@ -268,7 +268,7 @@ export async function POST(request: Request) {
     }
 
     // Auth check: reviewer must be authenticated
-    const authSupabase = await createClient()
+    const authSupabase = await createServerClient()
     const { data: { user } } = await authSupabase.auth.getUser()
     if (!user) {
       return NextResponse.json(

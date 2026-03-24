@@ -544,6 +544,67 @@ export function getLoanOrCreditSchema(params: {
   }
 }
 
+// Schema.org CollectionPage + AggregateRating (for /avis/[service] hub pages)
+export function getAvisHubSchema(params: {
+  serviceName: string
+  serviceSlug: string
+  description: string
+  url: string
+  ratingValue?: number
+  reviewCount?: number
+  reviews?: Array<{
+    authorName: string
+    rating: number
+    comment: string | null
+    datePublished: string
+  }>
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `Avis ${params.serviceName} en France`,
+    description: params.description,
+    url: params.url,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    about: {
+      '@type': 'Service',
+      name: params.serviceName,
+      serviceType: params.serviceName,
+      provider: {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
+        name: SITE_NAME,
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'France',
+      },
+      ...(params.ratingValue && params.reviewCount && params.reviewCount > 0 ? {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: params.ratingValue,
+          reviewCount: params.reviewCount,
+          bestRating: 5,
+          worstRating: 1,
+        },
+      } : {}),
+      ...(params.reviews && params.reviews.length > 0 ? {
+        review: params.reviews.slice(0, 3).map(r => ({
+          '@type': 'Review',
+          author: { '@type': 'Person', name: r.authorName },
+          reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+          reviewBody: r.comment,
+          datePublished: r.datePublished,
+        })),
+      } : {}),
+    },
+  }
+}
+
 // Schema.org SpeakableSpecification (voice AI optimization)
 export function getSpeakableSchema(params: {
   url: string
