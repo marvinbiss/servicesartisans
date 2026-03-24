@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, ChevronDown, ChevronRight, MapPin, Users, Thermometer, Building2 } from 'lucide-react'
-import Breadcrumb from '@/components/Breadcrumb'
+import dynamic from 'next/dynamic'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
@@ -19,7 +19,8 @@ import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InBodyLinks from '@/components/seo/InBodyLinks'
-import DevisForm from '@/components/DevisForm'
+const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false })
+const DevisForm = dynamic(() => import('@/components/DevisForm'), { ssr: false })
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 
 export const revalidate = 86400

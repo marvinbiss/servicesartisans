@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import {
   getServiceBySlug,
   getLocationBySlug,
   getProvidersByServiceAndLocation,
   getProviderCountByServiceAndLocation,
 } from '@/lib/supabase'
-import ServiceLocationPageClient from './PageClient'
 import SeoContent from './_components/SeoContent'
 import TradeSections from './_components/TradeSections'
 import FaqAndBlogSection from './_components/FaqAndBlogSection'
@@ -20,7 +20,6 @@ import InContentLinks from '@/components/seo/InContentLinks'
 
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema, getLocalServiceSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
-import Breadcrumb from '@/components/Breadcrumb'
 import { getArtisanUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
 import { services as staticServicesList, villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
@@ -35,11 +34,13 @@ import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
-import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
-import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
+
+const ServiceLocationPageClient = dynamic(() => import('./PageClient'), { ssr: false })
+const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/StickyMobileCTA'), { ssr: false })
+const SearchRecorder = dynamic(() => import('@/components/SearchRecorder'), { ssr: false })
 
 
 const MicroConversions = dynamic(

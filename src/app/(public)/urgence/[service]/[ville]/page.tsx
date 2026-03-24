@@ -18,7 +18,7 @@ import {
   Home,
   Wrench,
 } from 'lucide-react'
-import Breadcrumb from '@/components/Breadcrumb'
+import dynamic from 'next/dynamic'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, PHONE_TEL } from '@/lib/seo/config'
@@ -33,9 +33,9 @@ import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InContentLinks from '@/components/seo/InContentLinks'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
-import SearchRecorder from '@/components/SearchRecorder'
-import dynamic from 'next/dynamic'
+const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/StickyMobileCTA'), { ssr: false })
+const SearchRecorder = dynamic(() => import('@/components/SearchRecorder'), { ssr: false })
 
 export const revalidate = 86400 // ISR 24h
 
