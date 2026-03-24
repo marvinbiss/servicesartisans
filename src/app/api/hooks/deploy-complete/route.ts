@@ -1,32 +1,59 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { createHmac } from 'crypto'
 
 /**
  * Vercel deploy webhook → triggers GitHub Actions cache warmup.
  *
- * Setup in Vercel Dashboard:
- *   Settings → Git → Deploy Hooks is for triggering deploys (not what we want).
- *   Instead, use Project Settings → Webhooks → add:
- *     URL: https://servicesartisans.fr/api/hooks/deploy-complete
- *     Events: deployment.succeeded
- *
- * Or simpler: add to package.json scripts:
- *   "postbuild": "node scripts/vercel-deploy-hook.mjs"
- *   (won't work — runs at build time, not after deploy)
- *
- * Simplest: Vercel Integration → use the webhook approach below.
+ * Setup:
+ *   1. Vercel Dashboard → Team Settings → Webhooks
+ *   2. Event: deployment.succeeded
+ *   3. Endpoint: https://servicesartisans.fr/api/hooks/deploy-complete
+ *   4. Copy the signing secret → add as WEBHOOK_SECRET env var in Vercel
+ *   5. Add GITHUB_DISPATCH_TOKEN env var in Vercel (GitHub PAT)
  */
 
 export const dynamic = 'force-dynamic'
 
 const GITHUB_TOKEN = process.env.GITHUB_DISPATCH_TOKEN
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
 const REPO = 'marvinbiss/servicesartisans'
 
+async function verifySignature(request: Request, body: string): Promise<boolean> {
+  if (!WEBHOOK_SECRET) {
+    // If no secret configured, skip verification (dev/initial setup)
+    logger.warn('[deploy-hook] WEBHOOK_SECRET not set — skipping signature check')
+    return true
+  }
+
+  const signature = request.headers.get('x-vercel-signature')
+  if (!signature) return false
+
+  const hash = createHmac('sha1', WEBHOOK_SECRET).update(body).digest('hex')
+  return hash === signature
+}
+
 export async function POST(request: Request) {
-  // Verify this is from Vercel (check shared secret)
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const rawBody = await request.text()
+
+  // Verify Vercel webhook signature
+  const isValid = await verifySignature(request, rawBody)
+  if (!isValid) {
+    logger.warn('[deploy-hook] Invalid webhook signature')
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+  }
+
+  // Only trigger on production deploys
+  try {
+    const payload = JSON.parse(rawBody)
+    const target = payload?.payload?.deployment?.meta?.target
+      || payload?.payload?.target
+      || 'production'
+    if (target !== 'production') {
+      return NextResponse.json({ skipped: true, reason: `target=${target}` })
+    }
+  } catch {
+    // If we can't parse, still proceed
   }
 
   if (!GITHUB_TOKEN) {
