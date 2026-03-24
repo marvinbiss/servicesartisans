@@ -22,9 +22,9 @@ export async function GET() {
         comment,
         client_name,
         created_at,
-        artisan:profiles!artisan_id (
+        artisan:providers!artisan_id (
           id,
-          full_name
+          name
         )
       `)
       .eq('status', 'published')
@@ -49,7 +49,7 @@ export async function GET() {
           author_name: review.client_name || 'Client',
           rating: review.rating,
           comment: review.comment,
-          artisan_name: artisan?.full_name || null,
+          artisan_name: artisan?.name || null,
           created_at: review.created_at
         }
       })

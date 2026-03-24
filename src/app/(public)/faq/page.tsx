@@ -9,7 +9,7 @@ import { CmsContent } from '@/components/CmsContent'
 import Breadcrumb from '@/components/Breadcrumb'
 
 export const metadata: Metadata = {
-  title: 'Questions fréquentes (FAQ)',
+  title: 'FAQ ServicesArtisans — Questions sur les artisans et travaux',
   description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
   alternates: {
     canonical: `${SITE_URL}/faq`,
@@ -36,19 +36,31 @@ const breadcrumbSchema = getBreadcrumbSchema([
   { name: 'FAQ', url: '/faq' },
 ])
 
-// FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
-const faqJsonLd = null
+// WebPage schema for the FAQ page (FAQPage rich results deprecated by Google Aug 2023)
+const faqWebPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Questions fréquentes (FAQ)',
+  description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
+  url: `${SITE_URL}/faq`,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'ServicesArtisans',
+    url: SITE_URL,
+  },
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['h1', 'h2', '[data-speakable="true"]'],
+  },
+}
 
 export default async function FAQPage() {
   const cmsPage = await getPageContent('faq', 'faq')
 
   if (cmsPage?.content_html) {
-    // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
-    const cmsJsonLd = null
-
     return (
       <div className="min-h-screen bg-gray-50">
-        <JsonLd data={[cmsJsonLd, breadcrumbSchema]} />
+        <JsonLd data={[faqWebPageSchema, breadcrumbSchema]} />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'FAQ' }]} className="mb-4" />
@@ -70,7 +82,7 @@ export default async function FAQPage() {
 
   return (
     <>
-      <JsonLd data={[faqJsonLd, breadcrumbSchema]} />
+      <JsonLd data={[faqWebPageSchema, breadcrumbSchema]} />
       <FAQPageClient />
     </>
   )

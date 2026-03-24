@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { Phone, Clock, Shield, CheckCircle, ArrowRight, AlertTriangle, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getHowToSchema, getUrgencyHubServiceSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -291,20 +291,12 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, howToSchema, collectionPageSchema, {
-        '@context': 'https://schema.org',
-        '@type': 'Service',
-        name: `${trade.name} urgence soir & week-end`,
-        description: trade.emergencyInfo,
-        provider: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
-        areaServed: { '@type': 'Country', name: 'France' },
-        hoursAvailable: {
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-          opens: '00:00',
-          closes: '23:59',
-        },
-      }]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, howToSchema, collectionPageSchema, getUrgencyHubServiceSchema({
+        serviceName: trade.name,
+        serviceSlug: service,
+        description: trade.emergencyInfo || `Service d'urgence ${trade.name} disponible 7j/7 en France. Intervention rapide, devis gratuit.`,
+        url: `${SITE_URL}/urgence/${service}`,
+      })]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">

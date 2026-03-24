@@ -266,6 +266,99 @@ export default async function DevisServiceLocationPage({
     answer: f.a,
   }))
 
+  // ---------------------------------------------------------------------------
+  // Editorial content: 3 sections x 3 variantes = 27 unique combinations
+  // ---------------------------------------------------------------------------
+
+  const editorialSeed1 = Math.abs(hashCode(`devis-editorial-${service}-describe`))
+  const editorialSeed2 = Math.abs(hashCode(`devis-editorial-${service}-checklist`))
+  const editorialSeed3 = Math.abs(hashCode(`devis-editorial-${service}-tarifs`))
+
+  // Section 1: "Comment bien décrire votre projet ?" (~150 mots)
+  const describeProjectVariants = [
+    {
+      intro: `Un devis précis commence par une description claire de votre besoin. Plus vous êtes détaillé, plus les artisans ${tradeLower}s à ${villeData.name} pourront vous proposer un tarif juste.`,
+      tips: [
+        `Décrivez la nature exacte des travaux : s'agit-il d'une réparation, d'une installation neuve, d'un remplacement ou d'un entretien ?`,
+        `Précisez la surface concernée (en m²) ou le nombre d'éléments à traiter : les artisans à ${villeData.name} ont besoin de ces données pour calibrer leur devis.`,
+        `Joignez des photos si possible : un cliché de la zone concernée permet au ${tradeLower} d'évaluer la complexité avant même de se déplacer.`,
+        `Indiquez vos contraintes de calendrier : travaux urgents, date limite, créneaux de disponibilité. En ${villeData.region}, la demande peut être saisonnière.`,
+        `Mentionnez l'accès au chantier : étage, stationnement, accès camion. Ces détails évitent les mauvaises surprises sur le devis final.`,
+      ],
+    },
+    {
+      intro: `Pour obtenir un devis ${tradeLower} fiable à ${villeData.name}, la qualité de votre description fait toute la différence. Les professionnels du ${villeData.departement} apprécient les demandes bien structurées.`,
+      tips: [
+        `Identifiez le problème ou le besoin principal : fuite, panne, rénovation, mise aux normes ? Un diagnostic précis permet un chiffrage précis.`,
+        `Listez les matériaux souhaités si vous avez une préférence (marque, gamme, coloris). Sinon, demandez des alternatives avec les écarts de prix.`,
+        `Indiquez l'ancienneté du bâtiment : les immeubles anciens de ${villeData.name} peuvent nécessiter des adaptations spécifiques qui impactent le devis.`,
+        `Précisez si le logement est occupé pendant les travaux : cela peut modifier la durée et l'organisation du chantier.`,
+        `Signalez tout travail connexe nécessaire : un ${tradeLower} qui voit l'ensemble du chantier peut proposer un tarif groupé plus avantageux.`,
+      ],
+    },
+    {
+      intro: `Remplir une demande de devis ${tradeLower} ne prend que quelques minutes, mais un formulaire bien complété vous fera gagner du temps et de l'argent. Voici comment optimiser votre demande à ${villeData.name}.`,
+      tips: [
+        `Commencez par le type d'intervention : dépannage ponctuel, rénovation partielle ou chantier complet ? Chaque cas implique des compétences et des budgets différents.`,
+        `Décrivez l'état actuel : ce qui fonctionne encore, ce qui est cassé, ce qui doit être remplacé. Les artisans de ${villeData.name} ajusteront leur proposition en conséquence.`,
+        `Mentionnez le budget approximatif que vous envisagez : cela aide le professionnel à proposer des solutions adaptées à votre enveloppe.`,
+        `Précisez si des diagnostics préalables existent (DPE, diagnostic amiante, audit énergétique). Ces documents accélèrent l'élaboration du devis.`,
+        `Indiquez si vous avez déjà reçu d'autres devis : la transparence permet aux artisans locaux de vous faire une offre compétitive.`,
+      ],
+    },
+  ]
+
+  // Section 2: "Ce qu'il faut savoir avant de demander un devis" (~150 mots)
+  const checklistVariants = [
+    {
+      intro: `Avant de solliciter des devis de ${tradeLower} à ${villeData.name}, quelques vérifications préalables vous permettront de comparer les offres sur de bonnes bases.`,
+      items: [
+        `Vérifiez que l'artisan possède une assurance responsabilité civile professionnelle et une garantie décennale valides : c'est une obligation légale pour les travaux de ${tradeLower}.`,
+        `Demandez un devis écrit et détaillé : le devis doit mentionner la TVA applicable, les fournitures, la main-d'œuvre et les délais. Un devis de ${tradeLower} sans ces mentions n'a aucune valeur juridique.`,
+        `Comparez au moins 2 à 3 devis : à ${villeData.name}, les tarifs peuvent varier de 20 à 40 % d'un ${tradeLower} à l'autre pour la même prestation.`,
+        `Vérifiez le numéro SIRET de l'artisan sur societe.com ou le site de l'INSEE. Un ${tradeLower} sérieux à ${villeData.name} fournit cette information sans hésiter.`,
+        `Consultez les avis clients vérifiés : ils vous renseignent sur la ponctualité, la propreté du chantier et le respect du devis initial.`,
+      ],
+    },
+    {
+      intro: `Un devis n'est pas qu'un simple prix : c'est un document contractuel qui vous protège. Voici les points essentiels à vérifier avant de choisir votre ${tradeLower} à ${villeData.name}.`,
+      items: [
+        `Exigez la mention « Devis gratuit et sans engagement » : certains ${tradeLower}s facturent le déplacement pour établir un devis, surtout en zone rurale autour de ${villeData.name}.`,
+        `Le devis doit détailler chaque poste séparément : fournitures, main-d'œuvre, frais de déplacement, enlèvement des gravats. Méfiez-vous des devis « tout compris » sans détail.`,
+        `Vérifiez les délais annoncés : un bon ${tradeLower} à ${villeData.name} s'engage sur un planning réaliste, avec une date de début et une durée estimée.`,
+        `Renseignez-vous sur les aides financières : certains travaux de ${tradeLower} à ${villeData.name} peuvent bénéficier de MaPrimeRénov', de l'éco-PTZ ou des aides locales du ${villeData.departement}.`,
+        `Ne versez jamais plus de 30 % d'acompte à la signature : c'est un seuil raisonnable qui protège les deux parties. Le solde se règle à la réception des travaux.`,
+      ],
+    },
+    {
+      intro: `La préparation en amont est la clé d'un chantier réussi. Avant de contacter un ${tradeLower} à ${villeData.name}, assurez-vous d'avoir les bons réflexes.`,
+      items: [
+        `Faites un état des lieux précis de la situation actuelle : prenez des mesures, des photos et notez les références des équipements existants.`,
+        `Renseignez-vous sur les réglementations locales : à ${villeData.name}, certains travaux nécessitent une déclaration préalable ou un permis de construire selon le PLU.`,
+        `Préparez l'accès au chantier : dégagez la zone de travail, protégez les meubles et prévoyez un espace de stockage pour les matériaux. Un chantier bien préparé réduit la facture.`,
+        `Anticipez les travaux connexes : si vous faites intervenir un ${tradeLower}, c'est peut-être le moment d'en profiter pour régler d'autres points (mise aux normes, isolation, etc.).`,
+        `Définissez vos priorités : si votre budget est limité, indiquez-le clairement. Un ${tradeLower} honnête à ${villeData.name} saura vous proposer des solutions par étapes.`,
+      ],
+    },
+  ]
+
+  // Section 3: "Tarifs indicatifs" (~100 mots)
+  const tarifsVariants = [
+    {
+      text: `À ${villeData.name} (${villeData.departementCode}), les tarifs de ${tradeLower} se situent entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit} en moyenne. Ce prix varie selon la complexité de l'intervention, les matériaux utilisés et l'urgence de la demande. En ${villeData.region}, ${multiplier > 1.0 ? `les tarifs sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale, en raison du coût de la vie et de la forte demande` : multiplier < 1.0 ? `les tarifs sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale, ce qui avantage les particuliers` : `les tarifs sont proches de la moyenne nationale`}. Pour obtenir le meilleur rapport qualité-prix, comparez systématiquement plusieurs devis d'artisans locaux vérifiés.`,
+    },
+    {
+      text: `Le budget moyen pour un ${tradeLower} à ${villeData.name} oscille entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit}, fournitures et main-d'œuvre incluses selon la prestation. Ces chiffres sont ajustés au marché local du ${villeData.departement}. Les interventions d'urgence (nuit, week-end, jours fériés) entraînent généralement une majoration de 30 à 80 %. Conseil : demandez toujours un devis détaillé avant le début des travaux. Un devis gratuit ne vous engage à rien et vous permet de comparer sereinement les offres des ${tradeLower}s à ${villeData.name}.`,
+    },
+    {
+      text: `Fourchette de prix constatée à ${villeData.name} pour un ${tradeLower} : de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Cette estimation intègre les spécificités tarifaires de la région ${villeData.region} et du département ${villeData.departement}. Les facteurs qui influencent le prix final sont la nature des travaux, la difficulté d'accès, le choix des matériaux et la période d'intervention. Pour un chiffrage précis et adapté à votre situation, remplissez le formulaire ci-dessus : vous recevrez jusqu'à 3 devis gratuits et personnalisés de ${tradeLower}s référencés à ${villeData.name}.`,
+    },
+  ]
+
+  const editorialDescribe = describeProjectVariants[editorialSeed1 % describeProjectVariants.length]
+  const editorialChecklist = checklistVariants[editorialSeed2 % checklistVariants.length]
+  const editorialTarifs = tarifsVariants[editorialSeed3 % tarifsVariants.length]
+
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
@@ -352,6 +445,71 @@ export default async function DevisServiceLocationPage({
                 />
               </div>
             </details>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── EDITORIAL SECTION 1: Comment bien décrire votre projet ─── */}
+      <section className="py-12 bg-white border-t border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">
+            Comment bien décrire votre projet de {tradeLower} ?
+          </h2>
+          <p className="text-charcoal-600 text-sm leading-relaxed mb-6">
+            {editorialDescribe.intro}
+          </p>
+          <div className="space-y-3">
+            {editorialDescribe.tips.map((tip, i) => (
+              <div key={i} className="flex items-start gap-3 bg-sand-50 rounded-xl border border-sand-300 p-4">
+                <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-bold text-primary-600">{i + 1}</span>
+                </div>
+                <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── EDITORIAL SECTION 2: Ce qu'il faut savoir avant de demander un devis ─── */}
+      <section className="py-12 bg-sand-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">
+            Ce qu&apos;il faut savoir avant de demander un devis {tradeLower} à {villeData.name}
+          </h2>
+          <p className="text-charcoal-600 text-sm leading-relaxed mb-6">
+            {editorialChecklist.intro}
+          </p>
+          <div className="space-y-3">
+            {editorialChecklist.items.map((item, i) => (
+              <div key={i} className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4">
+                <CheckCircle className="w-5 h-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+                <p className="text-charcoal-700 text-sm leading-relaxed">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── EDITORIAL SECTION 3: Tarifs indicatifs ─── */}
+      <section className="py-12 bg-white border-t border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">
+            Tarifs indicatifs {tradeLower} à {villeData.name}
+          </h2>
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-6 border border-primary-200">
+            <p className="text-charcoal-700 text-sm leading-relaxed">
+              {editorialTarifs.text}
+            </p>
+          </div>
+          <div className="mt-4 text-center">
+            <a
+              href="#formulaire"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-600 transition-colors text-sm"
+            >
+              Obtenir mon devis gratuit
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </section>

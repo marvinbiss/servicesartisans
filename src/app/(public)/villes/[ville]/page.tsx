@@ -13,6 +13,7 @@ import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 import CityHubLinks from '@/components/seo/CityHubLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 5
@@ -447,6 +448,8 @@ export default async function VillePage({ params }: PageProps) {
       />
 
       <SeasonalLinks villeSlug={villeSlug} villeName={ville.name} />
+
+      <OrphanRescueLinks currentPath={`/villes/${villeSlug}`} villeSlug={villeSlug} />
 
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-8">

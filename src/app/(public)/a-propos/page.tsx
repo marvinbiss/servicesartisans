@@ -14,8 +14,8 @@ import { teamMembers, getAllAuthors } from '@/lib/data/team'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'À propos de ServicesArtisans',
-  description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+  title: 'À propos de ServicesArtisans — Annuaire d\'artisans gratuit',
+  description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable pour trouver un artisan.',
   alternates: {
     canonical: `${SITE_URL}/a-propos`,
   },

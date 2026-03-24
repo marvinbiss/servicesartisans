@@ -605,6 +605,90 @@ export function getAvisHubSchema(params: {
   }
 }
 
+// Schema.org Service for emergency/urgency pages (/urgence/[service]/[ville])
+export function getUrgencyServiceSchema(params: {
+  serviceName: string
+  serviceSlug: string
+  cityName: string
+  regionName?: string
+  url: string
+  lowPrice?: number
+  highPrice?: number
+  offerCount?: number
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `Dépannage urgent ${params.serviceName} à ${params.cityName}`,
+    description: `Service d'urgence ${params.serviceName} disponible 7j/7 à ${params.cityName}. Intervention rapide, devis gratuit.`,
+    url: params.url,
+    serviceType: params.serviceName,
+    areaServed: {
+      '@type': 'City',
+      name: params.cityName,
+      ...(params.regionName && {
+        containedInPlace: {
+          '@type': 'AdministrativeArea',
+          name: params.regionName,
+        },
+      }),
+    },
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    category: 'Emergency Service',
+    hoursAvailable: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: '00:00',
+      closes: '23:59',
+    },
+    ...(params.lowPrice != null && params.highPrice != null && {
+      offers: {
+        '@type': 'AggregateOffer',
+        priceCurrency: 'EUR',
+        lowPrice: params.lowPrice,
+        highPrice: params.highPrice,
+        ...(params.offerCount != null && { offerCount: params.offerCount }),
+      },
+    }),
+  }
+}
+
+// Schema.org Service for emergency hub pages (/urgence/[service])
+export function getUrgencyHubServiceSchema(params: {
+  serviceName: string
+  serviceSlug: string
+  description: string
+  url: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${params.serviceName} urgence soir & week-end`,
+    description: params.description,
+    url: params.url,
+    serviceType: params.serviceName,
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    areaServed: { '@type': 'Country', name: 'France' },
+    category: 'Emergency Service',
+    hoursAvailable: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: '00:00',
+      closes: '23:59',
+    },
+  }
+}
+
 // Schema.org SpeakableSpecification (voice AI optimization)
 export function getSpeakableSchema(params: {
   url: string

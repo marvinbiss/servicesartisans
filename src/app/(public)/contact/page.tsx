@@ -8,7 +8,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'Contactez-nous',
+  title: 'Contactez l\'équipe ServicesArtisans — Support & Questions',
   description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans. Formulaire de contact, email et assistance rapide.',
   alternates: {
     canonical: `${SITE_URL}/contact`,

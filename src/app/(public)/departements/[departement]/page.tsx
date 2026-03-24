@@ -12,6 +12,7 @@ import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { getTradeContent } from '@/lib/data/trade-content'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import { Thermometer, Home, TrendingUp, AlertTriangle, Globe, Star, Euro } from 'lucide-react'
 
 
@@ -702,6 +703,8 @@ export default async function DepartementPage({ params }: PageProps) {
       {top5Services.slice(0, 3).map((svc) => (
         <CrossIntentLinks key={svc.slug} service={svc.slug} serviceName={svc.name} currentIntent="services" />
       ))}
+
+      <OrphanRescueLinks currentPath={`/departements/${deptSlug}`} serviceSlug={topServiceSlug} />
 
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-8">

@@ -50,10 +50,8 @@ export async function PATCH(request: NextRequest) {
     const { review_ids, action } = parsed.data
 
     const updates = {
-      moderation_status: action === 'approve' ? 'approved' : 'rejected',
-      is_visible: action === 'approve',
-      moderated_at: new Date().toISOString(),
-      moderated_by: user.id,
+      status: action === 'approve' ? 'published' : 'rejected',
+      updated_at: new Date().toISOString(),
     }
 
     const { data, error } = await supabase

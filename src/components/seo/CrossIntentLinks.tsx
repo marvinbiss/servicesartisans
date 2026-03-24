@@ -1,13 +1,14 @@
 import Link from 'next/link'
-import { Euro, Star, Search, AlertTriangle, FileText } from 'lucide-react'
+import { Euro, Star, Search, AlertTriangle, FileText, HelpCircle } from 'lucide-react'
 import { getAnchorText, type Intent } from '@/lib/seo/anchor-variants'
+import { getProblemsByService } from '@/lib/data/problems'
 
 interface CrossIntentLinksProps {
   service: string
   serviceName: string
   ville?: string
   villeName?: string
-  currentIntent?: 'tarifs' | 'avis' | 'services' | 'urgence' | 'devis'
+  currentIntent?: 'tarifs' | 'avis' | 'services' | 'urgence' | 'devis' | 'problemes'
 }
 
 const intents = [
@@ -25,6 +26,10 @@ export default function CrossIntentLinks({
   villeName,
   currentIntent,
 }: CrossIntentLinksProps) {
+  // Resolve the primary problem slug for this service (if any)
+  const serviceProblems = getProblemsByService(service)
+  const primaryProblem = serviceProblems.length > 0 ? serviceProblems[0] : null
+
   return (
     <nav
       aria-label={`Voir aussi pour ${serviceName}${villeName ? ` a ${villeName}` : ''}`}
@@ -67,6 +72,38 @@ export default function CrossIntentLinks({
               </Link>
             )
           })}
+          {/* 6th intent: Problèmes — uses problem slug, not service slug */}
+          {primaryProblem && (() => {
+            const isCurrentProblemes = currentIntent === 'problemes'
+            const problemHref = ville
+              ? `/problemes/${primaryProblem.slug}/${ville}`
+              : `/problemes/${primaryProblem.slug}`
+            const problemLabel = villeName
+              ? `Problèmes ${serviceName.toLowerCase()} à ${villeName}`
+              : `Problèmes ${serviceName.toLowerCase()}`
+            if (isCurrentProblemes) {
+              return (
+                <span
+                  key="problemes"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-primary-400 text-white cursor-default"
+                  aria-current="page"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  Problèmes
+                </span>
+              )
+            }
+            return (
+              <Link
+                key="problemes"
+                href={problemHref}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-white text-charcoal-700 border border-sand-300 hover:border-blue-300 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+              >
+                <HelpCircle className="w-4 h-4" />
+                {problemLabel}
+              </Link>
+            )
+          })()}
         </div>
       </div>
     </nav>

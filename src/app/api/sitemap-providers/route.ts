@@ -11,6 +11,7 @@ const PROVIDER_BATCH_SIZE = 5_000
 /** Escape XML special characters in sitemap URLs to prevent invalid XML */
 function escapeXml(s: string): string {
   return s
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

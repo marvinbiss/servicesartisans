@@ -4,13 +4,13 @@ import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getHowToSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getHowToSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
+import { getDefaultAuthor } from '@/lib/data/team'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
-import { getDefaultAuthor } from '@/lib/data/team'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
@@ -134,6 +134,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
   const trade = tradeContent[service]
   if (!trade) notFound()
 
+  const author = getDefaultAuthor()
+
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Tarifs artisans', url: '/tarifs' },
@@ -144,62 +146,21 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     trade.faq.map((f) => ({ question: f.q, answer: f.a }))
   )
 
-  const author = getDefaultAuthor()
-
-  const dateModified = new Date().toISOString().split('T')[0]
   const priceValidUntil = `${new Date().getFullYear()}-12-31`
 
-  const seed = `rating-${service}-france`
-  const ratingValue = Math.round((4.0 + (Math.abs(hashCode(seed)) % 10) / 10) * 10) / 10
-  const reviewCount = 10 + Math.abs(hashCode(`reviews-${service}-france`) ) % 90
-  const reviewAuthors = ['Marie L.', 'Pierre D.', 'Sophie M.', 'Laurent B.', 'Isabelle R.', 'Nicolas T.', 'Catherine V.', 'François G.', 'Nathalie P.', 'Jean-Marc S.']
-  const authorIdx = Math.abs(hashCode(`author-${service}-france`)) % reviewAuthors.length
-  const reviewRating = Math.min(5, Math.floor(ratingValue) + 1)
   const tradeLower = trade.name.toLowerCase()
 
-  const serviceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: `${trade.name} en France`,
+  const serviceSchema = getServicePricingSchema({
+    serviceName: trade.name,
+    serviceSlug: service,
     description: `Guide des tarifs ${tradeLower} 2026. Prix horaire, tarifs par prestation et variations régionales.`,
-    dateModified,
-    serviceType: trade.name,
-    provider: {
-      '@type': 'Organization',
-      name: 'ServicesArtisans',
-      url: SITE_URL,
-    },
-    areaServed: {
-      '@type': 'Country',
-      name: 'France',
-    },
-    offers: {
-      '@type': 'AggregateOffer',
-      priceCurrency: 'EUR',
-      lowPrice: trade.priceRange.min,
-      highPrice: trade.priceRange.max,
-      offerCount: trade.commonTasks.length,
-      priceValidUntil,
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue,
-      reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: {
-      '@type': 'Review',
-      author: { '@type': 'Person', name: reviewAuthors[authorIdx] },
-      reviewRating: { '@type': 'Rating', ratingValue: reviewRating, bestRating: 5, worstRating: 1 },
-      reviewBody: `Très satisfait du service de ${tradeLower} en France. Tarifs conformes aux estimations, travail soigné et professionnel.`,
-    },
-    author: {
-      '@type': 'Person',
-      name: author.name,
-      url: `${SITE_URL}/a-propos`,
-    },
-  }
+    lowPrice: trade.priceRange.min,
+    highPrice: trade.priceRange.max,
+    priceCurrency: 'EUR',
+    priceUnit: trade.priceRange.unit,
+    offerCount: trade.commonTasks.length,
+    url: `${SITE_URL}/tarifs/${service}`,
+  })
 
   const pricingItemListSchema = {
     '@context': 'https://schema.org',

@@ -49,6 +49,7 @@ function parsePopulation(pop: string): number {
 // ---------------------------------------------------------------------------
 
 const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
+  // ── 15 services historiques ──
   ['plombier', ['prix-plombier-2026-tarifs-horaires', 'comment-choisir-son-plombier', 'fuite-eau-urgence-guide-complet-gestes-couts']],
   ['electricien', ['prix-electricien-2026-tarifs-travaux', 'comment-choisir-electricien-guide', 'normes-electriques-2026-nfc-15-100-guide']],
   ['serrurier', ['prix-serrurier-2026-tarifs-interventions', 'comment-choisir-serrurier-conseils', 'securiser-maison-cambriolage-solutions']],
@@ -59,13 +60,43 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
   ['couvreur', ['prix-toiture-2026-refection-reparation-materiaux', 'comment-choisir-couvreur-guide', 'toiture-renovation-prix-2026']],
   ['macon', ['prix-macon-2026-gros-oeuvre-renovation', 'comment-choisir-macon-guide', 'agrandir-maison-extension-guide']],
   ['jardinier', ['prix-jardinier-paysagiste-2026', 'comment-choisir-jardinier-paysagiste', 'amenager-terrasse-exterieure-guide']],
+  ['vitrier', ['prix-vitrier-2026-remplacement-vitrage', 'comment-choisir-vitrier-guide', 'guide-fenetre-double-vitrage']],
   ['climaticien', ['prix-climaticien-2026-installation-entretien', 'comment-choisir-climaticien-guide', 'climatisation-reversible-guide']],
   ['cuisiniste', ['prix-cuisiniste-2026-pose-cuisine', 'comment-choisir-cuisiniste-guide', 'renover-cuisine-guide-complet-etapes']],
-  ['vitrier', ['prix-vitrier-2026-remplacement-vitrage', 'comment-choisir-vitrier-guide', 'guide-fenetre-double-vitrage']],
+  ['solier', ['prix-solier-revetement-sol-2026', 'comment-choisir-solier-guide', 'beton-cire-vs-resine-vs-carrelage']],
+  ['nettoyage', ['prix-nettoyage-professionnel-2026', 'comment-choisir-entreprise-nettoyage', 'entretien-annuel-maison-checklist-complete']],
+  // ── 31 nouveaux services (Sprint 1 SEO) ──
+  ['terrassier', ['prix-extension-maison-2026', 'construire-garage-guide-permis-budget', 'permis-construire-declaration-prealable-guide']],
+  ['charpentier', ['prix-toiture-2026-refection-reparation-materiaux', 'toiture-renovation-prix-2026', 'types-de-tuiles-guide']],
+  ['zingueur', ['comment-choisir-zingueur-guide', 'prix-toiture-2026-refection-reparation-materiaux', 'etancheite-toiture-terrasse-solutions']],
+  ['etancheiste', ['etancheite-toiture-terrasse-solutions', 'humidite-moisissure-maison-solutions', 'prix-toiture-2026-refection-reparation-materiaux']],
+  ['facadier', ['prix-ravalement-facade-2026', 'renover-facade-ravalement-guide', 'types-enduit-facade']],
+  ['platrier', ['plaque-de-platre-ba13-guide', 'prix-renovation-appartement-2026-budget', 'renovation-maison-par-ou-commencer']],
+  ['metallier', ['comment-choisir-metallier-guide', 'prix-cloture-portail-2026', 'installer-portail-automatique-guide']],
+  ['ferronnier', ['prix-cloture-portail-2026', 'installer-portail-automatique-guide', 'securiser-maison-cambriolage-solutions']],
+  ['poseur-de-parquet', ['comment-choisir-poseur-parquet-guide', 'installer-parquet-massif-contrecolle-guide', 'parquet-massif-vs-contrecolle-vs-stratifie']],
+  ['miroitier', ['comment-choisir-miroitier-guide', 'prix-vitrier-2026-remplacement-vitrage', 'guide-fenetre-double-vitrage']],
+  ['storiste', ['comment-choisir-storiste-guide', 'guide-volet-roulant-electrique', 'comment-reparer-volet-roulant']],
+  ['salle-de-bain', ['renovation-salle-de-bain-guide-complet-prix-2026', 'tendances-salle-de-bain-2026', 'renovation-salle-de-bain-budget-etapes']],
+  ['architecte-interieur', ['comment-choisir-architecte-interieur-guide', 'renover-cuisine-guide-complet-etapes', 'renovation-maison-par-ou-commencer']],
+  ['decorateur', ['tendances-cuisine-2026', 'tendances-salle-de-bain-2026', 'peinture-interieure-conseils']],
+  ['domoticien', ['comment-choisir-domoticien-guide', 'domotique-maison-connectee-guide-debutant', 'prix-domotique-maison-2026']],
   ['pompe-a-chaleur', ['pompe-a-chaleur-guide-complet-2026', 'prix-pompe-a-chaleur-2026', 'aides-renovation-2026-cumul-guide']],
   ['panneaux-solaires', ['panneaux-solaires-rentabilite-2026', 'prix-panneaux-solaires-2026', 'installer-panneau-solaire-maison-2026']],
   ['isolation-thermique', ['isolation-maison-guide-complet-materiaux-prix-aides', 'isolation-combles-materiaux-guide', 'aides-renovation-2026-cumul-guide']],
   ['renovation-energetique', ['renovation-energetique-par-ou-commencer', 'dpe-diagnostic-performance-energetique-tout-savoir', 'eco-ptz-2026-pret-taux-zero-renovation']],
+  ['borne-recharge', ['prix-borne-recharge-domicile-2026', 'normes-electriques-2026-nfc-15-100-guide', 'domotique-maison-connectee-guide-debutant']],
+  ['ramoneur', ['ramonage-obligatoire-avant-hiver', 'entretien-chaudiere-annuel', 'preparer-maison-hiver-checklist']],
+  ['paysagiste', ['prix-jardinier-paysagiste-2026', 'amenager-jardin-paysagiste-guide', 'amenagement-terrasse-exterieur-2026']],
+  ['pisciniste', ['comment-choisir-pisciniste-guide', 'prix-terrasse-exterieure-2026', 'amenagement-terrasse-exterieur-2026']],
+  ['alarme-securite', ['securite-alarme-maison-guide-2026', 'securiser-maison-cambriolage-solutions', 'domotique-maison-connectee-guide-debutant']],
+  ['antenniste', ['comment-choisir-antenniste-guide', 'domotique-maison-connectee-guide-debutant', 'prix-domotique-maison-2026']],
+  ['ascensoriste', ['comment-choisir-ascensoriste-guide', 'adaptation-logement-senior-aides-2026', 'accessibilite-pmr-logement-normes']],
+  ['diagnostiqueur', ['comment-choisir-diagnostiqueur-guide', 'dpe-diagnostic-performance-energetique-tout-savoir', 'diagnostic-immobilier-obligatoire-liste']],
+  ['geometre', ['comment-choisir-geometre-guide', 'permis-construire-declaration-prealable-guide', 'urbanisme-regles-construction-extension']],
+  ['desinsectisation', ['nuisibles-maison-prevention-traitement', 'entretien-annuel-maison-checklist-complete', 'humidite-moisissure-maison-solutions']],
+  ['deratisation', ['nuisibles-maison-prevention-traitement', 'entretien-annuel-maison-checklist-complete', 'humidite-moisissure-maison-solutions']],
+  ['demenageur', ['comment-choisir-demenageur-guide', 'preparer-maison-revente-travaux-rentables', 'travaux-avant-vendre-maison-rentables']],
 ])
 
 // ---------------------------------------------------------------------------

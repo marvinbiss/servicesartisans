@@ -26,6 +26,7 @@ export default function ReviewPage() {
   const [hoveredRating, setHoveredRating] = useState(0)
   const [comment, setComment] = useState('')
   const [wouldRecommend, setWouldRecommend] = useState<boolean | null>(null)
+  const [reviewToken, setReviewToken] = useState<string | null>(null)
 
   // Fetch booking info
   useEffect(() => {
@@ -36,8 +37,13 @@ export default function ReviewPage() {
           throw new Error('Réservation non trouvée')
         }
         const data = await response.json()
-        setBookingInfo(data)
-        if (data.alreadyReviewed) {
+        setBookingInfo(data.data ?? data)
+        if (data.data?.reviewToken) {
+          setReviewToken(data.data.reviewToken)
+        } else if (data.reviewToken) {
+          setReviewToken(data.reviewToken)
+        }
+        if ((data.data ?? data).alreadyReviewed) {
           setSubmitted(true)
         }
       } catch (err) {
@@ -72,6 +78,7 @@ export default function ReviewPage() {
           rating,
           comment,
           wouldRecommend,
+          reviewToken,
         }),
       })
 

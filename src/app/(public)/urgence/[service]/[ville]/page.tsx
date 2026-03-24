@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getUrgencyServiceSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, PHONE_TEL } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -372,46 +372,16 @@ export default async function UrgenceServiceVillePage({
 
   const faqSchema = getFAQSchema(allFaqItems)
 
-  const serviceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: `${trade.name} urgence à ${villeData.name} soir & week-end`,
-    description: `Intervention d'urgence ${tradeLower} à ${villeData.name}. ${trade.averageResponseTime}. Disponible soir et week-end.`,
-    provider: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
-    areaServed: {
-      '@type': 'City',
-      name: villeData.name,
-      containedInPlace: {
-        '@type': 'AdministrativeArea',
-        name: villeData.region,
-      },
-    },
-    hoursAvailable: {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday',
-      ],
-      opens: '00:00',
-      closes: '23:59',
-    },
-    offers: {
-      '@type': 'AggregateOffer',
-      priceCurrency: 'EUR',
-      lowPrice: minPrice,
-      highPrice: Math.round(maxPrice * 2),
-      offerCount: commune?.nb_entreprises_artisanales ?? undefined,
-    },
-  }
+  const serviceSchema = getUrgencyServiceSchema({
+    serviceName: trade.name,
+    serviceSlug: service,
+    cityName: villeData.name,
+    regionName: villeData.region,
+    url: `${SITE_URL}/urgence/${service}/${villeSlug}`,
+    lowPrice: minPrice,
+    highPrice: Math.round(maxPrice * 2),
+    offerCount: commune?.nb_entreprises_artisanales ?? undefined,
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -513,6 +483,19 @@ export default async function UrgenceServiceVillePage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <UrgencyCountdown serviceName={trade.name} cityName={villeData.name} />
       </div>
+
+      {/* ─── EDITORIAL SECTIONS (SEO content enrichment) ──── */}
+      <EmergencyEditorialSections
+        service={service}
+        villeSlug={villeSlug}
+        tradeName={trade.name}
+        tradeLower={tradeLower}
+        villeName={villeData.name}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        priceUnit={trade.priceRange.unit}
+        emergencyInfo={trade.emergencyInfo}
+      />
 
       {/* ─── EMERGENCY PROBLEMS ────────────────────────────── */}
       <section className="py-16 bg-white">
@@ -1356,6 +1339,176 @@ export default async function UrgenceServiceVillePage({
       <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
 
       <MicroConversions pageType="urgence-ville" serviceSlug={service} cityName={villeData.name} />
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Sub-component: Emergency editorial sections (SEO content enrichment)
+// Adds ~320 words of template-based editorial content with 3 hash-selected
+// variants per section to avoid duplicate content across 106K pages.
+// ---------------------------------------------------------------------------
+
+interface EmergencyEditorialProps {
+  service: string
+  villeSlug: string
+  tradeName: string
+  tradeLower: string
+  villeName: string
+  minPrice: number
+  maxPrice: number
+  priceUnit: string
+  emergencyInfo?: string
+}
+
+function EmergencyEditorialSections({
+  service,
+  villeSlug,
+  tradeName,
+  tradeLower,
+  villeName,
+  minPrice,
+  maxPrice,
+  priceUnit,
+  emergencyInfo,
+}: EmergencyEditorialProps) {
+  // ── Section 1: Signes d'urgence (~120 mots, 3 variantes) ──
+  const signesHash = Math.abs(hashCode(`urgence-signes-${service}-${villeSlug}`))
+  const signesVariants = [
+    {
+      title: `Quand appeler un ${tradeLower} en urgence à ${villeName} ?`,
+      content: `Toutes les situations ne nécessitent pas une intervention d'urgence. À ${villeName}, un ${tradeLower} d'urgence est indispensable lorsque la sécurité des occupants est en jeu : risque d'inondation, de court-circuit, d'effraction ou de fuite de gaz. En revanche, une panne mineure qui ne présente aucun danger immédiat (robinet qui goutte légèrement, prise murale non fonctionnelle dans une pièce secondaire) peut généralement attendre un rendez-vous en journée, avec un tarif standard. Le critère décisif est simple : y a-t-il un risque pour les personnes, les biens ou la structure du logement ? Si oui, n'attendez pas. Si le problème est uniquement un inconfort, planifiez une intervention classique pour économiser sur les majorations de nuit ou de week-end.`,
+    },
+    {
+      title: `Urgence ${tradeLower} à ${villeName} : quand faut-il vraiment appeler ?`,
+      content: `Avant de contacter un ${tradeLower} en urgence à ${villeName}, évaluez la gravité de la situation. Une intervention d'urgence se justifie quand il y a un danger immédiat : dégât des eaux en cours, odeur de gaz, panne de chauffage en plein hiver avec des températures négatives, ou problème de sécurité (serrure forcée, vitre brisée). En dehors de ces cas critiques, il est souvent préférable de patienter jusqu'aux heures ouvrables. Un ${tradeLower} en journée à ${villeName} coûte en moyenne ${minPrice} à ${maxPrice} ${priceUnit}, contre ${Math.round(minPrice * 1.5)} à ${Math.round(maxPrice * 2)} ${priceUnit} en intervention nocturne ou le week-end. En résumé : si la situation peut attendre sans s'aggraver, reportez au lendemain matin.`,
+    },
+    {
+      title: `${tradeName} d'urgence à ${villeName} : urgence réelle ou fausse alerte ?`,
+      content: `À ${villeName}, les appels d'urgence pour un ${tradeLower} se répartissent en deux catégories : les vraies urgences et les situations qui peuvent attendre. Une vraie urgence implique un risque immédiat pour la sécurité ou des dégâts qui s'aggravent à chaque minute (fuite d'eau importante, panne électrique dangereuse, effraction en cours). Une fausse alerte, c'est un désagrément sans danger : un radiateur qui fait du bruit, une porte qui grince, un petit bouchon dans un évier secondaire. La différence est financière : une intervention urgente de nuit ou de week-end est majorée de 50 à 100 %. Prenez 30 secondes pour évaluer : le problème empire-t-il activement ? Y a-t-il un danger ? Si la réponse est non aux deux, attendez les heures normales.`,
+    },
+  ]
+  const signes = signesVariants[signesHash % signesVariants.length]
+
+  // ── Section 2: Checklist avant l'appel (~100 mots, 3 variantes) ──
+  const checklistHash = Math.abs(hashCode(`urgence-checklist-${service}-${villeSlug}`))
+
+  const checklistPlombier = [
+    'Coupez l\'arrivée d\'eau au compteur général ou au robinet d\'arrêt le plus proche',
+    'Placez des serpillières et récipients sous la fuite pour limiter les dégâts',
+    'Prenez des photos du problème et des dégâts déjà visibles',
+    'Notez l\'heure exacte de début du sinistre (utile pour l\'assurance)',
+    'Préparez votre adresse exacte, étage et code d\'accès à l\'immeuble',
+    'Vérifiez si votre assurance habitation couvre le dépannage d\'urgence',
+  ]
+  const checklistElectricien = [
+    'Coupez le disjoncteur général au tableau électrique',
+    'N\'utilisez pas d\'appareil électrique et ne touchez pas les fils à nu',
+    'Prenez des photos du tableau électrique et du problème visible',
+    'Notez les pièces affectées et les circonstances (orage, surcharge)',
+    'Préparez votre adresse exacte, étage et code d\'accès',
+    'Rassemblez les informations du contrat d\'électricité (Enedis, etc.)',
+  ]
+  const checklistSerrurier = [
+    'Vérifiez si une autre entrée est accessible (fenêtre, porte de service)',
+    'Contactez le syndic ou le gardien si vous êtes en copropriété',
+    'Prenez en photo la serrure et la marque de la porte',
+    'Préparez une pièce d\'identité et un justificatif de domicile',
+    'Notez la marque et le modèle de la serrure si visible',
+    'Demandez un devis ferme avant que le serrurier ne commence',
+  ]
+  const checklistDefault = [
+    'Sécurisez la zone en attendant l\'artisan (coupez l\'eau, l\'électricité ou le gaz si nécessaire)',
+    'Prenez des photos du problème sous différents angles',
+    'Notez l\'heure exacte de début du sinistre pour l\'assurance',
+    'Préparez votre adresse exacte, étage, code d\'accès et digicode',
+    'Rassemblez vos documents d\'assurance habitation',
+    'Ne tentez pas de réparation provisoire si vous n\'êtes pas sûr de vous',
+  ]
+
+  const checklistMap: Record<string, string[]> = {
+    plombier: checklistPlombier,
+    electricien: checklistElectricien,
+    serrurier: checklistSerrurier,
+  }
+  const checklist = checklistMap[service] || checklistDefault
+
+  const checklistTitles = [
+    `Checklist avant d'appeler un ${tradeLower} en urgence à ${villeName}`,
+    `${tradeName} urgence à ${villeName} : préparez votre appel`,
+    `Avant l'arrivée du ${tradeLower} à ${villeName} : les bons réflexes`,
+  ]
+  const checklistTitle = checklistTitles[checklistHash % checklistTitles.length]
+
+  const checklistIntros = [
+    `Pour gagner du temps et faciliter l'intervention du ${tradeLower} à ${villeName}, préparez ces éléments avant son arrivée :`,
+    `Une bonne préparation accélère le diagnostic et réduit le coût de l'intervention. Voici ce qu'il faut faire avant l'arrivée du ${tradeLower} à ${villeName} :`,
+    `Le ${tradeLower} sera plus efficace si vous avez anticipé ces quelques gestes. À ${villeName}, voici la checklist recommandée :`,
+  ]
+  const checklistIntro = checklistIntros[checklistHash % checklistIntros.length]
+
+  // ── Section 3: Prix urgence vs planifié (~100 mots, 3 variantes) ──
+  const prixHash = Math.abs(hashCode(`urgence-prix-comp-${service}-${villeSlug}`))
+  const nightMin = Math.round(minPrice * 1.5)
+  const nightMax = Math.round(maxPrice * 1.5)
+  const weMin = Math.round(minPrice * 2)
+  const weMax = Math.round(maxPrice * 2)
+
+  const prixVariants = [
+    {
+      title: `Prix ${tradeLower} urgence vs intervention planifiée à ${villeName}`,
+      content: `À ${villeName}, la différence de coût entre une intervention planifiée et une urgence est significative. En journée (lundi-samedi, 8h-20h), un ${tradeLower} facture en moyenne ${minPrice} à ${maxPrice} ${priceUnit}. Le soir et le week-end, comptez ${nightMin} à ${nightMax} ${priceUnit} (majoration de 50 %). Les dimanches et jours fériés, les tarifs doublent : ${weMin} à ${weMax} ${priceUnit}. Ces majorations sont légales et encadrées par la convention collective du bâtiment. Pour réduire la facture, deux réflexes : évaluez si le problème peut attendre le lendemain matin, et demandez toujours un devis écrit avant le début de l'intervention, même en urgence. ${emergencyInfo ? 'Un artisan sérieux acceptera toujours de vous donner un prix avant de commencer.' : 'Un professionnel transparent vous communiquera ses tarifs avant d\'intervenir.'}`,
+    },
+    {
+      title: `Combien coûte vraiment un ${tradeLower} d'urgence à ${villeName} ?`,
+      content: `La transparence tarifaire est essentielle, surtout en situation de stress. À ${villeName}, voici les fourchettes de prix réalistes pour un ${tradeLower}. Intervention planifiée en journée : ${minPrice} à ${maxPrice} ${priceUnit} — c'est le tarif de référence. Intervention d'urgence soir/samedi après-midi : ${nightMin} à ${nightMax} ${priceUnit}, soit une majoration d'environ 50 %. Dimanche, jour férié ou nuit (après minuit) : ${weMin} à ${weMax} ${priceUnit}, soit le double du tarif normal. Ces écarts s'expliquent par l'astreinte, le déplacement hors horaires et la disponibilité immédiate. Conseil important : un ${tradeLower} honnête à ${villeName} vous proposera un devis gratuit par téléphone avant de se déplacer. Refusez toute intervention sans devis préalable.`,
+    },
+    {
+      title: `${tradeName} à ${villeName} : urgence ou rendez-vous, quel impact sur le prix ?`,
+      content: `Planifier plutôt que subir : c'est la clé pour maîtriser son budget ${tradeLower} à ${villeName}. Un rendez-vous en journée coûte ${minPrice} à ${maxPrice} ${priceUnit}. En urgence le soir ou le samedi, la facture grimpe à ${nightMin}–${nightMax} ${priceUnit}. Le dimanche ou un jour férié, elle peut atteindre ${weMin} à ${weMax} ${priceUnit}. L'écart est considérable, mais justifié par les contraintes de l'astreinte. Pour chaque situation, posez-vous la question : le problème va-t-il empirer dans les prochaines heures ? Si oui, appelez immédiatement — les dégâts évités compensent largement le surcoût. Si le problème est stable, patientez jusqu'au prochain créneau en tarif normal et faites établir plusieurs devis comparatifs.`,
+    },
+  ]
+  const prix = prixVariants[prixHash % prixVariants.length]
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      {/* Section 1: Signes d'urgence */}
+      <section>
+        <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
+          {signes.title}
+        </h2>
+        <div className="prose prose-gray max-w-none">
+          <p className="text-gray-700 leading-relaxed">{signes.content}</p>
+        </div>
+      </section>
+
+      {/* Section 2: Checklist avant l'appel */}
+      <section>
+        <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
+          {checklistTitle}
+        </h2>
+        <p className="text-gray-600 mb-4">{checklistIntro}</p>
+        <div className="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100">
+          {checklist.map((item, i) => (
+            <div key={i} className="flex items-start gap-3 px-5 py-3.5">
+              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+              </div>
+              <span className="text-gray-700 text-sm leading-relaxed">{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Section 3: Prix urgence vs planifié */}
+      <section>
+        <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
+          {prix.title}
+        </h2>
+        <div className="prose prose-gray max-w-none">
+          <p className="text-gray-700 leading-relaxed">{prix.content}</p>
+        </div>
+      </section>
     </div>
   )
 }

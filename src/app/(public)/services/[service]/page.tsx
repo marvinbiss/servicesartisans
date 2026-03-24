@@ -26,6 +26,7 @@ import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
@@ -1021,6 +1022,8 @@ export default async function ServicePage({ params }: PageProps) {
       <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
 
       <SeasonalLinks currentService={serviceSlug} />
+
+      <OrphanRescueLinks currentPath={`/services/${serviceSlug}`} serviceSlug={serviceSlug} />
 
       <StickyMobileCTA serviceSlug={serviceSlug} />
 

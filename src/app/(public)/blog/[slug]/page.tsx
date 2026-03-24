@@ -17,6 +17,7 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { ArticleFAQ } from './ArticleFAQ'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 
 export const revalidate = 86400
 
@@ -39,21 +40,27 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
+function truncateTitle(title: string, maxLen = 60): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const article = allArticles[slug]
   if (!article) return { title: 'Article non trouvé' }
 
   const blogImage = getBlogImage(slug, article.category)
+  const title = truncateTitle(article.title, 60)
 
   return {
-    title: article.title,
+    title,
     description: article.excerpt,
     alternates: {
       canonical: `${SITE_URL}/blog/${slug}`,
     },
     openGraph: {
-      title: article.title,
+      title,
       description: article.excerpt,
       type: 'article',
       publishedTime: article.date,
@@ -65,7 +72,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: article.title,
+      title,
       description: article.excerpt,
       images: [blogImage.src],
     },
@@ -593,8 +600,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
   // Derive contextual devis link from service links (first /services/X match -> /devis/X)
   const firstServiceLink = getRelatedServiceLinks(slug, article.category, article.tags)
     .find((l) => l.href.startsWith('/services/'))
-  const devisHref = firstServiceLink
-    ? `/devis/${firstServiceLink.href.split('/services/')[1].split('/')[0]}`
+  const primaryServiceSlug = firstServiceLink
+    ? firstServiceLink.href.split('/services/')[1].split('/')[0]
+    : null
+  const devisHref = primaryServiceSlug
+    ? `/devis/${primaryServiceSlug}`
     : '/devis'
 
   // Index after which to insert mid-article CTA (after ~2nd h2 section)
@@ -1116,6 +1126,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </Link>
         </div>
       </div>
+
+      {/* DeepPageLinks — Maillage interne blog → services/villes */}
+      {primaryServiceSlug && (
+        <DeepPageLinks currentService={primaryServiceSlug} />
+      )}
     </div>
   )
 }

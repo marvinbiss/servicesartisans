@@ -120,6 +120,7 @@ export async function GET(request: Request) {
         .from('bookings')
         .select(`
           id,
+          client_id,
           provider_id,
           service_name,
           status,
@@ -137,7 +138,7 @@ export async function GET(request: Request) {
         )
       }
 
-      const typedBooking = booking as BookingWithRelations
+      const typedBooking = booking as BookingWithRelations & { client_id: string }
 
       // Check if already reviewed
       const { data: existingReview } = await supabase
@@ -146,11 +147,29 @@ export async function GET(request: Request) {
         .eq('booking_id', typedBooking.id)
         .single()
 
+      // Generate reviewToken only for authenticated client of this booking
+      let reviewToken: string | undefined
+      if (process.env.REVIEW_HMAC_SECRET) {
+        try {
+          const authSupabase = await createServerClient()
+          const { data: { user } } = await authSupabase.auth.getUser()
+          if (user && typedBooking.client_id === user.id) {
+            reviewToken = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
+              .update(bookingId)
+              .digest('hex')
+              .slice(0, 32)
+          }
+        } catch {
+          // Auth check failed — no token returned (public behavior)
+        }
+      }
+
       return NextResponse.json(
         createSuccessResponse({
           artisanName: getArtisanDisplayName(typedBooking.artisan),
           serviceName: typedBooking.service_name || 'Service',
           alreadyReviewed: !!existingReview,
+          ...(reviewToken ? { reviewToken } : {}),
         })
       )
     }
@@ -485,7 +504,7 @@ async function updateArtisanRating(supabase: SupabaseClientType, artisanId: stri
     const avgRating = reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
 
     await supabase
-      .from('profiles')
+      .from('providers')
       .update({
         average_rating: Math.round(avgRating * 10) / 10,
         review_count: reviews.length,

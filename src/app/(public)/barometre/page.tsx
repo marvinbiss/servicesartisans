@@ -21,7 +21,7 @@ const canonicalUrl = `${SITE_URL}/barometre`
 export const metadata: Metadata = {
   title: `Baromètre des Artisans 2026 — Stats par métier`,
   description:
-    'Baromètre des artisans en France : statistiques temps réel sur 940 000+ professionnels du bâtiment. Notes moyennes, taux de vérification, répartition par métier et par ville. Données ouvertes et API publique.',
+    'Baromètre des artisans en France : statistiques sur 940 000+ professionnels du bâtiment. Notes moyennes, avis, répartition par métier et ville.',
   alternates: { canonical: canonicalUrl },
   robots: { index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' as const, 'max-video-preview': -1 },
   openGraph: {

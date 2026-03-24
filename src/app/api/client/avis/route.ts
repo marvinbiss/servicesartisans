@@ -65,7 +65,7 @@ export async function GET() {
       .from('reviews')
       .select(`
         *,
-        artisan:profiles!artisan_id(id, full_name),
+        artisan:providers!artisan_id(id, name),
         booking:bookings!booking_id(service_name)
       `)
       .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
@@ -85,7 +85,7 @@ export async function GET() {
     // Format published reviews
     const formattedAvisPublies = avisPublies?.map(r => ({
       id: r.id,
-      artisan: r.artisan?.full_name || 'Artisan',
+      artisan: r.artisan?.name || 'Artisan',
       artisan_id: r.artisan_id,
       service: (r.booking as { service_name?: string } | null)?.service_name || null,
       date: r.created_at,
