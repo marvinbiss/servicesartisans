@@ -26,7 +26,7 @@ const claimsQuerySchema = z.object({
 // PATCH body
 const claimActionSchema = z.object({
   claimId: z.string().uuid(),
-  action: z.enum(['approve', 'reject']),
+  action: z.enum(['approve', 'reject', 'unclaim']),
   rejectionReason: z.string().max(500).optional(),
 })
 
@@ -140,6 +140,105 @@ export async function PATCH(request: NextRequest) {
         { success: false, error: { message: 'Demande introuvable' } },
         { status: 404 }
       )
+    }
+
+    // Unclaim: only works on approved claims
+    if (action === 'unclaim') {
+      if (claim.status !== 'approved') {
+        return NextResponse.json(
+          { success: false, error: { message: 'Seule une revendication approuvée peut être dérevendiquée' } },
+          { status: 409 }
+        )
+      }
+
+      // 1. Remove user_id from provider
+      const { error: providerError } = await supabase
+        .from('providers')
+        .update({
+          user_id: null,
+          claimed_at: null,
+          claimed_by: null,
+          updated_at: now,
+        })
+        .eq('id', claim.provider_id)
+
+      if (providerError) {
+        logger.error('Error unclaiming provider', providerError)
+        return NextResponse.json(
+          { success: false, error: { message: `Erreur dérevendication: ${providerError.message}` } },
+          { status: 500 }
+        )
+      }
+
+      // 2. Reset claim status to rejected with reason
+      const { error: claimUpdateError } = await supabase
+        .from('provider_claims')
+        .update({
+          status: 'rejected',
+          rejection_reason: rejectionReason || 'Dérevendiqué par un administrateur',
+          reviewed_by: authResult.admin.id,
+          reviewed_at: now,
+        })
+        .eq('id', claimId)
+
+      if (claimUpdateError) {
+        logger.error('Error updating claim after unclaim', claimUpdateError)
+        return NextResponse.json(
+          { success: false, error: { message: 'Erreur mise à jour de la demande' } },
+          { status: 500 }
+        )
+      }
+
+      // 3. Reset user role to client if they have no other claimed providers
+      if (claim.user_id) {
+        const { count } = await supabase
+          .from('providers')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', claim.user_id)
+
+        if (!count || count === 0) {
+          await supabase
+            .from('profiles')
+            .update({ role: 'client', updated_at: now })
+            .eq('id', claim.user_id)
+            .not('role', 'in', '(super_admin,admin,moderator)')
+        }
+      }
+
+      // 4. Revalidate affected pages
+      try {
+        const { data: providerInfo } = await supabase
+          .from('providers')
+          .select('specialty, address_city, slug, stable_id')
+          .eq('id', claim.provider_id)
+          .single()
+
+        if (providerInfo) {
+          const serviceSlug = slugify(providerInfo.specialty || 'artisan')
+          const locationSlug = slugify(providerInfo.address_city || 'france')
+          const publicId = providerInfo.slug || providerInfo.stable_id
+
+          if (publicId) {
+            revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+          }
+          revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+        }
+      } catch (revalError) {
+        logger.error('Revalidation failed after unclaim:', revalError)
+      }
+
+      logger.info('Claim unclaimed', {
+        claimId,
+        providerId: claim.provider_id,
+        userId: claim.user_id,
+        adminId: authResult.admin.id,
+        reason: rejectionReason || null,
+      })
+
+      return NextResponse.json({
+        success: true,
+        message: 'Revendication retirée. La fiche est à nouveau disponible.',
+      })
     }
 
     if (claim.status !== 'pending') {
@@ -399,9 +498,15 @@ export async function PATCH(request: NextRequest) {
         emailStatus,
       })
 
+      const emailMessage = emailStatus.startsWith('sent')
+        ? 'Demande approuvée. La fiche a été attribuée. Email envoyé.'
+        : emailStatus === 'skipped'
+          ? 'Demande approuvée. La fiche a été attribuée.'
+          : "Demande approuvée. La fiche a été attribuée. \u26A0 L'email n'a pas pu être envoyé \u2014 l'artisan devra utiliser \u00AB Mot de passe oublié \u00BB."
+
       return NextResponse.json({
         success: true,
-        message: `Demande approuvée. La fiche a été attribuée. Email: ${emailStatus}`,
+        message: emailMessage,
       })
     } else {
       // Reject

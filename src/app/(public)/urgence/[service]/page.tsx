@@ -6,6 +6,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
+import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode } from '@/lib/seo/location-content'
 import { villes, services } from '@/lib/data/france'
@@ -353,7 +354,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                 <Phone className="w-6 h-6" />
                 Appeler l'assistance
               </a>
-              <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+              <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
               href={`/services/${service}`}
@@ -654,7 +655,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               <Phone className="w-6 h-6" />
               Appeler l'assistance
             </a>
-            <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+            <PlatformPhoneLabel variant="badge" className="mt-2" />
           </div>
         </div>
       </section>

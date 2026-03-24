@@ -11,10 +11,13 @@ const adminsQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
 })
 
-// POST request schema
+// POST request schema — accepts email OR user_id
 const createAdminSchema = z.object({
-  user_id: z.string().uuid(),
+  user_id: z.string().uuid().optional(),
+  email: z.string().email().optional(),
   role: z.enum(['super_admin', 'admin', 'moderator', 'viewer']),
+}).refine(data => data.user_id || data.email, {
+  message: 'user_id ou email requis',
 })
 
 export const dynamic = 'force-dynamic'
@@ -113,13 +116,57 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { user_id, role } = result.data
+    const { user_id, email, role } = result.data
+
+    // Resolve user_id from email if needed
+    let targetUserId = user_id
+    if (!targetUserId && email) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', email)
+        .single()
+
+      if (profile) {
+        targetUserId = profile.id
+      } else {
+        // User doesn't exist — create auth account + profile
+        const tempPassword = crypto.randomUUID()
+        const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+          email,
+          password: tempPassword,
+          email_confirm: true,
+          user_metadata: { full_name: email.split('@')[0] },
+        })
+
+        if (authError || !authData.user) {
+          logger.error('Error creating auth user for admin', authError)
+          return NextResponse.json(
+            { success: false, error: { message: authError?.message || 'Erreur lors de la création du compte' } },
+            { status: 400 }
+          )
+        }
+
+        // Create profile
+        await supabase.from('profiles').upsert({
+          id: authData.user.id,
+          email,
+          full_name: email.split('@')[0],
+          is_admin: true,
+          role,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+
+        targetUserId = authData.user.id
+      }
+    }
 
     // Promote user to admin role via profiles table
     const { data: updatedProfile, error } = await supabase
       .from('profiles')
       .update({ role: role, is_admin: true, updated_at: new Date().toISOString() })
-      .eq('id', user_id)
+      .eq('id', targetUserId!)
       .select('id, email, full_name, role, is_admin, created_at')
       .single()
 

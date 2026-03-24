@@ -22,6 +22,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, PHONE_TEL } from '@/lib/seo/config'
+import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
@@ -480,7 +481,7 @@ export default async function UrgenceServiceVillePage({
                 <Phone className="w-6 h-6" />
                 Appeler l'assistance
               </a>
-              <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+              <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
               href={`/devis/${service}/${villeSlug}`}
@@ -1087,7 +1088,7 @@ export default async function UrgenceServiceVillePage({
                 <Phone className="w-6 h-6" />
                 Appeler l'assistance
               </a>
-              <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
+              <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
               href={`/devis/${service}/${villeSlug}`}

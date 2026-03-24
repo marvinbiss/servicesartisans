@@ -1,7 +1,10 @@
+'use client'
+
 import Link from 'next/link'
 import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, Instagram, Shield, CreditCard, Award, Building2 } from 'lucide-react'
 import NewsletterForm from './NewsletterForm'
 import { companyIdentity } from '@/lib/config/company-identity'
+import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 // DynamicFooterLinks removed — replaced by 8 fixed strategic links for permanent PageRank equity
 
 // Information links
@@ -244,6 +247,7 @@ export default function Footer() {
                 <div>
                   <p className="text-white font-medium text-sm mb-0.5">Téléphone</p>
                   <a href={`tel:${companyIdentity.phone}`} className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200">{companyIdentity.phone}</a>
+                  <PlatformPhoneLabel variant="inline" className="mt-1" />
                 </div>
               </div>
             )}

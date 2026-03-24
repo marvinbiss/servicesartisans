@@ -83,6 +83,10 @@
     {
       "path": "/api/cron/cache-warmup",
       "schedule": "0 */2 * * *"
+    },
+    {
+      "path": "/api/cron/check-radiees",
+      "schedule": "0 5 * * 0"
     }
   ]
 }

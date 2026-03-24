@@ -7,6 +7,7 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
+import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { villes, services } from '@/lib/data/france'
 
 export const revalidate = 86400
@@ -200,7 +201,7 @@ export default async function UrgencePage() {
                 <Phone className="w-6 h-6" />
                 Appeler l'assistance
               </a>
-              <span className="text-sm text-red-200/70 mt-2">Service de mise en relation</span>
+              <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
               href="/services"
@@ -483,7 +484,7 @@ export default async function UrgencePage() {
                 <Phone className="w-6 h-6" />
                 Appeler l'assistance
               </a>
-              <span className="text-sm text-red-200/70 mt-2">Service de mise en relation</span>
+              <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
               href="/services"

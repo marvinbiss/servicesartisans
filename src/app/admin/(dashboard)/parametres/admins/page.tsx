@@ -68,12 +68,15 @@ export default function AdminsManagementPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newAdmin),
       })
-      if (!response.ok) throw new Error('Erreur lors de l\'ajout')
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error?.message || 'Erreur lors de l\'ajout')
+      }
       setAddModal(false)
       setNewAdmin({ email: '', role: 'admin' })
       fetchAdmins()
-    } catch {
-      setError('Erreur lors de l\'ajout de l\'administrateur')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de l\'ajout de l\'administrateur')
     } finally {
       setAdding(false)
     }

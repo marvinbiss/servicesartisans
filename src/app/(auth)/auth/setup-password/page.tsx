@@ -3,12 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Wrench, AlertCircle, Loader2 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 
 export default function SetupPasswordPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   // Extract the hashed_token from query param
   const token = typeof window !== 'undefined'
@@ -30,31 +28,10 @@ export default function SetupPasswordPage() {
     )
   }
 
-  const handleVerify = async () => {
+  const handleContinue = () => {
     setLoading(true)
-    setError(null)
-
-    try {
-      const supabase = createClient()
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        token_hash: token,
-        type: 'recovery',
-      })
-
-      if (verifyError) {
-        setError(verifyError.message === 'Token has expired or is invalid'
-          ? 'Ce lien a expiré. Contactez support@servicesartisans.fr pour recevoir un nouveau lien.'
-          : `Erreur : ${verifyError.message}`)
-        setLoading(false)
-        return
-      }
-
-      // Session is now active — redirect to password setup
-      router.push('/definir-mot-de-passe')
-    } catch {
-      setError('Erreur inattendue. Veuillez réessayer.')
-      setLoading(false)
-    }
+    // Pass the token to the password definition page — verifyOtp will happen there
+    router.push(`/definir-mot-de-passe?token=${encodeURIComponent(token)}`)
   }
 
   return (
@@ -70,21 +47,15 @@ export default function SetupPasswordPage() {
           Votre fiche artisan a été validée. Cliquez le bouton ci-dessous pour définir votre mot de passe et accéder à votre espace.
         </p>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-            {error}
-          </div>
-        )}
-
         <button
-          onClick={handleVerify}
+          onClick={handleContinue}
           disabled={loading}
           className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold transition-all shadow-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30 disabled:opacity-60"
         >
           {loading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Vérification en cours...
+              Redirection en cours...
             </>
           ) : (
             'Définir mon mot de passe'

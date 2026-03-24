@@ -435,7 +435,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         />
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
                         <div className="absolute top-3 right-3 text-xs font-bold px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 border border-accent-200">
-                          {a.is_verified ? '&#10003; Vérifié SIREN' : '&#10003; Référencé'}
+                          {a.is_verified ? '✓ Vérifié SIREN' : '✓ Référencé'}
                         </div>
                       </div>
                       <div className="px-5 pb-5 pt-4">

@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, Wrench } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function DefinirMotDePassePage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -16,18 +17,49 @@ export default function DefinirMotDePassePage() {
   const [success, setSuccess] = useState(false)
   const [checking, setChecking] = useState(true)
   const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [tokenExpired, setTokenExpired] = useState(false)
 
-  // Verify session exists (user clicked recovery link)
+  const token = searchParams.get('token')
+
+  // On mount: check session, or verify OTP token if provided
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) {
-        router.push('/connexion')
-      } else {
-        setUserEmail(data.user.email || null)
+    const init = async () => {
+      const { data: userData } = await supabase.auth.getUser()
+
+      // If already has an active session, proceed directly
+      if (userData.user) {
+        setUserEmail(userData.user.email || null)
         setChecking(false)
+        return
       }
-    })
-  }, [supabase, router])
+
+      // No session — if we have a token, try to verify it
+      if (token) {
+        const { data: verifyData, error: verifyError } = await supabase.auth.verifyOtp({
+          token_hash: token,
+          type: 'recovery',
+        })
+
+        if (verifyError) {
+          setTokenExpired(true)
+          setChecking(false)
+          return
+        }
+
+        if (verifyData.user) {
+          setUserEmail(verifyData.user.email || null)
+          setChecking(false)
+          return
+        }
+      }
+
+      // No session and no token (or token produced no user) — redirect to login
+      router.push('/connexion')
+    }
+
+    init()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const getPasswordStrength = (pwd: string) => {
     let strength = 0
@@ -83,6 +115,29 @@ export default function DefinirMotDePassePage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
+      </div>
+    )
+  }
+
+  if (tokenExpired) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h1 className="text-xl font-bold text-gray-900 mb-2">Lien expiré ou invalide</h1>
+          <p className="text-gray-600 mb-6">
+            Ce lien a expiré ou a déjà été utilisé. Vous pouvez demander un nouveau lien via la page de réinitialisation de mot de passe.
+          </p>
+          <a
+            href="/mot-de-passe-oublie"
+            className="inline-flex items-center justify-center w-full py-3 rounded-xl font-semibold transition-all bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg shadow-amber-500/30"
+          >
+            Mot de passe oublié
+          </a>
+          <p className="mt-4 text-xs text-gray-400">
+            Ou contactez-nous à <a href="mailto:support@servicesartisans.fr" className="text-amber-600 underline">support@servicesartisans.fr</a>
+          </p>
+        </div>
       </div>
     )
   }

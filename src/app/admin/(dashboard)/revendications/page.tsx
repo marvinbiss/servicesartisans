@@ -14,6 +14,7 @@ import {
   Mail,
   Phone,
   Briefcase,
+  Undo2,
 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
@@ -69,7 +70,7 @@ export default function AdminClaimsPage() {
   const [actionModal, setActionModal] = useState<{
     open: boolean
     claimId: string
-    action: 'approve' | 'reject'
+    action: 'approve' | 'reject' | 'unclaim'
     providerName: string
     userName: string
   }>({ open: false, claimId: '', action: 'approve', providerName: '', userName: '' })
@@ -297,6 +298,22 @@ export default function AdminClaimsPage() {
                       </button>
                     </div>
                   )}
+
+                  {claim.status === 'approved' && (
+                    <button
+                      onClick={() => setActionModal({
+                        open: true,
+                        claimId: claim.id,
+                        action: 'unclaim',
+                        providerName: claim.provider?.name || 'Artisan',
+                        userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
+                      })}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
+                    >
+                      <Undo2 className="w-4 h-4" />
+                      Dérevendiquer
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -332,24 +349,30 @@ export default function AdminClaimsPage() {
         isOpen={actionModal.open}
         onClose={() => { setActionModal({ ...actionModal, open: false }); setRejectionReason('') }}
         onConfirm={confirmAction}
-        title={actionModal.action === 'approve' ? 'Approuver la revendication' : 'Rejeter la revendication'}
+        title={
+          actionModal.action === 'approve' ? 'Approuver la revendication'
+          : actionModal.action === 'unclaim' ? 'Dérevendiquer la fiche'
+          : 'Rejeter la revendication'
+        }
         message={
           actionModal.action === 'approve'
             ? `Approuver la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche sera attribuée. Si l'artisan n'a pas de compte, un compte sera créé et il recevra un email pour définir son mot de passe.`
+            : actionModal.action === 'unclaim'
+            ? `Retirer la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche redeviendra disponible et l'artisan perdra l'accès à sa gestion.`
             : `Rejeter la revendication de "${actionModal.providerName}" par ${actionModal.userName} ?`
         }
-        confirmText={actionModal.action === 'approve' ? 'Approuver' : 'Rejeter'}
+        confirmText={actionModal.action === 'approve' ? 'Approuver' : actionModal.action === 'unclaim' ? 'Dérevendiquer' : 'Rejeter'}
         variant={actionModal.action === 'approve' ? 'success' : 'danger'}
       >
-        {actionModal.action === 'reject' && (
+        {(actionModal.action === 'reject' || actionModal.action === 'unclaim') && (
           <div className="mt-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Motif du rejet (optionnel)
+              {actionModal.action === 'unclaim' ? 'Motif de la dérevendication (optionnel)' : 'Motif du rejet (optionnel)'}
             </label>
             <textarea
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
-              placeholder="Expliquez pourquoi la demande est rejetée..."
+              placeholder={actionModal.action === 'unclaim' ? 'Expliquez pourquoi la revendication est retirée...' : 'Expliquez pourquoi la demande est rejetée...'}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               maxLength={500}

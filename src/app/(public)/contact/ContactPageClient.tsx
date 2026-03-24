@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Mail, Send, CheckCircle, Clock, MessageSquare, ArrowRight, Loader2, AlertCircle, Phone } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export default function ContactPageClient() {
@@ -136,6 +137,7 @@ export default function ContactPageClient() {
                     <a href="tel:+33651858930" className="text-blue-600 hover:text-blue-700 font-medium">
                       06 51 85 89 30
                     </a>
+                    <PlatformPhoneLabel variant="inline" className="mt-1" />
                   </div>
                 </div>
 

@@ -130,7 +130,7 @@ export default async function MentionsLegalesPage() {
                 <li><strong>Siège social :</strong> {companyIdentity.address}</li>
               )}
               {companyIdentity.phone && (
-                <li><strong>Téléphone :</strong> {companyIdentity.phone}</li>
+                <li><strong>Téléphone :</strong> {companyIdentity.phone} (n° plateforme)</li>
               )}
               {companyIdentity.directeurPublication && (
                 <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
