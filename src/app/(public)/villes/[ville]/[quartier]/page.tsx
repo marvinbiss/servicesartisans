@@ -13,7 +13,7 @@ import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 
 // Pre-render top 5 cities × their quartiers — rest via ISR
-const TOP_CITIES = 5
+const TOP_CITIES = 3
 export function generateStaticParams() {
   return villes.slice(0, TOP_CITIES).flatMap(v =>
     getQuartiersByVille(v.slug).map(q => ({ ville: v.slug, quartier: q.slug }))

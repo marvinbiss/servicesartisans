@@ -15,7 +15,7 @@ import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
-const TOP_CITIES_COUNT = 20
+const TOP_CITIES_COUNT = 5
 export function generateStaticParams() {
   return villes.slice(0, TOP_CITIES_COUNT).map((ville) => ({ ville: ville.slug }))
 }
