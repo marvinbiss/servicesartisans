@@ -14,7 +14,6 @@ import {
   ArtisanServices,
   ArtisanSidebar,
   ArtisanMobileCTA,
-  ArtisanSchema,
   ArtisanBreadcrumb,
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
@@ -166,8 +165,7 @@ export default function ArtisanPageClient({
 
   return (
     <>
-      {/* Schema.org JSON-LD */}
-      <ArtisanSchema artisan={artisan} reviews={reviews} />
+      {/* Schema.org JSON-LD is now rendered server-side in page.tsx */}
 
       {/* Skip links for keyboard navigation */}
       <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">

@@ -6,6 +6,7 @@ import { getArtisanUrl } from '@/lib/utils'
 import { resolveProviderCity } from '@/lib/insee-resolver'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
+import { ArtisanSchema } from '@/components/artisan/ArtisanSchema'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 import type { Service, Location } from '@/types'
@@ -594,8 +595,8 @@ export default async function ProviderPage({ params }: PageProps) {
       {/* Preload hints */}
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
-      {/* JSON-LD structured data (BreadcrumbList, LocalBusiness, ProfilePage, etc.)
-           is rendered by ArtisanSchema inside ArtisanPageClient — no duplicates here */}
+      {/* JSON-LD structured data — rendered SERVER-SIDE for immediate bot visibility */}
+      <ArtisanSchema artisan={artisan} reviews={reviews} />
 
       <ArtisanPageClient
         initialArtisan={artisan}
