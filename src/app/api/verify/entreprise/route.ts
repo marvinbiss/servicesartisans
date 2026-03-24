@@ -190,9 +190,22 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST - Enrichir un profil artisan avec les données Pappers
+ * Requiert une authentification : soit admin, soit l'artisan propriétaire du profil.
  */
 export async function POST(request: NextRequest) {
   try {
+    // --- AUTH CHECK ---
+    const { createClient: createServerClient } = await import('@/lib/supabase/server')
+    const supabaseAuth = await createServerClient()
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Authentification requise' } },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
     const result = entreprisePostSchema.safeParse(body)
     if (!result.success) {
@@ -202,6 +215,43 @@ export async function POST(request: NextRequest) {
       )
     }
     const { siret, artisanId } = result.data
+
+    // Si un artisanId est fourni, vérifier que l'utilisateur est propriétaire ou admin
+    if (artisanId) {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const adminClient = createAdminClient()
+
+      // Vérifier ownership : le provider doit appartenir à l'utilisateur
+      const { data: provider } = await adminClient
+        .from('providers')
+        .select('id, user_id')
+        .eq('id', artisanId)
+        .single()
+
+      if (!provider) {
+        return NextResponse.json(
+          { success: false, error: { message: 'Artisan non trouvé' } },
+          { status: 404 }
+        )
+      }
+
+      // Vérifier que l'utilisateur est le propriétaire OU un admin
+      const { data: profile } = await adminClient
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+
+      const isOwner = provider.user_id === user.id
+      const isAdmin = profile?.is_admin === true
+
+      if (!isOwner && !isAdmin) {
+        return NextResponse.json(
+          { success: false, error: { message: 'Non autorisé à modifier ce profil' } },
+          { status: 403 }
+        )
+      }
+    }
 
     // Récupérer les données Pappers
     const entreprise = await getEntrepriseParSiret(siret)
@@ -219,16 +269,10 @@ export async function POST(request: NextRequest) {
 
     // Si un artisanId est fourni, mettre à jour le profil
     if (artisanId) {
-      const { createClient } = await import('@supabase/supabase-js')
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-      )
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const adminClient = createAdminClient()
 
-      // Only update columns that exist in the providers table.
-      // Dropped columns: company_name, trust_badge, trust_score, etc.
-      // Non-existent columns: siret_verified, company_legal_form, company_naf_*, pappers_data
-      await supabase
+      await adminClient
         .from('providers')
         .update({
           siret: siret,
