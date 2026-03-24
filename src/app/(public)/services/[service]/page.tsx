@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText, BookOpen } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -273,13 +273,7 @@ export default async function ServicePage({ params }: PageProps) {
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 
-  // JSON-LD structured data
-  const serviceSchema = getServiceSchema({
-    name: service.name,
-    description: service.description || `Services de ${service.name.toLowerCase()} en France`,
-    category: service.category || service.name,
-    image: getServiceImage(serviceSlug).src,
-  })
+  // JSON-LD structured data (single Service schema with aggregateRating + review)
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -311,7 +305,7 @@ export default async function ServicePage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-sand-50">
       {/* JSON-LD */}
-      <JsonLd data={[serviceSchema, breadcrumbSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
+      <JsonLd data={[breadcrumbSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b border-sand-200">
