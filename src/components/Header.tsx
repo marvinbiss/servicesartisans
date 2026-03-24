@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown, Heart } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useMobileMenu } from '@/contexts/MobileMenuContext'
+import { MobileMenuProvider, useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -19,6 +19,14 @@ import DesktopMegaMenus from './header/DesktopMegaMenus'
 import MobileMenu from './header/MobileMenu'
 
 export default function Header({ artisanCount = 0 }: { artisanCount?: number }) {
+  return (
+    <MobileMenuProvider>
+      <HeaderInner artisanCount={artisanCount} />
+    </MobileMenuProvider>
+  )
+}
+
+function HeaderInner({ artisanCount = 0 }: { artisanCount?: number }) {
   const router = useRouter()
   const pathname = usePathname()
   const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
@@ -42,7 +50,12 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
   const megaMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => {
+    setMounted(true)
+    // Hide the static HeaderShell now that the interactive header is loaded
+    const shell = document.getElementById('header-shell')
+    if (shell) shell.style.display = 'none'
+  }, [])
 
   // Fetch geo menu data
   useEffect(() => {
