@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText, BookOpen } from 'lucide-react'
-import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
+import { getServiceBySlug, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
@@ -205,17 +205,11 @@ export default async function ServicePage({ params }: PageProps) {
     logger.error('Service page DB error (service):', error)
   }
 
-  // Fetch cities, providers and total count independently — failure in one should not block the other
-  const [citiesResult, providersResult, countResult] = await Promise.allSettled([
-    getLocationsByService(serviceSlug),
+  // Fetch providers and count — cities are always static (faster, no DB dependency)
+  const [providersResult, countResult] = await Promise.allSettled([
     getProvidersByService(serviceSlug, 12),
     getProviderCountByService(serviceSlug),
   ])
-  if (citiesResult.status === 'fulfilled') {
-    topCities = citiesResult.value || []
-  } else {
-    logger.error('Service page DB error (locations):', citiesResult.reason)
-  }
   if (providersResult.status === 'fulfilled') {
     recentProviders = (providersResult.value || []) as ServiceProvider[]
   } else {
@@ -232,10 +226,8 @@ export default async function ServicePage({ params }: PageProps) {
     service = { name: staticSvc.name, slug: staticSvc.slug }
   }
 
-  // Fallback cities if DB returned nothing
-  if (!topCities || topCities.length === 0) {
-    topCities = getStaticCities()
-  }
+  // Always use static cities — faster, no DB latency, consistent 2267 cities
+  topCities = getStaticCities()
 
   // Filter: only keep cities that exist in the validated villes array (2,280 cities)
   // This prevents links to tiny communes that would show "Page non trouvée"
@@ -364,7 +356,7 @@ export default async function ServicePage({ params }: PageProps) {
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
-                {topCities?.length || 0}+
+                {villes.length.toLocaleString('fr-FR')}+
               </span>
               <span className="text-sm text-sand-400 mt-1">villes couvertes</span>
             </div>
@@ -421,7 +413,7 @@ export default async function ServicePage({ params }: PageProps) {
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans référencés et vérifiés SIREN dans ${topCities?.length || 0}+ villes. Devis gratuit, données officielles INSEE.`}
+            answer={`${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans référencés et vérifiés SIREN dans ${villes.length.toLocaleString('fr-FR')}+ villes. Devis gratuit, données officielles INSEE.`}
           />
         </div>
       )}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
 import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check, MapPin, Users, Shield, Clock } from 'lucide-react'
@@ -176,6 +176,13 @@ export default function DevisForm({
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
   const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || savedState?.selectedVillePostal || '')
   const [geoLoading, setGeoLoading] = useState(false)
+  const [debouncedVilleQuery, setDebouncedVilleQuery] = useState(villeQuery)
+
+  // Debounce ville search input (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedVilleQuery(villeQuery), 300)
+    return () => clearTimeout(timer)
+  }, [villeQuery])
 
   // Transition state: 'idle' | 'slide-out' | 'slide-in'
   const [transition, setTransition] = useState<'idle' | 'slide-out-left' | 'slide-out-right' | 'slide-in-left' | 'slide-in-right'>('idle')
@@ -243,14 +250,18 @@ export default function DevisForm({
     } catch {}
   }, [formData, step, villeQuery, selectedVillePostal, submitted])
 
-  const filteredVilles = villeQuery.length >= 2
-    ? villes
-        .filter((v) =>
-          v.name.toLowerCase().includes(villeQuery.toLowerCase()) ||
-          v.codePostal.startsWith(villeQuery)
-        )
-        .slice(0, 8)
-    : []
+  const filteredVilles = useMemo(() => {
+    if (debouncedVilleQuery.length < 2) return []
+    const q = debouncedVilleQuery.toLowerCase()
+    const results: typeof villes = []
+    for (const v of villes) {
+      if (v.name.toLowerCase().startsWith(q) || v.codePostal.startsWith(debouncedVilleQuery)) {
+        results.push(v)
+        if (results.length >= 8) break
+      }
+    }
+    return results
+  }, [debouncedVilleQuery])
 
   const handleGeolocation = useCallback(async () => {
     if (!navigator.geolocation) return
@@ -275,7 +286,7 @@ export default function DevisForm({
         }
       }
     } catch {
-      // Silently fail — user can still type manually
+      // Silently fail - user can still type manually
     } finally {
       setGeoLoading(false)
     }
@@ -412,9 +423,13 @@ export default function DevisForm({
       setSubmitted(true)
       localStorage.removeItem(STORAGE_KEY)
     } catch (err) {
-      setSubmitError(
-        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
-      )
+      if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setSubmitError('Erreur de connexion. Vérifiez votre internet.')
+      } else {
+        setSubmitError(
+          err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
+        )
+      }
     } finally {
       setSubmitting(false)
     }

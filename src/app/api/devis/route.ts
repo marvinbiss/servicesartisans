@@ -34,8 +34,8 @@ const devisSchema = z.object({
   description: z.string().optional(),
   codePostal: z.string().optional(),
   ville: z.string().optional(),
-  nom: z.string().min(2, 'Le nom est requis'),
-  email: z.string().email('Email invalide'),
+  nom: z.string().min(2, 'Le nom est requis').optional().or(z.literal('')),
+  email: z.string().email('Email invalide').optional().or(z.literal('')),
   telephone: z.string().min(10, 'Numéro de téléphone invalide'),
 })
 
@@ -55,6 +55,12 @@ const serviceNames: Record<string, string> = {
   cuisiniste: 'Cuisiniste',
   solier: 'Solier-moquettiste',
   nettoyage: 'Nettoyage professionnel',
+  general: 'Demande générale',
+}
+
+/** Resolve a human-readable service name, with fallback for unknown slugs */
+function resolveServiceName(service: string): string {
+  return serviceNames[service] || service.charAt(0).toUpperCase() + service.slice(1).replace(/-/g, ' ')
 }
 
 const urgencyLabels: Record<string, string> = {
@@ -77,7 +83,7 @@ export async function POST(request: Request) {
       const { data: { user } } = await serverSupabase.auth.getUser()
       clientId = user?.id ?? null
     } catch {
-      // Anonymous submission — no session cookie
+      // Anonymous submission - no session cookie
     }
 
     // Validate input
@@ -104,10 +110,10 @@ export async function POST(request: Request) {
       .from('devis_requests')
       .insert({
         client_id: clientId,
-        client_name: data.nom,
-        client_email: data.email,
+        client_name: data.nom || 'Rappel',
+        client_email: data.email || null,
         client_phone: data.telephone,
-        service_name: serviceNames[data.service] || data.service,
+        service_name: resolveServiceName(data.service),
         description: data.description || 'Demande de devis',
         budget: data.budget || null,
         urgency: urgencyDbMap[data.urgency] || 'normal',
@@ -123,7 +129,7 @@ export async function POST(request: Request) {
       // Continue even if DB fails - we'll still send emails
     }
 
-    // Log 'created' event — triggers "Demande bien reçue" notification to client
+    // Log 'created' event - triggers "Demande bien reçue" notification to client
     if (lead) {
       logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) => logger.error('Failed to log lead created event', err))
     }
@@ -138,7 +144,7 @@ export async function POST(request: Request) {
         flexible: 'flexible',
       }
       assignedProviders = await dispatchLead(lead.id, {
-        serviceName: serviceNames[data.service] || data.service,
+        serviceName: resolveServiceName(data.service),
         city: data.ville,
         postalCode: data.codePostal,
         urgency: urgencyMap[data.urgency] || 'normal',
@@ -153,48 +159,60 @@ export async function POST(request: Request) {
     }
 
     // Send both confirmation emails in parallel (use allSettled so one failure doesn't block the other)
-    const resend = getResend()
+    let resend: ReturnType<typeof getResend> | null = null
+    try {
+      resend = getResend()
+    } catch (emailInitError) {
+      logger.error('Resend not configured, skipping emails', emailInitError)
+    }
     const fromEmail = process.env.FROM_EMAIL || 'noreply@servicesartisans.fr'
 
-    const emailResults = await Promise.allSettled([
-      // Confirmation to client
-      resend.emails.send({
-        from: fromEmail,
-        to: data.email,
-        subject: 'Votre demande de devis - ServicesArtisans',
-        html: `
-          <h2>Bonjour ${htmlEscape(data.nom)},</h2>
-          <p>Nous avons bien reçu votre demande de devis. Voici le récapitulatif :</p>
-          <ul>
-            <li><strong>Service :</strong> ${htmlEscape(serviceNames[data.service] || data.service)}</li>
-            <li><strong>Délai :</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
-            ${data.ville ? `<li><strong>Ville :</strong> ${htmlEscape(data.ville)}</li>` : ''}
-            ${data.description ? `<li><strong>Description :</strong> ${htmlEscape(data.description)}</li>` : ''}
-          </ul>
-          <p><strong>Que se passe-t-il maintenant ?</strong></p>
-          <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu’à 3 devis gratuits dans les meilleurs délais.</p>
-          <p>Cordialement,<br />L’équipe ServicesArtisans</p>
-          <p style="color: #666; font-size: 12px;">
-            <a href="https://servicesartisans.fr">servicesartisans.fr</a>
-          </p>
-        `,
-      }),
-      // Notification to admin
+    const emailPromises: Promise<unknown>[] = []
+
+    // Confirmation to client (only if email provided)
+    if (resend && data.email) {
+      emailPromises.push(
+        resend.emails.send({
+          from: fromEmail,
+          to: data.email,
+          subject: 'Votre demande de devis - ServicesArtisans',
+          html: `
+            <h2>Bonjour ${htmlEscape(data.nom || 'Rappel')},</h2>
+            <p>Nous avons bien reçu votre demande de devis. Voici le récapitulatif :</p>
+            <ul>
+              <li><strong>Service :</strong> ${htmlEscape(resolveServiceName(data.service))}</li>
+              <li><strong>Délai :</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
+              ${data.ville ? `<li><strong>Ville :</strong> ${htmlEscape(data.ville)}</li>` : ''}
+              ${data.description ? `<li><strong>Description :</strong> ${htmlEscape(data.description)}</li>` : ''}
+            </ul>
+            <p><strong>Que se passe-t-il maintenant ?</strong></p>
+            <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu'à 3 devis gratuits dans les meilleurs délais.</p>
+            <p>Cordialement,<br />L'équipe ServicesArtisans</p>
+            <p style="color: #666; font-size: 12px;">
+              <a href="https://servicesartisans.fr">servicesartisans.fr</a>
+            </p>
+          `,
+        })
+      )
+    }
+
+    // Notification to admin
+    if (resend) emailPromises.push(
       resend.emails.send({
         from: fromEmail,
         to: 'contact@servicesartisans.fr',
-        subject: `[Nouveau Devis] ${serviceNames[data.service] || data.service} - ${data.ville || 'France'}`,
+        subject: `[Nouveau Devis] ${resolveServiceName(data.service)} - ${data.ville || 'France'}`,
         html: `
           <h2>Nouvelle demande de devis</h2>
           <h3>Client</h3>
           <ul>
-            <li><strong>Nom :</strong> ${htmlEscape(data.nom)}</li>
-            <li><strong>Email :</strong> ${htmlEscape(data.email)}</li>
+            <li><strong>Nom :</strong> ${htmlEscape(data.nom || 'Rappel')}</li>
+            <li><strong>Email :</strong> ${htmlEscape(data.email || 'Non fourni')}</li>
             <li><strong>Téléphone :</strong> ${htmlEscape(data.telephone)}</li>
           </ul>
           <h3>Demande</h3>
           <ul>
-            <li><strong>Service :</strong> ${htmlEscape(serviceNames[data.service] || data.service)}</li>
+            <li><strong>Service :</strong> ${htmlEscape(resolveServiceName(data.service))}</li>
             <li><strong>Délai :</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
             <li><strong>Ville :</strong> ${htmlEscape(data.ville || 'Non précisé')}</li>
             <li><strong>Code postal :</strong> ${htmlEscape(data.codePostal || 'Non précisé')}</li>
@@ -203,14 +221,15 @@ export async function POST(request: Request) {
           </ul>
           ${lead ? `<p>ID: ${lead.id}</p>` : ''}
         `,
-      }),
-    ])
+      })
+    )
+
+    const emailResults = await Promise.allSettled(emailPromises)
 
     // Log any email failures (devis is already saved in DB, so we still return success)
-    const emailLabels = ['client confirmation', 'admin notification']
     emailResults.forEach((result, i) => {
       if (result.status === 'rejected') {
-        logger.error(`Failed to send ${emailLabels[i]} email`, result.reason)
+        logger.error(`Failed to send email ${i}`, result.reason)
       }
     })
 

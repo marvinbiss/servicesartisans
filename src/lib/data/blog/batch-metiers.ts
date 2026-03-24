@@ -553,7 +553,7 @@ export const metiersArticles: Record<string, {
       ":::takeaway\n- Le **CAP Monteur en installations sanitaires** est la formation de base (2 ans)\n- Le label **RGE** et la qualification **Qualibat** sont les certifications clés\n- Salaire débutant : **1 600 – 1 900 € net/mois** ; indépendant : **3 000 – 5 000 € net/mois**\n- La **transition énergétique** (PAC, solaire thermique) crée une demande massive\n- Le taux d'insertion professionnelle dépasse **90 %** après formation\n:::",
 
       "## Sur ServicesArtisans",
-      "ServicesArtisans met en relation les particuliers avec des [plombiers vérifiés dans toute la France](/services/plombier) (SIRET, assurances, qualifications). Si vous êtes plombier et souhaitez développer votre activité, créez votre profil sur la plateforme pour accéder à une clientèle qualifiée dans votre zone d'intervention. Consultez aussi notre [guide pour choisir un plombier](/blog/comment-choisir-plombier-guide) et nos [tarifs de plomberie](/blog/prix-plombier-tarifs-interventions)."
+      "ServicesArtisans met en relation les particuliers avec des [plombiers vérifiés dans toute la France](/services/plombier) (SIRET, assurances, qualifications). Si vous êtes plombier et souhaitez développer votre activité, créez votre profil sur la plateforme pour accéder à une clientèle qualifiée dans votre zone d'intervention. Consultez aussi notre [guide pour choisir un plombier](/blog/comment-choisir-son-plombier) et nos [tarifs de plomberie](/blog/prix-plombier-2026-tarifs-horaires)."
     ],
     image: "/images/blog/metier-plombier.jpg",
     author: "ServicesArtisans",
@@ -601,7 +601,7 @@ export const metiersArticles: Record<string, {
       ":::takeaway\n- Le **CAP Électricien** est la formation de base, le **BTS Électrotechnique** ouvre l'accès aux postes supérieurs\n- **Qualifelec** est la certification de référence (indices E1 à E4)\n- Le label **RGE** est indispensable pour le photovoltaïque et les aides\n- Salaire débutant : **1 600 – 1 800 € net/mois** ; indépendant spécialisé : **3 500 – 5 500 € net/mois**\n- La **mobilité électrique** et la **domotique** sont les marchés d'avenir\n:::",
 
       "## Sur ServicesArtisans",
-      "ServicesArtisans vérifie les qualifications et les assurances de chaque électricien référencé. Si vous êtes électricien, rejoignez la plateforme pour développer votre clientèle et valoriser vos certifications (Qualifelec, RGE, IRVE) auprès de particuliers en recherche active. Découvrez aussi notre [guide pour choisir un électricien](/blog/comment-choisir-electricien-guide) et nos [tarifs d'électricité](/blog/prix-electricien-tarifs-prestations)."
+      "ServicesArtisans vérifie les qualifications et les assurances de chaque électricien référencé. Si vous êtes électricien, rejoignez la plateforme pour développer votre clientèle et valoriser vos certifications (Qualifelec, RGE, IRVE) auprès de particuliers en recherche active. Découvrez aussi notre [guide pour choisir un électricien](/blog/comment-choisir-electricien-guide) et nos [tarifs d'électricité](/blog/prix-electricien-2026-tarifs-travaux)."
     ],
     image: "/images/blog/metier-electricien.jpg",
     author: "ServicesArtisans",
@@ -649,7 +649,7 @@ export const metiersArticles: Record<string, {
       ":::takeaway\n- Le **CAP Maçon** est la formation de base (2 ans après la 3e)\n- **Qualibat** et la qualification **« Patrimoine bâti »** sont les labels de référence\n- Salaire débutant : **1 600 – 1 800 € net/mois** ; indépendant : **2 500 – 4 500 € net/mois**\n- L'**éco-construction** et le **BIM** sont les compétences d'avenir\n- La reconversion est possible via des formations accélérées de **6 à 10 mois**\n:::",
 
       "## Sur ServicesArtisans",
-      "Les maçons référencés sur ServicesArtisans sont vérifiés : SIRET actif, assurance décennale valide, qualifications contrôlées. Trouvez un maçon compétent pour votre projet ou inscrivez-vous en tant que professionnel pour accéder à de nouveaux chantiers. Consultez aussi notre [guide pour choisir un maçon](/blog/comment-choisir-macon-guide) et nos [tarifs de maçonnerie](/blog/prix-macon-tarifs-travaux)."
+      "Les maçons référencés sur ServicesArtisans sont vérifiés : SIRET actif, assurance décennale valide, qualifications contrôlées. Trouvez un maçon compétent pour votre projet ou inscrivez-vous en tant que professionnel pour accéder à de nouveaux chantiers. Consultez aussi notre [guide pour choisir un maçon](/blog/comment-choisir-macon-guide) et nos [tarifs de maçonnerie](/blog/prix-macon-2026-gros-oeuvre-renovation)."
     ],
     image: "/images/blog/metier-macon.jpg",
     author: "ServicesArtisans",
@@ -793,7 +793,7 @@ export const metiersArticles: Record<string, {
       ":::takeaway\n- Le **CAP Monteur en installations thermiques** est la base ; le **BTS FED** est le diplôme de référence\n- **QualiPAC**, **RGE** et l'**attestation fluides frigorigènes** sont les certifications indispensables\n- Salaire débutant : **1 700 – 2 000 € net/mois** ; indépendant : **4 000 – 6 000 € net/mois**\n- La **transition énergétique** crée une demande massive (700 000 rénovations/an visées)\n- La reconversion est possible via des formations accélérées de **6 à 12 mois**\n:::",
 
       "## Sur ServicesArtisans",
-      "ServicesArtisans vérifie les certifications de chaque chauffagiste : RGE, QualiPAC, attestation fluides frigorigènes, garantie décennale. Trouvez un chauffagiste qualifié pour votre projet ou inscrivez-vous en tant que professionnel pour développer votre activité. Découvrez aussi notre [guide pour choisir un chauffagiste](/blog/comment-choisir-chauffagiste-guide) et nos [tarifs de chauffage](/blog/prix-chauffagiste-tarifs-installations)."
+      "ServicesArtisans vérifie les certifications de chaque chauffagiste : RGE, QualiPAC, attestation fluides frigorigènes, garantie décennale. Trouvez un chauffagiste qualifié pour votre projet ou inscrivez-vous en tant que professionnel pour développer votre activité. Découvrez aussi notre [guide pour choisir un chauffagiste](/blog/comment-choisir-chauffagiste-guide) et nos [tarifs de chauffage](/blog/prix-chauffagiste-2026-installation-entretien)."
     ],
     image: "/images/blog/metier-chauffagiste.jpg",
     author: "ServicesArtisans",

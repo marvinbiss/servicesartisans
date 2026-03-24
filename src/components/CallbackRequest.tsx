@@ -42,18 +42,17 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service: serviceSlug || 'general',
-          ville: cityName || '',
           telephone: phone.trim(),
-          nom: '',
-          email: '',
           description: 'Demande de rappel',
           urgency: 'semaine',
-          budget: '',
-          codePostal: '',
+          ...(cityName && { ville: cityName }),
         }),
       })
 
-      if (!res.ok) throw new Error('Erreur')
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        throw new Error(body?.error || 'Erreur lors de l\'envoi')
+      }
 
       trackEvent('devis_submitted', {
         source: 'callback_request',
@@ -64,8 +63,14 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
       })
 
       setSuccess(true)
-    } catch {
-      setError('Une erreur est survenue. Veuillez réessayer.')
+    } catch (err) {
+      if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setError('Erreur de connexion. Vérifiez votre internet.')
+      } else if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('Une erreur est survenue. Veuillez réessayer.')
+      }
     } finally {
       setLoading(false)
     }

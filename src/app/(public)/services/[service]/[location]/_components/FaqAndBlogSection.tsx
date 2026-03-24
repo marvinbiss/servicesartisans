@@ -62,18 +62,18 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, serv
           <div className="grid sm:grid-cols-2 gap-4">
             {isPlombier ? (
               <>
-                <BlogLink href="/blog/comment-choisir-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les critères essentiels pour trouver un plombier fiable et compétent." />
-                <BlogLink href="/blog/urgence-plomberie-que-faire" emoji="&#128680;" title="Urgence plomberie : que faire ?" desc="Les bons réflexes en cas de fuite ou de dégât des eaux." />
+                <BlogLink href="/blog/comment-choisir-son-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les critères essentiels pour trouver un plombier fiable et compétent." />
+                <BlogLink href="/blog/fuite-eau-urgence-guide-complet-gestes-couts" emoji="&#128680;" title="Fuite d'eau : guide complet des gestes et coûts" desc="Les bons réflexes en cas de fuite ou de dégât des eaux." />
               </>
             ) : isBatiment ? (
               <>
-                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="Rénovation énergétique 2026 : aides et conseils" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
-                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances décoration 2026" desc="Les styles et matériaux qui font la tendance cette année." />
+                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Rénovation énergétique : aides disponibles en 2026" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
+                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#127912;" title="Tendances salle de bain 2026" desc="Les styles et matériaux qui font la tendance cette année." />
               </>
             ) : (
               <>
-                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances décoration 2026" desc="Les styles et matériaux qui font la tendance cette année." />
-                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="Rénovation énergétique 2026 : aides et conseils" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
+                <BlogLink href="/blog/tendances-salle-de-bain-2026" emoji="&#127912;" title="Tendances salle de bain 2026" desc="Les styles et matériaux qui font la tendance cette année." />
+                <BlogLink href="/blog/renovation-energetique-aides-2026" emoji="&#127969;" title="Rénovation énergétique : aides disponibles en 2026" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
               </>
             )}
           </div>

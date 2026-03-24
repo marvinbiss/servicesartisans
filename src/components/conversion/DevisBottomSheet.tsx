@@ -274,14 +274,23 @@ export default function DevisBottomSheet({
           source: 'bottom_sheet',
         }),
       })
-      if (!res.ok) throw new Error('Erreur serveur')
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        throw new Error(body?.error || 'Erreur serveur')
+      }
       trackEvent('form_completed', {
         service: formData.service,
         source: 'bottom_sheet',
       })
       setSubmitted(true)
-    } catch {
-      setSubmitError('Une erreur est survenue. Veuillez reessayer.')
+    } catch (err) {
+      if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setSubmitError('Erreur de connexion. Vérifiez votre internet.')
+      } else if (err instanceof Error) {
+        setSubmitError(err.message)
+      } else {
+        setSubmitError('Une erreur est survenue. Veuillez réessayer.')
+      }
     } finally {
       setSubmitting(false)
     }
