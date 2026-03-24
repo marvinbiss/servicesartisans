@@ -9,7 +9,7 @@ interface QuoteFormProps {
   onSuccess?: () => void
 }
 
-export function QuoteForm({ providerId, serviceSlug, onSuccess }: QuoteFormProps) {
+export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: QuoteFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -33,15 +33,20 @@ export function QuoteForm({ providerId, serviceSlug, onSuccess }: QuoteFormProps
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          provider_id: providerId,
-          service_slug: serviceSlug,
+          service: serviceSlug,
+          urgency: formData.urgency,
+          description: formData.description,
+          nom: formData.client_name,
+          email: formData.client_email,
+          telephone: formData.client_phone,
+          ville: formData.city,
+          codePostal: formData.postal_code,
         }),
       })
 
       if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error?.message || 'Erreur lors de l\'envoi')
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || 'Erreur lors de l\'envoi')
       }
 
       setIsSuccess(true)

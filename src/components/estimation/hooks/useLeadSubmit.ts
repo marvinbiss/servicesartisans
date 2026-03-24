@@ -34,7 +34,7 @@ export interface UseLeadSubmitReturn {
 
 export function useLeadSubmit(
   context: EstimationContext,
-  messages: ChatMessage[],
+  _messages?: ChatMessage[],
   onLeadSubmitted?: (confirmationMsg: string) => void,
   onCallbackSubmitted?: () => void,
 ): UseLeadSubmitReturn {
@@ -71,20 +71,17 @@ export function useLeadSubmit(
       setLeadLoading(true)
       setLeadError(false)
       try {
-        const response = await fetch('/api/estimation/lead', {
+        const response = await fetch('/api/devis', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            nom: leadName || undefined,
+            service: context.metierSlug || 'general',
+            urgency: 'semaine',
             telephone: leadPhone,
+            nom: leadName || undefined,
             email: leadEmail || undefined,
-            metier: context.metier,
-            ville: context.ville,
-            departement: context.departement || undefined,
-            source: 'chat' as const,
-            conversation_history: messages,
-            page_url: context.pageUrl,
-            artisan_public_id: context.artisan?.publicId,
+            ville: context.ville || undefined,
+            description: `Estimation chat — ${context.metier}${context.ville ? ` à ${context.ville}` : ''}`,
           }),
         })
 
@@ -114,7 +111,7 @@ export function useLeadSubmit(
         setLeadLoading(false)
       }
     },
-    [leadPhone, leadName, leadEmail, rgpdConsent, context, messages, onLeadSubmitted],
+    [leadPhone, leadName, leadEmail, rgpdConsent, context, onLeadSubmitted],
   )
 
   const handleCallbackSubmit = useCallback(
@@ -132,17 +129,15 @@ export function useLeadSubmit(
       setCallbackLoading(true)
       setCallbackError(false)
       try {
-        const response = await fetch('/api/estimation/lead', {
+        const response = await fetch('/api/devis', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            service: context.metierSlug || 'general',
+            urgency: 'semaine',
             telephone: callbackPhone,
-            metier: context.metier,
-            ville: context.ville,
-            departement: context.departement || undefined,
-            source: 'callback' as const,
-            page_url: context.pageUrl,
-            artisan_public_id: context.artisan?.publicId,
+            ville: context.ville || undefined,
+            description: `Demande de rappel — ${context.metier}${context.ville ? ` à ${context.ville}` : ''}`,
           }),
         })
 
