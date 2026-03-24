@@ -1352,7 +1352,7 @@ export default async function UrgenceServiceVillePage({
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
-      <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
+      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
 
       <MicroConversions pageType="urgence-ville" serviceSlug={service} cityName={villeData.name} />
     </div>

@@ -270,8 +270,13 @@ export default function DevisBottomSheet({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          source: 'bottom_sheet',
+          service: formData.service,
+          ville: formData.ville,
+          description: formData.description,
+          urgency: formData.urgence,
+          nom: formData.nom,
+          telephone: formData.telephone,
+          email: formData.email,
         }),
       })
       if (!res.ok) {
@@ -639,7 +644,7 @@ export default function DevisBottomSheet({
                         className="mt-0.5 w-5 h-5 rounded border-sand-400 text-primary-400 focus:ring-primary-400/40 flex-shrink-0"
                       />
                       <span className="text-xs text-charcoal-500 leading-relaxed">
-                        J'accepte d'etre contacte par des artisans pour recevoir mes devis gratuits.
+                        J'accepte d'être contacté par des artisans pour recevoir mes devis gratuits.
                       </span>
                     </label>
                     {errors.consentement && (

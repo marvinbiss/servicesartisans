@@ -649,7 +649,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       <MoneyPageBoost currentService={serviceSlug} currentVille={locationSlug} />
       <SeasonalLinks currentService={serviceSlug} villeSlug={locationSlug} villeName={location.name} />
 
-      <StickyMobileCTA serviceSlug={serviceSlug} citySlug={locationSlug} />
+      <StickyMobileCTA serviceSlug={serviceSlug} cityName={location.name} citySlug={locationSlug} />
 
       <MicroConversions pageType="service-ville" serviceSlug={serviceSlug} cityName={location.name} />
 

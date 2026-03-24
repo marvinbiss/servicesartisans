@@ -36,7 +36,7 @@ const devisSchema = z.object({
   ville: z.string().optional(),
   nom: z.string().min(2, 'Le nom est requis').optional().or(z.literal('')),
   email: z.string().email('Email invalide').optional().or(z.literal('')),
-  telephone: z.string().min(10, 'Numéro de téléphone invalide'),
+  telephone: z.string().min(10, 'Numéro de téléphone invalide').regex(/^(\+33|0033|0)[1-9]\d{8}$/, 'Format de téléphone français invalide'),
 })
 
 const serviceNames: Record<string, string> = {
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
       .insert({
         client_id: clientId,
         client_name: data.nom || 'Rappel',
-        client_email: data.email || null,
+        client_email: data.email || '',
         client_phone: data.telephone,
         service_name: resolveServiceName(data.service),
         description: data.description || 'Demande de devis',
@@ -126,7 +126,10 @@ export async function POST(request: Request) {
 
     if (dbError) {
       logger.error('Database error', dbError)
-      // Continue even if DB fails - we'll still send emails
+      return NextResponse.json(
+        { error: 'Erreur lors de l\'enregistrement de votre demande. Veuillez réessayer.' },
+        { status: 500 }
+      )
     }
 
     // Log 'created' event - triggers "Demande bien reçue" notification to client

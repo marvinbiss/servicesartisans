@@ -8,6 +8,7 @@ import StickyMobileCTANew from '@/components/conversion/StickyMobileCTA'
 
 interface StickyMobileCTAProps {
   serviceSlug?: string
+  cityName?: string
   citySlug?: string
   ctaText?: string
   href?: string
@@ -16,6 +17,7 @@ interface StickyMobileCTAProps {
 
 export default function StickyMobileCTA({
   serviceSlug,
+  cityName,
   citySlug,
   ctaText,
   providerCount,
@@ -23,6 +25,7 @@ export default function StickyMobileCTA({
   return (
     <StickyMobileCTANew
       serviceSlug={serviceSlug}
+      cityName={cityName}
       citySlug={citySlug}
       ctaText={ctaText}
       providerCount={providerCount}

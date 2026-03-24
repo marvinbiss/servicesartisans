@@ -88,7 +88,10 @@ export function useLeadSubmit(
           }),
         })
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+        if (!response.ok) {
+          const body = await response.json().catch(() => null)
+          throw new Error(body?.error || `Erreur serveur (${response.status})`)
+        }
 
         trackEvent('estimation_lead_submitted' as any, {
           source: 'chat',
@@ -143,7 +146,10 @@ export function useLeadSubmit(
           }),
         })
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+        if (!response.ok) {
+          const body = await response.json().catch(() => null)
+          throw new Error(body?.error || `Erreur serveur (${response.status})`)
+        }
 
         trackEvent('estimation_lead_submitted' as any, {
           source: 'callback',

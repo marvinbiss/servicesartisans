@@ -919,7 +919,7 @@ export default async function TarifsServiceVillePage({
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
-      <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} />
+      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} />
 
       <ExitIntentPopup
         sessionKey="sa:exit-tarifs-ville"
