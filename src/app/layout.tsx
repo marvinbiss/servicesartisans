@@ -5,6 +5,7 @@ import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getProviderCount } from '@/lib/data/stats'
@@ -221,20 +222,22 @@ fbq('track', 'PageView');`}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
         <PageViewTracker />
-        {/* Skip to main content for accessibility */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-        >
-          Aller au contenu principal
-        </a>
-        <Header artisanCount={artisanCount} />
-        <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
-        <Footer />
-        <MobileBottomNav />
-        <ServiceWorkerRegistration />
-        <CapacitorInit />
-        <CookieConsent />
+        <MobileMenuProvider>
+          {/* Skip to main content for accessibility */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          >
+            Aller au contenu principal
+          </a>
+          <Header artisanCount={artisanCount} />
+          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
+          <Footer />
+          <MobileBottomNav />
+          <ServiceWorkerRegistration />
+          <CapacitorInit />
+          <CookieConsent />
+        </MobileMenuProvider>
       </body>
     </html>
   )

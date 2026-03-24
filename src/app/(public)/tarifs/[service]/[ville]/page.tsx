@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, ChevronDown, MapPin, Users, Thermometer, Building2 } from 'lucide-react'
-import dynamic from 'next/dynamic'
+import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
@@ -24,11 +24,10 @@ import InBodyLinks from '@/components/seo/InBodyLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
+import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
-
-const Breadcrumb = dynamic(() => import('@/components/Breadcrumb'), { ssr: false })
-const StickyMobileCTA = dynamic(() => import('@/components/StickyMobileCTA'), { ssr: false })
-const SearchRecorder = dynamic(() => import('@/components/SearchRecorder'), { ssr: false })
+import dynamic from 'next/dynamic'
 
 
 const ExitIntentPopup = dynamic(
