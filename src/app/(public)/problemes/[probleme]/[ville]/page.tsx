@@ -15,6 +15,11 @@ import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
 
 // ---------------------------------------------------------------------------
 // Static params: top 10 problems x top 30 cities = 300 pre-rendered pages
@@ -881,26 +886,24 @@ export default async function ProblemeVillePage({
       <section className={`bg-gradient-to-br ${gradient} text-white py-16 overflow-hidden`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            Besoin d'un {tradeName.toLowerCase()} à {villeData.name} ?
+            Besoin d'un {tradeName.toLowerCase()} {'à'} {villeData.name} ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Comparez les artisans référencés et obtenez un devis gratuit.
+            Recevez 3 devis gratuits d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} sans engagement.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href={`/devis/${problem.primaryService}/${ville}`}
-              className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              Devis gratuit
-              <ArrowRight className="w-5 h-5" />
+          <TarifsDevisCTA
+            service={problem.primaryService}
+            serviceName={tradeName.toLowerCase()}
+            ville={ville}
+            villeName={villeData.name}
+            variant="banner"
+          />
+          <p className="text-white/60 text-sm mt-6">
+            Ou{' '}
+            <Link href={`/urgence/${problem.primaryService}/${ville}`} className="underline hover:text-white transition-colors">
+              {tradeName.toLowerCase()} urgence {'à'} {villeData.name}
             </Link>
-            <Link
-              href={`/urgence/${problem.primaryService}/${ville}`}
-              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
-            >
-              {tradeName} urgence
-            </Link>
-          </div>
+          </p>
         </div>
       </section>
 
@@ -1099,6 +1102,9 @@ export default async function ProblemeVillePage({
           </div>
         </div>
       </section>
+
+      <StickyMobileCTA serviceSlug={problem.primaryService} cityName={villeData.name} citySlug={ville} ctaText="Devis gratuit" />
+      <ExitIntentPopup />
     </div>
   )
 }

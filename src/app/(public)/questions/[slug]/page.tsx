@@ -8,6 +8,10 @@ import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/jsonld"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from "@/lib/data/questions"
 import RelatedHubs from '@/components/seo/RelatedHubs'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 // ---------------------------------------------------------------------------
 // Static params
@@ -223,6 +227,11 @@ export default function QuestionPage({
       </div>
 
       <RelatedHubs currentPath="/questions" extraLinks={[{href: "/glossaire", label: "Glossaire"}, {href: "/guides", label: "Guides travaux"}]} />
+
+      {question.relatedService && (
+        <StickyMobileCTA serviceSlug={question.relatedService} ctaText="Devis gratuit" />
+      )}
+      <ExitIntentPopup />
     </>
   )
 }

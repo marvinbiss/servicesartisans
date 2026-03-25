@@ -44,6 +44,8 @@ const ExitIntentPopup = dynamic(
   () => import('@/components/ExitIntentPopup'),
   { ssr: false }
 )
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
 
 export const revalidate = 86400 // Revalidate every 24h
 
@@ -1081,28 +1083,24 @@ export default async function AvisServiceVillePage({
       <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Trouver un {tradeLower} de confiance à {villeData.name}
+            Trouver un {tradeLower} de confiance {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit auprès de
-            professionnels référencés à {villeData.name}.
+            Recevez 3 devis gratuits d'artisans bien not{'é'}s pr{'è'}s de chez vous {'—'} sans engagement.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href={`/devis/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
-            >
-              Contacter un artisan bien noté
-              <ArrowRight className="w-5 h-5" />
+          <TarifsDevisCTA
+            service={service}
+            serviceName={tradeLower}
+            ville={villeSlug}
+            villeName={villeData.name}
+            variant="banner"
+          />
+          <p className="text-blue-200 text-sm mt-6">
+            Ou{' '}
+            <Link href={`/services/${service}/${villeSlug}`} className="underline hover:text-white transition-colors">
+              voir les {tradeLower}s {'à'} {villeData.name}
             </Link>
-            <Link
-              href={`/services/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
-            >
-              Voir les artisans
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+          </p>
         </div>
       </section>
 
@@ -1407,6 +1405,7 @@ export default async function AvisServiceVillePage({
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
+      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Devis gratuit" />
       <ExitIntentPopup
         sessionKey="sa:exit-avis"
         description="Contactez un artisan bien noté — recevez jusqu'à 3 devis gratuits."
