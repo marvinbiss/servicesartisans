@@ -232,7 +232,7 @@ export function getCollectionPageSchema(params: {
 }
 
 // Schema.org Service with pricing (for tarifs pages — NOT Product)
-// Includes aggregateRating, review, and offerCount to satisfy Google rich results requirements
+// Only includes aggregateRating when real data is provided — no fake reviews
 export function getServicePricingSchema(params: {
   serviceName: string
   serviceSlug: string
@@ -247,22 +247,6 @@ export function getServicePricingSchema(params: {
   location?: string
   url: string
 }) {
-  // Deterministic rating/review data from service+location hash (same pattern as /avis/ pages)
-  const seed = `rating-${params.serviceSlug}-${params.location || 'france'}`
-  const ratingValue = params.ratingValue || (4.0 + (Math.abs(hashCode(seed)) % 10) / 10)
-  const reviewCount = params.reviewCount || (10 + Math.abs(hashCode(`reviews-${params.serviceSlug}-${params.location || 'france'}`)) % 90)
-  const offerCount = params.offerCount || (3 + Math.abs(hashCode(`offers-${params.serviceSlug}`)) % 20)
-
-  // Deterministic review author and body
-  const reviewAuthors = [
-    'Marie L.', 'Pierre D.', 'Sophie M.', 'Laurent B.', 'Isabelle R.',
-    'Nicolas T.', 'Catherine V.', 'François G.', 'Nathalie P.', 'Jean-Marc S.',
-  ]
-  const authorIdx = Math.abs(hashCode(`author-${params.serviceSlug}-${params.location || 'france'}`)) % reviewAuthors.length
-  const reviewRating = Math.min(5, Math.floor(ratingValue) + 1)
-
-  const locationLabel = params.location || 'ma région'
-
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -286,29 +270,17 @@ export function getServicePricingSchema(params: {
       highPrice: params.highPrice,
       priceCurrency: params.priceCurrency || 'EUR',
       ...(params.priceUnit && { unitText: params.priceUnit }),
-      offerCount,
+      ...(params.offerCount != null && { offerCount: params.offerCount }),
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: Math.round(ratingValue * 10) / 10,
-      reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: {
-      '@type': 'Review',
-      author: {
-        '@type': 'Person',
-        name: reviewAuthors[authorIdx],
-      },
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: reviewRating,
+    ...(params.ratingValue && params.reviewCount && params.reviewCount > 0 && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: params.ratingValue,
+        reviewCount: params.reviewCount,
         bestRating: 5,
         worstRating: 1,
       },
-      reviewBody: `Très satisfait du service de ${params.serviceName.toLowerCase()} dans ${locationLabel}. Tarifs conformes aux estimations, travail soigné et professionnel.`,
-    },
+    }),
   }
 }
 
@@ -446,19 +418,6 @@ export function getInsuranceProductSchema(params: {
         offerCount: 5 + Math.abs(hashCode(`insurance-offers-${params.insuranceType}`)) % 15,
       },
     }),
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: Math.round((4.0 + (Math.abs(hashCode(`ins-rating-${params.insuranceType}`)) % 10) / 10) * 10) / 10,
-      reviewCount: 15 + Math.abs(hashCode(`ins-reviews-${params.insuranceType}`)) % 85,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: {
-      '@type': 'Review',
-      author: { '@type': 'Person', name: 'Thomas R.' },
-      reviewRating: { '@type': 'Rating', ratingValue: 5, bestRating: 5, worstRating: 1 },
-      reviewBody: `Guide très complet sur ${params.name.toLowerCase()}. Les informations sur les tarifs et les garanties m'ont aidé à faire le bon choix.`,
-    },
   }
 }
 
