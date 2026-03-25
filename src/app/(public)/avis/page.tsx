@@ -9,6 +9,10 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export const revalidate = 86400 // 24h
 
@@ -579,6 +583,9 @@ export default async function AvisPage() {
           </Link>
         </div>
       </section>
+
+      <StickyMobileCTA />
+      <ExitIntentPopup />
     </div>
   )
 }

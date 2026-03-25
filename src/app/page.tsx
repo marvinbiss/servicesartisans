@@ -16,6 +16,8 @@ import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
 const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 24h
 
@@ -61,6 +63,8 @@ export default async function HomePage() {
             <CmsContent html={cmsPage.content_html} />
           </div>
         </section>
+        <StickyMobileCTA ctaText="Devis gratuit en 30s" />
+        <ExitIntentPopup />
       </div>
     )
   }
@@ -252,6 +256,10 @@ export default async function HomePage() {
       </section>
 
       {/* Popular links handled by site-wide Footer — no duplication needed */}
+
+      {/* ─── CONVERSION BOOSTERS ───────────────────────────── */}
+      <StickyMobileCTA ctaText="Devis gratuit en 30s" />
+      <ExitIntentPopup />
     </div>
   )
 }

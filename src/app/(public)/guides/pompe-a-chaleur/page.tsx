@@ -3,6 +3,10 @@ import Link from "next/link"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
 import Breadcrumb from "@/components/Breadcrumb"
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 import {
   Home,
   CheckCircle2,
@@ -627,6 +631,10 @@ export default function PompeAChaleurPage() {
           </div>
         </section>
       </div>
+
+      {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
+      <StickyMobileCTA serviceSlug="chauffage" ctaText="Demander un devis gratuit" />
+      <ExitIntentPopup />
     </>
   )
 }

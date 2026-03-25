@@ -13,6 +13,10 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
 import { getServiceImage } from '@/lib/data/images'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 // ---------------------------------------------------------------------------
 // Static params: return a minimal seed set (NOT empty — empty array in a
@@ -536,6 +540,9 @@ export default async function TarifsServiceTravailVillePage({
           </div>
         </div>
       </section>
+
+      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} />
+      <ExitIntentPopup />
     </div>
   )
 }

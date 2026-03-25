@@ -24,36 +24,11 @@ import InBodyLinks from '@/components/seo/InBodyLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
-import SearchRecorder from '@/components/SearchRecorder'
-import DemandIndicator from '@/components/DemandIndicator'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import dynamic from 'next/dynamic'
 
-
-const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
-  { ssr: false }
-)
-
-const MicroConversions = dynamic(
-  () => import('@/components/MicroConversions'),
-  { ssr: false }
-)
-
-const CallbackRequest = dynamic(
-  () => import('@/components/CallbackRequest'),
-  { ssr: false }
-)
-
-const FAQTracker = dynamic(
-  () => import('@/components/FAQTracker'),
-  { ssr: false }
-)
-
-const ProactiveChatPrompt = dynamic(
-  () => import('@/components/ProactiveChatPrompt'),
-  { ssr: false }
-)
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -354,11 +329,6 @@ export default async function TarifsServiceVillePage({
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <SearchRecorder
-        type="tarifs"
-        label={`Tarifs ${trade.name} à ${villeData.name}`}
-        href={`/tarifs/${service}/${villeSlug}`}
-      />
       <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, speakableSchema]} />
 
       {/* Hero */}
@@ -429,6 +399,17 @@ export default async function TarifsServiceVillePage({
         </div>
       </section>
 
+      <section className="py-6 bg-sand-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <GeoPageCTA
+            title="Besoin d'un devis pour votre projet ?"
+            subtitle={`Comparez les tarifs de ${tradeLower}s vérifiés à ${villeData.name}`}
+            service={service}
+            ville={villeData.name}
+          />
+        </div>
+      </section>
+
       {/* Price range overview */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -455,10 +436,6 @@ export default async function TarifsServiceVillePage({
             )}
           </div>
 
-          <div className="mb-8">
-            <DemandIndicator serviceSlug={service} cityName={villeData.name} />
-          </div>
-
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
             Prestations courantes et prix {'à'} {villeData.name}
           </h2>
@@ -471,9 +448,7 @@ export default async function TarifsServiceVillePage({
             multiplier={multiplier}
             unit={trade.priceRange.unit}
           />
-          <div className="mt-8">
-            <CallbackRequest serviceSlug={service} cityName={villeData.name} />
-          </div>
+          <div className="mt-8" />
         </div>
       </section>
 
@@ -921,16 +896,8 @@ export default async function TarifsServiceVillePage({
 
       <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} />
 
-      <ExitIntentPopup
-        sessionKey="sa:exit-tarifs-ville"
-        description="Obtenez le prix exact pour votre projet — comparez jusqu'à 3 devis gratuits."
-        ctaHref={`/devis/${service}/${villeSlug}`}
-      />
+      <ExitIntentPopup />
 
-      <MicroConversions pageType="tarifs-ville" serviceSlug={service} cityName={villeData.name} />
-      <FAQTracker pageType="tarifs-ville" serviceSlug={service} />
-
-      <ProactiveChatPrompt serviceSlug={service} citySlug={villeSlug} />
     </div>
   )
 }

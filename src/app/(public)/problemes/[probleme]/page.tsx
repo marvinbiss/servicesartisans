@@ -13,6 +13,7 @@ import { hashCode } from '@/lib/seo/location-content'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -522,6 +523,9 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           </div>
         </div>
       </section>
+
+      {/* Conversion: Sticky mobile CTA + Exit intent */}
+      <GeoPageCTA variant="sticky-only" service={problem.primaryService} />
     </div>
   )
 }

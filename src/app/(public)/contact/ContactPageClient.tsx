@@ -1,11 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Mail, Send, CheckCircle, Clock, MessageSquare, ArrowRight, Loader2, AlertCircle, Phone } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export default function ContactPageClient() {
   const [formData, setFormData] = useState({
@@ -330,6 +334,10 @@ export default function ContactPageClient() {
           </div>
         </div>
       </section>
+
+      {/* Conversion: Sticky mobile CTA + Exit intent */}
+      <StickyMobileCTA />
+      <ExitIntentPopup />
     </div>
   )
 }

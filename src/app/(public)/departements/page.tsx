@@ -7,6 +7,7 @@ import { departements, regions, villes, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { getProviderCount, formatProviderCount } from '@/lib/data/stats'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 
 export const revalidate = 86400
 
@@ -274,6 +275,9 @@ export default async function DepartementsIndexPage() {
           </div>
         </div>
       </section>
+
+      {/* Conversion: Sticky mobile CTA + Exit intent */}
+      <GeoPageCTA variant="sticky-only" />
     </div>
   )
 }

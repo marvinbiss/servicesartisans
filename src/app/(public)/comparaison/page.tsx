@@ -6,6 +6,10 @@ import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
 import { SITE_URL } from "@/lib/seo/config"
 import RelatedHubs from '@/components/seo/RelatedHubs'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 import { comparisons } from "@/lib/data/comparisons"
 
 export const revalidate = false
@@ -174,6 +178,10 @@ export default function ComparaisonPage() {
       </div>
 
       <RelatedHubs currentPath="/comparaison" />
+
+      {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
+      <StickyMobileCTA ctaText="Demander un devis gratuit" />
+      <ExitIntentPopup />
     </>
   )
 }

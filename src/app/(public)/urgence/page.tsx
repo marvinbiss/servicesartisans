@@ -9,6 +9,10 @@ import { CmsContent } from '@/components/CmsContent'
 import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { villes, services } from '@/lib/data/france'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export const revalidate = 86400
 
@@ -657,6 +661,9 @@ export default async function UrgencePage() {
             .replace(/>/g, '\\u003e'),
         }}
       />
+
+      <StickyMobileCTA />
+      <ExitIntentPopup />
     </div>
   )
 }

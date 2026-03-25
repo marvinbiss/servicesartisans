@@ -10,6 +10,10 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { services, villes } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export const revalidate = 86400
 
@@ -476,6 +480,9 @@ export default async function TarifsPage() {
             </div>
           </div>
         </section>
+
+        <StickyMobileCTA />
+        <ExitIntentPopup />
       </div>
     </>
   )

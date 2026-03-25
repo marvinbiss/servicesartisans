@@ -18,6 +18,10 @@ import { ArticleFAQ } from './ArticleFAQ'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export const revalidate = 86400
 
@@ -1131,6 +1135,10 @@ export default async function BlogArticlePage({ params }: PageProps) {
       {primaryServiceSlug && (
         <DeepPageLinks currentService={primaryServiceSlug} />
       )}
+
+      {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
+      <StickyMobileCTA serviceSlug={primaryServiceSlug || undefined} ctaText="Demander un devis gratuit" />
+      <ExitIntentPopup />
     </div>
   )
 }

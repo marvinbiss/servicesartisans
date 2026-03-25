@@ -10,6 +10,7 @@ import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jso
 import { SITE_URL } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 
 export const metadata: Metadata = {
   title: 'Comment ça marche — Trouvez un artisan',
@@ -474,6 +475,8 @@ export default async function CommentCaMarchePage() {
           </div>
         </div>
       </section>
+      {/* Conversion: Sticky mobile CTA + Exit intent */}
+      <GeoPageCTA variant="sticky-only" />
     </div>
     </>
   )

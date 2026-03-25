@@ -13,6 +13,7 @@ import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { REVALIDATE } from '@/lib/cache'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks, GeographicNavigation } from '@/components/InternalLinks'
 import { services as staticServicesList } from '@/lib/data/france'
@@ -275,10 +276,15 @@ export default async function ServicesPage() {
             </span>{' '}
             artisans
           </h1>
-          <p className="text-xl text-sand-300 max-w-2xl mx-auto mb-10">
+          <p className="text-xl text-sand-300 max-w-2xl mx-auto mb-6">
             Trouvez le professionnel idéal pour tous vos travaux.
             Artisans référencés, devis gratuits.
           </p>
+
+          {/* GeoPageCTA above the fold */}
+          <div className="max-w-2xl mx-auto mb-10">
+            <GeoPageCTA title="Trouvez votre artisan en 2 minutes" subtitle="Comparez jusqu'à 3 devis gratuits d'artisans vérifiés" />
+          </div>
 
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-8">
@@ -415,6 +421,7 @@ export default async function ServicesPage() {
           </Link>
         </div>
       </section>
+
     </div>
   )
 }

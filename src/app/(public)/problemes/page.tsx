@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import problems from '@/lib/data/problems'
 
 export const revalidate = 86400
@@ -384,6 +385,9 @@ export default function ProblemesPage() {
           </div>
         </div>
       </section>
+
+      {/* Conversion: Sticky mobile CTA + Exit intent */}
+      <GeoPageCTA variant="sticky-only" />
     </div>
   )
 }

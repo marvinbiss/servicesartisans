@@ -24,6 +24,10 @@ import { relatedServices } from '@/lib/constants/navigation'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export const revalidate = 86400 // 24h
 
@@ -968,6 +972,9 @@ export default async function AvisServicePage({
           </div>
         </div>
       </section>
+
+      <StickyMobileCTA serviceSlug={service} />
+      <ExitIntentPopup />
     </div>
   )
 }

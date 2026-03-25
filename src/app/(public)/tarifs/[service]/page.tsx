@@ -18,15 +18,11 @@ import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
-import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import dynamic from 'next/dynamic'
 
-
-const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
-  { ssr: false }
-)
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 const tradeSlugs = getTradesSlugs()
 
@@ -312,6 +308,16 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-6 bg-sand-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <GeoPageCTA
+            title="Besoin d'un devis pour votre projet ?"
+            subtitle={`Comparez les tarifs de ${trade.name.toLowerCase()}s vérifiés près de chez vous`}
+            service={service}
+          />
         </div>
       </section>
 
@@ -689,11 +695,6 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      {/* Services de saison */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SeasonalLinks currentService={service} />
-      </div>
-
       {/* Trust */}
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -715,12 +716,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       </section>
 
       <StickyMobileCTA serviceSlug={service} />
-
-      <ExitIntentPopup
-        sessionKey="sa:exit-tarifs"
-        description="Obtenez le prix exact pour votre projet — comparez jusqu'à 3 devis gratuits."
-        ctaHref={`/devis/${service}`}
-      />
+      <ExitIntentPopup />
     </div>
   )
 }

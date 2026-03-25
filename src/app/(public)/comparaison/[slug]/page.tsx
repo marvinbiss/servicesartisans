@@ -19,6 +19,10 @@ import {
   Target,
 } from "lucide-react"
 import RelatedHubs from '@/components/seo/RelatedHubs'
+import dynamic from 'next/dynamic'
+
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
 
 export const revalidate = false
 export const dynamicParams = false
@@ -375,6 +379,10 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
       </div>
 
       <RelatedHubs currentPath="/comparaison" extraLinks={[{href: "/tarifs", label: "Tarifs artisans"}, {href: "/avis", label: "Avis artisans"}]} />
+
+      {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
+      <StickyMobileCTA ctaText="Demander un devis gratuit" />
+      <ExitIntentPopup />
     </>
   )
 }

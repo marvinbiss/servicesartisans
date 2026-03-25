@@ -6,6 +6,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, regions, departements, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 
 export const revalidate = 86400
 
@@ -284,6 +285,9 @@ export default async function VillesIndexPage() {
           </div>
         </div>
       </section>
+
+      {/* Conversion: Sticky mobile CTA + Exit intent */}
+      <GeoPageCTA variant="sticky-only" />
     </div>
   )
 }

@@ -34,7 +34,7 @@ import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InContentLinks from '@/components/seo/InContentLinks'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import dynamic from 'next/dynamic'
 
@@ -48,6 +48,11 @@ const MicroConversions = dynamic(
 
 const UrgencyCountdown = dynamic(
   () => import('@/components/UrgencyCountdown'),
+  { ssr: false }
+)
+
+const ExitIntentPopup = dynamic(
+  () => import('@/components/conversion/ExitIntentModal'),
   { ssr: false }
 )
 
@@ -1337,6 +1342,7 @@ export default async function UrgenceServiceVillePage({
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
       <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
+      <ExitIntentPopup />
 
       <MicroConversions pageType="urgence-ville" serviceSlug={service} cityName={villeData.name} />
     </div>

@@ -19,7 +19,12 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import dynamic from 'next/dynamic'
 
 const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
+  () => import('@/components/conversion/ExitIntentModal'),
+  { ssr: false }
+)
+
+const StickyMobileCTA = dynamic(
+  () => import('@/components/conversion/StickyMobileCTA'),
   { ssr: false }
 )
 
@@ -668,13 +673,9 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         </div>
       </section>
 
-      <ExitIntentPopup
-        sessionKey="sa:exit-urgence"
-        title="Besoin d'aide urgente ?"
-        description="Un artisan qualifié peut intervenir rapidement. Demandez un devis maintenant."
-        ctaText="Demander une intervention"
-        ctaHref={`/devis/${service}`}
-      />
+      <StickyMobileCTA serviceSlug={service} />
+
+      <ExitIntentPopup />
     </div>
   )
 }
