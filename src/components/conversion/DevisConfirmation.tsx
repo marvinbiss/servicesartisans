@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail } from 'lucide-react'
+import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp } from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france'
 
@@ -74,6 +74,7 @@ export default function DevisConfirmation({
   const [providers, setProviders] = useState<MatchedProvider[]>([])
   const [loading, setLoading] = useState(true)
   const [providerCount, setProviderCount] = useState<number | null>(null)
+  const [copied, setCopied] = useState(false)
 
   // Fetch matched providers async — success UI shows immediately
   useEffect(() => {
@@ -338,6 +339,82 @@ export default function DevisConfirmation({
         >
           Consulter les artisans à {city}
         </Link>
+      </motion.div>
+
+      {/* ── Pendant ce temps — liens utiles ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.3 }}
+        className={`${compact ? 'mt-4' : 'mt-6'}`}
+      >
+        <p className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
+          Pendant ce temps
+        </p>
+        <div className="space-y-2">
+          <Link
+            href={`/avis/${service}/${city}`}
+            className="flex items-center gap-3 p-3 bg-sand-50 border border-sand-200 rounded-xl hover:bg-sand-100 transition-colors"
+          >
+            <ThumbsUp className="w-4 h-4 text-primary-500 flex-shrink-0" />
+            <span className={`text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
+              Lire les avis de {serviceLabel.toLowerCase()}s {'\u00e0'} {city}
+            </span>
+          </Link>
+          <Link
+            href={`/tarifs/${service}/${city}`}
+            className="flex items-center gap-3 p-3 bg-sand-50 border border-sand-200 rounded-xl hover:bg-sand-100 transition-colors"
+          >
+            <FileText className="w-4 h-4 text-primary-500 flex-shrink-0" />
+            <span className={`text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
+              Consulter les tarifs {serviceLabel.toLowerCase()} {'\u00e0'} {city}
+            </span>
+          </Link>
+          <Link
+            href="/guides"
+            className="flex items-center gap-3 p-3 bg-sand-50 border border-sand-200 rounded-xl hover:bg-sand-100 transition-colors"
+          >
+            <BookOpen className="w-4 h-4 text-primary-500 flex-shrink-0" />
+            <span className={`text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
+              Nos guides travaux
+            </span>
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* ── Partage ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5 }}
+        className={`${compact ? 'mt-4' : 'mt-6'}`}
+      >
+        <p className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
+          Recommandez ServicesArtisans
+        </p>
+        <div className="flex gap-2">
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(`J'ai trouvé des artisans de confiance sur ServicesArtisans : ${typeof window !== 'undefined' ? window.location.href : 'https://servicesartisans.fr'}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#25D366] text-white font-medium rounded-xl hover:bg-[#20bd5a] transition-colors text-sm"
+          >
+            <MessageCircle className="w-4 h-4" />
+            WhatsApp
+          </a>
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href)
+              setCopied(true)
+              setTimeout(() => setCopied(false), 2000)
+            }}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-sand-300 text-charcoal-700 font-medium rounded-xl hover:bg-sand-50 transition-colors text-sm"
+          >
+            {copied ? <Check className="w-4 h-4 text-accent-500" /> : <Copy className="w-4 h-4" />}
+            {copied ? 'Copie !' : 'Copier le lien'}
+          </button>
+        </div>
       </motion.div>
     </div>
   )
