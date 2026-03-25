@@ -183,6 +183,28 @@ export default function DevisForm({
   const [geoLoading, setGeoLoading] = useState(false)
   const [debouncedVilleQuery, setDebouncedVilleQuery] = useState(villeQuery)
   const [abandonTracked, setAbandonTracked] = useState(false)
+  const [monthlyCount, setMonthlyCount] = useState<string>('1 200+')
+
+  // Fetch monthly demand count (social proof)
+  useEffect(() => {
+    try {
+      const cached = sessionStorage.getItem('sa:devis-monthly-count')
+      if (cached) {
+        const { count, ts } = JSON.parse(cached)
+        if (Date.now() - ts < 300_000) { setMonthlyCount(count.toLocaleString('fr-FR')); return }
+      }
+    } catch {}
+    fetch('/api/stats/demand')
+      .then(r => r.json())
+      .then(d => {
+        const count = d.requests_this_month || 0
+        if (count > 0) {
+          setMonthlyCount(count.toLocaleString('fr-FR'))
+          try { sessionStorage.setItem('sa:devis-monthly-count', JSON.stringify({ count, ts: Date.now() })) } catch {}
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   // Debounce ville search input (300ms)
   useEffect(() => {
@@ -753,6 +775,11 @@ export default function DevisForm({
                 {errors.email && (
                   <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.email}</p>
                 )}
+                {!errors.email && (
+                  <p className="text-xs text-charcoal-400 mt-1">
+                    Confidentiel — seul votre téléphone est transmis aux artisans
+                  </p>
+                )}
               </div>
 
               {/* Urgency chips */}
@@ -764,7 +791,7 @@ export default function DevisForm({
                   {urgencyOptions.map((opt) => (
                     <label
                       key={opt.value}
-                      className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium ${
+                      className={`relative flex items-center justify-center px-2 sm:px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium ${
                         formData.urgence === opt.value
                           ? 'border-primary-400 bg-primary-50 text-primary-700 ring-1 ring-primary-200 scale-[1.02]'
                           : 'border-sand-300 bg-sand-50 hover:border-sand-400 text-charcoal-700'
@@ -1023,6 +1050,19 @@ export default function DevisForm({
                 </div>
               )}
 
+              {/* Trust line before submit */}
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-accent-600 font-medium">
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5" /> Gratuit
+                </span>
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5" /> 3 devis max
+                </span>
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5" /> Artisans vérifiés SIREN
+                </span>
+              </div>
+
               <div className="flex gap-3 items-center">
                 <button
                   type="button"
@@ -1050,22 +1090,9 @@ export default function DevisForm({
                       Envoi en cours&hellip;
                     </>
                   ) : (
-                    <>Recevoir mes devis gratuits <ArrowRight className="w-5 h-5" /></>
+                    <>Obtenir mes 3 devis gratuits <ArrowRight className="w-5 h-5" /></>
                   )}
                 </button>
-              </div>
-
-              {/* Trust line under submit */}
-              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-accent-600 font-medium">
-                <span className="flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> Gratuit
-                </span>
-                <span className="flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> 3 devis max
-                </span>
-                <span className="flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> Artisans vérifiés SIREN
-                </span>
               </div>
             </div>
           )}
@@ -1075,7 +1102,7 @@ export default function DevisForm({
         <div className="mt-6 pt-5 border-t border-sand-100 flex items-center justify-center gap-2">
           <Clock className="w-3.5 h-3.5 text-charcoal-300" />
           <p className="text-xs text-charcoal-400">
-            Rejoint les <span className="font-semibold text-charcoal-500">1 247</span> demandes ce mois
+            Rejoint les <span className="font-semibold text-charcoal-500">{monthlyCount}</span> demandes ce mois
           </p>
         </div>
       </form>

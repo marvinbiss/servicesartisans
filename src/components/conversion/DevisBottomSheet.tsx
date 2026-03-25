@@ -570,6 +570,11 @@ export default function DevisBottomSheet({
                       {errors.email && (
                         <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                       )}
+                      {!errors.email && (
+                        <p className="text-xs text-charcoal-400 mt-1">
+                          Confidentiel — seul votre téléphone est transmis aux artisans
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -707,7 +712,7 @@ export default function DevisBottomSheet({
                         {submitting ? (
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
-                          <>Recevoir mes devis gratuits</>
+                          <>Obtenir mes 3 devis gratuits</>
                         )}
                       </button>
                     </div>

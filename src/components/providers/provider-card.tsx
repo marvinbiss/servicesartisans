@@ -23,9 +23,10 @@ interface ProviderCardProps {
     service_type?: string
   }
   showContact?: boolean
+  priority?: boolean
 }
 
-export function ProviderCard({ provider, showContact = false }: ProviderCardProps) {
+export function ProviderCard({ provider, showContact = false, priority = false }: ProviderCardProps) {
   const renderStars = (rating: number) => {
     return (
       <div className="flex items-center gap-0.5">
@@ -60,6 +61,7 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
                 sizes="64px"
                 placeholder="blur"
                 blurDataURL={BLUR_PLACEHOLDER}
+                priority={priority}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">

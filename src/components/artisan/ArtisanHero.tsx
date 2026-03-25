@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck, ShieldCheck } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
@@ -16,6 +16,7 @@ interface ArtisanHeroProps {
 export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
   const [showPhone, setShowPhone] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
 
   const hasPortfolioImage = artisan.portfolio && artisan.portfolio.length > 0 && artisan.portfolio[0].imageUrl
 
@@ -23,9 +24,9 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
       role="banner"
       aria-label={`Profil de ${displayName}`}
@@ -39,7 +40,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
           <div className="flex-shrink-0">
             <div className="relative">
               {/* Pulsing ring for artisans accepting new clients */}
-              {artisan.accepts_new_clients && (
+              {artisan.accepts_new_clients && !shouldReduceMotion && (
                 <motion.div
                   className="absolute -inset-1.5 rounded-2xl border-2 border-primary-400/40"
                   animate={{
@@ -62,6 +63,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                     fill
                     className="object-cover"
                     sizes="120px"
+                    priority
                   />
                 ) : (
                   <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>

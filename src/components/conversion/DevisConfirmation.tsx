@@ -257,6 +257,9 @@ export default function DevisConfirmation({
         <p className={`text-charcoal-400 ${compact ? 'text-[10px]' : 'text-xs'}`}>
           Un SMS de confirmation a été envoyé au {maskedPhone}
         </p>
+        <p className="text-charcoal-500 text-sm mt-2">
+          Un email de confirmation a été envoyé à votre adresse
+        </p>
       </motion.div>
 
       {/* ── Reassurances ── */}
@@ -291,12 +294,10 @@ export default function DevisConfirmation({
         className="text-center"
       >
         <Link
-          href={`/services/${service}/${city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}`}
-          className={`text-primary-500 hover:text-primary-600 font-medium underline underline-offset-2 transition-colors ${
-            compact ? 'text-xs' : 'text-sm'
-          }`}
+          href={`/services`}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary-400 text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all"
         >
-          Voir tous les artisans à {city}
+          Consulter les artisans à {city}
         </Link>
       </motion.div>
     </div>

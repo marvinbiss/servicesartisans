@@ -427,7 +427,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                           src={bgImage}
                           alt=""
                           fill
-                          loading="lazy"
+                          {...(i < 3 ? { priority: true } : { loading: 'lazy' as const })}
                           sizes="(max-width: 768px) 100vw, 33vw"
                           placeholder="blur"
                           blurDataURL={BLUR_PLACEHOLDER}
