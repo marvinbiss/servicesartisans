@@ -155,6 +155,7 @@ module.exports = {
         'float': 'float 6s ease-in-out infinite',
         'gradient-x': 'gradient-x 8s ease infinite',
         'glow-pulse': 'glowPulse 2s ease-in-out infinite',
+        'pulse-subtle': 'pulseSubtle 2.5s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -209,6 +210,10 @@ module.exports = {
         glowPulse: {
           '0%, 100%': { boxShadow: '0 0 20px rgba(232, 150, 10, 0.4)' },
           '50%': { boxShadow: '0 0 40px rgba(232, 150, 10, 0.6)' },
+        },
+        pulseSubtle: {
+          '0%, 100%': { boxShadow: '0 4px 14px 0 rgba(232, 107, 75, 0.3)' },
+          '50%': { boxShadow: '0 8px 30px 0 rgba(212, 85, 58, 0.45)' },
         },
         'gradient-x': {
           '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },

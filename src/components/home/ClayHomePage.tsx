@@ -159,28 +159,42 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             </div>
           </div>
 
-          {/* Main headline — "problème-first" */}
+          {/* Main headline — value-proposition first */}
           <h2
             className="font-heading font-black tracking-[-0.04em] leading-[1.08] text-charcoal-900 text-center mb-4 md:mb-5"
             style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
             aria-hidden="true"
           >
-            Quel est votre besoin ?
+            Trouvez un artisan de confiance près de chez vous
           </h2>
 
           <p className="text-center text-charcoal-500 text-base md:text-lg max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed">
-            Trouvez un artisan vérifié près de chez vous. Devis gratuit, réponse rapide.
+            Comparez les profils et recevez jusqu'à 3 devis gratuits — sans engagement
           </p>
 
-          {/* Single strong CTA — no decision paralysis */}
-          <div className="flex flex-col items-center gap-3 mb-8 md:mb-10">
+          {/* Primary CTA — high contrast, impossible to miss */}
+          <div className="flex flex-col items-center gap-4 mb-8 md:mb-10">
             <Link
               href="/devis"
-              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-heading font-bold text-base md:text-lg text-white bg-primary-400 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-1 animate-pulse-subtle"
             >
-              <ClipboardList className="w-5 h-5" />
-              Demander mes devis gratuits
+              <ClipboardList className="w-6 h-6" />
+              Recevoir mes 3 devis gratuits
             </Link>
+            {/* Trust micro-copy directly under CTA */}
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-charcoal-500">
+              <span className="inline-flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-accent-500" />
+                {countStr} artisans vérifiés
+              </span>
+              <span className="text-charcoal-200">·</span>
+              <span>100% gratuit</span>
+              <span className="text-charcoal-200">·</span>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-primary-400" />
+                Réponse sous 24h
+              </span>
+            </div>
             <Link
               href="/urgence"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-charcoal-500 hover:text-primary-400 transition-colors"
