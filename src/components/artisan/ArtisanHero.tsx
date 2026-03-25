@@ -3,11 +3,17 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck, ShieldCheck } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
-import { BookingFunnel } from '@/lib/analytics/tracking'
+import { BookingFunnel, trackEvent } from '@/lib/analytics/tracking'
+
+const DevisBottomSheet = dynamic(
+  () => import('@/components/conversion/DevisBottomSheet'),
+  { ssr: false }
+)
 
 interface ArtisanHeroProps {
   artisan: LegacyArtisan
@@ -16,6 +22,7 @@ interface ArtisanHeroProps {
 export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
   const [showPhone, setShowPhone] = useState(false)
+  const [isDevisOpen, setIsDevisOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
   const hasPortfolioImage = artisan.portfolio && artisan.portfolio.length > 0 && artisan.portfolio[0].imageUrl
@@ -23,6 +30,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const responseTimeMin = artisan.accepts_new_clients ? Math.floor(Math.abs(artisan.id.charCodeAt(2) % 45) + 15) : null
 
   return (
+    <>
     <motion.div
       initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
@@ -192,9 +200,46 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 </span>
               )}
             </div>
+
+            {/* Prominent CTA — above the fold */}
+            <div className="mt-5">
+              <motion.button
+                whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                onClick={() => {
+                  trackEvent('artisan_devis_click', {
+                    artisanId: artisan.id,
+                    artisanName: artisan.business_name || displayName,
+                    source: 'hero_cta',
+                  })
+                  setIsDevisOpen(true)
+                }}
+                className="w-full sm:w-auto py-3.5 px-8 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta hover:shadow-lg transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
+                aria-label={`Demander un devis gratuit à ${displayName}`}
+              >
+                <FileText className="w-5 h-5" aria-hidden="true" />
+                Demander un devis gratuit
+              </motion.button>
+              <p className="text-xs text-charcoal-500 mt-2 flex items-center gap-1.5">
+                <span>Gratuit</span>
+                <span className="text-charcoal-300" aria-hidden="true">·</span>
+                <span>Sans engagement</span>
+                <span className="text-charcoal-300" aria-hidden="true">·</span>
+                <span>Réponse sous 24h</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </motion.div>
+
+      {/* DevisBottomSheet — pre-filled with artisan data */}
+      <DevisBottomSheet
+        isOpen={isDevisOpen}
+        onClose={() => setIsDevisOpen(false)}
+        prefilledService={artisan.specialty_slug || ''}
+        prefilledCity={artisan.city || ''}
+      />
+    </>
   )
 }
