@@ -42,6 +42,11 @@ import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
 
+const GeoPageCTA = dynamic(
+  () => import('@/components/conversion/GeoPageCTA'),
+  { ssr: false }
+)
+
 const MicroConversions = dynamic(
   () => import('@/components/MicroConversions'),
   { ssr: false }
@@ -550,6 +555,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       {/* Demand indicator — urgency/scarcity signal */}
       <div className="max-w-7xl mx-auto px-4 py-3 bg-sand-50">
         <DemandIndicator serviceSlug={serviceSlug} cityName={location.name} variant="banner" />
+      </div>
+
+      {/* CTA secondaire above-the-fold — pré-rempli service + ville */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <GeoPageCTA
+          title={`Besoin d'un ${service.name.toLowerCase()} à ${location.name} ?`}
+          subtitle={`Recevez 3 devis gratuits d'artisans vérifiés sous 24-48h`}
+          service={serviceSlug}
+          ville={location.name}
+          variant="hero"
+        />
       </div>
 
       {/* Page Content */}

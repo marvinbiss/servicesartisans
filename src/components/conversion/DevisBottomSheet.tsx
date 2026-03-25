@@ -390,7 +390,14 @@ export default function DevisBottomSheet({
           {/* Step indicator — compact */}
           {!submitted && (
             <div className="flex-shrink-0 px-4 pb-3">
-              <div className="flex items-center gap-1">
+              <div
+                className="flex items-center gap-1"
+                role="progressbar"
+                aria-valuenow={step}
+                aria-valuemin={1}
+                aria-valuemax={3}
+                aria-label="Progression du formulaire"
+              >
                 {stepLabels.map((label, i) => (
                   <div key={label} className="flex items-center flex-1">
                     <div className="flex items-center gap-1.5 flex-1">
@@ -426,8 +433,15 @@ export default function DevisBottomSheet({
             </div>
           )}
 
+          {/* SR-only step announcer */}
+          {!submitted && (
+            <div className="sr-only" aria-live="assertive" aria-atomic="true">
+              Étape {step} sur 3{step === 1 ? ' : Votre besoin' : step === 2 ? ' : Vos coordonnées' : ' : Confirmation'}
+            </div>
+          )}
+
           {/* Content — scrollable */}
-          <div className="flex-1 overflow-y-auto px-4 pb-4 overscroll-contain">
+          <div className="flex-1 overflow-y-auto px-4 pb-4 overscroll-contain" aria-live="polite">
             {submitted ? (
               /* ── Success with matched providers ── */
               <div>
@@ -448,7 +462,7 @@ export default function DevisBottomSheet({
               <form onSubmit={handleSubmit} noValidate>
                 {/* ── Step 1: Service + Ville ── */}
                 {step === 1 && (
-                  <div className="space-y-4">
+                  <div className="space-y-4" aria-label="Étape 1 sur 3">
                     {/* Service */}
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
@@ -546,7 +560,7 @@ export default function DevisBottomSheet({
 
                 {/* ── Step 2: Email (early capture) + Urgence + Description ── */}
                 {step === 2 && (
-                  <div className="space-y-4">
+                  <div className="space-y-4" aria-label="Étape 2 sur 3">
                     {/* Email — early capture */}
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
@@ -610,7 +624,7 @@ export default function DevisBottomSheet({
                         value={formData.description}
                         onChange={(e) => updateField('description', e.target.value)}
                         rows={3}
-                        placeholder="Ex: Fuite sous l'évier de la cuisine..."
+                        placeholder="Ex: fuite d'eau dans la cuisine, remplacement chauffe-eau..."
                         className="w-full px-4 py-3 bg-sand-50 border border-sand-300 rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors resize-none"
                       />
                     </div>
@@ -638,7 +652,7 @@ export default function DevisBottomSheet({
 
                 {/* ── Step 3: Nom + Téléphone + Consentement ── */}
                 {step === 3 && (
-                  <div className="space-y-3">
+                  <div className="space-y-3" aria-label="Étape 3 sur 3">
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Votre nom
@@ -647,7 +661,7 @@ export default function DevisBottomSheet({
                         type="text"
                         value={formData.nom}
                         onChange={(e) => updateField('nom', e.target.value)}
-                        placeholder="Prénom Nom"
+                        placeholder="Votre nom complet"
                         className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
                           errors.nom ? 'border-red-400' : 'border-sand-300'
                         }`}
@@ -664,6 +678,7 @@ export default function DevisBottomSheet({
                         type="tel"
                         value={formData.telephone}
                         onChange={(e) => updateField('telephone', e.target.value)}
+                        inputMode="tel"
                         placeholder="06 12 34 56 78"
                         className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
                           errors.telephone ? 'border-red-400' : 'border-sand-300'

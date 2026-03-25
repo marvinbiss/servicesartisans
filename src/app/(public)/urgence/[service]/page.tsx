@@ -673,7 +673,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         </div>
       </section>
 
-      <StickyMobileCTA serviceSlug={service} />
+      <StickyMobileCTA serviceSlug={service} ctaText="Appeler un artisan en urgence" />
 
       <ExitIntentPopup />
     </div>

@@ -481,7 +481,7 @@ export default async function TarifsPage() {
           </div>
         </section>
 
-        <StickyMobileCTA />
+        <StickyMobileCTA ctaText="Comparer les prix gratuitement" />
         <ExitIntentPopup />
       </div>
     </>

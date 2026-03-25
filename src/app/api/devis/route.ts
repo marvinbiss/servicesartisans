@@ -137,6 +137,23 @@ export async function POST(request: Request) {
       )
     }
 
+    // Rate limiting per email — max 5 requests per 24h
+    if (data.email) {
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      const { count } = await supabase
+        .from('devis_requests')
+        .select('id', { count: 'exact', head: true })
+        .eq('client_email', data.email)
+        .gte('created_at', oneDayAgo)
+
+      if (count !== null && count >= 5) {
+        return NextResponse.json(
+          { error: 'Vous avez atteint la limite de 5 demandes par jour. Réessayez demain.' },
+          { status: 429 }
+        )
+      }
+    }
+
     // Store in devis_requests table
     const { data: lead, error: dbError } = await supabase
       .from('devis_requests')

@@ -894,7 +894,7 @@ export default async function TarifsServiceVillePage({
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
-      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} />
+      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Comparer les prix gratuitement" />
 
       <ExitIntentPopup />
 

@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Grid3X3 } from 'lucide-react'
-import { Artisan } from './types'
+import { Artisan, getDisplayName } from './types'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface ArtisanPhotoGridProps {
@@ -17,6 +17,7 @@ const BLUR_DATA_URL = BLUR_PLACEHOLDER
 export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const displayName = getDisplayName(artisan)
 
   // Only show real portfolio photos — no fake stock images
   const photos = artisan.portfolio && artisan.portfolio.length > 0
@@ -72,12 +73,12 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
           >
             <Image
               src={gridPhotos[0]?.imageUrl}
-              alt={gridPhotos[0]?.title || 'Photo principale'}
+              alt={`${displayName} - ${artisan.specialty} à ${artisan.city}`}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
               placeholder="blur"
               blurDataURL={BLUR_DATA_URL}
-              sizes="(max-width: 768px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
@@ -91,12 +92,14 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             >
               <Image
                 src={gridPhotos[1].imageUrl}
-                alt={gridPhotos[1].title}
+                alt={`Réalisation de ${displayName}${gridPhotos[1].title ? ` - ${gridPhotos[1].title}` : ''}`}
                 fill
+                loading="lazy"
+                decoding="async"
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 16vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
             </div>
@@ -109,12 +112,14 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             >
               <Image
                 src={gridPhotos[2].imageUrl}
-                alt={gridPhotos[2].title}
+                alt={`Réalisation de ${displayName}${gridPhotos[2].title ? ` - ${gridPhotos[2].title}` : ''}`}
                 fill
+                loading="lazy"
+                decoding="async"
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 16vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
             </div>
@@ -128,12 +133,14 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             >
               <Image
                 src={gridPhotos[3].imageUrl}
-                alt={gridPhotos[3].title}
+                alt={`Réalisation de ${displayName}${gridPhotos[3].title ? ` - ${gridPhotos[3].title}` : ''}`}
                 fill
+                loading="lazy"
+                decoding="async"
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 16vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
             </div>
@@ -146,12 +153,14 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             >
               <Image
                 src={gridPhotos[4].imageUrl}
-                alt={gridPhotos[4].title}
+                alt={`Réalisation de ${displayName}${gridPhotos[4].title ? ` - ${gridPhotos[4].title}` : ''}`}
                 fill
+                loading="lazy"
+                decoding="async"
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 16vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
 
@@ -244,11 +253,12 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             >
               <Image
                 src={photos[currentIndex].imageUrl}
-                alt={photos[currentIndex].title}
+                alt={`Réalisation de ${displayName}${photos[currentIndex].title ? ` - ${photos[currentIndex].title}` : ''}`}
                 fill
+                loading="eager"
+                decoding="async"
                 className="object-contain"
                 sizes="100vw"
-                priority
               />
 
               {/* Caption */}
@@ -284,8 +294,10 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 >
                   <Image
                     src={photo.imageUrl}
-                    alt={photo.title}
+                    alt={`Réalisation de ${displayName}${photo.title ? ` - ${photo.title}` : ''}`}
                     fill
+                    loading="lazy"
+                    decoding="async"
                     className="object-cover"
                     sizes="64px"
                   />

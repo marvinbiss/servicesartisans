@@ -22,11 +22,10 @@ interface ProviderCardProps {
     image_url?: string
     service_type?: string
   }
-  showContact?: boolean
   priority?: boolean
 }
 
-export function ProviderCard({ provider, showContact = false, priority = false }: ProviderCardProps) {
+export function ProviderCard({ provider, priority = false }: ProviderCardProps) {
   const renderStars = (rating: number) => {
     return (
       <div className="flex items-center gap-0.5">
@@ -55,7 +54,7 @@ export function ProviderCard({ provider, showContact = false, priority = false }
             {provider.image_url ? (
               <Image
                 src={provider.image_url}
-                alt={`${provider.name}${provider.service_type ? ` - ${provider.service_type}` : ''} à ${provider.address_city}`}
+                alt={`${provider.name} - artisan${provider.service_type ? ` ${provider.service_type}` : ''} à ${provider.address_city}`}
                 fill
                 className="object-cover"
                 sizes="64px"
@@ -136,13 +135,14 @@ export function ProviderCard({ provider, showContact = false, priority = false }
           >
             Voir le profil
           </Link>
-          {showContact && provider.phone && (
+          {provider.phone && (
             <a
               href={`tel:${provider.phone}`}
-              className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
             >
               <Phone className="w-4 h-4" />
-              Appeler
+              <span className="hidden sm:inline">{provider.phone}</span>
+              <span className="sm:hidden">Appeler</span>
             </a>
           )}
         </div>

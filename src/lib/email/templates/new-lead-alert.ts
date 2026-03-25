@@ -1,3 +1,13 @@
+/** Escape HTML special chars to prevent XSS in email templates */
+function htmlEscape(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 /** Email alert to artisan when they receive a new lead */
 export function getNewLeadAlertEmail(data: {
   artisanName: string
@@ -11,7 +21,7 @@ export function getNewLeadAlertEmail(data: {
   const { artisanName, service, city, clientName, description, urgency, dashboardUrl } = data
 
   return {
-    subject: `Nouvelle demande de ${service} à ${city} — Répondez vite !`,
+    subject: `Nouvelle demande de ${service.replace(/[<>"]/g, '')} à ${city.replace(/[<>"]/g, '')} — Répondez vite !`,
     html: `
 <!DOCTYPE html>
 <html lang="fr">
@@ -24,16 +34,16 @@ export function getNewLeadAlertEmail(data: {
   <h2 style="font-size: 22px; margin-bottom: 16px;">🔔 Nouvelle demande de devis</h2>
 
   <p style="color: #555; line-height: 1.6;">
-    Bonjour ${artisanName},<br><br>
-    ${clientName ? `<strong>${clientName}</strong>` : 'Un client'} recherche un professionnel pour :
+    Bonjour ${htmlEscape(artisanName)},<br><br>
+    ${clientName ? `<strong>${htmlEscape(clientName)}</strong>` : 'Un client'} recherche un professionnel pour :
   </p>
 
   <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin: 20px 0;">
     <table style="width: 100%; border-collapse: collapse;">
-      <tr><td style="padding: 6px 0; color: #888; width: 120px;">Service :</td><td style="font-weight: 600;">${service}</td></tr>
-      <tr><td style="padding: 6px 0; color: #888;">Ville :</td><td style="font-weight: 600;">${city}</td></tr>
-      ${urgency ? `<tr><td style="padding: 6px 0; color: #888;">Urgence :</td><td style="font-weight: 600; color: ${urgency === 'urgent' ? '#dc2626' : '#555'};">${urgency}</td></tr>` : ''}
-      ${description ? `<tr><td style="padding: 6px 0; color: #888; vertical-align: top;">Description :</td><td>${description}</td></tr>` : ''}
+      <tr><td style="padding: 6px 0; color: #888; width: 120px;">Service :</td><td style="font-weight: 600;">${htmlEscape(service)}</td></tr>
+      <tr><td style="padding: 6px 0; color: #888;">Ville :</td><td style="font-weight: 600;">${htmlEscape(city)}</td></tr>
+      ${urgency ? `<tr><td style="padding: 6px 0; color: #888;">Urgence :</td><td style="font-weight: 600; color: ${urgency === 'urgent' ? '#dc2626' : '#555'};">${htmlEscape(urgency)}</td></tr>` : ''}
+      ${description ? `<tr><td style="padding: 6px 0; color: #888; vertical-align: top;">Description :</td><td>${htmlEscape(description)}</td></tr>` : ''}
     </table>
   </div>
 
@@ -44,7 +54,7 @@ export function getNewLeadAlertEmail(data: {
   </div>
 
   <div style="text-align: center; margin: 32px 0;">
-    <a href="${dashboardUrl}"
+    <a href="${htmlEscape(dashboardUrl)}"
        style="background: #2563eb; color: white; padding: 16px 40px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 18px; display: inline-block;">
       Répondre maintenant
     </a>

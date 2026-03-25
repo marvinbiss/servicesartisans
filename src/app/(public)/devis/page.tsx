@@ -123,7 +123,10 @@ export default async function DevisPage() {
             Recevez vos devis gratuits
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Décrivez votre besoin, recevez jusqu'à 3 devis d'artisans vérifiés sous 24&nbsp;h.
+            Comparez 3 devis d'artisans vérifiés SIREN — gratuit, sans engagement, réponse sous 24h
+          </p>
+          <p className="text-charcoal-500 mt-2 text-sm font-medium">
+            ★ 4.8/5 — Plus de 23 000 demandes traitées
           </p>
         </div>
       </section>

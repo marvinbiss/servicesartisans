@@ -94,7 +94,14 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
         </span>
       </div>
       {/* Bar */}
-      <div className="relative h-2 bg-sand-200 rounded-full overflow-hidden">
+      <div
+        className="relative h-2 bg-sand-200 rounded-full overflow-hidden"
+        role="progressbar"
+        aria-valuenow={currentStep}
+        aria-valuemin={1}
+        aria-valuemax={3}
+        aria-label="Progression du formulaire"
+      >
         <div
           className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full transition-all duration-500 ease-premium"
           style={{ width: `${progress}%` }}
@@ -165,25 +172,72 @@ export default function DevisForm({
     } catch { return null }
   })() : null
 
+  // If there's a saved state beyond step 1, start at step 1 and show resume banner
+  // The user can click "Reprendre" to restore or "Recommencer" to clear
+  const hasSavedProgress = !isPrefilled && savedState?.step && savedState.step > 1
   const [step, setStep] = useState<1 | 2 | 3>(
-    isPrefilled ? 2 : (savedState?.step || 1) as 1 | 2 | 3
+    isPrefilled ? 2 : hasSavedProgress ? 1 : (savedState?.step || 1) as 1 | 2 | 3
   )
   const [formData, setFormData] = useState<FormData>(
     isPrefilled
       ? { ...initialFormData, service: prefilledService || '', ville: prefilledCity || '' }
-      : (savedState?.formData || initialFormData)
+      : hasSavedProgress ? initialFormData : (savedState?.formData || initialFormData)
   )
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [villeQuery, setVilleQuery] = useState(prefilledCity || savedState?.villeQuery || '')
+  const [villeQuery, setVilleQuery] = useState(prefilledCity || (hasSavedProgress ? '' : (savedState?.villeQuery || '')))
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
-  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || savedState?.selectedVillePostal || '')
+  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || (hasSavedProgress ? '' : (savedState?.selectedVillePostal || '')))
   const [geoLoading, setGeoLoading] = useState(false)
   const [debouncedVilleQuery, setDebouncedVilleQuery] = useState(villeQuery)
   const [abandonTracked, setAbandonTracked] = useState(false)
   const [monthlyCount, setMonthlyCount] = useState<string>('1 200+')
+
+  // Resume banner: show if saved state exists at step > 1 and not prefilled
+  const [showResumeBanner, setShowResumeBanner] = useState(false)
+  const [savedService, setSavedService] = useState('')
+  const [savedVille, setSavedVille] = useState('')
+
+  useEffect(() => {
+    if (isPrefilled) return
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (!saved) return
+      const parsed = JSON.parse(saved)
+      if (parsed.step && parsed.step > 1 && parsed.formData) {
+        setSavedService(parsed.formData.service || '')
+        setSavedVille(parsed.formData.ville || '')
+        setShowResumeBanner(true)
+      }
+    } catch {}
+  }, [isPrefilled])
+
+  const handleResume = useCallback(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (!saved) return
+      const parsed = JSON.parse(saved)
+      if (parsed.step) {
+        const targetStep = (parsed.step === 4 ? 3 : parsed.step > 3 ? 1 : parsed.step) as 1 | 2 | 3
+        setStep(targetStep)
+        if (parsed.formData) setFormData(parsed.formData)
+        if (parsed.villeQuery) setVilleQuery(parsed.villeQuery)
+        if (parsed.selectedVillePostal) setSelectedVillePostal(parsed.selectedVillePostal)
+      }
+    } catch {}
+    setShowResumeBanner(false)
+  }, [])
+
+  const handleDismiss = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY)
+    setStep(1)
+    setFormData(initialFormData)
+    setVilleQuery('')
+    setSelectedVillePostal('')
+    setShowResumeBanner(false)
+  }, [])
 
   // Fetch monthly demand count (social proof)
   useEffect(() => {
@@ -255,12 +309,12 @@ export default function DevisForm({
           break
         case 'telephone':
           if (!formData.telephone.trim()) next.telephone = 'Veuillez entrer votre numéro de téléphone'
-          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Veuillez entrer un numéro de téléphone français valide'
+          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Le numéro de téléphone doit contenir 10 chiffres (ex : 06 12 34 56 78)'
           else delete next.telephone
           break
         case 'email':
           if (!formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
-          else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) next.email = 'Veuillez entrer une adresse e-mail valide'
+          else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) next.email = 'Veuillez entrer une adresse e-mail valide (ex : nom@exemple.fr)'
           else delete next.email
           break
         default:
@@ -270,13 +324,13 @@ export default function DevisForm({
     })
   }, [formData])
 
-  // Persist form progress to localStorage
+  // Persist form progress to localStorage (skip while resume banner is shown to avoid overwriting saved data)
   useEffect(() => {
-    if (submitted) return
+    if (submitted || showResumeBanner) return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ formData, step, villeQuery, selectedVillePostal }))
     } catch {}
-  }, [formData, step, villeQuery, selectedVillePostal, submitted])
+  }, [formData, step, villeQuery, selectedVillePostal, submitted, showResumeBanner])
 
   const filteredVilles = useMemo(() => {
     if (debouncedVilleQuery.length < 2) return []
@@ -343,7 +397,7 @@ export default function DevisForm({
   // --- Validation per step ---
   const validateStep1 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.service) newErrors.service = 'Veuillez choisir un service'
+    if (!formData.service) newErrors.service = 'Veuillez sélectionner un service'
     if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -354,11 +408,11 @@ export default function DevisForm({
     if (!formData.email.trim()) {
       newErrors.email = 'Veuillez entrer votre adresse e-mail'
     } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
-      newErrors.email = 'Veuillez entrer une adresse e-mail valide'
+      newErrors.email = 'Veuillez entrer une adresse e-mail valide (ex : nom@exemple.fr)'
     }
     if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     if (formData.description.trim().length > 0 && formData.description.trim().length < 5) {
-      newErrors.description = 'Veuillez détailler davantage (5 caractères minimum) ou laisser le champ vide'
+      newErrors.description = 'Veuillez détailler davantage votre projet (5 caractères minimum) ou laisser le champ vide'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -370,7 +424,7 @@ export default function DevisForm({
     if (!formData.telephone.trim()) {
       newErrors.telephone = 'Veuillez entrer votre numéro de téléphone'
     } else if (!isValidFrenchPhone(formData.telephone.trim())) {
-      newErrors.telephone = 'Veuillez entrer un numéro de téléphone français valide'
+      newErrors.telephone = 'Le numéro de téléphone doit contenir 10 chiffres (ex : 06 12 34 56 78)'
     }
     if (!formData.consentement) {
       newErrors.consentement = "Veuillez accepter d'être contacté par des artisans"
@@ -425,8 +479,8 @@ export default function DevisForm({
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     if (!validateStep3()) return
 
     setSubmitting(true)
@@ -576,6 +630,27 @@ export default function DevisForm({
         </p>
       </div>
 
+      {showResumeBanner && (
+        <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 mb-4 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-primary-800">Vous aviez commencé une demande</p>
+            <p className="text-xs text-primary-600">
+              {savedService && <>Service : {services.find(s => s.slug === savedService)?.name || savedService}</>}
+              {savedService && savedVille && <> — </>}
+              {savedVille && <>Ville : {savedVille}</>}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button type="button" onClick={handleResume} className="text-sm font-medium text-primary-600 hover:text-primary-800">
+              Reprendre
+            </button>
+            <button type="button" onClick={handleDismiss} className="text-sm text-charcoal-400 hover:text-charcoal-600">
+              Recommencer
+            </button>
+          </div>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit}
         noValidate
@@ -583,15 +658,21 @@ export default function DevisForm({
       >
         <ProgressBar currentStep={step} />
 
+        {/* SR-only step announcer */}
+        <div className="sr-only" aria-live="assertive" aria-atomic="true">
+          Étape {step} sur 3{step === 1 ? ' : Votre besoin' : step === 2 ? ' : Vos coordonnées' : ' : Confirmation'}
+        </div>
+
         {/* Step container with transitions */}
         <div
           ref={stepContainerRef}
           className={`min-h-[320px] ${getTransitionClass()}`}
           onKeyDown={handleKeyDown}
+          aria-live="polite"
         >
           {/* --- Step 1: Service + Ville (merged) --- */}
           {step === 1 && (
-            <div className="space-y-6">
+            <div className="space-y-6" aria-label="Étape 1 sur 3">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
                   {stepTitles[0].title}
@@ -736,7 +817,7 @@ export default function DevisForm({
 
           {/* --- Step 2: Email (early capture) + Urgence + Description + Budget --- */}
           {step === 2 && (
-            <div className="space-y-6">
+            <div className="space-y-6" aria-label="Étape 2 sur 3">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
                   {stepTitles[1].title}
@@ -867,7 +948,7 @@ export default function DevisForm({
                   rows={3}
                   placeholder={formData.service && serviceSubcategories[formData.service]
                     ? "Précisions supplémentaires (optionnel)..."
-                    : "Ex : fuite robinet cuisine, remplacement chaudière..."}
+                    : "Ex: fuite d'eau dans la cuisine, remplacement chauffe-eau..."}
                   value={formData.description}
                   onChange={(e) => updateField('description', e.target.value)}
                   aria-describedby={errors.description ? 'description-error' : undefined}
@@ -952,7 +1033,7 @@ export default function DevisForm({
 
           {/* --- Step 3: Nom + Téléphone + Consentement --- */}
           {step === 3 && (
-            <div className="space-y-6">
+            <div className="space-y-6" aria-label="Étape 3 sur 3">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
                   {stepTitles[2].title}
@@ -972,7 +1053,7 @@ export default function DevisForm({
                     id="nom"
                     type="text"
                     autoComplete="name"
-                    placeholder="Jean Dupont"
+                    placeholder="Votre nom complet"
                     value={formData.nom}
                     onChange={(e) => updateField('nom', e.target.value)}
                     onBlur={() => validateField('nom')}
@@ -1002,6 +1083,7 @@ export default function DevisForm({
                     id="telephone"
                     type="tel"
                     autoComplete="tel"
+                    inputMode="tel"
                     placeholder="06 12 34 56 78"
                     value={formData.telephone}
                     onChange={(e) => updateField('telephone', e.target.value)}
@@ -1049,8 +1131,16 @@ export default function DevisForm({
               </div>
 
               {submitError && (
-                <div role="alert" className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 animate-fade-in-down">
-                  {submitError}
+                <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-4 text-center animate-fade-in-down">
+                  <p className="text-sm text-red-700">{submitError}</p>
+                  <p className="text-xs text-red-500 mt-1">Vos données sont conservées.</p>
+                  <button
+                    type="button"
+                    onClick={() => handleSubmit()}
+                    className="mt-2 text-sm font-medium text-red-600 hover:text-red-800 underline"
+                  >
+                    Réessayer
+                  </button>
                 </div>
               )}
 

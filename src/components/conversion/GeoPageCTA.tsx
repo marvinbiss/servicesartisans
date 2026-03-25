@@ -33,7 +33,7 @@ export default function GeoPageCTA({ title, subtitle, ville, service, variant = 
               onClick={() => setIsDevisOpen(true)}
               className="inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all text-lg whitespace-nowrap"
             >
-              Obtenir mon devis gratuit
+              {service && ville ? `Besoin d'un ${service} à ${ville} ?` : 'Obtenir mon devis gratuit'}
             </button>
           </div>
           {(ville || service) && (

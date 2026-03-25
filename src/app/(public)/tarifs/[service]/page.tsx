@@ -715,7 +715,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      <StickyMobileCTA serviceSlug={service} />
+      <StickyMobileCTA serviceSlug={service} ctaText="Comparer les prix gratuitement" />
       <ExitIntentPopup />
     </div>
   )

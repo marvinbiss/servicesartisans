@@ -19,6 +19,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import dynamic from 'next/dynamic'
+import BlogInlineCTA from '@/components/blog/BlogInlineCTA'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
 const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
@@ -904,6 +905,9 @@ export default async function BlogArticlePage({ params }: PageProps) {
           {faqItems.length > 0 && (
             <ArticleFAQ items={faqItems} />
           )}
+
+          {/* CTA contextuel — après le contenu, avant les liens internes */}
+          <BlogInlineCTA service={primaryServiceSlug || undefined} />
 
           {/* Services associes */}
           {serviceLinks.length > 0 && (

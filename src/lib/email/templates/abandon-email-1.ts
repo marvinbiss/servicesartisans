@@ -1,9 +1,19 @@
+/** Escape HTML special chars to prevent XSS in email templates */
+function htmlEscape(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 /** Email 1 — 30 min after abandon: "Vos artisans vous attendent" */
 export function getAbandonEmail1(data: { service: string; city: string; unsubscribeUrl: string }) {
   const { service, city, unsubscribeUrl } = data
 
   return {
-    subject: `3 artisans disponibles pour votre ${service} à ${city}`,
+    subject: `3 artisans disponibles pour votre ${service.replace(/[<>"]/g, '')} à ${city.replace(/[<>"]/g, '')}`,
     html: `
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +26,7 @@ export function getAbandonEmail1(data: { service: string; city: string; unsubscr
   <h2 style="font-size: 22px; margin-bottom: 8px;">Vos artisans vous attendent !</h2>
 
   <p style="color: #555; line-height: 1.6;">
-    Vous avez commencé une demande de devis pour <strong>${service}</strong> à <strong>${city}</strong>,
+    Vous avez commencé une demande de devis pour <strong>${htmlEscape(service)}</strong> à <strong>${htmlEscape(city)}</strong>,
     mais vous n'êtes pas allé au bout. Pas de souci — vos informations sont sauvegardées.
   </p>
 
@@ -38,7 +48,7 @@ export function getAbandonEmail1(data: { service: string; city: string; unsubscr
 
   <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
     Vous recevez cet email car vous avez commencé une demande de devis sur ServicesArtisans.<br>
-    <a href="${unsubscribeUrl}" style="color: #999;">Se désinscrire</a>
+    <a href="${htmlEscape(unsubscribeUrl)}" style="color: #999;">Se désinscrire</a>
   </p>
 </body>
 </html>`,

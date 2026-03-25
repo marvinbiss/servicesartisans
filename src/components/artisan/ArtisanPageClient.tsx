@@ -20,6 +20,7 @@ import {
 import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
 
 import { ArtisanProfileStrength } from '@/components/artisan/ArtisanProfileStrength'
+import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
@@ -245,6 +246,10 @@ export default function ArtisanPageClient({
               {/* 1. Hero — first impression, identity, trust signals */}
               <section aria-label="Informations principales">
                 <ArtisanHero artisan={artisan} />
+              </section>
+              {/* 1b. Quick Quote CTA — reduce friction, capture intent early */}
+              <section aria-label="Demande de devis rapide">
+                <ArtisanQuickQuote artisan={artisan} />
               </section>
               {/* 2. Urgency — availability signals push to action */}
               <section aria-label="Disponibilité et avantages">

@@ -1,9 +1,19 @@
+/** Escape HTML special chars to prevent XSS in email templates */
+function htmlEscape(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 /** Email 2 — 24h after abandon: "Ne passez pas à côté" */
 export function getAbandonEmail2(data: { service: string; city: string; unsubscribeUrl: string }) {
   const { service, city, unsubscribeUrl } = data
 
   return {
-    subject: `Votre demande de devis ${service} est toujours en attente`,
+    subject: `Votre demande de devis ${service.replace(/[<>"]/g, '')} est toujours en attente`,
     html: `
 <!DOCTYPE html>
 <html lang="fr">
@@ -17,7 +27,7 @@ export function getAbandonEmail2(data: { service: string; city: string; unsubscr
 
   <p style="color: #555; line-height: 1.6;">
     Des centaines de propriétaires trouvent chaque mois leur artisan de confiance sur ServicesArtisans.
-    Votre demande de <strong>${service}</strong> à <strong>${city}</strong> n'attend que vous.
+    Votre demande de <strong>${htmlEscape(service)}</strong> à <strong>${htmlEscape(city)}</strong> n'attend que vous.
   </p>
 
   <div style="background: #fefce8; border: 1px solid #fde68a; border-radius: 12px; padding: 20px; margin: 24px 0;">
@@ -37,7 +47,7 @@ export function getAbandonEmail2(data: { service: string; city: string; unsubscr
 
   <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
     Vous recevez cet email car vous avez commencé une demande de devis sur ServicesArtisans.<br>
-    <a href="${unsubscribeUrl}" style="color: #999;">Se désinscrire</a>
+    <a href="${htmlEscape(unsubscribeUrl)}" style="color: #999;">Se désinscrire</a>
   </p>
 </body>
 </html>`,

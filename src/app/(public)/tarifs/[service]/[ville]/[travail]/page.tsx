@@ -541,7 +541,7 @@ export default async function TarifsServiceTravailVillePage({
         </div>
       </section>
 
-      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} />
+      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Comparer les prix gratuitement" />
       <ExitIntentPopup />
     </div>
   )

@@ -1,9 +1,19 @@
+/** Escape HTML special chars to prevent XSS in email templates */
+function htmlEscape(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 /** Email 3 — 72h after abandon: "Dernière relance" */
 export function getAbandonEmail3(data: { service: string; city: string; unsubscribeUrl: string }) {
   const { service, city, unsubscribeUrl } = data
 
   return {
-    subject: `Dernière chance : devis gratuit ${service} à ${city}`,
+    subject: `Dernière chance : devis gratuit ${service.replace(/[<>"]/g, '')} à ${city.replace(/[<>"]/g, '')}`,
     html: `
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +26,7 @@ export function getAbandonEmail3(data: { service: string; city: string; unsubscr
   <h2 style="font-size: 22px; margin-bottom: 8px;">Dernière relance</h2>
 
   <p style="color: #555; line-height: 1.6;">
-    C'est notre dernier message concernant votre demande de <strong>${service}</strong> à <strong>${city}</strong>.
+    C'est notre dernier message concernant votre demande de <strong>${htmlEscape(service)}</strong> à <strong>${htmlEscape(city)}</strong>.
     Nous ne vous relancerons plus après cet email.
   </p>
 
@@ -39,7 +49,7 @@ export function getAbandonEmail3(data: { service: string; city: string; unsubscr
 
   <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
     Vous recevez cet email car vous avez commencé une demande de devis sur ServicesArtisans. C'est notre dernier message.<br>
-    <a href="${unsubscribeUrl}" style="color: #999;">Se désinscrire</a>
+    <a href="${htmlEscape(unsubscribeUrl)}" style="color: #999;">Se désinscrire</a>
   </p>
 </body>
 </html>`,
