@@ -84,7 +84,7 @@ export default function ProactiveChatPrompt({
                 onClick={() => setVisible(false)}
                 className="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
               >
-                Devis gratuit
+                Obtenir mon devis gratuit
               </Link>
               <button
                 onClick={() => setVisible(false)}

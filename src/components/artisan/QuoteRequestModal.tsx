@@ -183,7 +183,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
               <div>
                 <h2 id="quote-modal-title" className="text-xl font-bold text-gray-900">Demande de devis</h2>
                 <p id="quote-modal-description" className="text-sm text-gray-500">
-                  Envoyer à {displayName}
+                  Contacter mon artisan
                 </p>
               </div>
               <motion.button
@@ -418,7 +418,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     ) : (
                       <>
                         <Send className="w-5 h-5" aria-hidden="true" />
-                        <span>Envoyer ma demande</span>
+                        <span>Recevoir mes devis gratuits</span>
                       </>
                     )}
                   </motion.button>

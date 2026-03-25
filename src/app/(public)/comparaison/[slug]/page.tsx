@@ -368,7 +368,7 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
               href="/devis"
               className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
             >
-              Demander un devis gratuit
+              Obtenir mon devis gratuit
             </Link>
           </div>
         </section>

@@ -121,7 +121,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
       {/* Header */}
       <div className="bg-gradient-to-r from-primary-400 to-primary-600 px-6 py-5">
         <h2 className="font-heading text-xl font-bold text-white">
-          Demander un devis gratuit
+          Obtenir mon devis gratuit
         </h2>
         <p className="text-primary-100 text-sm mt-1">
           Recevez jusqu'à 3 devis de professionnels qualifiés
@@ -280,7 +280,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 whileHover={loading ? {} : { scale: 1.02 }}
                 whileTap={loading ? {} : { scale: 0.98 }}
                 className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-primary-400 to-primary-500 text-white font-semibold text-base flex items-center justify-center gap-2.5 shadow-cta hover:from-primary-500 hover:to-primary-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
-                aria-label={`Demander un devis gratuit à ${displayName}`}
+                aria-label={`Obtenir mon devis gratuit à ${displayName}`}
               >
                 {loading ? (
                   <span className="flex items-center gap-2">

@@ -463,7 +463,7 @@ export default async function TarifsServiceTravailVillePage({
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
             >
-              Demander un devis gratuit
+              Obtenir mon devis gratuit
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

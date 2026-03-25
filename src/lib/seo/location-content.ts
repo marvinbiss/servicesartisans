@@ -3189,7 +3189,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   },
   {
     q: (name) => `Comment obtenir un devis gratuit à ${name} ?`,
-    a: (p) => `Cliquez sur "Demander un devis gratuit", décrivez votre projet en quelques clics, et recevez jusqu'à 3 devis personnalisés d'artisans qualifiés intervenant à ${p.name}. Le service est 100% gratuit et sans engagement.`,
+    a: (p) => `Cliquez sur "Obtenir mon devis gratuit", décrivez votre projet en quelques clics, et recevez jusqu'à 3 devis personnalisés d'artisans qualifiés intervenant à ${p.name}. Le service est 100% gratuit et sans engagement.`,
   },
   {
     q: (name) => `Les artisans à ${name} interviennent-ils en urgence ?`,

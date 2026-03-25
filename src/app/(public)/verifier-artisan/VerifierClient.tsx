@@ -274,7 +274,7 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
               >
                 <div>
                   <p className="font-semibold text-gray-900">
-                    Demander un devis gratuit
+                    Obtenir mon devis gratuit
                   </p>
                   <p className="text-sm text-gray-500">
                     Comparez les offres

@@ -189,7 +189,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               href={`/devis/${problem.primaryService}`}
               className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
-              Demander un devis gratuit
+              Obtenir mon devis gratuit
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
@@ -451,7 +451,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
             href={`/devis/${problem.primaryService}`}
             className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
           >
-            Demander un devis gratuit
+            Obtenir mon devis gratuit
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

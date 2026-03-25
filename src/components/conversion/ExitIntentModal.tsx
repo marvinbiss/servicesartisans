@@ -57,7 +57,7 @@ export default function ExitIntentModal() {
     let armed = false
     const armTimer = setTimeout(() => {
       armed = true
-    }, 3000)
+    }, 30_000) // 30s minimum — visitors < 30s aren't qualified
 
     const handleMouseLeave = (e: MouseEvent) => {
       if (!armed) return
@@ -197,10 +197,10 @@ export default function ExitIntentModal() {
             id="exit-intent-title"
             className="font-heading text-xl sm:text-2xl font-bold text-charcoal-900 mb-2"
           >
-            Attendez !
+            Avant de partir...
           </h2>
           <p className="text-charcoal-600 mb-6">
-            Vous n'avez pas encore reçu vos devis gratuits.
+            Recevez 3 devis gratuits d&apos;artisans vérifiés près de chez vous — en 30 secondes, sans engagement
           </p>
 
           {/* What they lose */}
@@ -236,7 +236,7 @@ export default function ExitIntentModal() {
             onClick={handleResume}
             className="w-full bg-primary-400 hover:bg-primary-500 text-white font-heading font-bold text-base px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200"
           >
-            Recevoir mes devis gratuits
+            Obtenir mes devis gratuits
           </button>
 
           <button

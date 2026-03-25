@@ -219,7 +219,7 @@ export default async function RegionsIndexPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/devis" className="inline-flex items-center gap-2 bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:bg-primary-500 hover:-translate-y-0.5 transition-all duration-300">
-              Demander un devis gratuit
+              Obtenir mon devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors">
               Voir les services <ArrowRight className="w-4 h-4" />

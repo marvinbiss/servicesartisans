@@ -70,7 +70,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             className="w-full py-4 px-4 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 group"
           >
             <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
-            Demander un devis gratuit
+            Obtenir mon devis gratuit
           </button>
 
           {/* Trust reassurance */}

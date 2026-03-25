@@ -94,8 +94,8 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           <>
             <ArrowRight className="h-4 w-4" />
             {context.artisan
-              ? `Envoyer à ${context.artisan.name}`
-              : 'Être mis en relation'}
+              ? 'Contacter mon artisan'
+              : 'Obtenir mon devis gratuit'}
           </>
         )}
       </button>

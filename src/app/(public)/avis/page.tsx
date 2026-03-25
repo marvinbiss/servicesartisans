@@ -575,7 +575,7 @@ export default async function AvisPage() {
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             <Star className="w-5 h-5" />
-            Demander un devis gratuit
+            Obtenir mon devis gratuit
           </Link>
         </div>
       </section>

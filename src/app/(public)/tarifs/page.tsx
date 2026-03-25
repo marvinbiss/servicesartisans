@@ -350,7 +350,7 @@ export default async function TarifsPage() {
                 href="/devis"
                 className="inline-flex items-center justify-center gap-2 bg-white text-primary-500 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors text-base sm:text-lg w-full sm:w-auto"
               >
-                Demander un devis gratuit
+                Obtenir mon devis gratuit
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link

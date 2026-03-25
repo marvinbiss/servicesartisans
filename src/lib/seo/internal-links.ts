@@ -546,7 +546,7 @@ export function getRelatedServiceLinks(
 
   // Always add devis link for Tarifs articles
   if (category === 'Tarifs') {
-    links.push({ text: 'Demander un devis gratuit', href: '/devis' })
+    links.push({ text: 'Obtenir mon devis gratuit', href: '/devis' })
   }
 
   // Add general links based on category

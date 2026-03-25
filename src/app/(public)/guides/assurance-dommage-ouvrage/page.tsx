@@ -470,7 +470,7 @@ export default function AssuranceDommageOuvragePage() {
                 className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-teal-400 transition-colors border border-teal-400"
               >
                 <FileCheck className="w-5 h-5" />
-                Demander un devis gratuit
+                Obtenir mon devis gratuit
               </Link>
             </div>
           </div>

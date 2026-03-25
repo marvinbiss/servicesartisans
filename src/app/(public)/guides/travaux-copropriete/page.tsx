@@ -437,7 +437,7 @@ export default function TravauxCoproprietePage() {
                 className="inline-flex items-center justify-center gap-2 bg-purple-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-purple-400 transition-colors border border-purple-400"
               >
                 <FileCheck className="w-5 h-5" />
-                Demander un devis gratuit
+                Obtenir mon devis gratuit
               </Link>
             </div>
           </div>

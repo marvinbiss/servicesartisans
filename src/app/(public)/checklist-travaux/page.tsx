@@ -641,7 +641,7 @@ export default function ChecklistTravauxPage() {
               href="/devis"
               className="inline-flex items-center justify-center gap-2 bg-white text-indigo-700 px-8 py-3.5 rounded-xl font-bold hover:bg-indigo-50 transition-colors"
             >
-              Demander un devis gratuit
+              Obtenir mon devis gratuit
             </Link>
           </div>
         </div>

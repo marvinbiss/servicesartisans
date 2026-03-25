@@ -226,7 +226,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     potentialAction: {
       '@type': 'CommunicateAction',
       target: `${artisanUrl}#devis`,
-      name: 'Demander un devis gratuit',
+      name: 'Obtenir mon devis gratuit',
     },
   }
 

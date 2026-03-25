@@ -1,15 +1,16 @@
 'use client'
 
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { Users, Clock, TrendingUp, FileText, Eye } from 'lucide-react'
+import { Users, Clock, TrendingUp, FileText } from 'lucide-react'
 
-interface SocialProofData {
-  devisThisMonth: number
-  activeProviders: number
+interface DemandStats {
+  requests_this_week: number
+  requests_this_month: number
+  active_providers: number
 }
 
 interface SocialProofBannerProps {
-  /** Nom du metier pour contextualiser */
+  /** Nom du métier pour contextualiser */
   metier?: string
   /** Nom de la ville pour contextualiser */
   ville?: string
@@ -17,17 +18,6 @@ interface SocialProofBannerProps {
   variant?: 'inline' | 'card' | 'compact'
   /** Activer l'animation compteur (requiert IntersectionObserver) */
   animated?: boolean
-}
-
-/**
- * Deterministic fallback counter — same value for all visitors on the same day
- */
-function getDailyCount(): number {
-  const now = new Date()
-  const dayOfYear = Math.floor(
-    (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000,
-  )
-  return 47 + ((dayOfYear * 7 + 13) % 137) // 47-183, deterministic per day
 }
 
 /**
@@ -75,62 +65,60 @@ function useAnimatedNumber(target: number, duration = 1800, enabled = true) {
 }
 
 /**
- * Nombre pseudo-aléatoire "personnes en ligne" — change toutes les 5 min
+ * Deterministic fallback counter — same value for all visitors on the same day
  */
-function getLiveViewers(seed: string): number {
-  const timeBlock = Math.floor(Date.now() / 300_000)
-  let hash = 0
-  const str = seed + String(timeBlock)
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0
+function getDailyFallback(): DemandStats {
+  const now = new Date()
+  const dayOfYear = Math.floor(
+    (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000,
+  )
+  return {
+    requests_this_week: 8 + ((dayOfYear * 3) % 20),
+    requests_this_month: 47 + ((dayOfYear * 7 + 13) % 137),
+    active_providers: 200 + ((dayOfYear * 11) % 400),
   }
-  return 4 + (Math.abs(hash) % 12) // 4-15
 }
 
 export function SocialProofBanner({ metier, ville, variant = 'inline', animated = true }: SocialProofBannerProps) {
-  const fallbackCount = getDailyCount()
-  const [data, setData] = useState<SocialProofData | null>(null)
-  const [liveViewers, setLiveViewers] = useState<number | null>(null)
+  const fallback = getDailyFallback()
+  const [stats, setStats] = useState<DemandStats | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const observedRef = useRef(false)
 
   useEffect(() => {
-    // Check sessionStorage cache first
-    const cached = sessionStorage.getItem('sa:social-proof')
-    if (cached) {
-      try {
+    // Check sessionStorage cache
+    const cacheKey = `sa:social-proof:${metier || ''}:${ville || ''}`
+    try {
+      const cached = sessionStorage.getItem(cacheKey)
+      if (cached) {
         const parsed = JSON.parse(cached)
-        if (Date.now() - parsed.fetchedAt < 3600000) {
-          setData(parsed.data)
+        if (Date.now() - parsed.ts < 300_000) {
+          setStats(parsed.data)
           return
         }
-      } catch { /* ignore corrupt cache */ }
-    }
+      }
+    } catch { /* ignore */ }
 
-    fetch('/api/social-proof')
+    const params = new URLSearchParams()
+    if (metier) params.set('service', metier)
+    if (ville) params.set('city', ville)
+
+    fetch(`/api/stats/demand?${params}`)
       .then(r => r.json())
-      .then((d: SocialProofData) => {
-        setData(d)
-        sessionStorage.setItem('sa:social-proof', JSON.stringify({ data: d, fetchedAt: Date.now() }))
+      .then((data: DemandStats) => {
+        setStats(data)
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }))
+        } catch { /* ignore */ }
       })
       .catch(() => {
-        setData({ devisThisMonth: fallbackCount, activeProviders: 500 })
+        setStats(fallback)
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Live viewers — client only
-  useEffect(() => {
-    const slug = (metier || 'global') + (ville || '')
-    setLiveViewers(getLiveViewers(slug))
-    const interval = setInterval(() => {
-      setLiveViewers(getLiveViewers(slug))
-    }, 300_000)
-    return () => clearInterval(interval)
   }, [metier, ville])
 
-  const devisCount = data?.devisThisMonth ?? fallbackCount
-  const providerCount = data?.activeProviders ?? 500
+  const devisCount = stats?.requests_this_month ?? fallback.requests_this_month
+  const providerCount = stats?.active_providers ?? fallback.active_providers
 
   const devisAnim = useAnimatedNumber(devisCount, 1800, animated)
   const providerAnim = useAnimatedNumber(providerCount, 2000, animated)
@@ -159,12 +147,12 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
     observer.observe(containerRef.current)
     return () => observer.disconnect()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animated, data])
+  }, [animated, stats])
 
   const devisDisplay = (animated ? devisAnim.value : devisCount).toLocaleString('fr-FR')
   const providerDisplay = (animated ? providerAnim.value : providerCount).toLocaleString('fr-FR')
 
-  // ── Compact variant: minimal inline stats + live viewers ──
+  // ── Compact variant: minimal inline stats ──
   if (variant === 'compact') {
     return (
       <div ref={containerRef} className="flex flex-wrap items-center gap-4 text-xs text-charcoal-500">
@@ -176,20 +164,11 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
           <Users className="w-3.5 h-3.5" />
           {providerDisplay} artisans actifs
         </span>
-        {liveViewers !== null && (
-          <span className="flex items-center gap-1.5" role="status" aria-live="polite">
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-500" />
-            </span>
-            {liveViewers} en ligne
-          </span>
-        )}
       </div>
     )
   }
 
-  // ── Card variant: full card with stats grid + live activity ──
+  // ── Card variant: full card with stats grid ──
   if (variant === 'card') {
     return (
       <div
@@ -203,19 +182,6 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
               {metier ? `Forte demande en ${metier.toLowerCase()}` : 'Forte demande ce mois'}
             </span>
           </div>
-          {liveViewers !== null && (
-            <span
-              className="flex items-center gap-1.5 text-xs text-accent-700 bg-accent-50 px-2 py-1 rounded-full"
-              role="status"
-              aria-live="polite"
-            >
-              <span className="relative flex h-2 w-2" aria-hidden="true">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-500" />
-              </span>
-              {liveViewers} en ligne
-            </span>
-          )}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div className="flex items-center gap-2">
@@ -259,7 +225,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
     )
   }
 
-  // ── Inline variant (default): pill badges with live dot ──
+  // ── Inline variant (default): pill badges ──
   return (
     <div ref={containerRef} className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
       <span className="flex items-center gap-1.5 text-accent-700 bg-accent-50 px-3 py-1.5 rounded-full">
@@ -274,20 +240,6 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
         <Users className="w-3.5 h-3.5" />
         {providerDisplay} artisans
       </span>
-      {liveViewers !== null && (
-        <span
-          className="flex items-center gap-1.5 text-accent-700 bg-accent-50 px-3 py-1.5 rounded-full"
-          role="status"
-          aria-live="polite"
-        >
-          <span className="relative flex h-2 w-2" aria-hidden="true">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-500" />
-          </span>
-          <Eye className="w-3.5 h-3.5" />
-          {liveViewers} en ligne
-        </span>
-      )}
     </div>
   )
 }

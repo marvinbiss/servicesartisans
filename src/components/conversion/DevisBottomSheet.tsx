@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { X, CheckCircle, ArrowRight, ArrowLeft, MapPin, ChevronDown } from 'lucide-react'
 import { services, villes } from '@/lib/data/france'
 import { trackEvent } from '@/lib/analytics/tracking'
+import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
 
@@ -230,6 +231,25 @@ export default function DevisBottomSheet({
     }
   }, [updateField])
 
+  // --- Abandon tracking ---
+  const abandonTrackedRef = useRef(false)
+  const trackAbandon = useCallback(async (email: string) => {
+    if (abandonTrackedRef.current || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return
+    abandonTrackedRef.current = true
+    try {
+      await fetch('/api/devis/abandon-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          service_slug: formData.service || null,
+          city_slug: formData.ville || null,
+          step_reached: 2,
+        }),
+      })
+    } catch { /* non-blocking */ }
+  }, [formData.service, formData.ville])
+
   const validateAndNext = () => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (step === 1) {
@@ -237,8 +257,16 @@ export default function DevisBottomSheet({
       if (!formData.ville) newErrors.ville = 'Indiquez votre ville'
       if (Object.keys(newErrors).length === 0) setStep(2)
     } else if (step === 2) {
-      if (!formData.urgence) newErrors.urgence = 'Choisissez un delai'
-      if (Object.keys(newErrors).length === 0) setStep(3)
+      if (!formData.email.trim()) {
+        newErrors.email = 'Votre e-mail est requis'
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+        newErrors.email = 'E-mail invalide'
+      }
+      if (!formData.urgence) newErrors.urgence = 'Choisissez un délai'
+      if (Object.keys(newErrors).length === 0) {
+        trackAbandon(formData.email.trim())
+        setStep(3)
+      }
     }
     setErrors(newErrors)
   }
@@ -248,14 +276,9 @@ export default function DevisBottomSheet({
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.nom.trim()) newErrors.nom = 'Votre nom est requis'
     if (!formData.telephone.trim()) {
-      newErrors.telephone = 'Votre telephone est requis'
+      newErrors.telephone = 'Votre téléphone est requis'
     } else if (!isValidFrenchPhone(formData.telephone.trim())) {
-      newErrors.telephone = 'Numero invalide'
-    }
-    if (!formData.email.trim()) {
-      newErrors.email = 'Votre e-mail est requis'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = 'E-mail invalide'
+      newErrors.telephone = 'Numéro invalide'
     }
     if (!formData.consentement) {
       newErrors.consentement = 'Veuillez accepter'
@@ -282,6 +305,14 @@ export default function DevisBottomSheet({
       if (!res.ok) {
         const body = await res.json().catch(() => null)
         throw new Error(body?.error || 'Erreur serveur')
+      }
+      // Mark abandon as completed
+      if (formData.email.trim()) {
+        fetch('/api/devis/abandon-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formData.email.trim() }),
+        }).catch(() => {})
       }
       trackEvent('form_completed', {
         service: formData.service,
@@ -322,7 +353,7 @@ export default function DevisBottomSheet({
         ref={sheetRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Demander un devis gratuit"
+        aria-label="Obtenir mon devis gratuit"
         className="fixed bottom-0 left-0 right-0 z-[56] md:hidden"
         style={{
           transform: 'translateY(0)',
@@ -398,17 +429,14 @@ export default function DevisBottomSheet({
           {/* Content — scrollable */}
           <div className="flex-1 overflow-y-auto px-4 pb-4 overscroll-contain">
             {submitted ? (
-              /* ── Success ── */
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-8 h-8 text-accent-500" />
-                </div>
-                <h3 className="font-heading font-bold text-xl text-charcoal-900 mb-2">
-                  Demande envoyee !
-                </h3>
-                <p className="text-charcoal-500 text-sm mb-6">
-                  Vous recevrez jusqu'a 3 devis gratuits sous 24h.
-                </p>
+              /* ── Success with matched providers ── */
+              <div>
+                <DevisConfirmation
+                  service={formData.service}
+                  city={formData.ville}
+                  phone={formData.telephone}
+                  compact
+                />
                 <button
                   onClick={onClose}
                   className="w-full py-3 bg-primary-400 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all touch-manipulation"
@@ -516,9 +544,34 @@ export default function DevisBottomSheet({
                   </div>
                 )}
 
-                {/* ── Step 2: Urgence + Description ── */}
+                {/* ── Step 2: Email (early capture) + Urgence + Description ── */}
                 {step === 2 && (
                   <div className="space-y-4">
+                    {/* Email — early capture */}
+                    <div>
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
+                        Votre e-mail <span className="text-charcoal-400 font-normal">— pour recevoir vos devis</span>
+                      </label>
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => updateField('email', e.target.value)}
+                        onBlur={() => {
+                          if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+                            trackAbandon(formData.email.trim())
+                          }
+                        }}
+                        placeholder="votre@email.fr"
+                        className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
+                          errors.email ? 'border-red-400' : 'border-sand-300'
+                        }`}
+                        autoComplete="email"
+                      />
+                      {errors.email && (
+                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                      )}
+                    </div>
+
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
                         Quand souhaitez-vous les travaux ?
@@ -546,13 +599,13 @@ export default function DevisBottomSheet({
 
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
-                        Decrivez votre projet <span className="text-charcoal-400 font-normal">(optionnel)</span>
+                        Décrivez votre projet <span className="text-charcoal-400 font-normal">(optionnel)</span>
                       </label>
                       <textarea
                         value={formData.description}
                         onChange={(e) => updateField('description', e.target.value)}
                         rows={3}
-                        placeholder="Ex: Fuite sous l'evier de la cuisine..."
+                        placeholder="Ex: Fuite sous l'évier de la cuisine..."
                         className="w-full px-4 py-3 bg-sand-50 border border-sand-300 rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors resize-none"
                       />
                     </div>
@@ -578,7 +631,7 @@ export default function DevisBottomSheet({
                   </div>
                 )}
 
-                {/* ── Step 3: Contact ── */}
+                {/* ── Step 3: Nom + Téléphone + Consentement ── */}
                 {step === 3 && (
                   <div className="space-y-3">
                     <div>
@@ -589,7 +642,7 @@ export default function DevisBottomSheet({
                         type="text"
                         value={formData.nom}
                         onChange={(e) => updateField('nom', e.target.value)}
-                        placeholder="Prenom Nom"
+                        placeholder="Prénom Nom"
                         className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
                           errors.nom ? 'border-red-400' : 'border-sand-300'
                         }`}
@@ -600,7 +653,7 @@ export default function DevisBottomSheet({
 
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1">
-                        Telephone
+                        Téléphone
                       </label>
                       <input
                         type="tel"
@@ -614,25 +667,6 @@ export default function DevisBottomSheet({
                       />
                       {errors.telephone && (
                         <p className="text-red-500 text-xs mt-0.5">{errors.telephone}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
-                        E-mail
-                      </label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => updateField('email', e.target.value)}
-                        placeholder="votre@email.fr"
-                        className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
-                          errors.email ? 'border-red-400' : 'border-sand-300'
-                        }`}
-                        autoComplete="email"
-                      />
-                      {errors.email && (
-                        <p className="text-red-500 text-xs mt-0.5">{errors.email}</p>
                       )}
                     </div>
 
@@ -673,7 +707,7 @@ export default function DevisBottomSheet({
                         {submitting ? (
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
-                          <>Recevoir mes devis</>
+                          <>Recevoir mes devis gratuits</>
                         )}
                       </button>
                     </div>
@@ -692,7 +726,7 @@ export default function DevisBottomSheet({
       {/* Noscript fallback */}
       <noscript>
         <a href="/devis" className="fixed bottom-4 left-4 right-4 z-[56] block text-center py-3 bg-primary-400 text-white font-semibold rounded-xl md:hidden">
-          Demander un devis gratuit
+          Obtenir mon devis gratuit
         </a>
       </noscript>
     </>

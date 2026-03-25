@@ -309,7 +309,7 @@ export function HowItWorksSection() {
             href="/devis"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
-            Demander un devis gratuit <ArrowRight className="w-5 h-5" />
+            Obtenir mon devis gratuit <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>
       </div>

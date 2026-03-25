@@ -3,8 +3,9 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
-import { CheckCircle, ArrowRight, ArrowLeft, ChevronDown, Check, MapPin, Users, Shield, Clock } from 'lucide-react'
+import { ArrowRight, ArrowLeft, ChevronDown, Check, MapPin, Users, Shield, Clock } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
+import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 
 interface FormData {
   service: string
@@ -70,24 +71,23 @@ function isValidFrenchPhone(phone: string): boolean {
 const STORAGE_KEY = 'sa:devis-draft'
 
 const stepTitles = [
-  { title: 'De quel artisan avez-vous besoin ?', subtitle: 'Choisissez le métier qui correspond à votre besoin.' },
-  { title: 'Où habitez-vous ?', subtitle: 'Pour trouver les artisans les plus proches de chez vous.' },
+  { title: 'De quel artisan avez-vous besoin ?', subtitle: 'Choisissez le métier et indiquez votre ville.' },
   { title: 'Parlez-nous de votre projet', subtitle: 'Plus on en sait, meilleurs seront les devis.' },
   { title: 'Dernière étape \u2014 comment vous joindre ?', subtitle: 'Les artisans vous contacteront avec leurs devis.' },
 ]
 
-const stepLabels = ['Service', 'Ville', 'Projet', 'Contact']
+const stepLabels = ['Projet', 'Détails', 'Contact']
 
 // --- Progress Bar (Typeform-style) ---
 function ProgressBar({ currentStep }: { currentStep: number }) {
-  const progress = ((currentStep - 1) / 3) * 100
+  const progress = ((currentStep - 1) / 2) * 100
 
   return (
     <div className="mb-8">
       {/* Step label */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm font-heading font-semibold text-charcoal-600">
-          Étape {currentStep} sur 4
+          Étape {currentStep} sur 3
         </span>
         <span className="text-sm font-semibold text-primary-500">
           {Math.round(progress)}%
@@ -156,12 +156,17 @@ export default function DevisForm({
   const savedState = typeof window !== 'undefined' ? (() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
-      return saved ? JSON.parse(saved) : null
+      if (!saved) return null
+      const parsed = JSON.parse(saved)
+      // Migrate old 4-step saves to 3-step
+      if (parsed.step === 4) parsed.step = 3
+      if (parsed.step > 3) parsed.step = 1
+      return parsed
     } catch { return null }
   })() : null
 
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(
-    isPrefilled ? 3 : (savedState?.step || 1) as 1 | 2 | 3 | 4
+  const [step, setStep] = useState<1 | 2 | 3>(
+    isPrefilled ? 2 : (savedState?.step || 1) as 1 | 2 | 3
   )
   const [formData, setFormData] = useState<FormData>(
     isPrefilled
@@ -177,6 +182,7 @@ export default function DevisForm({
   const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || savedState?.selectedVillePostal || '')
   const [geoLoading, setGeoLoading] = useState(false)
   const [debouncedVilleQuery, setDebouncedVilleQuery] = useState(villeQuery)
+  const [abandonTracked, setAbandonTracked] = useState(false)
 
   // Debounce ville search input (300ms)
   useEffect(() => {
@@ -184,7 +190,7 @@ export default function DevisForm({
     return () => clearTimeout(timer)
   }, [villeQuery])
 
-  // Transition state: 'idle' | 'slide-out' | 'slide-in'
+  // Transition state
   const [transition, setTransition] = useState<'idle' | 'slide-out-left' | 'slide-out-right' | 'slide-in-left' | 'slide-in-right'>('idle')
 
   // Ref for auto-focus
@@ -201,7 +207,7 @@ export default function DevisForm({
       if (firstInput) {
         firstInput.focus()
       }
-    }, 450) // After transition animation completes
+    }, 450)
     return () => clearTimeout(timer)
   }, [step, transition])
 
@@ -292,22 +298,42 @@ export default function DevisForm({
     }
   }, [updateField])
 
+  // --- Abandon tracking: fire when email is filled at step 2 ---
+  const trackAbandon = useCallback(async (email: string) => {
+    if (abandonTracked || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return
+    setAbandonTracked(true)
+    try {
+      await fetch('/api/devis/abandon-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          service_slug: formData.service || null,
+          city_slug: formData.ville || null,
+          step_reached: 2,
+        }),
+      })
+    } catch {
+      // Non-blocking
+    }
+  }, [abandonTracked, formData.service, formData.ville])
+
+  // --- Validation per step ---
   const validateStep1 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.service) newErrors.service = 'Veuillez choisir un service'
+    if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   const validateStep2 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const validateStep3 = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
+    if (!formData.email.trim()) {
+      newErrors.email = 'Veuillez entrer votre adresse e-mail'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = 'Veuillez entrer une adresse e-mail valide'
+    }
     if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     if (formData.description.trim().length > 0 && formData.description.trim().length < 10) {
       newErrors.description = 'Veuillez détailler davantage (10 caractères minimum) ou laisser le champ vide'
@@ -316,18 +342,13 @@ export default function DevisForm({
     return Object.keys(newErrors).length === 0
   }
 
-  const validateStep4 = (): boolean => {
+  const validateStep3 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
     if (!formData.telephone.trim()) {
       newErrors.telephone = 'Veuillez entrer votre numéro de téléphone'
     } else if (!isValidFrenchPhone(formData.telephone.trim())) {
       newErrors.telephone = 'Veuillez entrer un numéro de téléphone français valide'
-    }
-    if (!formData.email.trim()) {
-      newErrors.email = 'Veuillez entrer votre adresse e-mail'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = 'Veuillez entrer une adresse e-mail valide'
     }
     if (!formData.consentement) {
       newErrors.consentement = "Veuillez accepter d'être contacté par des artisans"
@@ -336,8 +357,8 @@ export default function DevisForm({
     return Object.keys(newErrors).length === 0
   }
 
-  // Animated step transition (slide-out left, slide-in right for forward; reverse for backward)
-  const animateToStep = useCallback((targetStep: 1 | 2 | 3 | 4, direction: 'forward' | 'backward') => {
+  // Animated step transition
+  const animateToStep = useCallback((targetStep: 1 | 2 | 3, direction: 'forward' | 'backward') => {
     const outDirection = direction === 'forward' ? 'slide-out-left' : 'slide-out-right'
     const inDirection = direction === 'forward' ? 'slide-in-right' : 'slide-in-left'
 
@@ -348,7 +369,7 @@ export default function DevisForm({
       setTimeout(() => {
         setTransition('idle')
       }, 400)
-    }, 200) // Slide out takes 200ms, then switch + slide in
+    }, 200)
   }, [])
 
   const handleNext = () => {
@@ -359,24 +380,24 @@ export default function DevisForm({
       })
       animateToStep(2, 'forward')
     } else if (step === 2 && validateStep2()) {
+      // Track abandon with email captured at step 2
+      trackAbandon(formData.email.trim())
       animateToStep(3, 'forward')
-    } else if (step === 3 && validateStep3()) {
-      animateToStep(4, 'forward')
     }
   }
 
   const handlePrev = () => {
-    if (step === 2) animateToStep(1, 'backward')
-    else if (step === 3) {
-      if (isPrefilled) return // Can't go back past step 3 when prefilled
+    if (step === 2) {
+      if (isPrefilled) return
+      animateToStep(1, 'backward')
+    } else if (step === 3) {
       animateToStep(2, 'backward')
     }
-    else if (step === 4) animateToStep(3, 'backward')
   }
 
   // Enter = Next (Typeform pattern)
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && step < 4) {
+    if (e.key === 'Enter' && step < 3) {
       e.preventDefault()
       handleNext()
     }
@@ -384,7 +405,7 @@ export default function DevisForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!validateStep4()) return
+    if (!validateStep3()) return
 
     setSubmitting(true)
     setSubmitError(null)
@@ -409,6 +430,15 @@ export default function DevisForm({
       if (!res.ok) {
         const body = await res.json().catch(() => null)
         throw new Error(body?.error || "Erreur lors de l'envoi")
+      }
+
+      // Mark abandon as completed
+      if (formData.email.trim()) {
+        fetch('/api/devis/abandon-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formData.email.trim() }),
+        }).catch(() => {})
       }
 
       trackEvent('devis_submitted', {
@@ -436,10 +466,9 @@ export default function DevisForm({
   }
 
   // --- Step validation checks for smart button ---
-  const isStep1Valid = !!formData.service
-  const isStep2Valid = !!formData.ville
-  const isStep3Valid = !!formData.urgence && (formData.description.trim().length === 0 || formData.description.trim().length >= 10)
-  const isStep4Valid = !!formData.nom.trim() && !!formData.telephone.trim() && isValidFrenchPhone(formData.telephone.trim()) && !!formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()) && formData.consentement
+  const isStep1Valid = !!formData.service && !!formData.ville
+  const isStep2Valid = !!formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()) && !!formData.urgence && (formData.description.trim().length === 0 || formData.description.trim().length >= 10)
+  const isStep3Valid = !!formData.nom.trim() && !!formData.telephone.trim() && isValidFrenchPhone(formData.telephone.trim()) && formData.consentement
 
   // --- Validation state for inline feedback ---
   const getFieldState = (field: keyof FormData): 'idle' | 'valid' | 'error' => {
@@ -489,44 +518,14 @@ export default function DevisForm({
   // --- CONFIRMATION PAGE ---
   if (submitted) {
     return (
-      <div className="bg-white rounded-3xl shadow-premium border border-sand-200 p-8 md:p-12 max-w-2xl mx-auto text-center">
-        {/* Animated check icon */}
-        <div className="w-20 h-20 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-scale-in-bounce">
-          <CheckCircle className="w-10 h-10 text-accent-500" />
-        </div>
+      <div className="bg-white rounded-3xl shadow-premium border border-sand-200 p-8 md:p-12 max-w-2xl mx-auto">
+        <DevisConfirmation
+          service={formData.service}
+          city={formData.ville}
+          phone={formData.telephone}
+        />
 
-        <h3 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3">
-          Votre demande a bien été envoyée !
-        </h3>
-        <p className="text-charcoal-500 mb-8 max-w-md mx-auto">
-          Des artisans qualifiés près de chez vous vont étudier votre projet et vous contacter rapidement.
-        </p>
-
-        {/* Premium timeline next steps */}
-        <div className="text-left max-w-sm mx-auto mt-6 mb-10 relative">
-          {/* Vertical line */}
-          <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-accent-200" />
-
-          <div className="space-y-6">
-            {[
-              { num: '1', title: 'Analyse de votre demande', desc: 'Nous recherchons les artisans les plus adaptés à votre projet' },
-              { num: '2', title: 'Réception des devis sous 24h', desc: "Jusqu'à 3 artisans qualifiés vous contactent par email ou téléphone" },
-              { num: '3', title: 'Comparez et choisissez', desc: 'Comparez les devis, consultez les avis et choisissez librement' },
-            ].map((item) => (
-              <div key={item.num} className="flex items-start gap-4 relative">
-                <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0 z-10">
-                  <span className="text-sm font-bold text-primary-600">{item.num}</span>
-                </div>
-                <div className="pt-0.5">
-                  <p className="text-sm font-semibold text-charcoal-800">{item.title}</p>
-                  <p className="text-xs text-charcoal-600 mt-0.5">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
           <Link
             href="/services"
             className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
@@ -567,7 +566,7 @@ export default function DevisForm({
           className={`min-h-[320px] ${getTransitionClass()}`}
           onKeyDown={handleKeyDown}
         >
-          {/* --- Step 1: Service --- */}
+          {/* --- Step 1: Service + Ville (merged) --- */}
           {step === 1 && (
             <div className="space-y-6">
               <div>
@@ -579,6 +578,7 @@ export default function DevisForm({
                 </p>
               </div>
 
+              {/* Service */}
               <div>
                 <label htmlFor="service" className={labelClass}>
                   Type de service <span className="text-red-500">*</span>
@@ -612,39 +612,7 @@ export default function DevisForm({
                 )}
               </div>
 
-              {/* Social proof */}
-              <div className="flex items-center gap-2 text-charcoal-400">
-                <Users className="w-4 h-4 flex-shrink-0" />
-                <p className="text-sm">14 500+ artisans référencés sur notre plateforme</p>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={!isStep1Valid}
-                className={`w-full inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
-                  isStep1Valid
-                    ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
-                    : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
-                }`}
-              >
-                Suivant <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-          )}
-
-          {/* --- Step 2: Ville --- */}
-          {step === 2 && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
-                  {stepTitles[1].title}
-                </h3>
-                <p className="text-charcoal-500 text-sm">
-                  {stepTitles[1].subtitle}
-                </p>
-              </div>
-
+              {/* Ville */}
               <div>
                 <label htmlFor="ville" className={labelClass}>
                   Ville <span className="text-red-500">*</span>
@@ -718,40 +686,73 @@ export default function DevisForm({
                 )}
               </div>
 
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-3 rounded-xl transition-all duration-300"
-                >
-                  <ArrowLeft className="w-4 h-4" /> Précédent
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={!isStep2Valid}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
-                    isStep2Valid
-                      ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
-                      : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
-                  }`}
-                >
-                  Suivant <ArrowRight className="w-5 h-5" />
-                </button>
+              {/* Social proof */}
+              <div className="flex items-center gap-2 text-charcoal-400">
+                <Users className="w-4 h-4 flex-shrink-0" />
+                <p className="text-sm">14 500+ artisans référencés sur notre plateforme</p>
               </div>
+
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={!isStep1Valid}
+                className={`w-full inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
+                  isStep1Valid
+                    ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
+                    : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
+                }`}
+              >
+                Suivant <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
           )}
 
-          {/* --- Step 3: Urgence + Description + Budget --- */}
-          {step === 3 && (
+          {/* --- Step 2: Email (early capture) + Urgence + Description + Budget --- */}
+          {step === 2 && (
             <div className="space-y-6">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
-                  {stepTitles[2].title}
+                  {stepTitles[1].title}
                 </h3>
                 <p className="text-charcoal-500 text-sm">
-                  {stepTitles[2].subtitle}
+                  {stepTitles[1].subtitle}
                 </p>
+              </div>
+
+              {/* Email — early capture */}
+              <div>
+                <label htmlFor="email" className={labelClass}>
+                  Votre e-mail <span className="text-charcoal-400 font-normal">— pour recevoir vos devis</span> <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="jean.dupont@email.fr"
+                    value={formData.email}
+                    onChange={(e) => updateField('email', e.target.value)}
+                    onBlur={() => {
+                      validateField('email')
+                      // Track abandon on email blur if valid
+                      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+                        trackAbandon(formData.email.trim())
+                      }
+                    }}
+                    aria-describedby={errors.email ? 'email-error' : undefined}
+                    aria-invalid={!!errors.email}
+                    style={{ fontSize: '16px' }}
+                    className={`${inputBase} pr-10 ${inputBorderClass('email')}`}
+                  />
+                  {getFieldState('email') === 'valid' && (
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-500 animate-scale-in">
+                      <Check className="w-4 h-4" />
+                    </span>
+                  )}
+                </div>
+                {errors.email && (
+                  <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.email}</p>
+                )}
               </div>
 
               {/* Urgency chips */}
@@ -904,9 +905,9 @@ export default function DevisForm({
                 <button
                   type="button"
                   onClick={handleNext}
-                  disabled={!isStep3Valid}
+                  disabled={!isStep2Valid}
                   className={`${isPrefilled ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
-                    isStep3Valid
+                    isStep2Valid
                       ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
                       : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
                   }`}
@@ -917,15 +918,15 @@ export default function DevisForm({
             </div>
           )}
 
-          {/* --- Step 4: Contact info --- */}
-          {step === 4 && (
+          {/* --- Step 3: Nom + Téléphone + Consentement --- */}
+          {step === 3 && (
             <div className="space-y-6">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
-                  {stepTitles[3].title}
+                  {stepTitles[2].title}
                 </h3>
                 <p className="text-charcoal-500 text-sm">
-                  {stepTitles[3].subtitle}
+                  {stepTitles[2].subtitle}
                 </p>
               </div>
 
@@ -989,36 +990,6 @@ export default function DevisForm({
                 )}
               </div>
 
-              {/* Email */}
-              <div>
-                <label htmlFor="email" className={labelClass}>
-                  Adresse e-mail <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="jean.dupont@email.fr"
-                    value={formData.email}
-                    onChange={(e) => updateField('email', e.target.value)}
-                    onBlur={() => validateField('email')}
-                    aria-describedby={errors.email ? 'email-error' : undefined}
-                    aria-invalid={!!errors.email}
-                    style={{ fontSize: '16px' }}
-                    className={`${inputBase} pr-10 ${inputBorderClass('email')}`}
-                  />
-                  {getFieldState('email') === 'valid' && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-500 animate-scale-in">
-                      <Check className="w-4 h-4" />
-                    </span>
-                  )}
-                </div>
-                {errors.email && (
-                  <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.email}</p>
-                )}
-              </div>
-
               {/* Consent checkbox */}
               <div>
                 <label className="flex items-start gap-3 cursor-pointer group">
@@ -1063,9 +1034,9 @@ export default function DevisForm({
                 </button>
                 <button
                   type="submit"
-                  disabled={submitting || !isStep4Valid}
+                  disabled={submitting || !isStep3Valid}
                   className={`flex-1 inline-flex items-center justify-center gap-2 font-semibold px-6 py-5 rounded-xl transition-all duration-300 text-lg ${
-                    isStep4Valid && !submitting
+                    isStep3Valid && !submitting
                       ? 'bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1'
                       : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
                   }`}

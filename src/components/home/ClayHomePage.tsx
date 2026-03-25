@@ -530,7 +530,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 href="/devis"
                 className="font-heading text-primary-600 text-sm font-extrabold px-8 py-4 rounded-full transition-all duration-200 bg-white hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
               >
-                Demander un devis gratuit
+                Obtenir mon devis gratuit
               </Link>
               <Link
                 href="/espace-artisan"

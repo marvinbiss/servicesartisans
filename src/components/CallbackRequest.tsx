@@ -90,7 +90,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
     <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/60 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-3">
         <Phone className="w-4 h-4 text-amber-600" />
-        <span className="text-sm font-semibold text-amber-900">Être rappelé gratuitement</span>
+        <span className="text-sm font-semibold text-amber-900">Me faire rappeler gratuitement</span>
       </div>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
@@ -108,7 +108,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
           disabled={loading}
           className="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
         >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Rappel gratuit'}
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Me faire rappeler'}
         </button>
       </form>
       {error && <p className="text-xs text-red-600 mt-1.5">{error}</p>}

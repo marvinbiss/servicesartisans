@@ -188,7 +188,7 @@ export default function ContactPageClient() {
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
-                  Demander un devis gratuit
+                  Obtenir mon devis gratuit
                 </Link>
                 <Link
                   href="/inscription-artisan"

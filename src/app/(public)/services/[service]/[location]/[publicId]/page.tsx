@@ -623,7 +623,7 @@ export default async function ProviderPage({ params }: PageProps) {
               href={`/devis/${serviceSlug}/${locationSlug}`}
               className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
             >
-              Demander un devis gratuit
+              Obtenir mon devis gratuit
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>

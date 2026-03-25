@@ -388,7 +388,7 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
                     href="/devis"
                     className="flex items-center justify-center gap-2 w-full bg-white text-blue-600 border-2 border-blue-200 py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors"
                   >
-                    Demander un devis gratuit
+                    Obtenir mon devis gratuit
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>

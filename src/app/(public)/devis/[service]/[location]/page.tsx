@@ -817,7 +817,7 @@ export default async function DevisServiceLocationPage({
               href="#formulaire"
               className="inline-flex items-center gap-2 bg-white text-primary-500 px-8 py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors text-lg"
             >
-              Demander un devis gratuit
+              Obtenir mon devis gratuit
               <ArrowRight className="w-5 h-5" />
             </a>
             <Link
