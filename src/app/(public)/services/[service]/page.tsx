@@ -27,7 +27,7 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import RecentProviders from './RecentProviders'
@@ -36,7 +36,7 @@ import dynamic from 'next/dynamic'
 
 
 const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
+  () => import('@/components/conversion/ExitIntentModal'),
   { ssr: false }
 )
 
@@ -1027,11 +1027,7 @@ export default async function ServicePage({ params }: PageProps) {
 
       <StickyMobileCTA serviceSlug={serviceSlug} />
 
-      <ExitIntentPopup
-        sessionKey="sa:exit-services"
-        description="Comparez les devis de plusieurs artisans qualifiés, gratuitement et sans engagement."
-        ctaHref={`/devis/${serviceSlug}`}
-      />
+      <ExitIntentPopup />
 
       <MicroConversions pageType="service" serviceSlug={serviceSlug} />
       <FAQTracker pageType="service" serviceSlug={serviceSlug} />

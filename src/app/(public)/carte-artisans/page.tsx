@@ -7,6 +7,8 @@ import { SITE_URL } from '@/lib/seo/config'
 import { Loader2 } from 'lucide-react'
 import { services } from '@/lib/data/france'
 
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
+
 // Dynamic import of the map client component (Leaflet is SSR-incompatible)
 const CarteClient = dynamic(() => import('./CarteClient'), {
   ssr: false,
@@ -134,6 +136,7 @@ export default function CarteArtisansPage() {
           </div>
         </div>
       </div>
+      <GeoPageCTA variant="sticky-only" />
     </>
   )
 }

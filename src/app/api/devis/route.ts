@@ -109,11 +109,32 @@ export async function POST(request: Request) {
     const data = validation.data
 
     // Map urgency to devis_requests CHECK values
+    // DB constraint: ('normal', 'urgent', 'tres_urgent', 'semaine', 'mois', 'flexible')
+    // See migration 361_devis_urgency_values.sql
     const urgencyDbMap: Record<string, string> = {
       urgent: 'urgent',
-      semaine: 'normal',
-      mois: 'normal',
-      flexible: 'normal',
+      semaine: 'semaine',
+      mois: 'mois',
+      flexible: 'flexible',
+    }
+
+    // Vérifier doublon (même email + service + ville dans la dernière heure)
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+    const serviceName = resolveServiceName(data.service)
+    const { data: existing } = await supabase
+      .from('devis_requests')
+      .select('id')
+      .eq('client_email', data.email || '')
+      .eq('service_name', serviceName)
+      .eq('city', data.ville || '')
+      .gte('created_at', oneHourAgo)
+      .limit(1)
+
+    if (existing && existing.length > 0) {
+      return NextResponse.json(
+        { error: 'Vous avez déjà soumis une demande similaire. Vérifiez votre email pour le suivi.' },
+        { status: 409 }
+      )
     }
 
     // Store in devis_requests table
@@ -124,7 +145,7 @@ export async function POST(request: Request) {
         client_name: data.nom || 'Rappel',
         client_email: data.email || '',
         client_phone: data.telephone,
-        service_name: resolveServiceName(data.service),
+        service_name: serviceName,
         description: data.description || 'Demande de devis',
         budget: data.budget || null,
         urgency: urgencyDbMap[data.urgency] || 'normal',
@@ -153,12 +174,12 @@ export async function POST(request: Request) {
     if (lead) {
       const urgencyMap: Record<string, string> = {
         urgent: 'urgent',
-        semaine: 'normal',
-        mois: 'normal',
+        semaine: 'semaine',
+        mois: 'mois',
         flexible: 'flexible',
       }
       assignedProviders = await dispatchLead(lead.id, {
-        serviceName: resolveServiceName(data.service),
+        serviceName: serviceName,
         city: data.ville,
         postalCode: data.codePostal,
         urgency: urgencyMap[data.urgency] || 'normal',

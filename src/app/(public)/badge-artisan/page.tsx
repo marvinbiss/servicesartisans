@@ -4,6 +4,8 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import BadgeClient from './BadgeClient'
+import dynamic from 'next/dynamic'
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 const canonicalUrl = `${SITE_URL}/badge-artisan`
 
@@ -111,6 +113,7 @@ export default function BadgeArtisanPage() {
 
       {/* Badge configurator (client component) */}
       <BadgeClient faqItems={faqItems} />
+      <GeoPageCTA variant="sticky-only" />
     </div>
   )
 }

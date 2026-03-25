@@ -234,7 +234,7 @@ export default function DevisBottomSheet({
   // --- Abandon tracking ---
   const abandonTrackedRef = useRef(false)
   const trackAbandon = useCallback(async (email: string) => {
-    if (abandonTrackedRef.current || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return
+    if (abandonTrackedRef.current || !email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) return
     abandonTrackedRef.current = true
     try {
       await fetch('/api/devis/abandon-tracking', {
@@ -259,7 +259,7 @@ export default function DevisBottomSheet({
     } else if (step === 2) {
       if (!formData.email.trim()) {
         newErrors.email = 'Votre e-mail est requis'
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
         newErrors.email = 'E-mail invalide'
       }
       if (!formData.urgence) newErrors.urgence = 'Choisissez un délai'
@@ -557,7 +557,7 @@ export default function DevisBottomSheet({
                         value={formData.email}
                         onChange={(e) => updateField('email', e.target.value)}
                         onBlur={() => {
-                          if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+                          if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
                             trackAbandon(formData.email.trim())
                           }
                         }}

@@ -12,6 +12,8 @@ import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { teamMembers, getAllAuthors } from '@/lib/data/team'
 import { CmsContent } from '@/components/CmsContent'
+import dynamic from 'next/dynamic'
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'À propos de ServicesArtisans — Annuaire d\'artisans gratuit',
@@ -202,6 +204,7 @@ export default async function AProposPage() {
             })()}
           </div>
         </section>
+        <GeoPageCTA variant="sticky-only" />
       </div>
     )
   }
@@ -618,6 +621,7 @@ export default async function AProposPage() {
           </Link>
         </div>
       </section>
+      <GeoPageCTA variant="sticky-only" />
     </div>
   )
 }

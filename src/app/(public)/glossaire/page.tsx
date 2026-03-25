@@ -18,6 +18,8 @@ import {
   Scale,
 } from 'lucide-react'
 import RelatedHubs from '@/components/seo/RelatedHubs'
+import dynamic from 'next/dynamic'
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 const PAGE_URL = `${SITE_URL}/glossaire`
 
@@ -398,6 +400,7 @@ export default function GlossairePage() {
       </div>
 
       <RelatedHubs currentPath="/glossaire" />
+      <GeoPageCTA variant="sticky-only" />
     </>
   )
 }

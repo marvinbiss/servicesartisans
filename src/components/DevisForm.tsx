@@ -260,7 +260,7 @@ export default function DevisForm({
           break
         case 'email':
           if (!formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
-          else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) next.email = 'Veuillez entrer une adresse e-mail valide'
+          else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) next.email = 'Veuillez entrer une adresse e-mail valide'
           else delete next.email
           break
         default:
@@ -322,7 +322,7 @@ export default function DevisForm({
 
   // --- Abandon tracking: fire when email is filled at step 2 ---
   const trackAbandon = useCallback(async (email: string) => {
-    if (abandonTracked || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return
+    if (abandonTracked || !email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) return
     setAbandonTracked(true)
     try {
       await fetch('/api/devis/abandon-tracking', {
@@ -353,12 +353,12 @@ export default function DevisForm({
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.email.trim()) {
       newErrors.email = 'Veuillez entrer votre adresse e-mail'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
       newErrors.email = 'Veuillez entrer une adresse e-mail valide'
     }
     if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
-    if (formData.description.trim().length > 0 && formData.description.trim().length < 10) {
-      newErrors.description = 'Veuillez détailler davantage (10 caractères minimum) ou laisser le champ vide'
+    if (formData.description.trim().length > 0 && formData.description.trim().length < 5) {
+      newErrors.description = 'Veuillez détailler davantage (5 caractères minimum) ou laisser le champ vide'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -489,7 +489,7 @@ export default function DevisForm({
 
   // --- Step validation checks for smart button ---
   const isStep1Valid = !!formData.service && !!formData.ville
-  const isStep2Valid = !!formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()) && !!formData.urgence && (formData.description.trim().length === 0 || formData.description.trim().length >= 10)
+  const isStep2Valid = !!formData.email.trim() && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) && !!formData.urgence && (formData.description.trim().length === 0 || formData.description.trim().length >= 5)
   const isStep3Valid = !!formData.nom.trim() && !!formData.telephone.trim() && isValidFrenchPhone(formData.telephone.trim()) && formData.consentement
 
   // --- Validation state for inline feedback ---
@@ -505,7 +505,7 @@ export default function DevisForm({
         return isValidFrenchPhone(formData.telephone.trim()) ? 'valid' : 'idle'
       case 'email':
         if (!formData.email.trim()) return 'idle'
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()) ? 'valid' : 'idle'
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) ? 'valid' : 'idle'
       default: return 'idle'
     }
   }
@@ -545,6 +545,7 @@ export default function DevisForm({
           service={formData.service}
           city={formData.ville}
           phone={formData.telephone}
+          budget={formData.budget || undefined}
         />
 
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
@@ -598,6 +599,10 @@ export default function DevisForm({
                 <p className="text-charcoal-500 text-sm">
                   {stepTitles[0].subtitle}
                 </p>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-sm text-charcoal-500">
+                <span className="text-amber-500">&#9733;</span>
+                <span>4.8/5 basé sur <strong>23 000+</strong> demandes traitées</span>
               </div>
 
               {/* Service */}
@@ -757,7 +762,7 @@ export default function DevisForm({
                     onBlur={() => {
                       validateField('email')
                       // Track abandon on email blur if valid
-                      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+                      if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
                         trackAbandon(formData.email.trim())
                       }
                     }}
@@ -869,7 +874,7 @@ export default function DevisForm({
                   aria-invalid={!!errors.description}
                   style={{ fontSize: '16px' }}
                   className={`${inputBase} resize-none ${
-                    errors.description ? 'border-red-400 ring-2 ring-red-50' : formData.description.trim().length >= 10 ? 'border-accent-400 ring-1 ring-accent-100' : 'border-sand-300'
+                    errors.description ? 'border-red-400 ring-2 ring-red-50' : formData.description.trim().length >= 5 ? 'border-accent-400 ring-1 ring-accent-100' : 'border-sand-300'
                   }`}
                 />
                 <div className="flex justify-between mt-1">
@@ -881,10 +886,10 @@ export default function DevisForm({
                   {formData.description.length > 0 && (
                     <span
                       className={`text-xs ${
-                        formData.description.trim().length >= 10 ? 'text-accent-600' : 'text-charcoal-400'
+                        formData.description.trim().length >= 5 ? 'text-accent-600' : 'text-charcoal-400'
                       }`}
                     >
-                      {formData.description.length}/10 caract.
+                      {formData.description.length}/5 caract.
                     </span>
                   )}
                 </div>
@@ -924,7 +929,7 @@ export default function DevisForm({
                   <button
                     type="button"
                     onClick={handlePrev}
-                    className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-3 rounded-xl transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-4 rounded-xl transition-all duration-300"
                   >
                     <ArrowLeft className="w-4 h-4" /> Précédent
                   </button>
@@ -1034,9 +1039,8 @@ export default function DevisForm({
                     className="sr-only"
                   />
                   <span className="text-sm text-charcoal-600 leading-relaxed">
-                    J'accepte d'être contacté par des artisans pour recevoir des devis
-                    en lien avec ma demande.{' '}
-                    <span className="text-charcoal-400">Seuls votre nom, téléphone et description du projet sont transmis aux artisans contactés.</span>
+                    J&apos;accepte d&apos;être contacté par des artisans vérifiés pour cette demande.{' '}
+                    <Link href="/confidentialite" className="text-primary-500 hover:text-primary-700 underline underline-offset-2">Politique de confidentialité</Link>
                   </span>
                 </label>
                 {errors.consentement && (
@@ -1068,7 +1072,7 @@ export default function DevisForm({
                   type="button"
                   onClick={handlePrev}
                   disabled={submitting}
-                  className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-3 rounded-xl transition-all duration-300 disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-4 rounded-xl transition-all duration-300 disabled:opacity-50"
                 >
                   <ArrowLeft className="w-4 h-4" /> Précédent
                 </button>

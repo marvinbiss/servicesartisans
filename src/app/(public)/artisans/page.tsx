@@ -9,6 +9,8 @@ import { SITE_URL } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
 import { resolveProviderCities } from '@/lib/insee-resolver'
+import dynamic from 'next/dynamic'
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 export const revalidate = 3600 // ISR - revalidate every hour
 
@@ -335,6 +337,7 @@ export default async function ArtisansPage() {
           </div>
         </div>
       </section>
+      <GeoPageCTA variant="sticky-only" />
     </>
   )
 }

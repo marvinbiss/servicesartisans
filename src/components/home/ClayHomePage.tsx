@@ -172,21 +172,21 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             Trouvez un artisan vérifié près de chez vous. Devis gratuit, réponse rapide.
           </p>
 
-          {/* Two big option buttons — "problème-first" approach */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 md:mb-10 max-w-lg mx-auto">
+          {/* Single strong CTA — no decision paralysis */}
+          <div className="flex flex-col items-center gap-3 mb-8 md:mb-10">
             <Link
-              href="/urgence"
-              className="flex-1 flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-heading font-bold text-base text-white bg-primary-400 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-0.5"
+              href="/devis"
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-heading font-bold text-base md:text-lg text-white bg-primary-400 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-0.5"
             >
-              <Zap className="w-5 h-5" />
-              Une urgence ?
+              <ClipboardList className="w-5 h-5" />
+              Demander mes devis gratuits
             </Link>
             <Link
-              href="/services"
-              className="flex-1 flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-heading font-bold text-base text-white bg-charcoal-800 hover:bg-charcoal-900 shadow-soft transition-all duration-200 hover:-translate-y-0.5"
+              href="/urgence"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-charcoal-500 hover:text-primary-400 transition-colors"
             >
-              <Hammer className="w-5 h-5" />
-              Un projet de travaux ?
+              <Zap className="w-4 h-4" />
+              Besoin urgent ? Cliquez ici
             </Link>
           </div>
 

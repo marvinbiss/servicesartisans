@@ -7,6 +7,8 @@ import FAQPageClient from './FAQPageClient'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import Breadcrumb from '@/components/Breadcrumb'
+import dynamic from 'next/dynamic'
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 const faqTitle = 'FAQ — Questions Artisans et Travaux | ServicesArtisans'
 
@@ -78,6 +80,7 @@ export default async function FAQPage() {
             </div>
           </div>
         </section>
+        <GeoPageCTA variant="sticky-only" />
       </div>
     )
   }
@@ -86,6 +89,7 @@ export default async function FAQPage() {
     <>
       <JsonLd data={[faqWebPageSchema, breadcrumbSchema]} />
       <FAQPageClient />
+      <GeoPageCTA variant="sticky-only" />
     </>
   )
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Shield, Clock, Star, MapPin } from 'lucide-react'
+import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail } from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france'
 
@@ -17,10 +17,21 @@ interface MatchedProvider {
   review_count: number | null
 }
 
+/** Budget option value → human-readable label */
+const budgetLabels: Record<string, string> = {
+  'moins-500': 'Moins de 500 €',
+  '500-2000': '500\u20112 000 €',
+  '2000-5000': '2 000\u20115 000 €',
+  'plus-5000': 'Plus de 5 000 €',
+  'ne-sais-pas': 'Je ne sais pas',
+}
+
 interface DevisConfirmationProps {
   service: string
   city: string
   phone: string
+  /** Budget slug selected by the user (optional) */
+  budget?: string
   /** Compact mode for bottom sheet (mobile) */
   compact?: boolean
 }
@@ -57,6 +68,7 @@ export default function DevisConfirmation({
   service,
   city,
   phone,
+  budget,
   compact = false,
 }: DevisConfirmationProps) {
   const [providers, setProviders] = useState<MatchedProvider[]>([])
@@ -154,16 +166,35 @@ export default function DevisConfirmation({
             compact ? 'text-lg mb-1' : 'text-2xl md:text-3xl mb-2'
           }`}
         >
-          Votre demande a été envoyée !
+          Demande envoyée avec succès !
         </h3>
-        <p className={`text-charcoal-500 ${compact ? 'text-xs mb-4' : 'text-sm mb-6'}`}>
+        <p className={`text-charcoal-500 ${compact ? 'text-xs mb-1' : 'text-sm mb-2'}`}>
           {providerCount !== null && providerCount >= 3
             ? `3 artisans ${serviceLabel.toLowerCase()} correspondent à votre besoin`
             : providerCount !== null && providerCount > 0
             ? `${providerCount} artisan${providerCount > 1 ? 's' : ''} ${serviceLabel.toLowerCase()} trouvé${providerCount > 1 ? 's' : ''} près de chez vous`
             : 'Nous recherchons les meilleurs artisans pour vous'}
         </p>
+        <p className={`font-medium text-accent-600 ${compact ? 'text-xs mb-4' : 'text-sm mb-6'}`}>
+          Vous recevrez jusqu&apos;à 3 devis sous 24-48h
+        </p>
       </motion.div>
+
+      {/* ── Recap (service + budget) ── */}
+      {budget && budgetLabels[budget] && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className={`flex items-center gap-2 px-4 py-2.5 bg-primary-50 border border-primary-200 rounded-xl ${compact ? 'mb-3' : 'mb-5'}`}
+        >
+          <Wallet className="w-4 h-4 text-primary-500 flex-shrink-0" />
+          <span className={`text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
+            <span className="font-medium">Budget indicatif :</span>{' '}
+            {budgetLabels[budget]}
+          </span>
+        </motion.div>
+      )}
 
       {/* ── Provider cards (async loading) ── */}
       <div className={`space-y-2 ${compact ? 'mb-4' : 'mb-6'}`}>
@@ -244,22 +275,30 @@ export default function DevisConfirmation({
         ) : null}
       </div>
 
-      {/* ── Contact confirmation ── */}
+      {/* ── Contact confirmation & next steps ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="text-center space-y-2 mb-5"
+        className={`${compact ? 'mb-4' : 'mb-5'}`}
       >
-        <p className={`font-medium text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
-          Vous serez contacté sous 24h maximum
-        </p>
-        <p className={`text-charcoal-400 ${compact ? 'text-[10px]' : 'text-xs'}`}>
+        <div className="flex items-center gap-2 justify-center mb-3">
+          <Mail className="w-4 h-4 text-accent-500" />
+          <p className={`font-medium text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
+            Un email de confirmation a été envoyé à votre adresse
+          </p>
+        </div>
+        <p className={`text-charcoal-400 text-center ${compact ? 'text-[10px]' : 'text-xs'}`}>
           Un SMS de confirmation a été envoyé au {maskedPhone}
         </p>
-        <p className="text-charcoal-500 text-sm mt-2">
-          Un email de confirmation a été envoyé à votre adresse
-        </p>
+        <div className={`mt-4 bg-sand-50 border border-sand-200 rounded-xl p-4 ${compact ? 'text-xs' : 'text-sm'}`}>
+          <p className="font-semibold text-charcoal-800 mb-2">Prochaines étapes :</p>
+          <ol className="list-decimal list-inside space-y-1.5 text-charcoal-600">
+            <li>Les artisans analysent votre demande</li>
+            <li>Vous recevez jusqu&apos;à 3 devis détaillés sous 24-48h</li>
+            <li>Vous comparez et choisissez librement, sans engagement</li>
+          </ol>
+        </div>
       </motion.div>
 
       {/* ── Reassurances ── */}
