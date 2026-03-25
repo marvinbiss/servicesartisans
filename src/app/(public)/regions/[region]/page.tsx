@@ -13,6 +13,8 @@ import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
 import problems from '@/lib/data/problems'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
+import { SocialProofBanner } from '@/components/SocialProofBanner'
 
 export function generateStaticParams() {
   return regions.map((region) => ({ region: region.slug }))
@@ -246,6 +248,12 @@ export default async function RegionPage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* ─── CTA CONVERSION — above the fold ─────────────── */}
+        <GeoPageCTA
+          title={`Besoin d'un artisan en ${region.name} ?`}
+          subtitle="Recevez 3 devis gratuits d'artisans vérifiés près de chez vous"
+        />
+
         {/* ─── PROFIL RÉGIONAL ──────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
@@ -442,6 +450,11 @@ export default async function RegionPage({ params }: PageProps) {
               </Link>
             ))}
           </div>
+        </section>
+
+        {/* ─── SOCIAL PROOF MID-PAGE ────────────────────────── */}
+        <section className="mb-16">
+          <SocialProofBanner variant="card" />
         </section>
 
         {/* ─── ALL SERVICES IN REGION ─────────────────────── */}
@@ -719,6 +732,9 @@ export default async function RegionPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SeasonalLinks />
       </div>
+
+      {/* ─── STICKY MOBILE CTA + EXIT INTENT ────────────── */}
+      <GeoPageCTA variant="sticky-only" />
 
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">

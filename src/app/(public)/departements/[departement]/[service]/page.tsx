@@ -14,6 +14,8 @@ import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import { SocialProofBanner } from '@/components/SocialProofBanner'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { relatedServices } from '@/lib/constants/navigation'
 
 const topServices = ['plombier']
@@ -261,6 +263,14 @@ export default async function DeptServicePage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* ─── HERO CTA ───────────────────────────────────────── */}
+        <GeoPageCTA
+          title={`Besoin d'un ${trade.name.toLowerCase()} dans le ${dept.name} ?`}
+          subtitle="Recevez 3 devis gratuits d'artisans vérifiés près de chez vous"
+          ville={dept.chefLieu}
+          service={serviceSlug}
+        />
+
         {/* ─── SERVICE OVERVIEW ──────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
@@ -359,6 +369,11 @@ export default async function DeptServicePage({ params }: PageProps) {
             <p className="text-sm text-charcoal-500">Les tarifs dans le {dept.name} sont {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'} la moyenne nationale (coefficient {multiplier.toFixed(2)}). Ces prix sont indicatifs et varient selon la complexité de l'intervention.</p>
           </div>
         </section>
+
+        {/* ─── SOCIAL PROOF ───────────────────────────────────── */}
+        <div className="mb-16">
+          <SocialProofBanner ville={dept.chefLieu} metier={serviceSlug} variant="card" />
+        </div>
 
         {/* ─── CITIES GRID ──────────────────────────────────── */}
         {villesDuDepartement.length > 0 && (
@@ -618,6 +633,15 @@ export default async function DeptServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* ─── STICKY CTA + EXIT INTENT ─────────────────────── */}
+      <GeoPageCTA
+        title={`Comparez les devis ${trade.name.toLowerCase()} dans le ${dept.name}`}
+        subtitle="Gratuit, sans engagement, artisans vérifiés SIREN"
+        ville={dept.chefLieu}
+        service={serviceSlug}
+        variant="sticky-only"
+      />
     </div>
   )
 }

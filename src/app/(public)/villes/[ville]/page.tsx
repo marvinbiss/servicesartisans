@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { MapPin, Users, Building2, ArrowRight, Shield, Clock, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -14,6 +15,14 @@ import CityHubLinks from '@/components/seo/CityHubLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
+import { SocialProofBanner } from '@/components/SocialProofBanner'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
+import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
+
+const ExitIntentPopup = dynamic(
+  () => import('@/components/ExitIntentPopup'),
+  { ssr: false }
+)
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 5
@@ -224,6 +233,11 @@ export default async function VillePage({ params }: PageProps) {
               </div>
             </div>
           </div>
+
+          {/* ── CTA above the fold ── */}
+          <div className="mt-10 max-w-3xl">
+            <VilleHeroCTA villeName={ville.name} />
+          </div>
         </div>
       </section>
 
@@ -266,6 +280,11 @@ export default async function VillePage({ params }: PageProps) {
               </Link>
             </div>
           )}
+
+          {/* ── Social proof mid-page ── */}
+          <div className="mt-8">
+            <SocialProofBanner ville={ville.name} variant="card" />
+          </div>
         </section>
 
         {/* ─── QUARTIERS ────────────────────────────────────── */}
@@ -464,6 +483,10 @@ export default async function VillePage({ params }: PageProps) {
         </section>
 
       {/* Confiance & Sécurité links available in footer */}
+
+      {/* ── Conversion overlays ── */}
+      <StickyMobileCTA cityName={ville.name} citySlug={villeSlug} />
+      <ExitIntentPopup />
     </div>
   )
 }

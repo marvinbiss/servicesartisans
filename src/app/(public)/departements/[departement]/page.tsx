@@ -14,6 +14,8 @@ import { getTradeContent } from '@/lib/data/trade-content'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import { SocialProofBanner } from '@/components/SocialProofBanner'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { Thermometer, Home, TrendingUp, AlertTriangle, Globe, Star, Euro } from 'lucide-react'
 
 
@@ -249,6 +251,13 @@ export default async function DepartementPage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* ─── HERO CTA ───────────────────────────────────────── */}
+        <GeoPageCTA
+          title={`Besoin d'un artisan dans le ${dept.name} ?`}
+          subtitle="Recevez 3 devis gratuits d'artisans vérifiés près de chez vous"
+          ville={dept.chefLieu}
+        />
+
         {/* ─── SERVICES ─────────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
@@ -278,6 +287,11 @@ export default async function DepartementPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* ─── SOCIAL PROOF ───────────────────────────────────── */}
+        <div className="mb-16">
+          <SocialProofBanner ville={dept.chefLieu} variant="card" />
+        </div>
 
         {/* ─── PROFIL DU DÉPARTEMENT ────────────────────────── */}
         <section className="mb-16">
@@ -744,6 +758,14 @@ export default async function DepartementPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* ─── STICKY CTA + EXIT INTENT ─────────────────────── */}
+      <GeoPageCTA
+        title={`Comparez les devis d'artisans dans le ${dept.name}`}
+        subtitle="Gratuit, sans engagement, artisans vérifiés SIREN"
+        ville={dept.chefLieu}
+        variant="sticky-only"
+      />
     </div>
   )
 }

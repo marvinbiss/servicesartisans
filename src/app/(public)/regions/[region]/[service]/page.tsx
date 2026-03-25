@@ -13,6 +13,8 @@ import { getServiceImage } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import GeoPageCTA from '@/components/conversion/GeoPageCTA'
+import { SocialProofBanner } from '@/components/SocialProofBanner'
 import { relatedServices } from '@/lib/constants/navigation'
 
 export function generateStaticParams() {
@@ -251,6 +253,13 @@ export default async function RegionServicePage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* ─── CTA CONVERSION — above the fold ─────────────── */}
+        <GeoPageCTA
+          title={`Besoin d'un ${trade.name.toLowerCase()} en ${region.name} ?`}
+          subtitle="Comparez jusqu'à 3 devis gratuits d'artisans vérifiés"
+          service={serviceSlug}
+        />
+
         {/* ─── SERVICE OVERVIEW + REGIONAL PRICING ──────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
@@ -366,6 +375,11 @@ export default async function RegionServicePage({ params }: PageProps) {
               </Link>
             ))}
           </div>
+        </section>
+
+        {/* ─── SOCIAL PROOF MID-PAGE ────────────────────────── */}
+        <section className="mb-16">
+          <SocialProofBanner variant="card" metier={trade.name} />
         </section>
 
         {/* ─── TIPS ─────────────────────────────────────────── */}
@@ -561,6 +575,9 @@ export default async function RegionServicePage({ params }: PageProps) {
       <CrossIntentLinks service={serviceSlug} serviceName={trade.name} currentIntent="services" />
 
       <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
+
+      {/* ─── STICKY MOBILE CTA + EXIT INTENT ────────────── */}
+      <GeoPageCTA variant="sticky-only" service={serviceSlug} />
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">

@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, BarChart3, Thermometer, Zap, Home } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -11,6 +12,14 @@ import { villes, services, getQuartierBySlug, getQuartiersByVille, getNearbyCiti
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
+import { SocialProofBanner } from '@/components/SocialProofBanner'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
+import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
+
+const ExitIntentPopup = dynamic(
+  () => import('@/components/ExitIntentPopup'),
+  { ssr: false }
+)
 
 // Pre-render top 5 cities × their quartiers — rest via ISR
 const TOP_CITIES = 3
@@ -223,6 +232,11 @@ export default async function QuartierPage({ params }: PageProps) {
                 <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
+
+            {/* ── CTA above the fold ── */}
+            <div className="mt-10">
+              <VilleHeroCTA villeName={ville.name} quartierName={quartierName} />
+            </div>
           </div>
         </div>
       </section>
@@ -323,6 +337,11 @@ export default async function QuartierPage({ params }: PageProps) {
                 )}
               </Link>
             ))}
+          </div>
+
+          {/* ── Social proof mid-page ── */}
+          <div className="mt-8">
+            <SocialProofBanner ville={ville.name} variant="card" />
           </div>
         </section>
 
@@ -696,6 +715,10 @@ export default async function QuartierPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* ── Conversion overlays ── */}
+      <StickyMobileCTA cityName={ville.name} citySlug={villeSlug} />
+      <ExitIntentPopup />
     </div>
   )
 }
