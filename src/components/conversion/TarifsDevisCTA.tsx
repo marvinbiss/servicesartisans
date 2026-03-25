@@ -1,0 +1,82 @@
+'use client'
+
+import { useState } from 'react'
+import { ArrowRight, CheckCircle, Shield, Clock } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), { ssr: false })
+
+interface TarifsDevisCTAProps {
+  service: string
+  serviceName: string
+  ville: string
+  villeName?: string
+  taskName?: string
+  variant: 'inline' | 'banner'
+}
+
+export default function TarifsDevisCTA({
+  service,
+  serviceName,
+  ville,
+  taskName,
+  variant,
+}: TarifsDevisCTAProps) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  if (variant === 'inline') {
+    return (
+      <>
+        <button
+          onClick={() => setIsOpen(true)}
+          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-base"
+        >
+          Recevoir 3 devis gratuits
+          <ArrowRight className="w-4 h-4" />
+        </button>
+        <p className="text-xs text-gray-400 mt-2">Gratuit, sans engagement, r{'é'}ponse sous 24h</p>
+        <DevisBottomSheet
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          prefilledService={service}
+          prefilledCity={ville}
+        />
+      </>
+    )
+  }
+
+  // variant === 'banner'
+  return (
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="inline-flex items-center gap-3 bg-white text-blue-600 px-10 py-5 rounded-2xl font-bold hover:bg-blue-50 transition-all text-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+      >
+        {taskName
+          ? `Obtenir mon devis ${taskName.toLowerCase()}`
+          : `Obtenir mon devis ${serviceName}`}
+        <ArrowRight className="w-6 h-6" />
+      </button>
+      <div className="flex flex-wrap justify-center gap-6 mt-6 text-blue-100 text-sm">
+        <span className="flex items-center gap-1.5">
+          <CheckCircle className="w-4 h-4" />
+          100% gratuit
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Shield className="w-4 h-4" />
+          Artisans v{'é'}rifi{'é'}s SIREN
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Clock className="w-4 h-4" />
+          R{'é'}ponse sous 24h
+        </span>
+      </div>
+      <DevisBottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        prefilledService={service}
+        prefilledCity={ville}
+      />
+    </>
+  )
+}

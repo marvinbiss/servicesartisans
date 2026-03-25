@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight, Euro, ChevronDown, MapPin, ArrowLeft, Users } from 'lucide-react'
+import { Euro, ChevronDown, MapPin, ArrowLeft, Users } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
@@ -17,6 +17,7 @@ import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
 const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
 
 // ---------------------------------------------------------------------------
 // Static params: return a minimal seed set (NOT empty — empty array in a
@@ -309,6 +310,16 @@ export default async function TarifsServiceTravailVillePage({
             <p className="text-gray-500 text-sm mt-3">
               Ce tarif peut varier selon la complexit{'é'}, l'accessibilit{'é'} et les mat{'é'}riaux utilis{'é'}s.
             </p>
+            <div className="mt-6">
+              <TarifsDevisCTA
+                service={service}
+                serviceName={tradeLower}
+                ville={villeSlug}
+                villeName={villeData.name}
+                variant="inline"
+                taskName={currentTask.name}
+              />
+            </div>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
@@ -450,27 +461,25 @@ export default async function TarifsServiceTravailVillePage({
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Trouver un {tradeLower} {'à'} {villeData.name}
+            Obtenez un prix exact pour {currentTask.name.toLowerCase()} {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit pour {currentTask.name.toLowerCase()} {'à'} {villeData.name}.
+            Ces tarifs sont indicatifs. Recevez 3 devis personnalis{'é'}s d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href={`/services/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
-            >
-              Voir les {tradeLower}s {'à'} {villeData.name}
-              <ArrowRight className="w-5 h-5" />
+          <TarifsDevisCTA
+            service={service}
+            serviceName={tradeLower}
+            ville={villeSlug}
+            villeName={villeData.name}
+            variant="banner"
+            taskName={currentTask.name}
+          />
+          <p className="text-blue-200 text-sm mt-6">
+            Ou{' '}
+            <Link href={`/services/${service}/${villeSlug}`} className="underline hover:text-white transition-colors">
+              voir les {tradeLower}s {'à'} {villeData.name}
             </Link>
-            <Link
-              href={`/devis/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
-            >
-              Obtenir mon devis gratuit
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+          </p>
         </div>
       </section>
 

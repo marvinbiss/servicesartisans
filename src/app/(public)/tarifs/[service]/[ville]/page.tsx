@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight, CheckCircle, Euro, ChevronDown, MapPin, Users, Thermometer, Building2 } from 'lucide-react'
+import { CheckCircle, Euro, ChevronDown, MapPin, Users, Thermometer, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
@@ -29,6 +29,7 @@ import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
 const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -621,27 +622,24 @@ export default async function TarifsServiceVillePage({
       <section className="py-20 bg-gradient-primary">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Trouver un {tradeLower} {'à'} {villeData.name}
+            Obtenez un devis exact de {tradeLower} {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit aupr{'è'}s de professionnels r{'é'}f{'é'}renc{'é'}s {'à'} {villeData.name}.
+            Ces tarifs sont indicatifs. Recevez 3 devis personnalis{'é'}s d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href={`/services/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 bg-white text-primary-500 px-8 py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors text-lg"
-            >
-              Voir les {tradeLower}s {'à'} {villeData.name}
-              <ArrowRight className="w-5 h-5" />
+          <TarifsDevisCTA
+            service={service}
+            serviceName={tradeLower}
+            ville={villeSlug}
+            villeName={villeData.name}
+            variant="banner"
+          />
+          <p className="text-primary-200 text-sm mt-6">
+            Ou{' '}
+            <Link href={`/services/${service}/${villeSlug}`} className="underline hover:text-white transition-colors">
+              voir les {tradeLower}s {'à'} {villeData.name}
             </Link>
-            <Link
-              href={`/devis/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 bg-primary-300 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-200 transition-colors text-lg border border-primary-300"
-            >
-              Obtenir mon prix exact
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+          </p>
         </div>
       </section>
 
