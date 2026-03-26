@@ -14,7 +14,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Pool } from 'pg'
 
-const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
 const DATA_DIR = path.join(__dirname, '.enrich-data')
 const PJ_FILE = path.join(DATA_DIR, 'pj-listings.jsonl')
 const RESULTS_FILE = path.join(DATA_DIR, 'matches', 'matches-advanced.jsonl')

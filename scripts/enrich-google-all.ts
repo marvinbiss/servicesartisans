@@ -11,7 +11,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Pool } from 'pg'
 
-const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
 const GM_FILE = path.join(__dirname, '.gm-data', 'gm-listings.jsonl')
 
 const MATCH_THRESHOLD = 0.35

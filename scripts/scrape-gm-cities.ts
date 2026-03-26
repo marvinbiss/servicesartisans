@@ -19,7 +19,7 @@ import { Pool as PgPool } from 'pg'
 dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
 
 const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY
-const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
 
 const DATA_DIR = path.join(__dirname, '.gm-data')
 const LISTINGS_FILE = path.join(DATA_DIR, 'gm-listings-cities.jsonl')

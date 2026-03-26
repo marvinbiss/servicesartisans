@@ -122,8 +122,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
       const data = await response.json()
 
       if (!response.ok) {
-        const debugInfo = data.debug ? ` [DEBUG: ${JSON.stringify(data.debug)}]` : ''
-        setError((data.error || 'Erreur lors de la revendication') + debugInfo)
+        setError(data.error || 'Erreur lors de la revendication')
         return
       }
 

@@ -8,7 +8,7 @@
  * - Procédures collectives
  * - Annonces légales
  *
- * Upgraded with world-class error handling, caching, and retry logic
+ * Includes error handling, caching, and retry logic
  */
 
 import { retry, CircuitBreaker } from '../utils/retry'

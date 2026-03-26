@@ -5,7 +5,7 @@
  * API officielle du gouvernement français
  * 100% GRATUIT - Pas de limite - Pas de clé API
  *
- * Upgraded with world-class error handling, caching, and retry logic
+ * Includes error handling, caching, and retry logic
  */
 
 import { retry } from '../utils/retry'

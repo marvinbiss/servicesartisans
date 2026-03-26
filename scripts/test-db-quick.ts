@@ -1,6 +1,6 @@
 import { Client } from 'pg'
 
-const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
 
 async function main() {
   const t0 = Date.now()

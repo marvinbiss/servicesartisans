@@ -43,3 +43,13 @@ scripts/.verify-data/
 scripts/.bulk-data/
 scripts/.gm-data/
 scripts/output/
+
+# Debug/temp files — never commit
+scripts/debug-*
+tmp_audit_*
+audit-prompt.txt
+force-deploy-fix.txt
+test-webhook.txt
+trigger-vercel-deploy.txt
+*.debug.html
+*.bak

@@ -9,8 +9,8 @@ import * as path from 'path'
 import { Client } from 'pg'
 
 // Port 6543 = Supabase session pooler (plus stable que 5432 direct)
-const PG_URL = 'postgresql://postgres.umjmbdbwcsxrvfqktiui:BEB6LnGlT6U9bkTe@aws-0-eu-west-3.pooler.supabase.com:6543/postgres'
-const PG_URL_DIRECT = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
+const PG_URL_DIRECT = process.env.DATABASE_URL_DIRECT || process.env.DATABASE_URL!
 const MATCHES_FILE = path.join(__dirname, '.enrich-data', 'matches', 'matches-full.jsonl')
 const PROGRESS_FILE = path.join(__dirname, '.enrich-data', 'matches', 'upload-progress.json')
 

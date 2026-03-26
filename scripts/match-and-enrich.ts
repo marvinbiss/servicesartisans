@@ -1,5 +1,5 @@
 /**
- * MATCH & ENRICH — Méthode worldclass 2026
+ * MATCH & ENRICH — Script d'enrichissement automatique
  *
  * Zéro fichier intermédiaire. Tout en mémoire, 1 seul pass.
  * Pour chaque département :
@@ -14,7 +14,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { Client } from 'pg'
 
-const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
 const PJ_FILE = path.join(__dirname, '.enrich-data', 'pj-listings.jsonl')
 const GM_FILE = path.join(__dirname, '.gm-data', 'gm-listings.jsonl')
 const WORKERS = 4

@@ -10,7 +10,7 @@ import ProviderList from '@/components/ProviderList'
 
 const PAGE_SIZE = 50
 
-// Import GeographicMap (world-class version) dynamically to avoid SSR issues with Leaflet
+// Import GeographicMap dynamically to avoid SSR issues with Leaflet
 const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
   ssr: false,
   loading: () => (

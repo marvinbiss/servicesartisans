@@ -8,7 +8,7 @@ import { Client } from 'pg'
 
 const CACHE_DIR = path.join(__dirname, '.enrich-data')
 const CACHE_FILE = path.join(CACHE_DIR, 'artisans-cache.jsonl')
-const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
 const WORKERS = 4
 
 const DEPTS = [

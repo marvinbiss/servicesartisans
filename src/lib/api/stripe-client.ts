@@ -1,6 +1,6 @@
 /**
  * Stripe API Client
- * Payment processing with world-class error handling
+ * Payment processing with error handling and retry logic
  * Documentation: https://stripe.com/docs/api
  */
 

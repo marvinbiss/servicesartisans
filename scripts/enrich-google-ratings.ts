@@ -9,7 +9,7 @@
  */
 import { Pool } from 'pg'
 
-const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL!
 
 const COMMON_WORDS = new Set([
   'plomberie','plombier','chauffage','chauffagiste','electricite','electricien',

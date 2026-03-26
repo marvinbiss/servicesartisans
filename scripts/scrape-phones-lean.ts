@@ -28,7 +28,7 @@ dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
 // ════════════════════════════
 
 const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY
-const PG_URL = process.env.SUPABASE_DB_URL || 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const PG_URL = process.env.DATABASE_URL || process.env.SUPABASE_DB_URL!
 
 const DEFAULT_WORKERS = 100
 const SCRAPER_TIMEOUT_MS = 30000
