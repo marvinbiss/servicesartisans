@@ -1070,7 +1070,7 @@ export default async function ProblemeVillePage({
                 <Link href="/problemes" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Tous les problèmes</Link>
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Urgence artisan 24h/24</Link>
                 <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Guide des tarifs</Link>
-                <Link href="/questions" className="block text-sm text-gray-600 hover:text-amber-600 py-1">FAQ</Link>
+                <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1">FAQ</Link>
               </div>
             </div>
           </div>

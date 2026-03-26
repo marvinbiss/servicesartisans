@@ -191,7 +191,7 @@ export default function QuestionsHubPage() {
         )}
       </div>
 
-      <RelatedHubs currentPath="/questions" />
+      <RelatedHubs currentPath="/faq" />
     </>
   )
 }

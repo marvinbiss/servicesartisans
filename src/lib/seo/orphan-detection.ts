@@ -75,7 +75,7 @@ export function buildLinkGraph(): Map<string, Set<string>> {
   // Homepage → hub pages
   const hubPaths = [
     '/services', '/tarifs', '/urgence', '/devis', '/avis',
-    '/blog', '/guides', '/questions', '/barometre', '/departements',
+    '/blog', '/guides', '/faq', '/barometre', '/departements',
     '/regions', '/villes',
   ]
   for (const hub of hubPaths) {
@@ -424,7 +424,7 @@ export function getAllPagePaths(): string[] {
   // Static/hub pages
   const staticPaths = [
     '/services', '/tarifs', '/urgence', '/devis', '/avis',
-    '/blog', '/guides', '/questions', '/barometre',
+    '/blog', '/guides', '/faq', '/barometre',
     '/barometre/regions', '/barometre/tarifs', '/comparaison', '/glossaire',
     '/normes', '/statistiques-artisans-france',
     '/a-propos', '/contact', '/faq', '/comment-ca-marche',

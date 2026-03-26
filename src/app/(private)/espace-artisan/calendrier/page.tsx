@@ -252,8 +252,8 @@ export default function CalendrierPage() {
       const response = await fetch(`/api/bookings?artisanId=${profile.id}`)
       const data = await response.json()
 
-      if (data.bookings) {
-        const upcoming = data.bookings
+      if (data.data.bookings) {
+        const upcoming = data.data.bookings
           .filter((b: BookingEntry) => b.status === 'confirmed' && new Date(b.slot?.date ?? 0) >= new Date())
           .slice(0, 5)
         setUpcomingBookings(upcoming)
@@ -261,7 +261,7 @@ export default function CalendrierPage() {
         // Calculate stats
         const thisMonth = new Date().getMonth()
         const thisYear = new Date().getFullYear()
-        const monthlyBookings = data.bookings.filter((b: BookingEntry) => {
+        const monthlyBookings = data.data.bookings.filter((b: BookingEntry) => {
           const bookingDate = new Date(b.slot?.date ?? 0)
           return bookingDate.getMonth() === thisMonth && bookingDate.getFullYear() === thisYear
         }).length

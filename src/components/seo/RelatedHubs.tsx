@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 const HUB_META: Record<string, { label: string; description: string }> = {
   '/guides': { label: 'Guides travaux', description: 'Conseils pratiques pour vos projets' },
-  '/questions': { label: 'Questions fréquentes', description: 'Réponses d\'experts à vos questions' },
+  '/faq': { label: 'Questions fréquentes', description: 'Réponses d\'experts à vos questions' },
   '/comparaison': { label: 'Comparatifs artisans', description: 'Comparez les corps de métier' },
   '/barometre': { label: 'Baromètre des prix', description: 'Tarifs moyens actualisés' },
   '/glossaire': { label: 'Glossaire', description: 'Termes techniques expliqués' },
@@ -22,12 +22,12 @@ const HUB_META: Record<string, { label: string; description: string }> = {
 }
 
 const HUB_LINKS: Record<string, string[]> = {
-  '/guides': ['/questions', '/comparaison', '/normes', '/barometre'],
-  '/questions': ['/guides', '/glossaire', '/comparaison', '/problemes'],
+  '/guides': ['/faq', '/comparaison', '/normes', '/barometre'],
+  '/faq': ['/guides', '/glossaire', '/comparaison', '/problemes'],
   '/comparaison': ['/tarifs', '/avis', '/guides', '/barometre'],
   '/barometre': ['/tarifs', '/comparaison', '/statistiques-artisans-france', '/guides'],
-  '/glossaire': ['/questions', '/normes', '/guides'],
-  '/normes': ['/glossaire', '/guides', '/questions', '/barometre'],
+  '/glossaire': ['/faq', '/normes', '/guides'],
+  '/normes': ['/glossaire', '/guides', '/faq', '/barometre'],
   '/calendrier-travaux': ['/guides', '/checklist-travaux', '/barometre'],
   '/checklist-travaux': ['/guides', '/calendrier-travaux', '/devis'],
   '/avant-apres': ['/comparaison', '/avis', '/guides'],

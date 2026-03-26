@@ -226,7 +226,7 @@ export default function QuestionPage({
         </div>
       </div>
 
-      <RelatedHubs currentPath="/questions" extraLinks={[{href: "/glossaire", label: "Glossaire"}, {href: "/guides", label: "Guides travaux"}]} />
+      <RelatedHubs currentPath="/faq" extraLinks={[{href: "/glossaire", label: "Glossaire"}, {href: "/guides", label: "Guides travaux"}]} />
 
       {question.relatedService && (
         <StickyMobileCTA serviceSlug={question.relatedService} ctaText="Devis gratuit" />

@@ -245,7 +245,7 @@ const relatedPages = [
   {
     title: "Questions fréquentes",
     description: "Réponses aux questions les plus posées sur les travaux et les artisans.",
-    href: "/questions",
+    href: "/faq",
     icon: HelpCircle,
   },
   {

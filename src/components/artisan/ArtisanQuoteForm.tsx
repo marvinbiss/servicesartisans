@@ -52,7 +52,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
     if (!formData.nom.trim()) {
       errs.nom = 'Veuillez indiquer votre nom'
     }
-    const cleanPhone = formData.telephone.replace(/\s+/g, '')
+    const cleanPhone = formData.telephone.replace(/[\s.\-()]/g, '')
     if (!cleanPhone) {
       errs.telephone = 'Veuillez indiquer votre téléphone'
     } else if (!PHONE_REGEX.test(cleanPhone)) {
@@ -91,7 +91,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
           description: formData.description.trim(),
           nom: formData.nom.trim(),
           email: formData.email.trim(),
-          telephone: formData.telephone.replace(/\s+/g, ''),
+          telephone: formData.telephone.replace(/[\s.\-()]/g, ''),
           ville: artisan.city || '',
         }),
       })

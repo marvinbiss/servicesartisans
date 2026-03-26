@@ -57,6 +57,16 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
       .catch(() => {})
   }, [])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [isMenuOpen])
+
   // Scroll listener
   useEffect(() => {
     if (!mounted) return
@@ -66,15 +76,16 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [mounted])
 
-  // Close desktop mega menus on route change
+  // Close all menus on route change
   const prevPathnameRef = useRef(pathname)
   useEffect(() => {
     if (prevPathnameRef.current !== pathname) {
       prevPathnameRef.current = pathname
       setOpenMenu(null)
       setMobileAccordion(null)
+      setIsMenuOpen(false)
     }
-  }, [pathname])
+  }, [pathname, setIsMenuOpen])
 
   // Track openMenu in a ref for document click handler
   const openMenuRef = useRef(openMenu)
@@ -195,7 +206,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
           <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
           <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides travaux</Link>
           <div className="h-px bg-sand-200 my-1" />
-          <Link href="/questions" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>FAQ</Link>
+          <Link href="/faq" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>FAQ</Link>
           <Link href="/comparaison" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Comparatifs</Link>
           <Link href="/barometre" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Baromètre prix</Link>
           <Link href="/glossaire" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Glossaire</Link>
@@ -286,6 +297,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/connexion"
+              prefetch={false}
               className="relative text-charcoal-600 hover:text-primary-400 px-3 py-2 rounded-lg font-medium text-[0.85rem] hover:bg-sand-100/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion

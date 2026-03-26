@@ -290,7 +290,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     '/barometre',
     '/glossaire',
     '/guides',
-    '/questions',
+    '/faq',
     '/avis',
     '/problemes',
     '/departements',

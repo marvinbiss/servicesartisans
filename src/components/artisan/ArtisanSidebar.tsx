@@ -45,6 +45,11 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
   const handleEmail = () => {
     if (artisan.email) {
+      trackEvent('artisan_email_click', {
+        artisanId: artisan.id,
+        artisanName: artisan.business_name || '',
+        source: 'sidebar',
+      })
       window.location.href = `mailto:${artisan.email}`
     }
   }

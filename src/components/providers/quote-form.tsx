@@ -46,7 +46,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
           description: formData.description,
           nom: formData.client_name,
           email: formData.client_email,
-          telephone: formData.client_phone,
+          telephone: formData.client_phone.replace(/[\s.\-()]/g, ''),
           ville: formData.city,
           codePostal: formData.postal_code,
         }),

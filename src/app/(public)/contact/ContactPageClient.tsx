@@ -169,7 +169,7 @@ export default function ContactPageClient() {
                 Consultez notre FAQ pour trouver des réponses aux questions les plus fréquentes.
               </p>
               <Link
-                href="/questions"
+                href="/faq"
                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
               >
                 Voir la FAQ <ArrowRight className="w-4 h-4" />

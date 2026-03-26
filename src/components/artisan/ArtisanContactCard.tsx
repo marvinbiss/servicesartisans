@@ -66,6 +66,10 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             type="button"
             onClick={() => {
               trackEvent('artisan_devis_click' as any, { artisan_slug: artisan.slug })
+              const devisSection = document.getElementById('devis')
+              if (devisSection) {
+                devisSection.scrollIntoView({ behavior: 'smooth' })
+              }
             }}
             className="w-full py-4 px-4 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 group"
           >
@@ -90,7 +94,6 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <button
               type="button"
               onClick={() => {
-                trackEvent('phone_reveal' as any, { artisan_slug: artisan.slug })
                 trackEvent('phone_click' as any, { artisan_slug: artisan.slug })
                 window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
               }}

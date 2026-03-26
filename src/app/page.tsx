@@ -249,7 +249,7 @@ export default async function HomePage() {
             <Link href="/urgence" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Urgence artisan</Link>
             <Link href="/guides" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Guides travaux</Link>
             <Link href="/barometre" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Baromètre prix</Link>
-            <Link href="/questions" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">FAQ</Link>
+            <Link href="/faq" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">FAQ</Link>
             <Link href="/blog" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Blog</Link>
           </div>
         </div>

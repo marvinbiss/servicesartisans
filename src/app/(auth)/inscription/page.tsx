@@ -440,7 +440,7 @@ export default function InscriptionPage() {
                 <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
                   Comment ça marche ?
                 </Link>
-                <Link href="/questions" className="text-blue-400 hover:text-blue-300">
+                <Link href="/faq" className="text-blue-400 hover:text-blue-300">
                   Questions fréquentes
                 </Link>
                 <Link href="/devis" className="text-blue-400 hover:text-blue-300">

@@ -277,7 +277,7 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
         <Link href="/contact" className="text-gray-600 hover:text-clay-400 py-1">
           Contact
         </Link>
-        <Link href="/questions" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/faq" className="text-gray-600 hover:text-clay-400 py-1">
           Questions fréquentes
         </Link>
         <Link href="/barometre" className="text-gray-600 hover:text-clay-400 py-1">

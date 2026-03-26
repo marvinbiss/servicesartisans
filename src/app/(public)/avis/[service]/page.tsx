@@ -909,7 +909,7 @@ export default async function AvisServicePage({
                   Comment ça marche
                 </Link>
                 <Link
-                  href="/questions"
+                  href="/faq"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
                   FAQ

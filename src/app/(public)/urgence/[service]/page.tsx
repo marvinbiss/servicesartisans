@@ -590,7 +590,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Toutes les urgences</Link>
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
                 <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide des tarifs</Link>
-                <Link href="/questions" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
+                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
                 <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Processus de vérification</Link>
               </div>
             </div>

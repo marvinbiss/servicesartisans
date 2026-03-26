@@ -195,7 +195,6 @@ export default function ParametresClientPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           full_name: [formData.prenom, formData.nom].filter(Boolean).join(' ').trim() || undefined,
-          email: formData.email || undefined,
           phone: formData.telephone || undefined,
         }),
       })
@@ -509,9 +508,12 @@ export default function ParametresClientPage() {
                           <input
                             type="email"
                             value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            readOnly
+                            className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
                           />
+                          <p className="mt-1 text-xs text-gray-400">
+                            Pour modifier votre email, contactez le support.
+                          </p>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">

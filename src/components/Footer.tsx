@@ -11,7 +11,7 @@ import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 const informationLinks = [
   { name: 'À propos', href: '/a-propos' },
   { name: 'Contact', href: '/contact' },
-  { name: 'FAQ', href: '/questions' },
+  { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
   { name: 'Avis artisans', href: '/avis' },
 ]
