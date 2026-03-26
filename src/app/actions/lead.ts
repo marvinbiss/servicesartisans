@@ -36,7 +36,7 @@ export async function submitLead(
     serviceName: formData.get('serviceName'),
     name: formData.get('name'),
     email: formData.get('email'),
-    phone: String(formData.get('phone') || '').replace(/\s/g, ''),
+    phone: String(formData.get('phone') || '').replace(/[\s.\-()]/g, ''),
     postalCode: formData.get('postalCode') || undefined,
     city: formData.get('city') || undefined,
     description: formData.get('description'),

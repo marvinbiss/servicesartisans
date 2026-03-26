@@ -143,7 +143,7 @@ export default function ExitIntentModal() {
   const handleResume = useCallback(() => {
     close()
     // Scroll to the form if present, otherwise redirect to /devis
-    const form = document.querySelector('form')
+    const form = document.getElementById('devis')
     if (form) {
       form.scrollIntoView({ behavior: 'smooth', block: 'start' })
     } else {

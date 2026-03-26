@@ -71,7 +71,7 @@ export default function ArtisanSettingsPage() {
       const res = await fetch('/api/artisan/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone }),
+        body: JSON.stringify({ name, phone: phone.replace(/[\s.\-()]/g, '') }),
       })
       if (res.ok) {
         setSuccess('Paramètres enregistrés')

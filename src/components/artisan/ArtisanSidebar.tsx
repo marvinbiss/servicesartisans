@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, ShieldCheck, CheckCircle, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
-import { BookingFunnel, trackEvent } from '@/lib/analytics/tracking'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 function slugify(text: string): string {
   return text
@@ -126,10 +126,18 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               whileTap={{ scale: 0.98 }}
               onClick={() => {
                 if (showPhone) {
-                  BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'sidebar')
+                  trackEvent('phone_reveal', {
+                    artisanId: artisan.id,
+                    artisanName: artisan.business_name || '',
+                    source: 'sidebar',
+                  })
                   handleCall()
                 } else {
-                  BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'sidebar')
+                  trackEvent('phone_reveal', {
+                    artisanId: artisan.id,
+                    artisanName: artisan.business_name || '',
+                    source: 'sidebar',
+                  })
                   setShowPhone(true)
                 }
               }}
@@ -254,10 +262,18 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
             type="button"
             onClick={() => {
               if (showPhone) {
-                BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+                trackEvent('phone_reveal', {
+                  artisanId: artisan.id,
+                  artisanName: artisan.business_name || '',
+                  source: 'mobile_cta',
+                })
                 handleCall()
               } else {
-                BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+                trackEvent('phone_reveal', {
+                  artisanId: artisan.id,
+                  artisanName: artisan.business_name || '',
+                  source: 'mobile_cta',
+                })
                 setShowPhone(true)
               }
             }}

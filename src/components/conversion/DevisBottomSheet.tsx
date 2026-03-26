@@ -32,6 +32,7 @@ const initialFormData: FormData = {
 
 const urgencyOptions = [
   { value: 'flexible', label: 'Pas urgent' },
+  { value: 'mois', label: 'Ce mois-ci' },
   { value: 'semaine', label: 'Cette semaine' },
   { value: 'urgent', label: 'Urgent (sous 24h)' },
 ]

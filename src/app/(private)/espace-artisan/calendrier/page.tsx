@@ -374,6 +374,7 @@ export default function CalendrierPage() {
         body: JSON.stringify({
           artisanId: profile.id,
           settings,
+          defaultSlots: editableDefaultSlots,
         }),
       })
 

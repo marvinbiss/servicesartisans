@@ -85,7 +85,10 @@ export default function InscriptionArtisanPage() {
       const response = await fetch('/api/inscription-artisan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          telephone: formData.telephone.replace(/[\s.\-()]/g, ''),
+        }),
       })
 
       const data = await response.json()
@@ -160,7 +163,7 @@ export default function InscriptionArtisanPage() {
                 Inscription gratuite. Recevez des demandes de devis qualifiées et
                 développez votre activité.
               </p>
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                 {benefits.map((benefit) => {
                   const Icon = benefit.icon
                   return (

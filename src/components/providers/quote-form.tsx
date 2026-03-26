@@ -132,9 +132,10 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
         onChange={(e) => setFormData({ ...formData, urgency: e.target.value })}
         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
       >
-        <option value="mois">Normal (ce mois-ci)</option>
+        <option value="flexible">Pas urgent</option>
+        <option value="mois">Ce mois-ci</option>
         <option value="semaine">Cette semaine</option>
-        <option value="urgent">Urgent (sous 48h)</option>
+        <option value="urgent">Urgent (sous 24h)</option>
       </select>
 
       <div className="grid grid-cols-2 gap-2">
