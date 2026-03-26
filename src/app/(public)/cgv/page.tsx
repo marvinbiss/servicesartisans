@@ -219,7 +219,7 @@ export default async function CGVPage() {
               Pour toute question concernant ces CGVU :
             </p>
             <ul>
-              <li>Email : contact@servicesartisans.fr</li>
+              <li>Email : <a href="mailto:contact@servicesartisans.fr" className="text-blue-600 hover:underline">contact@servicesartisans.fr</a></li>
               <li>Courrier : Coordonnées disponibles sur la page mentions légales.</li>
             </ul>
 

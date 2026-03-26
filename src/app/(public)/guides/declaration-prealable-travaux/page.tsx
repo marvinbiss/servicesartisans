@@ -564,7 +564,7 @@ export default function DeclarationPrealablePage() {
                   {"Trouver un maçon"} <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/services/facades"
+                  href="/services/facadier"
                   className="inline-flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-400 transition-colors"
                 >
                   {"Trouver un façadier"} <ArrowRight className="w-4 h-4" />

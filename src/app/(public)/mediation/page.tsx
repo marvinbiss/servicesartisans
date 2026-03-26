@@ -44,7 +44,7 @@ const steps = [
     title: 'Processus de réclamation',
     content: [
       'Si vous rencontrez un problème avec une prestation effectuée par un artisan référencé sur la plateforme, la première étape consiste à nous adresser une réclamation écrite.',
-      'Vous pouvez nous contacter par email à ' + companyIdentity.supportEmail + ' en décrivant la situation, la prestation concernée et le résultat souhaité. Nous accusons réception de chaque réclamation.',
+      <>Vous pouvez nous contacter par email à <a href={`mailto:${companyIdentity.supportEmail}`} className="text-blue-600 hover:underline font-medium">{companyIdentity.supportEmail}</a> en décrivant la situation, la prestation concernée et le résultat souhaité. Nous accusons réception de chaque réclamation.</>,
     ],
   },
   {
@@ -181,10 +181,10 @@ export default async function MediationPage() {
             </h2>
             <div className="space-y-2 text-gray-600 mb-6">
               <p>
-                Pour toute réclamation : <strong>{companyIdentity.supportEmail}</strong>
+                Pour toute réclamation : <a href={`mailto:${companyIdentity.supportEmail}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.supportEmail}</strong></a>
               </p>
               <p>
-                Pour toute autre question : <strong>{companyIdentity.email}</strong>
+                Pour toute autre question : <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.email}</strong></a>
               </p>
             </div>
             <Link

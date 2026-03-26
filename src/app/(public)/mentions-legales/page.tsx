@@ -103,7 +103,7 @@ export default async function MentionsLegalesPage() {
                   seront publiées lors de l'immatriculation de la société.
                 </p>
                 <p className="text-blue-800 text-sm mt-2">
-                  Contact : <strong>{companyIdentity.email}</strong>
+                  Contact : <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.email}</strong></a>
                 </p>
               </div>
             )}
@@ -130,12 +130,12 @@ export default async function MentionsLegalesPage() {
                 <li><strong>Siège social :</strong> {companyIdentity.address}</li>
               )}
               {companyIdentity.phone && (
-                <li><strong>Téléphone :</strong> {companyIdentity.phone} (n° plateforme)</li>
+                <li><strong>Téléphone :</strong> <a href={`tel:${companyIdentity.phone.replace(/\s/g, '')}`} className="text-blue-600 hover:underline">{companyIdentity.phone}</a> (n° plateforme)</li>
               )}
               {companyIdentity.directeurPublication && (
                 <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
               )}
-              <li><strong>Email :</strong> {companyIdentity.email}</li>
+              <li><strong>Email :</strong> <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline">{companyIdentity.email}</a></li>
             </ul>
 
             <h2>Hébergement</h2>
@@ -160,13 +160,13 @@ export default async function MentionsLegalesPage() {
               dans notre <a href="/confidentialite">politique de confidentialité</a>.
             </p>
             <p>
-              Délégué à la protection des données (DPO) : <strong>{companyIdentity.dpoEmail}</strong>
+              Délégué à la protection des données (DPO) : <a href={`mailto:${companyIdentity.dpoEmail}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.dpoEmail}</strong></a>
             </p>
 
             <h2>Contact</h2>
             <p>
               Pour toute question relative aux mentions légales, vous pouvez nous contacter
-              par email : <strong>{companyIdentity.email}</strong>
+              par email : <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.email}</strong></a>
             </p>
 
           </div>

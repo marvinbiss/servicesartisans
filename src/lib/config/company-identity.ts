@@ -47,7 +47,7 @@ export const companyIdentity = {
     facebook: 'https://facebook.com/servicesartisans',
     instagram: 'https://instagram.com/servicesartisans',
     linkedin: 'https://linkedin.com/company/servicesartisans',
-    twitter: 'https://twitter.com/servicesartisans',
+    twitter: 'https://x.com/servicesartisans',
   },
 
   // Hosting (Level 1 — verifiable)

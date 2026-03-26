@@ -31,6 +31,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [error, setError] = useState('')
+  const [newsletterConsent, setNewsletterConsent] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('Tous')
   const [activeTag, setActiveTag] = useState(initialTag || '')
   const [visibleCount, setVisibleCount] = useState(ARTICLES_PER_PAGE)
@@ -70,6 +71,12 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
     e.preventDefault()
     setIsLoading(true)
     setError('')
+
+    if (!newsletterConsent) {
+      setError('Veuillez accepter la politique de confidentialité pour vous inscrire.')
+      setIsLoading(false)
+      return
+    }
 
     try {
       const response = await fetch('/api/newsletter', {
@@ -281,6 +288,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
               <div className="flex flex-col sm:flex-row gap-4">
                 <input
                   type="email"
+                  inputMode="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Votre email"
@@ -299,6 +307,20 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                   )}
                 </button>
               </div>
+              <label className="flex items-start gap-2 mt-4 text-left">
+                <input
+                  type="checkbox"
+                  checked={newsletterConsent}
+                  onChange={(e) => setNewsletterConsent(e.target.checked)}
+                  className="mt-1 rounded border-blue-300 text-blue-600 focus:ring-blue-300"
+                />
+                <span className="text-sm text-blue-100">
+                  J&apos;accepte que mes données soient utilisées pour recevoir la newsletter. Consultez notre{' '}
+                  <a href="/confidentialite" className="underline hover:text-white">
+                    politique de confidentialité
+                  </a>.
+                </span>
+              </label>
               {error && (
                 <div className="mt-4 flex items-center justify-center gap-2 text-red-200">
                   <AlertCircle className="w-4 h-4" />

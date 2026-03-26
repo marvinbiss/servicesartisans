@@ -162,7 +162,7 @@ export default function RecherchePage() {
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Comment ça marche</Link>
                 <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Tarifs des artisans</Link>
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Urgence 24h/24</Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Questions fréquentes</Link>
+                <Link href="/questions" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Questions fréquentes</Link>
                 <Link href="/blog" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Blog</Link>
               </div>
             </div>

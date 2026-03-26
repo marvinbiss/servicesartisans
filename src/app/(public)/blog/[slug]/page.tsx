@@ -994,11 +994,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 <Facebook className="w-5 h-5" />
               </a>
               <a
-                href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
+                href={`https://x.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
                 target="_blank"
                 rel="nofollow noopener noreferrer"
-                aria-label="Partager sur Twitter"
-                className="w-10 h-10 bg-sky-500 text-white rounded-full flex items-center justify-center hover:bg-sky-600 hover:scale-110 transition-all duration-200"
+                aria-label="Partager sur X"
+                className="w-10 h-10 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 hover:scale-110 transition-all duration-200"
               >
                 <Twitter className="w-5 h-5" />
               </a>

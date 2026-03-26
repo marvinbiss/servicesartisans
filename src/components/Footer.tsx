@@ -11,7 +11,7 @@ import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 const informationLinks = [
   { name: 'À propos', href: '/a-propos' },
   { name: 'Contact', href: '/contact' },
-  { name: 'FAQ', href: '/faq' },
+  { name: 'FAQ', href: '/questions' },
   { name: 'Blog', href: '/blog' },
   { name: 'Avis artisans', href: '/avis' },
 ]
@@ -149,7 +149,7 @@ export default function Footer() {
               <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="Facebook">
                 <Facebook className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://twitter.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="Twitter">
+              <a href="https://x.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="X">
                 <Twitter className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
               <a href="https://linkedin.com/company/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="LinkedIn">

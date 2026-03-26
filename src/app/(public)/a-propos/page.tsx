@@ -135,7 +135,7 @@ const commitments = [
   },
   {
     title: 'Données protégées',
-    description: 'Conformité RGPD, données hébergées en Europe, DPO joignable à dpo@servicesartisans.fr.',
+    description: <>Conformité RGPD, données hébergées en Europe, DPO joignable à <a href="mailto:dpo@servicesartisans.fr" className="text-blue-600 hover:underline">dpo@servicesartisans.fr</a>.</>,
   },
   {
     title: 'Transparence tarifaire',
@@ -610,7 +610,7 @@ export default async function AProposPage() {
             Une question ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Contactez-nous à <strong>{companyIdentity.email}</strong> ou via notre page de contact.
+            Contactez-nous à <a href={`mailto:${companyIdentity.email}`} className="text-white hover:underline"><strong>{companyIdentity.email}</strong></a> ou via notre page de contact.
           </p>
           <Link
             href="/contact"

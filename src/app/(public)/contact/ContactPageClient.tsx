@@ -127,7 +127,7 @@ export default function ContactPageClient() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
-                    <p className="text-gray-600">contact@servicesartisans.fr</p>
+                    <a href="mailto:contact@servicesartisans.fr" className="text-blue-600 hover:underline font-medium">contact@servicesartisans.fr</a>
                   </div>
                 </div>
 
@@ -169,7 +169,7 @@ export default function ContactPageClient() {
                 Consultez notre FAQ pour trouver des réponses aux questions les plus fréquentes.
               </p>
               <Link
-                href="/faq"
+                href="/questions"
                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
               >
                 Voir la FAQ <ArrowRight className="w-4 h-4" />
@@ -251,6 +251,7 @@ export default function ContactPageClient() {
                     <input
                       id="contact-email"
                       type="email"
+                      inputMode="email"
                       autoComplete="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}

@@ -68,7 +68,7 @@ const sections = [
     title: 'Suppression d\'avis',
     content: [
       'Un avis peut être supprimé uniquement s\'il enfreint nos conditions d\'utilisation : contenu injurieux, diffamatoire, discriminatoire, contenant des données personnelles de tiers, ou manifestement sans rapport avec une prestation réelle.',
-      'Un artisan ou un utilisateur peut demander la suppression d\'un avis en nous contactant à l\'adresse suivante : ' + companyIdentity.email + '. Chaque demande est examinée individuellement.',
+      <>Un artisan ou un utilisateur peut demander la suppression d&apos;un avis en nous contactant à l&apos;adresse suivante : <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline font-medium">{companyIdentity.email}</a>. Chaque demande est examinée individuellement.</>,
     ],
   },
   {
@@ -180,7 +180,7 @@ export default async function PolitiqueAvisPage() {
           </h2>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
             Si vous estimez qu'un avis ne respecte pas nos conditions d'utilisation,
-            vous pouvez le signaler par email à <strong>{companyIdentity.email}</strong>.
+            vous pouvez le signaler par email à <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.email}</strong></a>.
             Chaque signalement est examiné dans un délai raisonnable.
           </p>
           <Link

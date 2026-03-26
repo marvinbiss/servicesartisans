@@ -499,7 +499,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
                 <Link href="/verifier-artisan" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Vérifier un artisan (SIRET)</Link>
                 <Link href="/guides/devis-travaux" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Guide : bien comparer les devis</Link>
                 <Link href="/statistiques-artisans-france" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Statistiques artisans en France</Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1">FAQ</Link>
+                <Link href="/questions" className="block text-sm text-gray-600 hover:text-amber-600 py-1">FAQ</Link>
               </div>
             </div>
           </div>

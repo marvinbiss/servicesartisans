@@ -39,6 +39,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [consentRgpd, setConsentRgpd] = useState(false)
 
   const displayName = getDisplayName(artisan)
 
@@ -71,6 +72,11 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
     const validationErrors = validate()
     setErrors(validationErrors)
     if (Object.keys(validationErrors).length > 0) return
+
+    if (!consentRgpd) {
+      setSubmitError('Veuillez accepter la politique de confidentialité pour envoyer votre demande.')
+      return
+    }
 
     setLoading(true)
 
@@ -266,6 +272,22 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                   </p>
                 )}
               </div>
+
+              {/* Consentement RGPD */}
+              <label className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  checked={consentRgpd}
+                  onChange={(e) => setConsentRgpd(e.target.checked)}
+                  className="mt-1 rounded border-sand-200 text-primary-400 focus:ring-primary-400"
+                />
+                <span className="text-xs text-charcoal-500">
+                  J&apos;accepte que mes données soient utilisées pour traiter ma demande de devis. Consultez notre{' '}
+                  <a href="/confidentialite" className="underline hover:text-primary-500">
+                    politique de confidentialité
+                  </a>.
+                </span>
+              </label>
 
               {/* Submit error */}
               {submitError && (

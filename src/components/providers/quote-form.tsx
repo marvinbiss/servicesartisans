@@ -13,6 +13,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [consentRgpd, setConsentRgpd] = useState(false)
   const [formData, setFormData] = useState({
     client_name: '',
     client_email: '',
@@ -27,6 +28,12 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
     e.preventDefault()
     setIsLoading(true)
     setError('')
+
+    if (!consentRgpd) {
+      setError('Veuillez accepter la politique de confidentialité pour envoyer votre demande.')
+      setIsLoading(false)
+      return
+    }
 
     try {
       const response = await fetch('/api/devis', {
@@ -143,13 +150,24 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
         />
       </div>
 
+      <label className="flex items-start gap-2">
+        <input
+          type="checkbox"
+          checked={consentRgpd}
+          onChange={(e) => setConsentRgpd(e.target.checked)}
+          className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+        <span className="text-xs text-gray-500">
+          J&apos;accepte que mes données soient utilisées pour traiter ma demande de devis. Consultez notre{' '}
+          <a href="/confidentialite" className="underline hover:text-blue-600">
+            politique de confidentialité
+          </a>.
+        </span>
+      </label>
+
       <Button type="submit" disabled={isLoading} fullWidth>
         {isLoading ? 'Envoi...' : 'Envoyer ma demande'}
       </Button>
-
-      <p className="text-xs text-gray-500 text-center">
-        En soumettant, vous acceptez d'être contacté par l'artisan.
-      </p>
     </form>
   )
 }

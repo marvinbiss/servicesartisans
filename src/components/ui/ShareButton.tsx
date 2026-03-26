@@ -167,7 +167,7 @@ export function ShareButton({
       icon: <XIcon className="w-4 h-4" />,
       onClick: () => {
         window.open(
-          `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+          `https://x.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
           '_blank',
           'noopener,noreferrer',
         )
@@ -203,7 +203,7 @@ export function ShareButton({
           type="button"
           onClick={handleClick}
           className={clsx(
-            'p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200',
+            'p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center',
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
             className,
           )}
@@ -254,7 +254,7 @@ export function ShareButton({
               type="button"
               onClick={option.onClick}
               className={clsx(
-                'w-full flex items-center gap-3 px-3 py-2.5 text-sm transition-colors',
+                'w-full flex items-center gap-3 px-3 py-3 text-sm transition-colors min-h-[44px]',
                 option.color,
               )}
               role="menuitem"
@@ -267,9 +267,9 @@ export function ShareButton({
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs text-gray-400 hover:text-gray-600 transition-colors min-h-[44px]"
             >
-              <X className="w-3 h-3" />
+              <X className="w-4 h-4" />
               Fermer
             </button>
           </div>

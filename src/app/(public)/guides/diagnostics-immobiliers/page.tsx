@@ -138,7 +138,7 @@ const diagnostics = [
 ]
 
 const services = [
-  { label: "Diagnostiqueur immobilier", href: "/services/diagnostiqueur-immobilier", icon: FileCheck },
+  { label: "Diagnostiqueur immobilier", href: "/services/diagnostiqueur", icon: FileCheck },
   { label: "Électricien", href: "/services/electricien", icon: Zap },
   { label: "Plombier chauffagiste", href: "/services/plombier", icon: Flame },
   { label: "Couvreur", href: "/services/couvreur", icon: Home },
@@ -480,7 +480,7 @@ export default function DiagnosticsImmobiliersPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/services/diagnostiqueur-immobilier"
+                href="/services/diagnostiqueur"
                 className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-colors"
               >
                 <Search className="w-5 h-5" />

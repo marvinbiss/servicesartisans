@@ -401,6 +401,7 @@ export default function InscriptionPage() {
               </div>
               <div className="mt-6">
                 <button
+                  type="button"
                   onClick={handleGoogleLogin}
                   disabled={isLoading}
                   className="w-full flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 py-3 rounded-xl hover:bg-slate-700 transition-all text-white disabled:opacity-50"
@@ -439,7 +440,7 @@ export default function InscriptionPage() {
                 <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
                   Comment ça marche ?
                 </Link>
-                <Link href="/faq" className="text-blue-400 hover:text-blue-300">
+                <Link href="/questions" className="text-blue-400 hover:text-blue-300">
                   Questions fréquentes
                 </Link>
                 <Link href="/devis" className="text-blue-400 hover:text-blue-300">

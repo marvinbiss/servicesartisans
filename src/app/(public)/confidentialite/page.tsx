@@ -164,7 +164,7 @@ export default async function ConfidentialitePage() {
               <li><strong>Droit à la limitation :</strong> limiter l'utilisation de vos données</li>
             </ul>
             <p>
-              Pour exercer ces droits, contactez-nous à : <strong>dpo@servicesartisans.fr</strong>
+              Pour exercer ces droits, contactez-nous à : <a href="mailto:dpo@servicesartisans.fr" className="text-blue-600 hover:underline"><strong>dpo@servicesartisans.fr</strong></a>
             </p>
 
             <h2>7. Cookies</h2>
@@ -205,11 +205,11 @@ export default async function ConfidentialitePage() {
               Pour toute question concernant cette politique ou vos données personnelles :
             </p>
             <ul>
-              <li><strong>Email :</strong> dpo@servicesartisans.fr</li>
+              <li><strong>Email :</strong> <a href="mailto:dpo@servicesartisans.fr" className="text-blue-600 hover:underline">dpo@servicesartisans.fr</a></li>
               <li><strong>Courrier :</strong> Coordonnées du DPO disponibles sur demande via le formulaire de contact.</li>
             </ul>
             <p>
-              Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).
+              Vous pouvez également introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.cnil.fr</a>).
             </p>
 
           </div>

@@ -114,6 +114,7 @@ export default function ConnexionPage() {
             {/* User type toggle */}
             <div className="bg-slate-800/50 rounded-2xl p-1.5 flex mb-8 border border-slate-700">
               <button
+                type="button"
                 onClick={() => setUserType('particulier')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'particulier'
@@ -125,6 +126,7 @@ export default function ConnexionPage() {
                 Particulier
               </button>
               <button
+                type="button"
                 onClick={() => setUserType('artisan')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'artisan'
@@ -246,6 +248,7 @@ export default function ConnexionPage() {
               </div>
               <div className="mt-6">
                 <button
+                  type="button"
                   onClick={handleGoogleLogin}
                   className="w-full flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 py-3 rounded-xl hover:bg-slate-700 transition-all text-white"
                 >
@@ -267,7 +270,7 @@ export default function ConnexionPage() {
                 <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
                   Comment ça marche ?
                 </Link>
-                <Link href="/faq" className="text-blue-400 hover:text-blue-300">
+                <Link href="/questions" className="text-blue-400 hover:text-blue-300">
                   Questions fréquentes
                 </Link>
                 <Link href="/contact" className="text-blue-400 hover:text-blue-300">

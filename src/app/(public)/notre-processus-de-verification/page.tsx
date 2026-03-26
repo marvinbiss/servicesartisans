@@ -204,7 +204,7 @@ export default async function NotreProcessusDeVerificationPage() {
             </h2>
             <p className="text-gray-600 mb-6">
               Vous avez constaté un problème avec un artisan référencé ?
-              Contactez-nous à <strong>{companyIdentity.email}</strong> ou
+              Contactez-nous à <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.email}</strong></a> ou
               via notre page de contact. Chaque signalement est examiné avec attention.
             </p>
             <Link
