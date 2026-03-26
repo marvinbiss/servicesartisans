@@ -242,9 +242,9 @@ export default function DevisBottomSheet({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          service_slug: formData.service || null,
-          city_slug: formData.ville || null,
-          step_reached: 2,
+          service: formData.service || null,
+          city: formData.ville || null,
+          step: 2,
         }),
       })
     } catch { /* non-blocking */ }
@@ -298,7 +298,7 @@ export default function DevisBottomSheet({
           description: formData.description,
           urgency: formData.urgence,
           nom: formData.nom,
-          telephone: formData.telephone,
+          telephone: formData.telephone.replace(/[\s.\-()]/g, ''),
           email: formData.email,
         }),
       })
@@ -568,6 +568,7 @@ export default function DevisBottomSheet({
                       </label>
                       <input
                         type="email"
+                        inputMode="email"
                         value={formData.email}
                         onChange={(e) => updateField('email', e.target.value)}
                         onBlur={() => {

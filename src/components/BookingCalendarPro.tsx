@@ -210,14 +210,14 @@ export default function BookingCalendarPro({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la réservation')
+        throw new Error(data.error?.message || 'Erreur lors de la réservation')
       }
 
-      setBookingResult({ bookingId: data.booking.id })
+      setBookingResult({ bookingId: data.data.booking.id })
 
       // Track successful booking
       BookingFunnel.completeBooking(
-        data.booking.id,
+        data.data.booking.id,
         artisanId,
         serviceName,
         selectedSlot.date,
@@ -640,6 +640,7 @@ export default function BookingCalendarPro({
                 <input
                   id="clientPhone"
                   type="tel"
+                  inputMode="tel"
                   required
                   autoComplete="tel"
                   value={formData.clientPhone}
@@ -659,6 +660,7 @@ export default function BookingCalendarPro({
                 <input
                   id="clientEmail"
                   type="email"
+                  inputMode="email"
                   required
                   autoComplete="email"
                   value={formData.clientEmail}

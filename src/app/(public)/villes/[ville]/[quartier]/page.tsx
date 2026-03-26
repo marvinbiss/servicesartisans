@@ -327,7 +327,7 @@ export default async function QuartierPage({ params }: PageProps) {
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
-                href={`/services/${service.slug}/${villeSlug}/${quartierSlug}`}
+                href={`/services/${service.slug}/${villeSlug}`}
                 className={`rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-accent-50 border-2 border-emerald-200' : 'bg-white border border-sand-200'}`}
               >
                 <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">{service.name}</h3>
@@ -625,7 +625,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services à {quartierName}</h3>
               <div className="space-y-2">
                 {services.slice(0, 6).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}/${quartierSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {quartierName}
                   </Link>

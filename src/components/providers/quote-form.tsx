@@ -18,7 +18,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
     client_email: '',
     client_phone: '',
     description: '',
-    urgency: 'normal',
+    urgency: 'mois',
     city: '',
     postal_code: '',
   })
@@ -95,6 +95,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
 
       <Input
         type="tel"
+        inputMode="tel"
         placeholder="Téléphone *"
         value={formData.client_phone}
         onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
@@ -103,6 +104,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
 
       <Input
         type="email"
+        inputMode="email"
         placeholder="Email *"
         value={formData.client_email}
         onChange={(e) => setFormData({ ...formData, client_email: e.target.value })}
@@ -122,9 +124,9 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
         onChange={(e) => setFormData({ ...formData, urgency: e.target.value })}
         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
       >
-        <option value="normal">Normal</option>
+        <option value="mois">Normal (ce mois-ci)</option>
+        <option value="semaine">Cette semaine</option>
         <option value="urgent">Urgent (sous 48h)</option>
-        <option value="very_urgent">Très urgent (sous 24h)</option>
       </select>
 
       <div className="grid grid-cols-2 gap-2">

@@ -50,10 +50,6 @@ const FAQTracker = dynamic(
   { ssr: false }
 )
 
-const ProactiveChatPrompt = dynamic(
-  () => import('@/components/ProactiveChatPrompt'),
-  { ssr: false }
-)
 
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {
@@ -1032,7 +1028,6 @@ export default async function ServicePage({ params }: PageProps) {
       <MicroConversions pageType="service" serviceSlug={serviceSlug} />
       <FAQTracker pageType="service" serviceSlug={serviceSlug} />
 
-      <ProactiveChatPrompt serviceSlug={serviceSlug} />
     </div>
   )
 }

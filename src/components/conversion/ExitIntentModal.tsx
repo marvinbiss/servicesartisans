@@ -142,10 +142,12 @@ export default function ExitIntentModal() {
 
   const handleResume = useCallback(() => {
     close()
-    // Scroll to the form
+    // Scroll to the form if present, otherwise redirect to /devis
     const form = document.querySelector('form')
     if (form) {
       form.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    } else {
+      window.location.href = '/devis'
     }
   }, [close])
 
@@ -158,7 +160,7 @@ export default function ExitIntentModal() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="exit-intent-title"
@@ -174,7 +176,7 @@ export default function ExitIntentModal() {
       <div
         ref={modalRef}
         tabIndex={-1}
-        className="relative bg-white rounded-3xl shadow-premium border border-sand-200 max-w-md w-full p-8 animate-scale-in-bounce outline-none"
+        className="relative bg-white rounded-3xl shadow-premium border border-sand-200 max-w-md w-full p-8 animate-scale-in-bounce outline-none max-h-[90vh] overflow-y-auto"
       >
         {/* Close button */}
         <button

@@ -384,9 +384,9 @@ export default function DevisForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          service_slug: formData.service || null,
-          city_slug: formData.ville || null,
-          step_reached: 2,
+          service: formData.service || null,
+          city: formData.ville || null,
+          step: 2,
         }),
       })
     } catch {
@@ -499,7 +499,7 @@ export default function DevisForm({
           ville: formData.ville,
           nom: formData.nom,
           email: formData.email,
-          telephone: formData.telephone,
+          telephone: formData.telephone.replace(/[\s.\-()]/g, ''),
         }),
       })
 
@@ -836,6 +836,7 @@ export default function DevisForm({
                   <input
                     id="email"
                     type="email"
+                    inputMode="email"
                     autoComplete="email"
                     placeholder="jean.dupont@email.fr"
                     value={formData.email}

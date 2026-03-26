@@ -52,10 +52,6 @@ const MicroConversions = dynamic(
   { ssr: false }
 )
 
-const ProactiveChatPrompt = dynamic(
-  () => import('@/components/ProactiveChatPrompt'),
-  { ssr: false }
-)
 
 const CallbackRequest = dynamic(
   () => import('@/components/CallbackRequest'),
@@ -669,7 +665,6 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
       <MicroConversions pageType="service-ville" serviceSlug={serviceSlug} cityName={location.name} />
 
-      <ProactiveChatPrompt serviceSlug={serviceSlug} citySlug={locationSlug} />
     </>
   )
 }

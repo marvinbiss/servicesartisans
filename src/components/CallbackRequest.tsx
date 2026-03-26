@@ -42,7 +42,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service: serviceSlug || 'general',
-          telephone: phone.trim(),
+          telephone: phone.trim().replace(/[\s.\-()]/g, ''),
           description: 'Demande de rappel',
           urgency: 'semaine',
           ...(cityName && { ville: cityName }),

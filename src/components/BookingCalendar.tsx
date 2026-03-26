@@ -94,7 +94,7 @@ export default function BookingCalendar({
       }
 
       const data = await response.json()
-      setAvailableSlots(data.slots || {})
+      setAvailableSlots(data.data?.slots || {})
     } catch (err) {
       console.error('Error fetching slots:', err)
       setError('Impossible de charger les disponibilités. Veuillez réessayer.')
@@ -154,7 +154,7 @@ export default function BookingCalendar({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la réservation')
+        throw new Error(data.error?.message || 'Erreur lors de la réservation')
       }
 
       const bookingData: BookingData = {
@@ -420,6 +420,7 @@ export default function BookingCalendar({
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="tel"
+                  inputMode="tel"
                   required
                   value={formData.clientPhone}
                   onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
@@ -437,6 +438,7 @@ export default function BookingCalendar({
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="email"
+                  inputMode="email"
                   required
                   value={formData.clientEmail}
                   onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}

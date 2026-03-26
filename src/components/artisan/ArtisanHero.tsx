@@ -212,7 +212,17 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                     artisanName: artisan.business_name || displayName,
                     source: 'hero_cta',
                   })
-                  setIsDevisOpen(true)
+                  const isDesktop = window.matchMedia('(min-width: 768px)').matches
+                  if (isDesktop) {
+                    const devisSection = document.getElementById('devis')
+                    if (devisSection) {
+                      devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    } else {
+                      window.location.href = '/devis'
+                    }
+                  } else {
+                    setIsDevisOpen(true)
+                  }
                 }}
                 className="w-full sm:w-auto py-3.5 px-8 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta hover:shadow-lg transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
                 aria-label={`Demander un devis gratuit à ${displayName}`}

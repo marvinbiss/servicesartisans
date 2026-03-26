@@ -77,7 +77,7 @@ export function useLeadSubmit(
           body: JSON.stringify({
             service: context.metierSlug || 'general',
             urgency: 'semaine',
-            telephone: leadPhone,
+            telephone: leadPhone.replace(/[\s.\-()]/g, ''),
             nom: leadName || undefined,
             email: leadEmail || undefined,
             ville: context.ville || undefined,
@@ -135,7 +135,7 @@ export function useLeadSubmit(
           body: JSON.stringify({
             service: context.metierSlug || 'general',
             urgency: 'semaine',
-            telephone: callbackPhone,
+            telephone: callbackPhone.replace(/[\s.\-()]/g, ''),
             ville: context.ville || undefined,
             description: `Demande de rappel — ${context.metier}${context.ville ? ` à ${context.ville}` : ''}`,
           }),

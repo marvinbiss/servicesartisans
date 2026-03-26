@@ -45,8 +45,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
         const response = await fetch(`/api/reviews?artisanId=${artisanId}`)
         if (!response.ok) throw new Error('Failed to fetch reviews')
         const data = await response.json()
-        setReviews(data.reviews || [])
-        setStats(data.stats || null)
+        setReviews(data.data?.reviews || [])
+        setStats(data.data?.stats || null)
       } catch (error) {
         console.error('Error fetching reviews:', error)
       } finally {

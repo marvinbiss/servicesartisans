@@ -28,7 +28,17 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
       artisanName: artisan.business_name || displayName,
       source: 'quick_quote_block',
     })
-    setIsSheetOpen(true)
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+    if (isDesktop) {
+      const devisSection = document.getElementById('devis')
+      if (devisSection) {
+        devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      } else {
+        window.location.href = '/devis'
+      }
+    } else {
+      setIsSheetOpen(true)
+    }
   }
 
   return (

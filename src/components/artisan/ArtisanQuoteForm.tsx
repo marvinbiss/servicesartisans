@@ -30,7 +30,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
   const [formData, setFormData] = useState<FormData>({
     description: '',
-    urgence: 'Ce mois-ci',
+    urgence: 'mois',
     nom: '',
     telephone: '',
     email: '',
@@ -195,10 +195,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                   onChange={e => updateField('urgence', e.target.value)}
                   className="w-full rounded-lg border border-sand-200 bg-white px-3 py-2.5 text-sm text-charcoal-900 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 hover:border-primary-300"
                 >
-                  <option value="Pas urgent">Pas urgent</option>
-                  <option value="Ce mois-ci">Ce mois-ci</option>
-                  <option value="Cette semaine">Cette semaine</option>
-                  <option value="Urgent (sous 24h)">Urgent (sous 24h)</option>
+                  <option value="flexible">Pas urgent</option>
+                  <option value="mois">Ce mois-ci</option>
+                  <option value="semaine">Cette semaine</option>
+                  <option value="urgent">Urgent (sous 24h)</option>
                 </select>
               </div>
 
@@ -230,6 +230,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                   <input
                     id="devis-telephone"
                     type="tel"
+                    inputMode="tel"
                     placeholder="06 XX XX XX XX"
                     value={formData.telephone}
                     onChange={e => updateField('telephone', e.target.value)}
@@ -252,6 +253,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 <input
                   id="devis-email"
                   type="email"
+                  inputMode="email"
                   placeholder="votre@email.fr"
                   value={formData.email}
                   onChange={e => updateField('email', e.target.value)}
