@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, ShieldCheck, CheckCircle, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
-import { BookingFunnel } from '@/lib/analytics/tracking'
+import { BookingFunnel, trackEvent } from '@/lib/analytics/tracking'
 
 function slugify(text: string): string {
   return text
@@ -89,7 +89,11 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             } : {}}
             transition={shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
             onClick={() => {
-              BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'sidebar_devis')
+              trackEvent('artisan_devis_click', {
+                artisanId: artisan.id,
+                artisanName: artisan.business_name || '',
+                source: 'sidebar_devis',
+              })
               window.location.href = getDevisUrl(artisan)
             }}
             className="w-full py-4 px-5 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
@@ -219,7 +223,11 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           initial="initial"
           animate="pulse"
           onClick={() => {
-            BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+            trackEvent('artisan_devis_click', {
+              artisanId: artisan.id,
+              artisanName: artisan.business_name || '',
+              source: 'mobile_cta',
+            })
             window.location.href = getDevisUrl(artisan)
           }}
           className="w-full py-4 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"

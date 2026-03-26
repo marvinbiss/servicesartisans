@@ -1,7 +1,6 @@
 /**
  * Real-time Chat Service using Supabase Realtime
  * WebSocket-based messaging between clients and artisans
- * Enhanced with edit, delete, reactions, threading, and file upload
  */
 
 import { getSupabaseClient } from '@/lib/supabase/client'
@@ -18,48 +17,13 @@ export interface ChatMessage {
   file_url?: string
   read_at?: string
   created_at: string
-  // Enhanced fields
-  edited_at?: string
-  deleted_at?: string
   reply_to_message_id?: string
   rich_content?: {
     mentions?: string[]
     links?: string[]
     formatted?: boolean
   }
-  // Related data
   reply_to?: ChatMessage
-  attachments?: MessageAttachment[]
-  reactions?: MessageReaction[]
-  read_receipts?: ReadReceipt[]
-}
-
-export interface MessageAttachment {
-  id: string
-  message_id: string
-  file_url: string
-  file_name: string
-  file_size: number
-  mime_type: string
-  thumbnail_url?: string
-  duration?: number
-  transcription?: string
-  created_at: string
-}
-
-export interface MessageReaction {
-  id: string
-  message_id: string
-  user_id: string
-  emoji: string
-  created_at: string
-}
-
-export interface ReadReceipt {
-  id: string
-  message_id: string
-  user_id: string
-  read_at: string
 }
 
 export interface Conversation {
@@ -72,15 +36,6 @@ export interface Conversation {
   last_message_at: string
   unread_count: number
   created_at: string
-  // Settings
-  settings?: ConversationSettings
-}
-
-export interface ConversationSettings {
-  is_muted: boolean
-  is_archived: boolean
-  is_pinned: boolean
-  notification_preference: 'all' | 'mentions' | 'none'
 }
 
 export interface TypingIndicator {
@@ -88,18 +43,6 @@ export interface TypingIndicator {
   user_type: 'client' | 'artisan'
   is_typing: boolean
   timestamp: number
-}
-
-export interface QuickReplyTemplate {
-  id: string
-  user_id: string
-  title: string
-  content: string
-  shortcut?: string
-  category?: string
-  usage_count: number
-  is_active: boolean
-  created_at: string
 }
 
 class ChatService {
@@ -121,11 +64,8 @@ class ChatService {
     callbacks: {
       onMessage: (message: ChatMessage) => void
       onMessageUpdate?: (message: ChatMessage) => void
-      onMessageDelete?: (messageId: string) => void
-      onReaction?: (reaction: MessageReaction, action: 'add' | 'remove') => void
       onTyping?: (indicator: TypingIndicator) => void
       onPresence?: (users: string[]) => void
-      onReadReceipt?: (receipt: ReadReceipt) => void
     }
   ): () => void {
     const channelName = `conversation:${conversationId}`
@@ -158,52 +98,8 @@ class ChatService {
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          const message = payload.new as ChatMessage
-          if (message.deleted_at && callbacks.onMessageDelete) {
-            callbacks.onMessageDelete(message.id)
-          } else if (callbacks.onMessageUpdate) {
-            callbacks.onMessageUpdate(message)
-          }
-        }
-      )
-      // Reactions
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'message_reactions',
-        },
-        (payload) => {
-          if (callbacks.onReaction) {
-            callbacks.onReaction(payload.new as MessageReaction, 'add')
-          }
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'DELETE',
-          schema: 'public',
-          table: 'message_reactions',
-        },
-        (payload) => {
-          if (callbacks.onReaction) {
-            callbacks.onReaction(payload.old as MessageReaction, 'remove')
-          }
-        }
-      )
-      // Read receipts
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'message_read_receipts',
-        },
-        (payload) => {
-          if (callbacks.onReadReceipt) {
-            callbacks.onReadReceipt(payload.new as ReadReceipt)
+          if (callbacks.onMessageUpdate) {
+            callbacks.onMessageUpdate(payload.new as ChatMessage)
           }
         }
       )
@@ -285,121 +181,6 @@ class ChatService {
   }
 
   /**
-   * Edit a message
-   */
-  async editMessage(
-    messageId: string,
-    newContent: string,
-    userId: string
-  ): Promise<ChatMessage | null> {
-    const { data, error } = await this.supabase
-      .from('messages')
-      .update({
-        content: newContent,
-        edited_at: new Date().toISOString(),
-      })
-      .eq('id', messageId)
-      .eq('sender_id', userId) // Only allow editing own messages
-      .is('deleted_at', null) // Can't edit deleted messages
-      .select()
-      .single()
-
-    if (error) {
-      logger.error('Error editing message', error)
-      return null
-    }
-
-    return data as ChatMessage
-  }
-
-  /**
-   * Soft delete a message
-   */
-  async deleteMessage(messageId: string, userId: string): Promise<boolean> {
-    const { error } = await this.supabase
-      .from('messages')
-      .update({ deleted_at: new Date().toISOString() })
-      .eq('id', messageId)
-      .eq('sender_id', userId) // Only allow deleting own messages
-
-    if (error) {
-      logger.error('Error deleting message', error)
-      return false
-    }
-
-    return true
-  }
-
-  /**
-   * Add a reaction to a message
-   */
-  async addReaction(
-    messageId: string,
-    userId: string,
-    emoji: string
-  ): Promise<MessageReaction | null> {
-    const { data, error } = await this.supabase
-      .from('message_reactions')
-      .insert({
-        message_id: messageId,
-        user_id: userId,
-        emoji,
-      })
-      .select()
-      .single()
-
-    if (error) {
-      // Might be duplicate, which is fine
-      if (error.code !== '23505') {
-        logger.error('Error adding reaction', error)
-      }
-      return null
-    }
-
-    return data as MessageReaction
-  }
-
-  /**
-   * Remove a reaction from a message
-   */
-  async removeReaction(
-    messageId: string,
-    userId: string,
-    emoji: string
-  ): Promise<boolean> {
-    const { error } = await this.supabase
-      .from('message_reactions')
-      .delete()
-      .eq('message_id', messageId)
-      .eq('user_id', userId)
-      .eq('emoji', emoji)
-
-    if (error) {
-      logger.error('Error removing reaction', error)
-      return false
-    }
-
-    return true
-  }
-
-  /**
-   * Get reactions for a message
-   */
-  async getReactions(messageId: string): Promise<MessageReaction[]> {
-    const { data, error } = await this.supabase
-      .from('message_reactions')
-      .select('id, message_id, user_id, emoji, created_at')
-      .eq('message_id', messageId)
-
-    if (error) {
-      logger.error('Error fetching reactions', error)
-      return []
-    }
-
-    return data as MessageReaction[]
-  }
-
-  /**
    * Broadcast typing indicator
    */
   sendTypingIndicator(
@@ -436,33 +217,6 @@ class ChatService {
   }
 
   /**
-   * Mark a specific message as read
-   */
-  async markMessageAsRead(
-    messageId: string,
-    userId: string
-  ): Promise<ReadReceipt | null> {
-    const { data, error } = await this.supabase
-      .from('message_read_receipts')
-      .insert({
-        message_id: messageId,
-        user_id: userId,
-      })
-      .select()
-      .single()
-
-    if (error) {
-      // Might be duplicate, which is fine
-      if (error.code !== '23505') {
-        logger.error('Error marking message as read', error)
-      }
-      return null
-    }
-
-    return data as ReadReceipt
-  }
-
-  /**
    * Mark all messages in a conversation as read
    */
   async markMessagesAsRead(
@@ -478,7 +232,7 @@ class ChatService {
   }
 
   /**
-   * Get conversation messages with pagination and attachments
+   * Get conversation messages with pagination
    */
   async getMessages(
     conversationId: string,
@@ -488,13 +242,9 @@ class ChatService {
     let query = this.supabase
       .from('messages')
       .select(`
-        id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, edited_at, deleted_at, reply_to_message_id, rich_content,
-        attachments:message_attachments(id, message_id, file_url, file_name, file_size, mime_type, thumbnail_url, duration, transcription, created_at),
-        reactions:message_reactions(id, message_id, user_id, emoji, created_at),
-        read_receipts:message_read_receipts(id, message_id, user_id, read_at)
+        id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, reply_to_message_id, rich_content
       `)
       .eq('conversation_id', conversationId)
-      .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(limit)
 
@@ -522,12 +272,9 @@ class ChatService {
   ): Promise<ChatMessage[]> {
     const { data, error } = await this.supabase
       .from('messages')
-      .select('id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, edited_at, deleted_at, reply_to_message_id, rich_content')
+      .select('id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, reply_to_message_id, rich_content')
       .eq('conversation_id', conversationId)
-      .is('deleted_at', null)
-      .textSearch('search_vector', query, {
-        config: 'french',
-      })
+      .ilike('content', `%${query}%`)
       .order('created_at', { ascending: false })
       .limit(limit)
 
@@ -586,116 +333,27 @@ class ChatService {
    */
   async getConversations(
     userId: string,
-    userType: 'client' | 'artisan',
-    options?: {
-      includeArchived?: boolean
-      pinnedFirst?: boolean
-    }
+    userType: 'client' | 'artisan'
   ): Promise<Conversation[]> {
     const column = userType === 'client' ? 'client_id' : 'provider_id'
 
-    let query = this.supabase
+    const { data, error } = await this.supabase
       .from('conversations')
       .select(`
         id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at,
         client:profiles!client_id(id, full_name),
-        provider:providers!provider_id(id, name, avatar_url),
-        settings:conversation_settings(is_muted, is_archived, is_pinned, notification_preference)
+        provider:providers!provider_id(id, name)
       `)
       .eq(column, userId)
-
-    if (!options?.includeArchived) {
-      query = query.eq('status', 'active')
-    }
-
-    query = query.order('last_message_at', { ascending: false })
-
-    const { data, error } = await query
+      .eq('status', 'active')
+      .order('last_message_at', { ascending: false })
 
     if (error) {
       logger.error('Error fetching conversations', error)
       return []
     }
 
-    let conversations = data as Conversation[]
-
-    // Sort pinned first if requested
-    if (options?.pinnedFirst) {
-      conversations = conversations.sort((a, b) => {
-        const aSettings = Array.isArray(a.settings) ? a.settings[0] : a.settings
-        const bSettings = Array.isArray(b.settings) ? b.settings[0] : b.settings
-        const aPinned = aSettings?.is_pinned || false
-        const bPinned = bSettings?.is_pinned || false
-        if (aPinned && !bPinned) return -1
-        if (!aPinned && bPinned) return 1
-        return 0
-      })
-    }
-
-    return conversations
-  }
-
-  /**
-   * Update conversation settings
-   */
-  async updateConversationSettings(
-    conversationId: string,
-    userId: string,
-    settings: Partial<ConversationSettings>
-  ): Promise<boolean> {
-    const { error } = await this.supabase
-      .from('conversation_settings')
-      .upsert({
-        conversation_id: conversationId,
-        user_id: userId,
-        ...settings,
-        updated_at: new Date().toISOString(),
-      })
-
-    if (error) {
-      logger.error('Error updating conversation settings', error)
-      return false
-    }
-
-    return true
-  }
-
-  /**
-   * Archive a conversation
-   */
-  async archiveConversation(
-    conversationId: string,
-    userId: string
-  ): Promise<boolean> {
-    return this.updateConversationSettings(conversationId, userId, {
-      is_archived: true,
-    })
-  }
-
-  /**
-   * Pin/unpin a conversation
-   */
-  async togglePinConversation(
-    conversationId: string,
-    userId: string,
-    isPinned: boolean
-  ): Promise<boolean> {
-    return this.updateConversationSettings(conversationId, userId, {
-      is_pinned: isPinned,
-    })
-  }
-
-  /**
-   * Mute/unmute a conversation
-   */
-  async toggleMuteConversation(
-    conversationId: string,
-    userId: string,
-    isMuted: boolean
-  ): Promise<boolean> {
-    return this.updateConversationSettings(conversationId, userId, {
-      is_muted: isMuted,
-    })
+    return data as Conversation[]
   }
 
   /**
@@ -744,80 +402,6 @@ class ChatService {
       .getPublicUrl(data.path)
 
     return { url: publicUrl }
-  }
-
-  /**
-   * Get quick reply templates
-   */
-  async getQuickReplies(userId: string): Promise<QuickReplyTemplate[]> {
-    const { data, error } = await this.supabase
-      .from('quick_reply_templates')
-      .select('id, user_id, title, content, shortcut, category, usage_count, is_active, created_at')
-      .eq('user_id', userId)
-      .eq('is_active', true)
-      .order('usage_count', { ascending: false })
-
-    if (error) {
-      logger.error('Error fetching quick replies', error)
-      return []
-    }
-
-    return data as QuickReplyTemplate[]
-  }
-
-  /**
-   * Create a quick reply template
-   */
-  async createQuickReply(
-    userId: string,
-    template: Omit<QuickReplyTemplate, 'id' | 'user_id' | 'usage_count' | 'is_active' | 'created_at'>
-  ): Promise<QuickReplyTemplate | null> {
-    const { data, error } = await this.supabase
-      .from('quick_reply_templates')
-      .insert({
-        user_id: userId,
-        ...template,
-      })
-      .select()
-      .single()
-
-    if (error) {
-      logger.error('Error creating quick reply', error)
-      return null
-    }
-
-    return data as QuickReplyTemplate
-  }
-
-  /**
-   * Use a quick reply (increment usage count)
-   */
-  async useQuickReply(templateId: string): Promise<void> {
-    await this.supabase
-      .from('quick_reply_templates')
-      .update({
-        usage_count: this.supabase.rpc('increment', { row_id: templateId }),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', templateId)
-  }
-
-  /**
-   * Delete a quick reply template
-   */
-  async deleteQuickReply(templateId: string, userId: string): Promise<boolean> {
-    const { error } = await this.supabase
-      .from('quick_reply_templates')
-      .delete()
-      .eq('id', templateId)
-      .eq('user_id', userId)
-
-    if (error) {
-      logger.error('Error deleting quick reply', error)
-      return false
-    }
-
-    return true
   }
 
   /**

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Send, Paperclip, Image, Check, CheckCheck } from 'lucide-react'
+import { Send, Check, CheckCheck } from 'lucide-react'
 import { Button, Input } from '@/components/ui'
 import NextImage from 'next/image'
 import { chatService, ChatMessage, TypingIndicator } from '@/lib/realtime/chat-service'
@@ -96,15 +96,20 @@ export function ChatWindow({
     const content = newMessage.trim()
     setNewMessage('')
 
-    await chatService.sendMessage(
-      conversationId,
-      content,
-      currentUserId,
-      currentUserType
-    )
-
-    setIsSending(false)
-    inputRef.current?.focus()
+    try {
+      await chatService.sendMessage(
+        conversationId,
+        content,
+        currentUserId,
+        currentUserType
+      )
+    } catch {
+      // Restore the message so the user can retry
+      setNewMessage(content)
+    } finally {
+      setIsSending(false)
+      inputRef.current?.focus()
+    }
   }
 
   // Handle typing indicator
@@ -283,20 +288,6 @@ export function ChatWindow({
           }}
           className="flex items-center gap-2"
         >
-          <button
-            type="button"
-            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            title="Joindre un fichier"
-          >
-            <Paperclip className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            title="Envoyer une image"
-          >
-            <Image className="w-5 h-5" />
-          </button>
           <Input
             ref={inputRef}
             type="text"

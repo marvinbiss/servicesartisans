@@ -6,6 +6,9 @@
  *
  * Supported events:
  * - artisan_profile_view, phone_reveal, phone_click (artisan interactions)
+ * - artisan_devis_click, artisan_email_click, artisan_website_click (artisan CTA clicks)
+ * - header_devis_click, blog_cta_click (site-wide CTA clicks)
+ * - chat_opened, chat_message_sent, chat_lead_form_shown, estimation_lead_submitted (estimation chat)
  * - page_view (page navigation tracking with visitor_id)
  */
 
@@ -40,6 +43,15 @@ const ALLOWED_EVENTS = [
   'reminder_sent',
   'reminder_clicked',
   'devis_submitted',
+  'header_devis_click',
+  'artisan_devis_click',
+  'artisan_email_click',
+  'artisan_website_click',
+  'blog_cta_click',
+  'chat_opened',
+  'chat_message_sent',
+  'chat_lead_form_shown',
+  'estimation_lead_submitted',
 ] as const
 
 const analyticsSchema = z.object({
@@ -55,7 +67,7 @@ const analyticsSchema = z.object({
     timestamp: z.string().optional(),
     page_path: z.string().max(500).optional(),
     title: z.string().max(500).optional(),
-  }),
+  }).passthrough(),
   sessionId: z.string().max(100).optional(),
   visitorId: z.string().max(100).optional(),
   timestamp: z.string().optional(),
