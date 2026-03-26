@@ -15,7 +15,6 @@ src/app/api/artisans/[id]/route.ts
 src/app/api/verify/entreprise/route.ts
 
 # Legacy components
-src/components/ArtisanResultCard.tsx
 src/components/Map.tsx
 src/components/ProviderList.tsx
 src/components/artisan/ArtisanHero.tsx

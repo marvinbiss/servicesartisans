@@ -15,9 +15,9 @@ function computeProfileStrength(artisan: LegacyArtisan): { score: number; criter
   const criteria: CriterionResult[] = [
     { label: 'Nom', met: !!artisan.business_name, points: 10 },
     { label: 'Description', met: !!artisan.description && artisan.description.length > 50, points: 15 },
-    { label: 'Telephone', met: !!artisan.phone, points: 10 },
+    { label: 'Téléphone', met: !!artisan.phone, points: 10 },
     { label: 'Email', met: !!artisan.email, points: 5 },
-    { label: 'Verifie', met: !!artisan.is_verified, points: 15 },
+    { label: 'Vérifié', met: !!artisan.is_verified, points: 15 },
     { label: 'Services', met: artisan.services.length > 0, points: 10 },
     { label: 'Tarifs', met: artisan.service_prices.length > 0, points: 10 },
     { label: 'Portfolio', met: !!(artisan.portfolio && artisan.portfolio.length > 0), points: 10 },

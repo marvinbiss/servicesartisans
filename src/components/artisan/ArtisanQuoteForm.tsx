@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle, AlertCircle, Shield } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
@@ -283,9 +284,9 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 />
                 <span className="text-xs text-charcoal-500">
                   J&apos;accepte que mes données soient utilisées pour traiter ma demande de devis. Consultez notre{' '}
-                  <a href="/confidentialite" className="underline hover:text-primary-500">
+                  <Link href="/confidentialite" className="underline hover:text-primary-500">
                     politique de confidentialité
-                  </a>.
+                  </Link>.
                 </span>
               </label>
 

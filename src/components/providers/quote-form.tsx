@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Button, Input, Textarea } from '@/components/ui'
 
 interface QuoteFormProps {
@@ -159,9 +160,9 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
         />
         <span className="text-xs text-gray-500">
           J&apos;accepte que mes données soient utilisées pour traiter ma demande de devis. Consultez notre{' '}
-          <a href="/confidentialite" className="underline hover:text-blue-600">
+          <Link href="/confidentialite" className="underline hover:text-blue-600">
             politique de confidentialité
-          </a>.
+          </Link>.
         </span>
       </label>
 

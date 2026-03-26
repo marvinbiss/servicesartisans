@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button, Input } from '@/components/ui'
@@ -83,9 +84,9 @@ export function LoginForm() {
           <input type="checkbox" className="rounded border-gray-300" />
           <span className="text-sm text-gray-600">Se souvenir de moi</span>
         </label>
-        <a href="/mot-de-passe-oublie" className="text-sm text-blue-600 hover:underline">
+        <Link href="/mot-de-passe-oublie" className="text-sm text-blue-600 hover:underline">
           Mot de passe oublié ?
-        </a>
+        </Link>
       </div>
 
       <Button type="submit" disabled={isLoading} fullWidth>

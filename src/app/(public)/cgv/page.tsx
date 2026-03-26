@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
@@ -188,7 +189,7 @@ export default async function CGVPage() {
             <h2>10. Protection des données</h2>
             <p>
               Le traitement des données personnelles est régi par notre
-              <a href="/confidentialite"> Politique de Confidentialité</a>.
+              <Link href="/confidentialite"> Politique de Confidentialité</Link>.
             </p>
 
             <h2>11. Limitation de responsabilité</h2>

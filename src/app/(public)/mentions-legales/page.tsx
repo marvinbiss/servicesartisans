@@ -157,7 +157,7 @@ export default async function MentionsLegalesPage() {
             <h2>Protection des données personnelles</h2>
             <p>
               Le traitement des données personnelles collectées sur ce site est décrit
-              dans notre <a href="/confidentialite">politique de confidentialité</a>.
+              dans notre <Link href="/confidentialite">politique de confidentialité</Link>.
             </p>
             <p>
               Délégué à la protection des données (DPO) : <a href={`mailto:${companyIdentity.dpoEmail}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.dpoEmail}</strong></a>

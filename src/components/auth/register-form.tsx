@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button, Input } from '@/components/ui'
 
@@ -135,13 +136,13 @@ export function RegisterForm() {
         />
         <span className="text-sm text-gray-600">
           J'accepte les{' '}
-          <a href="/cgv" className="text-blue-600 underline">
+          <Link href="/cgv" className="text-blue-600 underline">
             conditions générales d'utilisation
-          </a>{' '}
+          </Link>{' '}
           et la{' '}
-          <a href="/confidentialite" className="text-blue-600 underline">
+          <Link href="/confidentialite" className="text-blue-600 underline">
             politique de confidentialité
-          </a>
+          </Link>
         </span>
       </label>
 

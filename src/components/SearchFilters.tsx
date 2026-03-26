@@ -51,7 +51,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
       role="search"
       aria-label="Filtres de recherche"
     >
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
         {/* Results count */}
         <div
           className="text-sm text-charcoal-600"
@@ -63,7 +63,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
         </div>
 
         {/* Filter controls */}
-        <div className="flex items-center gap-3" role="group" aria-label="Controles de tri et filtrage">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0" role="group" aria-label="Controles de tri et filtrage">
           {/* Sort dropdown */}
           <div className="relative">
             <label id={sortLabelId} className="sr-only">
@@ -127,7 +127,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
               }`}
             >
               <BadgeCheck className="w-4 h-4" aria-hidden="true" />
-              <span>Verifie</span>
+              <span>Vérifié</span>
             </button>
 
             {/* Rating filter */}
@@ -139,7 +139,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
                     updateFilter('minRating', filters.minRating === rating ? null : rating)
                   }
                   aria-pressed={filters.minRating === rating}
-                  aria-label={`Note minimum ${rating} etoiles`}
+                  aria-label={`Note minimum ${rating} étoiles`}
                   className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
                     filters.minRating === rating
                       ? 'bg-secondary-50 border-secondary-200 text-secondary-700'

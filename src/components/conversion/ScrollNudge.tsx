@@ -19,13 +19,14 @@ export default function ScrollNudge({
   threshold = 50,
   dismissAfter = 5000,
   sessionKey = 'sa:scroll-nudge-shown',
-  message = 'Comparez gratuitement jusqu\u2019a 3 devis',
+  message = 'Comparez gratuitement jusqu\u2019à 3 devis',
   onAction,
 }: ScrollNudgeProps) {
   const [visible, setVisible] = useState(false)
   const [exiting, setExiting] = useState(false)
   const hasShown = useRef(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     // Don't show on /devis pages or if already shown this session
@@ -52,7 +53,7 @@ export default function ScrollNudge({
         // Auto-dismiss
         timerRef.current = setTimeout(() => {
           setExiting(true)
-          setTimeout(() => setVisible(false), 300)
+          exitTimerRef.current = setTimeout(() => setVisible(false), 300)
         }, dismissAfter)
       }
     }
@@ -61,13 +62,15 @@ export default function ScrollNudge({
     return () => {
       window.removeEventListener('scroll', handleScroll)
       if (timerRef.current) clearTimeout(timerRef.current)
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current)
     }
   }, [threshold, dismissAfter, sessionKey])
 
   const handleDismiss = () => {
     if (timerRef.current) clearTimeout(timerRef.current)
+    if (exitTimerRef.current) clearTimeout(exitTimerRef.current)
     setExiting(true)
-    setTimeout(() => setVisible(false), 300)
+    exitTimerRef.current = setTimeout(() => setVisible(false), 300)
   }
 
   const handleTap = () => {

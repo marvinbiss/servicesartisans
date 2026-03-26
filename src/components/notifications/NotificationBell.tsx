@@ -64,12 +64,20 @@ export function NotificationBell({ userId }: NotificationBellProps) {
     }
   }
 
+  const [isProcessing, setIsProcessing] = useState(false)
+
   const markAllAsRead = async () => {
+    if (isProcessing) return
+    setIsProcessing(true)
     try {
-      await fetch('/api/notifications/read-all', { method: 'POST' })
-      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+      const response = await fetch('/api/notifications/read-all', { method: 'POST' })
+      if (response.ok) {
+        setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+      }
     } catch (error) {
       console.error('Error marking all as read:', error)
+    } finally {
+      setIsProcessing(false)
     }
   }
 
@@ -120,8 +128,8 @@ export function NotificationBell({ userId }: NotificationBellProps) {
           />
 
           {/* Dropdown */}
-          <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 max-h-96 overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h3 className="font-semibold">Notifications</h3>
               {unreadCount > 0 && (
                 <Button
@@ -149,15 +157,26 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                 notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ${
+                    role="button"
+                    tabIndex={0}
+                    className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${
                       !notification.read
-                        ? 'bg-blue-50 dark:bg-blue-900/20'
+                        ? 'bg-blue-50'
                         : ''
                     }`}
                     onClick={() => {
                       markAsRead(notification.id)
                       if (notification.link) {
                         window.location.href = notification.link
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        markAsRead(notification.id)
+                        if (notification.link) {
+                          window.location.href = notification.link
+                        }
                       }
                     }}
                   >
@@ -169,7 +188,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                         <p className="font-medium text-sm truncate">
                           {notification.title}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                        <p className="text-sm text-gray-600 line-clamp-2">
                           {notification.message}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">
@@ -192,13 +211,13 @@ export function NotificationBell({ userId }: NotificationBellProps) {
             </div>
 
             {notifications.length > 0 && (
-              <div className="p-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="p-2 border-t border-gray-200">
                 <Button
                   variant="ghost"
                   className="w-full text-sm"
                   onClick={() => {
                     setIsOpen(false)
-                    window.location.href = '/espace-client/notifications'
+                    window.location.href = '/espace-client/mes-demandes'
                   }}
                 >
                   Voir toutes les notifications

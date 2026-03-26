@@ -106,7 +106,7 @@ export default function StickyMobileCTA({
             {providerCount && providerCount > 0 && (
               <p className="text-[11px] text-charcoal-500 text-center mb-1.5">
                 <span className="inline-block w-1.5 h-1.5 bg-accent-500 rounded-full mr-1 animate-pulse" />
-                {providerCount} artisan{providerCount > 1 ? 's' : ''} disponible{providerCount > 1 ? 's' : ''} pres de chez vous
+                {providerCount} artisan{providerCount > 1 ? 's' : ''} disponible{providerCount > 1 ? 's' : ''} près de chez vous
               </p>
             )}
 

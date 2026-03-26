@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { CreditCard, Lock, Loader2, AlertCircle, Check } from 'lucide-react'
 
 interface BookingPaymentProps {
@@ -125,13 +126,13 @@ export default function BookingPayment({
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-4">
         En procédant au paiement, vous acceptez nos{' '}
-        <a href="/cgv" className="text-blue-600 hover:underline">
+        <Link href="/cgv" className="text-blue-600 hover:underline">
           conditions générales
-        </a>{' '}
+        </Link>{' '}
         et notre{' '}
-        <a href="/confidentialite" className="text-blue-600 hover:underline">
+        <Link href="/confidentialite" className="text-blue-600 hover:underline">
           politique de remboursement
-        </a>.
+        </Link>.
       </p>
     </div>
   )

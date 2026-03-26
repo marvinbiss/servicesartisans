@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface CookiePreferences {
@@ -306,12 +307,12 @@ export default function CookieConsent() {
 
             {/* Links */}
             <div className="mt-4 flex gap-4 text-xs text-gray-500">
-              <a href="/confidentialite" className="hover:text-blue-600 hover:underline">
+              <Link href="/confidentialite" className="hover:text-blue-600 hover:underline">
                 Politique de confidentialité
-              </a>
-              <a href="/mentions-legales" className="hover:text-blue-600 hover:underline">
+              </Link>
+              <Link href="/mentions-legales" className="hover:text-blue-600 hover:underline">
                 Mentions légales
-              </a>
+              </Link>
             </div>
           </div>
         </div>

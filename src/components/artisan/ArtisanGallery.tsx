@@ -93,12 +93,15 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
         </h2>
 
         {/* Airbnb-style photo grid */}
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-80 rounded-xl overflow-hidden">
+        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-60 md:h-80 rounded-xl overflow-hidden">
           {/* Main hero image */}
           <motion.div
             whileHover={{ scale: 1.02 }}
             className="col-span-2 row-span-2 relative cursor-pointer group"
+            role="button"
+            tabIndex={0}
             onClick={() => openLightbox(0)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(0) } }}
           >
             <Image
               src={getThumbnail(photos[0])}
@@ -130,7 +133,10 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
               key={photo.id}
               whileHover={{ scale: 1.05 }}
               className="relative cursor-pointer group overflow-hidden"
+              role="button"
+              tabIndex={0}
               onClick={() => openLightbox(index + 1)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(index + 1) } }}
             >
               <Image
                 src={getThumbnail(photo)}
@@ -202,7 +208,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                   {currentIndex + 1} / {photos.length}
                 </span>
                 <button
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                   onClick={closeLightbox}
                   aria-label="Fermer la galerie"
                 >

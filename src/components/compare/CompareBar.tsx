@@ -59,7 +59,7 @@ export function CompareBar() {
                     </span>
                     <button
                       onClick={() => removeFromCompare(provider.id)}
-                      className="p-0.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                      className="p-0.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors md:opacity-0 md:group-hover:opacity-100 focus:opacity-100"
                       aria-label={`Retirer ${provider.name}`}
                     >
                       <X className="w-3.5 h-3.5" />

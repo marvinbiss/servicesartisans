@@ -36,17 +36,17 @@ interface AdvancedSearchProps {
 
 const serviceCategories = [
   'Plomberie',
-  'Electricite',
+  'Électricité',
   'Serrurerie',
   'Peinture',
   'Menuiserie',
   'Carrelage',
-  'Maconnerie',
+  'Maçonnerie',
   'Chauffage',
   'Climatisation',
   'Jardinage',
   'Nettoyage',
-  'Demenagement',
+  'Déménagement',
 ]
 
 const sortOptions = [
@@ -54,7 +54,7 @@ const sortOptions = [
   { value: 'rating', label: 'Meilleures notes' },
   { value: 'reviews', label: 'Plus d\'avis' },
   { value: 'price_asc', label: 'Prix croissant' },
-  { value: 'price_desc', label: 'Prix decroissant' },
+  { value: 'price_desc', label: 'Prix décroissant' },
 ]
 
 export default function AdvancedSearch({
@@ -193,7 +193,7 @@ export default function AdvancedSearch({
     <div className={containerClass}>
       {/* Search Input */}
       <div className="relative">
-        <div className={`flex items-center gap-2 bg-white rounded-xl shadow-lg border border-gray-200 ${
+        <div className={`flex flex-col md:flex-row items-stretch md:items-center gap-0 bg-white rounded-xl shadow-lg border border-gray-200 ${
           variant === 'hero' ? 'p-2' : 'p-1'
         }`}>
           <div className="flex-1 flex items-center gap-3 px-4">
@@ -213,7 +213,8 @@ export default function AdvancedSearch({
             {query && (
               <button
                 onClick={() => setQuery('')}
-                className="p-1 hover:bg-gray-100 rounded-full"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 rounded-full"
+                aria-label="Effacer la recherche"
               >
                 <X className="w-4 h-4 text-gray-400" />
               </button>
@@ -221,45 +222,47 @@ export default function AdvancedSearch({
           </div>
 
           {/* Location Input */}
-          <div className="hidden md:flex items-center gap-2 px-4 border-l border-gray-200">
-            <MapPin className="w-5 h-5 text-gray-400" />
+          <div className="flex items-center gap-2 px-4 border-t md:border-t-0 md:border-l border-gray-200">
+            <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
             <input
               type="text"
               value={filters.location || ''}
               onChange={(e) => setFilters({ ...filters, location: e.target.value })}
               placeholder="Ville ou code postal"
-              className={`w-40 outline-none text-gray-900 placeholder-gray-400 ${
+              className={`w-full md:w-40 outline-none text-gray-900 placeholder-gray-400 ${
                 variant === 'hero' ? 'py-3' : 'py-2'
               }`}
             />
           </div>
 
-          {/* Filter Button */}
-          {showFilters && (
+          {/* Filter + Search Buttons */}
+          <div className="flex items-center gap-2 px-2 py-2 md:px-0 md:py-0">
+            {showFilters && (
+              <button
+                onClick={() => setShowFilterPanel(!showFilterPanel)}
+                className={`relative p-3 rounded-lg transition-colors ${
+                  showFilterPanel ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100 text-gray-600'
+                }`}
+              >
+                <Sliders className="w-5 h-5" />
+                {activeFiltersCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {/* Search Button */}
             <button
-              onClick={() => setShowFilterPanel(!showFilterPanel)}
-              className={`relative p-3 rounded-lg transition-colors ${
-                showFilterPanel ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100 text-gray-600'
+              onClick={handleSearch}
+              className={`flex-1 md:flex-none bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors ${
+                variant === 'hero' ? 'px-8 py-3' : 'px-6 py-2'
               }`}
             >
-              <Sliders className="w-5 h-5" />
-              {activeFiltersCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
-                  {activeFiltersCount}
-                </span>
-              )}
+              Rechercher
             </button>
-          )}
-
-          {/* Search Button */}
-          <button
-            onClick={handleSearch}
-            className={`bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors ${
-              variant === 'hero' ? 'px-8 py-3' : 'px-6 py-2'
-            }`}
-          >
-            Rechercher
-          </button>
+          </div>
         </div>
 
         {/* Suggestions Dropdown */}
@@ -270,14 +273,14 @@ export default function AdvancedSearch({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50"
+              className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50 max-h-[70vh] overflow-y-auto"
             >
               {/* Recent searches */}
               {recentSearches.length > 0 && (
                 <div className="p-3 border-b border-gray-100">
                   <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                     <History className="w-4 h-4" />
-                    Recherches recentes
+                    Recherches récentes
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {recentSearches.map((search, i) => (
@@ -350,7 +353,7 @@ export default function AdvancedSearch({
               {/* Service Category */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Categorie de service
+                  Catégorie de service
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {serviceCategories.map((service) => (
@@ -374,7 +377,7 @@ export default function AdvancedSearch({
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Rating Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -408,7 +411,7 @@ export default function AdvancedSearch({
                 {/* Availability Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Disponibilite
+                    Disponibilité
                   </label>
                   <select
                     value={filters.availability || ''}

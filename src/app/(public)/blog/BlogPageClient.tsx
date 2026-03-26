@@ -316,9 +316,9 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                 />
                 <span className="text-sm text-blue-100">
                   J&apos;accepte que mes données soient utilisées pour recevoir la newsletter. Consultez notre{' '}
-                  <a href="/confidentialite" className="underline hover:text-white">
+                  <Link href="/confidentialite" className="underline hover:text-white">
                     politique de confidentialité
-                  </a>.
+                  </Link>.
                 </span>
               </label>
               {error && (

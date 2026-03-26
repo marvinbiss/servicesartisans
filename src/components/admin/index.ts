@@ -10,4 +10,3 @@ export {
   ReportStatusBadge,
 } from './StatusBadge'
 export { ConfirmationModal, useConfirmation } from './ConfirmationModal'
-export { RefundModal } from './RefundModal'
