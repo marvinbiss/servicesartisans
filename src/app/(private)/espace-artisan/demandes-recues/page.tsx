@@ -83,9 +83,12 @@ export default function DemandesRecuesPage() {
         if (data.pagination) {
           setPagination(data.pagination)
         }
+      } else {
+        setToast({ message: 'Impossible de charger les demandes.', type: 'error' })
       }
     } catch (error) {
       console.error('Error fetching leads:', error)
+      setToast({ message: 'Erreur de connexion. Veuillez réessayer.', type: 'error' })
     } finally {
       setLoading(false)
     }
@@ -288,9 +291,9 @@ export default function DemandesRecuesPage() {
                         key={item.id}
                         className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-3 mb-2 flex-wrap">
                               <h3 className="font-semibold text-gray-900">{lead.service_name}</h3>
                               <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
                                 {statusInfo.label}
@@ -319,19 +322,20 @@ export default function DemandesRecuesPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 shrink-0">
                             {item.status === 'pending' && (
                               <>
                                 <button
                                   onClick={() => openDevisModal(item)}
-                                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
                                 >
                                   <Send className="w-4 h-4" />
-                                  Envoyer devis
+                                  <span className="hidden sm:inline">Envoyer</span> devis
                                 </button>
                                 <button
                                   onClick={() => openDetailModal(item)}
                                   className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                                  aria-label="Voir les détails"
                                 >
                                   <Eye className="w-5 h-5" />
                                 </button>
@@ -340,19 +344,19 @@ export default function DemandesRecuesPage() {
                             {(item.status === 'viewed' || item.status === 'quoted') && (
                               <button
                                 onClick={handleContact}
-                                className="flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                                className="flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm"
                               >
                                 <MessageSquare className="w-4 h-4" />
                                 Contacter
                               </button>
                             )}
                             {item.status === 'accepted' && (
-                              <span className="text-green-600 font-medium">Mission confirmée</span>
+                              <span className="text-green-600 font-medium text-sm">Mission confirmée</span>
                             )}
                             {item.status === 'declined' && (
-                              <span className="text-gray-500 font-medium">Refusé</span>
+                              <span className="text-gray-500 font-medium text-sm">Refusé</span>
                             )}
-                            <ChevronRight className="w-5 h-5 text-gray-400" />
+                            <ChevronRight className="w-5 h-5 text-gray-400 hidden sm:block" />
                           </div>
                         </div>
                       </div>
@@ -509,7 +513,7 @@ export default function DemandesRecuesPage() {
                   <p className="font-medium text-gray-900">{selectedLead.lead.client_name}</p>
                   <p className="flex items-center gap-2 text-gray-600">
                     <Phone className="w-4 h-4" />
-                    <a href={`tel:${selectedLead.lead.client_phone}`} className="text-blue-600 hover:underline">
+                    <a href={`tel:${selectedLead.lead.client_phone.replace(/[\s.\-()]/g, '')}`} className="text-blue-600 hover:underline">
                       {selectedLead.lead.client_phone}
                     </a>
                   </p>

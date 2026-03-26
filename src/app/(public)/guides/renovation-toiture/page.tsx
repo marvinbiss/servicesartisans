@@ -102,7 +102,7 @@ const services = [
   { label: "Couvreur", href: "/services/couvreur", icon: Home },
   { label: "Charpentier", href: "/services/charpentier", icon: Hammer },
   { label: "Zingueur", href: "/services/zingueur", icon: Hammer },
-  { label: "Isolation", href: "/services/isolation", icon: Shield },
+  { label: "Isolation", href: "/services/isolation-thermique", icon: Shield },
   { label: "Maçon", href: "/services/macon", icon: Building2 },
   { label: "Électricien", href: "/services/electricien", icon: Hammer },
 ]

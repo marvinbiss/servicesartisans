@@ -246,7 +246,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-white font-medium text-sm mb-0.5">Téléphone</p>
-                  <a href={`tel:${companyIdentity.phone.replace(/\s/g, '')}`} className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200">{companyIdentity.phone}</a>
+                  <a href={`tel:${companyIdentity.phone.replace(/[\s.\-()]/g, '')}`} className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200">{companyIdentity.phone}</a>
                   <PlatformPhoneLabel variant="inline" className="mt-1" />
                 </div>
               </div>

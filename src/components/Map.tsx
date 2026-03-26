@@ -98,7 +98,7 @@ export default function Map({
               )}
               {provider.phone && (
                 <a
-                  href={`tel:${provider.phone}`}
+                  href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
                   className="text-sm text-blue-600 hover:underline mt-1 block"
                 >
                   {provider.phone}

@@ -223,7 +223,7 @@ export default function AdminClaimsPage() {
                     {claim.claimant_phone && (
                       <div className="flex items-center gap-2 text-sm">
                         <Phone className="w-4 h-4 text-gray-400" />
-                        <a href={`tel:${claim.claimant_phone}`} className="text-gray-700">{claim.claimant_phone}</a>
+                        <a href={`tel:${claim.claimant_phone.replace(/[\s.\-()]/g, '')}`} className="text-gray-700">{claim.claimant_phone}</a>
                       </div>
                     )}
                     {claim.claimant_position && (

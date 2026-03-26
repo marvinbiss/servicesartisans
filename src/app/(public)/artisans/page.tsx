@@ -280,7 +280,7 @@ export default async function ArtisansPage() {
                     </Link>
                     {provider.phone && (
                       <a
-                        href={`tel:${provider.phone}`}
+                        href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
                         className="flex items-center justify-center gap-1.5 px-4 py-2.5 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-sm"
                       >
                         <Phone className="w-4 h-4" />

@@ -308,7 +308,7 @@ export default function AdminDevisPage() {
                                 </div>
                                 <div className="flex items-center gap-2 text-sm">
                                   <Phone className="w-4 h-4 text-gray-400" />
-                                  <a href={`tel:${demande.client_phone}`} className="text-blue-600 hover:underline">
+                                  <a href={`tel:${demande.client_phone.replace(/[\s.\-()]/g, '')}`} className="text-blue-600 hover:underline">
                                     {demande.client_phone}
                                   </a>
                                 </div>

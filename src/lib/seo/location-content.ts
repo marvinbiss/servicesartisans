@@ -1476,12 +1476,12 @@ const DENSITIES: { key: UrbanDensity; label: string }[] = [
 ]
 
 const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
-  'pre-1950': ['plombier', 'electricien', 'macon', 'couvreur', 'peintre-en-batiment', 'menuisier', 'chauffagiste', 'serrurier', 'carreleur', 'climaticien', 'vitrier', 'terrassier', 'paysagiste', 'facade', 'domoticien'],
-  '1950-1980': ['electricien', 'chauffagiste', 'plombier', 'peintre-en-batiment', 'climaticien', 'menuisier', 'carreleur', 'macon', 'couvreur', 'serrurier', 'vitrier', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
-  '1980-2000': ['peintre-en-batiment', 'menuisier', 'chauffagiste', 'climaticien', 'plombier', 'electricien', 'carreleur', 'serrurier', 'couvreur', 'macon', 'vitrier', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
-  'post-2000': ['climaticien', 'domoticien', 'serrurier', 'plombier', 'electricien', 'peintre-en-batiment', 'menuisier', 'carreleur', 'chauffagiste', 'vitrier', 'couvreur', 'macon', 'facade', 'terrassier', 'paysagiste'],
-  'haussmannien': ['peintre-en-batiment', 'plombier', 'electricien', 'menuisier', 'macon', 'serrurier', 'chauffagiste', 'carreleur', 'couvreur', 'vitrier', 'climaticien', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
-  'mixte': ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment', 'menuisier', 'climaticien', 'carreleur', 'couvreur', 'macon', 'vitrier', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
+  'pre-1950': ['plombier', 'electricien', 'macon', 'couvreur', 'peintre-en-batiment', 'menuisier', 'chauffagiste', 'serrurier', 'carreleur', 'climaticien', 'vitrier', 'terrassier', 'paysagiste', 'facadier', 'domoticien'],
+  '1950-1980': ['electricien', 'chauffagiste', 'plombier', 'peintre-en-batiment', 'climaticien', 'menuisier', 'carreleur', 'macon', 'couvreur', 'serrurier', 'vitrier', 'facadier', 'terrassier', 'paysagiste', 'domoticien'],
+  '1980-2000': ['peintre-en-batiment', 'menuisier', 'chauffagiste', 'climaticien', 'plombier', 'electricien', 'carreleur', 'serrurier', 'couvreur', 'macon', 'vitrier', 'facadier', 'terrassier', 'paysagiste', 'domoticien'],
+  'post-2000': ['climaticien', 'domoticien', 'serrurier', 'plombier', 'electricien', 'peintre-en-batiment', 'menuisier', 'carreleur', 'chauffagiste', 'vitrier', 'couvreur', 'macon', 'facadier', 'terrassier', 'paysagiste'],
+  'haussmannien': ['peintre-en-batiment', 'plombier', 'electricien', 'menuisier', 'macon', 'serrurier', 'chauffagiste', 'carreleur', 'couvreur', 'vitrier', 'climaticien', 'facadier', 'terrassier', 'paysagiste', 'domoticien'],
+  'mixte': ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment', 'menuisier', 'climaticien', 'carreleur', 'couvreur', 'macon', 'vitrier', 'facadier', 'terrassier', 'paysagiste', 'domoticien'],
 }
 
 const ERA_ISSUES: Record<BuildingEra, string[]> = {
@@ -2401,12 +2401,12 @@ const DEPT_CLIMATE_OVERRIDES: Record<string, ClimateZone> = {
 }
 
 const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
-  'oceanique': ['couvreur', 'peintre-en-batiment', 'plombier', 'chauffagiste', 'menuisier', 'electricien', 'macon', 'facade', 'serrurier', 'climaticien', 'carreleur', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
-  'continental': ['chauffagiste', 'plombier', 'electricien', 'couvreur', 'menuisier', 'macon', 'peintre-en-batiment', 'climaticien', 'serrurier', 'facade', 'carreleur', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
-  'mediterraneen': ['climaticien', 'plombier', 'electricien', 'peintre-en-batiment', 'carreleur', 'macon', 'serrurier', 'facade', 'couvreur', 'menuisier', 'chauffagiste', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
-  'montagnard': ['chauffagiste', 'couvreur', 'plombier', 'menuisier', 'macon', 'electricien', 'peintre-en-batiment', 'serrurier', 'facade', 'vitrier', 'climaticien', 'carreleur', 'terrassier', 'paysagiste', 'domoticien'],
-  'semi-oceanique': ['plombier', 'electricien', 'chauffagiste', 'peintre-en-batiment', 'menuisier', 'couvreur', 'serrurier', 'macon', 'climaticien', 'carreleur', 'facade', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
-  'tropical': ['climaticien', 'plombier', 'electricien', 'macon', 'peintre-en-batiment', 'couvreur', 'carreleur', 'serrurier', 'menuisier', 'facade', 'terrassier', 'paysagiste', 'vitrier', 'chauffagiste', 'domoticien'],
+  'oceanique': ['couvreur', 'peintre-en-batiment', 'plombier', 'chauffagiste', 'menuisier', 'electricien', 'macon', 'facadier', 'serrurier', 'climaticien', 'carreleur', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
+  'continental': ['chauffagiste', 'plombier', 'electricien', 'couvreur', 'menuisier', 'macon', 'peintre-en-batiment', 'climaticien', 'serrurier', 'facadier', 'carreleur', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
+  'mediterraneen': ['climaticien', 'plombier', 'electricien', 'peintre-en-batiment', 'carreleur', 'macon', 'serrurier', 'facadier', 'couvreur', 'menuisier', 'chauffagiste', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
+  'montagnard': ['chauffagiste', 'couvreur', 'plombier', 'menuisier', 'macon', 'electricien', 'peintre-en-batiment', 'serrurier', 'facadier', 'vitrier', 'climaticien', 'carreleur', 'terrassier', 'paysagiste', 'domoticien'],
+  'semi-oceanique': ['plombier', 'electricien', 'chauffagiste', 'peintre-en-batiment', 'menuisier', 'couvreur', 'serrurier', 'macon', 'climaticien', 'carreleur', 'facadier', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
+  'tropical': ['climaticien', 'plombier', 'electricien', 'macon', 'peintre-en-batiment', 'couvreur', 'carreleur', 'serrurier', 'menuisier', 'facadier', 'terrassier', 'paysagiste', 'vitrier', 'chauffagiste', 'domoticien'],
 }
 
 const CLIMATE_ISSUES: Record<ClimateZone, string[]> = {

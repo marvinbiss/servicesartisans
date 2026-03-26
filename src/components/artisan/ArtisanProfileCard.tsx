@@ -271,7 +271,7 @@ export function ArtisanProfileCard({
           <div className="flex gap-3 mt-6">
             {phone && (
               <a
-                href={`tel:${phone}`}
+                href={`tel:${phone.replace(/[\s.\-()]/g, '')}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex-1 flex items-center justify-center gap-2 bg-charcoal-800 hover:bg-charcoal-900 text-white py-3 rounded-xl font-semibold transition-colors"
               >
@@ -413,7 +413,7 @@ export function ArtisanProfileCard({
             <div className="flex gap-2 mt-4 sm:hidden">
               {phone && (
                 <a
-                  href={`tel:${phone}`}
+                  href={`tel:${phone.replace(/[\s.\-()]/g, '')}`}
                   onClick={(e) => e.stopPropagation()}
                   className="flex-1 flex items-center justify-center gap-1 bg-charcoal-800 text-white py-2.5 rounded-lg font-medium text-sm"
                 >

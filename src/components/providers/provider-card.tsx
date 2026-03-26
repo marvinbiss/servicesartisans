@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Phone, CheckCircle, Clock } from 'lucide-react'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface ProviderCardProps {
   provider: {
@@ -26,6 +27,8 @@ interface ProviderCardProps {
 }
 
 export function ProviderCard({ provider, priority = false }: ProviderCardProps) {
+  const providerUrl = getArtisanUrl({ slug: provider.slug, specialty: provider.service_type, city: provider.address_city })
+
   const renderStars = (rating: number) => {
     return (
       <div className="flex items-center gap-0.5">
@@ -73,7 +76,7 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <Link
-                href={`/artisan/${provider.slug}`}
+                href={providerUrl}
                 className="font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate"
               >
                 {provider.name}
@@ -130,14 +133,14 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
         {/* Actions */}
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
           <Link
-            href={`/artisan/${provider.slug}`}
+            href={providerUrl}
             className="flex-1 text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
           >
             Voir le profil
           </Link>
           {provider.phone && (
             <a
-              href={`tel:${provider.phone}`}
+              href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
               className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
             >
               <Phone className="w-4 h-4" />

@@ -24,16 +24,10 @@ export interface ChatMessage {
 }
 
 // ---------------------------------------------------------------------------
-// French phone validation
+// French phone validation (re-exported from shared utility)
 // ---------------------------------------------------------------------------
 
-export function isValidFrenchPhone(phone: string): boolean {
-  const cleaned = phone.replace(/[\s.\-()]/g, '')
-  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^0033[1-9]\d{8}$/.test(cleaned)) return true
-  return false
-}
+export { isValidFrenchPhone } from '@/lib/validation/phone'
 
 // ---------------------------------------------------------------------------
 // Lead form trigger: detect price estimation in response

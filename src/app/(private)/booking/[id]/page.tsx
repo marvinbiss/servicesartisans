@@ -148,7 +148,7 @@ export default function BookingPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors du report')
+        throw new Error(data.error?.message || data.error || 'Erreur lors du report')
       }
 
       // Refresh booking details
@@ -390,7 +390,7 @@ export default function BookingPage() {
           </p>
           {booking.artisan.phone && (
             <a
-              href={`tel:${booking.artisan.phone}`}
+              href={`tel:${booking.artisan.phone.replace(/[\s.\-()]/g, '')}`}
               className="text-blue-600 hover:underline font-medium"
             >
               Contacter l'artisan

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
 import { ArrowRight, ArrowLeft, ChevronDown, Check, MapPin, Users, Shield, Clock } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { isValidFrenchPhone } from '@/lib/validation/phone'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 
 interface FormData {
@@ -58,14 +59,6 @@ const serviceSubcategories: Record<string, string[]> = {
   couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage'],
   macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition'],
   jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture'],
-}
-
-function isValidFrenchPhone(phone: string): boolean {
-  const cleaned = phone.replace(/[\s.\-()]/g, '')
-  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^0033[1-9]\d{8}$/.test(cleaned)) return true
-  return false
 }
 
 const STORAGE_KEY = 'sa:devis-draft'

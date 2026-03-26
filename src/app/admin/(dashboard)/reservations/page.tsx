@@ -60,7 +60,7 @@ export default function AdminReservationsPage() {
     try {
       setActionError(null)
       await adminMutate(`/api/admin/bookings/${cancelModal.bookingId}`, {
-        method: 'PUT',
+        method: 'PATCH',
         body: { status: 'cancelled' },
       })
       setCancelModal({ open: false, bookingId: '' })

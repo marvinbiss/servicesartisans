@@ -171,7 +171,7 @@ export function DesktopResultsSidebar({
                       </Link>
                       {provider.phone && (
                         <a
-                          href={`tel:${provider.phone}`}
+                          href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
                           onClick={(e) => e.stopPropagation()}
                           className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                         >

@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import {
   X,
   Star,
@@ -112,6 +112,20 @@ function ProviderGrid({
 export function CompareView({ onClose }: CompareViewProps) {
   const { compareList, removeFromCompare } = useCompare()
 
+  // Lock body scroll & handle Escape
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [onClose])
+
   return (
     <Fragment>
       {/* Backdrop */}
@@ -124,7 +138,7 @@ export function CompareView({ onClose }: CompareViewProps) {
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-8 md:pt-16 overflow-y-auto">
         <div
-          className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl"
+          className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-labelledby="compare-title"
@@ -231,7 +245,7 @@ export function CompareView({ onClose }: CompareViewProps) {
                   <span className="text-gray-700">
                     {provider.phone ? (
                       <a
-                        href={`tel:${provider.phone.replace(/\s/g, '')}`}
+                        href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
                         className="text-blue-600 hover:text-blue-700"
                       >
                         {provider.phone}

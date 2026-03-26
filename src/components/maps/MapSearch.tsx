@@ -381,7 +381,7 @@ export default function MapSearch() {
                       mouseout: () => setHoveredProvider(null)
                     }}
                   >
-                    <Popup className="custom-popup" maxWidth={340} minWidth={300}>
+                    <Popup className="custom-popup" maxWidth={300} minWidth={240}>
                       <div className="p-2">
                         <div className="flex gap-3">
                           <div className="relative flex-shrink-0 rounded-xl">
@@ -439,7 +439,7 @@ export default function MapSearch() {
                           </Link>
                           {provider.phone && (
                             <a
-                              href={`tel:${provider.phone}`}
+                              href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
                               className="px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-semibold rounded-lg hover:from-green-700 hover:to-green-800 flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                               title="Appeler maintenant"
                             >

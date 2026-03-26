@@ -28,7 +28,7 @@ export default function AdminConnexionPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error?.message || 'Erreur de connexion')
+        setError(typeof data.error === 'string' ? data.error : data.error?.message || 'Erreur de connexion')
         return
       }
 

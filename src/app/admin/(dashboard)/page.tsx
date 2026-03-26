@@ -308,7 +308,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     <a
-                      href={`tel:${lead.telephone}`}
+                      href={`tel:${lead.telephone.replace(/[\s.\-()]/g, '')}`}
                       className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
                       title={`Appeler ${lead.telephone}`}
                     >

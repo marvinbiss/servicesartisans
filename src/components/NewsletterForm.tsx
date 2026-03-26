@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Loader2, CheckCircle } from 'lucide-react'
 
 export default function NewsletterForm() {
@@ -8,11 +9,17 @@ export default function NewsletterForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consentRgpd, setConsentRgpd] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email || !email.includes('@') || !email.includes('.')) {
       setError('Veuillez entrer une adresse email valide')
+      return
+    }
+
+    if (!consentRgpd) {
+      setError('Veuillez accepter la politique de confidentialité pour vous inscrire.')
       return
     }
 
@@ -51,32 +58,49 @@ export default function NewsletterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full max-w-md gap-3">
-      <div className="flex-1">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Votre email"
-          aria-label="Adresse email pour la newsletter"
-          required
+    <form onSubmit={handleSubmit} className="w-full max-w-md">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex-1">
+          <input
+            type="email"
+            inputMode="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Votre email"
+            aria-label="Adresse email pour la newsletter"
+            required
+            disabled={isLoading}
+            className="w-full px-5 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-50"
+          />
+          {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
+        </div>
+        <button
+          type="submit"
           disabled={isLoading}
-          className="w-full px-5 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-50"
-        />
-        {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
+          aria-label="S'inscrire à la newsletter"
+          className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {isLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            "S'inscrire"
+          )}
+        </button>
       </div>
-      <button
-        type="submit"
-        disabled={isLoading}
-        aria-label="S'inscrire à la newsletter"
-        className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-      >
-        {isLoading ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          "S'inscrire"
-        )}
-      </button>
+      <label className="flex items-start gap-2 mt-4 text-left cursor-pointer">
+        <input
+          type="checkbox"
+          checked={consentRgpd}
+          onChange={(e) => setConsentRgpd(e.target.checked)}
+          className="mt-1 rounded border-slate-600 text-blue-600 focus:ring-blue-500 bg-slate-800/50 flex-shrink-0"
+        />
+        <span className="text-sm text-gray-400 leading-relaxed">
+          J&apos;accepte que mes données soient utilisées pour recevoir la newsletter. Consultez notre{' '}
+          <Link href="/confidentialite" className="underline hover:text-white text-gray-300">
+            politique de confidentialité
+          </Link>.
+        </span>
+      </label>
     </form>
   )
 }

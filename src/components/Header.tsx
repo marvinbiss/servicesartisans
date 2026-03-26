@@ -316,7 +316,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/devis"
-              onClick={() => trackEvent('header_devis_click', {})}
+              onClick={() => trackEvent('header_devis_click', { source: 'header', pathname })}
               className="ml-2 px-5 py-2 bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Trouver un artisan

@@ -128,7 +128,7 @@ const typesOuverture = [
 const services = [
   { label: "Menuisier", href: "/services/menuisier", icon: Hammer },
   { label: "Vitrier", href: "/services/vitrier", icon: Home },
-  { label: "Isolation", href: "/services/isolation", icon: Building2 },
+  { label: "Isolation", href: "/services/isolation-thermique", icon: Building2 },
   { label: "Peintre", href: "/services/peintre", icon: Hammer },
   { label: "Maçon", href: "/services/macon", icon: Building2 },
 ]

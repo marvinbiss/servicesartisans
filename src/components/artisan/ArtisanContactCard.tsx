@@ -65,7 +65,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           <button
             type="button"
             onClick={() => {
-              trackEvent('artisan_devis_click' as any, { artisan_slug: artisan.slug })
+              trackEvent('artisan_devis_click' as any, { artisanId: artisan.id, artisanName: artisan.business_name || '', artisan_slug: artisan.slug, source: 'contact_card' })
               const devisSection = document.getElementById('devis')
               if (devisSection) {
                 devisSection.scrollIntoView({ behavior: 'smooth' })
@@ -94,8 +94,8 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <button
               type="button"
               onClick={() => {
-                trackEvent('phone_click' as any, { artisan_slug: artisan.slug })
-                window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
+                trackEvent('phone_click' as any, { artisanId: artisan.id, artisanName: artisan.business_name || '', artisan_slug: artisan.slug, source: 'contact_card' })
+                window.location.href = `tel:${artisan.phone!.replace(/[\s.\-()]/g, '')}`
               }}
               className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-charcoal-800 hover:bg-charcoal-900 text-white font-medium transition-colors"
               aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}
@@ -110,7 +110,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <a
               href={`mailto:${artisan.email}`}
               onClick={() => {
-                trackEvent('artisan_email_click' as any, { artisan_slug: artisan.slug })
+                trackEvent('artisan_email_click' as any, { artisanId: artisan.id, artisanName: artisan.business_name || '', artisan_slug: artisan.slug, source: 'contact_card' })
               }}
               className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2.5 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2 group"
               aria-label={`Envoyer un email à ${artisan.email}`}

@@ -172,7 +172,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
             <div className="flex flex-col gap-3 md:min-w-[200px]">
               {provider.phone && (
                 <a
-                  href={`tel:${provider.phone}`}
+                  href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
                   className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
                   <Phone className="w-5 h-5" />

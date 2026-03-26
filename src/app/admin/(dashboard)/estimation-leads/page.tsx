@@ -363,7 +363,7 @@ export default function AdminEstimationLeadsPage() {
                           </button>
                         )}
                         <a
-                          href={`tel:${lead.telephone}`}
+                          href={`tel:${lead.telephone.replace(/[\s.\-()]/g, '')}`}
                           className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                           title="Appeler"
                         >
@@ -468,7 +468,7 @@ export default function AdminEstimationLeadsPage() {
                 )}
               </p>
               <a
-                href={`tel:${selectedLead.telephone}`}
+                href={`tel:${selectedLead.telephone.replace(/[\s.\-()]/g, '')}`}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
               >
                 <Phone className="w-3.5 h-3.5" />

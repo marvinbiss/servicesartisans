@@ -68,7 +68,7 @@ const urgencyLabels: Record<string, string> = {
   urgent: 'Urgent (sous 24h)',
   semaine: 'Cette semaine',
   mois: 'Ce mois-ci',
-  flexible: 'Flexible',
+  flexible: 'Pas urgent',
 }
 
 

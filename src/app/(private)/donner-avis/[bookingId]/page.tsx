@@ -84,7 +84,7 @@ export default function ReviewPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de l\'envoi')
+        throw new Error(data.error?.message || data.error || 'Erreur lors de l\'envoi')
       }
 
       setSubmitted(true)

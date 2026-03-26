@@ -237,7 +237,7 @@ END:VCALENDAR`
                 <div>
                   <p className="text-sm text-gray-500">Téléphone</p>
                   <a
-                    href={`tel:${booking.artisanPhone}`}
+                    href={`tel:${booking.artisanPhone.replace(/[\s.\-()]/g, '')}`}
                     className="font-semibold text-gray-900 hover:text-violet-600"
                   >
                     {booking.artisanPhone}

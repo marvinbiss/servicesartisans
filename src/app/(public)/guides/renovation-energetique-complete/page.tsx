@@ -283,7 +283,7 @@ const roiParPoste = [
 ]
 
 const services = [
-  { label: "Isolation", href: "/services/isolation", icon: Home },
+  { label: "Isolation", href: "/services/isolation-thermique", icon: Home },
   { label: "Chauffagiste", href: "/services/chauffagiste", icon: Thermometer },
   { label: "Plombier", href: "/services/plombier", icon: Wrench },
   { label: "Menuisier", href: "/services/menuisier", icon: Hammer },

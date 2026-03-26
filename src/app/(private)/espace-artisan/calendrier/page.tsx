@@ -305,7 +305,7 @@ export default function CalendrierPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de l\'ajout du créneau')
+        throw new Error(data.error?.message || data.error || 'Erreur lors de l\'ajout du créneau')
       }
 
       // Refresh schedule
@@ -1064,7 +1064,7 @@ export default function CalendrierPage() {
                 <div>
                   <div className="text-sm text-gray-500 mb-1">Téléphone</div>
                   <a
-                    href={`tel:${selectedBooking.phone}`}
+                    href={`tel:${selectedBooking.phone.replace(/[\s.\-()]/g, '')}`}
                     className="font-medium text-blue-600 hover:text-blue-700"
                   >
                     {selectedBooking.phone}

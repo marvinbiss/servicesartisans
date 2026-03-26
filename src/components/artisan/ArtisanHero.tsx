@@ -161,7 +161,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 onClick={() => {
                   if (showPhone) {
                     BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'hero')
-                    window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
+                    window.location.href = `tel:${artisan.phone!.replace(/[\s.\-()]/g, '')}`
                   } else {
                     BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'hero')
                     setShowPhone(true)

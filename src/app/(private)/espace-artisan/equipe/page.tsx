@@ -54,6 +54,7 @@ export default function EquipePage() {
     role: '',
     color: COLORS[0].value,
   })
+  const [consentRgpd, setConsentRgpd] = useState(false)
 
   // Fetch team members via API route
   useEffect(() => {
@@ -93,6 +94,11 @@ export default function EquipePage() {
   // Add or update team member
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!editingMember && !consentRgpd) {
+      setError('Veuillez confirmer avoir informé cette personne conformément à la politique de confidentialité.')
+      return
+    }
 
     setIsSaving(true)
     setError(null)
@@ -147,6 +153,7 @@ export default function EquipePage() {
 
       setShowAddModal(false)
       setEditingMember(null)
+      setConsentRgpd(false)
       setFormData({
         name: '',
         email: '',
@@ -156,7 +163,7 @@ export default function EquipePage() {
       })
     } catch (err) {
       console.error('Error saving member:', err)
-      setError('Erreur lors de la sauvegarde')
+      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde')
     } finally {
       setIsSaving(false)
     }
@@ -179,7 +186,7 @@ export default function EquipePage() {
       setMembers(members.filter(m => m.id !== memberId))
     } catch (err) {
       console.error('Error deleting member:', err)
-      setError('Erreur lors de la suppression')
+      setError(err instanceof Error ? err.message : 'Erreur lors de la suppression')
     }
   }
 
@@ -211,6 +218,7 @@ export default function EquipePage() {
       ))
     } catch (err) {
       console.error('Error toggling member:', err)
+      setError('Impossible de modifier le statut du membre. Veuillez réessayer.')
     }
   }
 
@@ -488,6 +496,23 @@ export default function EquipePage() {
                   ))}
                 </div>
               </div>
+
+              {!editingMember && (
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consentRgpd}
+                    onChange={(e) => setConsentRgpd(e.target.checked)}
+                    className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
+                  />
+                  <span className="text-sm text-gray-600 leading-relaxed">
+                    Je confirme avoir informé cette personne conformément à la{' '}
+                    <Link href="/confidentialite" className="text-blue-600 underline hover:text-blue-800">
+                      politique de confidentialité
+                    </Link>
+                  </span>
+                </label>
+              )}
 
               <div className="flex gap-3 pt-4">
                 <button

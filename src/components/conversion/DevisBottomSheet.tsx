@@ -5,6 +5,7 @@ import { X, CheckCircle, ArrowRight, ArrowLeft, MapPin, ChevronDown } from 'luci
 import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { isValidFrenchPhone } from '@/lib/validation/phone'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
@@ -37,15 +38,6 @@ const urgencyOptions = [
   { value: 'semaine', label: 'Cette semaine' },
   { value: 'urgent', label: 'Urgent (sous 24h)' },
 ]
-
-/* ─── Helpers ──────────────────────────────────────────────────────── */
-
-function isValidFrenchPhone(phone: string): boolean {
-  const cleaned = phone.replace(/[\s.\-()]/g, '')
-  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
-  return false
-}
 
 /* ─── Component ────────────────────────────────────────────────────── */
 
@@ -701,7 +693,10 @@ export default function DevisBottomSheet({
                         className="mt-0.5 w-5 h-5 rounded border-sand-400 text-primary-400 focus:ring-primary-400/40 flex-shrink-0"
                       />
                       <span className="text-xs text-charcoal-500 leading-relaxed">
-                        J'accepte d'être contacté par des artisans pour recevoir mes devis gratuits.
+                        J&apos;accepte d&apos;être contacté par des artisans pour recevoir mes devis gratuits conformément à la{' '}
+                        <Link href="/confidentialite" className="underline text-primary-500 hover:text-primary-600">
+                          politique de confidentialité
+                        </Link>.
                       </span>
                     </label>
                     {errors.consentement && (

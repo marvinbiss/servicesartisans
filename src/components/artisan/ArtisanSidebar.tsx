@@ -39,7 +39,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
   const handleCall = () => {
     if (artisan.phone) {
-      window.location.href = `tel:${artisan.phone.replace(/\s/g, '')}`
+      window.location.href = `tel:${artisan.phone.replace(/[\s.\-()]/g, '')}`
     }
   }
 
@@ -199,7 +199,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
 
   const handleCall = () => {
     if (artisan.phone) {
-      window.location.href = `tel:${artisan.phone.replace(/\s/g, '')}`
+      window.location.href = `tel:${artisan.phone.replace(/[\s.\-()]/g, '')}`
     }
   }
 

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button, Input, Textarea } from '@/components/ui'
+import { isValidFrenchPhone } from '@/lib/validation/phone'
 
 interface QuoteFormProps {
   providerId: string
@@ -32,6 +33,18 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
 
     if (!consentRgpd) {
       setError('Veuillez accepter la politique de confidentialité pour envoyer votre demande.')
+      setIsLoading(false)
+      return
+    }
+
+    if (!isValidFrenchPhone(formData.client_phone)) {
+      setError('Numéro de téléphone français invalide (ex : 06 12 34 56 78)')
+      setIsLoading(false)
+      return
+    }
+
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.client_email.trim())) {
+      setError('Adresse email invalide')
       setIsLoading(false)
       return
     }

@@ -59,7 +59,7 @@ const transformations = [
     budget: "12 000 – 25 000 €",
     duree: "3 – 5 semaines",
     artisans: ["Façadier", "Isolation RGE"],
-    services: ["/services/facade", "/services/isolation"],
+    services: ["/services/facadier", "/services/isolation-thermique"],
   },
   {
     title: "Toiture rénovée intégralement",

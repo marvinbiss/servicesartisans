@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import {
   Calendar,
   ChevronLeft,
@@ -68,6 +69,7 @@ export default function BookingCalendar({
   const [availableSlots, setAvailableSlots] = useState<Record<string, TimeSlot[]>>({})
   const [isLoadingSlots, setIsLoadingSlots] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consentRgpd, setConsentRgpd] = useState(false)
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -131,6 +133,11 @@ export default function BookingCalendar({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedDate || !selectedSlot) return
+
+    if (!consentRgpd) {
+      setError('Veuillez accepter la politique de confidentialité pour continuer.')
+      return
+    }
 
     setIsSubmitting(true)
     setError(null)
@@ -465,12 +472,20 @@ export default function BookingCalendar({
             </div>
           </div>
 
-          <div className="flex items-start gap-2 mt-4 p-3 bg-yellow-50 rounded-lg">
-            <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-yellow-700">
-              En confirmant, vous acceptez d'être contacté par {artisanName} pour confirmer les détails du rendez-vous.
-            </p>
-          </div>
+          <label className="flex items-start gap-2.5 mt-4 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={consentRgpd}
+              onChange={(e) => setConsentRgpd(e.target.checked)}
+              className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
+            />
+            <span className="text-sm text-gray-600 leading-relaxed">
+              J&apos;accepte que mes données soient traitées conformément à la{' '}
+              <Link href="/confidentialite" className="text-blue-600 underline hover:text-blue-800">
+                politique de confidentialité
+              </Link>
+            </span>
+          </label>
 
           <div className="flex gap-3 mt-6">
             <button

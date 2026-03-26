@@ -4,17 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Phone, CheckCircle, Loader2 } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { isValidFrenchPhone } from '@/lib/validation/phone'
 
 interface CallbackRequestProps {
   serviceSlug?: string
   cityName?: string
-}
-
-function isValidFrenchPhone(phone: string): boolean {
-  const cleaned = phone.replace(/[\s.\-()]/g, '')
-  if (/^0[1-9]\d{8}$/.test(cleaned)) return true
-  if (/^\+33[1-9]\d{8}$/.test(cleaned)) return true
-  return false
 }
 
 export default function CallbackRequest({ serviceSlug, cityName }: CallbackRequestProps) {

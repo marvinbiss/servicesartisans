@@ -130,7 +130,7 @@ export default async function MentionsLegalesPage() {
                 <li><strong>Siège social :</strong> {companyIdentity.address}</li>
               )}
               {companyIdentity.phone && (
-                <li><strong>Téléphone :</strong> <a href={`tel:${companyIdentity.phone.replace(/\s/g, '')}`} className="text-blue-600 hover:underline">{companyIdentity.phone}</a> (n° plateforme)</li>
+                <li><strong>Téléphone :</strong> <a href={`tel:${companyIdentity.phone.replace(/[\s.\-()]/g, '')}`} className="text-blue-600 hover:underline">{companyIdentity.phone}</a> (n° plateforme)</li>
               )}
               {companyIdentity.directeurPublication && (
                 <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>

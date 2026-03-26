@@ -110,7 +110,7 @@ const categories = [
         scope: "Construction neuve depuis janvier 2022",
         requirements:
           "Bbio max (besoin bioclimatique) réduit de 30 % vs RT2012, Cep max (consommation énergie primaire) abaissé, indicateur carbone IC (prise en compte du cycle de vie des matériaux), confort d'été (indicateur DH). Remplace la RT2012 pour le neuf.",
-        service: "/services/isolation",
+        service: "/services/isolation-thermique",
         serviceLabel: "Trouver un isolateur",
       },
       {
@@ -118,7 +118,7 @@ const categories = [
         scope: "Isolation des combles par soufflage",
         requirements:
           "Résistance thermique minimale R ≥ 7 m².K/W en combles perdus (8 recommandé pour MaPrimeRénov), épaisseur selon le matériau (30-35 cm en laine de verre), pare-vapeur côté chaud, repérage des boîtiers électriques, protection des spots encastrés.",
-        service: "/services/isolation",
+        service: "/services/isolation-thermique",
         serviceLabel: "Trouver un isolateur",
       },
       {
@@ -126,7 +126,7 @@ const categories = [
         scope: "Isolation thermique par l'extérieur (ITE)",
         requirements:
           "Préparation du support (ravalement préalable si nécessaire), fixation mécanique + collage, résistance thermique R ≥ 3,7 m².K/W (murs), traitement des ponts thermiques (tableaux, appuis de fenêtre), pare-pluie, finition enduit ou bardage ventilé.",
-        service: "/services/isolation",
+        service: "/services/isolation-thermique",
         serviceLabel: "Trouver un façadier",
       },
     ],
