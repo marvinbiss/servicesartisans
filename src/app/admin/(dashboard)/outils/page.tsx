@@ -65,7 +65,7 @@ export default function AdminToolsPage() {
 
     try {
       const res = await fetch(`/api/admin/providers/${providerInfo.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           is_active: action === 'enable',

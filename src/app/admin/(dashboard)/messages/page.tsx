@@ -65,16 +65,10 @@ export default function AdminMessagesPage() {
   const handleStatusChange = async (conversationId: string, newStatus: 'archived' | 'blocked') => {
     try {
       setActionLoading(conversationId)
-      if (newStatus === 'archived') {
-        await adminMutate(`/api/conversations/${conversationId}/archive`, {
-          method: 'POST',
-        })
-      } else {
-        await adminMutate(`/api/conversations/${conversationId}/archive`, {
-          method: 'POST',
-          body: { status: newStatus },
-        })
-      }
+      await adminMutate(`/api/admin/messages/${conversationId}`, {
+        method: 'PATCH',
+        body: { status: newStatus },
+      })
       mutate()
     } catch {
       // Error will surface via SWR on next revalidation

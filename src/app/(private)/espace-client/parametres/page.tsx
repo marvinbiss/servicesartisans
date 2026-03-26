@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FileText, ArrowLeft,
   User, Mail, Phone, Lock, Bell, Shield, Trash2, Download,
-  Globe, Palette
 } from 'lucide-react'
 import usePushNotifications from '@/hooks/usePushNotifications'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -30,13 +29,6 @@ interface PrivacyPreferences {
   profile_public: boolean
   show_online_status: boolean
   allow_reviews: boolean
-}
-
-interface DisplayPreferences {
-  language: string
-  theme: string
-  timezone: string
-  currency: string
 }
 
 export default function ParametresClientPage() {
@@ -66,14 +58,17 @@ export default function ParametresClientPage() {
     allow_reviews: true,
   })
 
-  const [display, setDisplay] = useState<DisplayPreferences>({
-    language: 'fr',
-    theme: 'light',
-    timezone: 'Europe/Paris',
-    currency: 'EUR',
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   })
+  const [passwordSaving, setPasswordSaving] = useState(false)
+  const [passwordSuccess, setPasswordSuccess] = useState(false)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const passwordSuccessTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const [activeTab, setActiveTab] = useState<'profile' | 'notifications' | 'privacy' | 'display' | 'data'>('profile')
+  const [activeTab, setActiveTab] = useState<'profile' | 'notifications' | 'privacy' | 'data'>('profile')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deletePassword, setDeletePassword] = useState('')
@@ -84,12 +79,18 @@ export default function ParametresClientPage() {
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
   const [isExporting, setIsExporting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const pushNotifications = usePushNotifications(userId)
 
   useEffect(() => {
     loadUserData()
     loadDeletionStatus()
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current)
+      if (passwordSuccessTimerRef.current) clearTimeout(passwordSuccessTimerRef.current)
+    }
   }, [])
 
   const loadUserData = async () => {
@@ -117,12 +118,6 @@ export default function ParametresClientPage() {
             show_online_status: p.show_online_status ?? true,
             allow_reviews: p.allow_reviews ?? true,
           })
-          setDisplay({
-            language: p.language ?? 'fr',
-            theme: p.theme ?? 'light',
-            timezone: p.timezone ?? 'Europe/Paris',
-            currency: p.currency ?? 'EUR',
-          })
         }
       }
 
@@ -145,6 +140,7 @@ export default function ParametresClientPage() {
       }
     } catch (error) {
       console.error('Failed to load user data:', error)
+      setErrorMessage('Impossible de charger vos données. Veuillez rafraîchir la page.')
     } finally {
       setIsLoading(false)
     }
@@ -170,15 +166,20 @@ export default function ParametresClientPage() {
       const response = await fetch('/api/user/preferences', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notifications, privacy, display }),
+        body: JSON.stringify({ notifications, privacy }),
       })
 
       if (response.ok) {
         setSaveSuccess(true)
-        setTimeout(() => setSaveSuccess(false), 3000)
+        setErrorMessage(null)
+        if (successTimerRef.current) clearTimeout(successTimerRef.current)
+        successTimerRef.current = setTimeout(() => setSaveSuccess(false), 3000)
+      } else {
+        setErrorMessage('Impossible d\'enregistrer les préférences. Veuillez réessayer.')
       }
     } catch (error) {
       console.error('Failed to save preferences:', error)
+      setErrorMessage('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setIsSaving(false)
     }
@@ -194,18 +195,80 @@ export default function ParametresClientPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           full_name: [formData.prenom, formData.nom].filter(Boolean).join(' ').trim() || undefined,
+          email: formData.email || undefined,
           phone: formData.telephone || undefined,
         }),
       })
 
       if (response.ok) {
         setSaveSuccess(true)
-        setTimeout(() => setSaveSuccess(false), 3000)
+        setErrorMessage(null)
+        if (successTimerRef.current) clearTimeout(successTimerRef.current)
+        successTimerRef.current = setTimeout(() => setSaveSuccess(false), 3000)
+      } else {
+        setErrorMessage('Impossible de mettre à jour le profil. Veuillez réessayer.')
       }
     } catch (error) {
       console.error('Failed to update profile:', error)
+      setErrorMessage('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setPasswordError(null)
+    setPasswordSuccess(false)
+
+    if (!passwordData.currentPassword) {
+      setPasswordError('Veuillez entrer votre mot de passe actuel.')
+      return
+    }
+    if (passwordData.newPassword.length < 8) {
+      setPasswordError('Le nouveau mot de passe doit contenir au moins 8 caractères.')
+      return
+    }
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setPasswordError('Les mots de passe ne correspondent pas.')
+      return
+    }
+
+    setPasswordSaving(true)
+
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+
+      // Verify current password by signing in
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: passwordData.currentPassword,
+      })
+
+      if (signInError) {
+        setPasswordError('Le mot de passe actuel est incorrect.')
+        setPasswordSaving(false)
+        return
+      }
+
+      const { error } = await supabase.auth.updateUser({
+        password: passwordData.newPassword,
+      })
+
+      if (error) {
+        setPasswordError(error.message || 'Impossible de modifier le mot de passe. Veuillez réessayer.')
+      } else {
+        setPasswordSuccess(true)
+        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
+        if (passwordSuccessTimerRef.current) clearTimeout(passwordSuccessTimerRef.current)
+        passwordSuccessTimerRef.current = setTimeout(() => setPasswordSuccess(false), 3000)
+      }
+    } catch (error) {
+      console.error('Failed to update password:', error)
+      setPasswordError('Erreur de connexion. Veuillez réessayer.')
+    } finally {
+      setPasswordSaving(false)
     }
   }
 
@@ -244,6 +307,7 @@ export default function ParametresClientPage() {
       }
     } catch (error) {
       console.error('Failed to export data:', error)
+      setErrorMessage('Impossible d\'exporter vos données. Veuillez réessayer.')
     } finally {
       setIsExporting(false)
     }
@@ -274,6 +338,7 @@ export default function ParametresClientPage() {
       }
     } catch (error) {
       console.error('Failed to request deletion:', error)
+      setErrorMessage('Impossible de soumettre la demande de suppression. Veuillez réessayer.')
     }
   }
 
@@ -285,6 +350,7 @@ export default function ParametresClientPage() {
       }
     } catch (error) {
       console.error('Failed to cancel deletion:', error)
+      setErrorMessage('Impossible d\'annuler la demande de suppression. Veuillez réessayer.')
     }
   }
 
@@ -292,7 +358,6 @@ export default function ParametresClientPage() {
     { id: 'profile', label: 'Profil', icon: User },
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'privacy', label: 'Confidentialité', icon: Shield },
-    { id: 'display', label: 'Affichage', icon: Palette },
     { id: 'data', label: 'Mes données', icon: Download },
   ]
 
@@ -337,9 +402,27 @@ export default function ParametresClientPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
+          {/* Sidebar — horizontal tabs on mobile, vertical on desktop */}
           <div className="lg:col-span-1 space-y-4">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
+            {/* Mobile: horizontal scrollable tabs */}
+            <div className="lg:hidden flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-colors shrink-0 ${
+                    activeTab === tab.id
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            {/* Desktop: vertical sidebar */}
+            <nav className="hidden lg:block bg-white rounded-xl shadow-sm p-4 space-y-1">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -364,11 +447,19 @@ export default function ParametresClientPage() {
               </Link>
               <LogoutButton />
             </nav>
-            <QuickSiteLinks />
+            <div className="hidden lg:block">
+              <QuickSiteLinks />
+            </div>
           </div>
 
           {/* Content */}
           <div className="lg:col-span-3">
+            {errorMessage && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center justify-between">
+                <span>{errorMessage}</span>
+                <button type="button" onClick={() => setErrorMessage(null)} className="text-red-500 hover:text-red-700 font-medium ml-4">✕</button>
+              </div>
+            )}
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -449,15 +540,28 @@ export default function ParametresClientPage() {
                         <Lock className="w-5 h-5" />
                         Mot de passe
                       </h2>
-                      <form className="space-y-6">
+                      <form className="space-y-6" onSubmit={handlePasswordSubmit}>
+                        {passwordError && (
+                          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">
+                            {passwordError}
+                          </div>
+                        )}
+                        {passwordSuccess && (
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-700 text-sm">
+                            Mot de passe modifié avec succès.
+                          </div>
+                        )}
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             Mot de passe actuel
                           </label>
                           <input
                             type="password"
+                            value={passwordData.currentPassword}
+                            onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             placeholder="********"
+                            required
                           />
                         </div>
                         <div className="grid md:grid-cols-2 gap-6">
@@ -467,8 +571,12 @@ export default function ParametresClientPage() {
                             </label>
                             <input
                               type="password"
+                              value={passwordData.newPassword}
+                              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                               placeholder="********"
+                              minLength={8}
+                              required
                             />
                           </div>
                           <div>
@@ -477,16 +585,21 @@ export default function ParametresClientPage() {
                             </label>
                             <input
                               type="password"
+                              value={passwordData.confirmPassword}
+                              onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                               placeholder="********"
+                              minLength={8}
+                              required
                             />
                           </div>
                         </div>
                         <button
                           type="submit"
-                          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                          disabled={passwordSaving}
+                          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                         >
-                          Modifier le mot de passe
+                          {passwordSaving ? 'Modification en cours...' : 'Modifier le mot de passe'}
                         </button>
                       </form>
                     </div>
@@ -654,103 +767,6 @@ export default function ParametresClientPage() {
                           setPrivacy({ ...privacy, allow_reviews: checked })
                         }
                       />
-                    </div>
-
-                    <button
-                      onClick={savePreferences}
-                      disabled={isSaving}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
-                    >
-                      {isSaving ? 'Enregistrement...' : 'Enregistrer'}
-                    </button>
-                  </div>
-                )}
-
-                {/* Display Tab */}
-                {activeTab === 'display' && (
-                  <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      Préférences d'affichage
-                    </h2>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        <Globe className="w-4 h-4 inline mr-2" />
-                        Langue
-                      </label>
-                      <select
-                        value={display.language}
-                        onChange={(e) =>
-                          setDisplay({ ...display, language: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="fr">Français</option>
-                        <option value="en">English</option>
-                        <option value="es">Español</option>
-                        <option value="de">Deutsch</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Thème
-                      </label>
-                      <div className="grid grid-cols-3 gap-3">
-                        {(['light', 'dark', 'system'] as const).map((theme) => (
-                          <button
-                            key={theme}
-                            onClick={() => setDisplay({ ...display, theme })}
-                            className={`rounded-lg border-2 p-4 text-center transition-all ${
-                              display.theme === theme
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                          >
-                            <div className="text-2xl mb-1">
-                              {theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '💻'}
-                            </div>
-                            <div className="text-sm font-medium">
-                              {theme === 'light' ? 'Clair' : theme === 'dark' ? 'Sombre' : 'Système'}
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Fuseau horaire
-                      </label>
-                      <select
-                        value={display.timezone}
-                        onChange={(e) =>
-                          setDisplay({ ...display, timezone: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="Europe/Paris">Europe/Paris</option>
-                        <option value="Europe/London">Europe/London</option>
-                        <option value="America/New_York">America/New_York</option>
-                        <option value="America/Los_Angeles">America/Los_Angeles</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Devise
-                      </label>
-                      <select
-                        value={display.currency}
-                        onChange={(e) =>
-                          setDisplay({ ...display, currency: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="EUR">EUR — Euro</option>
-                        <option value="USD">USD — Dollar</option>
-                        <option value="GBP">GBP — Livre sterling</option>
-                      </select>
                     </div>
 
                     <button

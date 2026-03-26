@@ -93,14 +93,6 @@ function getDaysInMonth(year: number, month: number) {
   return days
 }
 
-// Composant pour l'affichage des créneaux horaires par défaut
-const defaultSlots = [
-  { start: '08:00', end: '10:00' },
-  { start: '10:00', end: '12:00' },
-  { start: '14:00', end: '16:00' },
-  { start: '16:00', end: '18:00' },
-]
-
 export default function CalendrierPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -116,10 +108,26 @@ export default function CalendrierPage() {
   const [upcomingBookings, setUpcomingBookings] = useState<BookingEntry[]>([])
   const [stats, setStats] = useState({ monthlyBookings: 0, fillRate: 0, avgRating: 0 })
 
+  // Booking detail modal state
+  const [selectedBooking, setSelectedBooking] = useState<TimeSlot['booking'] | null>(null)
+  const [showBookingDetailModal, setShowBookingDetailModal] = useState(false)
+
+  // Confirm delete slot modal
+  const [slotToDelete, setSlotToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
   // New slot form state
   const [newSlotStart, setNewSlotStart] = useState('08:00')
   const [newSlotEnd, setNewSlotEnd] = useState('10:00')
   const [repeatWeekly, setRepeatWeekly] = useState(false)
+
+  // Editable default slots
+  const [editableDefaultSlots, setEditableDefaultSlots] = useState([
+    { start: '08:00', end: '10:00' },
+    { start: '10:00', end: '12:00' },
+    { start: '14:00', end: '16:00' },
+    { start: '16:00', end: '18:00' },
+  ])
 
   // Settings state
   const [settings, setSettings] = useState({
@@ -168,6 +176,7 @@ export default function CalendrierPage() {
         }
       } catch (err) {
         console.error('Error fetching profile:', err)
+        setError('Impossible de charger votre profil. Veuillez rafraîchir la page.')
       } finally {
         setIsLoading(false)
       }
@@ -261,6 +270,7 @@ export default function CalendrierPage() {
       }
     } catch (err) {
       console.error('Error fetching bookings:', err)
+      setError('Impossible de charger les réservations.')
     }
   }, [profile])
 
@@ -312,9 +322,12 @@ export default function CalendrierPage() {
     }
   }
 
-  // Delete slot
+  // Delete slot with confirmation
   const handleDeleteSlot = async (slotId: string) => {
     if (!profile) return
+
+    setIsDeleting(true)
+    setError(null)
 
     try {
       const response = await fetch(`/api/availability?slotId=${slotId}`, {
@@ -323,15 +336,30 @@ export default function CalendrierPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de la suppression')
+        throw new Error(data.error?.message || data.error || 'Erreur lors de la suppression')
       }
 
       // Refresh schedule
       await fetchSchedule(currentDate.getFullYear(), currentDate.getMonth())
+      setSlotToDelete(null)
     } catch (err) {
       console.error('Error deleting slot:', err)
       setError(err instanceof Error ? err.message : 'Erreur lors de la suppression')
+    } finally {
+      setIsDeleting(false)
     }
+  }
+
+  // Show booking detail
+  const handleShowBookingDetail = (booking: TimeSlot['booking']) => {
+    if (!booking) return
+    setSelectedBooking(booking)
+    setShowBookingDetailModal(true)
+  }
+
+  // Remove a default slot from settings
+  const handleRemoveDefaultSlot = (index: number) => {
+    setEditableDefaultSlots(prev => prev.filter((_, i) => i !== index))
   }
 
   // Save settings
@@ -738,7 +766,7 @@ export default function CalendrierPage() {
                 </div>
 
                 <div className="space-y-3">
-                  {(getScheduleForDate(selectedDate)?.slots || defaultSlots.map((s, i) => ({
+                  {(getScheduleForDate(selectedDate)?.slots || editableDefaultSlots.map((s, i) => ({
                     id: `default-${i}`,
                     ...s,
                     available: true as const,
@@ -775,7 +803,7 @@ export default function CalendrierPage() {
                           <>
                             <span className="text-green-600 text-sm font-medium">Disponible</span>
                             <button
-                              onClick={() => handleDeleteSlot(slot.id)}
+                              onClick={() => setSlotToDelete(slot.id)}
                               className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg"
                               title="Supprimer ce créneau"
                             >
@@ -787,7 +815,11 @@ export default function CalendrierPage() {
                             <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
                               Réservé
                             </span>
-                            <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                            <button
+                              onClick={() => 'booking' in slot && slot.booking && handleShowBookingDetail(slot.booking)}
+                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                              title="Voir les détails de la réservation"
+                            >
                               <Users className="w-4 h-4" />
                             </button>
                           </>
@@ -946,6 +978,128 @@ export default function CalendrierPage() {
         </div>
       )}
 
+      {/* Modal Confirmation Suppression Créneau */}
+      {slotToDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <AlertCircle className="w-5 h-5 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Supprimer ce créneau ?
+              </h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Ce créneau sera supprimé et ne sera plus visible par vos clients. Cette action est irréversible.
+            </p>
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            )}
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setSlotToDelete(null); setError(null) }}
+                className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
+                disabled={isDeleting}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={() => handleDeleteSlot(slotToDelete)}
+                disabled={isDeleting}
+                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isDeleting && <Loader2 className="w-4 h-4 animate-spin" />}
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Détails Réservation */}
+      {showBookingDetailModal && selectedBooking && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Détails de la réservation
+              </h3>
+              <button
+                onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(null) }}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4 pb-4 border-b">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Users className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900 text-lg">{selectedBooking.clientName}</div>
+                  <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                    selectedBooking.status === 'confirmed'
+                      ? 'bg-green-100 text-green-700'
+                      : selectedBooking.status === 'pending'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-gray-100 text-gray-700'
+                  }`}>
+                    {selectedBooking.status === 'confirmed' ? 'Confirmé' :
+                     selectedBooking.status === 'pending' ? 'En attente' :
+                     selectedBooking.status === 'cancelled' ? 'Annulé' :
+                     selectedBooking.status}
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div className="text-sm text-gray-500 mb-1">Service demandé</div>
+                <div className="font-medium text-gray-900">{selectedBooking.service}</div>
+              </div>
+              {selectedBooking.phone && (
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">Téléphone</div>
+                  <a
+                    href={`tel:${selectedBooking.phone}`}
+                    className="font-medium text-blue-600 hover:text-blue-700"
+                  >
+                    {selectedBooking.phone}
+                  </a>
+                </div>
+              )}
+              {selectedBooking.email && (
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">Email</div>
+                  <a
+                    href={`mailto:${selectedBooking.email}`}
+                    className="font-medium text-blue-600 hover:text-blue-700"
+                  >
+                    {selectedBooking.email}
+                  </a>
+                </div>
+              )}
+            </div>
+            <div className="mt-6 pt-4 border-t flex gap-3">
+              <button
+                onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(null) }}
+                className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
+              >
+                Fermer
+              </button>
+              <Link
+                href={`/espace-artisan/demandes-recues`}
+                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center font-medium"
+              >
+                Voir les demandes
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modal Paramètres */}
       {showSettingsModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -965,14 +1119,22 @@ export default function CalendrierPage() {
               <div>
                 <h4 className="font-medium text-gray-900 mb-3">Créneaux par défaut</h4>
                 <div className="space-y-2">
-                  {defaultSlots.map((slot, i) => (
-                    <div key={i} className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded-lg">
-                      <span className="text-gray-700">{slot.start} - {slot.end}</span>
-                      <button className="text-red-500 hover:text-red-700">
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
+                  {editableDefaultSlots.length === 0 ? (
+                    <p className="text-sm text-gray-500 text-center py-2">Aucun créneau par défaut</p>
+                  ) : (
+                    editableDefaultSlots.map((slot, i) => (
+                      <div key={i} className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded-lg">
+                        <span className="text-gray-700">{slot.start} - {slot.end}</span>
+                        <button
+                          onClick={() => handleRemoveDefaultSlot(i)}
+                          className="text-red-500 hover:text-red-700"
+                          title="Supprimer ce créneau par défaut"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
               <div>
