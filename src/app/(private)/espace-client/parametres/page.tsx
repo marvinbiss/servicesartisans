@@ -195,7 +195,7 @@ export default function ParametresClientPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           full_name: [formData.prenom, formData.nom].filter(Boolean).join(' ').trim() || undefined,
-          phone: formData.telephone || undefined,
+          phone: formData.telephone?.replace(/[\s.\-()]/g, '') || undefined,
         }),
       })
 

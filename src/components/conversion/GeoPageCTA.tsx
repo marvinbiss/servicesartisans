@@ -20,6 +20,20 @@ interface GeoPageCTAProps {
 export default function GeoPageCTA({ title, subtitle, ville, service, variant = 'hero' }: GeoPageCTAProps) {
   const [isDevisOpen, setIsDevisOpen] = useState(false)
 
+  const handleClick = () => {
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+    if (isDesktop) {
+      const devisSection = document.getElementById('devis')
+      if (devisSection) {
+        devisSection.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        window.location.href = '/devis'
+      }
+    } else {
+      setIsDevisOpen(true)
+    }
+  }
+
   return (
     <>
       {variant !== 'sticky-only' && (
@@ -30,7 +44,7 @@ export default function GeoPageCTA({ title, subtitle, ville, service, variant = 
               {subtitle && <p className="text-charcoal-600 text-sm mt-1">{subtitle}</p>}
             </div>
             <button
-              onClick={() => setIsDevisOpen(true)}
+              onClick={handleClick}
               className="inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all text-lg whitespace-nowrap"
             >
               {service && ville ? `Besoin d'un ${service} à ${ville} ?` : 'Obtenir mon devis gratuit'}

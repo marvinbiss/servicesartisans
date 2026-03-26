@@ -145,7 +145,7 @@ export default function BookingCalendar({
           artisanId,
           slotId: selectedSlot.id,
           clientName: formData.clientName,
-          clientPhone: formData.clientPhone,
+          clientPhone: formData.clientPhone.replace(/[\s.\-()]/g, ''),
           clientEmail: formData.clientEmail,
           serviceDescription: formData.message || serviceName,
         }),

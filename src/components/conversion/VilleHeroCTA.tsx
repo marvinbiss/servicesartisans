@@ -28,7 +28,17 @@ export default function VilleHeroCTA({ villeName, quartierName, variant = 'hero'
       city: villeName,
       quartier: quartierName || '',
     })
-    setIsDevisOpen(true)
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+    if (isDesktop) {
+      const devisSection = document.getElementById('devis')
+      if (devisSection) {
+        devisSection.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        window.location.href = '/devis'
+      }
+    } else {
+      setIsDevisOpen(true)
+    }
   }, [villeName, quartierName, variant])
 
   const closeDevis = useCallback(() => {

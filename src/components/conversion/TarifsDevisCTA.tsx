@@ -24,11 +24,25 @@ export default function TarifsDevisCTA({
 }: TarifsDevisCTAProps) {
   const [isOpen, setIsOpen] = useState(false)
 
+  const handleClick = () => {
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+    if (isDesktop) {
+      const devisSection = document.getElementById('devis')
+      if (devisSection) {
+        devisSection.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        window.location.href = '/devis'
+      }
+    } else {
+      setIsOpen(true)
+    }
+  }
+
   if (variant === 'inline') {
     return (
       <>
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={handleClick}
           className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-base"
         >
           Recevoir 3 devis gratuits
@@ -49,7 +63,7 @@ export default function TarifsDevisCTA({
   return (
     <>
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={handleClick}
         className="inline-flex items-center gap-3 bg-white text-blue-600 px-10 py-5 rounded-2xl font-bold hover:bg-blue-50 transition-all text-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5"
       >
         {taskName

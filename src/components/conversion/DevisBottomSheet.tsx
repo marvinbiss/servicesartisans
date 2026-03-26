@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { X, CheckCircle, ArrowRight, ArrowLeft, MapPin, ChevronDown } from 'lucide-react'
+import Link from 'next/link'
 import { services, villes } from '@/lib/data/france'
 import { trackEvent } from '@/lib/analytics/tracking'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
@@ -747,9 +748,9 @@ export default function DevisBottomSheet({
 
       {/* Noscript fallback */}
       <noscript>
-        <a href="/devis" className="fixed bottom-4 left-4 right-4 z-[56] block text-center py-3 bg-primary-400 text-white font-semibold rounded-xl md:hidden">
+        <Link href="/devis" className="fixed bottom-4 left-4 right-4 z-[56] block text-center py-3 bg-primary-400 text-white font-semibold rounded-xl md:hidden">
           Obtenir mon devis gratuit
-        </a>
+        </Link>
       </noscript>
     </>
   )

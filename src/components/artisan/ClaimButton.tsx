@@ -21,6 +21,21 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
   const [success, setSuccess] = useState(false)
   const [profileLoaded, setProfileLoaded] = useState(false)
 
+  // Lock body scroll & handle Escape when modal open
+  useEffect(() => {
+    if (!showModal) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !isLoading) setShowModal(false)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = originalOverflow
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [showModal, isLoading])
+
   // Best-effort prefill from profile if user is logged in (non-blocking)
   useEffect(() => {
     if (!showModal || profileLoaded) return
@@ -99,7 +114,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
           siret,
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
-          phone: phone.trim(),
+          phone: phone.trim().replace(/[\s.\-()]/g, ''),
           position: position.trim(),
         }),
       })
@@ -165,7 +180,8 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
             {/* Close button */}
             <button
               onClick={() => !isLoading && setShowModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              className="absolute top-3 right-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-label="Fermer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -239,6 +255,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                     </label>
                     <input
                       type="email"
+                      inputMode="email"
                       value={email}
                       onChange={(e) => { setEmail(e.target.value); setError(null) }}
                       placeholder="jean@monentreprise.fr"
@@ -254,6 +271,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                     </label>
                     <input
                       type="tel"
+                      inputMode="tel"
                       value={phone}
                       onChange={(e) => { setPhone(formatPhone(e.target.value)); setError(null) }}
                       placeholder="06 12 34 56 78"

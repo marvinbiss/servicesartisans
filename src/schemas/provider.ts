@@ -78,8 +78,8 @@ export const providerArtisanUpdateSchema = z.object({
   team_size: z.number().int().min(1).max(1000).optional().nullable(),
 
   // Contact
-  phone: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/\s/g, '')).optional(),
-  phone_secondary: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/\s/g, '')).optional().nullable(),
+  phone: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/[\s.\-()]/g, '')).optional(),
+  phone_secondary: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/[\s.\-()]/g, '')).optional().nullable(),
   email: z.string().email('Email invalide').optional().nullable(),
   website: z.string().url('URL invalide').optional().nullable(),
 

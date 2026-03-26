@@ -21,7 +21,7 @@ export const calendrierTravaux: CalendrierMois[] = [
         titre: 'Bilan énergétique du logement',
         description:
           "Profitez des factures de chauffage pour identifier les déperditions. C'est le moment idéal pour faire réaliser un DPE ou un audit énergétique avant de lancer des travaux d'isolation au printemps.",
-        service: 'diagnostiqueur-immobilier',
+        service: 'diagnostiqueur',
       },
       {
         titre: 'Entretien de la chaudière',

@@ -41,6 +41,7 @@ export default function InscriptionArtisanPage() {
     experience: '',
     certifications: '',
   })
+  const [consentRgpd, setConsentRgpd] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -78,8 +79,12 @@ export default function InscriptionArtisanPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError('')
+    if (!consentRgpd) {
+      setError('Veuillez accepter la politique de confidentialité avant de finaliser votre inscription.')
+      return
+    }
+    setIsLoading(true)
 
     try {
       const response = await fetch('/api/inscription-artisan', {
@@ -416,12 +421,20 @@ export default function InscriptionArtisanPage() {
                         placeholder="RGE, Qualibat, etc."
                       />
                     </div>
-                    <div className="bg-blue-50 rounded-lg p-4 text-sm text-blue-800">
-                      En vous inscrivant, vous acceptez nos{' '}
-                      <Link href="/mentions-legales" className="underline hover:text-blue-600">conditions d'utilisation</Link>
-                      {' '}et notre{' '}
-                      <Link href="/confidentialite" className="underline hover:text-blue-600">politique de confidentialité</Link>.
-                    </div>
+                    <label className="flex items-start gap-3 bg-blue-50 rounded-lg p-4 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consentRgpd}
+                        onChange={(e) => setConsentRgpd(e.target.checked)}
+                        className="mt-0.5 accent-blue-600"
+                      />
+                      <span className="text-sm text-blue-800">
+                        J'accepte les{' '}
+                        <Link href="/mentions-legales" className="underline text-blue-600 hover:text-blue-700">conditions d'utilisation</Link>
+                        {' '}et la{' '}
+                        <Link href="/confidentialite" className="underline text-blue-600 hover:text-blue-700">politique de confidentialité</Link>
+                      </span>
+                    </label>
                   </div>
                 )}
 

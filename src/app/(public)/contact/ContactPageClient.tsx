@@ -18,6 +18,7 @@ export default function ContactPageClient() {
     sujet: '',
     message: '',
   })
+  const [consentRgpd, setConsentRgpd] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -25,6 +26,10 @@ export default function ContactPageClient() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    if (!consentRgpd) {
+      setError('Veuillez accepter la politique de confidentialité avant d\'envoyer votre message.')
+      return
+    }
     setIsLoading(true)
 
     try {
@@ -299,6 +304,19 @@ export default function ContactPageClient() {
                     placeholder="Décrivez votre demande..."
                   />
                 </div>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consentRgpd}
+                    onChange={(e) => setConsentRgpd(e.target.checked)}
+                    className="mt-1 accent-blue-600"
+                  />
+                  <span className="text-sm text-gray-600">
+                    J'accepte que mes données soient traitées conformément à la{' '}
+                    <Link href="/confidentialite" className="underline text-blue-600">politique de confidentialité</Link>
+                  </span>
+                </label>
 
                 <button
                   type="submit"

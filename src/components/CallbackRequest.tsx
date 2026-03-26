@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Phone, CheckCircle, Loader2 } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -18,6 +19,7 @@ function isValidFrenchPhone(phone: string): boolean {
 
 export default function CallbackRequest({ serviceSlug, cityName }: CallbackRequestProps) {
   const [phone, setPhone] = useState('')
+  const [consentRgpd, setConsentRgpd] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -32,6 +34,10 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
     }
     if (!isValidFrenchPhone(phone.trim())) {
       setError('Numéro de téléphone français invalide')
+      return
+    }
+    if (!consentRgpd) {
+      setError('Veuillez accepter la politique de confidentialité')
       return
     }
 
@@ -112,9 +118,18 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
         </button>
       </form>
       {error && <p className="text-xs text-red-600 mt-1.5">{error}</p>}
-      <p className="text-[10px] text-amber-700/60 mt-2">
-        Gratuit et sans engagement. Vos données restent confidentielles.
-      </p>
+      <label className="flex items-start gap-2 mt-2 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={consentRgpd}
+          onChange={(e) => setConsentRgpd(e.target.checked)}
+          className="mt-0.5 accent-amber-600"
+        />
+        <span className="text-[11px] text-amber-900/70">
+          J'accepte que mes données soient traitées conformément à la{' '}
+          <Link href="/confidentialite" className="underline text-blue-600">politique de confidentialité</Link>
+        </span>
+      </label>
     </div>
   )
 }

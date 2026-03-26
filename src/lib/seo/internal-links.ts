@@ -157,9 +157,9 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'ascensoriste': { slug: 'ascensoriste', label: 'ascensoriste' },
   'ascenseur': { slug: 'ascensoriste', label: 'ascensoriste' },
   // Diagnostiqueur
-  'diagnostiqueur': { slug: 'diagnostiqueur-immobilier', label: 'diagnostiqueur immobilier' },
-  'diagnostic immobilier': { slug: 'diagnostiqueur-immobilier', label: 'diagnostiqueur immobilier' },
-  'dpe': { slug: 'diagnostiqueur-immobilier', label: 'diagnostiqueur immobilier' },
+  'diagnostiqueur': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
+  'diagnostic immobilier': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
+  'dpe': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   // Géomètre
   'géomètre': { slug: 'geometre-expert', label: 'géomètre expert' },
   'geometre': { slug: 'geometre-expert', label: 'géomètre expert' },

@@ -584,7 +584,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le DPE est un diagnostic obligatoire lors de la vente ou la location d'un logement. Il attribue une étiquette énergie (A à G) en fonction de la consommation d'énergie primaire et des émissions de CO₂. Depuis 2023, les logements classés G sont progressivement interdits à la location.",
     category: 'Isolation & énergie',
-    relatedService: 'diagnostiqueur-immobilier',
+    relatedService: 'diagnostiqueur',
   },
   {
     term: 'BBC (Bâtiment Basse Consommation)',
@@ -1150,7 +1150,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "L'audit énergétique est une étude approfondie des performances thermiques d'un logement, plus détaillée qu'un DPE. Il propose des scénarios de travaux chiffrés avec les gains énergétiques attendus. Il est obligatoire depuis 2023 pour la vente des logements classés F ou G au DPE, et requis pour MaPrimeRénov' Parcours accompagné.",
     category: 'Isolation & énergie',
-    relatedService: 'diagnostiqueur-immobilier',
+    relatedService: 'diagnostiqueur',
   },
   {
     term: 'Étanchéité à l\'air',
