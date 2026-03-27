@@ -111,7 +111,7 @@ export function SentimentIndicator({
             <span
               key={keyword}
               className={cn(
-                'rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300',
+                'rounded-full bg-gray-100 text-gray-600',
                 sizeConfig.keyword
               )}
             >
@@ -155,12 +155,12 @@ export function TopicSentiment({ topics, size = 'sm', className }: TopicSentimen
         return (
           <div key={topic} className="flex items-center gap-2">
             <span className={cn(
-              'text-gray-600 dark:text-gray-400 min-w-[100px]',
+              'text-gray-600 min-w-[100px]',
               size === 'sm' ? 'text-xs' : 'text-sm'
             )}>
               {label}
             </span>
-            <div className="flex-1 h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
               <div
                 className={cn(
                   'h-full rounded-full transition-all',

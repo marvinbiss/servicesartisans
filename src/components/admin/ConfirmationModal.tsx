@@ -58,6 +58,16 @@ export function ConfirmationModal({
   const [loading, setLoading] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
 
+  // Lock body scroll when open
+  useEffect(() => {
+    if (!isOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = originalOverflow
+    }
+  }, [isOpen])
+
   // Trap focus inside modal: cycle Tab/Shift+Tab, close on Escape
   useEffect(() => {
     if (!isOpen) return
@@ -138,7 +148,7 @@ export function ConfirmationModal({
           aria-modal="true"
           aria-labelledby="confirmation-modal-title"
           tabIndex={-1}
-          className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+          className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto"
         >
           {/* Close button */}
           <button

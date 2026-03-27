@@ -151,7 +151,7 @@ export function AuthenticityDetails({
   return (
     <div className={cn('p-4 rounded-lg border', className)}>
       <div className="flex items-center justify-between mb-3">
-        <h4 className="font-medium text-gray-900 dark:text-white">
+        <h4 className="font-medium text-gray-900">
           Authenticité de l'avis
         </h4>
         <AuthenticityBadge
@@ -164,10 +164,10 @@ export function AuthenticityDetails({
       {/* Score bar */}
       <div className="mb-4">
         <div className="flex items-center justify-between text-sm mb-1">
-          <span className="text-gray-600 dark:text-gray-400">Score de confiance</span>
+          <span className="text-gray-600">Score de confiance</span>
           <span className="font-medium">{score}%</span>
         </div>
-        <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
             className={cn(
               'h-full rounded-full transition-all',
@@ -180,13 +180,13 @@ export function AuthenticityDetails({
 
       {/* Verified purchase info */}
       {isVerifiedPurchase && (
-        <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-3">
-          <div className="flex items-center gap-2 text-green-700 dark:text-green-400 text-sm font-medium mb-1">
+        <div className="p-3 bg-green-50 rounded-lg mb-3">
+          <div className="flex items-center gap-2 text-green-700 text-sm font-medium mb-1">
             <ShieldCheck className="w-4 h-4" />
             Achat confirmé
           </div>
           {bookingDate && (
-            <p className="text-sm text-green-600 dark:text-green-500">
+            <p className="text-sm text-green-600">
               Prestation réalisée le {new Date(bookingDate).toLocaleDateString('fr-FR')}
             </p>
           )}
@@ -196,8 +196,8 @@ export function AuthenticityDetails({
       {/* Flags */}
       {flags && Object.values(flags).some(Boolean) && (
         <div className="space-y-1 mb-3">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Signaux détectés:</p>
-          <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-0.5">
+          <p className="text-sm font-medium text-gray-700">Signaux détectés:</p>
+          <ul className="text-sm text-gray-600 space-y-0.5">
             {flags.suspected_fake && (
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
@@ -229,8 +229,8 @@ export function AuthenticityDetails({
       {/* Risk factors */}
       {riskFactors.length > 0 && (
         <div className="space-y-1">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Facteurs de risque:</p>
-          <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-0.5">
+          <p className="text-sm font-medium text-gray-700">Facteurs de risque:</p>
+          <ul className="text-sm text-gray-600 space-y-0.5">
             {riskFactors.map((factor) => (
               <li key={factor} className="flex items-center gap-1.5">
                 <AlertTriangle className="w-3 h-3 text-yellow-500" />

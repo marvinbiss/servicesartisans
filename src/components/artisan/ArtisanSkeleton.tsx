@@ -141,7 +141,7 @@ export function ArtisanPageSkeleton() {
 export function ArtisanPhotoGridSkeleton() {
   return (
     <div className="rounded-2xl overflow-hidden">
-      <div className="grid grid-cols-4 grid-rows-2 gap-2 h-80">
+      <div className="grid grid-cols-4 grid-rows-2 gap-2 h-60 md:h-80">
         {/* Main hero */}
         <Shimmer className="col-span-2 row-span-2 rounded-l-2xl" />
         {/* Secondary images */}

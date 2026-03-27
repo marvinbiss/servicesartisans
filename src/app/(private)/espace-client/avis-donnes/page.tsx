@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, ArrowLeft, Edit2, Trash2, Loader2 } from 'lucide-react'
+import { Star, ArrowLeft, Edit2, Trash2, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { QuickSiteLinks } from '@/components/InternalLinks'
-import LogoutButton from '@/components/LogoutButton'
+import ClientSidebar from '@/components/client/ClientSidebar'
 
 interface AvisPublie {
   id: string
@@ -37,6 +36,7 @@ export default function AvisDonnesPage() {
   const [note, setNote] = useState(5)
   const [commentaire, setCommentaire] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchAvis()
@@ -50,8 +50,9 @@ export default function AvisDonnesPage() {
         setAvisPublies(data.avisPublies || [])
         setAvisEnAttente(data.avisEnAttente || [])
       }
-    } catch (error) {
-      console.error('Error fetching avis:', error)
+    } catch (err) {
+      console.error('Error fetching avis:', err)
+      setError('Impossible de charger vos avis. Veuillez réessayer.')
     } finally {
       setLoading(false)
     }
@@ -99,8 +100,9 @@ export default function AvisDonnesPage() {
           setSelectedAvis(null)
         }
       }
-    } catch (error) {
-      console.error('Error submitting avis:', error)
+    } catch (err) {
+      console.error('Error submitting avis:', err)
+      setError('Erreur lors de l\'envoi de votre avis. Veuillez réessayer.')
     } finally {
       setSubmitting(false)
       setNote(5)
@@ -119,8 +121,9 @@ export default function AvisDonnesPage() {
       if (response.ok) {
         await fetchAvis()
       }
-    } catch (error) {
-      console.error('Error deleting avis:', error)
+    } catch (err) {
+      console.error('Error deleting avis:', err)
+      setError('Erreur lors de la suppression de l\'avis. Veuillez réessayer.')
     }
   }
 
@@ -177,43 +180,16 @@ export default function AvisDonnesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-4">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-client/mes-demandes"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <FileText className="w-5 h-5" />
-                Mes demandes
-              </Link>
-              <Link
-                href="/espace-client/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-              </Link>
-              <Link
-                href="/espace-client/avis-donnes"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <Star className="w-5 h-5" />
-                Avis donnés
-              </Link>
-              <Link
-                href="/espace-client/parametres"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Settings className="w-5 h-5" />
-                Paramètres
-              </Link>
-              <LogoutButton />
-            </nav>
-            <QuickSiteLinks />
-          </div>
+          <ClientSidebar activePage="avis-donnes" />
 
           {/* Content */}
           <div className="lg:col-span-3 space-y-8">
+            {error && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center justify-between">
+                <span>{error}</span>
+                <button type="button" onClick={() => setError(null)} className="text-red-500 hover:text-red-700 font-medium ml-4">✕</button>
+              </div>
+            )}
             {/* En attente */}
             {avisEnAttente.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm p-6">

@@ -63,7 +63,7 @@ export function AdvancedFilters({
   ).length
 
   return (
-    <div className={cn('bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700', className)}>
+    <div className={cn('bg-white rounded-xl shadow-sm border border-gray-200', className)}>
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
@@ -71,7 +71,7 @@ export function AdvancedFilters({
       >
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-gray-500" />
-          <span className="font-medium text-gray-900 dark:text-white">
+          <span className="font-medium text-gray-900">
             Filtres avancés
           </span>
           {activeFiltersCount > 0 && (
@@ -89,16 +89,16 @@ export function AdvancedFilters({
 
       {/* Filters */}
       {isExpanded && (
-        <div className="border-t border-gray-200 dark:border-gray-700">
+        <div className="border-t border-gray-200">
           {/* Rating filter */}
-          <div className="border-b border-gray-200 dark:border-gray-700">
+          <div className="border-b border-gray-200">
             <button
               onClick={() => toggleSection('rating')}
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
                 <Star className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Note minimum</span>
+                <span className="text-sm font-medium text-gray-700">Note minimum</span>
               </div>
               {expandedSections.has('rating') ? (
                 <ChevronUp className="w-4 h-4 text-gray-400" />
@@ -108,16 +108,16 @@ export function AdvancedFilters({
             </button>
             {expandedSections.has('rating') && (
               <div className="px-4 pb-4">
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {[0, 3, 3.5, 4, 4.5].map((rating) => (
                     <button
                       key={rating}
                       onClick={() => handleChange('minRating', rating === 0 ? undefined : rating)}
                       className={cn(
-                        'flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                        'flex items-center gap-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px]',
                         (values.minRating || 0) === rating
-                          ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                          : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       )}
                     >
                       {rating === 0 ? (
@@ -137,14 +137,14 @@ export function AdvancedFilters({
 
           {/* Distance filter */}
           {userLocation && (
-            <div className="border-b border-gray-200 dark:border-gray-700">
+            <div className="border-b border-gray-200">
               <button
                 onClick={() => toggleSection('distance')}
                 className="w-full flex items-center justify-between p-4"
               >
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-medium text-gray-700">
                     Distance ({values.radius || 25} km)
                   </span>
                 </div>
@@ -168,14 +168,14 @@ export function AdvancedFilters({
           )}
 
           {/* Price filter */}
-          <div className="border-b border-gray-200 dark:border-gray-700">
+          <div className="border-b border-gray-200">
             <button
               onClick={() => toggleSection('price')}
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
                 <Euro className="w-4 h-4 text-green-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tarif horaire</span>
+                <span className="text-sm font-medium text-gray-700">Tarif horaire</span>
               </div>
               {expandedSections.has('price') ? (
                 <ChevronUp className="w-4 h-4 text-gray-400" />
@@ -198,14 +198,14 @@ export function AdvancedFilters({
           </div>
 
           {/* Availability filter */}
-          <div className="border-b border-gray-200 dark:border-gray-700">
+          <div className="border-b border-gray-200">
             <button
               onClick={() => toggleSection('availability')}
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-purple-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Disponibilité</span>
+                <span className="text-sm font-medium text-gray-700">Disponibilité</span>
               </div>
               {expandedSections.has('availability') ? (
                 <ChevronUp className="w-4 h-4 text-gray-400" />
@@ -225,34 +225,40 @@ export function AdvancedFilters({
 
           {/* Verified only toggle */}
           <div className="p-4 flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <span className="text-sm font-medium text-gray-700">
               Artisans référencés uniquement
             </span>
             <button
               onClick={() => handleChange('verified', !values.verified)}
-              className={cn(
-                'relative w-11 h-6 rounded-full transition-colors',
-                values.verified ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
-              )}
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-pressed={!!values.verified}
+              aria-label="Artisans référencés uniquement"
             >
               <span
                 className={cn(
-                  'absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform shadow',
-                  values.verified && 'translate-x-5'
+                  'relative w-11 h-6 rounded-full transition-colors inline-block',
+                  values.verified ? 'bg-blue-600' : 'bg-gray-300'
                 )}
-              />
+              >
+                <span
+                  className={cn(
+                    'absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform shadow',
+                    values.verified && 'translate-x-5'
+                  )}
+                />
+              </span>
             </button>
           </div>
 
           {/* Sort by */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+          <div className="p-4 border-t border-gray-200">
+            <label className="text-sm font-medium text-gray-700 mb-2 block">
               Trier par
             </label>
             <select
               value={values.sortBy || 'relevance'}
               onChange={(e) => handleChange('sortBy', e.target.value as FilterValues['sortBy'])}
-              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              className="w-full p-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm"
             >
               <option value="relevance">Pertinence</option>
               <option value="rating">Meilleures notes</option>
@@ -263,10 +269,10 @@ export function AdvancedFilters({
           </div>
 
           {/* Reset button */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="p-4 border-t border-gray-200">
             <button
               onClick={onReset}
-              className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 min-h-[44px]"
             >
               <RotateCcw className="w-4 h-4" />
               Réinitialiser les filtres

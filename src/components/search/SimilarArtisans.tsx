@@ -66,7 +66,7 @@ export function SimilarArtisans({
 
   if (isLoading) {
     return (
-      <div className={cn('bg-white dark:bg-gray-800 rounded-xl p-6', className)}>
+      <div className={cn('bg-white rounded-xl p-6', className)}>
         <div className="flex items-center justify-center py-8">
           <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
         </div>
@@ -79,20 +79,20 @@ export function SimilarArtisans({
   }
 
   return (
-    <div className={cn('bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700', className)}>
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+    <div className={cn('bg-white rounded-xl shadow-sm border border-gray-200', className)}>
+      <div className="p-4 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-purple-500" />
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-gray-900">
             Artisans similaires
           </h3>
         </div>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm text-gray-500 mt-1">
           Basé sur le service et la localisation
         </p>
       </div>
 
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="divide-y divide-gray-200">
         {artisans.map((artisan) => {
           const providerUrl = getArtisanUrl({ stable_id: artisan.stable_id, slug: artisan.slug, specialty: artisan.specialty, city: artisan.city })
 
@@ -100,10 +100,10 @@ export function SimilarArtisans({
             <Link
               key={artisan.id}
               href={providerUrl}
-              className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+              className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors"
             >
               {/* Avatar */}
-              <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {artisan.avatarUrl ? (
                   <Image
                     src={artisan.avatarUrl}
@@ -116,7 +116,7 @@ export function SimilarArtisans({
                     blurDataURL={BLUR_PLACEHOLDER}
                   />
                 ) : (
-                  <span className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                  <span className="text-lg font-medium text-gray-500">
                     {artisan.name.charAt(0)}
                   </span>
                 )}
@@ -125,11 +125,11 @@ export function SimilarArtisans({
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-900 dark:text-white truncate">
+                  <span className="font-medium text-gray-900 truncate">
                     {artisan.name}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-2 text-sm text-gray-500">
                   <span>{artisan.specialty}</span>
                   <span>·</span>
                   <span className="flex items-center gap-1">
@@ -142,7 +142,7 @@ export function SimilarArtisans({
               {/* Rating */}
               <div className="flex items-center gap-1 text-sm">
                 <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-gray-900">
                   {artisan.ratingAverage.toFixed(1)}
                 </span>
                 <span className="text-gray-400">({artisan.reviewCount})</span>
@@ -156,7 +156,7 @@ export function SimilarArtisans({
       </div>
 
       {/* View more link */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-t border-gray-200">
         <Link
           href={`/services/${serviceSlug}/${locationSlug}`}
           className="flex items-center justify-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700"

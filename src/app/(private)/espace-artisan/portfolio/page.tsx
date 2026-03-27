@@ -91,9 +91,12 @@ export default function PortfolioPage() {
         setItems((prev) =>
           prev.map((i) => (i.id === item.id ? data.item : i))
         )
+      } else {
+        setError('Impossible de modifier la visibilité. Veuillez réessayer.')
       }
     } catch (err) {
       console.error('Error toggling visibility:', err)
+      setError('Erreur de connexion. Veuillez réessayer.')
     }
   }
 
@@ -109,9 +112,12 @@ export default function PortfolioPage() {
         setItems((prev) =>
           prev.map((i) => (i.id === item.id ? data.item : i))
         )
+      } else {
+        setError('Impossible de modifier la mise en avant. Veuillez réessayer.')
       }
     } catch (err) {
       console.error('Error toggling featured:', err)
+      setError('Erreur de connexion. Veuillez réessayer.')
     }
   }
 

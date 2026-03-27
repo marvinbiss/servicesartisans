@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Code, Zap, Globe, Shield, HelpCircle, ExternalLink, Copy, BarChart3 } from 'lucide-react'
+import { Code, Zap, Globe, Shield, HelpCircle, ExternalLink, BarChart3 } from 'lucide-react'
+import CopyButton from '@/components/ui/CopyButton'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
@@ -229,13 +230,10 @@ export default function WidgetPrixPage() {
                 <Code className="h-4 w-4" />
                 Code HTML à copier
               </span>
-              <button
+              <CopyButton
+                text={embedCode}
                 className="flex items-center gap-1.5 rounded-md bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 transition hover:bg-primary-100"
-                title="Copier le code"
-              >
-                <Copy className="h-3.5 w-3.5" />
-                Copier
-              </button>
+              />
             </div>
             <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
               <code className="text-charcoal-800">{embedCode}</code>

@@ -450,11 +450,19 @@ export default function DashboardArtisanPage() {
                               href={`/espace-artisan/demandes-recues?id=${demande.id}`}
                               className="block border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-blue-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-all"
                             >
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h3 className="font-medium text-gray-900">
-                                    {demande.service_name}
-                                  </h3>
+                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div className="min-w-0">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <h3 className="font-medium text-gray-900">
+                                      {demande.service_name}
+                                    </h3>
+                                    <span
+                                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClasses(demande.status)}`}
+                                      role="status"
+                                    >
+                                      {getStatusLabel(demande.status)}
+                                    </span>
+                                  </div>
                                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-gray-500">
                                     <span>{demande.client_name}</span>
                                     <span>{demande.city || 'Non précisé'}</span>
@@ -469,15 +477,7 @@ export default function DashboardArtisanPage() {
                                     </div>
                                   )}
                                 </div>
-                                <div className="flex items-center gap-4">
-                                  <span
-                                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusClasses(demande.status)}`}
-                                    role="status"
-                                  >
-                                    {getStatusLabel(demande.status)}
-                                  </span>
-                                  <ChevronRight className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                                </div>
+                                <ChevronRight className="w-5 h-5 text-gray-400 hidden sm:block shrink-0" aria-hidden="true" />
                               </div>
                             </Link>
                           </motion.div>

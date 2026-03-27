@@ -664,6 +664,7 @@ export default function StatistiquesArtisansFrancePage() {
                       Voir détail <ExternalLink className="w-3 h-3" />
                     </Link>
                   </div>
+                  <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-left text-xs text-gray-500 border-b border-gray-100">
@@ -689,6 +690,7 @@ export default function StatistiquesArtisansFrancePage() {
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               ))}
             </div>

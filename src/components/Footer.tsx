@@ -12,6 +12,7 @@ const informationLinks = [
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
   { name: 'Avis artisans', href: '/avis' },
+  { name: 'Checklist travaux', href: '/checklist-travaux' },
 ]
 
 
@@ -190,6 +191,11 @@ export default function Footer() {
               <li>
                 <Link href="/garantie" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Notre garantie
+                </Link>
+              </li>
+              <li>
+                <Link href="/widget-prix" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Widget prix
                 </Link>
               </li>
             </ul>

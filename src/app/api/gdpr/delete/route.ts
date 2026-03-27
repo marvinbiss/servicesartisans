@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { checkRateLimit } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 const deletePostSchema = z.object({
@@ -28,6 +29,15 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { success: false, error: { message: 'Authentification requise' } },
         { status: 401 }
+      )
+    }
+
+    // Rate limiting (1 request per 24 hours per user ID)
+    const rl = await checkRateLimit(`gdpr-delete:${user.id}`, { window: 86_400_000, max: 1 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Vous avez déjà fait une demande de suppression récemment. Veuillez réessayer dans 24 heures.' } },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
       )
     }
 

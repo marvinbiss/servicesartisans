@@ -1,7 +1,7 @@
 import { SITE_URL } from '@/lib/seo/config'
 
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/IndexNow'
-const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || 'd438ef72ba5465680fecf42737f316b4'
+const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY
 
 const BATCH_SIZE = 10_000
 

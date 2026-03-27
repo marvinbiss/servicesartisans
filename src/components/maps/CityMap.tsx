@@ -8,7 +8,7 @@ import { MapPin, Loader2 } from 'lucide-react'
 const GeographicMap = dynamic(() => import('./GeographicMap'), {
   ssr: false,
   loading: () => (
-    <div className="bg-gray-100 rounded-xl h-[300px] flex items-center justify-center">
+    <div className="bg-gray-100 rounded-xl h-[300px] md:h-[400px] flex items-center justify-center">
       <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
     </div>
   ),
@@ -104,14 +104,16 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
         Artisans sur la carte à {cityName}
       </h2>
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <GeographicMap
-          centerLat={coordinates.lat}
-          centerLng={coordinates.lng}
-          zoom={12}
-          providers={providers}
-          locationName={cityName}
-          height="400px"
-        />
+        <div className="h-[300px] md:h-[400px]">
+          <GeographicMap
+            centerLat={coordinates.lat}
+            centerLng={coordinates.lng}
+            zoom={12}
+            providers={providers}
+            locationName={cityName}
+            height="100%"
+          />
+        </div>
         {providers.length > 0 && (
           <div className="p-4 border-t bg-gray-50">
             <p className="text-sm text-gray-600">

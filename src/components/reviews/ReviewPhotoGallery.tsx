@@ -94,7 +94,7 @@ export function ReviewPhotoGallery({
                 unoptimized
               />
             ) : (
-              <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                 <Play className="w-6 h-6 text-white" />
               </div>
             )}

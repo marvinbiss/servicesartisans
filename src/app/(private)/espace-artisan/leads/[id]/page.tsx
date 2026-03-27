@@ -110,18 +110,21 @@ export default function LeadDetailPage() {
   // Auto-mark as viewed on first load
   useEffect(() => {
     if (assignment && assignment.status === 'pending') {
+      let cancelled = false
       fetch(`/api/artisan/leads/${id}/action`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'view' }),
       }).then(() => {
+        if (cancelled) return
         setAssignment((prev) =>
           prev ? { ...prev, status: 'viewed', viewed_at: new Date().toISOString() } : prev
         )
         fetchEvents()
       })
+      return () => { cancelled = true }
     }
-  }, [assignment?.status, id]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [assignment?.status, id, fetchEvents])
 
   const handleAction = async (action: string, extraData?: Record<string, unknown>) => {
     setActionLoading(action)

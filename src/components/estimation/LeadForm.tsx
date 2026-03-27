@@ -54,6 +54,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
       </div>
       <input
         type="email"
+        inputMode="email"
         placeholder="Votre email (optionnel)"
         value={lead.leadEmail}
         onChange={(e) => lead.setLeadEmail(e.target.value)}

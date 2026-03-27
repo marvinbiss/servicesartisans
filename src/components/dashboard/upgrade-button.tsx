@@ -10,11 +10,13 @@ interface UpgradeButtonProps {
 
 export function UpgradeButton({ planId, className }: UpgradeButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleUpgrade = async () => {
     if (planId === 'free') return
 
     setIsLoading(true)
+    setError(null)
     try {
       const response = await fetch('/api/stripe/create-checkout', {
         method: 'POST',
@@ -26,25 +28,33 @@ export function UpgradeButton({ planId, className }: UpgradeButtonProps) {
 
       if (data.url) {
         window.location.href = data.url
+      } else {
+        setError('Impossible de démarrer le paiement. Veuillez réessayer.')
       }
-    } catch (error) {
-      console.error('Upgrade error:', error)
+    } catch (err) {
+      console.error('Upgrade error:', err)
+      setError('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <Button
-      onClick={handleUpgrade}
-      disabled={isLoading || planId === 'free'}
-      className={className}
-    >
-      {planId === 'free'
-        ? 'Plan gratuit'
-        : isLoading
-        ? 'Chargement...'
-        : 'Choisir ce plan'}
-    </Button>
+    <div>
+      <Button
+        onClick={handleUpgrade}
+        disabled={isLoading || planId === 'free'}
+        className={className}
+      >
+        {planId === 'free'
+          ? 'Plan gratuit'
+          : isLoading
+          ? 'Chargement...'
+          : 'Choisir ce plan'}
+      </Button>
+      {error && (
+        <p className="text-red-600 text-sm mt-2">{error}</p>
+      )}
+    </div>
   )
 }

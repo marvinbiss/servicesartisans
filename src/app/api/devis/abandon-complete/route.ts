@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+
+// Basic email format validation
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 /**
  * POST /api/devis/abandon-complete
@@ -7,10 +11,25 @@ import { createAdminClient } from '@/lib/supabase/admin'
  */
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 5 requests per minute per IP
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`abandon-complete:${ip}`, { window: 60_000, max: 5 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes, veuillez réessayer plus tard' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     const { email } = await request.json()
 
     if (!email || typeof email !== 'string') {
       return NextResponse.json({ error: 'email required' }, { status: 400 })
+    }
+
+    // Validate email format before any DB operation
+    if (!EMAIL_REGEX.test(email) || email.length > 254) {
+      return NextResponse.json({ error: 'Format email invalide' }, { status: 400 })
     }
 
     const supabase = createAdminClient()

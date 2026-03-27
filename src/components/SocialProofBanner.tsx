@@ -79,13 +79,18 @@ function getDailyFallback(): DemandStats {
   }
 }
 
+// Computed once per day, stable across renders
+const dailyFallback = getDailyFallback()
+
 export function SocialProofBanner({ metier, ville, variant = 'inline', animated = true }: SocialProofBannerProps) {
-  const fallback = getDailyFallback()
+  const fallback = dailyFallback
   const [stats, setStats] = useState<DemandStats | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const observedRef = useRef(false)
 
   useEffect(() => {
+    const controller = new AbortController()
+
     // Check sessionStorage cache
     const cacheKey = `sa:social-proof:${metier || ''}:${ville || ''}`
     try {
@@ -103,7 +108,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
     if (metier) params.set('service', metier)
     if (ville) params.set('city', ville)
 
-    fetch(`/api/stats/demand?${params}`)
+    fetch(`/api/stats/demand?${params}`, { signal: controller.signal })
       .then(r => r.json())
       .then((data: DemandStats) => {
         setStats(data)
@@ -111,11 +116,13 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
           sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }))
         } catch { /* ignore */ }
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === 'AbortError') return
         setStats(fallback)
       })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metier, ville])
+
+    return () => controller.abort()
+  }, [metier, ville, fallback])
 
   const devisCount = stats?.requests_this_month ?? fallback.requests_this_month
   const providerCount = stats?.active_providers ?? fallback.active_providers
@@ -146,8 +153,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
 
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animated, stats])
+  }, [animated, stats, devisAnim.play, providerAnim.play])
 
   const devisDisplay = (animated ? devisAnim.value : devisCount).toLocaleString('fr-FR')
   const providerDisplay = (animated ? providerAnim.value : providerCount).toLocaleString('fr-FR')

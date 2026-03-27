@@ -243,6 +243,12 @@ const guides = [
 
 const relatedPages = [
   {
+    title: "Checklist avant travaux",
+    description: "60 points de contrôle essentiels pour préparer, suivre et réceptionner vos travaux sans rien oublier.",
+    href: "/checklist-travaux",
+    icon: FileCheck,
+  },
+  {
     title: "Questions fréquentes",
     description: "Réponses aux questions les plus posées sur les travaux et les artisans.",
     href: "/faq",

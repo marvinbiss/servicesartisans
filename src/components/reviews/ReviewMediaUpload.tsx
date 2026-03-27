@@ -160,8 +160,8 @@ export function ReviewMediaUpload({
         className={cn(
           'relative border-2 border-dashed rounded-lg p-6 text-center transition-colors',
           dragActive
-            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-            : 'border-gray-300 dark:border-gray-600 hover:border-gray-400',
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-300 hover:border-gray-400',
           files.length >= maxFiles && 'opacity-50 pointer-events-none'
         )}
         onDragEnter={handleDrag}
@@ -181,23 +181,23 @@ export function ReviewMediaUpload({
         {uploading ? (
           <div className="flex flex-col items-center">
             <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-2" />
-            <p className="text-sm text-gray-600 dark:text-gray-400">Upload en cours...</p>
+            <p className="text-sm text-gray-600">Upload en cours...</p>
           </div>
         ) : (
           <>
             <div className="flex justify-center gap-2 mb-3">
               {acceptedTypes.includes('image') && (
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
-                  <Camera className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <div className="p-2 bg-blue-100 rounded-full">
+                  <Camera className="w-6 h-6 text-blue-600" />
                 </div>
               )}
               {acceptedTypes.includes('video') && (
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-                  <Video className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                <div className="p-2 bg-purple-100 rounded-full">
+                  <Video className="w-6 h-6 text-purple-600" />
                 </div>
               )}
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <p className="text-sm text-gray-600 mb-2">
               Glissez-déposez vos fichiers ici ou
             </p>
             <button
@@ -207,12 +207,12 @@ export function ReviewMediaUpload({
               <Upload className="w-4 h-4" />
               Parcourir
             </button>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+            <p className="text-xs text-gray-500 mt-2">
               {acceptedTypes.includes('image') && 'Images: JPG, PNG, WebP (max 5MB)'}
               {acceptedTypes.includes('image') && acceptedTypes.includes('video') && ' • '}
               {acceptedTypes.includes('video') && 'Vidéos: MP4, WebM (max 50MB)'}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-500">
+            <p className="text-xs text-gray-500">
               Maximum {maxFiles} fichiers
             </p>
           </>
@@ -221,7 +221,7 @@ export function ReviewMediaUpload({
 
       {/* Error message */}
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p className="text-sm text-red-600">{error}</p>
       )}
 
       {/* File previews */}
@@ -230,7 +230,7 @@ export function ReviewMediaUpload({
           {files.map((file) => (
             <div
               key={file.id}
-              className="relative group rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800"
+              className="relative group rounded-lg overflow-hidden bg-gray-100"
             >
               {/* Preview */}
               {file.type === 'photo' ? (
@@ -243,7 +243,7 @@ export function ReviewMediaUpload({
                   unoptimized
                 />
               ) : (
-                <div className="w-full h-32 flex items-center justify-center bg-gray-200 dark:bg-gray-700">
+                <div className="w-full h-32 flex items-center justify-center bg-gray-200">
                   <Video className="w-8 h-8 text-gray-400" />
                 </div>
               )}

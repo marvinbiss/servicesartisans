@@ -133,7 +133,7 @@ export function Modal({
         <div
           ref={modalRef}
           className={clsx(
-            'relative w-full bg-white rounded-2xl shadow-2xl',
+            'relative w-full bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto',
             'animate-scale-in',
             sizes[size]
           )}
@@ -160,7 +160,7 @@ export function Modal({
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="p-2 -m-2 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
                   aria-label="Fermer"
                 >
                   <X className="w-5 h-5" />

@@ -6,11 +6,11 @@ import { usePathname } from 'next/navigation'
 import { Home, Search, FileText, User } from 'lucide-react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
-const navItems: { href: string; icon: typeof Home; label: string }[] = [
+const navItems: { href: string; icon: typeof Home; label: string; prefetch?: boolean }[] = [
   { href: '/', icon: Home, label: 'Accueil' },
   { href: '/recherche', icon: Search, label: 'Recherche' },
   { href: '/devis', icon: FileText, label: 'Devis' },
-  { href: '/connexion', icon: User, label: 'Mon compte' },
+  { href: '/connexion', icon: User, label: 'Mon compte', prefetch: false },
 ]
 
 export default function MobileBottomNav() {
@@ -40,13 +40,14 @@ export default function MobileBottomNav() {
       aria-label="Navigation mobile"
     >
       <div className="flex items-center justify-around h-14 pb-safe">
-        {navItems.map(({ href, icon: Icon, label }) => {
+        {navItems.map(({ href, icon: Icon, label, prefetch }) => {
           const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
 
           return (
             <Link
               key={href}
               href={href}
+              prefetch={prefetch}
               aria-current={isActive ? 'page' : undefined}
               className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95 ${
                 isActive ? 'text-primary-400' : 'text-charcoal-400'

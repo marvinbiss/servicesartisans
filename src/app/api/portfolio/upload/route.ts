@@ -53,6 +53,19 @@ function validateMagicBytes(bytes: Uint8Array): boolean {
   return isJpeg || isPng || isWebp || isGif
 }
 
+/**
+ * Valide les magic bytes des fichiers vidéo pour confirmer le vrai format.
+ * Protège contre le MIME type spoofing côté vidéo.
+ */
+function validateVideoMagicBytes(bytes: Uint8Array): boolean {
+  if (bytes.length < 12) return false
+  // WebM: 1A 45 DF A3
+  if (bytes[0] === 0x1A && bytes[1] === 0x45 && bytes[2] === 0xDF && bytes[3] === 0xA3) return true
+  // MP4/MOV: "ftyp" at offset 4
+  if (bytes[4] === 0x66 && bytes[5] === 0x74 && bytes[6] === 0x79 && bytes[7] === 0x70) return true
+  return false
+}
+
 function generateFilePath(artisanId: string, fileName: string): string {
   const timestamp = Date.now()
   const randomStr = crypto.randomUUID().replace(/-/g, '').substring(0, 12)
@@ -142,7 +155,13 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
-    // Validate magic bytes to prevent MIME type spoofing (images only)
+    // Validate magic bytes to prevent MIME type spoofing
+    if (isVideo && !validateVideoMagicBytes(new Uint8Array(arrayBuffer))) {
+      return NextResponse.json(
+        { error: 'Format vidéo invalide. Le contenu ne correspond pas au type déclaré.' },
+        { status: 400 }
+      )
+    }
     if (!isVideo && !validateMagicBytes(new Uint8Array(arrayBuffer))) {
       return NextResponse.json(
         { error: 'Format de fichier invalide. Le contenu ne correspond pas au type déclaré.' },

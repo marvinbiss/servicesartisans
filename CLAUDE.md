@@ -118,6 +118,19 @@ Ne jamais référencer : `is_premium`, `trust_badge`, `trust_score`, `company_na
 
 ---
 
+## Dark Mode — Désactivé
+
+Le site est **light-only**. Le dark mode a été nettoyé le 2026-03-26 :
+- `ThemeProvider` et `ThemeToggle` supprimés (étaient du code mort, jamais montés)
+- Variables CSS `.dark {}` supprimées de `globals.css`
+- Classes `dark:*` supprimées de tous les composants publics (search, reviews, home, UI)
+- `darkMode: 'class'` conservé dans `tailwind.config.js` pour empêcher Tailwind d'auto-appliquer les dark: variants via media query
+- `colorScheme: 'light'` dans le viewport du root layout
+- Il reste des `dark:` classes dans `src/components/chat/*` (9 fichiers privés) — inertes, non prioritaires
+- **Ne PAS ajouter de nouvelles classes `dark:*`** dans les composants publics
+
+---
+
 ## Auth
 
 - **OAuth Google** activé (Supabase provider)

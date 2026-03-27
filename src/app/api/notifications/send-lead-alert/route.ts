@@ -3,8 +3,12 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail } from '@/lib/email/resend'
 import { getNewLeadAlertEmail } from '@/lib/email/templates/new-lead-alert'
 import { sendSMS } from '@/lib/sms/twilio'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisans.fr'
+
+// UUID v4 format validation
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 /**
  * POST /api/notifications/send-lead-alert
@@ -13,10 +17,36 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisa
  */
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 3 requests per minute per IP
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`send-lead-alert:${ip}`, { window: 60_000, max: 3 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes, veuillez réessayer plus tard' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     const { provider_ids, service, city, description, urgency, client_name } = await request.json()
 
+    // Input validation
     if (!Array.isArray(provider_ids) || provider_ids.length === 0) {
       return NextResponse.json({ error: 'provider_ids required' }, { status: 400 })
+    }
+
+    // Validate provider_ids are valid UUIDs and limit array size
+    if (provider_ids.length > 50) {
+      return NextResponse.json({ error: 'provider_ids limit exceeded (max 50)' }, { status: 400 })
+    }
+    if (!provider_ids.every((id: unknown) => typeof id === 'string' && UUID_REGEX.test(id))) {
+      return NextResponse.json({ error: 'provider_ids must be valid UUIDs' }, { status: 400 })
+    }
+
+    if (service && typeof service !== 'string') {
+      return NextResponse.json({ error: 'service must be a string' }, { status: 400 })
+    }
+    if (city && typeof city !== 'string') {
+      return NextResponse.json({ error: 'city must be a string' }, { status: 400 })
     }
 
     const supabase = createAdminClient()

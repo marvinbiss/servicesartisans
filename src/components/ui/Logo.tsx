@@ -29,9 +29,7 @@ export default function Logo({
 
   const textColor = theme === 'dark'
     ? 'text-white'
-    : theme === 'light'
-    ? 'text-gray-900'
-    : 'text-gray-900 dark:text-white'
+    : 'text-gray-900'
 
   const LogoIcon = () => (
     <svg
@@ -112,7 +110,7 @@ export default function Logo({
 // Tagline component
 export function Tagline({ className }: { className?: string }) {
   return (
-    <p className={clsx('text-gray-600 dark:text-gray-400', className)}>
+    <p className={clsx('text-gray-600', className)}>
       Trouvez des artisans qualifiés près de chez vous
     </p>
   )

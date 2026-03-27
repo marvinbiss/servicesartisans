@@ -75,7 +75,7 @@ export function PriceRangeFilter({
               'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
               isPresetActive(preset)
                 ? 'bg-green-600 text-white'
-                : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             )}
           >
             {preset.label}
@@ -86,7 +86,7 @@ export function PriceRangeFilter({
       {/* Custom range inputs */}
       <div className="flex items-center gap-3">
         <div className="flex-1">
-          <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
+          <label className="text-xs text-gray-500 mb-1 block">
             Min (EUR/h)
           </label>
           <div className="relative">
@@ -98,7 +98,7 @@ export function PriceRangeFilter({
               placeholder="0"
               min={minLimit}
               max={maxLimit}
-              className="w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm"
             />
           </div>
         </div>
@@ -106,7 +106,7 @@ export function PriceRangeFilter({
         <span className="text-gray-400 mt-6">—</span>
 
         <div className="flex-1">
-          <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
+          <label className="text-xs text-gray-500 mb-1 block">
             Max (EUR/h)
           </label>
           <div className="relative">
@@ -118,14 +118,14 @@ export function PriceRangeFilter({
               placeholder="200"
               min={minLimit}
               max={maxLimit}
-              className="w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm"
             />
           </div>
         </div>
       </div>
 
       {/* Visual indicator */}
-      <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
         <div
           className="h-full bg-green-500 rounded-full"
           style={{

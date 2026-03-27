@@ -120,7 +120,7 @@ export function ResponseTimeDisplay({
       <div className={cn('flex items-center gap-2', className)}>
         <div className="flex items-center gap-1">
           <Icon className={cn('w-4 h-4', speedConfig.color)} />
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <span className="text-sm text-gray-600">
             Répond en ~{formatTime(avgResponseTimeHours)}
           </span>
         </div>
@@ -135,9 +135,9 @@ export function ResponseTimeDisplay({
 
   // Card variant
   return (
-    <div className={cn('p-4 rounded-lg border bg-white dark:bg-gray-800', className)}>
+    <div className={cn('p-4 rounded-lg border bg-white', className)}>
       <div className="flex items-center justify-between mb-4">
-        <h4 className="font-medium text-gray-900 dark:text-white">
+        <h4 className="font-medium text-gray-900">
           Réactivité aux avis
         </h4>
         <div
@@ -158,22 +158,22 @@ export function ResponseTimeDisplay({
       <div className="grid grid-cols-2 gap-4">
         {/* Response time */}
         <div>
-          <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm mb-1">
+          <div className="flex items-center gap-1.5 text-gray-500 text-sm mb-1">
             <Clock className="w-4 h-4" />
             Temps moyen
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="text-2xl font-bold text-gray-900">
             {formatTime(avgResponseTimeHours)}
           </div>
         </div>
 
         {/* Response rate */}
         <div>
-          <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm mb-1">
+          <div className="flex items-center gap-1.5 text-gray-500 text-sm mb-1">
             <TrendingUp className="w-4 h-4" />
             Taux de réponse
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="text-2xl font-bold text-gray-900">
             {responseRate}%
           </div>
         </div>
@@ -181,7 +181,7 @@ export function ResponseTimeDisplay({
 
       {/* Progress bar for response rate */}
       <div className="mt-4">
-        <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
             className={cn(
               'h-full rounded-full transition-all',
@@ -196,7 +196,7 @@ export function ResponseTimeDisplay({
 
       {/* Review count */}
       {totalReviews !== undefined && reviewsWithResponse !== undefined && (
-        <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-3 text-xs text-gray-500">
           {reviewsWithResponse} réponses sur {totalReviews} avis
         </p>
       )}

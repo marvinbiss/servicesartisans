@@ -36,12 +36,17 @@ export default function StatistiquesPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [noProvider, setNoProvider] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [period, setPeriod] = useState<'week' | 'month' | 'year'>('month')
 
   useEffect(() => {
+    const controller = new AbortController()
+
     async function fetchStats() {
       try {
-        const res = await fetch(`/api/artisan/stats?period=${period}`)
+        const res = await fetch(`/api/artisan/stats?period=${period}`, {
+          signal: controller.signal,
+        })
 
         if (res.status === 404) {
           setNoProvider(true)
@@ -50,6 +55,7 @@ export default function StatistiquesPage() {
         }
 
         if (!res.ok) {
+          setError('Impossible de charger les statistiques.')
           setIsLoading(false)
           return
         }
@@ -80,13 +86,16 @@ export default function StatistiquesPage() {
           upcomingBookings: s.upcomingBookings ?? 0,
         })
       } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') return
         console.error('Error fetching stats:', err)
+        setError('Erreur de connexion. Veuillez réessayer.')
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchStats()
+    return () => controller.abort()
   }, [period])
 
   if (isLoading) {
@@ -110,6 +119,22 @@ export default function StatistiquesPage() {
           >
             Créer mon profil
           </Link>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Réessayer
+          </button>
         </div>
       </div>
     )
@@ -214,21 +239,23 @@ export default function StatistiquesPage() {
               <BarChart3 className="w-5 h-5 text-blue-600" />
               Réservations par jour
             </h3>
-            <div className="flex items-end justify-between h-32 sm:h-40">
-              {stats.bookingsByDay.map((day) => {
-                const maxCount = Math.max(...stats.bookingsByDay.map(d => d.count), 1)
-                const height = (day.count / maxCount) * 100
-                return (
-                  <div key={day.day} className="flex flex-col items-center gap-2">
-                    <div className="text-xs text-gray-600">{day.count}</div>
-                    <div
-                      className="w-10 bg-blue-500 rounded-t transition-all"
-                      style={{ height: `${Math.max(height, 4)}%` }}
-                    />
-                    <div className="text-xs text-gray-500">{day.day}</div>
-                  </div>
-                )
-              })}
+            <div className="overflow-x-auto">
+              <div className="flex items-end justify-between h-32 sm:h-40 min-w-[280px]">
+                {stats.bookingsByDay.map((day) => {
+                  const maxCount = Math.max(...stats.bookingsByDay.map(d => d.count), 1)
+                  const height = (day.count / maxCount) * 100
+                  return (
+                    <div key={day.day} className="flex flex-col items-center gap-2 flex-1 min-w-[36px]">
+                      <div className="text-xs text-gray-600">{day.count}</div>
+                      <div
+                        className="w-8 sm:w-10 bg-blue-500 rounded-t transition-all"
+                        style={{ height: `${Math.max(height, 4)}%` }}
+                      />
+                      <div className="text-xs text-gray-500 truncate max-w-[40px]">{day.day}</div>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
 
@@ -238,23 +265,25 @@ export default function StatistiquesPage() {
               <TrendingUp className="w-5 h-5 text-green-600" />
               Evolution mensuelle
             </h3>
-            <div className="flex items-end justify-between h-32 sm:h-40">
-              {stats.bookingsByMonth.map((month, i) => {
-                const maxCount = Math.max(...stats.bookingsByMonth.map(m => m.count), 1)
-                const height = (month.count / maxCount) * 100
-                return (
-                  <div key={month.month} className="flex flex-col items-center gap-2">
-                    <div className="text-xs text-gray-600">{month.count}</div>
-                    <div
-                      className={`w-10 rounded-t transition-all ${
-                        i === stats.bookingsByMonth.length - 1 ? 'bg-green-500' : 'bg-gray-300'
-                      }`}
-                      style={{ height: `${Math.max(height, 4)}%` }}
-                    />
-                    <div className="text-xs text-gray-500">{month.month}</div>
-                  </div>
-                )
-              })}
+            <div className="overflow-x-auto">
+              <div className="flex items-end justify-between h-32 sm:h-40 min-w-[400px]">
+                {stats.bookingsByMonth.map((month, i) => {
+                  const maxCount = Math.max(...stats.bookingsByMonth.map(m => m.count), 1)
+                  const height = (month.count / maxCount) * 100
+                  return (
+                    <div key={month.month} className="flex flex-col items-center gap-2 flex-1 min-w-[32px]">
+                      <div className="text-xs text-gray-600">{month.count}</div>
+                      <div
+                        className={`w-8 sm:w-10 rounded-t transition-all ${
+                          i === stats.bookingsByMonth.length - 1 ? 'bg-green-500' : 'bg-gray-300'
+                        }`}
+                        style={{ height: `${Math.max(height, 4)}%` }}
+                      />
+                      <div className="text-xs text-gray-500 truncate max-w-[36px]">{month.month}</div>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>

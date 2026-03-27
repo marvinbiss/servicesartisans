@@ -357,6 +357,10 @@ export default async function DevisPage() {
                   <ChevronRight className="w-3 h-3" />
                   Avis artisans
                 </Link>
+                <Link href="/checklist-travaux" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Checklist avant travaux
+                </Link>
               </div>
             </div>
           </div>

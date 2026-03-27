@@ -56,8 +56,8 @@ export function AvailabilityFilter({
             className={cn(
               'w-full flex items-center gap-3 p-3 rounded-lg border transition-all',
               isSelected
-                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                ? 'border-purple-500 bg-purple-50'
+                : 'border-gray-200 hover:border-gray-300'
             )}
           >
             <div
@@ -65,7 +65,7 @@ export function AvailabilityFilter({
                 'w-10 h-10 rounded-full flex items-center justify-center',
                 isSelected
                   ? 'bg-purple-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                  : 'bg-gray-100 text-gray-500'
               )}
             >
               <Icon className="w-5 h-5" />
@@ -76,13 +76,13 @@ export function AvailabilityFilter({
                 className={cn(
                   'font-medium',
                   isSelected
-                    ? 'text-purple-700 dark:text-purple-300'
-                    : 'text-gray-900 dark:text-white'
+                    ? 'text-purple-700'
+                    : 'text-gray-900'
                 )}
               >
                 {option.label}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500">
                 {option.sublabel}
               </div>
             </div>

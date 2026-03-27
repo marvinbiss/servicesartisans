@@ -32,8 +32,8 @@ export function CompareButton({ provider, size = 'sm', className }: CompareButto
       className={clsx(
         'inline-flex items-center gap-1.5 rounded-lg border font-medium transition-all duration-200',
         'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-        size === 'sm' && 'px-2.5 py-1.5 text-xs',
-        size === 'md' && 'px-3 py-2 text-sm',
+        size === 'sm' && 'px-3 py-2 text-xs min-h-[44px]',
+        size === 'md' && 'px-3 py-2.5 text-sm min-h-[44px]',
         active
           ? 'bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100'
           : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300',

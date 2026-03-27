@@ -39,7 +39,7 @@ export function RadiusSlider({
               'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
               value === preset
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             )}
           >
             {preset} km
@@ -50,17 +50,17 @@ export function RadiusSlider({
       {/* Slider */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500 dark:text-gray-400">{min} km</span>
+          <span className="text-gray-500">{min} km</span>
           <div className="flex items-center gap-1 font-medium text-blue-600">
             <MapPin className="w-4 h-4" />
             {value} km
           </div>
-          <span className="text-gray-500 dark:text-gray-400">{max} km</span>
+          <span className="text-gray-500">{max} km</span>
         </div>
 
         <div className="relative h-2">
           {/* Track background */}
-          <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 rounded-full" />
+          <div className="absolute inset-0 bg-gray-200 rounded-full" />
 
           {/* Filled track */}
           <div
@@ -98,7 +98,7 @@ export function RadiusSlider({
           <div className="relative">
             <div
               className={cn(
-                'rounded-full bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700 transition-all',
+                'rounded-full bg-blue-100 border border-blue-300 transition-all',
               )}
               style={{
                 width: `${Math.min(150, value * 1.5)}px`,

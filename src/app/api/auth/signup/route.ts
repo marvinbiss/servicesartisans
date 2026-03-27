@@ -99,7 +99,7 @@ export async function POST(request: Request) {
       email: email.toLowerCase(),
       full_name: `${firstName} ${lastName}`.trim(),
       phone_e164: phone || null,
-      role: 'user',
+      user_type: 'client',
       created_at: new Date().toISOString(),
     })
 

@@ -325,7 +325,7 @@ export default function LeadDetailPage() {
                 {/* Stats bar */}
                 {stats && (
                   <div className="bg-white rounded-xl border border-gray-200 p-4">
-                    <div className="grid grid-cols-3 gap-4 text-center">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
                       <div>
                         <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
                           <Users className="w-4 h-4" />

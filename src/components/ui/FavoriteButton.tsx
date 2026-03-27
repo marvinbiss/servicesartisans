@@ -13,9 +13,9 @@ interface FavoriteButtonProps {
 }
 
 const sizeMap = {
-  sm: { button: 'w-7 h-7', icon: 'w-3.5 h-3.5' },
-  md: { button: 'w-8 h-8', icon: 'w-4 h-4' },
-  lg: { button: 'w-10 h-10', icon: 'w-5 h-5' },
+  sm: { button: 'w-[44px] h-[44px]', icon: 'w-4 h-4' },
+  md: { button: 'w-[44px] h-[44px]', icon: 'w-5 h-5' },
+  lg: { button: 'w-12 h-12', icon: 'w-5 h-5' },
 }
 
 export function FavoriteButton({

@@ -69,9 +69,9 @@ export function SavedSearches({
   }
 
   return (
-    <div className={cn('bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700', className)}>
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+    <div className={cn('bg-white rounded-xl shadow-sm border border-gray-200', className)}>
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <h3 className="font-semibold text-gray-900">
           Recherches sauvegardées
         </h3>
         {onCreateNew && (
@@ -87,8 +87,8 @@ export function SavedSearches({
 
       {searches.length === 0 ? (
         <div className="p-8 text-center">
-          <Bell className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+          <Bell className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-500 mb-4">
             Aucune recherche sauvegardée
           </p>
           {onCreateNew && (
@@ -101,7 +101,7 @@ export function SavedSearches({
           )}
         </div>
       ) : (
-        <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+        <ul className="divide-y divide-gray-200">
           {searches.map((search) => {
             const FrequencyIcon = getFrequencyIcon(search.frequency)
             const isEditing = editingId === search.id
@@ -115,7 +115,7 @@ export function SavedSearches({
                     className="flex-1 text-left"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-gray-900 dark:text-white">
+                      <span className="font-medium text-gray-900">
                         {search.name}
                       </span>
                       {search.newResultsCount > 0 && (
@@ -126,7 +126,7 @@ export function SavedSearches({
                     </div>
 
                     {/* Filters summary */}
-                    <div className="flex flex-wrap gap-2 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex flex-wrap gap-2 text-sm text-gray-500">
                       {search.filters.service && (
                         <span className="flex items-center gap-1">
                           <Briefcase className="w-3 h-3" />
@@ -153,7 +153,7 @@ export function SavedSearches({
                   <div className="flex items-center gap-1">
                     {/* Frequency dropdown */}
                     {isEditing ? (
-                      <div className="flex flex-col gap-1 bg-gray-50 dark:bg-gray-700 rounded-lg p-2">
+                      <div className="flex flex-col gap-1 bg-gray-50 rounded-lg p-2">
                         {FREQUENCY_OPTIONS.map((option) => (
                           <button
                             key={option.value}
@@ -165,7 +165,7 @@ export function SavedSearches({
                               'flex items-center gap-2 px-2 py-1 rounded text-sm',
                               search.frequency === option.value
                                 ? 'bg-blue-100 text-blue-700'
-                                : 'hover:bg-gray-100 dark:hover:bg-gray-600'
+                                : 'hover:bg-gray-100'
                             )}
                           >
                             {search.frequency === option.value && (
@@ -188,8 +188,8 @@ export function SavedSearches({
                           className={cn(
                             'p-2 rounded-lg transition-colors',
                             search.frequency !== 'never'
-                              ? 'text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                              : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                              ? 'text-blue-600 hover:bg-blue-50'
+                              : 'text-gray-400 hover:bg-gray-100'
                           )}
                           title="Modifier les alertes"
                         >
@@ -197,7 +197,7 @@ export function SavedSearches({
                         </button>
                         <button
                           onClick={() => onDelete(search.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                           title="Supprimer"
                         >
                           <Trash2 className="w-4 h-4" />

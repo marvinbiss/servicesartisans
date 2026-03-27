@@ -32,6 +32,7 @@ export default function AvisRecusPage() {
   const [replyText, setReplyText] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [replyError, setReplyError] = useState<string | null>(null)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchAvis()
@@ -45,9 +46,12 @@ export default function AvisRecusPage() {
       if (response.ok) {
         setAvis(data.avis || [])
         setStats(data.stats || stats)
+      } else {
+        setFetchError('Impossible de charger les avis.')
       }
     } catch (error) {
       console.error('Error fetching avis:', error)
+      setFetchError('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setLoading(false)
     }
@@ -118,6 +122,11 @@ export default function AvisRecusPage() {
 
           {/* Content */}
           <div className="lg:col-span-3 space-y-8">
+            {fetchError && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {fetchError}
+              </div>
+            )}
             {/* Stats */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="grid md:grid-cols-2 gap-8">

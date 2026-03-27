@@ -187,14 +187,14 @@ export function InstantSearch({
           onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-12 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-12 pr-12 py-4 text-lg border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
         {isLoading ? (
           <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 animate-spin" />
         ) : query && (
           <button
             onClick={handleClear}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full"
           >
             <X className="w-5 h-5 text-gray-400" />
           </button>
@@ -203,9 +203,9 @@ export function InstantSearch({
 
       {/* Suggestions dropdown */}
       {isOpen && (query || suggestions.length > 0) && (
-        <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden max-h-[70vh] overflow-y-auto">
           {suggestions.length === 0 && query && !isLoading ? (
-            <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+            <div className="p-4 text-center text-gray-500">
               Aucune suggestion pour "{query}"
             </div>
           ) : (
@@ -217,8 +217,8 @@ export function InstantSearch({
                     className={cn(
                       'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
                       index === selectedIndex
-                        ? 'bg-blue-50 dark:bg-blue-900/20'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-700'
+                        ? 'bg-blue-50'
+                        : 'hover:bg-gray-50'
                     )}
                   >
                     <div
@@ -233,11 +233,11 @@ export function InstantSearch({
                       {getIcon(suggestion.type)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 dark:text-white truncate">
+                      <div className="font-medium text-gray-900 truncate">
                         {suggestion.text}
                       </div>
                       {suggestion.metadata && (
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-sm text-gray-500">
                           {suggestion.metadata.specialty && (
                             <span>{suggestion.metadata.specialty}</span>
                           )}
@@ -258,7 +258,7 @@ export function InstantSearch({
 
           {/* Search button */}
           {query && (
-            <div className="border-t border-gray-200 dark:border-gray-700 p-2">
+            <div className="border-t border-gray-200 p-2">
               <button
                 onClick={handleSubmit}
                 className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

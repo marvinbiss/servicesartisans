@@ -13,6 +13,7 @@ import { logger } from '@/lib/logger'
 export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 500
+const UPDATE_CHUNK_SIZE = 50
 
 /**
  * Calculate data quality score for a provider record (0-100).
@@ -90,26 +91,40 @@ export async function GET(request: Request) {
         break
       }
 
-      // Process batch: calculate scores and persist to DB
-      for (const provider of providers) {
+      // Calculate scores in memory first, then batch-update in parallel chunks
+      const updates = providers.map((provider) => {
         const { score, flags } = calculateQualityScore(provider)
+        return { id: provider.id, score, flags }
+      })
 
-        const { error: updateError } = await supabase
-          .from('providers')
-          .update({
-            data_quality_score: score,
-            data_quality_flags: flags,
-          })
-          .eq('id', provider.id)
+      // Process updates in chunks of UPDATE_CHUNK_SIZE, parallelized within each chunk
+      for (let i = 0; i < updates.length; i += UPDATE_CHUNK_SIZE) {
+        const chunk = updates.slice(i, i + UPDATE_CHUNK_SIZE)
 
-        if (updateError) {
-          logger.error(`[Cron] Failed to update quality score for provider ${provider.id}:`, updateError)
-          totalErrors++
-        } else {
-          logger.info(`[Cron] Provider ${provider.id}: score=${score} flags=${flags.join(',')}`)
-          totalUpdated++
+        const results = await Promise.all(
+          chunk.map((u) =>
+            supabase
+              .from('providers')
+              .update({
+                data_quality_score: u.score,
+                data_quality_flags: u.flags,
+              })
+              .eq('id', u.id)
+              .then(({ error: updateError }) => ({ id: u.id, score: u.score, flags: u.flags, updateError }))
+          )
+        )
+
+        for (const result of results) {
+          if (result.updateError) {
+            logger.error(`[Cron] Failed to update quality score for provider ${result.id}:`, result.updateError)
+            totalErrors++
+          } else {
+            totalUpdated++
+          }
         }
       }
+
+      logger.info(`[Cron] Batch processed: ${updates.length} providers (offset=${offset})`)
 
       if (providers.length < BATCH_SIZE) {
         hasMore = false

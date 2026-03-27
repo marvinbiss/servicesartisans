@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 
-const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || 'd438ef72ba5465680fecf42737f316b4'
+const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY
 
 /**
  * POST /api/indexnow — Submit URLs to IndexNow (Bing, Yandex, etc.)
  * Called by the sitemap health cron or manually after deploys.
  */
 export async function POST(request: Request) {
+  if (!INDEXNOW_KEY) {
+    return NextResponse.json({ error: 'IndexNow API key not configured' }, { status: 500 })
+  }
+
   // Verify this is an internal call (simple auth check)
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {

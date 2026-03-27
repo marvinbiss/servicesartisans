@@ -21,9 +21,8 @@ const REPO = 'marvinbiss/servicesartisans'
 
 async function verifySignature(request: Request, body: string): Promise<boolean> {
   if (!WEBHOOK_SECRET) {
-    // If no secret configured, skip verification (dev/initial setup)
-    logger.warn('[deploy-hook] WEBHOOK_SECRET not set — skipping signature check')
-    return true
+    // This should never be reached — POST handler checks first
+    return false
   }
 
   const signature = request.headers.get('x-vercel-signature')
@@ -34,6 +33,11 @@ async function verifySignature(request: Request, body: string): Promise<boolean>
 }
 
 export async function POST(request: Request) {
+  if (!process.env.WEBHOOK_SECRET) {
+    logger.error('[deploy-hook] WEBHOOK_SECRET not configured — rejecting request')
+    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
+  }
+
   const rawBody = await request.text()
 
   // Verify Vercel webhook signature

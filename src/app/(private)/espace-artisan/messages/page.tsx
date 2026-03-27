@@ -38,6 +38,8 @@ export default function MessagesArtisanPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [publicUrl, setPublicUrl] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [sendError, setSendError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -46,9 +48,35 @@ export default function MessagesArtisanPage() {
   }, [])
 
   useEffect(() => {
-    if (selectedConversation) {
-      fetchMessages(selectedConversation.id, selectedConversation.partner.id)
+    if (!selectedConversation) return
+    const controller = new AbortController()
+
+    const loadMessages = async () => {
+      try {
+        const response = await fetch(
+          `/api/artisan/messages?conversation_id=${selectedConversation.id}`,
+          { signal: controller.signal }
+        )
+        const data = await response.json()
+
+        if (response.ok) {
+          setMessages(data.messages || [])
+          if (data.currentUserId) {
+            setCurrentUserId(data.currentUserId)
+          } else if (data.messages?.length > 0) {
+            const msg = data.messages.find((m: Message) => m.sender_id !== selectedConversation.partner.id)
+            if (msg) setCurrentUserId(msg.sender_id)
+          }
+        }
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') return
+        console.error('Error fetching messages:', err)
+        setError('Impossible de charger les messages.')
+      }
     }
+
+    loadMessages()
+    return () => controller.abort()
   }, [selectedConversation])
 
   useEffect(() => {
@@ -58,6 +86,7 @@ export default function MessagesArtisanPage() {
   const fetchConversations = async () => {
     try {
       setLoading(true)
+      setError(null)
       const response = await fetch('/api/artisan/messages')
       const data = await response.json()
 
@@ -66,9 +95,12 @@ export default function MessagesArtisanPage() {
         if (data.conversations?.length > 0) {
           setSelectedConversation(data.conversations[0])
         }
+      } else {
+        setError('Impossible de charger les conversations.')
       }
-    } catch (error) {
-      console.error('Error fetching conversations:', error)
+    } catch (err) {
+      console.error('Error fetching conversations:', err)
+      setError('Erreur de connexion. Veuillez vérifier votre connexion internet.')
     } finally {
       setLoading(false)
     }
@@ -108,8 +140,9 @@ export default function MessagesArtisanPage() {
           if (msg) setCurrentUserId(msg.sender_id)
         }
       }
-    } catch (error) {
-      console.error('Error fetching messages:', error)
+    } catch (err) {
+      console.error('Error fetching messages:', err)
+      setError('Impossible de charger les messages.')
     }
   }
 
@@ -130,11 +163,15 @@ export default function MessagesArtisanPage() {
 
       if (response.ok) {
         setNewMessage('')
+        setSendError(null)
         // Refresh messages
         fetchMessages(selectedConversation.id, selectedConversation.partner.id)
+      } else {
+        setSendError('Impossible d\'envoyer le message. Veuillez réessayer.')
       }
-    } catch (error) {
-      console.error('Error sending message:', error)
+    } catch (err) {
+      console.error('Error sending message:', err)
+      setSendError('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setSendingMessage(false)
     }
@@ -201,6 +238,11 @@ export default function MessagesArtisanPage() {
 
           {/* Messages */}
           <div className="lg:col-span-3">
+            {error && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[400px] sm:h-[600px] flex items-center justify-center">
                 <div>
@@ -321,6 +363,9 @@ export default function MessagesArtisanPage() {
 
                       {/* Input */}
                       <form onSubmit={handleSendMessage} className="p-4 border-t">
+                        {sendError && (
+                          <p className="text-red-600 text-sm mb-2">{sendError}</p>
+                        )}
                         <div className="flex gap-2">
                           <button
                             type="button"

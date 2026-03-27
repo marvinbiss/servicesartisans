@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, Send, Search, ArrowLeft, Loader2 } from 'lucide-react'
+import { MessageSquare, Send, Search, ArrowLeft, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { QuickSiteLinks } from '@/components/InternalLinks'
-import LogoutButton from '@/components/LogoutButton'
+import ClientSidebar from '@/components/client/ClientSidebar'
 
 interface Partner {
   id: string
@@ -37,6 +36,8 @@ export default function MessagesClientPage() {
   const [newMessage, setNewMessage] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [sendError, setSendError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -44,9 +45,32 @@ export default function MessagesClientPage() {
   }, [])
 
   useEffect(() => {
-    if (selectedConversation) {
-      fetchMessages(selectedConversation.id)
+    if (!selectedConversation) return
+    const controller = new AbortController()
+
+    const loadMessages = async () => {
+      try {
+        const response = await fetch(
+          `/api/client/messages?conversation_id=${selectedConversation.id}`,
+          { signal: controller.signal }
+        )
+        const data = await response.json()
+
+        if (response.ok) {
+          setMessages(data.messages || [])
+          if (data.currentUserId) {
+            setCurrentUserId(data.currentUserId)
+          }
+        }
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') return
+        console.error('Error fetching messages:', err)
+        setError('Impossible de charger les messages.')
+      }
     }
+
+    loadMessages()
+    return () => controller.abort()
   }, [selectedConversation])
 
   useEffect(() => {
@@ -56,6 +80,7 @@ export default function MessagesClientPage() {
   const fetchConversations = async () => {
     try {
       setLoading(true)
+      setError(null)
       const response = await fetch('/api/client/messages')
       const data = await response.json()
 
@@ -64,9 +89,12 @@ export default function MessagesClientPage() {
         if (data.conversations?.length > 0) {
           setSelectedConversation(data.conversations[0])
         }
+      } else {
+        setError('Impossible de charger les conversations.')
       }
-    } catch (error) {
-      console.error('Error fetching conversations:', error)
+    } catch (err) {
+      console.error('Error fetching conversations:', err)
+      setError('Erreur de connexion. Veuillez vérifier votre connexion internet.')
     } finally {
       setLoading(false)
     }
@@ -83,8 +111,9 @@ export default function MessagesClientPage() {
           setCurrentUserId(data.currentUserId)
         }
       }
-    } catch (error) {
-      console.error('Error fetching messages:', error)
+    } catch (err) {
+      console.error('Error fetching messages:', err)
+      setError('Impossible de charger les messages.')
     }
   }
 
@@ -105,10 +134,14 @@ export default function MessagesClientPage() {
 
       if (response.ok) {
         setNewMessage('')
+        setSendError(null)
         fetchMessages(selectedConversation.id)
+      } else {
+        setSendError('Impossible d\'envoyer le message. Veuillez réessayer.')
       }
-    } catch (error) {
-      console.error('Error sending message:', error)
+    } catch (err) {
+      console.error('Error sending message:', err)
+      setSendError('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setSendingMessage(false)
     }
@@ -168,48 +201,18 @@ export default function MessagesClientPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-4">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-client/mes-demandes"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <FileText className="w-5 h-5" />
-                Mes demandes
-              </Link>
-              <Link
-                href="/espace-client/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-                {conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0) > 0 && (
-                  <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
-                    {conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0)}
-                  </span>
-                )}
-              </Link>
-              <Link
-                href="/espace-client/avis-donnes"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Star className="w-5 h-5" />
-                Avis donnés
-              </Link>
-              <Link
-                href="/espace-client/parametres"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Settings className="w-5 h-5" />
-                Paramètres
-              </Link>
-              <LogoutButton />
-            </nav>
-            <QuickSiteLinks />
-          </div>
+          <ClientSidebar
+            activePage="messages"
+            unreadMessagesCount={conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0)}
+          />
 
           {/* Messages */}
           <div className="lg:col-span-3">
+            {error && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
                 <div>
@@ -234,7 +237,7 @@ export default function MessagesClientPage() {
             ) : (
               <div className="bg-white rounded-xl shadow-sm overflow-hidden h-[600px] flex">
                 {/* Conversations list */}
-                <div className="w-1/3 border-r">
+                <div className={`w-full sm:w-1/3 border-r ${selectedConversation ? 'hidden sm:block' : 'block'}`}>
                   <div className="p-4 border-b">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -282,11 +285,19 @@ export default function MessagesClientPage() {
                 </div>
 
                 {/* Chat */}
-                <div className="flex-1 flex flex-col">
+                <div className={`flex-1 flex flex-col ${selectedConversation ? 'block' : 'hidden sm:flex'}`}>
                   {selectedConversation ? (
                     <>
                       {/* Chat header */}
                       <div className="p-4 border-b flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedConversation(null)}
+                          className="sm:hidden p-1 text-gray-500 hover:text-gray-700 rounded"
+                          aria-label="Retour aux conversations"
+                        >
+                          <ArrowLeft className="w-5 h-5" />
+                        </button>
                         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">
                           {getAvatar(selectedConversation.partner)}
                         </div>
@@ -328,6 +339,9 @@ export default function MessagesClientPage() {
 
                       {/* Input */}
                       <form onSubmit={handleSendMessage} className="p-4 border-t">
+                        {sendError && (
+                          <p className="text-red-600 text-sm mb-2">{sendError}</p>
+                        )}
                         <div className="flex gap-2">
                           <input
                             type="text"
