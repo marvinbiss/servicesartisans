@@ -3,6 +3,7 @@
 import { Phone, Mail, MessageCircle, ShieldCheck, Star, CheckCircle, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { cleanPhone } from '@/lib/validation/phone'
 
 interface ArtisanContactCardProps {
   artisan: LegacyArtisan
@@ -95,7 +96,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
               type="button"
               onClick={() => {
                 trackEvent('phone_click' as any, { artisanId: artisan.id, artisanName: artisan.business_name || '', artisan_slug: artisan.slug, source: 'contact_card' })
-                window.location.href = `tel:${artisan.phone!.replace(/[\s.\-()]/g, '')}`
+                window.location.href = `tel:${cleanPhone(artisan.phone!)}`
               }}
               className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-charcoal-800 hover:bg-charcoal-900 text-white font-medium transition-colors"
               aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}

@@ -173,11 +173,8 @@ export function isValidEmail(email: string): boolean {
   return emailRegex.test(email)
 }
 
-// Validate French phone number
-export function isValidFrenchPhone(phone: string): boolean {
-  const phoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/
-  return phoneRegex.test(phone)
-}
+// Validate French phone number (re-exported from shared utility)
+export { isValidFrenchPhone } from '@/lib/validation/phone'
 
 // Format French phone number
 export function formatFrenchPhone(phone: string): string {
