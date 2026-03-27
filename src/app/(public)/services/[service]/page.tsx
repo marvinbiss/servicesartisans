@@ -95,10 +95,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { service: serviceSlug } = await params
 
   let serviceName = ''
+  let providerCount = 0
 
   try {
-    const service = await getServiceBySlug(serviceSlug)
+    const [service, count] = await Promise.all([
+      getServiceBySlug(serviceSlug),
+      getProviderCountByService(serviceSlug),
+    ])
     if (service) serviceName = service.name
+    providerCount = count
   } catch {
     // DB down — fallback to static data
   }
@@ -110,6 +115,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const svcLower = serviceName.toLowerCase()
+  const countLabel = providerCount > 0 ? `${providerCount}+` : 'des centaines de'
 
   const titleHash = Math.abs(hashCode(`hub-title-${serviceSlug}`))
   const titleTemplates = [
@@ -123,11 +129,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${svcLower} qualifié parmi nos artisans vérifiés SIREN. Tarifs, avis et devis gratuit dans ${departements.length} départements.`,
-    `Comparez les ${svcLower}s en France : tarifs, avis et certifications. Devis gratuit, sans engagement.`,
-    `Annuaire de ${svcLower}s vérifiés par SIREN en France. Prix, conseils d'experts et devis gratuit.`,
-    `Besoin d'un ${svcLower} ? Annuaire national : tarifs indicatifs, artisans référencés, devis gratuit en ligne.`,
-    `${serviceName} en France 2026 : prix, conseils, certifications. Comparez les artisans et demandez un devis gratuit.`,
+    `Trouvez un ${svcLower} qualifié parmi ${countLabel} artisans vérifiés SIREN en France. Comparez les tarifs, consultez les avis clients et obtenez un devis gratuit dans ${departements.length} départements.`,
+    `Comparez ${countLabel} ${svcLower}s certifiés partout en France : tarifs détaillés, avis clients vérifiés et certifications. Devis gratuit en ligne, sans engagement, réponse sous 24h.`,
+    `Annuaire de ${svcLower}s vérifiés par SIREN dans toute la France. Consultez les prix, les avis clients et les certifications. Demandez un devis gratuit en ligne sans engagement.`,
+    `Besoin d'un ${svcLower} ? Parcourez ${countLabel} artisans référencés dans ${departements.length} départements : tarifs indicatifs, avis vérifiés et devis gratuit en ligne sans engagement.`,
+    `${serviceName} en France 2026 : comparez ${countLabel} artisans qualifiés. Prix indicatifs, certifications vérifiées et devis gratuit en ligne. Couverture nationale, réponse rapide.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -136,6 +142,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large' as const,
+      'max-snippet': -1,
+    },
     openGraph: {
       locale: 'fr_FR',
       title,

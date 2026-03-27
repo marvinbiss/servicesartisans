@@ -67,7 +67,69 @@ export default async function ContactPage() {
         { name: 'Accueil', url: '/' },
         { name: 'Contact', url: '/contact' },
       ])} />
-      <ContactPageClient />
+
+      {/* Server-rendered intro for SEO — visible content before client hydration */}
+      <div className="min-h-screen bg-gray-50">
+        <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+          <div className="absolute inset-0">
+            <div className="absolute inset-0" style={{
+              background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+            }} />
+            <div className="absolute inset-0 opacity-[0.025]" style={{
+              backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }} />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          </div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+            <Breadcrumb
+              items={[{ label: 'Contact' }]}
+              className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            />
+            <div className="text-center">
+              <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
+                Contactez ServicesArtisans
+              </h1>
+              <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+                Une question sur notre annuaire d&apos;artisans ? Notre équipe est disponible pour vous aider par email, téléphone ou via le formulaire ci-dessous.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Server-rendered contact info for SEO */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-1">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Nos coordonnées</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-gray-900">Email</h3>
+                  <p><a href="mailto:contact@servicesartisans.fr" className="text-blue-600 hover:underline font-medium">contact@servicesartisans.fr</a></p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">Téléphone</h3>
+                  <p><a href="tel:+33651858930" className="text-blue-600 hover:text-blue-700 font-medium">06 51 85 89 30</a></p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">Horaires d&apos;ouverture</h3>
+                  <p className="text-gray-600">Lundi - Vendredi : 9h - 18h</p>
+                  <p className="text-gray-600">Samedi : 9h - 12h</p>
+                </div>
+              </div>
+              <div className="mt-8">
+                <h3 className="font-semibold text-gray-900 mb-2">Besoin d&apos;aide rapide ?</h3>
+                <p className="text-gray-600 text-sm">
+                  Consultez notre <a href="/faq" className="text-blue-600 hover:underline">FAQ</a> pour trouver des réponses aux questions les plus fréquentes sur l&apos;utilisation de ServicesArtisans, la demande de devis ou l&apos;inscription en tant qu&apos;artisan.
+                </p>
+              </div>
+            </div>
+            <div className="lg:col-span-2">
+              <ContactPageClient />
+            </div>
+          </div>
+        </section>
+      </div>
     </>
   )
 }

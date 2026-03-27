@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Calendar, Clock, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
-import Breadcrumb from '@/components/Breadcrumb'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 export interface BlogArticleMeta {
@@ -35,6 +34,9 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
   const [selectedCategory, setSelectedCategory] = useState('Tous')
   const [activeTag, setActiveTag] = useState(initialTag || '')
   const [visibleCount, setVisibleCount] = useState(ARTICLES_PER_PAGE)
+
+  // When no filter is active, the first 12 articles are already server-rendered above
+  const isDefaultView = selectedCategory === 'Tous' && !activeTag
 
   const categoryFiltered = selectedCategory === 'Tous'
     ? articles
@@ -100,36 +102,8 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
-          <Breadcrumb
-            items={[{ label: 'Blog' }]}
-            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
-          />
-          <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
-              Blog & Actualités
-            </h1>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Conseils, guides de prix et tendances pour vos projets de travaux. Par les experts de ServicesArtisans.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Categories */}
+    <div className="bg-gray-50">
+      {/* Categories — interactive filters */}
       <section className="py-8 bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-3 overflow-x-auto md:overflow-x-visible md:flex-wrap scrollbar-hide">
@@ -168,11 +142,19 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
         </div>
       )}
 
-      {/* Articles */}
+      {/* Articles — when filtered, show all matching articles; default view shows only extras beyond SSR */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {!isDefaultView && (
+            <p className="text-sm text-gray-500 mb-6">
+              {filteredArticles.length} article{filteredArticles.length > 1 ? 's' : ''} trouvé{filteredArticles.length > 1 ? 's' : ''}
+            </p>
+          )}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {visibleArticles.map((article, index) => {
+            {(isDefaultView
+              ? visibleArticles.slice(ARTICLES_PER_PAGE)
+              : visibleArticles
+            ).map((article, index) => {
               // Category color mapping for pill badges
               const categoryColors: Record<string, string> = {
                 'Guides pratiques': 'bg-blue-100 text-blue-700',
@@ -185,7 +167,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                 'Budget': 'bg-orange-100 text-orange-700',
               }
               const badgeColor = categoryColors[article.category] || 'bg-blue-100 text-blue-700'
-              const isFeatured = index === 0 && selectedCategory === 'Tous' && !activeTag
+              const isFeatured = index === 0 && !isDefaultView && selectedCategory === 'Tous' && !activeTag
 
               return (
                 <Link

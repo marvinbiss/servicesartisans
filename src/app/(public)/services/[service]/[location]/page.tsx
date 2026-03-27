@@ -542,6 +542,42 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </div>
       </div>
 
+      {/* SSR H1 — always in server component HTML for Googlebot */}
+      <div className="bg-white border-b border-sand-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 tracking-tight">
+            {h1Text}
+          </h1>
+          {(location.department_name || location.postal_code) && (
+            <p className="text-charcoal-500 text-sm mt-1">
+              {location.department_name
+                ? `${location.department_name}${location.department_code ? ` (${location.department_code})` : ''}`
+                : location.postal_code}
+              {totalProviderCount > 0 && ` — ${totalProviderCount} artisan${totalProviderCount > 1 ? 's' : ''} vérifié${totalProviderCount > 1 ? 's' : ''}`}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* SSR provider links — crawlable by Googlebot even without JS execution */}
+      {providers.length > 0 && (
+        <div className="sr-only" aria-hidden="true">
+          <ul>
+            {providers.slice(0, 10).map((p) => (
+              <li key={p.id}>
+                <a href={getArtisanUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })}>
+                  {p.name}
+                </a>
+                {p.address_city && <span> — {p.address_city}</span>}
+                {p.rating_average && p.rating_average > 0 && (
+                  <span> — Note : {p.rating_average.toFixed(1)}/5{p.review_count ? ` (${p.review_count} avis)` : ''}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <SearchRecorder
         type="service-ville"
         label={`${service.name} à ${location.name}`}

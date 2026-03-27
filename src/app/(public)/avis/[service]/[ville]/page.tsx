@@ -11,11 +11,11 @@ import {
   ChevronDown,
   MapPin,
   Users,
-  Thermometer,
   Building2,
   Star,
   Zap,
   TrendingUp,
+  Thermometer,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -29,16 +29,25 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getCityValues } from '@/lib/insee-resolver'
 import { getProblemsByService } from '@/lib/data/problems'
-import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
-import InBodyLinks from '@/components/seo/InBodyLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import dynamic from 'next/dynamic'
 
+
+function getClimatLabel(zone: string | null): string {
+  const labels: Record<string, string> = {
+    oceanique: 'Climat océanique',
+    'semi-oceanique': 'Climat semi-océanique',
+    continental: 'Climat continental',
+    mediterraneen: 'Climat méditerranéen',
+    montagnard: 'Climat montagnard',
+  }
+  return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
+}
 
 const ExitIntentPopup = dynamic(
   () => import('@/components/ExitIntentPopup'),
@@ -153,17 +162,6 @@ export const dynamicParams = true
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function getClimatLabel(zone: string | null): string {
-  const labels: Record<string, string> = {
-    oceanique: 'Climat océanique',
-    'semi-oceanique': 'Climat semi-océanique',
-    continental: 'Climat continental',
-    mediterraneen: 'Climat méditerranéen',
-    montagnard: 'Climat montagnard',
-  }
-  return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
-}
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -351,10 +349,7 @@ export default async function AvisServiceVillePage({
       }))
     : []
 
-  // Deterministic fallback rating (same pattern used across all pages)
-  const fallbackRating = 4.0 + (Math.abs(hashCode(`rating-${service}-${villeSlug}`)) % 10) / 10
-  const fallbackReviewCount = 10 + Math.abs(hashCode(`reviews-${service}-${villeSlug}`)) % 90
-
+  // Only emit structured data when backed by real reviews — never fabricate
   const reviewSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -369,19 +364,16 @@ export default async function AvisServiceVillePage({
       addressCountry: 'FR',
     },
     priceRange: `${minPrice}–${maxPrice} ${trade.priceRange.unit}`,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: hasRealReviews ? roundedRating : Math.round(fallbackRating * 10) / 10,
-      reviewCount: hasRealReviews ? totalReviews : fallbackReviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: hasRealReviews ? schemaReviews : [{
-      '@type': 'Review',
-      author: { '@type': 'Person', name: 'Client vérifié' },
-      reviewRating: { '@type': 'Rating', ratingValue: Math.min(5, Math.floor(fallbackRating) + 1), bestRating: 5, worstRating: 1 },
-      reviewBody: `Très satisfait du service de ${tradeLower} à ${villeData.name}. Professionnel et ponctuel, tarifs conformes au devis.`,
-    }],
+    ...(hasRealReviews ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: roundedRating,
+        reviewCount: totalReviews,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      review: schemaReviews,
+    } : {}),
   }
 
   // ----- Related links -----
@@ -1201,164 +1193,6 @@ export default async function AvisServiceVillePage({
         )
       })()}
 
-      {/* Cross-intent navigation */}
-      <section className="py-8 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Voir aussi</h2>
-          <div className="flex flex-wrap gap-3">
-            <Link href={`/devis/${service}/${villeSlug}`} className="px-4 py-2 bg-amber-50 text-amber-800 rounded-lg text-sm font-medium border border-amber-100 hover:border-amber-200 transition-colors">
-              Devis {tradeLower} à {villeData.name}
-            </Link>
-            <Link href={`/tarifs/${service}/${villeSlug}`} className="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-colors">
-              Tarifs {tradeLower} à {villeData.name}
-            </Link>
-            <Link href={`/urgence/${service}/${villeSlug}`} className="px-4 py-2 bg-red-50 text-red-800 rounded-lg text-sm font-medium border border-red-100 hover:border-red-200 transition-colors">
-              Urgence {tradeLower} à {villeData.name}
-            </Link>
-            <Link href={`/services/${service}/${villeSlug}`} className="px-4 py-2 bg-gray-50 text-gray-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-gray-300 transition-colors">
-              {trade.name} à {villeData.name}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── VOIR AUSSI ───────────────────────────────────────── */}
-      <section className="py-12 bg-gray-50 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-gray-900 mb-6">
-            Voir aussi
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
-              <div className="space-y-2">
-                <Link
-                  href={`/avis/${service}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Avis {tradeLower} en France
-                </Link>
-                <Link
-                  href={`/services/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  {trade.name} à {villeData.name}
-                </Link>
-                <Link
-                  href={`/devis/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Devis {tradeLower} à {villeData.name}
-                </Link>
-                <Link
-                  href={`/tarifs/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Tarifs {tradeLower} à {villeData.name}
-                </Link>
-                <Link
-                  href={`/urgence/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  {trade.name} urgence à {villeData.name}
-                </Link>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Cette ville</h3>
-              <div className="space-y-2">
-                <Link
-                  href={`/villes/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Artisans à {villeData.name}
-                </Link>
-                {otherTrades.slice(0, 3).map((slug) => {
-                  const t = tradeContent[slug]
-                  if (!t) return null
-                  return (
-                    <Link
-                      key={slug}
-                      href={`/avis/${slug}/${villeSlug}`}
-                      className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                    >
-                      Avis {t.name.toLowerCase()} à {villeData.name}
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
-                Informations utiles
-              </h3>
-              <div className="space-y-2">
-                <Link
-                  href="/avis"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Tous les avis artisans
-                </Link>
-                <Link
-                  href="/devis"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Demander un devis
-                </Link>
-                <Link
-                  href="/tarifs"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Guide complet des tarifs
-                </Link>
-                <Link
-                  href="/comment-ca-marche"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Comment ça marche
-                </Link>
-                <Link
-                  href="/faq"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  FAQ
-                </Link>
-              </div>
-            </div>
-          </div>
-          {/* Articles de blog liés */}
-          {(() => {
-            const relatedArticles = allArticlesMeta.filter((a) =>
-              a.tags.some((tag) => tag.toLowerCase().includes(tradeLower) || tradeLower.includes(tag.toLowerCase()))
-              || a.category === 'Fiches métier' && (a.title.toLowerCase().includes(tradeLower) || a.slug.includes(service))
-            ).slice(0, 3)
-            if (relatedArticles.length === 0) return null
-            return (
-              <div className="mt-8">
-                <h3 className="font-semibold text-gray-900 mb-4">Articles sur ce métier</h3>
-                <div className="grid md:grid-cols-3 gap-3">
-                  {relatedArticles.map((article) => (
-                    <Link
-                      key={article.slug}
-                      href={`/blog/${article.slug}`}
-                      className="flex items-start gap-3 p-4 bg-white hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-colors group"
-                    >
-                      <span className="text-2xl flex-shrink-0">{article.image}</span>
-                      <div>
-                        <div className="font-medium text-gray-900 group-hover:text-blue-600 text-sm leading-snug">
-                          {article.title}
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">{article.readTime} · {article.category}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )
-          })()}
-        </div>
-      </section>
-
       {/* ─── EDITORIAL CREDIBILITY ────────────────────────────── */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1398,8 +1232,6 @@ export default async function AvisServiceVillePage({
         villeName={villeData.name}
         currentIntent="avis"
       />
-
-      <InBodyLinks serviceSlug={service} villeSlug={villeSlug} villeName={villeData.name} serviceName={trade.name} />
 
       <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="avis" skipCrossIntent />
 

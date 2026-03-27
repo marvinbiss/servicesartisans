@@ -241,13 +241,47 @@ export default async function AProposPage() {
           />
           <div className="text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-            Annuaire des artisans de France
+            À propos de ServicesArtisans
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Nous avons construit un annuaire d'artisans en France
-            en exploitant les données ouvertes du gouvernement.
+            ServicesArtisans est l&apos;annuaire gratuit des artisans en France,
+            construit à partir des données ouvertes du gouvernement.
             {stats.artisanCount > 0 ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels référencés,` : ' Des milliers de professionnels référencés,'} accessibles gratuitement.
           </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission & valeurs — server-rendered for SEO */}
+      <section className="py-16 bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Notre mission</h2>
+          <div className="prose prose-lg text-gray-700 max-w-none space-y-4">
+            <p>
+              ServicesArtisans a pour mission de faciliter la mise en relation entre particuliers et artisans qualifiés partout en France. Notre annuaire référence des milliers de professionnels du bâtiment, de la rénovation et des services, en s&apos;appuyant exclusivement sur les données officielles du registre SIREN via l&apos;API Annuaire des Entreprises du gouvernement.
+            </p>
+            <p>
+              Nous croyons que trouver un artisan de confiance ne devrait pas être compliqué. C&apos;est pourquoi notre plateforme est entièrement gratuite, aussi bien pour les particuliers que pour les artisans. Pas de commissions cachées, pas de revente de données personnelles.
+            </p>
+            <p>
+              Chaque professionnel référencé sur ServicesArtisans est issu des registres officiels. Nous vérifions les numéros SIRET, demandons les attestations d&apos;assurance RC professionnelle et de garantie décennale pour les métiers du bâtiment, et ne publions que des avis authentiques de clients ayant réellement fait appel à un artisan via la plateforme.
+            </p>
+          </div>
+
+          <h2 className="text-3xl font-bold text-gray-900 mt-12 mb-6">Nos valeurs</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Transparence</h3>
+              <p className="text-gray-600 text-sm">Toutes nos données proviennent de sources publiques officielles. Aucune information n&apos;est inventée ou embellie.</p>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Gratuité</h3>
+              <p className="text-gray-600 text-sm">La recherche d&apos;artisans, les demandes de devis et l&apos;inscription sont 100 % gratuites pour tous les utilisateurs.</p>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Protection des données</h3>
+              <p className="text-gray-600 text-sm">Conformité RGPD, hébergement en Europe, aucune revente de données personnelles. Votre vie privée est respectée.</p>
+            </div>
           </div>
         </div>
       </section>

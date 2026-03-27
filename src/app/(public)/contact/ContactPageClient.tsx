@@ -1,15 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Mail, Send, CheckCircle, Clock, MessageSquare, ArrowRight, Loader2, AlertCircle, Phone } from 'lucide-react'
-import Breadcrumb from '@/components/Breadcrumb'
-import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
-import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
-
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+import { Send, CheckCircle, Loader2, AlertCircle } from 'lucide-react'
 
 export default function ContactPageClient() {
   const [formData, setFormData] = useState({
@@ -86,139 +79,7 @@ export default function ContactPageClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
-          {/* Breadcrumb */}
-          <Breadcrumb
-            items={[{ label: 'Contact' }]}
-            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
-          />
-          <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
-              Contactez-nous
-            </h1>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Une question ? Un problème ? Notre équipe est là pour vous aider.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Contact Info */}
-          <div className="lg:col-span-1 space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Nos coordonnées
-              </h2>
-
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Email</h3>
-                    <a href="mailto:contact@servicesartisans.fr" className="text-blue-600 hover:underline font-medium">contact@servicesartisans.fr</a>
-                  </div>
-                </div>
-
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Téléphone</h3>
-                    <a href="tel:+33651858930" className="text-blue-600 hover:text-blue-700 font-medium">
-                      06 51 85 89 30
-                    </a>
-                    <PlatformPhoneLabel variant="inline" className="mt-1" />
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Horaires</h3>
-                    <p className="text-gray-600">
-                      Lun - Ven : 9h - 18h<br />
-                      Sam : 9h - 12h
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-blue-50 rounded-xl p-6">
-              <div className="flex items-center gap-3 mb-3">
-                <MessageSquare className="w-6 h-6 text-blue-600" />
-                <h3 className="font-semibold text-gray-900">Besoin d'aide rapide ?</h3>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">
-                Consultez notre FAQ pour trouver des réponses aux questions les plus fréquentes.
-              </p>
-              <Link
-                href="/faq"
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
-              >
-                Voir la FAQ <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            {/* Contextual Links */}
-            <div className="bg-gray-100 rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Liens utiles</h3>
-              <div className="space-y-2">
-                <Link
-                  href="/comment-ca-marche"
-                  className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                  Comment ça marche ?
-                </Link>
-                <Link
-                  href="/devis"
-                  className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                  Obtenir mon devis gratuit
-                </Link>
-                <Link
-                  href="/inscription-artisan"
-                  className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                  Devenir artisan partenaire
-                </Link>
-                <Link
-                  href="/connexion"
-                  className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                  Se connecter
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
+    <>
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Envoyez-nous un message
@@ -337,26 +198,6 @@ export default function ContactPageClient() {
                 </button>
               </form>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Related Links Section */}
-      <section className="bg-gray-100 py-12 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Trouvez un artisan près de chez vous
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <PopularServicesLinks />
-            <PopularCitiesLinks />
-          </div>
-        </div>
-      </section>
-
-      {/* Conversion: Sticky mobile CTA + Exit intent */}
-      <StickyMobileCTA />
-      <ExitIntentPopup />
-    </div>
+    </>
   )
 }
