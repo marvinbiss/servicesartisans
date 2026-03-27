@@ -383,8 +383,12 @@ const nextConfig = {
       { source: '/recherche', destination: '/services', permanent: true },
       { source: '/pro/:path*', destination: '/espace-artisan', permanent: true },
       { source: '/services/artisan/:path*', destination: '/services', permanent: true },
+      { source: '/metiers', destination: '/services', permanent: true },
+      { source: '/artisan/:service/:location', destination: '/services/:service/:location', permanent: true },
+      { source: '/artisan/:service', destination: '/services/:service', permanent: true },
       // French legal page aliases (RGPD compliance)
       { source: '/politique-de-confidentialite', destination: '/confidentialite', permanent: true },
+      { source: '/politique-confidentialite', destination: '/confidentialite', permanent: true },
       { source: '/conditions-generales', destination: '/cgv', permanent: true },
       // Common alternative slugs
       { source: '/services/peintre', destination: '/services/peintre-en-batiment', permanent: true },
