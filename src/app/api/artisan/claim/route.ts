@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 
 const claimSchema = z.object({
   providerId: z.string().uuid('ID artisan invalide'),
-  siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir exactement 14 chiffres'),
+  siret: z.string().regex(/^\d{9}(\d{5})?$/, 'Entrez un SIREN (9 chiffres) ou SIRET (14 chiffres)'),
   fullName: z.string().min(2, 'Le nom est requis (min. 2 caractères)'),
   email: z.string().email('Email invalide'),
   phone: z.string().min(10, 'Numéro de téléphone invalide'),
@@ -153,12 +153,18 @@ export async function POST(request: Request) {
       )
     }
 
-    // SIRET verification (normalize: strip spaces)
+    // SIREN/SIRET verification (normalize: strip spaces)
     const normalizedInput = siret.replace(/\s/g, '')
     const normalizedStored = provider.siret.replace(/\s/g, '')
+    const isSirenInput = normalizedInput.length === 9
 
-    if (normalizedInput !== normalizedStored) {
-      logger.warn('Claim SIRET mismatch', {
+    // Match: full SIRET (14 digits) or SIREN (first 9 digits)
+    const matches = isSirenInput
+      ? normalizedInput === normalizedStored.slice(0, 9)
+      : normalizedInput === normalizedStored
+
+    if (!matches) {
+      logger.warn('Claim SIREN/SIRET mismatch', {
         userId: user?.id || 'anonymous',
         claimantEmail: email,
         providerId,
@@ -168,18 +174,19 @@ export async function POST(request: Request) {
       })
 
       return NextResponse.json(
-        { error: 'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIRET ou contacter le support.' },
+        { error: 'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIREN/SIRET ou contacter le support.' },
         { status: 403 }
       )
     }
 
-    // SIRET matches — create a pending claim for admin review
+    // SIREN/SIRET matches — create a pending claim for admin review
+    // Store the full SIRET for traceability even if user entered SIREN
     const { error: insertError } = await adminClient
       .from('provider_claims')
       .insert({
         provider_id: providerId,
         user_id: user?.id ?? null,
-        siret_provided: normalizedInput,
+        siret_provided: isSirenInput ? normalizedStored : normalizedInput,
         claimant_name: fullName,
         claimant_email: email.trim().toLowerCase(),
         claimant_phone: phone,

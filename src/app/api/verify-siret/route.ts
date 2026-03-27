@@ -94,6 +94,76 @@ function getTrancheEffectifs(code: string | undefined | null): string {
   return TRANCHES_EFFECTIFS[code] || "Non renseigne"
 }
 
+// ─── SIREN lookup helpers ────────────────────────────────────────────
+
+function formatSirenResult(
+  siren: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  unite: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  etab: any,
+  source: "insee" | "gouv"
+) {
+  if (source === "insee") {
+    const adresse = etab.adresseEtablissement
+    const isActive =
+      etab.periodesEtablissement?.[0]?.etatAdministratifEtablissement === "A"
+    return {
+      found: true,
+      siret: etab.siret || `${siren}${etab.nicSiegeUniteLegale || "00001"}`,
+      siren,
+      denomination:
+        unite.denominationUniteLegale ||
+        `${unite.prenomUsuelUniteLegale || ""} ${unite.nomUniteLegale || ""}`.trim() ||
+        "Non renseigne",
+      formeJuridique: getFormeJuridique(unite.categorieJuridiqueUniteLegale),
+      dateCreation: unite.dateCreationUniteLegale || "",
+      activitePrincipale:
+        etab.periodesEtablissement?.[0]?.activitePrincipaleEtablissement || "",
+      libelleActivite: "",
+      adresse: adresse
+        ? {
+            numero: adresse.numeroVoieEtablissement || "",
+            voie: `${adresse.typeVoieEtablissement || ""} ${adresse.libelleVoieEtablissement || ""}`.trim(),
+            codePostal: adresse.codePostalEtablissement || "",
+            commune: adresse.libelleCommuneEtablissement || "",
+            departement: adresse.codePostalEtablissement?.substring(0, 2) || "",
+          }
+        : undefined,
+      etatAdministratif: isActive ? "Active" : "Fermee",
+      isActive,
+      trancheEffectifs: getTrancheEffectifs(unite.trancheEffectifsUniteLegale),
+      categorieEntreprise: unite.categorieEntreprise || "",
+    }
+  }
+  // gouv
+  return {
+    found: true,
+    siret: etab.siret || `${siren}00001`,
+    siren,
+    denomination:
+      unite?.denomination ||
+      unite?.nom_raison_sociale ||
+      `${unite?.prenom_1 || ""} ${unite?.nom || ""}`.trim() ||
+      "Non renseigne",
+    formeJuridique: getFormeJuridique(unite?.categorie_juridique),
+    dateCreation: unite?.date_creation || "",
+    activitePrincipale: etab.activite_principale || "",
+    libelleActivite: etab.libelle_activite_principale || "",
+    adresse: {
+      numero: etab.numero_voie || "",
+      voie: `${etab.type_voie || ""} ${etab.libelle_voie || ""}`.trim(),
+      codePostal: etab.code_postal || "",
+      commune: etab.libelle_commune || "",
+      departement: etab.code_postal?.substring(0, 2) || "",
+    },
+    etatAdministratif: etab.etat_administratif === "A" ? "Active" : "Fermee",
+    isActive: etab.etat_administratif === "A",
+    trancheEffectifs: getTrancheEffectifs(unite?.tranche_effectifs),
+    categorieEntreprise: unite?.categorie_entreprise || "",
+  }
+}
+
 // ─── Main handler ───────────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
@@ -111,29 +181,136 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const siret = request.nextUrl.searchParams.get("siret")
+  const siretParam = request.nextUrl.searchParams.get("siret")
+  const sirenParam = request.nextUrl.searchParams.get("siren")
 
-  // Validate format (14 digits)
-  if (!siret || !/^\d{14}$/.test(siret.replace(/\s/g, ""))) {
-    return NextResponse.json(
-      { error: "Le numero SIRET doit contenir exactement 14 chiffres." },
-      { status: 400 }
-    )
-  }
+  // Determine if this is a SIREN (9 digits) or SIRET (14 digits) lookup
+  const isSirenLookup = !siretParam && !!sirenParam
+  const rawValue = (siretParam || sirenParam || "").replace(/\s/g, "")
 
-  const cleanSiret = siret.replace(/\s/g, "")
-
-  // Validate Luhn checksum
-  if (!validateSiretLuhn(cleanSiret)) {
-    return NextResponse.json(
-      { error: "Ce numero SIRET est invalide (somme de controle incorrecte)." },
-      { status: 400 }
-    )
+  if (isSirenLookup) {
+    // SIREN: 9 digits
+    if (!/^\d{9}$/.test(rawValue)) {
+      return NextResponse.json(
+        { error: "Le numero SIREN doit contenir exactement 9 chiffres." },
+        { status: 400 }
+      )
+    }
+  } else {
+    // SIRET: 14 digits
+    if (!/^\d{14}$/.test(rawValue)) {
+      return NextResponse.json(
+        { error: "Le numero SIRET doit contenir exactement 14 chiffres." },
+        { status: 400 }
+      )
+    }
+    // Validate Luhn checksum for SIRET
+    if (!validateSiretLuhn(rawValue)) {
+      return NextResponse.json(
+        { error: "Ce numero SIRET est invalide (somme de controle incorrecte)." },
+        { status: 400 }
+      )
+    }
   }
 
   try {
-    // Try INSEE API first if token is available
     const inseeToken = process.env.INSEE_API_TOKEN
+
+    if (isSirenLookup) {
+      // ── SIREN lookup: find the company's head establishment ──
+      const cleanSiren = rawValue
+
+      // Try INSEE API first
+      if (inseeToken) {
+        try {
+          const inseeRes = await fetch(
+            `https://api.insee.fr/entreprises/sirene/V3.11/siren/${cleanSiren}`,
+            {
+              headers: {
+                Authorization: `Bearer ${inseeToken}`,
+                Accept: "application/json",
+              },
+              next: { revalidate: 86400 },
+            }
+          )
+
+          if (inseeRes.ok) {
+            const inseeData = await inseeRes.json()
+            const unite = inseeData.uniteLegale
+            if (unite) {
+              // Get the siege (head establishment) via SIRET endpoint
+              const siegeSiret = `${cleanSiren}${unite.nicSiegeUniteLegale || "00001"}`
+              const siegeRes = await fetch(
+                `https://api.insee.fr/entreprises/sirene/V3.11/siret/${siegeSiret}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${inseeToken}`,
+                    Accept: "application/json",
+                  },
+                  next: { revalidate: 86400 },
+                }
+              )
+              if (siegeRes.ok) {
+                const siegeData = await siegeRes.json()
+                if (siegeData.etablissement) {
+                  return NextResponse.json(
+                    formatSirenResult(cleanSiren, unite, siegeData.etablissement, "insee")
+                  )
+                }
+              }
+              // If siege fetch fails, return basic info from unite legale
+              return NextResponse.json(
+                formatSirenResult(cleanSiren, unite, { siret: siegeSiret }, "insee")
+              )
+            }
+          }
+        } catch {
+          logger.warn("INSEE SIREN API failed, falling back to data.gouv.fr")
+        }
+      }
+
+      // Fallback: data.gouv.fr — search by SIREN (unites_legales endpoint)
+      const res = await fetch(
+        `https://entreprise.data.gouv.fr/api/sirene/v3/unites_legales/${cleanSiren}`,
+        { next: { revalidate: 86400 } }
+      )
+
+      if (!res.ok) {
+        if (res.status === 404) {
+          return NextResponse.json({
+            found: false,
+            siren: cleanSiren,
+            siret: cleanSiren,
+            message: "Aucune entreprise trouvee pour ce numero SIREN.",
+          })
+        }
+        throw new Error(`data.gouv.fr SIREN API error: ${res.status}`)
+      }
+
+      const data = await res.json()
+      const uniteLegale = data.unite_legale
+
+      if (!uniteLegale) {
+        return NextResponse.json({
+          found: false,
+          siren: cleanSiren,
+          siret: cleanSiren,
+          message: "Aucune entreprise trouvee pour ce numero SIREN.",
+        })
+      }
+
+      // Get the siege establishment
+      const siege = uniteLegale.etablissement_siege || uniteLegale.etablissements?.[0] || {}
+
+      return NextResponse.json(
+        formatSirenResult(cleanSiren, uniteLegale, siege, "gouv")
+      )
+    }
+
+    // ── Standard SIRET lookup ──
+    const cleanSiret = rawValue
+
+    // Try INSEE API first if token is available
     if (inseeToken) {
       try {
         const inseeRes = await fetch(
@@ -254,7 +431,7 @@ export async function GET(request: NextRequest) {
       categorieEntreprise: unite?.categorie_entreprise || "",
     })
   } catch (error) {
-    logger.error("SIRET public verification error", error)
+    logger.error("SIRET/SIREN public verification error", error)
     return NextResponse.json(
       { error: "Erreur lors de la verification. Veuillez reessayer." },
       { status: 500 }

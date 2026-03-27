@@ -52,8 +52,9 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
       .catch(() => { /* not logged in — that's fine */ })
   }, [showModal, profileLoaded, fullName, email, phone])
 
-  // Format SIRET with spaces for display (XXX XXX XXX XXXXX)
-  const formatSiret = (value: string) => {
+  // Format SIREN/SIRET with spaces for display
+  // SIREN: XXX XXX XXX — SIRET: XXX XXX XXX XXXXX
+  const formatSirenSiret = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 14)
     const parts = []
     if (digits.length > 0) parts.push(digits.slice(0, 3))
@@ -74,15 +75,15 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
   }
 
   const isFormValid =
-    siret.length === 14 &&
+    (siret.length === 9 || siret.length === 14) &&
     fullName.trim().length >= 2 &&
     email.includes('@') &&
     phone.replace(/\D/g, '').length >= 10 &&
     position.trim().length >= 2
 
   const handleClaim = async () => {
-    if (siret.length !== 14) {
-      setError('Le SIRET doit contenir exactement 14 chiffres')
+    if (siret.length !== 9 && siret.length !== 14) {
+      setError('Entrez votre SIREN (9 chiffres) ou SIRET (14 chiffres)')
       return
     }
     if (fullName.trim().length < 2) {
@@ -221,7 +222,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 </div>
 
                 <p className="text-sm text-gray-600 mb-4">
-                  Remplissez vos coordonnées et votre SIRET pour prouver que vous êtes le propriétaire de cette entreprise.
+                  Remplissez vos coordonnées et votre SIREN ou SIRET pour prouver que vous êtes le propriétaire de cette entreprise.
                 </p>
 
                 {error && (
@@ -294,22 +295,23 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                     />
                   </div>
 
-                  {/* SIRET */}
+                  {/* SIREN / SIRET */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Numéro SIRET <span className="text-red-500">*</span>
+                      SIREN ou SIRET <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
-                      value={formatSiret(siret)}
+                      value={formatSirenSiret(siret)}
                       onChange={(e) => handleSiretChange(e.target.value)}
-                      placeholder="XXX XXX XXX XXXXX"
+                      placeholder="SIREN (9) ou SIRET (14 chiffres)"
                       className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
                       maxLength={17}
+                      inputMode="numeric"
                       disabled={isLoading}
                     />
                     <p className="mt-1 text-xs text-gray-500">
-                      Votre SIRET figure sur votre extrait Kbis ou sur{' '}
+                      Votre SIREN/SIRET figure sur votre extrait Kbis ou sur{' '}
                       <a
                         href="https://www.societe.com"
                         target="_blank"

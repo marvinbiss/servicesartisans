@@ -59,11 +59,11 @@ interface VerifierClientProps {
   faqItems: FaqItem[]
 }
 
-// ─── SIRET formatting ───────────────────────────────────────────────
+// ─── SIREN/SIRET formatting ─────────────────────────────────────────
 
-function formatSiretInput(value: string): string {
+function formatSirenSiretInput(value: string): string {
   const digits = value.replace(/\D/g, "").slice(0, 14)
-  // Format: XXX XXX XXX XXXXX
+  // SIREN (≤9): XXX XXX XXX — SIRET (>9): XXX XXX XXX XXXXX
   const parts: string[] = []
   if (digits.length > 0) parts.push(digits.slice(0, 3))
   if (digits.length > 3) parts.push(digits.slice(3, 6))
@@ -108,7 +108,7 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
 
   const handleSiretChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSiret(formatSiretInput(e.target.value))
+      setSiret(formatSirenSiretInput(e.target.value))
     },
     []
   )
@@ -116,10 +116,10 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
-      const cleanSiret = siret.replace(/\s/g, "")
+      const clean = siret.replace(/\s/g, "")
 
-      if (cleanSiret.length !== 14) {
-        setError("Le numero SIRET doit contenir exactement 14 chiffres.")
+      if (clean.length !== 9 && clean.length !== 14) {
+        setError("Entrez un SIREN (9 chiffres) ou un SIRET (14 chiffres).")
         setResult(null)
         return
       }
@@ -129,9 +129,10 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
       setResult(null)
 
       try {
-        const res = await fetch(
-          `/api/verify-siret?siret=${encodeURIComponent(cleanSiret)}`
-        )
+        const param = clean.length === 9
+          ? `siren=${encodeURIComponent(clean)}`
+          : `siret=${encodeURIComponent(clean)}`
+        const res = await fetch(`/api/verify-siret?${param}`)
         const data: SiretResult = await res.json()
 
         if (data.rateLimited) {
@@ -173,8 +174,9 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
             Verifiez votre artisan en 30 secondes
           </h1>
           <p className="text-blue-100 text-lg sm:text-xl mb-10 max-w-2xl mx-auto">
-            Entrez un numero SIRET pour verifier instantanement qu{"'"}un
-            artisan est fiable et exerce legalement.
+            Entrez un numero SIREN (9 chiffres) ou SIRET (14 chiffres) pour
+            verifier instantanement qu{"'"}un artisan est fiable et exerce
+            legalement.
           </p>
 
           {/* Search form */}
@@ -189,17 +191,17 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
                   type="text"
                   value={siret}
                   onChange={handleSiretChange}
-                  placeholder="Entrez un SIRET (ex: 443 061 841 00015)"
+                  placeholder="SIREN ou SIRET (ex: 443 061 841)"
                   className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-900 text-lg placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
                   inputMode="numeric"
                   autoComplete="off"
                   maxLength={17}
-                  aria-label="Numero SIRET"
+                  aria-label="Numero SIREN ou SIRET"
                 />
               </div>
               <button
                 type="submit"
-                disabled={loading || siret.replace(/\s/g, "").length < 14}
+                disabled={loading || (siret.replace(/\s/g, "").length !== 9 && siret.replace(/\s/g, "").length < 14)}
                 className="px-8 py-4 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors shadow-lg flex items-center justify-center gap-2 text-lg"
               >
                 {loading ? (
