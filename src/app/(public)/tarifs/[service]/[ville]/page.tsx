@@ -223,15 +223,8 @@ export default async function TarifsServiceVillePage({
   const author = getDefaultAuthor()
 
 
-  const seed = `rating-${service}-${villeData.name}`
-  const ratingValue = Math.round((4.0 + (Math.abs(hashCode(seed)) % 10) / 10) * 10) / 10
-  const reviewCount = 10 + Math.abs(hashCode(`reviews-${service}-${villeData.name}`)) % 90
   const dbOfferCount = commune?.nb_entreprises_artisanales
   const offerCount = dbOfferCount || (3 + Math.abs(hashCode(`offers-${service}`)) % 20)
-
-  const reviewAuthors = ['Marie L.', 'Pierre D.', 'Sophie M.', 'Laurent B.', 'Isabelle R.', 'Nicolas T.', 'Catherine V.', 'François G.', 'Nathalie P.', 'Jean-Marc S.']
-  const authorIdx = Math.abs(hashCode(`author-${service}-${villeData.name}`)) % reviewAuthors.length
-  const reviewRating = Math.min(5, Math.floor(ratingValue) + 1)
 
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -259,19 +252,6 @@ export default async function TarifsServiceVillePage({
       lowPrice: minPrice,
       highPrice: maxPrice,
       offerCount,
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue,
-      reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: {
-      '@type': 'Review',
-      author: { '@type': 'Person', name: reviewAuthors[authorIdx] },
-      reviewRating: { '@type': 'Rating', ratingValue: reviewRating, bestRating: 5, worstRating: 1 },
-      reviewBody: `Très satisfait du service de ${tradeLower} à ${villeData.name}. Tarifs conformes aux estimations, travail soigné et professionnel.`,
     },
   }
 

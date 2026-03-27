@@ -119,40 +119,70 @@ const faqItems = [
   },
 ]
 
+interface TopReview {
+  client_name: string
+  rating: number
+  comment: string
+  created_at: string
+}
+
 async function getPlatformStats() {
-  if (IS_BUILD) return { totalReviews: 0, avgRating: 0, providerCount: 0 }
+  if (IS_BUILD) return { totalReviews: 0, avgRating: 0, providerCount: 0, topReviews: [] as TopReview[] }
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    // Get total providers with reviews
-    const { count: providerCount } = await supabase
-      .from('providers')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-      .gt('review_count', 0)
+    // Run all queries in parallel
+    const [providerCountResult, statsResult, topReviewsResult] = await Promise.all([
+      // Get total providers with reviews
+      supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .gt('review_count', 0),
 
-    // Get total review count and average rating
-    const { data: stats } = await supabase
-      .from('providers')
-      .select('rating_average, review_count')
-      .eq('is_active', true)
-      .gt('review_count', 0)
+      // Get total review count and average rating
+      supabase
+        .from('providers')
+        .select('rating_average, review_count')
+        .eq('is_active', true)
+        .gt('review_count', 0),
+
+      // Get top recent reviews for JSON-LD schema
+      supabase
+        .from('reviews')
+        .select('client_name, rating, comment, created_at')
+        .eq('status', 'published')
+        .gte('rating', 4)
+        .not('comment', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(5),
+    ])
+
+    const { count: providerCount } = providerCountResult
+    const { data: stats } = statsResult
+    const { data: rawTopReviews } = topReviewsResult
 
     if (!stats || stats.length === 0) {
-      return { totalReviews: 0, avgRating: 0, providerCount: 0 }
+      return { totalReviews: 0, avgRating: 0, providerCount: 0, topReviews: [] as TopReview[] }
     }
 
     const totalReviews = stats.reduce((sum, p) => sum + (p.review_count || 0), 0)
     const avgRating = stats.reduce((sum, p) => sum + (p.rating_average || 0), 0) / stats.filter(p => p.rating_average && p.rating_average > 0).length
 
+    // Filter reviews with meaningful content (>20 chars)
+    const topReviews: TopReview[] = (rawTopReviews || [])
+      .filter((r) => r.comment && r.comment.length > 20 && r.client_name)
+      .slice(0, 5)
+
     return {
       totalReviews,
       avgRating: Math.round(avgRating * 10) / 10,
       providerCount: providerCount || 0,
+      topReviews,
     }
   } catch {
-    return { totalReviews: 0, avgRating: 0, providerCount: 0 }
+    return { totalReviews: 0, avgRating: 0, providerCount: 0, topReviews: [] as TopReview[] }
   }
 }
 
@@ -207,6 +237,23 @@ export default async function AvisPage() {
               bestRating: 5,
               worstRating: 1,
             },
+            ...(platformStats.topReviews.length > 0 ? {
+              review: platformStats.topReviews.map((r) => ({
+                '@type': 'Review',
+                author: {
+                  '@type': 'Person',
+                  name: r.client_name,
+                },
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: r.rating,
+                  bestRating: 5,
+                  worstRating: 1,
+                },
+                reviewBody: r.comment,
+                datePublished: r.created_at.split('T')[0],
+              })),
+            } : {}),
           }] : []),
         ]}
       />
@@ -285,7 +332,7 @@ export default async function AvisPage() {
         <section className="relative -mt-10 z-10 px-4 pb-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-              <div className="grid grid-cols-3 gap-8 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 text-center">
                 <div>
                   <div className="flex items-center gap-2 justify-center mb-1">
                     <Star className="w-6 h-6 text-amber-500 fill-amber-500" />

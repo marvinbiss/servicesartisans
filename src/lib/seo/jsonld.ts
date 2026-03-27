@@ -244,11 +244,6 @@ export function getServicePricingSchema(params: {
   offerCount?: number
   ratingValue?: number
   reviewCount?: number
-  review?: {
-    authorName: string
-    rating: number
-    comment: string
-  }
   location?: string
   url: string
 }) {
@@ -286,14 +281,6 @@ export function getServicePricingSchema(params: {
         worstRating: 1,
       },
     }),
-    ...(params.review && {
-      review: {
-        '@type': 'Review',
-        author: { '@type': 'Person', name: params.review.authorName },
-        reviewRating: { '@type': 'Rating', ratingValue: params.review.rating, bestRating: 5, worstRating: 1 },
-        reviewBody: params.review.comment,
-      },
-    }),
   }
 }
 
@@ -327,30 +314,6 @@ export function getLocalServiceSchema(params: {
       '@type': 'Organization',
       name: SITE_NAME,
       url: SITE_URL,
-    },
-  }
-}
-
-// Schema.org Service with AggregateRating (for /avis/[service]/[ville])
-export function getServiceRatingSchema(params: {
-  serviceName: string
-  cityName: string
-  ratingValue: number
-  reviewCount: number
-  url: string
-}) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: `${params.serviceName} à ${params.cityName}`,
-    url: params.url,
-    provider: { '@type': 'Organization', name: SITE_NAME },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: params.ratingValue,
-      reviewCount: params.reviewCount,
-      bestRating: 5,
-      worstRating: 1,
     },
   }
 }

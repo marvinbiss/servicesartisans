@@ -291,12 +291,6 @@ export default async function ServicePage({ params }: PageProps) {
     title: h1Text,
   })
 
-  const svcRatingValue = trade ? Math.round((4.0 + (Math.abs(hashCode(`svc-rating-${serviceSlug}`)) % 10) / 10) * 10) / 10 : undefined
-  const svcReviewCount = trade ? 15 + Math.abs(hashCode(`svc-reviews-${serviceSlug}`)) % 85 : undefined
-  const svcReviewAuthors = ['Marie L.', 'Pierre D.', 'Sophie M.', 'Laurent B.', 'Isabelle R.']
-  const svcAuthorIdx = Math.abs(hashCode(`svc-author-${serviceSlug}`)) % svcReviewAuthors.length
-  const svcReviewRating = svcRatingValue ? Math.min(5, Math.floor(svcRatingValue) + 1) : 5
-
   const pricingSchema = trade ? getServicePricingSchema({
     serviceName: service.name,
     serviceSlug: serviceSlug,
@@ -306,13 +300,6 @@ export default async function ServicePage({ params }: PageProps) {
     priceCurrency: 'EUR',
     priceUnit: trade.priceRange.unit,
     offerCount: totalProviderCount || trade.commonTasks.length,
-    ratingValue: svcRatingValue,
-    reviewCount: svcReviewCount,
-    review: {
-      authorName: svcReviewAuthors[svcAuthorIdx],
-      rating: svcReviewRating,
-      comment: `Service de ${service.name.toLowerCase()} conforme aux tarifs annoncés. Professionnel et soigné.`,
-    },
     url: `${SITE_URL}/services/${serviceSlug}`,
   }) : null
 

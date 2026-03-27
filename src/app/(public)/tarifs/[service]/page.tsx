@@ -146,12 +146,6 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
 
   const tradeLower = trade.name.toLowerCase()
 
-  const ratingValue = Math.round((4.0 + (Math.abs(hashCode(`hub-rating-${service}`)) % 10) / 10) * 10) / 10
-  const reviewCount = 15 + Math.abs(hashCode(`hub-reviews-${service}`)) % 85
-  const reviewAuthors = ['Marie L.', 'Pierre D.', 'Sophie M.', 'Laurent B.', 'Isabelle R.']
-  const authorIdx = Math.abs(hashCode(`hub-author-${service}`)) % reviewAuthors.length
-  const reviewRating = Math.min(5, Math.floor(ratingValue) + 1)
-
   const serviceSchema = getServicePricingSchema({
     serviceName: trade.name,
     serviceSlug: service,
@@ -161,13 +155,6 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     priceCurrency: 'EUR',
     priceUnit: trade.priceRange.unit,
     offerCount: trade.commonTasks.length,
-    ratingValue,
-    reviewCount,
-    review: {
-      authorName: reviewAuthors[authorIdx],
-      rating: reviewRating,
-      comment: `Service de ${tradeLower} conforme aux tarifs annoncés. Professionnel et soigné.`,
-    },
     url: `${SITE_URL}/tarifs/${service}`,
   })
 
