@@ -150,7 +150,7 @@ export default function ProviderCard({
         </Link>
         {isValidPhone(provider.phone) && (
           <a
-            href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
+            href={`tel:${provider.phone!.replace(/[\s.\-()]/g, '')}`}
             className="flex items-center justify-center gap-2 px-5 py-3 min-h-[48px] border-2 border-sand-400 text-charcoal-700 rounded-xl font-semibold hover:bg-sand-100 hover:border-primary-200 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
           >
             <Phone className="w-5 h-5" />
