@@ -1,6 +1,5 @@
 'use client'
 
-import 'leaflet/dist/leaflet.css'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { Star } from 'lucide-react'
@@ -40,6 +39,11 @@ export default function CarteAvecListe({
   const [loading, setLoading] = useState(true)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const mapRef = useRef<any>(null)
+
+  // Load CSS asynchronously after mount to avoid blocking render
+  useEffect(() => {
+    import('leaflet/dist/leaflet.css')
+  }, [])
 
   useEffect(() => {
     import('leaflet').then((leaflet) => {
@@ -134,8 +138,8 @@ export default function CarteAvecListe({
   }
 
   return (
-    <div className="h-screen flex">
-      <div className="w-2/5 bg-white overflow-y-auto">
+    <div className="min-h-screen md:h-screen flex flex-col md:flex-row">
+      <div className="order-2 md:order-1 md:w-2/5 bg-white overflow-y-auto">
         <div className="p-4 space-y-4">
           {providers.map((provider) => {
             const isHovered = hoveredId === provider.id
@@ -157,7 +161,7 @@ export default function CarteAvecListe({
         </div>
       </div>
 
-      <div className="flex-1 relative">
+      <div className="order-1 md:order-2 flex-1 relative h-[300px] md:h-auto">
         <MapContainer center={initialCenter} zoom={initialZoom} ref={mapRef} className="w-full h-full" zoomControl={true}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap' />
           {providers.map((provider) => (

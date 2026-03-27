@@ -5,7 +5,14 @@ import { useRouter } from 'next/navigation'
 import { Search, MapPin, TrendingUp, Zap, Wrench, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Navigation, ChevronRight, Clock, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { slugify } from '@/lib/utils'
-import { villes, type Ville } from '@/lib/data/france'
+import { villesLight, type Ville } from '@/lib/data/france-light'
+
+// Full villes loaded on demand (lazy — only when user types)
+let _allVilles: Ville[] | null = null
+function getAllVilles(): Promise<Ville[]> {
+  if (_allVilles) return Promise.resolve(_allVilles)
+  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+}
 
 // ── Icon map ─────────────────────────────────────────────────────────
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -46,7 +53,7 @@ function formatPopulation(pop: string): string {
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
-function searchCities(query: string, limit = 8): Ville[] {
+function searchCitiesFromList(query: string, cityList: Ville[], limit = 8): Ville[] {
   if (!query || query.length < 2) return []
 
   const normalized = normalizeText(query)
@@ -60,7 +67,7 @@ function searchCities(query: string, limit = 8): Ville[] {
   // 4) Departement name match
   const deptMatches: Ville[] = []
 
-  for (const v of villes) {
+  for (const v of cityList) {
     const normalizedName = normalizeText(v.name)
 
     if (normalizedName.startsWith(normalized)) {
@@ -216,9 +223,17 @@ export function HeroSearch() {
     return services.filter(s => normalizeText(s.name).includes(normalized))
   }, [query])
 
-  // ── Fuzzy city search with prioritized matching ────────────────────
-  const filteredCities = useMemo(() => {
-    return searchCities(location, 8)
+  // ── Fuzzy city search — instant from light dataset, then async full ──
+  const [filteredCities, setFilteredCities] = useState<Ville[]>([])
+  useEffect(() => {
+    if (!location || location.trim().length < 2) {
+      setFilteredCities([])
+      return
+    }
+    setFilteredCities(searchCitiesFromList(location, villesLight, 8))
+    getAllVilles().then(full => {
+      setFilteredCities(searchCitiesFromList(location, full, 8))
+    })
   }, [location])
 
   // Determine if user typed something but got no results
@@ -288,7 +303,7 @@ export function HeroSearch() {
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     e?.preventDefault()
     const serviceSlug = services.find(s => normalizeText(s.name) === normalizeText(query))?.slug || slugify(query)
-    const cityMatch = villes.find(v => normalizeText(v.name) === normalizeText(location))
+    const cityMatch = (_allVilles || villesLight).find(v => normalizeText(v.name) === normalizeText(location))
     const citySlug = cityMatch?.slug || slugify(location)
 
     // Save to recent searches
@@ -371,13 +386,13 @@ export function HeroSearch() {
     if (!hasTypedCity && recentSearches.length > 0) {
       // Map recent searches to ville objects or placeholders
       return recentSearches.map(name => {
-        const match = villes.find(v => normalizeText(v.name) === normalizeText(name))
+        const match = (_allVilles || villesLight).find(v => normalizeText(v.name) === normalizeText(name))
         return match || { name, slug: slugify(name), region: '', departement: '', departementCode: '', population: '', codePostal: '', description: '', quartiers: [] } as Ville
       })
     }
     // Popular cities
     return popularCities.map(pc => {
-      const match = villes.find(v => v.slug === pc.slug)
+      const match = villesLight.find(v => v.slug === pc.slug)
       return match || { name: pc.name, slug: pc.slug, region: '', departement: '', departementCode: '', population: '', codePostal: '', description: '', quartiers: [] } as Ville
     })
   }, [filteredCities, hasTypedCity, recentSearches])
@@ -494,7 +509,7 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[420px] overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[420px] overflow-y-auto"
                     role="listbox"
                     aria-label="Services disponibles"
                   >
@@ -651,7 +666,7 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[460px] overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[460px] overflow-y-auto"
                     role="listbox"
                     aria-label="Villes disponibles"
                   >

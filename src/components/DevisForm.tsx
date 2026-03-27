@@ -1,8 +1,16 @@
 'use client'
 
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { services, villes } from '@/lib/data/france'
+import { services, villesLight } from '@/lib/data/france-light'
+import type { Ville } from '@/lib/data/france-light'
+
+// Full villes loaded on demand (lazy — only when user types)
+let _allVilles: Ville[] | null = null
+function getAllVilles(): Promise<Ville[]> {
+  if (_allVilles) return Promise.resolve(_allVilles)
+  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+}
 import { ArrowRight, ArrowLeft, ChevronDown, Check, MapPin, Users, Shield, Clock } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { isValidFrenchPhone } from '@/lib/validation/phone'
@@ -325,17 +333,22 @@ export default function DevisForm({
     } catch {}
   }, [formData, step, villeQuery, selectedVillePostal, submitted, showResumeBanner])
 
-  const filteredVilles = useMemo(() => {
-    if (debouncedVilleQuery.length < 2) return []
+  const [filteredVilles, setFilteredVilles] = useState<Ville[]>([])
+  useEffect(() => {
+    if (debouncedVilleQuery.length < 2) { setFilteredVilles([]); return }
     const q = debouncedVilleQuery.toLowerCase()
-    const results: typeof villes = []
-    for (const v of villes) {
-      if (v.name.toLowerCase().startsWith(q) || v.codePostal.startsWith(debouncedVilleQuery)) {
-        results.push(v)
-        if (results.length >= 8) break
+    const filterList = (list: Ville[]) => {
+      const results: Ville[] = []
+      for (const v of list) {
+        if (v.name.toLowerCase().startsWith(q) || v.codePostal.startsWith(debouncedVilleQuery)) {
+          results.push(v)
+          if (results.length >= 8) break
+        }
       }
+      return results
     }
-    return results
+    setFilteredVilles(filterList(villesLight))
+    getAllVilles().then(full => setFilteredVilles(filterList(full)))
   }, [debouncedVilleQuery])
 
   const handleGeolocation = useCallback(async () => {

@@ -60,7 +60,7 @@ export { AdresseAutocomplete } from './AdresseAutocomplete'
 export { SiretAutocomplete } from './SiretAutocomplete'
 export { MetierAutocomplete } from './MetierAutocomplete'
 
-// Scroll-triggered animations (Framer Motion)
+// Scroll-triggered animations (CSS-only)
 export { ScrollReveal } from './ScrollReveal'
 export { StaggerGrid, StaggerItem } from './StaggerGrid'
 

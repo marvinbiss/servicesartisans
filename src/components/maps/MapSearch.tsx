@@ -1,6 +1,5 @@
 'use client'
 
-import 'leaflet/dist/leaflet.css'
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -292,6 +291,11 @@ export default function MapSearch() {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
+
+  // Load CSS asynchronously after mount to avoid blocking render
+  useEffect(() => {
+    import('leaflet/dist/leaflet.css')
+  }, [])
 
   useEffect(() => {
     setMapReady(true)

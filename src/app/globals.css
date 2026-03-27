@@ -116,15 +116,10 @@
     --z-tooltip: 1800;
   }
 
-  /* Dark mode support (future) */
-  .dark {
-    --color-background: #1C1917;
-    --color-surface: #302C28;
-    --color-border: #45403B;
-    --color-text-primary: #F9F4EE;
-    --color-text-secondary: #D5C9BE;
-    --color-text-muted: #9A8879;
-  }
+  /* Dark mode: intentionally disabled — site is light-only.
+     The darkMode:'class' config in tailwind.config.js is kept
+     to prevent Tailwind from auto-applying dark: variants via
+     media query, but no .dark class is ever set on <html>. */
 }
 
 /* ===========================================
@@ -856,6 +851,25 @@ img {
   color: #4b5563;
   line-height: 1.75;
   font-size: inherit;
+}
+
+/* ── Scroll Reveal (CSS-only, replaces framer-motion) ── */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 

@@ -161,6 +161,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
                   alt={file.fileName}
                   fill
                   className="object-cover"
+                  sizes="80px"
                   unoptimized
                 />
               )}

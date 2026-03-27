@@ -2,7 +2,14 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { services, villes, type Ville } from '@/lib/data/france'
+import { services, villesLight, type Ville } from '@/lib/data/france-light'
+
+// Full villes loaded on demand (lazy — only when user types)
+let _allVilles: Ville[] | null = null
+function getAllVilles(): Promise<Ville[]> {
+  if (_allVilles) return Promise.resolve(_allVilles)
+  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+}
 
 function normalizeText(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
@@ -21,13 +28,13 @@ function searchServices(query: string, limit = 6): typeof services {
   return [...prefix, ...contains].slice(0, limit)
 }
 
-function searchCities(query: string, limit = 6): Ville[] {
+function searchCitiesSync(query: string, cityList: Ville[], limit = 6): Ville[] {
   if (!query || query.length < 1) return []
   const n = normalizeText(query)
   const prefix: Ville[] = []
   const contains: Ville[] = []
   const postal: Ville[] = []
-  for (const v of villes) {
+  for (const v of cityList) {
     const vn = normalizeText(v.name)
     if (vn.startsWith(n)) prefix.push(v)
     else if (vn.includes(n)) contains.push(v)
@@ -86,7 +93,13 @@ export function ClayHeroSearch() {
     setVille(value)
     setSelectedCitySlug('')
     setHighlightedIndex(-1)
-    setCitySuggestions(searchCities(value))
+    // Show instant results from light dataset, then upgrade to full
+    setCitySuggestions(searchCitiesSync(value, villesLight))
+    if (value.length >= 1) {
+      getAllVilles().then(full => {
+        setCitySuggestions(searchCitiesSync(value, full))
+      })
+    }
   }, [])
 
   function selectService(s: typeof services[0]) {
@@ -200,7 +213,7 @@ export function ClayHeroSearch() {
             type="text"
             value={ville}
             onChange={e => handleCityChange(e.target.value)}
-            onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCities(ville)) }}
+            onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCitiesSync(ville, villesLight)) }}
             placeholder="Ville ou code postal"
             className="w-0 flex-1 bg-transparent text-charcoal-800 placeholder-charcoal-400 text-base outline-none font-medium"
             role="combobox"

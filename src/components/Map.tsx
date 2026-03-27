@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import type { LegacyProvider } from '@/types/legacy'
-import 'leaflet/dist/leaflet.css'
 
 // Custom marker icon using divIcon (CSS-based, no external images needed)
 const createDivIcon = (isVerified: boolean) => {
@@ -48,6 +47,11 @@ export default function Map({
   selectedProvider: _selectedProvider,
 }: MapProps) {
   const [isMounted, setIsMounted] = useState(false)
+
+  // Load CSS asynchronously after mount to avoid blocking render
+  useEffect(() => {
+    import('leaflet/dist/leaflet.css')
+  }, [])
 
   useEffect(() => {
     setIsMounted(true)

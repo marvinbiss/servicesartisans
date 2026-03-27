@@ -15,7 +15,9 @@ import {
   popularCities,
   popularRegions
 } from '@/lib/constants/navigation'
-import { villes, services, regions } from '@/lib/data/france'
+import { services, TOTAL_VILLES_COUNT } from '@/lib/data/france-light'
+
+const TOTAL_REGIONS_COUNT = 18
 import { getAnchorText } from '@/lib/seo/anchor-variants'
 
 // Re-export for backward compatibility
@@ -112,7 +114,7 @@ export function PopularCitiesLinks({
         href="/villes"
         className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
       >
-        Artisans dans {villes.length} villes <ArrowRight className="w-4 h-4" />
+        Artisans dans {TOTAL_VILLES_COUNT} villes <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -131,7 +133,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-clay-400">Par région</div>
-          <div className="text-sm text-gray-500">{regions.length} régions</div>
+          <div className="text-sm text-gray-500">{TOTAL_REGIONS_COUNT} régions</div>
         </div>
       </Link>
       <Link
@@ -155,7 +157,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-amber-600">Par ville</div>
-          <div className="text-sm text-gray-500">{villes.length} villes</div>
+          <div className="text-sm text-gray-500">{TOTAL_VILLES_COUNT} villes</div>
         </div>
       </Link>
     </div>
@@ -260,7 +262,7 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
           {services.length} métiers d'artisanat
         </Link>
         <Link href="/villes" className="text-gray-600 hover:text-clay-400 py-1">
-          {villes.length} villes de France
+          {TOTAL_VILLES_COUNT} villes de France
         </Link>
         <Link href="/regions" className="text-gray-600 hover:text-clay-400 py-1">
           Par région

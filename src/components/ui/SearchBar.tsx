@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ArrowRight, Clock, TrendingUp, X, Navigation, Wrench } from 'lucide-react'
-import { services as allServices } from '@/lib/data/france'
+import { services as allServices } from '@/lib/data/france-light'
 
 // Simple client-side city autocomplete
 interface CitySuggestion {

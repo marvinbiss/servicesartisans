@@ -273,6 +273,7 @@ export default function AddPortfolioModal({
                           alt="Avant"
                           fill
                           className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 400px"
                           unoptimized
                         />
                         <button
@@ -303,6 +304,7 @@ export default function AddPortfolioModal({
                           alt="Après"
                           fill
                           className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 400px"
                           unoptimized
                         />
                         <button
@@ -341,6 +343,7 @@ export default function AddPortfolioModal({
                           alt="Aperçu"
                           fill
                           className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 400px"
                           unoptimized
                         />
                       )}

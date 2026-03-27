@@ -3,7 +3,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { X, CheckCircle, ArrowRight, ArrowLeft, MapPin, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
-import { services, villes } from '@/lib/data/france'
+import { services, villesLight } from '@/lib/data/france-light'
+import type { Ville } from '@/lib/data/france-light'
+
+// Full villes loaded on demand (lazy — only when user types)
+let _allVilles: Ville[] | null = null
+function getAllVilles(): Promise<Ville[]> {
+  if (_allVilles) return Promise.resolve(_allVilles)
+  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+}
 import { trackEvent } from '@/lib/analytics/tracking'
 import { isValidFrenchPhone } from '@/lib/validation/phone'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
@@ -190,14 +198,18 @@ export default function DevisBottomSheet({
     []
   )
 
-  const filteredVilles = villeQuery.length >= 2
-    ? villes
-        .filter((v) =>
-          v.name.toLowerCase().includes(villeQuery.toLowerCase()) ||
-          v.codePostal.startsWith(villeQuery)
-        )
-        .slice(0, 6)
-    : []
+  const [filteredVilles, setFilteredVilles] = useState<Ville[]>([])
+  useEffect(() => {
+    if (villeQuery.length < 2) { setFilteredVilles([]); return }
+    const filterList = (list: Ville[]) => list
+      .filter((v) =>
+        v.name.toLowerCase().includes(villeQuery.toLowerCase()) ||
+        v.codePostal.startsWith(villeQuery)
+      )
+      .slice(0, 6)
+    setFilteredVilles(filterList(villesLight))
+    getAllVilles().then(full => setFilteredVilles(filterList(full)))
+  }, [villeQuery])
 
   const handleGeolocation = useCallback(async () => {
     if (!navigator.geolocation) return

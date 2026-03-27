@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getAvatarColor, getInitials } from '@/lib/utils'
-import { services as allServicesFromFrance } from '@/lib/data/france'
+import { services as allServicesFromFrance } from '@/lib/data/france-light'
 
 // ─── ANIMATION VARIANTS ────────────────────────────────────────
 

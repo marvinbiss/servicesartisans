@@ -1,6 +1,5 @@
 'use client'
 
-import 'leaflet/dist/leaflet.css'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -11,7 +10,7 @@ import {
   getMarkerColor,
   getMarkerRadius,
 } from '@/lib/data/map-coverage'
-import { services } from '@/lib/data/france'
+import { services } from '@/lib/data/france-light'
 
 // Dynamic imports for Leaflet (SSR-incompatible)
 const MapContainer = dynamic(
@@ -124,6 +123,11 @@ export default function CarteClient() {
   const [showFilters, setShowFilters] = useState(false)
   const mapRef = useRef<import('leaflet').Map | null>(null)
   const leafletRef = useRef<typeof import('leaflet') | null>(null)
+
+  // Load CSS asynchronously after mount to avoid blocking render
+  useEffect(() => {
+    import('leaflet/dist/leaflet.css')
+  }, [])
 
   useEffect(() => {
     // Load Leaflet with timeout fallback

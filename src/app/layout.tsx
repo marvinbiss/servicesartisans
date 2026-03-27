@@ -9,7 +9,6 @@ import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getProviderCount } from '@/lib/data/stats'
-import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -48,6 +47,10 @@ const WebVitals = dynamic(
 const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
   ssr: false,
 })
+const CompareProviderWrapper = dynamic(
+  () => import('@/components/compare/CompareProvider').then(mod => ({ default: mod.CompareProviderWrapper })),
+  { ssr: false }
+)
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
@@ -165,11 +168,9 @@ export default async function RootLayout({
           }}
         />
 
-        {/* Preconnect for Google Tag Manager & Analytics */}
+        {/* Preconnect for Google Tag Manager */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
         {/* Preconnect for Meta Pixel */}
         <link rel="preconnect" href="https://connect.facebook.net" />
@@ -216,13 +217,15 @@ fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
 fbq('track', 'PageView');`}
           </Script>
         )}
-        {/* Contentsquare UX Analytics */}
-        <Script src="https://t.contentsquare.net/uxa/8da7eeef2dab8.js" strategy="lazyOnload" />
-        {/* Microsoft Clarity — chargé uniquement après consentement analytics (RGPD) via CookieConsent */}
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+        {/* Contentsquare UX Analytics — deferred until idle or 5s fallback */}
+        <Script id="contentsquare-deferred" strategy="lazyOnload">
+          {`(function(){function l(){if(l.d)return;l.d=1;var s=document.createElement('script');s.src='https://t.contentsquare.net/uxa/8da7eeef2dab8.js';s.async=true;document.head.appendChild(s)}if(typeof requestIdleCallback==='function'){requestIdleCallback(l,{timeout:5000})}else{setTimeout(l,5000)}})();`}
+        </Script>
+        {/* GA4 removed — GTM (GTM-THV3KZ8N) already includes GA4 tracking, standalone gtag.js was duplicate */}
         <WebVitals />
         <PageViewTracker />
         <MobileMenuProvider>
+          <CompareProviderWrapper>
           {/* Skip to main content for accessibility */}
           <a
             href="#main-content"
@@ -237,6 +240,7 @@ fbq('track', 'PageView');`}
           <ServiceWorkerRegistration />
           <CapacitorInit />
           <CookieConsent />
+          </CompareProviderWrapper>
         </MobileMenuProvider>
       </body>
     </html>

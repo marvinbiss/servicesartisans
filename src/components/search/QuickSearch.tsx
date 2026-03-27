@@ -1,9 +1,16 @@
 'use client'
 
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, Wrench, X } from 'lucide-react'
-import { services, villes, type Ville } from '@/lib/data/france'
+import { services, villesLight, type Ville } from '@/lib/data/france-light'
+
+// Full villes loaded on demand (lazy — only when user types)
+let _allVilles: Ville[] | null = null
+function getAllVilles(): Promise<Ville[]> {
+  if (_allVilles) return Promise.resolve(_allVilles)
+  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+}
 
 // ── Normalize text (strip accents, lowercase) ───────────────────────
 function normalizeText(text: string): string {
@@ -25,7 +32,7 @@ function formatPopulation(pop: string): string {
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
-function searchCities(query: string, limit = 5): Ville[] {
+function searchCitiesFromList(query: string, cityList: Ville[], limit = 5): Ville[] {
   if (!query || query.length < 1) return []
 
   const normalized = normalizeText(query)
@@ -34,7 +41,7 @@ function searchCities(query: string, limit = 5): Ville[] {
   const containsMatches: Ville[] = []
   const postalMatches: Ville[] = []
 
-  for (const v of villes) {
+  for (const v of cityList) {
     const normalizedName = normalizeText(v.name)
 
     if (normalizedName.startsWith(normalized)) {
@@ -95,7 +102,7 @@ interface Suggestion {
 }
 
 // ── Build suggestions from input ────────────────────────────────────
-function buildSuggestions(input: string): Suggestion[] {
+function buildSuggestions(input: string, cityList: Ville[]): Suggestion[] {
   if (!input || input.trim().length < 1) return []
 
   const trimmed = input.trim()
@@ -135,7 +142,7 @@ function buildSuggestions(input: string): Suggestion[] {
 
     const cityPart = remainingWords.join(' ')
     if (cityPart.length >= 1) {
-      const matchingCities = searchCities(cityPart, 5)
+      const matchingCities = searchCitiesFromList(cityPart, cityList, 5)
       for (const city of matchingCities) {
         results.push({
           type: 'combined',
@@ -153,7 +160,7 @@ function buildSuggestions(input: string): Suggestion[] {
     // If no city part remaining, but service matched exactly with trailing space
     if (cityPart.length === 0 && input.endsWith(' ')) {
       // Show top cities for this service
-      const topCities = [...villes]
+      const topCities = [...cityList]
         .sort((a, b) => {
           const popA = parseInt(a.population.replace(/\s/g, ''), 10) || 0
           const popB = parseInt(b.population.replace(/\s/g, ''), 10) || 0
@@ -204,7 +211,7 @@ function buildSuggestions(input: string): Suggestion[] {
   }
 
   // City matches
-  const cityMatches = searchCities(trimmed, 4)
+  const cityMatches = searchCitiesFromList(trimmed, cityList, 4)
   for (const c of cityMatches) {
     results.push({
       type: 'city',
@@ -236,7 +243,7 @@ function buildSuggestions(input: string): Suggestion[] {
         }
         const cityPart = remainingWords.join(' ')
         if (cityPart.length >= 1) {
-          const matchingCities = searchCities(cityPart, 4)
+          const matchingCities = searchCitiesFromList(cityPart, cityList, 4)
           for (const service of partialServiceMatches.slice(0, 2)) {
             for (const city of matchingCities.slice(0, 3)) {
               results.push({
@@ -297,8 +304,18 @@ export default function QuickSearch() {
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
 
-  // Build suggestions
-  const suggestions = useMemo(() => buildSuggestions(input), [input])
+  // Build suggestions — instant from light dataset, then upgrade to full
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
+  useEffect(() => {
+    if (!input || input.trim().length < 1) {
+      setSuggestions([])
+      return
+    }
+    setSuggestions(buildSuggestions(input, villesLight))
+    getAllVilles().then(full => {
+      setSuggestions(buildSuggestions(input, full))
+    })
+  }, [input])
 
   // Reset highlight when suggestions change
   useEffect(() => {

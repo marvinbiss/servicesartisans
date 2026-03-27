@@ -65,7 +65,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
         transition={{ duration: 0.4 }}
         className="rounded-2xl overflow-hidden cursor-pointer group"
       >
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-80 md:h-96">
+        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-60 md:h-80 lg:h-96">
           {/* Main hero image (left half) */}
           <div
             className="col-span-2 row-span-2 relative overflow-hidden"
@@ -78,7 +78,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
               className="object-cover transition-transform duration-300 group-hover:scale-105"
               placeholder="blur"
               blurDataURL={BLUR_DATA_URL}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 50vw, 33vw"
               priority
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
@@ -99,7 +99,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="(max-width: 768px) 25vw, 17vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
             </div>
@@ -119,7 +119,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="(max-width: 768px) 25vw, 17vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
             </div>
@@ -140,7 +140,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="(max-width: 768px) 25vw, 17vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
             </div>
@@ -160,7 +160,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 className="object-cover transition-transform duration-300 hover:scale-110"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="(max-width: 768px) 25vw, 17vw"
               />
               <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
 

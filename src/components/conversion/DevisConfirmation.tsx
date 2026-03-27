@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp } from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
-import { services } from '@/lib/data/france'
+import { services } from '@/lib/data/france-light'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
 

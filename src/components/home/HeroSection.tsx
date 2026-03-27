@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useMotionValue, useTransform, animate, useInView, type Variants } from 'framer-motion'
-import { services, villes, departements } from '@/lib/data/france'
+import { services, TOTAL_VILLES_COUNT, TOTAL_DEPARTEMENTS_COUNT } from '@/lib/data/france-light'
 import { heroImage } from '@/lib/data/images'
 import { HeroSearch } from '@/components/search/HeroSearch'
 
@@ -302,8 +302,8 @@ export function HeroSection({ artisanCount = 0 }: { artisanCount?: number }) {
             >
               {[
                 { value: artisanCount, suffix: '', label: 'artisans' },
-                { value: villes.length, suffix: '', label: 'villes' },
-                { value: departements.length, suffix: '', label: 'départements' },
+                { value: TOTAL_VILLES_COUNT, suffix: '', label: 'villes' },
+                { value: TOTAL_DEPARTEMENTS_COUNT, suffix: '', label: 'départements' },
                 { value: services.length, suffix: '', label: 'métiers' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">

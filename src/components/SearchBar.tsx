@@ -3,7 +3,14 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ChevronDown } from 'lucide-react'
-import { services, villes, type Ville } from '@/lib/data/france'
+import { services, villesLight, type Ville } from '@/lib/data/france-light'
+
+// Full villes loaded on demand (lazy — only when user types)
+let _allVilles: Ville[] | null = null
+function getAllVilles(): Promise<Ville[]> {
+  if (_allVilles) return Promise.resolve(_allVilles)
+  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+}
 
 interface SearchBarProps {
   size?: 'compact' | 'large'
@@ -28,7 +35,7 @@ function formatPopulation(pop: string): string {
 }
 
 // ── Fuzzy city search with prioritized matching ─────────────────────
-function searchCities(query: string, limit = 6): Ville[] {
+function searchCitiesFromList(query: string, cityList: Ville[], limit = 6): Ville[] {
   if (!query || query.length < 1) return []
 
   const normalized = normalizeText(query)
@@ -38,7 +45,7 @@ function searchCities(query: string, limit = 6): Ville[] {
   const postalMatches: Ville[] = []
   const deptMatches: Ville[] = []
 
-  for (const v of villes) {
+  for (const v of cityList) {
     const normalizedName = normalizeText(v.name)
 
     if (normalizedName.startsWith(normalized)) {
@@ -136,9 +143,19 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
     )
   }, [serviceFilter])
 
-  // Filter cities based on query using prioritized fuzzy search
-  const filteredCities = useMemo(() => {
-    return searchCities(cityQuery, 6)
+  // Filter cities based on query — instant from light dataset, then upgrade to full
+  const [filteredCities, setFilteredCities] = useState<Ville[]>([])
+  useEffect(() => {
+    if (!cityQuery || cityQuery.trim().length < 1) {
+      setFilteredCities([])
+      return
+    }
+    // Instant results from lightweight dataset
+    setFilteredCities(searchCitiesFromList(cityQuery, villesLight, 6))
+    // Async upgrade to full dataset
+    getAllVilles().then(full => {
+      setFilteredCities(searchCitiesFromList(cityQuery, full, 6))
+    })
   }, [cityQuery])
 
   // Derived state for city dropdown display modes
@@ -149,9 +166,9 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
   const navigableCityItems = useMemo(() => {
     if (filteredCities.length > 0) return filteredCities
     if (!hasTypedCity) {
-      // Return popular cities mapped to Ville objects
+      // Return popular cities mapped to Ville objects from light dataset
       return popularCities.map(pc => {
-        const match = villes.find(v => v.slug === pc.slug)
+        const match = villesLight.find(v => v.slug === pc.slug)
         return match || { name: pc.name, slug: pc.slug, region: '', departement: '', departementCode: '', population: '', codePostal: '', description: '', quartiers: [] } as Ville
       })
     }
@@ -208,8 +225,8 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
     e?.preventDefault()
     if (!serviceSlug || !cityQuery.trim()) return
 
-    const cityMatch = villes.find(
-      v => normalizeText(v.name) === normalizeText(cityQuery.trim())
+    const cityMatch = (_allVilles || villesLight).find(
+      (v: Ville) => normalizeText(v.name) === normalizeText(cityQuery.trim())
     )
     const citySlugValue = cityMatch ? cityMatch.slug : cityQuery.trim().toLowerCase()
 

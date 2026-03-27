@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, Instagram, Shield, CreditCard, Award, Building2 } from 'lucide-react'
 import NewsletterForm from './NewsletterForm'

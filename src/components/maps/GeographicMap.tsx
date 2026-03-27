@@ -1,8 +1,5 @@
 'use client'
 
-import 'leaflet/dist/leaflet.css'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import { Loader2 } from 'lucide-react'
@@ -74,6 +71,13 @@ export default function GeographicMap({
 
   // Marker icon cache
   const markerIconCache = useRef(new Map<string, import('leaflet').DivIcon>())
+
+  // Load CSS asynchronously after mount to avoid blocking render
+  useEffect(() => {
+    import('leaflet/dist/leaflet.css')
+    import('leaflet.markercluster/dist/MarkerCluster.css')
+    import('leaflet.markercluster/dist/MarkerCluster.Default.css')
+  }, [])
 
   useEffect(() => {
     import('leaflet').then(async (leaflet) => {
