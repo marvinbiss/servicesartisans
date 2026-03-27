@@ -222,8 +222,6 @@ export default async function TarifsServiceVillePage({
 
   const author = getDefaultAuthor()
 
-  const dateModified = new Date().toISOString().split('T')[0]
-  const priceValidUntil = `${new Date().getFullYear()}-12-31`
 
   const seed = `rating-${service}-${villeData.name}`
   const ratingValue = Math.round((4.0 + (Math.abs(hashCode(seed)) % 10) / 10) * 10) / 10
@@ -241,12 +239,11 @@ export default async function TarifsServiceVillePage({
     name: `${trade.name} à ${villeData.name}`,
     description: `Service de ${tradeLower} à ${villeData.name} (${villeData.departement}). Tarifs 2026 : ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
-    dateModified,
     serviceType: trade.name,
     provider: {
-      '@type': 'LocalBusiness',
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
-      url: SITE_URL,
     },
     areaServed: {
       '@type': 'City',
@@ -262,7 +259,6 @@ export default async function TarifsServiceVillePage({
       lowPrice: minPrice,
       highPrice: maxPrice,
       offerCount,
-      priceValidUntil,
     },
     aggregateRating: {
       '@type': 'AggregateRating',
@@ -277,11 +273,6 @@ export default async function TarifsServiceVillePage({
       reviewRating: { '@type': 'Rating', ratingValue: reviewRating, bestRating: 5, worstRating: 1 },
       reviewBody: `Très satisfait du service de ${tradeLower} à ${villeData.name}. Tarifs conformes aux estimations, travail soigné et professionnel.`,
     },
-    author: {
-      '@type': 'Person',
-      name: author.name,
-      url: `${SITE_URL}/a-propos`,
-    },
   }
 
   const pricingItemListSchema = {
@@ -293,25 +284,11 @@ export default async function TarifsServiceVillePage({
     itemListElement: trade.commonTasks.map((task, i) => {
       const parts = task.split(':')
       const name = parts[0].trim()
-      const priceStr = parts.slice(1).join(':').trim()
-      const priceMatch = priceStr.match(/(\d+)/)
       return {
         '@type': 'ListItem',
         position: i + 1,
-        item: {
-          '@type': 'Offer',
-          name,
-          ...(priceMatch ? {
-            priceSpecification: {
-              '@type': 'PriceSpecification',
-              price: priceMatch[1],
-              priceCurrency: 'EUR',
-            }
-          } : {}),
-          description: task,
-          availability: 'https://schema.org/InStock',
-          priceValidUntil,
-        }
+        name,
+        url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
       }
     })
   }

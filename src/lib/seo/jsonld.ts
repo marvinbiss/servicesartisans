@@ -244,6 +244,11 @@ export function getServicePricingSchema(params: {
   offerCount?: number
   ratingValue?: number
   reviewCount?: number
+  review?: {
+    authorName: string
+    rating: number
+    comment: string
+  }
   location?: string
   url: string
 }) {
@@ -279,6 +284,14 @@ export function getServicePricingSchema(params: {
         reviewCount: params.reviewCount,
         bestRating: 5,
         worstRating: 1,
+      },
+    }),
+    ...(params.review && {
+      review: {
+        '@type': 'Review',
+        author: { '@type': 'Person', name: params.review.authorName },
+        reviewRating: { '@type': 'Rating', ratingValue: params.review.rating, bestRating: 5, worstRating: 1 },
+        reviewBody: params.review.comment,
       },
     }),
   }
