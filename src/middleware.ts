@@ -12,9 +12,11 @@ import { logger } from '@/lib/logger'
  * - Rate limiting for API routes (Upstash Redis in production, in-memory fallback in dev)
  */
 
-// Pre-computed CSP parts — only nonce changes per request
-const CSP_PREFIX = "default-src 'self'; script-src 'self' 'nonce-"
-const CSP_SUFFIX = "' 'strict-dynamic' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://t.contentsquare.net https://www.clarity.ms; " +
+// Static CSP — no nonce (Next.js 14 App Router doesn't propagate nonce to framework chunks)
+// 'unsafe-inline' required for Next.js inline scripts; 'self' covers /_next/static/chunks/*.js
+const STATIC_CSP =
+  "default-src 'self'; " +
+  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://t.contentsquare.net https://www.clarity.ms; " +
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
   "font-src 'self' https://fonts.gstatic.com data:; " +
   "img-src 'self' data: blob: https: http:; " +
@@ -23,7 +25,7 @@ const CSP_SUFFIX = "' 'strict-dynamic' https://js.stripe.com https://www.googlet
   "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
 
 // CSP headers only — other security headers are set in next.config.js (more efficient, handled at CDN edge)
-function addCspHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
+function addCspHeaders(response: NextResponse, request: NextRequest): NextResponse {
   const userAgent = request.headers.get('user-agent') || ''
   const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
   const isDev = process.env.NODE_ENV === 'development'
@@ -32,8 +34,7 @@ function addCspHeaders(response: NextResponse, request: NextRequest, nonce: stri
     return response
   }
 
-  response.headers.set('Content-Security-Policy', CSP_PREFIX + nonce + CSP_SUFFIX)
-  response.headers.set('x-nonce', nonce)
+  response.headers.set('Content-Security-Policy', STATIC_CSP)
 
   return response
 }
@@ -138,8 +139,8 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     return NextResponse.redirect(canonicalUrl, 301)
   }
 
-  // Generate nonce AFTER early redirects to avoid wasting crypto on redirected requests
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  // Nonce removed — Next.js 14 App Router doesn't propagate nonce to framework chunk <script> tags
+  // so 'strict-dynamic' CSP breaks all /_next/static/chunks/*.js loading
 
   // Auth guard for private spaces
   if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || (pathname.startsWith('/admin') && pathname !== '/admin/connexion')) {
@@ -323,7 +324,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     event.waitUntil(logGooglebotCrawl(pathname, ua))
   }
 
-  return addCspHeaders(response, request, nonce)
+  return addCspHeaders(response, request)
 }
 
 export const config = {
