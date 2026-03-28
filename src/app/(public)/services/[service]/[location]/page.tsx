@@ -17,6 +17,8 @@ import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InBodyLinks from '@/components/seo/InBodyLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
+import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
 
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema, getLocalServiceSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -38,6 +40,7 @@ import { getCommuneBySlug } from '@/lib/data/commune-data'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -172,44 +175,47 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const seoPairs = hasProviders
     ? [
-        { title: `${serviceName} ${locationName} — ${providerCount} artisans`, h1: `${serviceName} à ${locationName}` },
-        { title: `${serviceName} à ${locationName} — Devis Gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName} (2026) — ${providerCount} vérifiés`, h1: `${serviceName} à ${locationName}` },
+        { title: `${serviceName} à ${locationName} — ${providerCount} artisans`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
         { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
-        { title: `${serviceName} à ${locationName} — Comparez`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${serviceName} ${locationName} : avis et devis`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${serviceName} ${locationName} — ${providerCount} pros`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${serviceName} ${locationName} (2026) — Devis gratuit`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
     : [
-        { title: `${serviceName} ${locationName} — Annuaire`, h1: `${serviceName} à ${locationName}` },
+        { title: `${serviceName} ${locationName} (2026) — Annuaire`, h1: `${serviceName} à ${locationName}` },
         { title: `${serviceName} à ${locationName} — Devis Gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
-        { title: `${serviceName} à ${locationName} — Artisans`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${serviceName} ${locationName} : annuaire`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} 2026`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
+        { title: `${serviceName} à ${locationName} — Artisans vérifiés`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${serviceName} ${locationName} : devis gratuit 2026`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
 
   const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
 
-  // Unique meta descriptions with provider count, department and regional context
+  // Resolve trade content early for price range in descriptions
+  const tradeContent = getTradeContent(serviceSlug)
+  const priceTag = tradeContent ? `${tradeContent.priceRange.min}€–${tradeContent.priceRange.max}€` : ''
+
+  // Unique meta descriptions with provider count, price range, department and CTA
   const descHash = Math.abs(hashCode(`desc-${serviceSlug}-${locationSlug}`))
   const deptLabel = departmentName || departmentCode
   const descTemplates = hasProviders
     ? [
-        `${providerCount} ${svcLower}s vérifiés SIREN à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Comparez les profils, tarifs et avis. Devis gratuit.`,
-        `${serviceName} à ${locationName} : ${providerCount} artisans référencés. Comparez et demandez un devis gratuit, sans engagement.`,
-        `Trouvez le meilleur ${svcLower} à ${locationName} parmi ${providerCount} pros vérifiés. Tarifs, avis et devis gratuit.`,
-        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s vérifiés SIREN. Tarifs, avis et devis gratuit.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés. Devis gratuit et réponse rapide.`,
+        `Trouvez un ${svcLower} à ${locationName}. ${providerCount} artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit en 2 min.`,
+        `${providerCount} ${svcLower}s vérifiés à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. ${priceTag}/h` : ''}. Comparez et demandez un devis gratuit.`,
+        `${serviceName} à ${locationName} : ${providerCount} pros vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit, sans engagement.`,
+        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés${priceTag ? `, ${priceTag}/h` : ''}. Devis gratuit et réponse rapide.`,
+        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s vérifiés${priceTag ? `. Prix : ${priceTag}` : ''}. Devis gratuit.`,
       ]
     : [
-        `Trouvez un ${svcLower} qualifié à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}. Artisans vérifiés SIREN. Devis gratuit.`,
-        `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans référencés. Devis gratuit, sans engagement.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? Annuaire d'artisans vérifiés. Devis gratuit.`,
-        `${serviceName} à ${locationName}. Professionnels vérifiés SIREN. Devis gratuit et immédiat.`,
-        `${locationName}${deptLabel ? ` (${deptLabel})` : ''} : trouvez un ${svcLower} de confiance. Artisans référencés SIREN. Devis gratuit.`,
+        `Trouvez un ${svcLower} à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. Tarifs : ${priceTag}` : ''}. Devis gratuit en 2 min.`,
+        `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.`,
+        `Besoin d'un ${svcLower} à ${locationName} ? Artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit.`,
+        `${serviceName} à ${locationName}${priceTag ? `. ${priceTag}/h` : ''}. Professionnels vérifiés SIREN. Devis gratuit.`,
+        `${locationName}${deptLabel ? ` (${deptLabel})` : ''} : trouvez un ${svcLower} de confiance${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.`,
       ]
   const description = descTemplates[descHash % descTemplates.length]
 
   // Pruning: noindex pages with zero providers AND no unique data (fail-open safe)
-  const tradeContent = getTradeContent(serviceSlug)
   const isNoindex = shouldNoindex(`/services/${serviceSlug}/${locationSlug}`, {
     providerCount,
     isQuartierPage: false,
@@ -437,6 +443,13 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   // Regional pricing multiplier for localized tariffs
   const pricingMultiplier = ville ? getRegionalMultiplier(ville.region) : 1.0
 
+  // Compute average rating and total reviews from provider data (for ImmediateAnswerBlock)
+  const ratedProviders = providers.filter((p) => p.rating_average && p.rating_average > 0)
+  const averageRating = ratedProviders.length > 0
+    ? ratedProviders.reduce((sum, p) => sum + (p.rating_average ?? 0), 0) / ratedProviders.length
+    : null
+  const totalReviews = ratedProviders.reduce((sum, p) => sum + (p.review_count ?? 0), 0) || null
+
   // FAQ: combine 2 trade FAQ (hash-selected) + 4 location-specific FAQ
   const combinedFaq: { question: string; answer: string }[] = []
   if (trade && trade.faq.length > 0) {
@@ -559,6 +572,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </div>
       </div>
 
+      {/* Artisans disponibles — visible showcase with real providers */}
+      <LocalProviderShowcase
+        providers={(providers || []).slice(0, 6)}
+        serviceName={service.name}
+        cityName={location.name}
+        max={6}
+      />
+
       {/* SSR provider links — crawlable by Googlebot even without JS execution */}
       {providers.length > 0 && (
         <div className="sr-only" aria-hidden="true">
@@ -583,6 +604,21 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         label={`${service.name} à ${location.name}`}
         href={`/services/${serviceSlug}/${locationSlug}`}
       />
+
+      {/* Immediate Answer Block — Position 0 / Featured Snippet target */}
+      <div className="py-4 bg-sand-50">
+        <ImmediateAnswerBlock
+          serviceName={service.name}
+          villeName={location.name}
+          trade={trade ?? null}
+          minPrice={trade ? Math.round(trade.priceRange.min * pricingMultiplier) : undefined}
+          maxPrice={trade ? Math.round(trade.priceRange.max * pricingMultiplier) : undefined}
+          providerCount={totalProviderCount}
+          averageRating={averageRating}
+          totalReviews={totalReviews}
+          variant="services"
+        />
+      </div>
 
       {/* Demand indicator — urgency/scarcity signal */}
       <div className="max-w-7xl mx-auto px-4 py-3 bg-sand-50">
@@ -630,6 +666,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         providerCount={providers.length}
         trade={trade || null}
         pricingMultiplier={pricingMultiplier}
+      />
+
+      {/* Local insights — ville-specific differentiation */}
+      <LocalInsightsBlock
+        communeData={communeData}
+        serviceSlug={serviceSlug}
+        serviceName={service.name}
+        villeName={location.name}
+        villeSlug={locationSlug}
+        providerCount={totalProviderCount}
+        regionalMultiplier={pricingMultiplier}
       />
 
       {trade && (

@@ -6,6 +6,7 @@ import { getBreadcrumbSchema, getOrganizationSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { Loader2 } from 'lucide-react'
 import { services } from '@/lib/data/france'
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
@@ -136,6 +137,7 @@ export default function CarteArtisansPage() {
           </div>
         </div>
       </div>
+      <RelatedHubs currentPath="/carte-artisans" />
       <GeoPageCTA variant="sticky-only" />
     </>
   )

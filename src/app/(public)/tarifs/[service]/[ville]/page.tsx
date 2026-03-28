@@ -9,8 +9,10 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import { getProvidersByServiceAndLocation } from '@/lib/supabase'
 import { hashCode } from '@/lib/seo/location-content'
 import LocalDataInsights from '@/components/seo/LocalDataInsights'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { getServiceImage } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
 import { relatedServices } from '@/lib/constants/navigation'
@@ -23,6 +25,9 @@ import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InBodyLinks from '@/components/seo/InBodyLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
+import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
+import StructuredPricingTable from '@/components/seo/StructuredPricingTable'
+import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
 import { getDefaultAuthor } from '@/lib/data/team'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import dynamic from 'next/dynamic'
@@ -140,22 +145,23 @@ export async function generateMetadata({
   const dept = villeData.departement
 
   const titleHash = Math.abs(hashCode(`tarif-title-${service}-${villeSlug}`))
+  const priceShort = `${minPrice}–${maxPrice}€`
   const titleTemplates = [
-    `Prix ${tradeLower} ${villeData.name} 2026`,
-    `Prix ${tradeLower} à ${villeData.name} — Tarifs`,
-    `Tarif ${tradeLower} ${villeData.name} 2026`,
-    `Prix ${tradeLower} ${villeData.name} : barème`,
-    `Tarifs ${tradeLower} ${villeData.name} — Guide`,
+    `Prix ${tradeLower} ${villeData.name} (2026) — ${priceShort}`,
+    `Prix ${tradeLower} à ${villeData.name} — ${priceShort}`,
+    `Tarif ${tradeLower} ${villeData.name} — ${priceShort}`,
+    `Prix ${tradeLower} ${villeData.name} : ${priceShort}`,
+    `Tarifs ${tradeLower} ${villeData.name} (2026)`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}-${villeSlug}`))
   const descTemplates = [
-    `Prix ${tradeLower} à ${villeData.name} en 2026 : ${minPrice}–${maxPrice} ${unit}. Tarifs locaux, facteurs de prix et devis gratuit.`,
-    `Tarif ${tradeLower} à ${villeData.name} (${dept}) : de ${minPrice} à ${maxPrice} ${unit}. Comparez les artisans et demandez un devis.`,
-    `Quel est le prix d’un ${tradeLower} à ${villeData.name} ? De ${minPrice} à ${maxPrice} ${unit} en 2026. Guide complet et devis gratuit.`,
-    `Guide des tarifs ${tradeLower} à ${villeData.name} en 2026. Prix moyen : ${minPrice}–${maxPrice} ${unit}. Conseils et devis sans engagement.`,
-    `Tarifs ${tradeLower} ${villeData.name} en 2026 : ${minPrice} à ${maxPrice} ${unit}. Découvrez les prix locaux et obtenez un devis gratuit.`,
+    `Prix ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${unit} en 2026. Barème local et devis gratuit en 2 min.`,
+    `Tarif ${tradeLower} à ${villeData.name} (${dept}) : de ${minPrice} à ${maxPrice} ${unit}. Comparez et demandez un devis gratuit.`,
+    `Combien coûte un ${tradeLower} à ${villeData.name} ? ${minPrice}–${maxPrice} ${unit} en 2026. Guide complet + devis gratuit.`,
+    `Tarifs ${tradeLower} à ${villeData.name} en 2026 : ${minPrice}–${maxPrice} ${unit}. Prix locaux, conseils et devis sans engagement.`,
+    `${trade.name} à ${villeData.name} : ${minPrice} à ${maxPrice} ${unit}. Prix ajustés ${villeData.region}. Devis gratuit en 2 min.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -198,7 +204,11 @@ export default async function TarifsServiceVillePage({
   const villeData = getVilleBySlug(villeSlug)
   if (!trade || !villeData) notFound()
 
-  const commune = await getCommuneBySlug(villeSlug)
+  // Fetch commune data + providers in parallel (best-effort for providers)
+  const [commune, providers] = await Promise.all([
+    getCommuneBySlug(villeSlug),
+    getProvidersByServiceAndLocation(service, villeSlug, { limit: 6 }).catch(() => []),
+  ])
 
   const multiplier = getRegionalMultiplier(villeData.region)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
@@ -357,6 +367,19 @@ export default async function TarifsServiceVillePage({
         </div>
       </section>
 
+      {/* Immediate Answer Block — Position 0 / Featured Snippet target */}
+      <div className="-mt-16 relative z-10 pb-6">
+        <ImmediateAnswerBlock
+          serviceName={trade.name}
+          villeName={villeData.name}
+          trade={trade}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          providerCount={commune?.provider_count ?? 0}
+          variant="tarifs"
+        />
+      </div>
+
       <section className="py-6 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <GeoPageCTA
@@ -367,6 +390,14 @@ export default async function TarifsServiceVillePage({
           />
         </div>
       </section>
+
+      {/* Artisans disponibles — real providers for this service+city */}
+      <LocalProviderShowcase
+        providers={providers}
+        serviceName={trade.name}
+        cityName={villeData.name}
+        max={6}
+      />
 
       {/* Price range overview */}
       <section className="py-16 bg-white">
@@ -406,9 +437,30 @@ export default async function TarifsServiceVillePage({
             multiplier={multiplier}
             unit={trade.priceRange.unit}
           />
+
+          <StructuredPricingTable
+            serviceSlug={service}
+            serviceName={trade.name}
+            villeName={villeData.name}
+            villeSlug={villeSlug}
+            tasks={trade.commonTasks}
+            multiplier={multiplier}
+            unit="€"
+          />
           <div className="mt-8" />
         </div>
       </section>
+
+      {/* Local insights — ville-specific differentiation */}
+      <LocalInsightsBlock
+        communeData={commune}
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        villeSlug={villeSlug}
+        providerCount={commune?.provider_count}
+        regionalMultiplier={multiplier}
+      />
 
       {/* Local factors */}
       <section className="py-16 bg-sand-50">
@@ -541,7 +593,7 @@ export default async function TarifsServiceVillePage({
             Conseils pour choisir un {tradeLower} {'à'} {villeData.name}
           </h2>
           <div className="space-y-4">
-            {trade.tips.map((tip, i) => (
+            {trade.tips.slice(0, 4).map((tip, i) => (
               <div key={i} className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5">
                 <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-secondary-600" />
@@ -553,24 +605,27 @@ export default async function TarifsServiceVillePage({
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ — localisée par ville */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fr{'é'}quentes {'—'} {trade.name} {'à'} {villeData.name}
           </h2>
           <div className="space-y-4">
-            {trade.faq.slice(0, 5).map((item, i) => (
-              <details key={i} className="bg-white rounded-xl border border-sand-300 group">
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">{item.q}</h3>
-                  <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
-                  {item.a}
-                </div>
-              </details>
-            ))}
+            {trade.faq.slice(0, 5).map((item, i) => {
+              const localQ = item.q.replace(/\?$/, '') + ` à ${villeData.name} ?`
+              return (
+                <details key={i} className="bg-white rounded-xl border border-sand-300 group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <h3 className="text-base font-semibold text-charcoal-900 pr-4">{localQ}</h3>
+                    <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
+                    {item.a}
+                  </div>
+                </details>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -731,28 +786,7 @@ export default async function TarifsServiceVillePage({
         )
       })()}
 
-      {/* Cross-intent navigation */}
-      <section className="py-8 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">Voir aussi</h2>
-          <div className="flex flex-wrap gap-3">
-            <Link href={`/devis/${service}/${villeSlug}`} className="px-4 py-2 bg-secondary-50 text-secondary-700 rounded-lg text-sm font-medium border border-secondary-100 hover:border-secondary-200 transition-colors">
-              Devis {tradeLower} {'à'} {villeData.name}
-            </Link>
-            <Link href={`/avis/${service}/${villeSlug}`} className="px-4 py-2 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium border border-primary-100 hover:border-primary-200 transition-colors">
-              Avis {tradeLower} {'à'} {villeData.name}
-            </Link>
-            <Link href={`/urgence/${service}/${villeSlug}`} className="px-4 py-2 bg-red-50 text-red-800 rounded-lg text-sm font-medium border border-red-100 hover:border-red-200 transition-colors">
-              Urgence {tradeLower} {'à'} {villeData.name}
-            </Link>
-            <Link href={`/services/${service}/${villeSlug}`} className="px-4 py-2 bg-sand-50 text-charcoal-800 rounded-lg text-sm font-medium border border-sand-300 hover:border-sand-400 transition-colors">
-              {trade.name} {'à'} {villeData.name}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Voir aussi */}
+      {/* Voir aussi — navigation interne consolidée */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">Voir aussi</h2>

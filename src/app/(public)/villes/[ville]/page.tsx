@@ -287,6 +287,61 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* ─── SERVICES ASSOCIES — cross-intent links ──────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
+              <ArrowRight className="w-5 h-5 text-violet-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
+                Services associés à {ville.name}
+              </h2>
+              <p className="text-sm text-charcoal-500">Tarifs, devis et urgences par métier</p>
+            </div>
+          </div>
+          <div className="space-y-4">
+            {orderedServices.slice(0, 5).map((service) => (
+              <div key={`intent-${service.slug}`} className="bg-white rounded-2xl border border-sand-200 p-5">
+                <h3 className="font-semibold text-charcoal-900 text-sm mb-3">{service.name} à {ville.name}</h3>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    href={`/services/${service.slug}/${villeSlug}`}
+                    className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    Artisans
+                  </Link>
+                  <Link
+                    href={`/tarifs/${service.slug}/${villeSlug}`}
+                    className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Tarifs
+                  </Link>
+                  <Link
+                    href={`/devis/${service.slug}/${villeSlug}`}
+                    className="inline-flex items-center gap-1.5 text-sm text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Devis gratuit
+                  </Link>
+                  <Link
+                    href={`/urgence/${service.slug}/${villeSlug}`}
+                    className="inline-flex items-center gap-1.5 text-sm text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Urgence
+                  </Link>
+                  <Link
+                    href={`/avis/${service.slug}/${villeSlug}`}
+                    className="inline-flex items-center gap-1.5 text-sm text-amber-600 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Avis
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ─── QUARTIERS ────────────────────────────────────── */}
         {ville.quartiers && ville.quartiers.length > 0 && (
           <section className="mb-16">

@@ -76,13 +76,13 @@ const diagnosticFAQs = [
 
 export default function DiagnosticPage() {
   const breadcrumbItems = [
-    { label: 'Outils', href: '/outils/diagnostic' },
+    { label: 'Outils', href: '/outils' },
     { label: 'Diagnostic' },
   ]
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Outils', url: '/outils/diagnostic' },
+    { name: 'Outils', url: '/outils' },
     { name: 'Diagnostic', url: '/outils/diagnostic' },
   ])
 

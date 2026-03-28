@@ -41,7 +41,10 @@ export default function SeoContent({
                 <p>{locationContent.introText}</p>
 
                 <h3 className="font-heading text-charcoal-800">Tarifs et prix d'un {service.name.toLowerCase()} à {location.name}</h3>
-                <p>{locationContent.pricingNote}</p>
+                <p>
+                  {locationContent.pricingNote}
+                  {trade && <> Consultez notre <Link href={`/tarifs/${service.slug}/${locationSlug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">grille tarifaire {service.name.toLowerCase()} à {location.name}</Link> pour un barème détaillé par prestation.</>}
+                </p>
 
                 <h3 className="font-heading text-charcoal-800">Conseils pour vos travaux à {location.name}</h3>
                 <ul>
@@ -65,7 +68,10 @@ export default function SeoContent({
                   </div>
                 )}
 
-                <p>{locationContent.conclusion}</p>
+                <p>
+                  {locationContent.conclusion}
+                  {' '}Pour démarrer votre projet, <Link href={`/devis/${service.slug}/${locationSlug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">demandez un devis gratuit {service.name.toLowerCase()} à {location.name}</Link>.
+                </p>
               </div>
             </div>
           </div>
@@ -94,6 +100,7 @@ export default function SeoContent({
                       Le tarif horaire moyen d'un {service.name.toLowerCase()} à {location.name} se situe
                       entre <strong>{Math.round(trade.priceRange.min * pricingMultiplier)} et {Math.round(trade.priceRange.max * pricingMultiplier)} {trade.priceRange.unit}</strong>.
                       Les prix varient selon la complexité des travaux et le professionnel choisi.
+                      {' '}Retrouvez le détail sur notre page <Link href={`/tarifs/${service.slug}/${locationSlug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">tarifs {service.name.toLowerCase()} à {location.name}</Link>.
                     </p>
                     {trade.certifications && trade.certifications.length > 0 && (
                       <>
@@ -104,6 +111,9 @@ export default function SeoContent({
                         </p>
                       </>
                     )}
+                    <p>
+                      Pour obtenir un chiffrage précis, <Link href={`/devis/${service.slug}/${locationSlug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">demandez un devis gratuit {service.name.toLowerCase()} à {location.name}</Link> directement auprès d'artisans vérifiés.
+                    </p>
                   </>
                 )}
               </div>

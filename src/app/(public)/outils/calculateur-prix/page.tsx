@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 export default function CalculateurPrixPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Outils', url: '/outils/calculateur-prix' },
+    { name: 'Outils', url: '/outils' },
     { name: 'Calculateur de prix', url: '/outils/calculateur-prix' },
   ])
 
@@ -110,7 +110,7 @@ export default function CalculateurPrixPage() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
             <Breadcrumb
               items={[
-                { label: 'Outils' },
+                { label: 'Outils', href: '/outils' },
                 { label: 'Calculateur de prix' },
               ]}
               className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"

@@ -77,6 +77,16 @@ interface RescueLink {
 }
 
 /**
+ * Static discovery pages that should be linked from as many pages as possible
+ * to prevent them from being orphaned.
+ */
+const DISCOVERY_LINKS: RescueLink[] = [
+  { href: '/carte-artisans', label: 'Carte des artisans' },
+  { href: '/avant-apres', label: 'Avant / Après travaux' },
+  { href: '/badge-artisan', label: 'Badge Artisan Vérifié' },
+]
+
+/**
  * Generate rescue links for a service hub page (/services/{service}).
  * Links to small cities that might not appear elsewhere.
  */
@@ -209,6 +219,14 @@ export default function OrphanRescueLinks({
   } else if (resolvedVille) {
     // City page
     rescueLinks = getCityRescueLinks(resolvedVille)
+  }
+
+  // Append discovery links (orphan rescue) if not already present and not self-referencing
+  const existingHrefs = new Set(rescueLinks.map(l => l.href))
+  for (const dl of DISCOVERY_LINKS) {
+    if (!existingHrefs.has(dl.href) && dl.href !== currentPath) {
+      rescueLinks.push(dl)
+    }
   }
 
   if (rescueLinks.length === 0) return null

@@ -389,6 +389,48 @@ export default async function ServicesPage() {
             </h2>
             <PopularCitiesLinks showTitle={false} limit={10} />
           </div>
+
+          {/* Liens contextuels : carte, réalisations, badge */}
+          <div className="mt-12 pt-10 border-t border-sand-200">
+            <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-5 tracking-tight">
+              Explorez aussi
+            </h2>
+            <div className="grid sm:grid-cols-3 gap-4">
+              <Link
+                href="/carte-artisans"
+                className="group bg-white rounded-2xl border border-sand-200 p-5 hover:border-primary-200 hover:shadow-card-hover transition-all"
+              >
+                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-1">
+                  Carte des artisans
+                </h3>
+                <p className="text-sm text-charcoal-500">
+                  Visualisez la couverture nationale dans les 101 départements.
+                </p>
+              </Link>
+              <Link
+                href="/avant-apres"
+                className="group bg-white rounded-2xl border border-sand-200 p-5 hover:border-primary-200 hover:shadow-card-hover transition-all"
+              >
+                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-1">
+                  Avant / Après travaux
+                </h3>
+                <p className="text-sm text-charcoal-500">
+                  12 transformations de rénovation avec budgets et durées.
+                </p>
+              </Link>
+              <Link
+                href="/badge-artisan"
+                className="group bg-white rounded-2xl border border-sand-200 p-5 hover:border-primary-200 hover:shadow-card-hover transition-all"
+              >
+                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-1">
+                  Badge Artisan Vérifié
+                </h3>
+                <p className="text-sm text-charcoal-500">
+                  Générez votre badge de certification gratuit pour votre site.
+                </p>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

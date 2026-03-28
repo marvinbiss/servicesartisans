@@ -127,6 +127,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/politique-avis`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
       { url: `${SITE_URL}/mediation`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
       { url: `${SITE_URL}/garantie`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/outils`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
       { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
       { url: `${SITE_URL}/outils/diagnostic`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
       { url: `${SITE_URL}/carte-artisans`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.5 },

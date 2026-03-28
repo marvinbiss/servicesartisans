@@ -251,6 +251,9 @@ export default async function HomePage() {
             <Link href="/barometre" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Baromètre prix</Link>
             <Link href="/faq" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">FAQ</Link>
             <Link href="/blog" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Blog</Link>
+            <Link href="/carte-artisans" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Carte des artisans</Link>
+            <Link href="/avant-apres" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Avant / Après</Link>
+            <Link href="/badge-artisan" className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors">Badge Artisan</Link>
           </div>
         </div>
       </section>

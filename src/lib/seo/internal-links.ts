@@ -529,6 +529,11 @@ export function getRelatedServiceLinks(
           text: `Trouver un ${service.label} qualifié`,
           href: `/services/${service.slug}`,
         })
+        // Add tarifs link for each matched service
+        links.push({
+          text: `Tarifs ${service.label}`,
+          href: `/tarifs/${service.slug}`,
+        })
         // Add top-city variants for the first matched service only
         if (!firstServiceSlug) {
           firstServiceSlug = service.slug
@@ -567,8 +572,8 @@ export function getRelatedServiceLinks(
     links.push({ text: 'Artisan en urgence', href: '/urgence' })
   }
 
-  // Limit to 5 links max
-  return links.slice(0, 5)
+  // Limit to 8 links max (services + tarifs + city variants)
+  return links.slice(0, 8)
 }
 
 interface ArticleMeta {

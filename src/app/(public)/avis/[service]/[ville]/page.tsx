@@ -110,6 +110,31 @@ async function getTopProviders(cityName: string, _serviceSlug: string): Promise<
   }
 }
 
+/**
+ * Lightweight count query for noindex decision in generateMetadata.
+ * Returns the number of active providers with reviews in the given city.
+ * Fail-open: returns 1 on error (= indexed by default, ISR will correct).
+ */
+async function getProviderCountWithReviews(cityName: string): Promise<number> {
+  if (IS_BUILD) return 1 // Fail-open during build
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    const { count, error } = await supabase
+      .from('providers')
+      .select('id', { count: 'exact', head: true })
+      .eq('is_active', true)
+      .gt('review_count', 0)
+      .in('address_city', getCityValues(cityName))
+
+    if (error) return 1 // Fail-open on DB error
+    return count ?? 0
+  } catch {
+    return 1 // Fail-open on exception
+  }
+}
+
 async function getRecentReviews(artisanIds: string[]): Promise<AvisReview[]> {
   if (IS_BUILD || artisanIds.length === 0) return []
   try {
@@ -211,11 +236,17 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
 
+  // noindex pages with no reviewed providers — fail-open (defaults to 1 if DB unavailable)
+  const reviewedProviderCount = await getProviderCountWithReviews(villeData.name)
+  const isNoindex = reviewedProviderCount < 1
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    robots: { index: true, follow: true },
+    robots: isNoindex
+      ? { index: false, follow: true }
+      : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -795,6 +826,15 @@ export default async function AvisServiceVillePage({
                 <span className="text-gray-800 text-sm">{task}</span>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-6">
+            <Link
+              href={`/barometre/tarifs/${service}`}
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+            >
+              Consulter le baromètre des prix {tradeLower}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>

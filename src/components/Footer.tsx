@@ -12,6 +12,7 @@ const informationLinks = [
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
   { name: 'Avis artisans', href: '/avis' },
+  { name: 'Outils', href: '/outils' },
   { name: 'Checklist travaux', href: '/checklist-travaux' },
 ]
 
@@ -174,10 +175,25 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Entreprise */}
+          {/* Découvrir */}
           <div>
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Entreprise</h4>
+            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Découvrir</h4>
             <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="/carte-artisans" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Carte des artisans
+                </Link>
+              </li>
+              <li>
+                <Link href="/avant-apres" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Avant / Après travaux
+                </Link>
+              </li>
+              <li>
+                <Link href="/badge-artisan" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Badge Artisan Vérifié
+                </Link>
+              </li>
               <li>
                 <Link href="/inscription-artisan" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Devenir partenaire

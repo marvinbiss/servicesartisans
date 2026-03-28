@@ -21,6 +21,8 @@ import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
+import { BAROMETRE_METIERS } from '@/lib/barometre/constants'
+import { departements } from '@/lib/data/france'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -948,6 +950,38 @@ export default async function AvisServicePage({
           </nav>
         </div>
       </section>
+
+      {/* Barometre cross-link */}
+      {BAROMETRE_METIERS.some(m => m.slug === service) && (
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
+              Baromètre {trade.name}
+            </h2>
+            <p className="text-gray-600 text-sm mb-6">
+              Consultez les statistiques détaillées des {trade.name.toLowerCase()}s en France : nombre d'artisans, note moyenne, taux de vérification par département.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={`/barometre/tarifs/${service}`}
+                className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 hover:bg-blue-100 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors border border-blue-100 hover:border-blue-200"
+              >
+                <Star className="w-4 h-4" />
+                Statistiques {trade.name.toLowerCase()} en France
+              </Link>
+              {departements.slice(0, 5).map(dept => (
+                <Link
+                  key={dept.slug}
+                  href={`/departements/${dept.slug}/${service}`}
+                  className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-50 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-gray-200 hover:border-blue-200"
+                >
+                  {trade.name} dans le {dept.code}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="avis" />
 

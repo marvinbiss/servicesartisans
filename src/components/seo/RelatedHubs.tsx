@@ -14,24 +14,30 @@ const HUB_META: Record<string, { label: string; description: string }> = {
   '/calendrier-travaux': { label: 'Calendrier travaux', description: 'Meilleure période pour chaque chantier' },
   '/checklist-travaux': { label: 'Checklist travaux', description: 'Ne rien oublier avant de commencer' },
   '/avant-apres': { label: 'Avant/Après', description: 'Réalisations et transformations' },
+  '/carte-artisans': { label: 'Carte des artisans', description: 'Couverture nationale en un coup d\'œil' },
+  '/badge-artisan': { label: 'Badge Artisan Vérifié', description: 'Certification gratuite pour artisans' },
   '/statistiques-artisans-france': { label: 'Statistiques artisans', description: 'Chiffres clés du secteur' },
   '/tarifs': { label: 'Tarifs artisans', description: 'Grilles tarifaires par métier' },
   '/avis': { label: 'Avis artisans', description: 'Retours d\'expérience clients' },
   '/problemes': { label: 'Problèmes courants', description: 'Solutions aux incidents fréquents' },
   '/devis': { label: 'Demander un devis', description: 'Comparez gratuitement les artisans' },
+  '/outils': { label: 'Outils gratuits', description: 'Calculateur de prix et diagnostic artisan' },
 }
 
 const HUB_LINKS: Record<string, string[]> = {
   '/guides': ['/faq', '/comparaison', '/normes', '/barometre'],
   '/faq': ['/guides', '/glossaire', '/comparaison', '/problemes'],
-  '/comparaison': ['/tarifs', '/avis', '/guides', '/barometre'],
+  '/comparaison': ['/tarifs', '/avis', '/guides', '/avant-apres'],
   '/barometre': ['/tarifs', '/comparaison', '/statistiques-artisans-france', '/guides'],
   '/glossaire': ['/faq', '/normes', '/guides'],
   '/normes': ['/glossaire', '/guides', '/faq', '/barometre'],
   '/calendrier-travaux': ['/guides', '/checklist-travaux', '/barometre'],
-  '/checklist-travaux': ['/guides', '/calendrier-travaux', '/devis'],
-  '/avant-apres': ['/comparaison', '/avis', '/guides'],
-  '/statistiques-artisans-france': ['/barometre', '/comparaison', '/guides'],
+  '/checklist-travaux': ['/guides', '/calendrier-travaux', '/devis', '/avant-apres'],
+  '/avant-apres': ['/comparaison', '/avis', '/guides', '/carte-artisans'],
+  '/carte-artisans': ['/avant-apres', '/statistiques-artisans-france', '/barometre', '/badge-artisan'],
+  '/badge-artisan': ['/carte-artisans', '/avant-apres', '/avis'],
+  '/statistiques-artisans-france': ['/barometre', '/comparaison', '/guides', '/carte-artisans'],
+  '/outils': ['/tarifs', '/problemes', '/devis', '/guides'],
 }
 
 // ---------------------------------------------------------------------------

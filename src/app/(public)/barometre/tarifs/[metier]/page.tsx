@@ -251,6 +251,45 @@ export default async function BarometreMetierPage({ params }: PageProps) {
           </section>
         )}
 
+        {/* Avis & Tarifs cross-links */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Aller plus loin
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <Link
+              href={`/avis/${metierSlug}`}
+              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all group"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Star className="w-5 h-5 text-amber-500" />
+                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Avis {metier.label.toLowerCase()}</h3>
+              </div>
+              <p className="text-sm text-gray-500">Consultez les retours clients vérifiés et comparez les professionnels.</p>
+            </Link>
+            <Link
+              href={`/tarifs/${metierSlug}`}
+              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all group"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <ArrowRight className="w-5 h-5 text-blue-600" />
+                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Tarifs {metier.label.toLowerCase()}</h3>
+              </div>
+              <p className="text-sm text-gray-500">Grille tarifaire détaillée, prix par prestation et conseils budget.</p>
+            </Link>
+            <Link
+              href={`/devis/${metierSlug}`}
+              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all group"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <ArrowRight className="w-5 h-5 text-emerald-600" />
+                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Devis {metier.label.toLowerCase()}</h3>
+              </div>
+              <p className="text-sm text-gray-500">Recevez jusqu'à 3 devis gratuits de professionnels vérifiés.</p>
+            </Link>
+          </div>
+        </section>
+
         {/* Liens rapides */}
         <section className="bg-white py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -61,6 +61,43 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+/**
+ * Maps comparison slugs to related service slugs for cross-linking.
+ * Each comparison typically involves 1-2 trades/services.
+ */
+const comparisonServiceMap: Record<string, { slug: string; label: string }[]> = {
+  'pompe-a-chaleur-vs-chaudiere-gaz': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
+  'fenetre-pvc-vs-aluminium-vs-bois': [{ slug: 'menuisier', label: 'Menuisier' }],
+  'isolation-interieure-vs-exterieure': [{ slug: 'facadier', label: 'Façadier' }, { slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' }],
+  'carrelage-vs-parquet-vs-vinyle': [{ slug: 'carreleur', label: 'Carreleur' }, { slug: 'poseur-de-parquet', label: 'Poseur de parquet' }],
+  'chaudiere-gaz-vs-electrique-vs-pac': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
+  'toiture-tuiles-vs-ardoise-vs-zinc': [{ slug: 'couvreur', label: 'Couvreur' }, { slug: 'zingueur', label: 'Zingueur' }],
+  'volet-roulant-vs-battant-vs-persienne': [{ slug: 'storiste', label: 'Storiste' }, { slug: 'menuisier', label: 'Menuisier' }],
+  'peinture-mate-vs-satinee-vs-brillante': [{ slug: 'peintre-en-batiment', label: 'Peintre en bâtiment' }],
+  'cloison-placo-vs-brique-vs-carreau-platre': [{ slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' }, { slug: 'macon', label: 'Maçon' }],
+  'porte-entree-bois-vs-alu-vs-pvc': [{ slug: 'menuisier', label: 'Menuisier' }, { slug: 'serrurier', label: 'Serrurier' }],
+  'chauffe-eau-electrique-vs-thermodynamique-vs-solaire': [{ slug: 'plombier', label: 'Plombier' }, { slug: 'chauffagiste', label: 'Chauffagiste' }],
+  'climatisation-split-vs-gainable-vs-monobloc': [{ slug: 'climaticien', label: 'Climaticien' }],
+  'portail-coulissant-vs-battant': [{ slug: 'metallier-serrurier', label: 'Métallier serrurier' }],
+  'terrasse-bois-vs-composite-vs-carrelage': [{ slug: 'carreleur', label: 'Carreleur' }, { slug: 'menuisier', label: 'Menuisier' }],
+  'piscine-coque-vs-beton-vs-hors-sol': [{ slug: 'pisciniste', label: 'Pisciniste' }],
+  'store-banne-vs-pergola-vs-voile-ombrage': [{ slug: 'storiste', label: 'Storiste' }],
+  'escalier-bois-vs-metal-vs-beton': [{ slug: 'menuisier', label: 'Menuisier' }, { slug: 'metallier-serrurier', label: 'Métallier serrurier' }],
+  'radiateur-fonte-vs-acier-vs-aluminium': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
+  'gouttiere-zinc-vs-alu-vs-pvc': [{ slug: 'zingueur', label: 'Zingueur' }, { slug: 'couvreur', label: 'Couvreur' }],
+  'enduit-facade-vs-bardage-vs-peinture': [{ slug: 'facadier', label: 'Façadier' }],
+  'pac-air-air-vs-air-eau': [{ slug: 'climaticien', label: 'Climaticien' }, { slug: 'chauffagiste', label: 'Chauffagiste' }],
+  'chaudiere-gaz-vs-bois-granules': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
+  'isolation-laine-vs-ouate-vs-polyurethane': [{ slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' }],
+  'plafond-tendu-vs-faux-plafond': [{ slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' }],
+  'porte-blindee-vs-renforcee': [{ slug: 'serrurier', label: 'Serrurier' }],
+  'parquet-massif-vs-contrecolle-vs-stratifie': [{ slug: 'poseur-de-parquet', label: 'Poseur de parquet' }],
+  'volet-electrique-vs-manuel': [{ slug: 'storiste', label: 'Storiste' }, { slug: 'electricien', label: 'Électricien' }],
+  'vmc-simple-flux-vs-double-flux': [{ slug: 'climaticien', label: 'Climaticien' }],
+  'fosse-septique-vs-micro-station': [{ slug: 'terrassier', label: 'Terrassier' }, { slug: 'plombier', label: 'Plombier' }],
+  'veranda-alu-vs-bois-vs-pvc': [{ slug: 'menuisier', label: 'Menuisier' }],
+}
+
 export default async function ComparaisonSlugPage({ params }: PageProps) {
   const { slug } = await params
   const comparison = comparisons.find((c) => c.slug === slug)
@@ -354,6 +391,53 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
                     Voir le comparatif <ArrowRight className="w-4 h-4" />
                   </span>
                 </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Services & Tarifs cross-links */}
+        {comparisonServiceMap[slug] && comparisonServiceMap[slug].length > 0 && (
+          <section className="max-w-5xl mx-auto px-4 py-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+              Trouver un professionnel
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Pour concrétiser votre projet, trouvez un artisan qualifié et comparez les tarifs.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {comparisonServiceMap[slug].map((svc) => (
+                <div key={svc.slug} className="bg-white rounded-xl border border-gray-100 p-5 space-y-3">
+                  <h3 className="font-bold text-gray-900">{svc.label}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    <Link
+                      href={`/services/${svc.slug}`}
+                      className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      <ArrowRight className="w-3.5 h-3.5" />
+                      Trouver un {svc.label.toLowerCase()}
+                    </Link>
+                    <Link
+                      href={`/tarifs/${svc.slug}`}
+                      className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      <Euro className="w-3.5 h-3.5" />
+                      Tarifs {svc.label.toLowerCase()}
+                    </Link>
+                    <Link
+                      href={`/avis/${svc.slug}`}
+                      className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      Avis {svc.label.toLowerCase()}
+                    </Link>
+                    <Link
+                      href={`/devis/${svc.slug}`}
+                      className="inline-flex items-center gap-1.5 text-sm text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      Devis gratuit
+                    </Link>
+                  </div>
+                </div>
               ))}
             </div>
           </section>
