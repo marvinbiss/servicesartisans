@@ -3,18 +3,23 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp } from 'lucide-react'
+import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp, ShieldCheck, ArrowRight } from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france-light'
+import { getArtisanUrl } from '@/lib/utils'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
 
 interface MatchedProvider {
   id: string
   name: string
+  slug: string | null
+  stable_id: string | null
+  specialty: string | null
   address_city: string | null
   rating_average: number | null
   review_count: number | null
+  is_verified: boolean
 }
 
 /** Budget option value → human-readable label */
@@ -52,16 +57,6 @@ function getServiceLabel(slug: string): string {
   return found?.name || slug
 }
 
-/** Pseudo-random response time based on provider name for consistency */
-function getResponseTime(name: string): number {
-  let hash = 0
-  for (let i = 0; i < name.length; i++) {
-    hash = (hash << 5) - hash + name.charCodeAt(i)
-    hash |= 0
-  }
-  return (Math.abs(hash) % 4) + 1
-}
-
 /* ─── Component ────────────────────────────────────────────────────── */
 
 export default function DevisConfirmation({
@@ -83,16 +78,19 @@ export default function DevisConfirmation({
     async function fetchProviders() {
       try {
         const supabase = getSupabaseClient()
+        const providerFields = 'id, name, slug, stable_id, specialty, address_city, rating_average, review_count, is_verified'
 
         // Try same city first (ilike for case-insensitive match)
+        // Use %service% pattern to match specialty variants (e.g., "plombier" matches "Plombier")
         const { data: cityData } = await supabase
           .from('providers')
-          .select('id, name, address_city, rating_average, review_count')
+          .select(providerFields)
           .eq('is_active', true)
-          .ilike('specialty', service)
+          .ilike('specialty', `%${service}%`)
           .ilike('address_city', city)
+          .order('is_verified', { ascending: false })
           .order('rating_average', { ascending: false, nullsFirst: false })
-          .limit(3)
+          .limit(5)
 
         if (cancelled) return
 
@@ -100,24 +98,31 @@ export default function DevisConfirmation({
           setProviders(cityData)
           setProviderCount(cityData.length)
         } else {
-          // Fallback: broader search without city filter
+          // Fallback: fill remaining slots with nearby providers (different city)
+          const existingIds = (cityData || []).map(p => p.id)
+          const remaining = 5 - (cityData?.length || 0)
+
           const { data: broadData } = await supabase
             .from('providers')
-            .select('id, name, address_city, rating_average, review_count')
+            .select(providerFields)
             .eq('is_active', true)
-            .ilike('specialty', service)
+            .ilike('specialty', `%${service}%`)
+            .order('is_verified', { ascending: false })
             .order('rating_average', { ascending: false, nullsFirst: false })
-            .limit(3)
+            .limit(remaining + existingIds.length)
 
           if (cancelled) return
 
-          const combined = [...(cityData || []), ...(broadData || [])]
-          const uniqueMap = new Map<string, MatchedProvider>()
-          combined.forEach((p) => uniqueMap.set(p.id, p))
-          const unique = Array.from(uniqueMap.values()).slice(0, 3)
+          // Deduplicate: city providers first, then fill with others
+          const combined = [...(cityData || [])]
+          for (const p of broadData || []) {
+            if (!existingIds.includes(p.id) && combined.length < 5) {
+              combined.push(p)
+            }
+          }
 
-          setProviders(unique)
-          setProviderCount(unique.length)
+          setProviders(combined)
+          setProviderCount(combined.length)
         }
       } catch {
         setProviderCount(0)
@@ -220,58 +225,76 @@ export default function DevisConfirmation({
           </div>
         ) : providers.length > 0 ? (
           <AnimatePresence>
-            {providers.map((provider, i) => (
-              <motion.div
-                key={provider.id}
-                initial={{ opacity: 0, y: 15, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  delay: 0.3 + i * 0.2,
-                  type: 'spring',
-                  stiffness: 300,
-                  damping: 25,
-                }}
-                className="flex items-center gap-3 p-3 bg-sand-50 border border-sand-200 rounded-xl"
-              >
-                {/* Avatar initial */}
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-bold text-primary-600">
-                    {(provider.name || 'A').charAt(0).toUpperCase()}
-                  </span>
-                </div>
+            {providers.map((provider, i) => {
+              const profileUrl = getArtisanUrl({
+                stable_id: provider.stable_id,
+                slug: provider.slug,
+                specialty: provider.specialty,
+                city: provider.address_city,
+              })
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-charcoal-900 truncate">
-                    {provider.name}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-charcoal-500">
-                    {provider.rating_average ? (
-                      <span className="flex items-center gap-0.5">
-                        <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                        {provider.rating_average.toFixed(1)}
-                        {provider.review_count ? (
-                          <span className="text-charcoal-400">
-                            ({provider.review_count})
-                          </span>
-                        ) : null}
-                      </span>
-                    ) : null}
-                    {provider.address_city && (
-                      <span className="flex items-center gap-0.5">
-                        <MapPin className="w-3 h-3" />
-                        {provider.address_city}
-                      </span>
-                    )}
+              return (
+                <motion.div
+                  key={provider.id}
+                  initial={{ opacity: 0, y: 15, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    delay: 0.3 + i * 0.2,
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 25,
+                  }}
+                  className="flex items-center gap-3 p-3 bg-sand-50 border border-sand-200 rounded-xl"
+                >
+                  {/* Avatar initial */}
+                  <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-bold text-primary-600">
+                      {(provider.name || 'A').charAt(0).toUpperCase()}
+                    </span>
                   </div>
-                </div>
 
-                {/* Response time */}
-                <span className="text-xs text-accent-600 font-medium whitespace-nowrap">
-                  ~{getResponseTime(provider.name)}h
-                </span>
-              </motion.div>
-            ))}
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1">
+                      <p className="text-sm font-semibold text-charcoal-900 truncate">
+                        {provider.name}
+                      </p>
+                      {provider.is_verified && (
+                        <ShieldCheck className="w-3.5 h-3.5 text-accent-500 flex-shrink-0" />
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-charcoal-500">
+                      {provider.rating_average ? (
+                        <span className="flex items-center gap-0.5">
+                          <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                          {provider.rating_average.toFixed(1)}
+                          {provider.review_count ? (
+                            <span className="text-charcoal-400">
+                              ({provider.review_count})
+                            </span>
+                          ) : null}
+                        </span>
+                      ) : null}
+                      {provider.address_city && (
+                        <span className="flex items-center gap-0.5">
+                          <MapPin className="w-3 h-3" />
+                          {provider.address_city}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CTA: Voir le profil */}
+                  <Link
+                    href={profileUrl}
+                    className="flex items-center gap-1 text-xs text-primary-500 hover:text-primary-600 font-medium whitespace-nowrap transition-colors"
+                  >
+                    Voir le profil
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </motion.div>
+              )
+            })}
           </AnimatePresence>
         ) : null}
       </div>
@@ -334,7 +357,7 @@ export default function DevisConfirmation({
         className="text-center"
       >
         <Link
-          href={`/services`}
+          href={`/services/${service}/${city.toLowerCase().replace(/\s+/g, '-')}`}
           className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary-400 text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all"
         >
           Consulter les artisans à {city}

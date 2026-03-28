@@ -24,6 +24,11 @@ const ExitIntentPopup = dynamic(
   { ssr: false }
 )
 
+const CityMap = dynamic(
+  () => import('@/components/maps/CityMap'),
+  { ssr: false }
+)
+
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 5
 export function generateStaticParams() {
@@ -286,6 +291,9 @@ export default async function VillePage({ params }: PageProps) {
             <SocialProofBanner ville={ville.name} variant="card" />
           </div>
         </section>
+
+        {/* ─── CARTE DES ARTISANS ─────────────────────────────── */}
+        <CityMap cityName={ville.name} citySlug={villeSlug} />
 
         {/* ─── SERVICES ASSOCIES — cross-intent links ──────── */}
         <section className="mb-16">

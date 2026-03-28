@@ -62,7 +62,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://api.openai.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api-adresse.data.gouv.fr https://www.clarity.ms https://t.contentsquare.net https://connect.facebook.net",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://api.openai.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api-adresse.data.gouv.fr https://www.clarity.ms https://t.contentsquare.net https://connect.facebook.net https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com",
               "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org",
               "frame-ancestors 'none'",
               "base-uri 'self'",

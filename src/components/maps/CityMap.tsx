@@ -8,8 +8,8 @@ import { MapPin, Loader2 } from 'lucide-react'
 const GeographicMap = dynamic(() => import('./GeographicMap'), {
   ssr: false,
   loading: () => (
-    <div className="bg-gray-100 rounded-xl h-[300px] md:h-[400px] flex items-center justify-center">
-      <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+    <div className="bg-sand-100 rounded-2xl h-[300px] md:h-[400px] flex items-center justify-center border border-sand-300">
+      <Loader2 className="w-6 h-6 animate-spin text-charcoal-400" />
     </div>
   ),
 })
@@ -98,12 +98,23 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
   }
 
   return (
-    <section className="mb-16">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-        <MapPin className="w-6 h-6 text-blue-600" />
-        Artisans sur la carte à {cityName}
-      </h2>
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+    <section className="mb-16" aria-label={`Carte des artisans à ${cityName}`}>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+          <MapPin className="w-5 h-5 text-primary-400" />
+        </div>
+        <div>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
+            Carte des artisans à {cityName}
+          </h2>
+          {providers.length > 0 && (
+            <p className="text-sm text-charcoal-500">
+              {providers.length} artisan{providers.length > 1 ? 's' : ''} référencé{providers.length > 1 ? 's' : ''}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="bg-white rounded-2xl border border-sand-300 overflow-hidden">
         <div className="h-[300px] md:h-[400px]">
           <GeographicMap
             centerLat={coordinates.lat}
@@ -114,13 +125,6 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
             height="100%"
           />
         </div>
-        {providers.length > 0 && (
-          <div className="p-4 border-t bg-gray-50">
-            <p className="text-sm text-gray-600">
-              {providers.length} artisan{providers.length > 1 ? 's' : ''} trouvé{providers.length > 1 ? 's' : ''} à {cityName}
-            </p>
-          </div>
-        )}
       </div>
     </section>
   )

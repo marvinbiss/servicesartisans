@@ -43,6 +43,7 @@ interface Assignment {
   lead: LeadData
 }
 
+
 type StatusFilter = 'all' | 'pending' | 'viewed' | 'quoted' | 'declined'
 
 function formatRelative(dateStr: string): string {
@@ -66,6 +67,7 @@ export default function ArtisanLeadsInbox() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
+  const [artisanCity, setArtisanCity] = useState<string | null>(null)
   const pageSize = 15
 
   const fetchLeads = useCallback(async () => {
@@ -77,6 +79,9 @@ export default function ArtisanLeadsInbox() {
 
       if (response.ok) {
         setLeads(data.leads || [])
+        if (data.provider_city) {
+          setArtisanCity(data.provider_city)
+        }
       } else if (response.status === 401) {
         window.location.href = '/connexion?redirect=/espace-artisan/leads'
         return
@@ -93,6 +98,12 @@ export default function ArtisanLeadsInbox() {
   useEffect(() => {
     fetchLeads()
   }, [fetchLeads])
+
+  /** Check if a lead city matches the artisan's city (case-insensitive) */
+  const isInZone = (leadCity: string | null): boolean => {
+    if (!artisanCity || !leadCity) return false
+    return leadCity.toLowerCase().trim() === artisanCity.toLowerCase().trim()
+  }
 
   // Filter and search
   const filtered = leads.filter((a) => {
@@ -287,6 +298,20 @@ export default function ArtisanLeadsInbox() {
                                 <MapPin className="w-3.5 h-3.5" />
                                 {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                               </span>
+                            )}
+                            {/* Zone badge: show if lead matches artisan city or if different */}
+                            {lead.city && artisanCity && (
+                              isInZone(lead.city) ? (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                  <MapPin className="w-3 h-3" />
+                                  Dans votre zone
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                                  <MapPin className="w-3 h-3" />
+                                  {lead.city}
+                                </span>
+                              )
                             )}
                             <span className="flex items-center gap-1">
                               <Phone className="w-3.5 h-3.5" />

@@ -21,10 +21,10 @@ export async function GET(request: NextRequest) {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    // Get provider linked to this user
+    // Get provider linked to this user (include address_city for zone matching)
     const { data: provider } = await supabase
       .from('providers')
-      .select('id')
+      .select('id, address_city')
       .eq('user_id', user.id)
       .eq('is_active', true)
       .single()
@@ -117,6 +117,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       leads: assignments || [],
       count: totalItems,
+      provider_city: provider.address_city || null,
       pagination: {
         page,
         pageSize,

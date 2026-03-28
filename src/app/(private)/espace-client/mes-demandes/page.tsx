@@ -15,6 +15,7 @@ import {
   RefreshCw,
 } from 'lucide-react'
 import ClientSidebar from '@/components/client/ClientSidebar'
+import LeadRecommendations from '@/components/client/LeadRecommendations'
 import { StatusTabs } from '@/components/dashboard/StatusTabs'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { StatCard } from '@/components/dashboard/StatCard'
@@ -254,53 +255,62 @@ export default function MesDemandesPage() {
                     const statusColor = STATUS_COLORS[lead.derived_status] || 'bg-gray-100 text-gray-700'
 
                     return (
-                      <Link
-                        key={lead.id}
-                        href={`/espace-client/mes-demandes/${lead.id}`}
-                        className="block bg-white rounded-xl border border-gray-100 transition-all hover:shadow-md hover:border-blue-200 group"
-                      >
-                        <div className="p-5">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-2 flex-wrap">
-                                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                                  {lead.service_name}
-                                </h3>
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
-                                  {urg.label}
-                                </span>
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor}`}>
-                                  {lead.derived_status_label}
-                                </span>
-                              </div>
+                      <div key={lead.id}>
+                        <Link
+                          href={`/espace-client/mes-demandes/${lead.id}`}
+                          className="block bg-white rounded-xl border border-gray-100 transition-all hover:shadow-md hover:border-blue-200 group"
+                        >
+                          <div className="p-5">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                    {lead.service_name}
+                                  </h3>
+                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                                    {urg.label}
+                                  </span>
+                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor}`}>
+                                    {lead.derived_status_label}
+                                  </span>
+                                </div>
 
-                              <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                                {lead.description}
-                              </p>
+                                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                                  {lead.description}
+                                </p>
 
-                              <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
-                                <span className="flex items-center gap-1">
-                                  <Clock className="w-3.5 h-3.5" />
-                                  {formatRelative(lead.last_activity)}
-                                </span>
-                                {lead.city && (
+                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                                   <span className="flex items-center gap-1">
-                                    <MapPin className="w-3.5 h-3.5" />
-                                    {lead.city} {lead.postal_code && `(${lead.postal_code})`}
+                                    <Clock className="w-3.5 h-3.5" />
+                                    {formatRelative(lead.last_activity)}
                                   </span>
-                                )}
-                                {lead.event_count > 0 && (
-                                  <span className="text-gray-400">
-                                    {lead.event_count} événement{lead.event_count > 1 ? 's' : ''}
-                                  </span>
-                                )}
+                                  {lead.city && (
+                                    <span className="flex items-center gap-1">
+                                      <MapPin className="w-3.5 h-3.5" />
+                                      {lead.city} {lead.postal_code && `(${lead.postal_code})`}
+                                    </span>
+                                  )}
+                                  {lead.event_count > 0 && (
+                                    <span className="text-gray-400">
+                                      {lead.event_count} événement{lead.event_count > 1 ? 's' : ''}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-                            </div>
 
-                            <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 flex-shrink-0 mt-1 transition-colors" />
+                              <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 flex-shrink-0 mt-1 transition-colors" />
+                            </div>
                           </div>
-                        </div>
-                      </Link>
+                        </Link>
+
+                        {/* Recommended artisans for this lead's city + service */}
+                        {lead.city && (
+                          <LeadRecommendations
+                            serviceName={lead.service_name}
+                            city={lead.city}
+                          />
+                        )}
+                      </div>
                     )
                   })}
                 </div>
