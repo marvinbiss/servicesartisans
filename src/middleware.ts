@@ -14,11 +14,11 @@ import { logger } from '@/lib/logger'
 
 // Pre-computed CSP parts — only nonce changes per request
 const CSP_PREFIX = "default-src 'self'; script-src 'self' 'nonce-"
-const CSP_SUFFIX = "' 'strict-dynamic' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com; " +
+const CSP_SUFFIX = "' 'strict-dynamic' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://t.contentsquare.net https://www.clarity.ms; " +
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
   "font-src 'self' https://fonts.gstatic.com data:; " +
   "img-src 'self' data: blob: https: http:; " +
-  "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://api-adresse.data.gouv.fr https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; " +
+  "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://api-adresse.data.gouv.fr https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.anthropic.com https://api.openai.com https://www.clarity.ms https://t.contentsquare.net https://connect.facebook.net; " +
   "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org; " +
   "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
 

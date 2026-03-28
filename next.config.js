@@ -51,24 +51,25 @@ const nextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self), payment=(self)' },
           // CSP also defined in middleware.ts (takes precedence for non-static routes)
           // This CSP serves as fallback for static assets not processed by middleware
-          {
+          // In dev, Next.js uses eval() for source maps — 'unsafe-eval' is required
+          ...(process.env.NODE_ENV === 'production' ? [{
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
               // 'unsafe-inline' is a known limitation: required for Next.js inline scripts on static routes
-              // (full nonce-based CSP for static routes requires Next.js 15+; middleware handles dynamic routes)
-              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+              // (full nonce-based CSP for static routes requires Next.js 15+; middleware handles dynamic routes with nonce)
+              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://t.contentsquare.net https://www.clarity.ms https://js.stripe.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://api.openai.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
-              "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://api.openai.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api-adresse.data.gouv.fr https://www.clarity.ms https://t.contentsquare.net https://connect.facebook.net",
+              "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
               "upgrade-insecure-requests",
             ].join('; '),
-          },
+          }] : []),
         ],
       },
       {
