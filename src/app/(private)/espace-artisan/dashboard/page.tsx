@@ -14,10 +14,10 @@ import {
   Calendar,
   AlertCircle,
   ArrowRight,
-  UserCheck,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
+import ProfileCompleteness from '@/components/artisan-dashboard/ProfileCompleteness'
 import { StatCard } from '@/components/dashboard/StatCard'
 import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
 import { getArtisanUrl } from '@/lib/utils'
@@ -54,7 +54,19 @@ interface Provider {
   slug: string | null
   specialty: string | null
   address_city: string | null
+  address_postal_code: string | null
   is_verified: boolean
+  name: string | null
+  description: string | null
+  bio: string | null
+  phone: string | null
+  email: string | null
+  siret: string | null
+  avatar_url: string | null
+  services_offered: string[] | null
+  service_prices: unknown[] | null
+  opening_hours: Record<string, unknown> | null
+  website: string | null
 }
 
 interface DashboardData {
@@ -150,45 +162,6 @@ function DemandesSkeleton() {
           </div>
         ))}
       </div>
-    </div>
-  )
-}
-
-// ─── Profile Completion CTA ──────────────────────────────────────────────────
-
-function ProfileCompletionCTA() {
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2.5 rounded-lg bg-blue-50 text-blue-600">
-          <UserCheck className="w-5 h-5" aria-hidden="true" />
-        </div>
-        <h3 className="font-semibold text-gray-900">Complétez votre profil</h3>
-      </div>
-      <p className="text-sm text-gray-500 mb-4">
-        Un profil complet et vérifié vous permet d'apparaître en priorité dans les résultats de recherche et d'inspirer confiance aux clients.
-      </p>
-      <ul className="space-y-2 mb-5 text-sm text-gray-600">
-        <li className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-          Ajoutez une description détaillée
-        </li>
-        <li className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-          Complétez vos coordonnées
-        </li>
-        <li className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-          Ajoutez votre logo
-        </li>
-      </ul>
-      <Link
-        href="/espace-artisan/profil"
-        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors w-full justify-center"
-      >
-        Compléter mon profil
-        <ArrowRight className="w-4 h-4" aria-hidden="true" />
-      </Link>
     </div>
   )
 }
@@ -314,7 +287,7 @@ export default function DashboardArtisanPage() {
       ]
     : []
 
-  const showProfileCTA = provider && !provider.is_verified
+  const showProfileWidget = !!provider
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -413,10 +386,10 @@ export default function DashboardArtisanPage() {
               )}
             </section>
 
-            {/* Two-column layout: Demandes + Profile CTA */}
-            <div className={showProfileCTA ? 'grid lg:grid-cols-3 gap-8' : ''}>
+            {/* Two-column layout: Demandes + Profile widget */}
+            <div className={showProfileWidget ? 'grid lg:grid-cols-3 gap-8' : ''}>
               {/* Dernières demandes */}
-              <section className={showProfileCTA ? 'lg:col-span-2' : ''} aria-label="Dernières demandes">
+              <section className={showProfileWidget ? 'lg:col-span-2' : ''} aria-label="Dernières demandes">
                 {isLoading ? (
                   <DemandesSkeleton />
                 ) : (
@@ -488,15 +461,15 @@ export default function DashboardArtisanPage() {
                 )}
               </section>
 
-              {/* Profile Completion CTA (right column) */}
-              {showProfileCTA && !isLoading && (
+              {/* Profile Completeness widget (right column) */}
+              {showProfileWidget && !isLoading && provider && (
                 <motion.aside
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                   aria-label="Complétion du profil"
                 >
-                  <ProfileCompletionCTA />
+                  <ProfileCompleteness provider={provider} />
                 </motion.aside>
               )}
             </div>

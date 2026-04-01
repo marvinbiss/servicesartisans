@@ -15,12 +15,14 @@ import {
   Send,
   BarChart3,
   RefreshCw,
+  Download,
 } from 'lucide-react'
 import Link from 'next/link'
 import { URGENCY_META, STATUS_META, type Lead, type AssignmentStatusFilter } from '@/types/leads'
 import { StatusTabs } from '@/components/dashboard/StatusTabs'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { StatCard } from '@/components/dashboard/StatCard'
+import { LeadsTrendChart } from '@/components/dashboard/LeadsTrendChart'
 
 interface Assignment {
   id: string
@@ -53,6 +55,11 @@ interface PaginationMeta {
   totalItems: number
 }
 
+interface MonthlyData {
+  month: string
+  count: number
+}
+
 interface StatusCounts {
   all: number
   pending: number
@@ -75,6 +82,7 @@ export default function ArtisanLeadsInbox() {
   const [statusCounts, setStatusCounts] = useState<StatusCounts>({
     all: 0, pending: 0, viewed: 0, quoted: 0, declined: 0,
   })
+  const [monthlyTrend, setMonthlyTrend] = useState<MonthlyData[]>([])
   const pageSize = 20
 
   // Fetch status counts from the dedicated stats endpoint (once + on refresh)
@@ -91,6 +99,9 @@ export default function ArtisanLeadsInbox() {
           quoted: data.stats.quoted ?? 0,
           declined: data.stats.declined ?? 0,
         })
+      }
+      if (data.monthlyTrend) {
+        setMonthlyTrend(data.monthlyTrend)
       }
     } catch {
       // Non-blocking — counts will just stay at 0
@@ -211,6 +222,17 @@ export default function ArtisanLeadsInbox() {
                 Statistiques
               </Link>
               <button
+                onClick={() => {
+                  const params = new URLSearchParams()
+                  if (statusFilter !== 'all') params.set('status', statusFilter)
+                  window.location.href = `/api/artisan/leads/export${params.toString() ? `?${params}` : ''}`
+                }}
+                className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg px-3 py-1.5"
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Exporter CSV</span>
+              </button>
+              <button
                 onClick={handleRefresh}
                 className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
               >
@@ -249,6 +271,9 @@ export default function ArtisanLeadsInbox() {
             color="indigo"
           />
         </div>
+
+        {/* Monthly trend chart */}
+        <LeadsTrendChart data={monthlyTrend} />
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">

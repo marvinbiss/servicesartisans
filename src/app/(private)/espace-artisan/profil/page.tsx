@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Loader2, Building2, Phone, MapPin, FileText, Euro, Award, Clock, Settings2, Camera, HelpCircle } from 'lucide-react'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { IdentiteSection } from '@/components/artisan-dashboard/profil/IdentiteSection'
@@ -31,10 +32,15 @@ const TABS = [
 ]
 
 export default function ProfilArtisanPage() {
+  const searchParams = useSearchParams()
+  const tabParam = searchParams.get('tab')
+  const validTabs = useMemo(() => TABS.map(t => t.id), [])
+  const initialTab = (tabParam && validTabs.includes(tabParam as TabId)) ? tabParam as TabId : 'identite'
+
   const [provider, setProvider] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<TabId>('identite')
+  const [activeTab, setActiveTab] = useState<TabId>(initialTab)
 
   useEffect(() => {
     fetch('/api/artisan/provider')
