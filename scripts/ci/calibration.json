@@ -1,0 +1,51 @@
+{
+  "_comment": "Pipeline calibration data. Updated manually after reviewing PR results.",
+  "_instructions": "After each PR review, update metrics below. This tracks precision/recall over time.",
+  "version": 1,
+  "created": "2026-04-02",
+
+  "severity_weights": {
+    "_comment": "Adjust these if P0/P1/P2 scoring is too aggressive or too lenient",
+    "P0": 25,
+    "P1": 10,
+    "P2": 2
+  },
+
+  "risk_router_thresholds": {
+    "_comment": "Tune these based on false negative rate (missed issues on skipped agents)",
+    "medium_min_score": 3,
+    "low_min_score": 5,
+    "large_diff_threshold": 500,
+    "medium_diff_threshold": 100,
+    "medium_files_threshold": 5
+  },
+
+  "dedup_settings": {
+    "_comment": "Tune based on duplicate rate. Lower similarity = more aggressive merging.",
+    "line_proximity": 5,
+    "title_similarity_threshold": 0.5,
+    "exact_title_merge": true
+  },
+
+  "historical_metrics": {
+    "_comment": "Fill after each PR. Format: { pr: number, date: string, raw: number, deduped: number, true_positives: number, false_positives: number, missed_in_prod: number }",
+    "reviews": []
+  },
+
+  "known_false_positives": {
+    "_comment": "Patterns that agents flag incorrectly. Add here to suppress in future.",
+    "patterns": []
+  },
+
+  "critical_paths": {
+    "_comment": "Files/patterns that always trigger high-risk. Update as codebase evolves.",
+    "always_high": [
+      "src/middleware",
+      "src/lib/auth",
+      "src/lib/supabase/admin",
+      "supabase/migrations",
+      "src/app/api/admin",
+      ".env"
+    ]
+  }
+}

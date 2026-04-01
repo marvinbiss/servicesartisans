@@ -40,10 +40,57 @@ jobs:
           NEXT_BUILD_SKIP_DB: '1'
         run: npx next build
 
-  # ─── 10 parallel Claude Code AI agents ─────────────────────────────────────
+  # ─── Risk Router: analyze diff and select agents ───────────────────────────
+  risk-router:
+    name: Risk Router
+    needs: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      agents: ${{ steps.route.outputs.agents }}
+      skipped: ${{ steps.route.outputs.skipped }}
+      risk_level: ${{ steps.route.outputs.risk_level }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Analyze diff and select agents
+        id: route
+        run: |
+          git diff origin/${{ github.base_ref }}...HEAD > /tmp/pr-diff.txt
+          RESULT=$(node scripts/ci/risk-router.mjs /tmp/pr-diff.txt)
+
+          echo "$RESULT"
+
+          # Extract fields for GitHub outputs
+          AGENTS=$(echo "$RESULT" | node -e "
+            const r = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            console.log(JSON.stringify(r.agents));
+          ")
+          SKIPPED=$(echo "$RESULT" | node -e "
+            const r = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            console.log(r.skipped.join(','));
+          ")
+          RISK=$(echo "$RESULT" | node -e "
+            const r = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            console.log(r.risk_level);
+          ")
+
+          echo "agents=$AGENTS" >> $GITHUB_OUTPUT
+          echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
+          echo "risk_level=$RISK" >> $GITHUB_OUTPUT
+
+          echo "Risk: $RISK | Agents: $AGENTS | Skipped: $SKIPPED"
+
+  # ─── Parallel Claude Code agents (only selected by risk router) ────────────
   claude-agent:
     name: Claude · ${{ matrix.agent }}
-    needs: gate
+    needs: risk-router
     runs-on: ubuntu-latest
     timeout-minutes: 8
     strategy:
@@ -66,30 +113,45 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check if agent is selected
+        id: check
+        run: |
+          AGENTS='${{ needs.risk-router.outputs.agents }}'
+          if echo "$AGENTS" | node -e "
+            const agents = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            process.exit(agents.includes('${{ matrix.agent }}') ? 0 : 1);
+          "; then
+            echo "selected=true" >> $GITHUB_OUTPUT
+          else
+            echo "selected=false" >> $GITHUB_OUTPUT
+            echo "Agent ${{ matrix.agent }} skipped by risk router"
+            echo '{"agent":"${{ matrix.agent }}","findings":[],"skipped":true}' > /tmp/report.json
+          fi
+
       - uses: actions/setup-node@v4
+        if: steps.check.outputs.selected == 'true'
         with:
           node-version: 20
 
       - name: Generate PR diff
+        if: steps.check.outputs.selected == 'true'
         run: |
           git diff origin/${{ github.base_ref }}...HEAD > /tmp/pr-diff.txt
           LINES=$(wc -l < /tmp/pr-diff.txt)
           echo "Diff: $LINES lines"
           if [ "$LINES" -eq 0 ]; then
             echo '{"agent":"${{ matrix.agent }}","findings":[]}' > /tmp/report.json
-            echo "Empty diff — skipping agent"
             echo "SKIP=true" >> $GITHUB_ENV
           fi
 
       - name: Run Claude agent — ${{ matrix.agent }}
-        if: env.SKIP != 'true'
+        if: steps.check.outputs.selected == 'true' && env.SKIP != 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           PROMPT=$(cat scripts/ci/agents/${{ matrix.agent }}.md)
           DIFF=$(head -c 100000 /tmp/pr-diff.txt)
 
-          # Build the full prompt with diff injected
           FULL_PROMPT=$(cat <<PROMPT_EOF
           $PROMPT
 
@@ -99,14 +161,12 @@ jobs:
           PROMPT_EOF
           )
 
-          # Run Claude Code in headless mode
           echo "$FULL_PROMPT" | npx -y @anthropic-ai/claude-code@latest \
             -p \
             --output-format json \
             --max-turns 1 \
             > /tmp/report-raw.json 2>/tmp/claude-stderr.log || true
 
-          # Parse the JSON output — extract findings from Claude's response
           node -e "
             const fs = require('fs');
             let raw;
@@ -121,30 +181,22 @@ jobs:
               process.exit(0);
             }
 
-            // Try parsing as direct JSON
             try {
               const parsed = JSON.parse(raw);
-              // Claude --output-format json wraps in {result: '...'}
               const text = parsed.result || JSON.stringify(parsed);
-
-              // Extract JSON from the text
               const jsonMatch = text.match(/\`\`\`json\s*([\s\S]*?)\`\`\`/)
                 || text.match(/(\{[\s\S]*\"findings\"[\s\S]*\})/);
-
               if (jsonMatch) {
                 const report = JSON.parse(jsonMatch[1]);
                 fs.writeFileSync('/tmp/report.json', JSON.stringify(report, null, 2));
                 process.exit(0);
               }
-
-              // Maybe the result itself is the JSON
               if (parsed.agent && parsed.findings) {
                 fs.writeFileSync('/tmp/report.json', JSON.stringify(parsed, null, 2));
                 process.exit(0);
               }
             } catch {}
 
-            // Try raw text as JSON
             try {
               const direct = JSON.parse(raw);
               if (direct.agent && direct.findings) {
@@ -153,7 +205,6 @@ jobs:
               }
             } catch {}
 
-            // Fallback
             fs.writeFileSync('/tmp/report.json', JSON.stringify({
               agent: '${{ matrix.agent }}',
               findings: [],
@@ -174,7 +225,7 @@ jobs:
   # ─── Aggregate all agent reports ───────────────────────────────────────────
   aggregate:
     name: Aggregate & Decide
-    needs: claude-agent
+    needs: [risk-router, claude-agent]
     runs-on: ubuntu-latest
     if: always() && needs.claude-agent.result != 'cancelled'
     timeout-minutes: 3
@@ -194,7 +245,19 @@ jobs:
 
       - name: Aggregate reports
         id: aggregate
-        run: node scripts/ci/aggregate-reports.mjs /tmp/claude-reports
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          node scripts/ci/aggregate-reports.mjs /tmp/claude-reports \
+            --skipped "${{ needs.risk-router.outputs.skipped }}"
+
+      - name: Upload metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-metrics
+          path: /tmp/claude-metrics.jsonl
+          retention-days: 90
 
       - name: Post PR comment
         if: always()
