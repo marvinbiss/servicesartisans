@@ -4464,6 +4464,10 @@ export type Database = {
       }
       provider_claims: {
         Row: {
+          claimant_email: string | null
+          claimant_name: string | null
+          claimant_phone: string | null
+          claimant_position: string | null
           created_at: string
           id: string
           provider_id: string
@@ -4475,6 +4479,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          claimant_email?: string | null
+          claimant_name?: string | null
+          claimant_phone?: string | null
+          claimant_position?: string | null
           created_at?: string
           id?: string
           provider_id: string
@@ -4486,6 +4494,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          claimant_email?: string | null
+          claimant_name?: string | null
+          claimant_phone?: string | null
+          claimant_position?: string | null
           created_at?: string
           id?: string
           provider_id?: string

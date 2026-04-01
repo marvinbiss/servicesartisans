@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Invalid parameters', details: result.error.flatten() },
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
 
     if (!provider) {
       return NextResponse.json(
-        { error: 'Profil artisan non trouvé' },
+        { success: false, error: { message: 'Profil artisan non trouvé' } },
         { status: 404 }
       )
     }
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
 
       if (!conversation) {
         return NextResponse.json(
-          { error: 'Conversation non trouvée' },
+          { success: false, error: { message: 'Conversation non trouvée' } },
           { status: 404 }
         )
       }
@@ -81,7 +81,7 @@ export async function GET(request: Request) {
       if (messagesError) {
         logger.error('Error fetching messages:', messagesError)
         return NextResponse.json(
-          { error: 'Erreur lors de la récupération des messages' },
+          { success: false, error: { message: 'Erreur lors de la récupération des messages' } },
           { status: 500 }
         )
       }
@@ -94,7 +94,7 @@ export async function GET(request: Request) {
         .eq('sender_type', 'client')
         .is('read_at', null)
 
-      return NextResponse.json({ messages: messages || [] })
+      return NextResponse.json({ messages: messages || [], currentUserId: user!.id })
     }
 
     // Bug fix: the Supabase JS client does not support .limit() on nested relation
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
     if (convsError) {
       logger.error('Error fetching conversations:', convsError)
       return NextResponse.json(
-        { error: 'Erreur lors de la récupération des conversations' },
+        { success: false, error: { message: 'Erreur lors de la récupération des conversations' } },
         { status: 500 }
       )
     }
@@ -154,7 +154,7 @@ export async function GET(request: Request) {
       if (msgsError) {
         logger.error('Error fetching recent messages:', msgsError)
         return NextResponse.json(
-          { error: 'Erreur lors de la récupération des messages' },
+          { success: false, error: { message: 'Erreur lors de la récupération des messages' } },
           { status: 500 }
         )
       }
@@ -190,7 +190,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('Messages GET error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }
@@ -205,7 +205,7 @@ export async function POST(request: Request) {
     const result = sendMessageSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -220,7 +220,7 @@ export async function POST(request: Request) {
 
     if (!provider) {
       return NextResponse.json(
-        { error: 'Profil artisan non trouvé' },
+        { success: false, error: { message: 'Profil artisan non trouvé' } },
         { status: 404 }
       )
     }
@@ -231,7 +231,7 @@ export async function POST(request: Request) {
       // Try to find existing conversation or create one
       if (!client_id) {
         return NextResponse.json(
-          { error: 'conversation_id ou client_id requis' },
+          { success: false, error: { message: 'conversation_id ou client_id requis' } },
           { status: 400 }
         )
       }
@@ -255,7 +255,7 @@ export async function POST(request: Request) {
         if (convError || !newConv) {
           logger.error('Error creating conversation:', convError)
           return NextResponse.json(
-            { error: 'Erreur lors de la création de la conversation' },
+            { success: false, error: { message: 'Erreur lors de la création de la conversation' } },
             { status: 500 }
           )
         }
@@ -272,7 +272,7 @@ export async function POST(request: Request) {
 
       if (!conversation) {
         return NextResponse.json(
-          { error: 'Conversation non trouvée ou non autorisée' },
+          { success: false, error: { message: 'Conversation non trouvée ou non autorisée' } },
           { status: 403 }
         )
       }
@@ -293,7 +293,7 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Error sending message:', insertError)
       return NextResponse.json(
-        { error: "Erreur lors de l'envoi du message" },
+        { success: false, error: { message: "Erreur lors de l'envoi du message" } },
         { status: 500 }
       )
     }
@@ -305,7 +305,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Messages POST error:', error)
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
     )
   }

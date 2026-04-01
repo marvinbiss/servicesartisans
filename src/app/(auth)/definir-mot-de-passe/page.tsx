@@ -18,25 +18,69 @@ export default function DefinirMotDePassePage() {
   const [checking, setChecking] = useState(true)
   const [userEmail, setUserEmail] = useState<string | null>(null)
   const [tokenExpired, setTokenExpired] = useState(false)
+  const [userRole, setUserRole] = useState<string | null>(null)
 
-  const token = searchParams.get('token')
+  const tokenFromQuery = searchParams.get('token')
 
-  // On mount: check session, or verify OTP token if provided
+  // On mount: check session, parse hash fragment, or verify OTP token
   useEffect(() => {
     const init = async () => {
-      const { data: userData } = await supabase.auth.getUser()
+      // 1. Check if Supabase sent tokens in the hash fragment
+      //    (resetPasswordForEmail redirects with #access_token=...&type=recovery)
+      if (typeof window !== 'undefined' && window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1))
+        const accessToken = hashParams.get('access_token')
+        const refreshToken = hashParams.get('refresh_token')
+        const type = hashParams.get('type')
 
-      // If already has an active session, proceed directly
+        if (accessToken && type === 'recovery') {
+          // Set the session from the hash tokens
+          if (refreshToken) {
+            const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            })
+
+            if (!sessionError && sessionData.user) {
+              setUserEmail(sessionData.user.email || null)
+              // Clear hash from URL to avoid token leakage
+              window.history.replaceState(null, '', window.location.pathname)
+              setChecking(false)
+              return
+            }
+          }
+
+          // Fallback: try verifyOtp with the access_token as token_hash
+          const { data: verifyData, error: verifyError } = await supabase.auth.verifyOtp({
+            token_hash: accessToken,
+            type: 'recovery',
+          })
+
+          if (!verifyError && verifyData.user) {
+            setUserEmail(verifyData.user.email || null)
+            window.history.replaceState(null, '', window.location.pathname)
+            setChecking(false)
+            return
+          }
+
+          setTokenExpired(true)
+          setChecking(false)
+          return
+        }
+      }
+
+      // 2. Check for existing session (user already authenticated)
+      const { data: userData } = await supabase.auth.getUser()
       if (userData.user) {
         setUserEmail(userData.user.email || null)
         setChecking(false)
         return
       }
 
-      // No session — if we have a token, try to verify it
-      if (token) {
+      // 3. Check for token in query params (from admin claim flow / setup-password)
+      if (tokenFromQuery) {
         const { data: verifyData, error: verifyError } = await supabase.auth.verifyOtp({
-          token_hash: token,
+          token_hash: tokenFromQuery,
           type: 'recovery',
         })
 
@@ -72,7 +116,7 @@ export default function DefinirMotDePassePage() {
   }
 
   const passwordStrength = getPasswordStrength(password)
-  const strengthLabels = ['Tres faible', 'Faible', 'Moyen', 'Fort', 'Tres fort']
+  const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
   const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-400', 'bg-green-600']
 
   const isValid =
@@ -93,7 +137,7 @@ export default function DefinirMotDePassePage() {
       const { error: updateError } = await supabase.auth.updateUser({ password })
 
       if (updateError) {
-        setError(updateError.message || 'Erreur lors de la mise a jour du mot de passe')
+        setError(updateError.message || 'Erreur lors de la mise à jour du mot de passe')
         return
       }
 
@@ -102,8 +146,25 @@ export default function DefinirMotDePassePage() {
         await supabase.auth.signInWithPassword({ email: userEmail, password })
       }
 
+      // Determine redirect based on user role
+      let redirectPath = '/espace-client'
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      if (currentUser) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', currentUser.id)
+          .single()
+        if (profile?.role === 'artisan') {
+          redirectPath = '/espace-artisan'
+          setUserRole('artisan')
+        } else {
+          setUserRole('client')
+        }
+      }
+
       setSuccess(true)
-      setTimeout(() => router.push('/espace-artisan'), 2000)
+      setTimeout(() => router.push(redirectPath), 2000)
     } catch {
       setError('Erreur de connexion au serveur')
     } finally {
@@ -150,10 +211,10 @@ export default function DefinirMotDePassePage() {
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Mot de passe defini !
+            Mot de passe défini !
           </h1>
           <p className="text-gray-600 mb-4">
-            Votre compte est pret. Redirection vers votre espace artisan...
+            Votre compte est prêt. Redirection vers votre espace{userRole === 'artisan' ? ' artisan' : ''}...
           </p>
           <Loader2 className="w-6 h-6 text-amber-500 animate-spin mx-auto" />
         </div>
@@ -169,10 +230,10 @@ export default function DefinirMotDePassePage() {
             <Wrench className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Definissez votre mot de passe
+            Définissez votre mot de passe
           </h1>
           <p className="text-gray-400">
-            Votre fiche artisan a ete validee. Choisissez un mot de passe pour acceder a votre espace.
+            Votre fiche artisan a été validée. Choisissez un mot de passe pour accéder à votre espace.
           </p>
         </div>
 
@@ -196,7 +257,7 @@ export default function DefinirMotDePassePage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full pl-10 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                placeholder="8 caracteres minimum"
+                placeholder="8 caractères minimum"
               />
               <button
                 type="button"
@@ -217,7 +278,7 @@ export default function DefinirMotDePassePage() {
                   ))}
                 </div>
                 <p className="text-xs text-gray-500">
-                  Force : {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Tres faible'}
+                  Force : {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Très faible'}
                 </p>
               </div>
             )}
@@ -251,7 +312,7 @@ export default function DefinirMotDePassePage() {
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              'Valider et acceder a mon espace'
+              'Valider et accéder à mon espace'
             )}
           </button>
         </form>

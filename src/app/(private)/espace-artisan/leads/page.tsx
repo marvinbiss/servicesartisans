@@ -17,34 +17,20 @@ import {
   RefreshCw,
 } from 'lucide-react'
 import Link from 'next/link'
-import { URGENCY_META, STATUS_META } from '@/types/leads'
+import { URGENCY_META, STATUS_META, type Lead, type AssignmentStatusFilter } from '@/types/leads'
 import { StatusTabs } from '@/components/dashboard/StatusTabs'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { StatCard } from '@/components/dashboard/StatCard'
-
-interface LeadData {
-  id: string
-  service_name: string
-  city: string | null
-  postal_code: string | null
-  description: string
-  urgency: string
-  client_name: string
-  client_phone: string
-  created_at: string
-  status: string
-}
 
 interface Assignment {
   id: string
   status: string
   assigned_at: string
   viewed_at: string | null
-  lead: LeadData
+  lead: Lead
 }
 
-
-type StatusFilter = 'all' | 'pending' | 'viewed' | 'quoted' | 'declined'
+type StatusFilter = AssignmentStatusFilter
 
 function formatRelative(dateStr: string): string {
   const d = new Date(dateStr)

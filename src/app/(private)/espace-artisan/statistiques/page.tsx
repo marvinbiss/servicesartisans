@@ -78,7 +78,7 @@ export default function StatistiquesPage() {
           averageRating: s.averageRating ?? 0,
           totalReviews: s.totalReviews ?? 0,
           newClients: s.clientsSatisfaits?.value ?? 0,
-          newClientsChange: s.totalBookingsChange ?? 0,
+          newClientsChange: parseInt(s.clientsSatisfaits?.change ?? '0', 10) || 0,
           cancelRate: s.cancelRate ?? 0,
           bookingsByDay: s.bookingsByDay ?? [],
           bookingsByMonth: s.bookingsByMonth ?? [],

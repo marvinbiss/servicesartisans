@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, ShieldCheck, CheckCircle, Users } from 'lucide-react'
+import { Phone, Mail, MessageCircle, ShieldCheck, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -53,9 +53,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
       window.location.href = `mailto:${artisan.email}`
     }
   }
-
-  // Social proof - contacts this month
-  const contactsThisMonth = Math.floor(Math.abs((artisan.id.charCodeAt(0) * 7 + artisan.id.charCodeAt(1) * 3) % 18) + 5)
 
   return (
     <motion.div
@@ -161,12 +158,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               Envoyer un email
             </motion.button>
           )}
-        </div>
-
-        {/* Social proof */}
-        <div className="flex items-center gap-2 text-sm text-charcoal-600 mb-5 pb-5 border-b border-sand-200">
-          <Users className="w-4 h-4 text-primary-400 flex-shrink-0" aria-hidden="true" />
-          <span><strong>{contactsThisMonth}</strong> personnes ont contacté cet artisan ce mois</span>
         </div>
 
         {/* Trust badges */}

@@ -1,6 +1,6 @@
 /**
  * Artisan Equipe [id] API
- * PATCH:  Update a team member (Zod validation)
+ * PUT:    Update a team member (Zod validation)
  * DELETE: Remove a team member
  */
 
@@ -20,7 +20,7 @@ const memberUpdateSchema = z.object({
   is_active: z.boolean().optional(),
 })
 
-export async function PATCH(
+export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
@@ -78,7 +78,7 @@ export async function PATCH(
 
     return NextResponse.json({ member: data })
   } catch (error) {
-    logger.error('Equipe PATCH error:', error)
+    logger.error('Equipe PUT error:', error)
     return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
   }
 }

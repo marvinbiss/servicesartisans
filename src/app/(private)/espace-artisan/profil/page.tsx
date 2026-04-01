@@ -38,8 +38,15 @@ export default function ProfilArtisanPage() {
 
   useEffect(() => {
     fetch('/api/artisan/provider')
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 401) {
+          window.location.href = '/connexion?redirect=/espace-artisan/profil'
+          return null
+        }
+        return res.json()
+      })
       .then(data => {
+        if (!data) return
         if (data.error) throw new Error(data.error)
         setProvider(data.provider)
       })

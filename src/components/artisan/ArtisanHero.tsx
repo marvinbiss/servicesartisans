@@ -183,9 +183,9 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               </div>
             )}
 
-            {/* Badge statut artisan */}
-            <div className="mt-3">
-              {artisan.accepts_new_clients === true ? (
+            {/* Badge statut artisan — only show when available */}
+            {artisan.accepts_new_clients === true && (
+              <div className="mt-3">
                 <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-green-50 text-green-700 border border-green-200">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -193,13 +193,8 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                   </span>
                   Disponible — accepte de nouveaux clients
                 </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
-                  <span className="w-2 h-2 rounded-full bg-gray-400" />
-                  Actuellement indisponible
-                </span>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Prominent CTA — above the fold */}
             <div className="mt-5">

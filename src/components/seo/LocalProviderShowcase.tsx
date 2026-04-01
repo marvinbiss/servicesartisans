@@ -24,7 +24,7 @@ interface LocalProviderShowcaseProps {
   providers: ShowcaseProvider[]
   serviceName: string
   cityName: string
-  /** Max providers to display (default 6) */
+  /** Max providers to display (default 3) */
   max?: number
 }
 
@@ -121,7 +121,7 @@ export default function LocalProviderShowcase({
   providers,
   serviceName,
   cityName,
-  max = 6,
+  max = 3,
 }: LocalProviderShowcaseProps) {
   if (!providers || providers.length === 0) return null
 

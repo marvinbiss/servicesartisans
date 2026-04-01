@@ -380,6 +380,26 @@ export default async function TarifsServiceVillePage({
         />
       </div>
 
+      {/* Snippet-bait: reponse directe textuelle pour Featured Snippet Google */}
+      <section className="py-6 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="snippet-answer" data-speakable="true">
+            <p className="text-base text-charcoal-700 leading-relaxed">
+              Le <strong>prix {tradeLower} {'à'} {villeData.name}</strong> est de{' '}
+              <strong>{minPrice} {'à'} {maxPrice} {trade.priceRange.unit}</strong> en 2026.
+              {multiplier !== 1.0 && (
+                <> Les tarifs en {villeData.region} sont{' '}
+                {multiplier > 1.0
+                  ? `${Math.round((multiplier - 1) * 100)} % supérieurs`
+                  : `${Math.round((1 - multiplier) * 100)} % inférieurs`}
+                {' '}{'à'} la moyenne nationale.</>
+              )}
+              {' '}Prestations courantes : {trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="py-6 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <GeoPageCTA
@@ -396,7 +416,7 @@ export default async function TarifsServiceVillePage({
         providers={providers}
         serviceName={trade.name}
         cityName={villeData.name}
-        max={6}
+        max={3}
       />
 
       {/* Price range overview */}

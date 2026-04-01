@@ -91,6 +91,7 @@ export async function GET(request: NextRequest) {
           description,
           urgency,
           client_name,
+          client_email,
           client_phone,
           created_at,
           status

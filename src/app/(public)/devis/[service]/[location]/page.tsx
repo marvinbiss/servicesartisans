@@ -397,7 +397,7 @@ export default async function DevisServiceLocationPage({
                 <span>{formatNumber(commune.nb_entreprises_artisanales)} artisans locaux</span>
               </div>
             )}
-            {recentDevisCount > 0 && (
+            {recentDevisCount >= 120 && (
               <div className="flex items-center gap-1.5 text-xs text-accent-700 bg-accent-50 px-3 py-1.5 rounded-full border border-accent-100">
                 <span className="w-1.5 h-1.5 bg-accent-500 rounded-full animate-pulse" />
                 <span>{recentDevisCount} devis demandé{recentDevisCount > 1 ? 's' : ''} ce mois-ci</span>

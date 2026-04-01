@@ -205,7 +205,7 @@ export async function getLocationBySlug(slug: string) {
   if (IS_BUILD) {
     // Use static france.ts fallback during build
     const ville = getVilleBySlugImport(slug)
-    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
+    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal, department_code: ville.departementCode, department_name: ville.departement, region_name: ville.region }
     return null
   }
 
@@ -242,7 +242,7 @@ export async function getLocationBySlug(slug: string) {
       } catch {
         // Fallback to france.ts static data when DB table is empty/missing
         const ville = getVilleBySlugImport(slug)
-        if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
+        if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal, department_code: ville.departementCode, department_name: ville.departement, region_name: ville.region }
         return null
       }
     },
@@ -428,7 +428,7 @@ export async function getProvidersByServiceAndLocation(
         )
       }
 
-      const cityValues = getCityValues(ville.name)
+      const cityValues = getCityValues(ville.name, ville.departementCode)
 
       try {
         return await retryWithBackoff(
@@ -490,7 +490,7 @@ export async function hasProvidersByServiceAndLocation(
         const cityName = ville?.name
         if (!cityName) return false
 
-        const cityValues = getCityValues(cityName)
+        const cityValues = getCityValues(cityName, ville?.departementCode)
         const { count, error } = await supabase
           .from('providers')
           .select('id', { count: 'exact', head: true })
@@ -536,7 +536,7 @@ export async function getProviderCountByServiceAndLocation(
             const cityName = ville?.name
             if (!cityName) return 0
 
-            const cityValues = getCityValues(cityName)
+            const cityValues = getCityValues(cityName, ville?.departementCode)
             const { count, error } = await supabase
               .from('providers')
               .select('id', { count: 'exact', head: true })
@@ -564,7 +564,7 @@ export async function getProvidersByLocation(locationSlug: string) {
   const ville = getVilleBySlugImport(locationSlug)
   if (!ville) return []
 
-  const cityValues = getCityValues(ville.name)
+  const cityValues = getCityValues(ville.name, ville.departementCode)
   try {
     return await retryWithBackoff(
       async () => {

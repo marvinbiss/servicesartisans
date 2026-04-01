@@ -1,6 +1,6 @@
 'use client'
 
-import { Phone, Mail, MessageCircle, ShieldCheck, Star, CheckCircle, Users } from 'lucide-react'
+import { Phone, Mail, MessageCircle, ShieldCheck, Star, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { cleanPhone } from '@/lib/validation/phone'
@@ -29,9 +29,6 @@ function formatFrenchPhone(phone: string): string {
 export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
   const hasPhone = isValidPhone(artisan.phone)
   const hasEmail = !!artisan.email
-
-  // Social proof
-  const contactsThisMonth = Math.floor(Math.abs((artisan.id.charCodeAt(0) * 7 + artisan.id.charCodeAt(1) * 3) % 18) + 5)
 
   return (
     <div className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden">
@@ -121,12 +118,6 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             </a>
           )}
 
-        </div>
-
-        {/* Social proof */}
-        <div className="flex items-center gap-2 text-sm text-charcoal-600 pt-4 mt-4 border-t border-sand-200">
-          <Users className="w-4 h-4 text-primary-400 flex-shrink-0" aria-hidden="true" />
-          <span><strong>{contactsThisMonth}</strong> personnes ont contacté cet artisan ce mois</span>
         </div>
 
         {/* Trust footer */}

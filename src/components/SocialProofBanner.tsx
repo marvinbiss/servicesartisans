@@ -124,7 +124,9 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
     return () => controller.abort()
   }, [metier, ville, fallback])
 
-  const devisCount = stats?.requests_this_month ?? fallback.requests_this_month
+  const rawDevisCount = stats?.requests_this_month ?? fallback.requests_this_month
+  // Only show devis count if >= 120 to maintain trust — low numbers hurt credibility
+  const devisCount = rawDevisCount >= 120 ? rawDevisCount : fallback.requests_this_month
   const providerCount = stats?.active_providers ?? fallback.active_providers
 
   const devisAnim = useAnimatedNumber(devisCount, 1800, animated)

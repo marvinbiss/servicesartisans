@@ -415,10 +415,18 @@ export async function PATCH(request: NextRequest) {
 
       const protectedRoles = ['super_admin', 'admin', 'moderator']
       if (!currentProfile || !protectedRoles.includes(currentProfile.role)) {
-        await supabase
+        const { error: roleError } = await supabase
           .from('profiles')
           .update({ role: 'artisan', updated_at: now })
           .eq('id', resolvedUserId)
+
+        if (roleError) {
+          logger.error('Failed to update profile role to artisan', { claimId, userId: resolvedUserId, error: roleError })
+          return NextResponse.json(
+            { success: false, error: { message: 'Erreur lors de la mise à jour du rôle artisan' } },
+            { status: 500 }
+          )
+        }
       }
 
       // 4. Mark user as artisan in auth metadata
@@ -429,7 +437,13 @@ export async function PATCH(request: NextRequest) {
       // 5. For anonymous claims: generate recovery link + send email
       let emailStatus = 'skipped'
       if (!claim.user_id) {
-        const claimEmail = claim.claimant_email!.trim().toLowerCase()
+        if (!claim.claimant_email) {
+          return NextResponse.json(
+            { success: false, error: { message: 'Email du demandeur manquant — impossible d\'envoyer l\'email de configuration' } },
+            { status: 400 }
+          )
+        }
+        const claimEmail = claim.claimant_email.trim().toLowerCase()
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
         try {

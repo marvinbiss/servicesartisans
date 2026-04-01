@@ -76,34 +76,67 @@ while ((vm = villeRegex.exec(franceTsContent)) !== null) {
 console.log(`France.ts villes enrichment: ${Object.keys(villeMap).length} villes with code_postal & population`)
 
 // ---------------------------------------------------------------------------
-// Build rows
+// Build rows — two-pass: group by slug, then assign bare slug to most populous
 // ---------------------------------------------------------------------------
+
+// Pass 1: group all entries by base slug
+const slugGroups = new Map() // baseSlug → [{ code, data, name }]
+for (const [codeInsee, data] of Object.entries(insee)) {
+  const name = data.n
+  const baseSlug = slugify(name)
+  if (!slugGroups.has(baseSlug)) slugGroups.set(baseSlug, [])
+  slugGroups.get(baseSlug).push({ code: codeInsee, data, name })
+}
+
+// Build france.ts dept lookup: slug → departementCode (to match bare slug to correct commune)
+const franceDeptMap = {}
+const franceDeptRegex = /slug:\s*'([^']+)',\s*name:\s*'[^']+',\s*region:\s*'[^']+',\s*departement:\s*'[^']+',\s*departementCode:\s*'([^']+)'/g
+let fdm
+while ((fdm = franceDeptRegex.exec(franceTsContent)) !== null) {
+  franceDeptMap[fdm[1]] = fdm[2]
+}
+console.log(`France.ts dept mapping: ${Object.keys(franceDeptMap).length} villes with departementCode`)
+
+// Pass 2: for each group, assign bare slug to the commune matching france.ts
 const rows = []
 const seenSlugs = new Set()
 
-for (const [codeInsee, data] of Object.entries(insee)) {
-  const name = data.n
-  const slug = slugify(name)
-
-  // Handle duplicate slugs (some communes share the same name)
-  if (seenSlugs.has(slug)) {
-    // Append departement code to disambiguate
-    const disambiguatedSlug = `${slug}-${data.d}`
-    if (seenSlugs.has(disambiguatedSlug)) {
-      // Still duplicate? Append code_insee
-      const finalSlug = `${slug}-${codeInsee}`
-      if (seenSlugs.has(finalSlug)) continue // Skip if truly duplicate
-      seenSlugs.add(finalSlug)
-      rows.push(buildRow(codeInsee, data, name, finalSlug))
-    } else {
-      seenSlugs.add(disambiguatedSlug)
-      rows.push(buildRow(codeInsee, data, name, disambiguatedSlug))
+for (const [baseSlug, entries] of slugGroups) {
+  if (entries.length === 1) {
+    // Unique slug — use as-is
+    const e = entries[0]
+    seenSlugs.add(baseSlug)
+    rows.push(buildRow(e.code, e.data, e.name, baseSlug))
+  } else {
+    // Duplicate slug — pick which entry gets the bare slug:
+    // 1. If france.ts defines this slug, match by departementCode
+    // 2. Otherwise, pick the entry with the largest population (from villeMap)
+    // 3. Fallback: first entry alphabetically by dept code
+    let bareIdx = 0
+    const franceDept = franceDeptMap[baseSlug]
+    if (franceDept) {
+      const idx = entries.findIndex(e => e.data.d === franceDept)
+      if (idx >= 0) bareIdx = idx
     }
-    continue
-  }
 
-  seenSlugs.add(slug)
-  rows.push(buildRow(codeInsee, data, name, slug))
+    for (let i = 0; i < entries.length; i++) {
+      const e = entries[i]
+      if (i === bareIdx) {
+        seenSlugs.add(baseSlug)
+        rows.push(buildRow(e.code, e.data, e.name, baseSlug))
+      } else {
+        const deptSlug = `${baseSlug}-${e.data.d.toLowerCase()}`
+        if (seenSlugs.has(deptSlug)) {
+          const inseeSlug = `${baseSlug}-${e.code}`
+          seenSlugs.add(inseeSlug)
+          rows.push(buildRow(e.code, e.data, e.name, inseeSlug))
+        } else {
+          seenSlugs.add(deptSlug)
+          rows.push(buildRow(e.code, e.data, e.name, deptSlug))
+        }
+      }
+    }
+  }
 }
 
 function buildRow(codeInsee, data, name, slug) {

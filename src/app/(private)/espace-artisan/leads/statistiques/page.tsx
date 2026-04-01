@@ -88,9 +88,9 @@ export default function ArtisanLeadStatsPage() {
 
   const funnel = [
     { stage: 'dispatched', count: stats.total, rate: 100 },
-    { stage: 'viewed', count: stats.viewed + stats.quoted + stats.accepted + stats.completed, rate: stats.total > 0 ? Math.round(((stats.viewed + stats.quoted + stats.accepted + stats.completed) / stats.total) * 100) : 0 },
-    { stage: 'quoted', count: stats.quoted + stats.accepted + stats.completed, rate: stats.total > 0 ? Math.round(((stats.quoted + stats.accepted + stats.completed) / stats.total) * 100) : 0 },
-    { stage: 'accepted', count: stats.accepted + stats.completed, rate: stats.total > 0 ? Math.round(((stats.accepted + stats.completed) / stats.total) * 100) : 0 },
+    { stage: 'viewed', count: stats.viewed, rate: stats.total > 0 ? Math.round((stats.viewed / stats.total) * 100) : 0 },
+    { stage: 'quoted', count: stats.quoted, rate: stats.total > 0 ? Math.round((stats.quoted / stats.total) * 100) : 0 },
+    { stage: 'accepted', count: stats.accepted, rate: stats.total > 0 ? Math.round((stats.accepted / stats.total) * 100) : 0 },
     { stage: 'completed', count: stats.completed, rate: stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0 },
   ]
 

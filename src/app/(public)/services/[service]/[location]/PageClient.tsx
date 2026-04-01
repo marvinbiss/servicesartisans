@@ -224,7 +224,7 @@ export default function ServiceLocationPageClient({
                 </span>
               </div>
 
-              {recentDevisCount > 0 && (
+              {recentDevisCount >= 120 && (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent-50 text-accent-700 rounded-full text-sm font-medium mt-2">
                   <span className="w-2 h-2 bg-accent-500 rounded-full animate-pulse" />
                   {recentDevisCount} devis demand{'e'}{recentDevisCount > 1 ? 's' : ''} ce mois-ci

@@ -109,9 +109,24 @@ export function getInseeCodesForCity(cityName: string): string[] {
  * Get all possible address_city values for a given city name.
  * Returns the city name itself plus all matching INSEE codes.
  * Use with `.in('address_city', getCityValues(...))` for index-friendly queries.
+ *
+ * When `deptCode` is provided, only INSEE codes from that department are included.
+ * This prevents mixing providers from different departments that share a city name
+ * (e.g., Saint-Denis 93 vs Saint-Denis 974).
  */
-export function getCityValues(cityName: string): string[] {
-  const codes = getInseeCodesForCity(cityName)
+export function getCityValues(cityName: string, deptCode?: string): string[] {
+  let codes = getInseeCodesForCity(cityName)
+
+  // Filter by department when multiple communes share the same name
+  if (deptCode && codes.length > 1) {
+    const filtered = codes.filter(code => {
+      const entry = communes[code]
+      return entry && entry.d === deptCode
+    })
+    // Only use filtered if it has results; otherwise fall back to all codes
+    if (filtered.length > 0) codes = filtered
+  }
+
   const normalized = _normalize(cityName)
 
   // Include arrondissement codes for Paris, Marseille, Lyon

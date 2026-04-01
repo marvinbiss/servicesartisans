@@ -113,6 +113,18 @@ export async function POST(request: Request) {
       }
     }
 
+    // Verify the artisan has a lead_assignment for this request
+    const { data: assignment } = await supabase
+      .from('lead_assignments')
+      .select('id')
+      .eq('provider_id', provider.id)
+      .eq('lead_id', request_id)
+      .single()
+
+    if (!assignment) {
+      return NextResponse.json({ success: false, error: { message: 'Demande non assignée' } }, { status: 403 })
+    }
+
     // Verify the devis_request exists
     const { data: devisRequest } = await supabase
       .from('devis_requests')

@@ -109,7 +109,7 @@ export default async function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Téléphone</h3>
-                  <p><a href="tel:+33651858930" className="text-blue-600 hover:text-blue-700 font-medium">06 51 85 89 30</a></p>
+                  <p><a href="tel:+33756872787" className="text-blue-600 hover:text-blue-700 font-medium">07 56 87 27 87</a></p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Horaires d&apos;ouverture</h3>

@@ -17,6 +17,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js'
+import { readFileSync } from 'fs'
 import inseeData from '../src/lib/data/insee-communes.json'
 
 // ---------------------------------------------------------------------------
@@ -100,7 +101,22 @@ async function main() {
     slugMap.get(baseSlug)!.push({ code, name: data.n, dept: data.d, region: data.r })
   }
 
-  // 2. Build final list with deduplicated slugs
+  // 2. Build france.ts dept lookup: slug → departementCode
+  //    So that duplicate slugs give the bare version to the commune matching france.ts
+  const franceDeptMap: Record<string, string> = {}
+  try {
+    const franceTsContent = readFileSync('src/lib/data/france.ts', 'utf8')
+    const re = /slug:\s*'([^']+)',\s*name:\s*'[^']+',\s*region:\s*'[^']+',\s*departement:\s*'[^']+',\s*departementCode:\s*'([^']+)'/g
+    let m: RegExpExecArray | null
+    while ((m = re.exec(franceTsContent)) !== null) {
+      franceDeptMap[m[1]] = m[2]
+    }
+    console.log('📍 france.ts dept mapping loaded:', Object.keys(franceDeptMap).length, 'villes')
+  } catch {
+    console.warn('⚠️  Could not read france.ts — all duplicate slugs will be dept-suffixed')
+  }
+
+  // 3. Build final list with deduplicated slugs
   const communes: Array<{
     code_insee: string
     name: string
@@ -125,12 +141,18 @@ async function main() {
         is_active: true,
       })
     } else {
-      // Duplicate slug — append department code
-      for (const e of entries) {
+      // Duplicate slug — give bare slug to the commune matching france.ts, suffix the rest
+      const franceDept = franceDeptMap[baseSlug]
+      const bareIdx = franceDept
+        ? entries.findIndex(e => e.dept === franceDept)
+        : 0 // fallback: first entry
+
+      for (let i = 0; i < entries.length; i++) {
+        const e = entries[i]
         communes.push({
           code_insee: e.code,
           name: e.name,
-          slug: `${baseSlug}-${e.dept.toLowerCase()}`,
+          slug: i === (bareIdx >= 0 ? bareIdx : 0) ? baseSlug : `${baseSlug}-${e.dept.toLowerCase()}`,
           departement_code: e.dept,
           departement_name: DEPT_NAMES[e.dept] || e.dept,
           region_name: e.region,

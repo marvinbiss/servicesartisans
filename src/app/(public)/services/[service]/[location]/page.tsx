@@ -20,7 +20,7 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
 import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
 
-import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema, getLocalServiceSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema, getEnrichedLocalServiceSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getArtisanUrl } from '@/lib/utils'
@@ -301,17 +301,43 @@ function generateJsonLd(
     name: `${service.name} à ${location.name}`,
     description: `Trouvez les meilleurs ${svcLower}s à ${location.name}`,
     image: getServiceImage(serviceSlug).src,
+    serviceType: service.name,
+    inLanguage: 'fr-FR',
     areaServed: {
       '@type': 'City',
       name: location.name,
-      containedInPlace: {
-        '@type': 'AdministrativeArea',
-        name: location.department_name || '',
-      },
+      containedInPlace: [
+        ...(location.department_name ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: location.department_name,
+        }] : []),
+        ...(location.region_name ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: location.region_name,
+        }] : []),
+      ],
     },
     provider: {
+      '@type': 'Organization',
       '@id': `${SITE_URL}#organization`,
+      name: 'ServicesArtisans',
     },
+    ...(trade ? {
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: `Prestations ${svcLower} à ${location.name}`,
+        itemListElement: trade.commonTasks.slice(0, 8).map(task => {
+          const parts = task.split(':')
+          return {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: parts[0].trim(),
+            },
+          }
+        }),
+      },
+    } : {}),
     dateModified: new Date().toISOString().split('T')[0],
   }
 
@@ -524,13 +550,28 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   })
   jsonLdSchemas.push(speakableSchema)
 
-  jsonLdSchemas.push(getLocalServiceSchema({
+  // Schema enrichi avec OfferCatalog, AggregateRating et areaServed détaillé
+  jsonLdSchemas.push(getEnrichedLocalServiceSchema({
     serviceName: trade?.name || service.name,
     serviceType: trade?.name || service.name,
     description: `${service.name} à ${location.name} — artisans référencés SIREN. Devis gratuit.`,
     cityName: location.name,
     regionName: location.region_name || '',
+    departmentName: location.department_name || '',
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+    image: getServiceImage(serviceSlug).src,
+    ...(trade ? {
+      lowPrice: trade.priceRange.min,
+      highPrice: trade.priceRange.max,
+      priceUnit: trade.priceRange.unit,
+      tasks: trade.commonTasks.slice(0, 10).map(task => {
+        const parts = task.split(':')
+        return { name: parts[0].trim(), description: parts.length > 1 ? parts[1].trim() : undefined }
+      }),
+    } : {}),
+    ...(averageRating ? { ratingValue: averageRating } : {}),
+    ...(totalReviews ? { reviewCount: totalReviews } : {}),
+    providerCount: providers.length,
   }))
 
   return (
@@ -574,10 +615,10 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
       {/* Artisans disponibles — visible showcase with real providers */}
       <LocalProviderShowcase
-        providers={(providers || []).slice(0, 6)}
+        providers={(providers || []).slice(0, 3)}
         serviceName={service.name}
         cityName={location.name}
-        max={6}
+        max={3}
       />
 
       {/* SSR provider links — crawlable by Googlebot even without JS execution */}

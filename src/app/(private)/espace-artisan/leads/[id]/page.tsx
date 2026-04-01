@@ -20,30 +20,15 @@ import {
   Calendar,
 } from 'lucide-react'
 import { EventTimeline } from '@/components/dashboard/EventTimeline'
-import { URGENCY_META, STATUS_META } from '@/types/leads'
+import { URGENCY_META, STATUS_META, type Lead } from '@/types/leads'
 import type { LeadEventType } from '@/types/leads'
-
-interface LeadData {
-  id: string
-  service_name: string
-  city: string | null
-  postal_code: string | null
-  description: string
-  budget: string | null
-  urgency: string
-  client_name: string
-  client_email: string | null
-  client_phone: string
-  created_at: string
-  status: string
-}
 
 interface Assignment {
   id: string
   status: string
   assigned_at: string
   viewed_at: string | null
-  lead: LeadData
+  lead: Lead
 }
 
 interface TimelineEvent {

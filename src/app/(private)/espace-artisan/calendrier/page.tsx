@@ -54,11 +54,9 @@ interface BookingEntry {
   client_name: string
   service_description: string
   status: string
-  slot?: {
-    date: string
-    start_time: string
-    end_time: string
-  }
+  scheduled_date: string | null
+  scheduled_time: string | null
+  duration_minutes: number | null
 }
 
 interface UserProfile {
@@ -254,7 +252,7 @@ export default function CalendrierPage() {
 
       if (data.data.bookings) {
         const upcoming = data.data.bookings
-          .filter((b: BookingEntry) => b.status === 'confirmed' && new Date(b.slot?.date ?? 0) >= new Date())
+          .filter((b: BookingEntry) => b.status === 'confirmed' && b.scheduled_date && new Date(b.scheduled_date) >= new Date())
           .slice(0, 5)
         setUpcomingBookings(upcoming)
 
@@ -262,7 +260,7 @@ export default function CalendrierPage() {
         const thisMonth = new Date().getMonth()
         const thisYear = new Date().getFullYear()
         const monthlyBookings = data.data.bookings.filter((b: BookingEntry) => {
-          const bookingDate = new Date(b.slot?.date ?? 0)
+          const bookingDate = new Date(b.scheduled_date ?? 0)
           return bookingDate.getMonth() === thisMonth && bookingDate.getFullYear() === thisYear
         }).length
 
@@ -863,13 +861,13 @@ export default function CalendrierPage() {
                       </div>
                       <div className="text-right">
                         <div className="font-medium text-gray-900">
-                          {booking.slot?.date && new Date(booking.slot.date).toLocaleDateString('fr-FR', {
+                          {booking.scheduled_date && new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
                             day: 'numeric',
                             month: 'short'
                           })}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {booking.slot?.start_time} - {booking.slot?.end_time}
+                          {booking.scheduled_time ?? '--:--'}
                         </div>
                       </div>
                     </div>

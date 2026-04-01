@@ -12,7 +12,7 @@ import { z } from 'zod'
 // POST request schema (reply to review)
 const replyToReviewSchema = z.object({
   review_id: z.string().uuid(),
-  response: z.string().min(1).max(2000),
+  response: z.string().min(10, 'La réponse doit contenir au moins 10 caractères').max(2000),
 })
 
 export const dynamic = 'force-dynamic'
@@ -56,20 +56,8 @@ export async function GET() {
       distribution,
     }
 
-    // Format reviews for frontend
-    const formattedReviews = reviews?.map(r => ({
-      id: r.id,
-      client: r.client_name || 'Client',
-      date: r.created_at,
-      note: r.rating,
-      commentaire: r.comment,
-      reponse: r.artisan_response,
-      artisan_responded_at: r.artisan_responded_at,
-      repondu: r.artisan_response !== null,
-    })) || []
-
     return NextResponse.json({
-      avis: formattedReviews,
+      avis: reviews || [],
       stats,
     })
   } catch (error) {

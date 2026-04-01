@@ -108,6 +108,14 @@ export async function GET(request: Request) {
       )
     }
 
+    // Verify artisan role
+    if (profile.role !== 'artisan') {
+      return NextResponse.json(
+        { error: 'Accès réservé aux artisans' },
+        { status: 403 }
+      )
+    }
+
     // Try optimized RPC first (single query for all stats)
     const { data: rpcStats, error: rpcError } = await supabase.rpc('get_artisan_dashboard_stats', {
       p_artisan_id: user.id,
