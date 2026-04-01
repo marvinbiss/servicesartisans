@@ -86,20 +86,24 @@ function buildSupabaseMock(overrides: {
         }
       }
 
-      // idx 0 = reviews with pagination, idx 1 = allRatings, idx 2+ = single review / update
+      // idx 0 = reviews with pagination
+      // idx 1-5 = COUNT per rating (1 through 5) via { count: 'exact', head: true }
+      // idx 6+ = single review / update (POST)
       if (idx === 0) {
         // select with count:exact — thenable
         chain.then = (resolve: (v: unknown) => void) => {
           resolve({ data: reviews, error: reviewsError, count })
           return chain
         }
-      } else if (idx === 1) {
-        // allRatings query — thenable
+      } else if (idx >= 1 && idx <= 5) {
+        // COUNT per rating — compute from allRatings
+        const ratingValue = idx // idx 1 = rating 1, idx 5 = rating 5
+        const ratingCount = allRatings.filter(r => r.rating === ratingValue).length
         chain.then = (resolve: (v: unknown) => void) => {
-          resolve({ data: allRatings, error: ratingsError })
+          resolve({ count: ratingCount, data: null, error: ratingsError })
           return chain
         }
-      } else if (idx === 2) {
+      } else if (idx === 6) {
         // single review fetch for POST
         ;(chain.single as ReturnType<typeof vi.fn>).mockResolvedValue({
           data: singleReview,
@@ -108,7 +112,7 @@ function buildSupabaseMock(overrides: {
       }
 
       // For update chain (POST update review)
-      if (idx === 3) {
+      if (idx === 7) {
         chain.then = (resolve: (v: unknown) => void) => {
           resolve({ error: updateError })
           return chain

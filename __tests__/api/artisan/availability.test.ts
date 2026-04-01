@@ -41,9 +41,11 @@ function makeChain(result: unknown, singleResult?: unknown) {
   const chain: Record<string, unknown> = {
     select: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
+    in: vi.fn().mockReturnThis(),
     order: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
     delete: vi.fn().mockReturnThis(),
+    limit: vi.fn().mockReturnThis(),
     single: vi.fn(),
   }
   for (const key of Object.keys(chain)) {
@@ -294,6 +296,13 @@ describe('DELETE /api/artisan/availability', () => {
           // Fetch slot — .single()
           return makeChain({}, {
             data: { id: slotId, artisan_id: 'user-123' },
+            error: null,
+          })
+        }
+        if (callIdx === 2) {
+          // Check active bookings — .single() returns null (no booking)
+          return makeChain({}, {
+            data: null,
             error: null,
           })
         }
