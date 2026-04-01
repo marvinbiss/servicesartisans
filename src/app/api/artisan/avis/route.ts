@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
+import { sanitizeUserInput } from '@/lib/sanitize'
 
 // POST request schema (reply to review)
 const replyToReviewSchema = z.object({
@@ -109,7 +110,7 @@ export async function POST(request: Request) {
     // Update with response
     const { error: updateError } = await supabase
       .from('reviews')
-      .update({ artisan_response: response, artisan_responded_at: new Date().toISOString() })
+      .update({ artisan_response: sanitizeUserInput(response.trim()), artisan_responded_at: new Date().toISOString() })
       .eq('id', review_id)
 
     if (updateError) {

@@ -252,6 +252,8 @@ interface ReviewRow {
   created_at: string
   client_name: string | null
   has_media: boolean | null
+  artisan_response: string | null
+  artisan_responded_at: string | null
 }
 
 // Fetch similar artisans (same specialty, same department)
@@ -312,7 +314,9 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
         comment,
         created_at,
         client_name,
-        has_media
+        has_media,
+        artisan_response,
+        artisan_responded_at
       `)
       .eq('artisan_id', providerId)
       .eq('status', 'published')
@@ -334,6 +338,8 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
         service: serviceName || '',
         verified: false,
         hasPhoto: r.has_media || false,
+        artisan_response: r.artisan_response || null,
+        artisan_responded_at: r.artisan_responded_at || null,
       }))
     }
 

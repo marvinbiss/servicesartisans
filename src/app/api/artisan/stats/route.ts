@@ -131,13 +131,22 @@ export async function GET(request: Request) {
     // -----------------------------------------------------------------------
     // Provider record (needed for scoped queries)
     // -----------------------------------------------------------------------
-    const { data: providerForUnread } = await supabase
+    const { data: providerRows } = await supabase
       .from('providers')
       .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email')
       .eq('user_id', user.id)
-      .single()
+      .limit(1)
 
-    const providerId = providerForUnread?.id
+    const providerForUnread = providerRows?.[0] ?? null
+
+    if (!providerForUnread) {
+      return NextResponse.json(
+        { error: 'Profil artisan introuvable' },
+        { status: 404 }
+      )
+    }
+
+    const providerId = providerForUnread.id
 
     // -----------------------------------------------------------------------
     // Wave 1 — All independent queries in parallel
@@ -414,14 +423,23 @@ async function getLegacyStats(
   const adminClient = createAdminClient()
   const nilUuid = '00000000-0000-0000-0000-000000000000'
 
-  // Provider record
-  const { data: legacyProvider } = await supabase
+  // Provider record — use limit(1) instead of single() to avoid crash on multi-provider
+  const { data: legacyProviderRows } = await supabase
     .from('providers')
     .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email')
     .eq('user_id', user.id)
-    .single()
+    .limit(1)
 
-  const providerId = legacyProvider?.id
+  const legacyProvider = legacyProviderRows?.[0] ?? null
+
+  if (!legacyProvider) {
+    return NextResponse.json(
+      { error: 'Profil artisan introuvable' },
+      { status: 404 }
+    )
+  }
+
+  const providerId = legacyProvider.id
 
   // -----------------------------------------------------------------------
   // Wave 1 — All independent queries

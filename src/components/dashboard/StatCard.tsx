@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import { TrendingUp, TrendingDown } from 'lucide-react'
 
@@ -39,7 +39,7 @@ function AnimatedValue({ value }: { value: number }) {
   return <motion.span>{display}</motion.span>
 }
 
-export function StatCard({ title, value, subtitle, trend, icon, color = 'blue', delay = 0 }: StatCardProps) {
+export const StatCard = memo(function StatCard({ title, value, subtitle, trend, icon, color = 'blue', delay = 0 }: StatCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -77,4 +77,4 @@ export function StatCard({ title, value, subtitle, trend, icon, color = 'blue', 
       </div>
     </motion.div>
   )
-}
+})

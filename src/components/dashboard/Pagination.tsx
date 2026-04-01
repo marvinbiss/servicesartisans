@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface PaginationProps {
@@ -8,17 +9,18 @@ interface PaginationProps {
   onPageChange: (page: number) => void
 }
 
-export function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
+export const Pagination = memo(function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-6">
+    <nav className="flex items-center justify-center gap-2 mt-6" aria-label="Pagination">
       <button
         onClick={() => onPageChange(Math.max(1, page - 1))}
         disabled={page === 1}
+        aria-label={`Page précédente (page ${page - 1})`}
         className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="w-4 h-4" aria-hidden="true" />
         <span className="hidden sm:inline">Précédent</span>
       </button>
 
@@ -39,6 +41,8 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
+              aria-label={`Page ${pageNum}`}
+              aria-current={pageNum === page ? 'page' : undefined}
               className={`w-9 h-9 text-sm rounded-lg transition-colors ${
                 pageNum === page
                   ? 'bg-blue-600 text-white font-medium'
@@ -54,11 +58,12 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(Math.min(totalPages, page + 1))}
         disabled={page === totalPages}
+        aria-label={`Page suivante (page ${page + 1})`}
         className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
       >
         <span className="hidden sm:inline">Suivant</span>
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="w-4 h-4" aria-hidden="true" />
       </button>
-    </div>
+    </nav>
   )
-}
+})

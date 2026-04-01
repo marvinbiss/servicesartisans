@@ -15,8 +15,12 @@ import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { PortfolioCard } from '@/components/portfolio'
 import Button from '@/components/ui/Button'
 import type { PortfolioItem, MediaType } from '@/types/portfolio'
+import dynamic from 'next/dynamic'
 import AddPortfolioModal from './AddPortfolioModal'
-import PortfolioLightbox from './PortfolioLightbox'
+
+const PortfolioLightbox = dynamic(() => import('./PortfolioLightbox'), {
+  ssr: false,
+})
 
 export default function PortfolioPage() {
   const [loading, setLoading] = useState(true)

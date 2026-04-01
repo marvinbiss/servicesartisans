@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import Link from 'next/link'
 import { Clock, MapPin, ChevronRight } from 'lucide-react'
 import { URGENCY_META, STATUS_META } from '@/types/leads'
@@ -26,7 +27,7 @@ function formatRelative(dateStr: string): string {
   return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 }
 
-export function LeadTable({ assignments, basePath, showProvider, providerNames }: LeadTableProps) {
+export const LeadTable = memo(function LeadTable({ assignments, basePath, showProvider, providerNames }: LeadTableProps) {
   if (assignments.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
@@ -128,4 +129,4 @@ export function LeadTable({ assignments, basePath, showProvider, providerNames }
       </div>
     </div>
   )
-}
+})

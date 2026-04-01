@@ -1,5 +1,7 @@
 'use client'
 
+import { memo } from 'react'
+
 interface Tab {
   key: string
   label: string
@@ -12,12 +14,14 @@ interface StatusTabsProps {
   onTabChange: (key: string) => void
 }
 
-export function StatusTabs({ tabs, activeTab, onTabChange }: StatusTabsProps) {
+export const StatusTabs = memo(function StatusTabs({ tabs, activeTab, onTabChange }: StatusTabsProps) {
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex gap-2 flex-wrap" role="tablist">
       {tabs.map((tab) => (
         <button
           key={tab.key}
+          role="tab"
+          aria-selected={activeTab === tab.key}
           onClick={() => onTabChange(tab.key)}
           className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
             activeTab === tab.key
@@ -33,4 +37,4 @@ export function StatusTabs({ tabs, activeTab, onTabChange }: StatusTabsProps) {
       ))}
     </div>
   )
-}
+})

@@ -125,8 +125,9 @@ export default function PortfolioLightbox({
                   alt={currentItem.title}
                   fill
                   className="object-contain"
-                  sizes="100vw"
-                  priority
+                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  loading="eager"
+                  quality={85}
                 />
               </div>
             )}

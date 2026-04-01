@@ -221,6 +221,28 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     }
   }
 
+  // CSRF protection — validate Origin header for mutating API requests
+  const method = request.method
+  if (
+    method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS' &&
+    (pathname.startsWith('/api/artisan/') || pathname.startsWith('/api/client/'))
+  ) {
+    const origin = request.headers.get('origin')
+    if (origin) {
+      const allowedOrigin = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
+      try {
+        if (!origin.includes(new URL(allowedOrigin).hostname)) {
+          return new NextResponse(
+            JSON.stringify({ error: 'Origine non autorisée' }),
+            { status: 403, headers: { 'Content-Type': 'application/json' } }
+          )
+        }
+      } catch {
+        // If URL parsing fails, allow through (fail-open for safety)
+      }
+    }
+  }
+
   // Refresh session — only for routes that need auth (skip Supabase call for public pages)
   let response: NextResponse
   const needsAuth = pathname.startsWith('/espace-') || pathname.startsWith('/admin') || pathname.startsWith('/booking')

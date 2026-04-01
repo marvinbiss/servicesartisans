@@ -84,6 +84,8 @@ export interface Review {
   hasPhoto?: boolean
   photoUrl?: string
   verified?: boolean
+  artisan_response?: string | null
+  artisan_responded_at?: string | null
 }
 
 export function getDisplayName(artisan: Artisan): string {

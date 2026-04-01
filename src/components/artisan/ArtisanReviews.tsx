@@ -106,6 +106,14 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
           </span>
         </div>
       )}
+
+      {/* Artisan response — visible publicly for SEO and trust */}
+      {review.artisan_response && (
+        <div className="mt-3 ml-4 pl-4 border-l-2 border-blue-200 bg-blue-50/50 rounded-r-lg py-2 pr-3">
+          <p className="text-xs font-medium text-blue-700 mb-1">Réponse de l&apos;artisan</p>
+          <p className="text-sm text-charcoal-700 leading-relaxed">{review.artisan_response}</p>
+        </div>
+      )}
     </motion.div>
   )
 }
