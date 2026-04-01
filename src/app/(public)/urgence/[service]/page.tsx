@@ -16,6 +16,7 @@ import { CmsContent } from '@/components/CmsContent'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import dynamic from 'next/dynamic'
 
 const ExitIntentPopup = dynamic(
@@ -643,6 +644,9 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         serviceName={trade.name}
         currentIntent="urgence"
       />
+
+      {/* Topical cluster links */}
+      <TopicalClusterLinks serviceSlug={service} serviceName={trade.name} currentPath={`/urgence/${service}`} />
 
       {/* Deep page links */}
       <DeepPageLinks

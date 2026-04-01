@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { Calendar, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAuthorByName } from '@/lib/data/authors'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getArticleSpeakableSchema } from '@/lib/seo/jsonld'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
@@ -18,6 +18,8 @@ import { ArticleFAQ } from './ArticleFAQ'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import BlogClusterLinks from '@/components/seo/BlogClusterLinks'
+import EnBrefBox from '@/components/seo/EnBrefBox'
 import dynamic from 'next/dynamic'
 import BlogInlineCTA from '@/components/blog/BlogInlineCTA'
 
@@ -56,17 +58,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!article) return { title: 'Article non trouvé' }
 
   const blogImage = getBlogImage(slug, article.category)
-  const title = truncateTitle(article.title, 60)
+  const title = article.metaTitle ?? truncateTitle(article.title, 60)
+  const description = article.metaDescription ?? article.excerpt
 
   return {
     title,
-    description: article.excerpt,
+    description,
     alternates: {
       canonical: `${SITE_URL}/blog/${slug}`,
     },
     openGraph: {
       title,
-      description: article.excerpt,
+      description,
       type: 'article',
       publishedTime: article.date,
       ...(article.updatedDate ? { modifiedTime: article.updatedDate } : {}),
@@ -78,7 +81,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: {
       card: 'summary_large_image',
       title,
-      description: article.excerpt,
+      description,
       images: [blogImage.src],
     },
   }
@@ -629,7 +632,14 @@ export default async function BlogArticlePage({ params }: PageProps) {
     { name: article.title, url: `/blog/${slug}` },
   ])
 
-  const allSchemas = [breadcrumbSchema, ...schemas, ...(faqSchema ? [faqSchema] : [])]
+  // Speakable schema pour les assistants vocaux et extraits enrichis
+  const speakableSchema = getArticleSpeakableSchema({
+    url: `${SITE_URL}/blog/${slug}`,
+    title: article.title,
+    excerpt: article.excerpt,
+  })
+
+  const allSchemas = [breadcrumbSchema, ...schemas, speakableSchema, ...(faqSchema ? [faqSchema] : [])]
 
   const articleUrl = `${SITE_URL}/blog/${slug}`
   const encodedUrl = encodeURIComponent(articleUrl)
@@ -769,6 +779,14 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
           {/* Table of Contents */}
           <TableOfContents items={tocItems} />
+
+          {/* En bref — Featured Snippet bait for long-form content */}
+          {(article.keyTakeaways && article.keyTakeaways.length > 0) && (
+            <EnBrefBox
+              summary={article.excerpt}
+              keyPoints={article.keyTakeaways}
+            />
+          )}
 
           {/* Article body */}
           <div className="article-body">
@@ -1134,6 +1152,9 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </Link>
         </div>
       </div>
+
+      {/* BlogClusterLinks — Articles lies + dossier thematique */}
+      <BlogClusterLinks articleSlug={slug} />
 
       {/* DeepPageLinks — Maillage interne blog → services/villes */}
       {primaryServiceSlug && (

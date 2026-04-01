@@ -16,6 +16,11 @@ const PRIVATE_DISALLOW = [
   '/inscription',
   '/inscription-artisan',
   '/mot-de-passe-oublie',
+  '/definir-mot-de-passe',
+  // Internal search page (redirects to /services via 301 — waste of crawl budget)
+  '/recherche',
+  // Offline fallback page (PWA only, no SEO value)
+  '/offline',
   // Query parameter variations (duplicate content).
   // Pattern /*?*param= covers BOTH first (?param=) and secondary (&param=) occurrences.
   // Google doc example: disallow: /*?*color= (blocks /items?color=x AND /items?cat=y&color=x)
@@ -24,6 +29,11 @@ const PRIVATE_DISALLOW = [
   '/*?*filter=',
   '/*?*q=',
   '/*?*redirect=',
+  '/*?*utm_source=',
+  '/*?*utm_medium=',
+  '/*?*utm_campaign=',
+  '/*?*fbclid=',
+  '/*?*gclid=',
 ]
 
 export default function robots(): MetadataRoute.Robots {
@@ -40,6 +50,13 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Bingbot',
         allow: '/',
         disallow: PRIVATE_DISALLOW,
+      },
+      // Yandex: full access with crawl-delay (Yandex respects crawl-delay, unlike Google)
+      {
+        userAgent: 'YandexBot',
+        allow: '/',
+        disallow: PRIVATE_DISALLOW,
+        crawlDelay: 1,
       },
       // AdsBot — MUST be named explicitly: the '*' wildcard does NOT cover AdsBot (Google spec).
       // Block private routes to avoid unnecessary ad-serving crawl on auth/admin pages.
@@ -163,6 +180,9 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
+      // Recent sitemap first — Google crawls sitemaps in declaration order.
+      // Pages modified in the last 7 days get crawled first (freshness signal).
+      `${SITE_URL}/api/sitemap-recent`,
       `${SITE_URL}/sitemap.xml`,
       `${SITE_URL}/image-sitemap.xml`,
       `${SITE_URL}/news-sitemap.xml`,

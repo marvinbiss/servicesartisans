@@ -190,6 +190,8 @@ export function getPlaceSchema(city: {
   slug: string
   region?: string
   department?: string
+  departmentCode?: string
+  population?: number
   description?: string
   image?: string
 }) {
@@ -200,12 +202,20 @@ export function getPlaceSchema(city: {
     url: `${SITE_URL}/villes/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
-    ...(city.region ? {
-      containedInPlace: {
-        '@type': 'AdministrativeArea',
-        name: city.region,
-      },
+    ...(city.region || city.department ? {
+      containedInPlace: [
+        ...(city.department ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: city.department,
+          ...(city.departmentCode && { identifier: city.departmentCode }),
+        }] : []),
+        ...(city.region ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: city.region,
+        }] : []),
+      ],
     } : {}),
+    ...(city.population && { population: city.population }),
   }
 }
 
@@ -291,6 +301,7 @@ export function getLocalServiceSchema(params: {
   description: string
   cityName: string
   regionName: string
+  departmentName?: string
   url: string
 }) {
   return {
@@ -300,6 +311,7 @@ export function getLocalServiceSchema(params: {
     description: params.description,
     url: params.url,
     serviceType: params.serviceType,
+    inLanguage: 'fr-FR',
     areaServed: {
       '@type': 'City',
       name: params.cityName,
@@ -309,9 +321,16 @@ export function getLocalServiceSchema(params: {
         addressRegion: params.regionName,
         addressCountry: 'FR',
       },
+      ...(params.departmentName && {
+        containedInPlace: {
+          '@type': 'AdministrativeArea',
+          name: params.departmentName,
+        },
+      }),
     },
     provider: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
       url: SITE_URL,
     },
@@ -640,6 +659,270 @@ export function getSpeakableSchema(params: {
       cssSelector: params.speakableCssSelectors || [
         'h1',
         '[data-speakable="true"]',
+        '.speakable-summary',
+      ],
+    },
+  }
+}
+
+// Schema.org Service enrichi avec OfferCatalog et AggregateRating (pour /services/[service]/[ville])
+export function getEnrichedLocalServiceSchema(params: {
+  serviceName: string
+  serviceType: string
+  description: string
+  cityName: string
+  regionName: string
+  departmentName?: string
+  url: string
+  image?: string
+  lowPrice?: number
+  highPrice?: number
+  priceUnit?: string
+  tasks?: Array<{ name: string; description?: string; price?: string }>
+  ratingValue?: number
+  reviewCount?: number
+  providerCount?: number
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${params.serviceName} à ${params.cityName}`,
+    description: params.description,
+    url: params.url,
+    serviceType: params.serviceType,
+    ...(params.image && { image: params.image }),
+    inLanguage: 'fr-FR',
+    areaServed: {
+      '@type': 'City',
+      name: params.cityName,
+      containedInPlace: [
+        ...(params.departmentName ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: params.departmentName,
+        }] : []),
+        ...(params.regionName ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: params.regionName,
+        }] : []),
+      ],
+    },
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    ...(params.tasks && params.tasks.length > 0 && {
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: `Prestations ${params.serviceName.toLowerCase()} à ${params.cityName}`,
+        itemListElement: params.tasks.map((task) => ({
+          '@type': 'OfferCatalog',
+          name: task.name,
+          itemListElement: [{
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: task.name,
+              ...(task.description && { description: task.description }),
+            },
+            ...(() => {
+              if (!task.price) return {}
+              const numericPrice = task.price.replace(/[^0-9]/g, '')
+              if (!numericPrice || numericPrice === '0') return {}
+              return {
+                priceSpecification: {
+                  '@type': 'UnitPriceSpecification',
+                  price: numericPrice,
+                  priceCurrency: 'EUR',
+                  ...(params.priceUnit && { unitText: params.priceUnit }),
+                },
+              }
+            })(),
+          }],
+        })),
+      },
+    }),
+    ...(params.lowPrice != null && params.highPrice != null && {
+      offers: {
+        '@type': 'AggregateOffer',
+        lowPrice: params.lowPrice,
+        highPrice: params.highPrice,
+        priceCurrency: 'EUR',
+        ...(params.priceUnit && { unitText: params.priceUnit }),
+        ...(params.providerCount != null && params.providerCount > 0 && { offerCount: params.providerCount }),
+      },
+    }),
+    ...(params.ratingValue && params.reviewCount && params.reviewCount > 0 && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Number(params.ratingValue.toFixed(1)),
+        reviewCount: params.reviewCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
+  }
+}
+
+// Schema.org City enrichi avec population, département, code postal et ItemList de services
+export function getEnrichedPlaceSchema(city: {
+  name: string
+  slug: string
+  region?: string
+  department?: string
+  departmentCode?: string
+  postalCode?: string
+  population?: number
+  latitude?: number
+  longitude?: number
+  description?: string
+  image?: string
+  services?: Array<{ name: string; slug: string }>
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'City',
+    name: city.name,
+    url: `${SITE_URL}/villes/${city.slug}`,
+    ...(city.image ? { image: city.image } : {}),
+    description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
+    ...(city.region || city.department ? {
+      containedInPlace: [
+        ...(city.department ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: city.department,
+          ...(city.departmentCode && { identifier: city.departmentCode }),
+        }] : []),
+        ...(city.region ? [{
+          '@type': 'AdministrativeArea' as const,
+          name: city.region,
+        }] : []),
+      ],
+    } : {}),
+    ...(city.postalCode && {
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: city.name,
+        postalCode: city.postalCode,
+        addressCountry: 'FR',
+        ...(city.department && { addressRegion: city.department }),
+      },
+    }),
+    ...(city.latitude && city.longitude && {
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: city.latitude,
+        longitude: city.longitude,
+      },
+    }),
+    ...(city.population && { population: city.population }),
+  }
+}
+
+// Schema.org ItemList de services disponibles dans une ville
+export function getCityServicesListSchema(params: {
+  cityName: string
+  citySlug: string
+  services: Array<{ name: string; slug: string }>
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Services artisans à ${params.cityName}`,
+    description: `Liste des ${params.services.length} corps de métier disponibles à ${params.cityName}`,
+    url: `${SITE_URL}/villes/${params.citySlug}`,
+    numberOfItems: params.services.length,
+    itemListElement: params.services.map((svc, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: svc.name,
+      url: `${SITE_URL}/services/${svc.slug}/${params.citySlug}`,
+    })),
+  }
+}
+
+// Schema.org Service avec PriceSpecification détaillée par prestation (pour /tarifs/[service])
+export function getDetailedPricingSchema(params: {
+  serviceName: string
+  serviceSlug: string
+  description: string
+  url: string
+  tasks: Array<{
+    name: string
+    lowPrice: number
+    highPrice: number
+    unit?: string
+  }>
+  overallLowPrice: number
+  overallHighPrice: number
+  priceUnit?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${params.serviceName} en France`,
+    description: params.description,
+    url: params.url,
+    serviceType: params.serviceName,
+    inLanguage: 'fr-FR',
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
+    areaServed: { '@type': 'Country', name: 'France' },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: `Tarifs ${params.serviceName.toLowerCase()}`,
+      itemListElement: params.tasks.map((task) => ({
+        '@type': 'OfferCatalog',
+        name: task.name,
+        itemListElement: [{
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: task.name,
+          },
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            minPrice: task.lowPrice,
+            maxPrice: task.highPrice,
+            priceCurrency: 'EUR',
+            unitText: task.unit || params.priceUnit || 'intervention',
+          },
+        }],
+      })),
+    },
+    offers: {
+      '@type': 'AggregateOffer',
+      lowPrice: params.overallLowPrice,
+      highPrice: params.overallHighPrice,
+      priceCurrency: 'EUR',
+      ...(params.priceUnit && { unitText: params.priceUnit }),
+    },
+  }
+}
+
+// Schema.org Article enrichi avec Speakable pour les blogs (complète getBlogArticleSchema)
+export function getArticleSpeakableSchema(params: {
+  url: string
+  title: string
+  excerpt: string
+  speakableCssSelectors?: string[]
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: params.title,
+    url: params.url,
+    description: params.excerpt,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: params.speakableCssSelectors || [
+        'h1',
+        '[data-speakable="true"]',
+        '.article-excerpt',
         '.speakable-summary',
       ],
     },

@@ -1,18 +1,6 @@
-export const reglementationArticles: Record<string, {
-  title: string
-  excerpt: string
-  content: string[]
-  image: string
-  author: string
-  authorBio?: string
-  date: string
-  updatedDate?: string
-  readTime: string
-  category: string
-  tags: string[]
-  faq?: { question: string; answer: string }[]
-  keyTakeaways?: string[]
-}> = {
+import type { BlogArticle } from './articles'
+
+export const reglementationArticles: Record<string, BlogArticle> = {
   'assurance-dommages-ouvrage-guide-complet': {
     title: 'Assurance Dommages-Ouvrage : Guide 2026',
     excerpt: 'Obligatoire pour tout maître d\'ouvrage, l\'assurance dommages-ouvrage garantit une réparation rapide des désordres. Fonctionnement, coût et pièges.',
@@ -106,6 +94,8 @@ export const reglementationArticles: Record<string, {
   'certificats-economies-energie-cee-guide': {
     title: 'CEE : Certificats d\'Économies d\'Énergie 2026',
     excerpt: 'Les CEE vous permettent de financer une partie de vos travaux de rénovation énergétique grâce aux primes versées par les fournisseurs d\'énergie. Mode d\'emploi complet.',
+    metaTitle: 'CEE 2026 : jusqu\'à 5 000€ de prime — Guide complet',
+    metaDescription: 'Primes CEE 2026 : PAC 2 500-4 000€, isolation 10-25€/m². Cumulables avec MaPrimeRénov\'. Inscription AVANT devis obligatoire.',
     content: [
       "Le dispositif des Certificats d'Économies d'Énergie (CEE), instauré par la loi POPE du 13 juillet 2005 (articles L.221-1 et suivants du Code de l'énergie), oblige les fournisseurs d'énergie (EDF, Engie, TotalEnergies) à promouvoir l'efficacité énergétique. Concrètement, ils financent une partie de vos travaux via des primes, des bons d'achat ou des prêts bonifiés.",
       "## Quels travaux sont éligibles aux CEE ?\n\nLes opérations standardisées sont listées dans des fiches publiées au Journal officiel. Les plus courantes :\n\n- [Isolation des combles](/blog/isolation-maison-guide-complet-materiaux-prix-aides) (fiche BAR-EN-101)\n- Isolation des murs (BAR-EN-102)\n- Remplacement de chaudière par une [pompe à chaleur](/blog/chauffage-pompe-chaleur-vs-chaudiere-gaz-2026) (BAR-TH-104)\n- Fenêtres double vitrage (BAR-EN-104)\n- VMC double flux (BAR-TH-125)\n\n:::info Bon à savoir\nLes fiches d'opérations standardisées définissent précisément les critères techniques (résistance thermique minimale, COP minimum pour les PAC). Un artisan RGE compétent, comme un [spécialiste en isolation thermique](/services/isolation-thermique) ou en [pompe à chaleur](/services/pompe-a-chaleur), connaît ces exigences et dimensionne les travaux en conséquence.\n:::",
@@ -135,6 +125,8 @@ export const reglementationArticles: Record<string, {
   'eco-pret-taux-zero-guide-complet-2026': {
     title: 'Éco-PTZ 2026 : Conditions et Montants',
     excerpt: 'L\'éco-PTZ permet d\'emprunter jusqu\'à 50 000 € sans intérêts pour financer vos travaux de rénovation énergétique. Conditions, plafonds et démarches en 2026.',
+    metaTitle: 'Éco-PTZ 2026 : jusqu\'à 50 000€ à taux zéro — Guide',
+    metaDescription: 'Éco-PTZ 2026 : empruntez jusqu\'à 50 000€ sans intérêts pour vos travaux. Sans condition de revenus. Conditions, plafonds et banques.',
     content: [
       "L'éco-prêt à taux zéro (éco-PTZ) est un prêt sans intérêts, accordé sans condition de revenus, destiné à financer des travaux de rénovation énergétique. Prévu par les articles 244 quater U du CGI et R.319-1 du Code de la construction, il a été prolongé jusqu'au 31 décembre 2027.",
       "## Les conditions d'éligibilité\n\nLe logement doit être une résidence principale, construite depuis plus de 2 ans. Aucune condition de revenus n'est requise. Les travaux doivent être réalisés par un artisan [RGE](/blog/label-rge-artisan-travaux-energetiques).\n\n:::info Bon à savoir\nL'éco-PTZ est accessible aux propriétaires occupants et bailleurs, ainsi qu'aux copropriétés. C'est l'une des rares aides sans condition de revenus, ce qui la rend accessible aux ménages aisés qui ne bénéficient pas de MaPrimeRénov'.\n:::",
@@ -461,6 +453,8 @@ export const reglementationArticles: Record<string, {
   'accessibilite-pmr-logement-normes': {
     title: 'Accessibilité PMR 2026 : Normes et Aides',
     excerpt: 'Adapter un logement pour une personne à mobilité réduite : normes à respecter, travaux nécessaires et aides disponibles en 2026.',
+    metaTitle: 'Accessibilité PMR : jusqu\'à 15 400€ d\'aide en 2026',
+    metaDescription: 'Normes PMR logement et aides 2026 : MaPrimeAdapt\' (70%), crédit d\'impôt 25%. Douche, rampe, monte-escalier : prix et subventions.',
     content: [
       "L'adaptation du logement aux personnes à mobilité réduite (PMR) est un enjeu majeur dans une société vieillissante. La loi du 11 février 2005 pour l'égalité des droits et des chances a posé les bases de l'accessibilité universelle.",
       "## Les normes d'accessibilité en logement\n\nLa norme NF P 99-611 définit :\n\n- Largeur de portes de 90 cm minimum\n- Couloirs de 120 cm de large\n- Absence de ressaut supérieur à 2 cm\n- Douche de plain-pied sans seuil\n- WC avec aire de manœuvre de 150 cm de diamètre\n- Revêtements antidérapants",

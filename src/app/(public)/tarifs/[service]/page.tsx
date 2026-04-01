@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getHowToSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getHowToSchema, getServicePricingSchema, getDetailedPricingSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
@@ -18,6 +18,8 @@ import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import dynamic from 'next/dynamic'
 
@@ -225,11 +227,39 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     }
   )
 
+  // Schema détaillé avec PriceSpecification par prestation
+  const parsedTasks = trade.commonTasks.map(task => {
+    const parts = task.split(':')
+    const name = parts[0].trim()
+    // Extraire les prix min/max du texte (ex: "80 à 250 €")
+    const priceMatch = task.match(/(\d[\d\s]*)\s*(?:à|–|-)\s*(\d[\d\s]*)\s*€/)
+    if (priceMatch) {
+      return {
+        name,
+        lowPrice: parseInt(priceMatch[1].replace(/\s/g, ''), 10),
+        highPrice: parseInt(priceMatch[2].replace(/\s/g, ''), 10),
+        unit: 'intervention',
+      }
+    }
+    return null
+  }).filter((t): t is { name: string; lowPrice: number; highPrice: number; unit: string } => t !== null)
+
+  const detailedPricingSchema = parsedTasks.length > 0 ? getDetailedPricingSchema({
+    serviceName: trade.name,
+    serviceSlug: service,
+    description: `Tarifs détaillés ${tradeLower} 2026 : ${parsedTasks.length} prestations avec prix indicatifs.`,
+    url: `${SITE_URL}/tarifs/${service}`,
+    tasks: parsedTasks,
+    overallLowPrice: trade.priceRange.min,
+    overallHighPrice: trade.priceRange.max,
+    priceUnit: trade.priceRange.unit,
+  }) : null
+
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 4)
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, collectionPageSchema, speakableSchema, howToSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, collectionPageSchema, speakableSchema, howToSchema, detailedPricingSchema]} />
 
       {/* Hero */}
       <section className="relative bg-gradient-hero text-white overflow-hidden">
@@ -296,6 +326,26 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
+      {/* Snippet-bait: reponse directe + tableau pour Featured Snippet Google (Position 0) */}
+      <section className="py-10 bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="snippet-answer" data-speakable="true">
+            <p className="text-base text-charcoal-700 leading-relaxed mb-6">
+              Le <strong>prix {tradeLower}</strong> en France est de{' '}
+              <strong>{trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}</strong> en 2026.
+              {' '}Ce tarif inclut la main-d&apos;oeuvre et varie selon la région, la complexité de l&apos;intervention et l&apos;urgence.
+              {' '}Voici le détail des tarifs par prestation :
+            </p>
+          </div>
+          <PriceTableHTML
+            tasks={trade.commonTasks}
+            serviceName={trade.name}
+            serviceSlug={service}
+            unit={trade.priceRange.unit}
+          />
+        </div>
+      </section>
+
       <section className="py-6 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <GeoPageCTA
@@ -320,7 +370,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d'oeuvre incluse
+              Prix moyen constaté en France métropolitaine, main-d&apos;oeuvre incluse
             </p>
           </div>
 
@@ -331,12 +381,6 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
             Détail des prestations courantes
           </h2>
-          <PriceTableHTML
-            tasks={trade.commonTasks}
-            serviceName={trade.name}
-            serviceSlug={service}
-            unit={trade.priceRange.unit}
-          />
         </div>
       </section>
 
@@ -679,6 +723,17 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </div>
         </div>
       </section>
+
+      {/* Maillage interne — cluster thematique */}
+      <TopicalClusterLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        currentPath={`/tarifs/${service}`}
+        maxLinks={10}
+      />
+
+      {/* Maillage interne — liens profonds service x ville */}
+      <DeepPageLinks currentService={service} currentIntent="tarifs" skipCrossIntent />
 
       {/* Trust */}
       <section className="py-8 bg-white border-t">

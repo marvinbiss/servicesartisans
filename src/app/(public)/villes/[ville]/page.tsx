@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { MapPin, Users, Building2, ArrowRight, Shield, Clock, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getEnrichedPlaceSchema, getCityServicesListSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
@@ -121,12 +121,14 @@ export default async function VillePage({ params }: PageProps) {
 
   // JSON-LD structured data
   const cityImage = getCityImage(ville.slug)
-  const placeSchema = getPlaceSchema({
+  const placeSchema = getEnrichedPlaceSchema({
     name: ville.name,
     slug: ville.slug,
     region: ville.region,
     department: ville.departement,
-    description: `Trouvez des artisans qualifiés à ${ville.name}. Plombiers, électriciens, serruriers et plus.`,
+    departmentCode: ville.departementCode,
+    population: typeof ville.population === 'number' ? ville.population : parseInt(String(ville.population).replace(/\s/g, ''), 10) || undefined,
+    description: `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). ${services.length} corps de métier : plombiers, électriciens, serruriers et plus.`,
     image: cityImage?.src,
   })
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -137,9 +139,16 @@ export default async function VillePage({ params }: PageProps) {
 
   const faqSchema = getFAQSchema(content.faqItems)
 
+  // ItemList des services disponibles dans cette ville
+  const servicesListSchema = getCityServicesListSchema({
+    cityName: ville.name,
+    citySlug: ville.slug,
+    services: orderedServices.slice(0, 20).map(s => ({ name: s.name, slug: s.slug })),
+  })
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[placeSchema, breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[placeSchema, breadcrumbSchema, faqSchema, servicesListSchema]} />
 
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

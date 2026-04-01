@@ -1,18 +1,6 @@
-export const conseilsArticles: Record<string, {
-  title: string
-  excerpt: string
-  content: string[]
-  image: string
-  author: string
-  date: string
-  readTime: string
-  category: string
-  tags: string[]
-  authorBio?: string
-  updatedDate?: string
-  faq?: { question: string; answer: string }[]
-  keyTakeaways?: string[]
-}> = {
+import type { BlogArticle } from './articles'
+
+export const conseilsArticles: Record<string, BlogArticle> = {
   'entretien-annuel-maison-checklist-complete': {
     title: 'Entretien Maison 2026 : Checklist',
     excerpt: 'Liste exhaustive des vérifications et travaux d\'entretien à réaliser chaque année pour préserver votre maison en parfait état. Devis gratuit.',

@@ -10,6 +10,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { services, villes } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
@@ -47,20 +48,24 @@ export const metadata: Metadata = {
 
 const tradeFaqs = [
   {
+    question: 'Quel est le prix moyen d\'un artisan en France en 2026 ?',
+    answer: 'Le prix moyen d\'un artisan en France se situe entre 35 et 90 €/h TTC en 2026, selon le corps de métier. Un plombier coûte 60 à 90 €/h, un électricien 50 à 80 €/h, un peintre 35 à 55 €/h. Demandez plusieurs devis pour comparer.',
+  },
+  {
     question: 'Comment sont calculés les prix affichés ?',
-    answer: 'Les prix affichés sont des fourchettes moyennes observées en France métropolitaine. Ils incluent la main-d\'oeuvre et varient selon la région, la complexité des travaux, l\'urgence et le niveau de qualification de l\'artisan. Demandez toujours plusieurs devis pour obtenir le meilleur prix.',
+    answer: 'Les prix affichés sont des fourchettes moyennes observées en France métropolitaine, main-d\'oeuvre incluse. Ils varient selon la région, la complexité des travaux et le niveau de qualification de l\'artisan. Demandez toujours plusieurs devis.',
   },
   {
     question: 'Pourquoi les prix varient-ils autant d\'un artisan à l\'autre ?',
-    answer: 'Plusieurs facteurs expliquent les écarts de prix : la localisation géographique (les prix sont plus élevés en Île-de-France), l\'expérience et les certifications de l\'artisan, la complexité du chantier, les matériaux utilisés et la période de l\'année (plus cher en haute saison).',
+    answer: 'Les écarts de prix s\'expliquent par la localisation (plus cher en Île-de-France), l\'expérience de l\'artisan, ses certifications, la complexité du chantier, les matériaux et la période de l\'année. Comptez +25 % en région parisienne.',
   },
   {
     question: 'Comment obtenir un devis gratuit pour mes travaux ?',
-    answer: 'Sur ServicesArtisans, vous pouvez demander un devis gratuit en remplissant notre formulaire en ligne. Vous pouvez aussi contacter directement les artisans référencés sur notre plateforme. Nous recommandons de demander au moins 3 devis pour comparer.',
+    answer: 'Remplissez notre formulaire en ligne pour recevoir jusqu\'à 3 devis gratuits d\'artisans vérifiés. Vous pouvez aussi contacter directement les artisans référencés. Comparez toujours au moins 3 devis avant de vous engager.',
   },
   {
     question: 'Les prix incluent-ils la TVA ?',
-    answer: 'Les prix affichés sont généralement TTC (toutes taxes comprises). Le taux de TVA varie selon le type de travaux : 10% pour la rénovation dans un logement de plus de 2 ans, 5,5% pour les travaux d\'amélioration énergétique (isolation, chauffage), et 20% pour les constructions neuves.',
+    answer: 'Les prix affichés sont TTC. Le taux de TVA varie : 10 % pour la rénovation (logement de plus de 2 ans), 5,5 % pour les travaux d\'amélioration énergétique (isolation, chauffage) et 20 % pour les constructions neuves.',
   },
 ]
 
@@ -191,6 +196,24 @@ export default async function TarifsPage() {
                 </a>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Snippet-bait: tableau recapitulatif des prix pour Featured Snippet Google */}
+        <section className="py-12 bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
+              Combien co{'u'}te un artisan en France en 2026 ?
+            </h2>
+            <SnippetBaitSummary
+              trades={trades.map((trade) => ({
+                name: trade.name,
+                slug: trade.slug,
+                min: trade.priceRange.min,
+                max: trade.priceRange.max,
+                unit: trade.priceRange.unit,
+              }))}
+            />
           </div>
         </section>
 

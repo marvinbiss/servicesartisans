@@ -38,6 +38,10 @@ export interface BlogArticle {
   updatedDate?: string
   keyTakeaways?: string[]
   faq?: { question: string; answer: string }[]
+  /** SEO-optimized title for SERP (Google). Falls back to `title` if absent. */
+  metaTitle?: string
+  /** SEO-optimized description for SERP (Google). Falls back to `excerpt` if absent. */
+  metaDescription?: string
 }
 
 /** Every blog article keyed by slug */

@@ -195,9 +195,16 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       },
     }),
 
-    ...(artisan.website && {
-      sameAs: [artisan.website],
-    }),
+    ...(() => {
+      const links: string[] = []
+      if (artisan.website) links.push(artisan.website)
+      // Lien societe.com basé sur le SIREN (9 premiers chiffres du SIRET)
+      if (artisan.siret && artisan.siret.length >= 9) {
+        const siren = artisan.siret.replace(/\s/g, '').slice(0, 9)
+        links.push(`https://www.societe.com/societe/${siren}.html`)
+      }
+      return links.length > 0 ? { sameAs: links } : {}
+    })(),
 
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),

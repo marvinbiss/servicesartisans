@@ -87,6 +87,10 @@
     {
       "path": "/api/cron/check-radiees",
       "schedule": "0 5 * * 0"
+    },
+    {
+      "path": "/api/cron/gsc-sync",
+      "schedule": "0 7 * * *"
     }
   ]
 }

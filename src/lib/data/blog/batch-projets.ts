@@ -1,18 +1,6 @@
-export const projetsArticles: Record<string, {
-  title: string
-  excerpt: string
-  content: string[]
-  image: string
-  author: string
-  date: string
-  readTime: string
-  category: string
-  tags: string[]
-  authorBio?: string
-  updatedDate?: string
-  faq?: { question: string; answer: string }[]
-  keyTakeaways?: string[]
-}> = {
+import type { BlogArticle } from './articles'
+
+export const projetsArticles: Record<string, BlogArticle> = {
   'renover-cuisine-guide-complet-etapes': {
     title: 'Rénover sa Cuisine 2026 : Guide Étapes',
     excerpt: 'De la conception à la réception des travaux, toutes les étapes pour réussir la rénovation de votre cuisine. Devis gratuit.',

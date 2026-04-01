@@ -14,6 +14,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
@@ -455,6 +456,8 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="devis" />
 
       <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="devis" />
+
+      <TopicalClusterLinks serviceSlug={service} serviceName={trade.name} currentPath={`/devis/${service}`} />
 
       <DeepPageLinks currentService={service} currentIntent="devis" skipCrossIntent />
 

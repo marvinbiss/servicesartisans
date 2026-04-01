@@ -236,14 +236,27 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
 
   response.headers.set('x-pathname', pathname)
 
-  // X-Robots-Tag + Cache-Control for all private and admin routes
+  // X-Robots-Tag + Cache-Control for all private, admin, and auth routes.
+  // Belt-and-suspenders: metadata robots in layout.tsx handles <meta>, this handles HTTP header.
+  // Both signals ensure crawlers never index private content even if one is missed.
   if (
     pathname.startsWith('/espace-artisan') ||
     pathname.startsWith('/espace-client') ||
-    pathname.startsWith('/admin')
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/booking')
   ) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+  }
+  // Auth pages — noindex via HTTP header (supplements layout.tsx metadata)
+  if (
+    pathname === '/connexion' ||
+    pathname === '/inscription' ||
+    pathname === '/inscription-artisan' ||
+    pathname === '/mot-de-passe-oublie' ||
+    pathname === '/definir-mot-de-passe'
+  ) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow')
   }
 
   // CDN cache headers for public pages.
@@ -311,7 +324,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     '/notre-processus-de-verification',
     '/devis',
     '/tarifs',
-    '/recherche',
+    // /recherche removed — 301-redirects to /services (never reaches middleware cache logic)
   ])
   if (publicCacheExact.has(pathname) || publicCachePrefixes.some(p => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')

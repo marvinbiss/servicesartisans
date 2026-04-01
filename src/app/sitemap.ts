@@ -110,7 +110,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/barometre`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/barometre/regions`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
       { url: `${SITE_URL}/barometre/tarifs`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
-      { url: `${SITE_URL}/recherche`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.8 },
+      // /recherche removed — 301-redirects to /services (next.config.js). Including redirected URLs
+      // in sitemaps wastes crawl budget and sends conflicting signals to Google.
       { url: `${SITE_URL}/comparaison`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
       { url: `${SITE_URL}/glossaire`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
       { url: `${SITE_URL}/normes`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
@@ -194,13 +195,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
 
     // Blog articles — lastModified réel (seul contenu avec vraie date vérifiable)
+    // Priority 0.7: blog content drives organic traffic and E-E-A-T signals
     const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
       const article = allArticles[slug]
       return {
         url: `${SITE_URL}/blog/${slug}`,
         lastModified: article ? new Date(article.updatedDate || article.date) : undefined,
         changeFrequency: 'weekly' as const,
-        priority: 0.6,
+        priority: 0.7,
       }
     })
 
@@ -292,7 +294,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     for (const service of services) {
       for (const ville of mergedCities) {
         // Service×city — no lastmod: static composition, never truly changes between deploys
-        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}`, changeFrequency: 'monthly', priority: 0.7 })
+        // Priority 0.8: these are the primary conversion pages (service + location intent)
+        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}`, changeFrequency: 'monthly', priority: 0.8 })
       }
     }
 
@@ -309,11 +312,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
 
     // lastmod = date du dernier provider modifié dans cette ville. Si aucun → omis.
+    // Priority 0.6: city pages are strong geo-landing pages for local SEO
     const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
       url: `${SITE_URL}/villes/${ville.slug}`,
       lastModified: byCity.get(normalizeName(ville.name)),
       changeFrequency: 'monthly' as const,
-      priority: 0.4,
+      priority: 0.6,
     }))
 
     return [...villesIndex, ...villePages]
@@ -418,7 +422,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of services) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`, changeFrequency: 'monthly', priority: 0.6 })
+        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`, changeFrequency: 'monthly', priority: 0.7 })
         count++
       }
     }

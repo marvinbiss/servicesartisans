@@ -1,21 +1,11 @@
-export const prixArticles: Record<string, {
-  title: string
-  excerpt: string
-  content: string[]
-  image: string
-  author: string
-  date: string
-  readTime: string
-  category: string
-  tags: string[]
-  authorBio?: string
-  updatedDate?: string
-  faq?: { question: string; answer: string }[]
-  keyTakeaways?: string[]
-}> = {
+import type { BlogArticle } from './articles'
+
+export const prixArticles: Record<string, BlogArticle> = {
   "prix-serrurier-2026-tarifs-interventions": {
     title: "Prix Serrurier 2026 : Tarifs Détaillés",
     excerpt: "Tarifs serrurier 2026 : ouverture de porte, changement de serrure, blindage. Tous les prix détaillés. Devis gratuit.",
+    metaTitle: "Prix Serrurier 2026 : 80-450€ — Barème officiel",
+    metaDescription: "Tarifs serrurier 2026 : ouverture porte 80-150€, serrure 3 points 250-850€, blindage 600-1 200€. Prix réels + guide anti-arnaque.",
     content: [
       "Vous êtes devant votre porte, les clés sont restées à l'intérieur, et il est 22 heures un samedi soir. Le stress monte, et votre premier réflexe est de chercher « serrurier urgence » sur votre téléphone. C'est exactement dans ces moments-là que les arnaques prospèrent : des factures de 800 à 1 500 € pour une simple ouverture de porte ne sont pas rares. En France, la DGCCRF estime que la serrurerie est l'un des secteurs les plus touchés par les pratiques commerciales déloyales. Ce guide complet vous arme avec les **vrais prix du marché** en 2026, pour que vous ne soyez plus jamais pris au dépourvu. Pour trouver un [serrurier de confiance près de chez vous](/services/serrurier), consultez notre annuaire vérifié.",
 
@@ -129,6 +119,8 @@ export const prixArticles: Record<string, {
   "prix-chauffagiste-2026-installation-entretien": {
     title: "Prix Chauffagiste 2026 : Tarifs",
     excerpt: "Tarifs chauffagiste 2026 : chaudière, entretien, dépannage, pompe à chaleur. Comparez les prix. Devis gratuit.",
+    metaTitle: "Prix Chauffagiste 2026 : 45-95€/h — Barème complet",
+    metaDescription: "Tarifs chauffagiste 2026 : entretien chaudière 90-180€, PAC 8 000-18 000€, dépannage 100-400€. Prix réels par prestation et région.",
     content: [
       "Votre facture de chauffage vous semble exorbitante ? Vous n'êtes pas seul : le chauffage représente en moyenne **60 % de la facture énergétique** des ménages français, soit 1 500 à 2 500 € par an pour une maison de 100 m² mal isolée. Le choix du bon système et du bon professionnel pour l'installer constitue un enjeu financier majeur. En 2026, le marché est en pleine mutation avec la montée en puissance des pompes à chaleur, l'interdiction des chaudières fioul dans le neuf et le déclin progressif du gaz. Ce guide vous détaille les tarifs actualisés pour toutes les prestations d'un chauffagiste, et vous montre comment réduire la facture grâce aux aides de l'État. Trouvez un [chauffagiste qualifié près de chez vous](/services/chauffagiste) pour obtenir un devis personnalisé.",
 
@@ -232,6 +224,8 @@ export const prixArticles: Record<string, {
   "prix-menuisier-2026-tarifs-travaux": {
     title: "Prix Menuisier 2026 : Tarifs Travaux",
     excerpt: "Tarifs menuisier 2026 : portes, fenêtres, escaliers, placards sur mesure. Tous les prix détaillés. Devis gratuit.",
+    metaTitle: "Prix Menuisier 2026 : 35-70€/h — Tarifs détaillés",
+    metaDescription: "Tarifs menuisier 2026 : fenêtres 300-1 200€, escalier 2 000-8 000€, dressing sur mesure 1 500-5 000€. Prix réels + devis gratuit.",
     content: [
       "Vous souhaitez remplacer vos fenêtres vieillissantes, installer un escalier sur mesure ou aménager un dressing fonctionnel ? La menuiserie est un poste de dépenses souvent sous-estimé, avec des écarts de prix qui peuvent aller du simple au quintuple selon les matériaux et le niveau de finition. En 2026, le marché reste dynamique, porté par la rénovation énergétique (remplacement de fenêtres) et la demande croissante d'agencements sur mesure qui optimisent chaque mètre carré. Ce guide complet vous donne les **vrais tarifs** pratiqués pour chaque type de prestation. Comparez les tarifs de [menuisiers qualifiés dans votre ville](/services/menuisier).",
 
@@ -324,6 +318,8 @@ export const prixArticles: Record<string, {
   "prix-carreleur-2026-pose-fourniture": {
     title: "Prix Carreleur 2026 : Pose et Fourniture",
     excerpt: "Prix carrelage 2026 : pose au m², fournitures, faïence salle de bain, carrelage extérieur. Estimez votre budget. Devis gratuit.",
+    metaTitle: "Prix Carreleur 2026 : 30-70€/m² — Pose + fourniture",
+    metaDescription: "Tarifs carreleur 2026 : pose sol 30-70€/m², faïence 40-80€/m², terrasse 50-100€/m². Prix réels fourniture + main-d'oeuvre.",
     content: [
       "Vous rêvez d'une salle de bain moderne avec du carrelage grand format, ou d'une terrasse en grès cérame imitation bois ? Le carrelage demeure l'un des revêtements les plus prisés en France grâce à sa durabilité exceptionnelle (30 ans et plus), sa facilité d'entretien et la diversité infinie de ses finitions. Mais entre le prix du carrelage lui-même, la préparation du support et la main-d'œuvre, la facture peut rapidement grimper. En 2026, il est indispensable de connaître les tarifs pratiqués pour éviter les mauvaises surprises et **budgéter votre projet avec précision**. Trouvez un [carreleur professionnel près de chez vous](/services/carreleur) pour obtenir des devis détaillés.",
 
@@ -413,6 +409,8 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-macon-2026-gros-oeuvre-renovation": {
+    metaTitle: "Prix Maçon 2026 : 40-85€/h — Gros oeuvre et réno",
+    metaDescription: "Tarifs maçon 2026 : fondations 100-200€/ml, mur parpaing 50-100€/m², dalle béton 60-120€/m². Prix réels par prestation.",
     title: "Prix Maçon 2026 : Gros Œuvre et Rénovation",
     excerpt: "Tarifs maçon 2026 : construction, rénovation, fondations, murs porteurs. Prix détaillés et réalistes. Devis gratuit.",
     content: [

@@ -288,6 +288,30 @@ export default async function TarifsServiceTravailVillePage({
         </div>
       </section>
 
+      {/* Snippet-bait: reponse directe textuelle pour Featured Snippet Google */}
+      <section className="py-6 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="snippet-answer" data-speakable="true">
+            <p className="text-base text-gray-700 leading-relaxed">
+              {priceRange ? (
+                <>Le <strong>prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}</strong> est de{' '}
+                <strong>{priceRange.low} {'à'} {priceRange.high} {'€'}</strong> en 2026.
+                {' '}Ce tarif varie selon la complexit{'é'} de l&apos;intervention, l&apos;accessibilit{'é'} du chantier et les mat{'é'}riaux utilis{'é'}s.
+                {multiplier !== 1.0 && (
+                  <> Les tarifs en {villeData.region} sont{' '}
+                  {multiplier > 1.0
+                    ? `${Math.round((multiplier - 1) * 100)} % supérieurs`
+                    : `${Math.round((1 - multiplier) * 100)} % inférieurs`}
+                  {' '}{'à'} la moyenne nationale.</>
+                )}</>
+              ) : (
+                <>Le <strong>prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}</strong> varie selon la complexit{'é'} du chantier. Demandez un devis gratuit pour obtenir un prix pr{'é'}cis.</>
+              )}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Task price detail */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

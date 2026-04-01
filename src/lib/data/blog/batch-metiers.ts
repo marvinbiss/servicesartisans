@@ -1,18 +1,6 @@
-export const metiersArticles: Record<string, {
-  title: string
-  excerpt: string
-  content: string[]
-  image: string
-  author: string
-  date: string
-  readTime: string
-  category: string
-  tags: string[]
-  authorBio?: string
-  updatedDate?: string
-  faq?: { question: string; answer: string }[]
-  keyTakeaways?: string[]
-}> = {
+import type { BlogArticle } from './articles'
+
+export const metiersArticles: Record<string, BlogArticle> = {
   "comment-choisir-electricien-guide": {
     title: "Choisir son Électricien 2026 : Guide",
     excerpt: "Qualifications, certifications, assurances : tous les critères pour trouver un électricien fiable et compétent. Devis gratuit.",

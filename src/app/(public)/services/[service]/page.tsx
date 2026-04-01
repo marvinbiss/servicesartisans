@@ -24,6 +24,7 @@ import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
@@ -1024,6 +1025,14 @@ export default async function ServicePage({ params }: PageProps) {
         serviceSlug={serviceSlug}
         serviceName={service.name}
         currentIntent="services"
+      />
+
+      {/* TopicalClusterLinks — blog, guides, problemes du meme cluster */}
+      <TopicalClusterLinks
+        serviceSlug={serviceSlug}
+        serviceName={service.name}
+        currentPath={`/services/${serviceSlug}`}
+        maxLinks={10}
       />
 
       {/* DeepPageLinks — Hub mode (no city) */}

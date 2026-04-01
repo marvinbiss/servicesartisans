@@ -326,13 +326,7 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
         ],
       },
-      // Recherche
-      {
-        source: '/recherche',
-        headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
-        ],
-      },
+      // /recherche removed — 301-redirects to /services, cache header never applied
       // Pages institutionnelles & légales
       {
         source: '/presse',
