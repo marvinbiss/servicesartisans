@@ -480,33 +480,40 @@ export async function hasProvidersByServiceAndLocation(
   // Fail open: assume providers exist during build so pages are indexed by default.
   // ISR will correct to noindex if truly 0 providers on first revalidation.
   if (IS_BUILD) return true
-  try {
-    return await retryWithBackoff(
-      async () => {
-        const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-        if (!specialties || specialties.length === 0) return false
 
-        const ville = getVilleBySlugImport(locationSlug)
-        const cityName = ville?.name
-        if (!cityName) return false
+  return getCachedData(
+    `has-providers:svc-loc:${serviceSlug}:${locationSlug}`,
+    async () => {
+      try {
+        return await retryWithBackoff(
+          async () => {
+            const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+            if (!specialties || specialties.length === 0) return false
 
-        const cityValues = getCityValues(cityName, ville?.departementCode)
-        const { count, error } = await supabase
-          .from('providers')
-          .select('id', { count: 'exact', head: true })
-          .in('specialty', specialties)
-          .in('address_city', cityValues)
-          .eq('is_active', true)
+            const ville = getVilleBySlugImport(locationSlug)
+            const cityName = ville?.name
+            if (!cityName) return false
 
-        if (error) throw error
-        return (count ?? 0) > 0
-      },
-      `hasProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
-    )
-  } catch {
-    // On any failure, conservatively return false (noindex)
-    return false
-  }
+            const cityValues = getCityValues(cityName, ville?.departementCode)
+            const { count, error } = await supabase
+              .from('providers')
+              .select('id', { count: 'exact', head: true })
+              .in('specialty', specialties)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+
+            if (error) throw error
+            return (count ?? 0) > 0
+          },
+          `hasProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+        )
+      } catch {
+        // On any failure, conservatively return false (noindex)
+        return false
+      }
+    },
+    CACHE_TTL.artisans,
+  )
 }
 
 /**
@@ -565,28 +572,36 @@ export async function getProvidersByLocation(locationSlug: string) {
   if (!ville) return []
 
   const cityValues = getCityValues(ville.name, ville.departementCode)
-  try {
-    return await retryWithBackoff(
-      async () => {
-        const { data, error } = await supabase
-          .from('providers')
-          .select(PROVIDER_LIST_SELECT)
-          .in('address_city', cityValues)
-          .eq('is_active', true)
-          .order('phone', { ascending: false, nullsFirst: false })
-          .order('is_verified', { ascending: false })
-          .order('name')
-          .limit(500)
 
-        if (error) throw error
-        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
-      },
-      `getProvidersByLocation(${locationSlug})`,
-    )
-  } catch (err) {
-    logger.error(`[getProvidersByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
-    throw err
-  }
+  return getCachedData(
+    `providers:location:${locationSlug}`,
+    async () => {
+      try {
+        return await retryWithBackoff(
+          async () => {
+            const { data, error } = await supabase
+              .from('providers')
+              .select(PROVIDER_LIST_SELECT)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+              .order('phone', { ascending: false, nullsFirst: false })
+              .order('is_verified', { ascending: false })
+              .order('name')
+              .limit(500)
+
+            if (error) throw error
+            return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+          },
+          `getProvidersByLocation(${locationSlug})`,
+        )
+      } catch (err) {
+        logger.error(`[getProvidersByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+        throw err
+      }
+    },
+    CACHE_TTL.artisans,
+    { skipNull: true },
+  )
 }
 
 export async function getAllProviders() {

@@ -104,16 +104,19 @@ async function fetchWithRetry(url: string, retries = MAX_RETRIES): Promise<unkno
 // ---------------------------------------------------------------------------
 
 interface CatNatEvent {
-  cod_nat: string
-  lib_risque_jo: string
-  dat_deb: string
-  dat_fin: string
-  dat_pub_arrete: string
+  code_national_catnat: string
+  libelle_risque_jo: string
+  date_debut_evt: string  // dd/mm/yyyy
+  date_fin_evt: string
+  date_publication_arrete: string
+  code_insee: string
+  libelle_commune: string
 }
 
 interface CatNatResponse {
   data: CatNatEvent[]
-  totalCount?: number
+  results: number
+  total_pages: number
 }
 
 interface RapportRisque {
@@ -125,74 +128,71 @@ interface RapportRisque {
 }
 
 async function fetchCatNat(codeInsee: string): Promise<{ nbCatNat: number; risques: string[] }> {
-  const url = `https://georisques.gouv.fr/api/v1/gaspar/catnat?code_insee=${codeInsee}&rayon=1000`
-  const result = await fetchWithRetry(url) as CatNatResponse | null
+  // Fetch all pages of CatNat events
+  let allEvents: CatNatEvent[] = []
+  let page = 1
+  let totalPages = 1
 
-  if (!result?.data) {
+  while (page <= totalPages) {
+    const url = `https://georisques.gouv.fr/api/v1/gaspar/catnat?code_insee=${codeInsee}&page=${page}`
+    const result = await fetchWithRetry(url) as CatNatResponse | null
+
+    if (!result?.data) break
+
+    allEvents = allEvents.concat(result.data)
+    totalPages = result.total_pages || 1
+    page++
+    if (page <= totalPages) await sleep(100)
+  }
+
+  if (allEvents.length === 0) {
     return { nbCatNat: 0, risques: [] }
   }
 
-  const events = result.data
-  // Count events since 2000
-  const recentEvents = events.filter(e => {
-    const year = parseInt(e.dat_deb?.substring(0, 4) || '0', 10)
+  // Count events since 2000 (date format: dd/mm/yyyy)
+  const recentEvents = allEvents.filter(e => {
+    const parts = e.date_debut_evt?.split('/')
+    if (!parts || parts.length < 3) return false
+    const year = parseInt(parts[2], 10)
     return year >= 2000
   })
 
   // Extract unique risk types
   const risqueSet = new Set<string>()
-  for (const e of events) {
-    if (e.lib_risque_jo) {
-      risqueSet.add(e.lib_risque_jo.trim())
+  for (const e of allEvents) {
+    if (e.libelle_risque_jo) {
+      risqueSet.add(e.libelle_risque_jo.trim())
     }
   }
 
   return {
     nbCatNat: recentEvents.length,
-    risques: Array.from(risqueSet).slice(0, 10), // cap at 10 labels
+    risques: Array.from(risqueSet).slice(0, 10),
   }
 }
 
 async function fetchRapportRisques(codeInsee: string): Promise<RapportRisque | null> {
-  const url = `https://georisques.gouv.fr/api/v1/resultats_rapport_risques?code_insee=${codeInsee}`
-  const result = await fetchWithRetry(url)
-
-  if (!result || typeof result !== 'object') return null
-
-  // The API can return various structures; extract what we need
-  const data = result as Record<string, unknown>
-
   const rapport: RapportRisque = {}
 
-  // Inondation
-  if ('risqueInondation' in data) {
-    rapport.risqueInondation = !!data.risqueInondation
+  // Sismicité (individual endpoint — reliable)
+  const sismUrl = `https://georisques.gouv.fr/api/v1/zonage_sismique?code_insee=${codeInsee}`
+  const sismResult = await fetchWithRetry(sismUrl) as { data?: Array<{ code_zone?: string; zone_sismicite?: string }> } | null
+  if (sismResult?.data?.[0]) {
+    const zone = parseInt(sismResult.data[0].code_zone || '0', 10)
+    if (zone > 0) rapport.zoneSismicite = zone
   }
 
-  // Argile — retrait-gonflement
-  if ('classePotentielleArgile' in data && data.classePotentielleArgile) {
-    const argile = String(data.classePotentielleArgile).toLowerCase()
-    if (['fort', 'moyen', 'faible'].includes(argile)) {
-      rapport.classePotentielleArgile = argile
-    }
+  // Radon (individual endpoint)
+  const radonUrl = `https://georisques.gouv.fr/api/v1/radon?code_insee=${codeInsee}`
+  const radonResult = await fetchWithRetry(radonUrl) as { data?: Array<{ classe_potentiel?: number }> } | null
+  if (radonResult?.data?.[0]?.classe_potentiel) {
+    rapport.classeRadon = radonResult.data[0].classe_potentiel
   }
 
-  // Zone sismique
-  if ('zoneSismicite' in data && typeof data.zoneSismicite === 'number') {
-    rapport.zoneSismicite = data.zoneSismicite
-  }
+  // Inondation is derived from CatNat data (handled by caller)
+  // Argile retrait-gonflement — endpoint unreliable, skip for now
 
-  // Radon
-  if ('classeRadon' in data && typeof data.classeRadon === 'number') {
-    rapport.classeRadon = data.classeRadon
-  }
-
-  // Liste des risques
-  if ('listeRisques' in data && Array.isArray(data.listeRisques)) {
-    rapport.listeRisques = data.listeRisques
-  }
-
-  return rapport
+  return (rapport.zoneSismicite || rapport.classeRadon) ? rapport : null
 }
 
 // ---------------------------------------------------------------------------
@@ -214,23 +214,15 @@ async function enrichCommune(commune: CommuneRow): Promise<boolean> {
     fetchRapportRisques(code_insee),
   ])
 
-  // Merge risk labels from CatNat and rapport
+  // Risk labels from CatNat
   const risquesPrincipaux = [...catnat.risques]
-  if (rapport?.listeRisques) {
-    for (const r of rapport.listeRisques) {
-      if (r.libelle && !risquesPrincipaux.includes(r.libelle)) {
-        risquesPrincipaux.push(r.libelle)
-      }
-    }
-  }
 
-  // Determine inondation from either source
-  const risqueInondation = rapport?.risqueInondation ??
-    risquesPrincipaux.some(r => /inondation/i.test(r))
+  // Determine inondation from CatNat labels
+  const risqueInondation = risquesPrincipaux.some(r => /inondation/i.test(r))
 
   const updateData = {
     risque_inondation: risqueInondation,
-    risque_argile: rapport?.classePotentielleArgile || null,
+    risque_argile: null as string | null, // argile endpoint unreliable
     zone_sismique: rapport?.zoneSismicite || null,
     risque_radon: rapport?.classeRadon || null,
     nb_catnat: catnat.nbCatNat,
@@ -262,22 +254,36 @@ async function main() {
   console.log('🌍 Géorisques Enrichment Script')
   console.log('================================')
 
-  // Load all communes from DB
-  let query = supabase
-    .from('communes')
-    .select('code_insee,slug,name')
-    .eq('is_active', true)
-    .not('code_insee', 'is', null)
-    .order('population', { ascending: false })
+  // Load all communes from DB (paginated — Supabase limits to 1000 per query)
+  const PAGE_SIZE = 1000
+  const allCommunes: CommuneRow[] = []
+  let offset = 0
+  let hasMore = true
 
-  if (slugFilter) {
-    query = query.eq('slug', slugFilter)
-  }
+  while (hasMore) {
+    let query = supabase
+      .from('communes')
+      .select('code_insee,slug,name')
+      .eq('is_active', true)
+      .not('code_insee', 'is', null)
+      .order('population', { ascending: false })
+      .range(offset, offset + PAGE_SIZE - 1)
 
-  const { data: allCommunes, error } = await query
-  if (error || !allCommunes) {
-    console.error('Failed to fetch communes from DB:', error)
-    process.exit(1)
+    if (slugFilter) {
+      query = query.eq('slug', slugFilter)
+    }
+
+    const { data, error } = await query
+    if (error || !data) {
+      console.error('Failed to fetch communes from DB:', error)
+      process.exit(1)
+    }
+    allCommunes.push(...(data as CommuneRow[]))
+    if (data.length < PAGE_SIZE) {
+      hasMore = false
+    } else {
+      offset += PAGE_SIZE
+    }
   }
 
   console.log(`Found ${allCommunes.length} communes in DB`)

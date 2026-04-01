@@ -11,6 +11,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
+import { getCommuneBySlug } from '@/lib/data/commune-data'
 import CityHubLinks from '@/components/seo/CityHubLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -109,6 +110,9 @@ export default async function VillePage({ params }: PageProps) {
   const regionSlug = getRegionSlugByName(ville.region)
   const dept = getDepartementByCode(ville.departementCode)
   const deptSlug = dept?.slug
+
+  // Fetch commune enrichment data (cached 24h, null if unavailable)
+  const commune = await getCommuneBySlug(villeSlug)
 
   // Generate unique SEO content
   const content = generateVilleContent(ville)
@@ -428,6 +432,116 @@ export default async function VillePage({ params }: PageProps) {
               <p className="font-bold text-charcoal-900">{ville.departement} ({ville.departementCode})</p>
             </div>
           </div>
+
+          {/* Données enrichies — affichées uniquement si disponibles */}
+          {commune && (commune.nb_artisans_btp != null || commune.prix_m2_maison != null || commune.pct_passoires_dpe != null || commune.jours_gel_annuels != null || commune.nb_artisans_rge != null || commune.nb_maprimerenov_annuel != null) && (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {commune.nb_artisans_btp != null && (
+                <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Wrench className="w-4 h-4 text-teal-500" />
+                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Artisans BTP</span>
+                  </div>
+                  <p className="font-bold text-charcoal-900 text-lg">{commune.nb_artisans_btp.toLocaleString('fr-FR')}</p>
+                  <p className="text-xs text-charcoal-500 mt-1">entreprises actives (SIRENE)</p>
+                </div>
+              )}
+              {commune.nb_artisans_rge != null && (
+                <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="w-4 h-4 text-accent-500" />
+                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Certifiés RGE</span>
+                  </div>
+                  <p className="font-bold text-charcoal-900 text-lg">{commune.nb_artisans_rge.toLocaleString('fr-FR')}</p>
+                  <p className="text-xs text-charcoal-500 mt-1">artisans rénovation énergétique</p>
+                </div>
+              )}
+              {commune.prix_m2_maison != null && (
+                <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Building2 className="w-4 h-4 text-primary-400" />
+                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Prix immobilier</span>
+                  </div>
+                  <p className="font-bold text-charcoal-900 text-lg">{commune.prix_m2_maison.toLocaleString('fr-FR')} €/m²</p>
+                  <p className="text-xs text-charcoal-500 mt-1">
+                    maison{commune.prix_m2_appartement != null ? ` · ${commune.prix_m2_appartement.toLocaleString('fr-FR')} €/m² appt` : ''}
+                  </p>
+                </div>
+              )}
+              {commune.pct_passoires_dpe != null && (
+                <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
+                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Passoires énergétiques</span>
+                  </div>
+                  <p className="font-bold text-charcoal-900 text-lg">{commune.pct_passoires_dpe}%</p>
+                  <p className="text-xs text-charcoal-500 mt-1">des logements classés F ou G (DPE)</p>
+                </div>
+              )}
+              {commune.jours_gel_annuels != null && (
+                <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Thermometer className="w-4 h-4 text-blue-500" />
+                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Climat</span>
+                  </div>
+                  <p className="font-bold text-charcoal-900 text-lg">{commune.jours_gel_annuels} jours de gel/an</p>
+                  <p className="text-xs text-charcoal-500 mt-1">
+                    {commune.temperature_moyenne_hiver != null && commune.temperature_moyenne_ete != null
+                      ? `Hiver ${commune.temperature_moyenne_hiver.toFixed(1)}°C · Été ${commune.temperature_moyenne_ete.toFixed(1)}°C`
+                      : `${commune.precipitation_annuelle != null ? commune.precipitation_annuelle + ' mm/an' : ''}`
+                    }
+                  </p>
+                </div>
+              )}
+              {commune.nb_maprimerenov_annuel != null && (
+                <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="w-4 h-4 text-emerald-500" />
+                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">MaPrimeRénov&apos;</span>
+                  </div>
+                  <p className="font-bold text-charcoal-900 text-lg">{commune.nb_maprimerenov_annuel.toLocaleString('fr-FR')}</p>
+                  <p className="text-xs text-charcoal-500 mt-1">dossiers/an dans le département</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Risques naturels — affichés uniquement si données géorisques disponibles */}
+          {commune && (commune.nb_catnat != null && commune.nb_catnat > 0 || commune.zone_sismique != null || commune.risque_argile != null) && (
+            <div className="bg-amber-50 rounded-2xl border border-amber-200 p-5 mb-6">
+              <h3 className="font-semibold text-charcoal-900 mb-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-500" />
+                Risques naturels à {ville.name}
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {commune.zone_sismique != null && (
+                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                    Zone sismique <strong className="ml-1">{commune.zone_sismique}/5</strong>
+                  </span>
+                )}
+                {commune.risque_argile != null && (
+                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                    Argile : <strong className="ml-1">{commune.risque_argile}</strong>
+                  </span>
+                )}
+                {commune.risque_inondation === true && (
+                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                    Risque inondation
+                  </span>
+                )}
+                {commune.risque_radon != null && (
+                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                    Radon : <strong className="ml-1">niveau {commune.risque_radon}/3</strong>
+                  </span>
+                )}
+                {commune.nb_catnat != null && commune.nb_catnat > 0 && (
+                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                    <strong className="mr-1">{commune.nb_catnat}</strong> arrêtés CatNat
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="bg-white rounded-2xl border border-sand-300 p-6 mb-4">
             <h3 className="font-semibold text-charcoal-900 mb-3">Habitat à {ville.name}</h3>

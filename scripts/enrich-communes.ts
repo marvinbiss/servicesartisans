@@ -46,6 +46,36 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+// Supabase limits queries to 1000 rows by default. Paginate to get all.
+async function fetchAllCommunes(
+  select: string,
+  slugFilter?: string,
+): Promise<Record<string, unknown>[]> {
+  const PAGE_SIZE = 1000
+  const all: Record<string, unknown>[] = []
+  let offset = 0
+  let hasMore = true
+
+  while (hasMore) {
+    let query = supabase.from('communes').select(select).eq('is_active', true)
+    if (slugFilter) query = query.eq('slug', slugFilter)
+    const { data, error } = await query.range(offset, offset + PAGE_SIZE - 1)
+    if (error || !data) {
+      console.error('Failed to fetch communes from DB:', error)
+      break
+    }
+    all.push(...(data as Record<string, unknown>[]))
+    if (data.length < PAGE_SIZE) {
+      hasMore = false
+    } else {
+      offset += PAGE_SIZE
+    }
+  }
+
+  console.log(`  Fetched ${all.length} communes from DB`)
+  return all
+}
+
 // ---------------------------------------------------------------------------
 // 1. API Geo — base demographics
 // ---------------------------------------------------------------------------
@@ -64,14 +94,8 @@ interface GeoCommune {
 async function enrichFromGeo(slugFilter?: string, limit?: number) {
   console.log('\n📍 Enriching from API Geo (geo.api.gouv.fr)...')
 
-  // Get all communes currently in DB
-  let query = supabase.from('communes').select('code_insee,slug,name').eq('is_active', true)
-  if (slugFilter) query = query.eq('slug', slugFilter)
-  const { data: communes, error } = await query
-  if (error || !communes) {
-    console.error('Failed to fetch communes from DB:', error)
-    return
-  }
+  const communes = await fetchAllCommunes('code_insee,slug,name', slugFilter)
+  if (!communes.length) return
 
   const toProcess = limit ? communes.slice(0, limit) : communes
   let updated = 0
@@ -116,41 +140,46 @@ async function enrichFromSirene(slugFilter?: string, limit?: number) {
   // NAF codes for BTP (divisions 41-43)
   const nafBtp = ['41', '42', '43'] // Prefixes
 
-  let query = supabase.from('communes').select('code_insee,slug,name,code_postal').eq('is_active', true)
-  if (slugFilter) query = query.eq('slug', slugFilter)
-  const { data: communes, error } = await query
-  if (error || !communes) {
-    console.error('Failed to fetch communes:', error)
-    return
-  }
+  const communes = await fetchAllCommunes('code_insee,slug,name,code_postal', slugFilter)
+  if (!communes.length) return
 
   const toProcess = limit ? communes.slice(0, limit) : communes
   let updated = 0
 
-  for (const commune of toProcess) {
-    try {
-      // Use code_postal for SIRENE search (more reliable than commune name)
-      if (!commune.code_postal) continue
+  // Process in parallel batches of 5 (API is rate-limited)
+  const PARALLEL = 5
 
+  async function processOneSirene(commune: Record<string, unknown>): Promise<boolean> {
+    try {
+      if (!commune.code_postal) return false
       const url = `https://recherche-entreprises.api.gouv.fr/search?code_postal=${commune.code_postal}&activite_principale=43&page=1&per_page=1`
-      const res = await fetch(url)
-      if (!res.ok) { await sleep(200); continue }
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 8000)
+      const res = await fetch(url, { signal: controller.signal })
+      clearTimeout(timeout)
+      if (!res.ok) return false
 
       const data = await res.json()
       const totalBtp = data.total_results || 0
 
       await supabase.from('communes').update({
         nb_artisans_btp: totalBtp,
-        nb_entreprises_artisanales: totalBtp, // BTP is main source of artisans
+        nb_entreprises_artisanales: totalBtp,
       }).eq('code_insee', commune.code_insee)
-
-      updated++
-      if (updated % 20 === 0) console.log(`  Updated ${updated}/${toProcess.length}`)
-      await sleep(150) // Rate limit: ~6 req/s
-    } catch (err) {
-      console.error(`  Error for ${commune.name}:`, err)
-      await sleep(500)
+      return true
+    } catch {
+      return false
     }
+  }
+
+  for (let i = 0; i < toProcess.length; i += PARALLEL) {
+    const batch = toProcess.slice(i, i + PARALLEL)
+    const results = await Promise.all(batch.map(c => processOneSirene(c)))
+    updated += results.filter(Boolean).length
+    if (updated % 50 === 0 || i + PARALLEL >= toProcess.length) {
+      console.log(`  Updated ${updated}/${toProcess.length}`)
+    }
+    await sleep(200)
   }
 
   console.log(`✅ SIRENE: updated ${updated} communes`)
@@ -163,37 +192,32 @@ async function enrichFromSirene(slugFilter?: string, limit?: number) {
 async function enrichFromClimate(slugFilter?: string, limit?: number) {
   console.log('\n🌡️ Enriching from Open-Meteo (climate data)...')
 
-  let query = supabase.from('communes').select('code_insee,slug,name,latitude,longitude').eq('is_active', true)
-  if (slugFilter) query = query.eq('slug', slugFilter)
-  query = query.not('latitude', 'is', null)
-  const { data: communes, error } = await query
-  if (error || !communes) {
-    console.error('Failed to fetch communes:', error)
-    return
-  }
+  const allCommunes = await fetchAllCommunes('code_insee,slug,name,latitude,longitude', slugFilter)
+  const communes = allCommunes.filter(c => c.latitude != null)
+  if (!communes.length) return
 
   const toProcess = limit ? communes.slice(0, limit) : communes
   let updated = 0
 
-  for (const commune of toProcess) {
-    if (!commune.latitude || !commune.longitude) continue
+  // Process in parallel batches of 10 for speed
+  const PARALLEL = 10
 
+  async function processOneClimate(commune: Record<string, unknown>) {
+    if (!commune.latitude || !commune.longitude) return false
     try {
-      // Fetch 5 years of daily data (2019-2024) for climate averages
-      const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${commune.latitude}&longitude=${commune.longitude}&start_date=2019-01-01&end_date=2024-12-31&daily=temperature_2m_min,temperature_2m_max,precipitation_sum&timezone=Europe/Paris`
+      // Use 2 years instead of 5 — much faster, still representative
+      const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${commune.latitude}&longitude=${commune.longitude}&start_date=2023-01-01&end_date=2024-12-31&daily=temperature_2m_min,temperature_2m_max,precipitation_sum&timezone=Europe/Paris`
       const res = await fetch(url)
-      if (!res.ok) { await sleep(200); continue }
+      if (!res.ok) return false
 
       const data = await res.json()
       const daily = data.daily
+      if (!daily?.temperature_2m_min) return false
 
-      if (!daily?.temperature_2m_min) continue
-
-      // Calculate climate metrics
       let frostDays = 0
       let totalPrecip = 0
-      let winterTemps: number[] = []
-      let summerTemps: number[] = []
+      const winterTemps: number[] = []
+      const summerTemps: number[] = []
       const monthPrecip: number[] = Array(12).fill(0)
       const monthDays: number[] = Array(12).fill(0)
 
@@ -201,7 +225,7 @@ async function enrichFromClimate(slugFilter?: string, limit?: number) {
         const tMin = daily.temperature_2m_min[i]
         const tMax = daily.temperature_2m_max[i]
         const precip = daily.precipitation_sum[i] || 0
-        const month = new Date(daily.time[i]).getMonth() // 0-indexed
+        const month = new Date(daily.time[i]).getMonth()
 
         if (tMin !== null && tMin <= 0) frostDays++
         totalPrecip += precip
@@ -210,14 +234,12 @@ async function enrichFromClimate(slugFilter?: string, limit?: number) {
 
         if (tMin !== null && tMax !== null) {
           const avg = (tMin + tMax) / 2
-          // Winter: Dec (11), Jan (0), Feb (1)
           if (month === 11 || month === 0 || month === 1) winterTemps.push(avg)
-          // Summer: Jun (5), Jul (6), Aug (7)
           if (month === 5 || month === 6 || month === 7) summerTemps.push(avg)
         }
       }
 
-      const years = 6 // 2019-2024
+      const years = 2
       const avgFrost = Math.round(frostDays / years)
       const avgPrecip = Math.round(totalPrecip / years)
       const avgWinter = winterTemps.length > 0
@@ -227,19 +249,16 @@ async function enrichFromClimate(slugFilter?: string, limit?: number) {
         ? Math.round((summerTemps.reduce((a, b) => a + b, 0) / summerTemps.length) * 10) / 10
         : null
 
-      // Best months for exterior work: months with < 80mm average precip and avg temp > 10°C
-      // Simplified: find start/end of dry season
       const avgMonthPrecip = monthPrecip.map((p, i) => monthDays[i] > 0 ? (p / years) : 999)
-      let bestStart = 4 // Default: April
-      let bestEnd = 10  // Default: October
+      let bestStart = 4
+      let bestEnd = 10
       for (let m = 2; m <= 5; m++) {
-        if (avgMonthPrecip[m] < 80) { bestStart = m + 1; break } // 1-indexed
+        if (avgMonthPrecip[m] < 80) { bestStart = m + 1; break }
       }
       for (let m = 9; m >= 6; m--) {
         if (avgMonthPrecip[m] < 80) { bestEnd = m + 1; break }
       }
 
-      // Determine climate zone
       let climatZone = 'semi-océanique'
       if (avgWinter !== null && avgSummer !== null) {
         if (avgWinter > 8 && avgPrecip < 700) climatZone = 'méditerranéen'
@@ -258,13 +277,20 @@ async function enrichFromClimate(slugFilter?: string, limit?: number) {
         climat_zone: climatZone,
       }).eq('code_insee', commune.code_insee)
 
-      updated++
-      if (updated % 10 === 0) console.log(`  Updated ${updated}/${toProcess.length}`)
-      await sleep(200) // Respect rate limits
-    } catch (err) {
-      console.error(`  Error for ${commune.name}:`, err)
-      await sleep(1000)
+      return true
+    } catch {
+      return false
     }
+  }
+
+  for (let i = 0; i < toProcess.length; i += PARALLEL) {
+    const batch = toProcess.slice(i, i + PARALLEL)
+    const results = await Promise.all(batch.map(c => processOneClimate(c)))
+    updated += results.filter(Boolean).length
+    if (updated % 50 === 0 || i + PARALLEL >= toProcess.length) {
+      console.log(`  Updated ${updated}/${toProcess.length}`)
+    }
+    await sleep(100) // Brief pause between parallel batches
   }
 
   console.log(`✅ Open-Meteo: updated ${updated} communes`)
@@ -277,13 +303,8 @@ async function enrichFromClimate(slugFilter?: string, limit?: number) {
 async function enrichFromDvf(slugFilter?: string, limit?: number) {
   console.log('\n🏠 Enriching from DVF (property prices)...')
 
-  let query = supabase.from('communes').select('code_insee,slug,name').eq('is_active', true)
-  if (slugFilter) query = query.eq('slug', slugFilter)
-  const { data: communes, error } = await query
-  if (error || !communes) {
-    console.error('Failed to fetch communes:', error)
-    return
-  }
+  const communes = await fetchAllCommunes('code_insee,slug,name', slugFilter)
+  if (!communes.length) return
 
   const toProcess = limit ? communes.slice(0, limit) : communes
   let updated = 0
