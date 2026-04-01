@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { providerArtisanUpdateSchema } from '@/schemas/provider'
+import { sanitizeUserInput } from '@/lib/sanitize'
 // DOMPurify lazy-imported inside PUT to avoid JSDOM crash in serverless cold start
 
 export const dynamic = 'force-dynamic'
@@ -50,7 +51,7 @@ export async function GET() {
     // Fetch provider by user_id
     const { data: provider, error: providerError } = await supabase
       .from('providers')
-      .select('id, stable_id, name, slug, email, phone, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, avatar_url, created_at, updated_at')
+      .select('id, stable_id, name, slug, email, phone, phone_secondary, website, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, avatar_url, created_at, updated_at, opening_hours, accepts_new_clients, free_quote, available_24h, intervention_radius_km, services_offered, service_prices, faq, team_size')
       .eq('user_id', user.id)
       .single()
 
@@ -133,20 +134,25 @@ export async function PUT(request: Request) {
 
     const validated = result.data
 
-    // Sanitize text fields
+    // Sanitize text fields (XSS prevention + DOMPurify for rich text)
     const updateData: Record<string, unknown> = {}
+    const freeTextFields = new Set(['description', 'bio'])
 
     for (const [key, value] of Object.entries(validated)) {
       if (value === undefined) continue
 
       if (key === 'description') {
-        // Strip all HTML tags from description
+        // Sanitize user input first, then strip all HTML tags via DOMPurify
         if (typeof value === 'string') {
+          const sanitized = sanitizeUserInput(value)
           const { default: DOMPurify } = await import('isomorphic-dompurify')
-          updateData[key] = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })
+          updateData[key] = DOMPurify.sanitize(sanitized, { ALLOWED_TAGS: [] })
         } else {
           updateData[key] = value
         }
+      } else if (freeTextFields.has(key)) {
+        // Sanitize free-text fields against XSS
+        updateData[key] = typeof value === 'string' ? sanitizeUserInput(value) : value
       } else if (key === 'name') {
         // Trim name
         updateData[key] = typeof value === 'string' ? value.trim() : value

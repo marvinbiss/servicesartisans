@@ -30,7 +30,7 @@ export const providerUpdateSchema = z.object({
   address_street: z.string().max(200).optional().nullable(),
   address_postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional().nullable(),
   address_city: z.string().max(100).optional().nullable(),
-  intervention_radius_km: z.number().int().min(1).max(200).optional().default(30),
+  intervention_radius_km: z.number().int().min(5).max(200).optional().default(30),
   free_quote: z.boolean().optional().default(true),
   available_24h: z.boolean().optional().default(false),
 })
@@ -91,7 +91,7 @@ export const providerArtisanUpdateSchema = z.object({
   address_department: z.string().max(50).optional().nullable(),
   latitude: z.number().min(-90).max(90).optional().nullable(),
   longitude: z.number().min(-180).max(180).optional().nullable(),
-  intervention_radius_km: z.number().int().min(1).max(200).optional(),
+  intervention_radius_km: z.number().int().min(5).max(200).optional(),
 
   // Presentation
   description: z.string().max(5000).optional().nullable(),

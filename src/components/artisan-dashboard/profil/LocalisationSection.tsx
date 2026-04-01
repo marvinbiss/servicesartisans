@@ -3,6 +3,7 @@
 import { MapPin } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useProviderForm } from './useProviderForm'
+import { InterventionZoneEditor } from '../InterventionZoneEditor'
 
 interface LocalisationSectionProps {
   provider: Record<string, unknown>
@@ -20,6 +21,7 @@ export function LocalisationSection({ provider, onSaved }: LocalisationSectionPr
   }
 
   const radiusValue = typeof formData.intervention_radius_km === 'number' ? formData.intervention_radius_km : 30
+  const cityValue = (formData.address_city as string) || null
 
   return (
     <SectionCard
@@ -79,24 +81,13 @@ export function LocalisationSection({ provider, onSaved }: LocalisationSectionPr
           </div>
         </div>
 
-        <div>
-          <label htmlFor="localisation-radius" className="block text-sm font-medium text-gray-700 mb-2">
-            Rayon d'intervention : <span className="text-blue-600 font-semibold">{radiusValue} km</span>
-          </label>
-          <input
-            id="localisation-radius"
-            type="range"
-            min={1}
-            max={200}
+        {/* Zone d'intervention */}
+        <div className="border-t border-gray-100 pt-6">
+          <InterventionZoneEditor
             value={radiusValue}
-            onChange={(e) => setField('intervention_radius_km', parseInt(e.target.value, 10))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            city={cityValue}
+            onChange={(radius) => setField('intervention_radius_km', radius)}
           />
-          <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span>1 km</span>
-            <span>100 km</span>
-            <span>200 km</span>
-          </div>
         </div>
       </div>
     </SectionCard>

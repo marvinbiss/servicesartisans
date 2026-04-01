@@ -3,49 +3,24 @@
 import { Clock } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useProviderForm } from './useProviderForm'
+import { OpeningHoursEditor, DEFAULT_OPENING_HOURS } from '../OpeningHoursEditor'
 
 interface DisponibiliteSectionProps {
   provider: Record<string, unknown>
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-interface DaySchedule {
-  ouvert: boolean
-  debut: string
-  fin: string
-}
-
-interface OpeningHours {
-  lundi: DaySchedule
-  mardi: DaySchedule
-  mercredi: DaySchedule
-  jeudi: DaySchedule
-  vendredi: DaySchedule
-  samedi: DaySchedule
-  dimanche: DaySchedule
+interface OpeningHoursValue {
+  lundi: { ouvert: boolean; debut: string; fin: string }
+  mardi: { ouvert: boolean; debut: string; fin: string }
+  mercredi: { ouvert: boolean; debut: string; fin: string }
+  jeudi: { ouvert: boolean; debut: string; fin: string }
+  vendredi: { ouvert: boolean; debut: string; fin: string }
+  samedi: { ouvert: boolean; debut: string; fin: string }
+  dimanche: { ouvert: boolean; debut: string; fin: string }
 }
 
 const FIELDS = ['opening_hours', 'available_24h', 'accepts_new_clients'] as const
-
-const DAYS: { key: keyof OpeningHours; label: string }[] = [
-  { key: 'lundi', label: 'Lundi' },
-  { key: 'mardi', label: 'Mardi' },
-  { key: 'mercredi', label: 'Mercredi' },
-  { key: 'jeudi', label: 'Jeudi' },
-  { key: 'vendredi', label: 'Vendredi' },
-  { key: 'samedi', label: 'Samedi' },
-  { key: 'dimanche', label: 'Dimanche' },
-]
-
-const DEFAULT_HOURS: OpeningHours = {
-  lundi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  mardi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  mercredi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  jeudi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  vendredi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  samedi: { ouvert: true, debut: '09:00', fin: '12:00' },
-  dimanche: { ouvert: false, debut: '', fin: '' },
-}
 
 export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
@@ -56,22 +31,9 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
   }
 
   const isUsingDefaults = !provider['opening_hours']
-  const openingHours = (formData.opening_hours as OpeningHours) || DEFAULT_HOURS
+  const openingHours = (formData.opening_hours as OpeningHoursValue) || DEFAULT_OPENING_HOURS
   const available24h = Boolean(formData.available_24h)
   const acceptsNewClients = formData.accepts_new_clients !== false
-
-  const updateDay = (day: keyof OpeningHours, field: keyof DaySchedule, value: boolean | string) => {
-    const updated = {
-      ...openingHours,
-      [day]: { ...openingHours[day], [field]: value },
-    }
-    setField('opening_hours', updated)
-  }
-
-  /** Returns true if closing time is not after opening time for an open day */
-  const hasTimeError = (day: DaySchedule): boolean => {
-    return day.ouvert && day.debut !== '' && day.fin !== '' && day.fin <= day.debut
-  }
 
   return (
     <SectionCard
@@ -84,74 +46,12 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
       success={success}
     >
       <div className="space-y-8">
-        {/* Opening hours grid */}
-        <div>
-          <span className="block text-sm font-medium text-gray-700 mb-3">Horaires d'ouverture</span>
-          {isUsingDefaults && !isDirty && (
-            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg mb-3">
-              Horaires par défaut. Modifiez et enregistrez pour personnaliser.
-            </p>
-          )}
-          <div className="space-y-3">
-            {DAYS.map(({ key, label }) => {
-              const day = openingHours[key] || { ouvert: false, debut: '', fin: '' }
-              const timeError = hasTimeError(day)
-              return (
-                <div key={key}>
-                  <div className="flex items-center gap-4">
-                    <span className="w-24 text-sm text-gray-700">{label}</span>
-                    <label htmlFor={`dispo-${key}-ouvert`} className="flex items-center gap-2">
-                      <input
-                        id={`dispo-${key}-ouvert`}
-                        type="checkbox"
-                        checked={day.ouvert}
-                        onChange={(e) => updateDay(key, 'ouvert', e.target.checked)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-600">Ouvert</span>
-                    </label>
-                    {day.ouvert && (
-                      <>
-                        <label htmlFor={`dispo-${key}-debut`} className="sr-only">
-                          Heure d'ouverture {label}
-                        </label>
-                        <input
-                          id={`dispo-${key}-debut`}
-                          type="time"
-                          value={day.debut}
-                          onChange={(e) => updateDay(key, 'debut', e.target.value)}
-                          aria-label={`Heure d'ouverture ${label}`}
-                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
-                            timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
-                          }`}
-                        />
-                        <span className="text-gray-500 text-sm" aria-hidden="true">à</span>
-                        <label htmlFor={`dispo-${key}-fin`} className="sr-only">
-                          Heure de fermeture {label}
-                        </label>
-                        <input
-                          id={`dispo-${key}-fin`}
-                          type="time"
-                          value={day.fin}
-                          onChange={(e) => updateDay(key, 'fin', e.target.value)}
-                          aria-label={`Heure de fermeture ${label}`}
-                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
-                            timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
-                          }`}
-                        />
-                      </>
-                    )}
-                  </div>
-                  {timeError && (
-                    <p className="text-xs text-red-500 mt-1 ml-28">
-                      L'heure de fermeture doit être après l'heure d'ouverture
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
+        {/* Opening hours editor */}
+        <OpeningHoursEditor
+          value={openingHours}
+          onChange={(val) => setField('opening_hours', val)}
+          showDefaultsHint={isUsingDefaults && !isDirty}
+        />
 
         {/* Toggle switches */}
         <div className="space-y-4">
