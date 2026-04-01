@@ -15,13 +15,13 @@ interface StatCardProps {
 }
 
 const colorMap = {
-  blue: 'bg-blue-50 text-blue-600',
-  green: 'bg-green-50 text-green-600',
-  yellow: 'bg-yellow-50 text-yellow-600',
+  blue: 'bg-primary-50 text-primary-600',
+  green: 'bg-accent-50 text-accent-600',
+  yellow: 'bg-secondary-50 text-secondary-600',
   red: 'bg-red-50 text-red-600',
-  indigo: 'bg-indigo-50 text-indigo-600',
-  purple: 'bg-purple-50 text-purple-600',
-  gray: 'bg-gray-50 text-gray-600',
+  indigo: 'bg-primary-100 text-primary-700',
+  purple: 'bg-primary-50 text-primary-700',
+  gray: 'bg-sand-50 text-charcoal-600',
 }
 
 function AnimatedValue({ value }: { value: number }) {
@@ -47,7 +47,7 @@ export const StatCard = memo(function StatCard({ title, value, subtitle, trend, 
       transition={{ delay, duration: 0.3, ease: 'easeOut' }}
       whileHover={{ y: -2, boxShadow: '0 8px 25px rgba(0,0,0,0.08)' }}
     >
-      <div className="bg-white rounded-xl border border-gray-200 p-5 transition-shadow">
+      <div className="bg-white rounded-xl border border-sand-200 p-5 transition-shadow">
         <div className="flex items-start justify-between">
           <div className={`p-2.5 rounded-lg ${colorMap[color]}`}>
             {icon}
@@ -55,7 +55,7 @@ export const StatCard = memo(function StatCard({ title, value, subtitle, trend, 
           {trend && (
             <div className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${
               trend.isPositive
-                ? 'bg-green-50 text-green-700'
+                ? 'bg-accent-50 text-accent-700'
                 : 'bg-red-50 text-red-700'
             }`}>
               {trend.isPositive ? (
@@ -68,11 +68,11 @@ export const StatCard = memo(function StatCard({ title, value, subtitle, trend, 
           )}
         </div>
         <div className="mt-3">
-          <p className="text-2xl font-bold text-gray-900 tabular-nums">
+          <p className="text-2xl font-bold text-charcoal-900 tabular-nums">
             {typeof value === 'number' ? <AnimatedValue value={value} /> : value}
           </p>
-          <p className="text-sm text-gray-500 mt-0.5">{title}</p>
-          {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
+          <p className="text-sm text-charcoal-500 mt-0.5">{title}</p>
+          {subtitle && <p className="text-xs text-charcoal-400 mt-1">{subtitle}</p>}
         </div>
       </div>
     </motion.div>

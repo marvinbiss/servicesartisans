@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -15,6 +15,7 @@ import {
   Trash2,
   Edit2,
 } from 'lucide-react'
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
 
 interface TeamMember {
   id: string
@@ -45,6 +46,11 @@ export default function EquipePage() {
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const equipeModalRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(equipeModalRef, showAddModal, () => {
+    setShowAddModal(false)
+    setEditingMember(null)
+  })
 
   // Form state
   const [formData, setFormData] = useState({
@@ -266,8 +272,8 @@ export default function EquipePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error message */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <div role="alert" className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <p className="text-red-700">{error}</p>
           </div>
         )}
@@ -346,12 +352,14 @@ export default function EquipePage() {
                     <button
                       onClick={() => openEditModal(member)}
                       className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                      aria-label={`Modifier ${member.name}`}
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(member.id)}
                       className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                      aria-label={`Supprimer ${member.name}`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -406,9 +414,15 @@ export default function EquipePage() {
       {/* Add/Edit Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full shadow-2xl">
+          <div
+            ref={equipeModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="equipe-modal-title"
+            className="bg-white rounded-xl max-w-md w-full shadow-2xl"
+          >
             <div className="flex items-center justify-between p-6 border-b">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 id="equipe-modal-title" className="text-lg font-semibold text-gray-900">
                 {editingMember ? 'Modifier le membre' : 'Ajouter un membre'}
               </h3>
               <button
@@ -417,6 +431,7 @@ export default function EquipePage() {
                   setEditingMember(null)
                 }}
                 className="p-2 hover:bg-gray-100 rounded-lg"
+                aria-label="Fermer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -424,10 +439,11 @@ export default function EquipePage() {
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="equipe-name" className="block text-sm font-medium text-gray-700 mb-1">
                   Nom complet *
                 </label>
                 <input
+                  id="equipe-name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -437,10 +453,11 @@ export default function EquipePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="equipe-email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email *
                 </label>
                 <input
+                  id="equipe-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -450,10 +467,11 @@ export default function EquipePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="equipe-phone" className="block text-sm font-medium text-gray-700 mb-1">
                   Téléphone
                 </label>
                 <input
+                  id="equipe-phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -462,10 +480,11 @@ export default function EquipePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="equipe-role" className="block text-sm font-medium text-gray-700 mb-1">
                   Rôle / Spécialité *
                 </label>
                 <input
+                  id="equipe-role"
                   type="text"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
@@ -492,6 +511,7 @@ export default function EquipePage() {
                       }`}
                       style={{ backgroundColor: color.value }}
                       title={color.name}
+                      aria-label={`Couleur ${color.name}${formData.color === color.value ? ' (sélectionnée)' : ''}`}
                     />
                   ))}
                 </div>

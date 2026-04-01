@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, AlertTriangle, Loader2, Calendar, Clock } from 'lucide-react'
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
 
 interface CancellationModalProps {
   bookingId: string
@@ -25,20 +26,17 @@ export default function CancellationModal({
   const [reason, setReason] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(modalRef, true, onClose)
 
-  // Lock body scroll & handle Escape
+  // Lock body scroll
   useEffect(() => {
     const originalOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', handleKeyDown)
     return () => {
       document.body.style.overflow = originalOverflow
-      document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [onClose])
+  }, [])
 
   const handleCancel = async () => {
     setIsSubmitting(true)
@@ -71,15 +69,22 @@ export default function CancellationModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
-      <div className="bg-white rounded-xl max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cancellation-modal-title"
+        className="bg-white rounded-xl max-w-md w-full shadow-2xl max-h-[90vh] overflow-y-auto"
+      >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 id="cancellation-modal-title" className="text-lg font-semibold text-gray-900">
             Annuler la réservation
           </h3>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg"
+            aria-label="Fermer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -119,17 +124,18 @@ export default function CancellationModal({
 
           {/* Error message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <div role="alert" className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
 
           {/* Reason input */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="cancellation-reason" className="block text-sm font-medium text-gray-700 mb-2">
               Raison de l'annulation (optionnel)
             </label>
             <textarea
+              id="cancellation-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Indiquez la raison de votre annulation..."

@@ -338,7 +338,7 @@ export default function DashboardArtisanPage() {
           />
 
           {/* Main content */}
-          <main className="lg:col-span-3 space-y-8">
+          <main id="main-content" className="lg:col-span-3 space-y-8">
             {/* Inline error banner */}
             {hasGenericError && (
               <motion.div

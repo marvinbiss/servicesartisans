@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
   X,
   Image as ImageIcon,
@@ -12,6 +12,7 @@ import {
 import Image from 'next/image'
 import { FileDropzone } from '@/components/upload'
 import Button from '@/components/ui/Button'
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
 import type { PortfolioItem, MediaType, UploadedFile } from '@/types/portfolio'
 import { PORTFOLIO_CATEGORIES } from '@/types/portfolio'
 
@@ -26,6 +27,9 @@ export default function AddPortfolioModal({
   onClose,
   onCreated,
 }: AddPortfolioModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(modalRef, true, onClose)
+
   const isEditing = !!item
   const [step, setStep] = useState<'type' | 'upload' | 'details'>(
     isEditing ? 'details' : 'type'
@@ -168,18 +172,26 @@ export default function AddPortfolioModal({
       <div
         className="absolute inset-0 bg-black/50"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="portfolio-modal-title"
+        className="relative bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+      >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-2xl">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 id="portfolio-modal-title" className="text-xl font-semibold text-gray-900">
             {isEditing ? 'Modifier' : 'Ajouter une réalisation'}
           </h2>
           <button
             onClick={onClose}
             className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
+            aria-label="Fermer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -188,8 +200,8 @@ export default function AddPortfolioModal({
         <div className="p-6">
           {/* Error */}
           {error && (
-            <div className="mb-6 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <div role="alert" className="mb-6 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <p>{error}</p>
             </div>
           )}
@@ -279,6 +291,7 @@ export default function AddPortfolioModal({
                         <button
                           onClick={() => setBeforeFile(null)}
                           className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-gray-100"
+                          aria-label="Supprimer l'image avant"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -310,6 +323,7 @@ export default function AddPortfolioModal({
                         <button
                           onClick={() => setAfterFile(null)}
                           className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-gray-100"
+                          aria-label="Supprimer l'image après"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -350,6 +364,7 @@ export default function AddPortfolioModal({
                       <button
                         onClick={() => setMainFile(null)}
                         className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-gray-100"
+                        aria-label="Supprimer le fichier"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -392,10 +407,11 @@ export default function AddPortfolioModal({
           {step === 'details' && (
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="portfolio-title" className="block text-sm font-medium text-gray-700 mb-2">
                   Titre *
                 </label>
                 <input
+                  id="portfolio-title"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -406,10 +422,11 @@ export default function AddPortfolioModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="portfolio-description" className="block text-sm font-medium text-gray-700 mb-2">
                   Description
                 </label>
                 <textarea
+                  id="portfolio-description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Décrivez les travaux réalisés..."
@@ -423,10 +440,11 @@ export default function AddPortfolioModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="portfolio-category" className="block text-sm font-medium text-gray-700 mb-2">
                   Catégorie
                 </label>
                 <select
+                  id="portfolio-category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

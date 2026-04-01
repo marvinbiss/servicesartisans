@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BeforeAfterSlider, VideoPlayer } from '@/components/portfolio'
 import type { PortfolioItem } from '@/types/portfolio'
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
 
 interface PortfolioLightboxProps {
   items: PortfolioItem[]
@@ -19,6 +20,8 @@ export default function PortfolioLightbox({
   onClose,
 }: PortfolioLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
+  const lightboxRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(lightboxRef, true, onClose)
   const currentItem = items[currentIndex]
 
   const goToPrevious = useCallback(() => {
@@ -55,10 +58,14 @@ export default function PortfolioLightbox({
   return (
     <AnimatePresence>
       <motion.div
+        ref={lightboxRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Galerie photo : ${currentItem?.title ?? ''}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 text-white">

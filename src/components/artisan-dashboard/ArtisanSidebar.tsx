@@ -194,7 +194,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
   )
 
   return (
-    <div className="lg:col-span-1">
+    <aside className="lg:col-span-1" aria-label="Barre latérale artisan">
       {/* Mobile toggle button */}
       <button
         type="button"
@@ -296,6 +296,6 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
           </Link>
         </div>
       </div>
-    </div>
+    </aside>
   )
 }

@@ -193,30 +193,30 @@ export default function ArtisanLeadsInbox() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="text-sm text-gray-500 mt-2">Chargement des leads...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
+          <p className="text-sm text-charcoal-500 mt-2">Chargement des leads...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Link href="/espace-artisan" className="hover:text-gray-900">Espace Artisan</Link>
+            <div className="flex items-center gap-2 text-sm text-charcoal-500">
+              <Link href="/espace-artisan" className="hover:text-charcoal-900">Espace Artisan</Link>
               <span>/</span>
-              <span className="text-gray-900 font-medium">Leads reçus</span>
+              <span className="text-charcoal-900 font-medium">Leads reçus</span>
             </div>
             <div className="flex items-center gap-3">
               <Link
                 href="/espace-artisan/leads/statistiques"
-                className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 font-medium"
               >
                 <BarChart3 className="w-4 h-4" />
                 Statistiques
@@ -227,23 +227,24 @@ export default function ArtisanLeadsInbox() {
                   if (statusFilter !== 'all') params.set('status', statusFilter)
                   window.location.href = `/api/artisan/leads/export${params.toString() ? `?${params}` : ''}`
                 }}
-                className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg px-3 py-1.5"
+                className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-700 border border-sand-200 rounded-lg px-3 py-1.5"
               >
                 <Download className="w-4 h-4" />
                 <span className="hidden sm:inline">Exporter CSV</span>
               </button>
               <button
                 onClick={handleRefresh}
-                className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
+                className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-700"
+                aria-label="Rafraîchir les leads"
               >
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <main id="main-content" className="max-w-5xl mx-auto px-4 py-6">
         {/* Quick stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <StatCard
@@ -285,32 +286,33 @@ export default function ArtisanLeadsInbox() {
             />
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" aria-hidden="true" />
             <input
               type="text"
               placeholder="Rechercher..."
+              aria-label="Rechercher dans les leads"
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setPage(1) }}
-              className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-sand-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+          <div role="alert" className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" aria-hidden="true" />
             <p className="text-red-700 text-sm">{error}</p>
           </div>
         )}
 
         {/* Lead list */}
         {paginated.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-7 h-7 text-gray-400" />
+          <div className="bg-white rounded-xl border border-sand-200 p-12 text-center">
+            <div className="w-14 h-14 bg-sand-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FileText className="w-7 h-7 text-charcoal-400" />
             </div>
-            <p className="text-gray-500 font-medium text-lg">Aucun lead</p>
-            <p className="text-gray-400 text-sm mt-2">
+            <p className="text-charcoal-500 font-medium text-lg">Aucun lead</p>
+            <p className="text-charcoal-400 text-sm mt-2">
               {searchQuery ? 'Aucun résultat pour cette recherche.' : 'Les demandes de devis vous seront attribuées automatiquement.'}
             </p>
           </div>
@@ -328,7 +330,7 @@ export default function ArtisanLeadsInbox() {
                     key={assignment.id}
                     href={`/espace-artisan/leads/${assignment.id}`}
                     className={`block bg-white rounded-xl border transition-all hover:shadow-md group ${
-                      isNew ? 'border-blue-200 ring-1 ring-blue-100' : 'border-gray-100'
+                      isNew ? 'border-primary-200 ring-1 ring-primary-100' : 'border-sand-200'
                     }`}
                   >
                     <div className="p-5">
@@ -336,9 +338,9 @@ export default function ArtisanLeadsInbox() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-2 flex-wrap">
                             {isNew && (
-                              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                              <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse" />
                             )}
-                            <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                            <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">
                               {lead.service_name}
                             </h3>
                             <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
@@ -349,11 +351,11 @@ export default function ArtisanLeadsInbox() {
                             </span>
                           </div>
 
-                          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                          <p className="text-charcoal-600 text-sm mb-3 line-clamp-2">
                             {lead.description}
                           </p>
 
-                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
+                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-charcoal-500">
                             <span className="flex items-center gap-1">
                               <Clock className="w-3.5 h-3.5" />
                               {formatRelative(lead.created_at)}
@@ -385,7 +387,7 @@ export default function ArtisanLeadsInbox() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 flex-shrink-0 mt-1 transition-colors" />
+                        <ChevronRight className="w-5 h-5 text-charcoal-300 group-hover:text-primary-500 flex-shrink-0 mt-1 transition-colors" />
                       </div>
                     </div>
                   </Link>
@@ -396,7 +398,7 @@ export default function ArtisanLeadsInbox() {
             <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
           </>
         )}
-      </div>
+      </main>
     </div>
   )
 }

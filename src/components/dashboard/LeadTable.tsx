@@ -30,76 +30,76 @@ function formatRelative(dateStr: string): string {
 export const LeadTable = memo(function LeadTable({ assignments, basePath, showProvider, providerNames }: LeadTableProps) {
   if (assignments.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-          <Clock className="w-6 h-6 text-gray-400" />
+      <div className="bg-white rounded-xl border border-sand-200 p-12 text-center">
+        <div className="w-12 h-12 bg-sand-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <Clock className="w-6 h-6 text-charcoal-400" />
         </div>
-        <p className="text-gray-500 font-medium">Aucun lead</p>
-        <p className="text-sm text-gray-400 mt-1">Les nouveaux leads apparaîtront ici.</p>
+        <p className="text-charcoal-500 font-medium">Aucun lead</p>
+        <p className="text-sm text-charcoal-400 mt-1">Les nouveaux leads apparaîtront ici.</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-100 bg-gray-50/50">
-              <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
+            <tr className="border-b border-sand-200 bg-sand-50/50">
+              <th className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3">
                 Service
               </th>
-              <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
+              <th className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3">
                 Lieu
               </th>
               {showProvider && (
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
+                <th className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3">
                   Artisan
                 </th>
               )}
-              <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
+              <th className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3">
                 Urgence
               </th>
-              <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
+              <th className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3">
                 Statut
               </th>
-              <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">
+              <th className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3">
                 Date
               </th>
               <th className="w-10" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-sand-100">
             {assignments.map((a) => {
               const lead = a.lead
               const urg = URGENCY_META[lead.urgency] || URGENCY_META.normal
               const st = STATUS_META[a.status] || STATUS_META.pending
 
               return (
-                <tr key={a.id} className="hover:bg-gray-50/50 transition-colors group">
+                <tr key={a.id} className="hover:bg-sand-50/50 transition-colors group">
                   <td className="px-4 py-3">
                     <Link
                       href={`${basePath}/${a.id}`}
-                      className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                      className="font-medium text-charcoal-900 hover:text-primary-600 transition-colors"
                     >
                       {lead.service_name}
                     </Link>
-                    <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">
+                    <p className="text-xs text-charcoal-400 mt-0.5 line-clamp-1">
                       {lead.client_name}
                     </p>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-600">
+                  <td className="px-4 py-3 text-sm text-charcoal-600">
                     {lead.city ? (
                       <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                        <MapPin className="w-3.5 h-3.5 text-charcoal-400" />
                         {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                       </span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-charcoal-400">—</span>
                     )}
                   </td>
                   {showProvider && providerNames && (
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-charcoal-600">
                       {providerNames[a.provider_id] || a.provider_id.slice(0, 8)}
                     </td>
                   )}
@@ -113,12 +113,12 @@ export const LeadTable = memo(function LeadTable({ assignments, basePath, showPr
                       {st.label}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                  <td className="px-4 py-3 text-sm text-charcoal-500 whitespace-nowrap">
                     {formatRelative(a.assigned_at)}
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`${basePath}/${a.id}`}>
-                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 transition-colors" />
                     </Link>
                   </td>
                 </tr>

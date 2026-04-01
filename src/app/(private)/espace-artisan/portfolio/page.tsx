@@ -218,7 +218,7 @@ export default function PortfolioPage() {
           <ArtisanSidebar activePage="portfolio" />
 
           {/* Main content */}
-          <div className="lg:col-span-3 space-y-6">
+          <main id="main-content" className="lg:col-span-3 space-y-6">
             {/* Stats summary */}
             <div className="bg-white rounded-xl shadow-sm p-4">
               <h4 className="font-medium text-gray-900 mb-3">Statistiques</h4>
@@ -334,7 +334,7 @@ export default function PortfolioPage() {
                 ))}
               </div>
             )}
-          </div>
+          </main>
         </div>
       </div>
 

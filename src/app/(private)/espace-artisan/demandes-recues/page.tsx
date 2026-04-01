@@ -254,11 +254,11 @@ export default function DemandesRecuesPage() {
           />
 
           {/* Content */}
-          <div className="lg:col-span-3">
+          <main id="main-content" className="lg:col-span-3">
             {/* Filters */}
             <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-                <Filter className="w-5 h-5 text-gray-400" />
+                <Filter className="w-5 h-5 text-gray-400" aria-hidden="true" />
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => handleFilterChange('all')}
@@ -404,7 +404,7 @@ export default function DemandesRecuesPage() {
                 )}
               </>
             )}
-          </div>
+          </main>
         </div>
       </div>
 

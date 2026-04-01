@@ -259,9 +259,9 @@ export default function MessagesArtisanPage() {
           />
 
           {/* Messages */}
-          <div className="lg:col-span-3">
+          <main id="main-content" className="lg:col-span-3">
             {error && (
-              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <div role="alert" className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                 {error}
               </div>
             )}
@@ -425,7 +425,7 @@ export default function MessagesArtisanPage() {
                 </div>
               </div>
             )}
-          </div>
+          </main>
         </div>
       </div>
     </div>

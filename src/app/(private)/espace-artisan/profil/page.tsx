@@ -165,8 +165,9 @@ export default function ProfilArtisanPage() {
           </div>
 
           {/* Content */}
-          <div
-            className="lg:col-span-3"
+          <div id="main-content" className="lg:col-span-3">
+          <main
+            className="w-full"
             role="tabpanel"
             id={`tabpanel-${activeTab}`}
             aria-labelledby={`tab-${activeTab}`}
@@ -181,6 +182,7 @@ export default function ProfilArtisanPage() {
             {activeTab === 'faq' && <FaqSection provider={provider} onSaved={handleSaved} />}
             {activeTab === 'preferences' && <PreferencesSection provider={provider} onSaved={handleSaved} />}
             {activeTab === 'avatar' && <AvatarSection provider={provider} onSaved={handleSaved} />}
+          </main>
           </div>
         </div>
       </div>

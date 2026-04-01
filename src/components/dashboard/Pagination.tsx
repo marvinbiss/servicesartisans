@@ -18,7 +18,7 @@ export const Pagination = memo(function Pagination({ page, totalPages, onPageCha
         onClick={() => onPageChange(Math.max(1, page - 1))}
         disabled={page === 1}
         aria-label={`Page précédente (page ${page - 1})`}
-        className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-sand-200 bg-white disabled:opacity-40 hover:bg-sand-50 transition-colors"
       >
         <ChevronLeft className="w-4 h-4" aria-hidden="true" />
         <span className="hidden sm:inline">Précédent</span>
@@ -45,8 +45,8 @@ export const Pagination = memo(function Pagination({ page, totalPages, onPageCha
               aria-current={pageNum === page ? 'page' : undefined}
               className={`w-9 h-9 text-sm rounded-lg transition-colors ${
                 pageNum === page
-                  ? 'bg-blue-600 text-white font-medium'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-primary-600 text-white font-medium'
+                  : 'text-charcoal-600 hover:bg-sand-100'
               }`}
             >
               {pageNum}
@@ -59,7 +59,7 @@ export const Pagination = memo(function Pagination({ page, totalPages, onPageCha
         onClick={() => onPageChange(Math.min(totalPages, page + 1))}
         disabled={page === totalPages}
         aria-label={`Page suivante (page ${page + 1})`}
-        className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-sand-200 bg-white disabled:opacity-40 hover:bg-sand-50 transition-colors"
       >
         <span className="hidden sm:inline">Suivant</span>
         <ChevronRight className="w-4 h-4" aria-hidden="true" />

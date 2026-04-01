@@ -128,9 +128,9 @@ export default function AvisRecusPage() {
           <ArtisanSidebar activePage="avis-recus" />
 
           {/* Content */}
-          <div className="lg:col-span-3 space-y-8">
+          <main id="main-content" className="lg:col-span-3 space-y-8">
             {fetchError && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <div role="alert" className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                 {fetchError}
               </div>
             )}
@@ -293,7 +293,7 @@ export default function AvisRecusPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>
