@@ -46,6 +46,21 @@ function formatRelative(dateStr: string): string {
   return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 }
 
+interface PaginationMeta {
+  page: number
+  pageSize: number
+  totalPages: number
+  totalItems: number
+}
+
+interface StatusCounts {
+  all: number
+  pending: number
+  viewed: number
+  quoted: number
+  declined: number
+}
+
 export default function ArtisanLeadsInbox() {
   const [leads, setLeads] = useState<Assignment[]>([])
   const [loading, setLoading] = useState(true)
@@ -54,17 +69,53 @@ export default function ArtisanLeadsInbox() {
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
   const [artisanCity, setArtisanCity] = useState<string | null>(null)
-  const pageSize = 15
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
+    page: 1, pageSize: 20, totalPages: 1, totalItems: 0,
+  })
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({
+    all: 0, pending: 0, viewed: 0, quoted: 0, declined: 0,
+  })
+  const pageSize = 20
 
-  const fetchLeads = useCallback(async () => {
+  // Fetch status counts from the dedicated stats endpoint (once + on refresh)
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await fetch('/api/artisan/leads/stats')
+      if (!res.ok) return
+      const data = await res.json()
+      if (data.stats) {
+        setStatusCounts({
+          all: data.stats.total ?? 0,
+          pending: data.stats.pending ?? 0,
+          viewed: data.stats.viewed ?? 0,
+          quoted: data.stats.quoted ?? 0,
+          declined: data.stats.declined ?? 0,
+        })
+      }
+    } catch {
+      // Non-blocking — counts will just stay at 0
+    }
+  }, [])
+
+  const fetchLeads = useCallback(async (p: number, status: StatusFilter) => {
     try {
       setError(null)
       setLoading(true)
-      const response = await fetch('/api/artisan/leads')
+      const params = new URLSearchParams({
+        page: String(p),
+        pageSize: String(pageSize),
+      })
+      if (status !== 'all') {
+        params.set('status', status)
+      }
+      const response = await fetch(`/api/artisan/leads?${params}`)
       const data = await response.json()
 
       if (response.ok) {
         setLeads(data.leads || [])
+        if (data.pagination) {
+          setPaginationMeta(data.pagination)
+        }
         if (data.provider_city) {
           setArtisanCity(data.provider_city)
         }
@@ -79,11 +130,22 @@ export default function ArtisanLeadsInbox() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [pageSize])
 
+  // Fetch leads when page or status filter changes
   useEffect(() => {
-    fetchLeads()
-  }, [fetchLeads])
+    fetchLeads(page, statusFilter)
+  }, [fetchLeads, page, statusFilter])
+
+  // Fetch stats on mount
+  useEffect(() => {
+    fetchStats()
+  }, [fetchStats])
+
+  const handleRefresh = useCallback(() => {
+    fetchLeads(page, statusFilter)
+    fetchStats()
+  }, [fetchLeads, fetchStats, page, statusFilter])
 
   /** Check if a lead city matches the artisan's city (case-insensitive) */
   const isInZone = (leadCity: string | null): boolean => {
@@ -91,32 +153,24 @@ export default function ArtisanLeadsInbox() {
     return leadCity.toLowerCase().trim() === artisanCity.toLowerCase().trim()
   }
 
-  // Filter and search
-  const filtered = leads.filter((a) => {
-    if (statusFilter !== 'all' && a.status !== statusFilter) return false
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase()
-      const lead = a.lead
-      return (
-        lead.service_name.toLowerCase().includes(q) ||
-        lead.client_name.toLowerCase().includes(q) ||
-        (lead.city || '').toLowerCase().includes(q) ||
-        (lead.postal_code || '').includes(q)
-      )
-    }
-    return true
-  })
+  // Client-side search within current page results
+  const filtered = searchQuery
+    ? leads.filter((a) => {
+        const q = searchQuery.toLowerCase()
+        const lead = a.lead
+        return (
+          lead.service_name.toLowerCase().includes(q) ||
+          lead.client_name.toLowerCase().includes(q) ||
+          (lead.city || '').toLowerCase().includes(q) ||
+          (lead.postal_code || '').includes(q)
+        )
+      })
+    : leads
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
-  const paginated = filtered.slice((page - 1) * pageSize, page * pageSize)
-
-  const statusCounts = {
-    all: leads.length,
-    pending: leads.filter((a) => a.status === 'pending').length,
-    viewed: leads.filter((a) => a.status === 'viewed').length,
-    quoted: leads.filter((a) => a.status === 'quoted').length,
-    declined: leads.filter((a) => a.status === 'declined').length,
-  }
+  const totalPages = searchQuery
+    ? Math.max(1, Math.ceil(filtered.length / pageSize))
+    : paginationMeta.totalPages
+  const paginated = searchQuery ? filtered : leads
 
   const tabs = [
     { key: 'all', label: 'Tous', count: statusCounts.all },
@@ -157,7 +211,7 @@ export default function ArtisanLeadsInbox() {
                 Statistiques
               </Link>
               <button
-                onClick={fetchLeads}
+                onClick={handleRefresh}
                 className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
               >
                 <RefreshCw className="w-4 h-4" />

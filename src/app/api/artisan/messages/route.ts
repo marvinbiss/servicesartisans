@@ -6,8 +6,10 @@
 
 import { NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { notifyNewMessage } from '@/lib/notifications/message-notifications'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
@@ -297,6 +299,52 @@ export async function POST(request: Request) {
         { status: 500 }
       )
     }
+
+    // Fire-and-forget: notify the client by email
+    const effectiveConvId = resolvedConversationId
+    const effectiveClientId = client_id
+    ;(async () => {
+      try {
+        const adminSupabase = createAdminClient()
+
+        // Resolve client_id from conversation if not provided directly
+        let cid = effectiveClientId
+        if (!cid && effectiveConvId) {
+          const { data: conv } = await adminSupabase
+            .from('conversations')
+            .select('client_id')
+            .eq('id', effectiveConvId)
+            .single()
+          cid = conv?.client_id ?? null
+        }
+        if (!cid) return
+
+        const { data: clientProfile } = await adminSupabase
+          .from('profiles')
+          .select('email, full_name')
+          .eq('id', cid)
+          .single()
+
+        if (!clientProfile?.email) return
+
+        // Get artisan name from provider
+        const { data: providerData } = await adminSupabase
+          .from('providers')
+          .select('name')
+          .eq('id', provider.id)
+          .single()
+
+        await notifyNewMessage({
+          recipientEmail: clientProfile.email,
+          recipientName: clientProfile.full_name || 'Client',
+          senderName: providerData?.name || 'Un artisan',
+          messageContent: content,
+          recipientRole: 'client',
+        })
+      } catch (err) {
+        logger.error('Failed to send message notification to client:', err)
+      }
+    })()
 
     return NextResponse.json({
       success: true,

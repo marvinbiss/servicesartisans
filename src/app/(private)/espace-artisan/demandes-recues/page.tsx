@@ -134,9 +134,32 @@ export default function DemandesRecuesPage() {
     setShowDevisModal(true)
   }
 
+  const markLeadAsViewed = async (lead: Lead) => {
+    if (lead.status !== 'pending') return
+    try {
+      const res = await fetch(`/api/artisan/leads/${lead.id}/action`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'view' }),
+      })
+      if (res.ok) {
+        setLeads((prev) =>
+          prev.map((l) =>
+            l.id === lead.id
+              ? { ...l, status: 'viewed', viewed_at: new Date().toISOString() }
+              : l
+          )
+        )
+      }
+    } catch {
+      // Non-blocking — lead stays pending visually
+    }
+  }
+
   const openDetailModal = (lead: Lead) => {
     setSelectedLead(lead)
     setShowDetailModal(true)
+    markLeadAsViewed(lead)
   }
 
   const handleSendDevis = async (e: React.FormEvent) => {

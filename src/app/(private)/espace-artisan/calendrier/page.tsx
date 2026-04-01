@@ -1,1195 +1,195 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import Link from 'next/link'
-import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Plus,
-  X,
-  Check,
-  AlertCircle,
-  Settings,
-  FileText,
-  MessageSquare,
-  Star,
-  Euro,
-  TrendingUp,
-  Lock,
-  Users,
-  Loader2,
-  ExternalLink,
-  Search,
-} from 'lucide-react'
+import { useState, useCallback, useEffect } from 'react'
+import useSWR from 'swr'
+import { Calendar as CalendarIcon, AlertCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { QuickSiteLinks } from '@/components/InternalLinks'
-import LogoutButton from '@/components/LogoutButton'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
+import Calendar, { type CalendarBooking } from '@/components/artisan-dashboard/Calendar'
 import { getArtisanUrl } from '@/lib/utils'
 
-// Types
-interface TimeSlot {
-  id: string
-  start: string
-  end: string
-  available: boolean
-  booking?: {
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface StatsResponse {
+  profile: { id: string; full_name: string | null } | null
+  provider: {
     id: string
-    clientName: string
-    service: string
-    phone?: string
-    email?: string
-    status: string
+    stable_id: string | null
+    slug: string | null
+    specialty: string | null
+    address_city: string | null
+  } | null
+}
+
+interface BookingsResponse {
+  bookings: CalendarBooking[]
+  error?: string
+}
+
+// ─── SWR fetcher ─────────────────────────────────────────────────────────────
+
+const fetcher = async (url: string) => {
+  const res = await fetch(url)
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error ?? `Erreur ${res.status}`)
   }
+  return res.json()
 }
 
-interface DaySchedule {
-  date: string
-  slots: TimeSlot[]
-}
-
-interface BookingEntry {
-  id: string
-  client_name: string
-  service_description: string
-  status: string
-  scheduled_date: string | null
-  scheduled_time: string | null
-  duration_minutes: number | null
-}
-
-interface UserProfile {
-  id: string
-  full_name: string
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
-}
-
-interface ProviderInfo {
-  stable_id: string | null
-  slug: string | null
-  specialty: string | null
-  address_city: string | null
-}
-
-// Format date as local YYYY-MM-DD (avoids UTC timezone shift)
-const formatDateLocal = (d: Date): string => {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
-}
-
-// Génération des jours du mois
-function getDaysInMonth(year: number, month: number) {
-  const date = new Date(year, month, 1)
-  const days = []
-  while (date.getMonth() === month) {
-    days.push(new Date(date))
-    date.setDate(date.getDate() + 1)
-  }
-  return days
-}
+// ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function CalendrierPage() {
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [showSlotModal, setShowSlotModal] = useState(false)
-  const [showSettingsModal, setShowSettingsModal] = useState(false)
-  const [schedule, setSchedule] = useState<DaySchedule[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLoadingSlots, setIsLoadingSlots] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [provider, setProvider] = useState<ProviderInfo | null>(null)
-  const [upcomingBookings, setUpcomingBookings] = useState<BookingEntry[]>([])
-  const [stats, setStats] = useState({ monthlyBookings: 0, fillRate: 0, avgRating: 0 })
+  const [year, setYear] = useState(() => new Date().getFullYear())
+  const [month, setMonth] = useState(() => new Date().getMonth())
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
-  // Booking detail modal state
-  const [selectedBooking, setSelectedBooking] = useState<TimeSlot['booking'] | null>(null)
-  const [showBookingDetailModal, setShowBookingDetailModal] = useState(false)
+  // Charger le profil artisan (pour la sidebar)
+  const { data: statsData } = useSWR<StatsResponse>(
+    '/api/artisan/stats',
+    fetcher,
+    { revalidateOnFocus: false }
+  )
 
-  // Confirm delete slot modal
-  const [slotToDelete, setSlotToDelete] = useState<string | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
+  // Charger les bookings du mois
+  const { data: bookingsData, error: bookingsError, isLoading } = useSWR<BookingsResponse>(
+    `/api/artisan/bookings?month=${month}&year=${year}`,
+    fetcher,
+    { revalidateOnFocus: false }
+  )
 
-  // New slot form state
-  const [newSlotStart, setNewSlotStart] = useState('08:00')
-  const [newSlotEnd, setNewSlotEnd] = useState('10:00')
-  const [repeatWeekly, setRepeatWeekly] = useState(false)
+  const bookings = bookingsData?.bookings ?? []
+  const profile = statsData?.profile
+  const provider = statsData?.provider
 
-  // Editable default slots
-  const [editableDefaultSlots, setEditableDefaultSlots] = useState([
-    { start: '08:00', end: '10:00' },
-    { start: '10:00', end: '12:00' },
-    { start: '14:00', end: '16:00' },
-    { start: '16:00', end: '18:00' },
-  ])
+  // URL publique de l'artisan
+  const publicUrl = provider
+    ? getArtisanUrl({
+        stable_id: provider.stable_id,
+        slug: provider.slug,
+        specialty: provider.specialty,
+        city: provider.address_city,
+      })
+    : null
 
-  // Settings state
-  const [settings, setSettings] = useState({
-    emailNotifications: true,
-    smsReminders: true,
-    googleCalendarSync: false,
-    serviceRadius: 'Paris et petite couronne (20km)',
-  })
-
-  const hasCalendarAccess = true // All features are free
-
-  // Fetch user profile and subscription via API routes
+  // Auto-sélectionner aujourd'hui quand on est sur le mois courant
   useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const [subRes, statsRes] = await Promise.all([
-          fetch('/api/artisan/subscription'),
-          fetch('/api/artisan/stats'),
-        ])
-
-        if (!subRes.ok || !statsRes.ok) {
-          setIsLoading(false)
-          return
-        }
-
-        const subData = await subRes.json()
-        const statsData = await statsRes.json()
-
-        const plan: 'gratuit' | 'pro' | 'premium' = subData.plan ?? 'gratuit'
-
-        if (statsData.profile) {
-          setProfile({
-            id: statsData.profile.id,
-            full_name: statsData.profile.full_name ?? '',
-            subscription_plan: plan,
-          })
-        }
-
-        if (statsData.provider) {
-          setProvider({
-            stable_id: statsData.provider.stable_id ?? null,
-            slug: statsData.provider.slug ?? null,
-            specialty: statsData.provider.specialty ?? null,
-            address_city: statsData.provider.address_city ?? null,
-          })
-        }
-      } catch (err) {
-        console.error('Error fetching profile:', err)
-        setError('Impossible de charger votre profil. Veuillez rafraîchir la page.')
-      } finally {
-        setIsLoading(false)
-      }
+    const now = new Date()
+    if (year === now.getFullYear() && month === now.getMonth()) {
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+      setSelectedDate(todayStr)
+    } else {
+      setSelectedDate(null)
     }
-    fetchProfile()
+  }, [year, month])
+
+  const handlePreviousMonth = useCallback(() => {
+    setMonth(prev => {
+      if (prev === 0) {
+        setYear(y => y - 1)
+        return 11
+      }
+      return prev - 1
+    })
   }, [])
 
-  // Fetch schedule for the current month
-  const fetchSchedule = useCallback(async (year: number, month: number) => {
-    if (!profile) return
-
-    setIsLoadingSlots(true)
-    setError(null)
-
-    try {
-      const startDate = new Date(year, month, 1)
-      const endDate = new Date(year, month + 1, 0)
-
-      const response = await fetch(
-        `/api/availability?artisanId=${profile.id}&startDate=${formatDateLocal(startDate)}&endDate=${formatDateLocal(endDate)}`
-      )
-
-      if (!response.ok) {
-        throw new Error('Erreur lors du chargement du calendrier')
+  const handleNextMonth = useCallback(() => {
+    setMonth(prev => {
+      if (prev === 11) {
+        setYear(y => y + 1)
+        return 0
       }
-
-      const data = await response.json()
-
-      // Transform API data to DaySchedule format
-      const scheduleByDate: Record<string, TimeSlot[]> = {}
-
-      if (data.slots) {
-        for (const slot of data.slots) {
-          if (!scheduleByDate[slot.date]) {
-            scheduleByDate[slot.date] = []
-          }
-          scheduleByDate[slot.date].push({
-            id: slot.id,
-            start: slot.start_time,
-            end: slot.end_time,
-            available: slot.is_available,
-            booking: slot.booking ? {
-              id: slot.booking.id,
-              clientName: slot.booking.client_name,
-              service: slot.booking.service_description,
-              phone: slot.booking.client_phone,
-              email: slot.booking.client_email,
-              status: slot.booking.status,
-            } : undefined,
-          })
-        }
-      }
-
-      const scheduleArray: DaySchedule[] = Object.entries(scheduleByDate).map(([date, slots]) => ({
-        date,
-        slots: slots.sort((a, b) => a.start.localeCompare(b.start)),
-      }))
-
-      setSchedule(scheduleArray)
-    } catch (err) {
-      console.error('Error fetching schedule:', err)
-      setError('Impossible de charger le calendrier')
-    } finally {
-      setIsLoadingSlots(false)
-    }
-  }, [profile])
-
-  // Fetch upcoming bookings
-  const fetchUpcomingBookings = useCallback(async () => {
-    if (!profile) return
-
-    try {
-      const response = await fetch(`/api/bookings?artisanId=${profile.id}`)
-      const data = await response.json()
-
-      if (data.data.bookings) {
-        const upcoming = data.data.bookings
-          .filter((b: BookingEntry) => b.status === 'confirmed' && b.scheduled_date && new Date(b.scheduled_date) >= new Date())
-          .slice(0, 5)
-        setUpcomingBookings(upcoming)
-
-        // Calculate stats
-        const thisMonth = new Date().getMonth()
-        const thisYear = new Date().getFullYear()
-        const monthlyBookings = data.data.bookings.filter((b: BookingEntry) => {
-          const bookingDate = new Date(b.scheduled_date ?? 0)
-          return bookingDate.getMonth() === thisMonth && bookingDate.getFullYear() === thisYear
-        }).length
-
-        setStats(prev => ({ ...prev, monthlyBookings }))
-      }
-    } catch (err) {
-      console.error('Error fetching bookings:', err)
-      setError('Impossible de charger les réservations.')
-    }
-  }, [profile])
-
-  // Load data when profile is available
-  useEffect(() => {
-    if (profile) {
-      fetchSchedule(currentDate.getFullYear(), currentDate.getMonth())
-      fetchUpcomingBookings()
-    }
-  }, [profile, currentDate, fetchSchedule, fetchUpcomingBookings])
-
-  // Add new slot
-  const handleAddSlot = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!profile || !selectedDate) return
-
-    setIsSaving(true)
-    setError(null)
-
-    try {
-      const response = await fetch('/api/availability', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          artisanId: profile.id,
-          date: formatDateLocal(selectedDate),
-          startTime: newSlotStart,
-          endTime: newSlotEnd,
-          repeatWeekly,
-        }),
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error?.message || data.error || 'Erreur lors de l\'ajout du créneau')
-      }
-
-      // Refresh schedule
-      await fetchSchedule(currentDate.getFullYear(), currentDate.getMonth())
-      setShowSlotModal(false)
-      setNewSlotStart('08:00')
-      setNewSlotEnd('10:00')
-      setRepeatWeekly(false)
-    } catch (err) {
-      console.error('Error adding slot:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'ajout')
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  // Delete slot with confirmation
-  const handleDeleteSlot = async (slotId: string) => {
-    if (!profile) return
-
-    setIsDeleting(true)
-    setError(null)
-
-    try {
-      const response = await fetch(`/api/availability?slotId=${slotId}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error?.message || data.error || 'Erreur lors de la suppression')
-      }
-
-      // Refresh schedule
-      await fetchSchedule(currentDate.getFullYear(), currentDate.getMonth())
-      setSlotToDelete(null)
-    } catch (err) {
-      console.error('Error deleting slot:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de la suppression')
-    } finally {
-      setIsDeleting(false)
-    }
-  }
-
-  // Show booking detail
-  const handleShowBookingDetail = (booking: TimeSlot['booking']) => {
-    if (!booking) return
-    setSelectedBooking(booking)
-    setShowBookingDetailModal(true)
-  }
-
-  // Remove a default slot from settings
-  const handleRemoveDefaultSlot = (index: number) => {
-    setEditableDefaultSlots(prev => prev.filter((_, i) => i !== index))
-  }
-
-  // Save settings
-  const handleSaveSettings = async () => {
-    if (!profile) return
-
-    setIsSaving(true)
-    try {
-      const response = await fetch('/api/availability', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          artisanId: profile.id,
-          settings,
-          defaultSlots: editableDefaultSlots,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Erreur lors de la sauvegarde')
-      }
-
-      setShowSettingsModal(false)
-    } catch (err) {
-      console.error('Error saving settings:', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde')
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  const year = currentDate.getFullYear()
-  const month = currentDate.getMonth()
-  const days = getDaysInMonth(year, month)
-  const firstDayOfMonth = new Date(year, month, 1).getDay()
-
-  const monthNames = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-  ]
-
-  const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
-
-  const previousMonth = () => {
-    setCurrentDate(new Date(year, month - 1, 1))
-  }
-
-  const nextMonth = () => {
-    setCurrentDate(new Date(year, month + 1, 1))
-  }
-
-  const getScheduleForDate = (date: Date) => {
-    const dateStr = formatDateLocal(date)
-    return schedule.find(s => s.date === dateStr)
-  }
-
-  // Show loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-      </div>
-    )
-  }
-
-  const isToday = (date: Date) => {
-    const today = new Date()
-    return date.toDateString() === today.toDateString()
-  }
-
-  const isPast = (date: Date) => {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    return date < today
-  }
-
-  // Si l'utilisateur n'a pas accès au calendrier
-  if (!hasCalendarAccess) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        {/* Breadcrumb */}
-        <div className="bg-white border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <Breadcrumb items={[
-              { label: 'Espace Artisan', href: '/espace-artisan' },
-              { label: 'Calendrier' }
-            ]} />
-          </div>
-        </div>
-
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 className="text-2xl font-bold">Espace Artisan</h1>
-            <p className="text-blue-100">Calendrier des disponibilités</p>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="max-w-2xl mx-auto text-center py-16">
-            <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Lock className="w-10 h-10 text-yellow-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Fonctionnalité Premium
-            </h2>
-            <p className="text-gray-600 mb-8">
-              Le calendrier de disponibilités est réservé aux artisans Pro et Premium.
-              Permettez à vos clients de réserver directement un créneau et augmentez vos conversions.
-            </p>
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-              <h3 className="font-semibold text-gray-900 mb-4">Avantages du calendrier :</h3>
-              <ul className="text-left space-y-3">
-                <li className="flex items-center gap-3 text-gray-700">
-                  <Check className="w-5 h-5 text-green-500" />
-                  Réservation en ligne 24h/24
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <Check className="w-5 h-5 text-green-500" />
-                  Gestion automatique des créneaux
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <Check className="w-5 h-5 text-green-500" />
-                  Rappels automatiques par SMS/email
-                </li>
-                <li className="flex items-center gap-3 text-gray-700">
-                  <Check className="w-5 h-5 text-green-500" />
-                  Synchronisation avec Google Calendar
-                </li>
-              </ul>
-            </div>
-            <Link
-              href="/espace-artisan/abonnement"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all"
-            >
-              Passer à Pro ou Premium
-              <ChevronRight className="w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
+      return prev + 1
+    })
+  }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-100">
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={[
             { label: 'Espace Artisan', href: '/espace-artisan' },
-            { label: 'Calendrier' }
+            { label: 'Calendrier' },
           ]} />
         </div>
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between">
+      <div className="bg-charcoal-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="flex items-center gap-3">
+            <CalendarIcon className="w-6 h-6 text-primary-400" />
             <div>
-              <h1 className="text-2xl font-bold">Espace Artisan</h1>
-              <p className="text-blue-100">{profile?.full_name}</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
-                {profile?.subscription_plan}
-              </span>
+              <h1 className="text-xl sm:text-2xl font-bold">Mon Calendrier</h1>
+              <p className="text-charcoal-300 text-sm">
+                {profile?.full_name ? `${profile.full_name} — ` : ''}
+                Consultez vos rendez-vous
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Contenu */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="grid lg:grid-cols-4 gap-4 lg:gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-artisan/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <TrendingUp className="w-5 h-5" />
-                Tableau de bord
-              </Link>
-              <Link
-                href="/espace-artisan/calendrier"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <Calendar className="w-5 h-5" />
-                Calendrier
-              </Link>
-              <Link
-                href="/espace-artisan/demandes-recues"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <FileText className="w-5 h-5" />
-                Demandes
-              </Link>
-              <Link
-                href="/espace-artisan/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-              </Link>
-              <Link
-                href="/espace-artisan/avis-recus"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Star className="w-5 h-5" />
-                Avis reçus
-              </Link>
-              <Link
-                href="/espace-artisan/profil"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Settings className="w-5 h-5" />
-                Mon profil
-              </Link>
-              <Link
-                href="/espace-artisan/abonnement"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Euro className="w-5 h-5" />
-                Mon compte
-              </Link>
-              <LogoutButton />
-            </nav>
+          <ArtisanSidebar activePage="calendrier" publicUrl={publicUrl} />
 
-            {/* Voir mon profil public */}
-            {provider && (
-              <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-                <Link
-                  href={getArtisanUrl({
-                    stable_id: provider.stable_id,
-                    slug: provider.slug,
-                    specialty: provider.specialty,
-                    city: provider.address_city,
-                  })}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Voir mon profil public
-                </Link>
-              </div>
-            )}
-
-            {/* Quick links */}
-            <div className="mt-4">
-              <QuickSiteLinks />
-            </div>
-
-            {/* Additional links */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
-              <div className="space-y-2 text-sm">
-                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
-                  Parcourir les services
-                </Link>
-                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
-                  Rechercher un artisan
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Main content */}
-          <div className="lg:col-span-3 space-y-6">
-            {/* Calendar Header */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Mon Calendrier
-                  </h2>
-                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                    Réservation en ligne activée
-                  </span>
-                </div>
-                <button
-                  onClick={() => setShowSettingsModal(true)}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-                >
-                  <Settings className="w-5 h-5" />
-                  Paramètres
-                </button>
-              </div>
-
-              {/* Month navigation */}
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  onClick={previousMonth}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {monthNames[month]} {year}
-                </h3>
-                <button
-                  onClick={nextMonth}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Slots loading indicator */}
-              {isLoadingSlots && (
-                <div className="flex items-center justify-center py-4">
-                  <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
-                  <span className="ml-2 text-sm text-gray-500">Chargement des créneaux...</span>
-                </div>
-              )}
-
-              {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-px sm:gap-1">
-                {/* Day headers */}
-                {dayNames.map(day => (
-                  <div key={day} className="text-center text-xs sm:text-sm font-medium text-gray-500 py-1 sm:py-2">
-                    {day}
-                  </div>
-                ))}
-
-                {/* Empty cells for days before the first of the month */}
-                {Array.from({ length: firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1 }).map((_, i) => (
-                  <div key={`empty-${i}`} className="aspect-square" />
-                ))}
-
-                {/* Days of the month */}
-                {days.map(date => {
-                  const daySchedule = getScheduleForDate(date)
-                  const hasBookings = daySchedule?.slots.some(s => !s.available)
-                  const hasAvailable = daySchedule?.slots.some(s => s.available)
-                  const past = isPast(date)
-
-                  return (
-                    <button
-                      key={date.toISOString()}
-                      onClick={() => !past && setSelectedDate(date)}
-                      disabled={past}
-                      className={`aspect-square p-1 rounded-lg border-2 transition-all ${
-                        selectedDate?.toDateString() === date.toDateString()
-                          ? 'border-blue-500 bg-blue-50'
-                          : isToday(date)
-                          ? 'border-blue-300 bg-blue-50'
-                          : 'border-transparent hover:bg-gray-50'
-                      } ${past ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
-                    >
-                      <div className={`text-sm font-medium ${
-                        isToday(date) ? 'text-blue-600' : 'text-gray-900'
-                      }`}>
-                        {date.getDate()}
-                      </div>
-                      {!past && (
-                        <div className="flex justify-center gap-0.5 mt-1">
-                          {hasBookings && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-red-500" title="RDV confirmés" />
-                          )}
-                          {hasAvailable && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-green-500" title="Créneaux disponibles" />
-                          )}
-                        </div>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-
-              {/* Legend */}
-              <div className="flex flex-wrap items-center gap-3 sm:gap-6 mt-4 pt-4 border-t text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="text-gray-600">Disponible</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <span className="text-gray-600">Réservé</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Selected Day Detail */}
-            {selectedDate && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {selectedDate.toLocaleDateString('fr-FR', {
-                      weekday: 'long',
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric'
-                    })}
-                  </h3>
-                  <button
-                    onClick={() => setShowSlotModal(true)}
-                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Ajouter un créneau
-                  </button>
-                </div>
-
-                <div className="space-y-3">
-                  {(getScheduleForDate(selectedDate)?.slots || editableDefaultSlots.map((s, i) => ({
-                    id: `default-${i}`,
-                    ...s,
-                    available: true as const,
-                    booking: undefined,
-                  }))).map(slot => (
-                    <div
-                      key={slot.id}
-                      className={`flex items-center justify-between p-4 rounded-lg border-2 ${
-                        slot.available
-                          ? 'border-green-200 bg-green-50'
-                          : 'border-gray-200 bg-gray-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <Clock className={`w-5 h-5 ${slot.available ? 'text-green-600' : 'text-gray-400'}`} />
-                        <div>
-                          <div className="font-medium text-gray-900">
-                            {slot.start} - {slot.end}
-                          </div>
-                          {'booking' in slot && slot.booking && (
-                            <div className="text-sm text-gray-500 mt-1">
-                              <span className="font-medium">{slot.booking.clientName}</span>
-                              {' - '}
-                              {slot.booking.service}
-                              {slot.booking.phone && (
-                                <span className="ml-2 text-blue-600">{slot.booking.phone}</span>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {slot.available ? (
-                          <>
-                            <span className="text-green-600 text-sm font-medium">Disponible</span>
-                            <button
-                              onClick={() => setSlotToDelete(slot.id)}
-                              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg"
-                              title="Supprimer ce créneau"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                              Réservé
-                            </span>
-                            <button
-                              onClick={() => 'booking' in slot && slot.booking && handleShowBookingDetail(slot.booking)}
-                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                              title="Voir les détails de la réservation"
-                            >
-                              <Users className="w-4 h-4" />
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Upcoming bookings */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Prochains rendez-vous
-              </h3>
-              <div className="space-y-3">
-                {upcomingBookings.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">
-                    Aucun rendez-vous à venir
+          {/* Main */}
+          <div className="lg:col-span-3">
+            {/* Erreur */}
+            {bookingsError && (
+              <div className="mb-4 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
+                <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-red-800">
+                    Erreur de chargement
                   </p>
-                ) : (
-                  upcomingBookings.map(booking => (
-                    <div
-                      key={booking.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Calendar className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900">
-                            {booking.client_name}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {booking.service_description}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-medium text-gray-900">
-                          {booking.scheduled_date && new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
-                            day: 'numeric',
-                            month: 'short'
-                          })}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {booking.scheduled_time ?? '--:--'}
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
+                  <p className="text-sm text-red-600 mt-1">
+                    {bookingsError.message || 'Impossible de charger les réservations. Veuillez réessayer.'}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.monthlyBookings}</div>
-                <div className="text-sm text-gray-500">RDV ce mois</div>
+            {/* Calendrier */}
+            <Calendar
+              year={year}
+              month={month}
+              bookings={bookings}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+              onPreviousMonth={handlePreviousMonth}
+              onNextMonth={handleNextMonth}
+              isLoading={isLoading}
+            />
+
+            {/* Stats rapides */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
+              <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+                <div className="text-2xl font-bold text-primary-600">
+                  {bookings.length}
+                </div>
+                <div className="text-xs text-charcoal-500 mt-1">RDV ce mois</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-green-600">{stats.fillRate}%</div>
-                <div className="text-sm text-gray-500">Taux de remplissage</div>
+              <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+                <div className="text-2xl font-bold text-accent-600">
+                  {bookings.filter(b => b.status === 'confirmed').length}
+                </div>
+                <div className="text-xs text-charcoal-500 mt-1">Confirmés</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.avgRating || '-'}</div>
-                <div className="text-sm text-gray-500">Note moyenne</div>
+              <div className="bg-white rounded-xl shadow-sm p-4 text-center col-span-2 sm:col-span-1">
+                <div className="text-2xl font-bold text-secondary-600">
+                  {bookings.filter(b => b.status === 'pending').length}
+                </div>
+                <div className="text-xs text-charcoal-500 mt-1">En attente</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Modal Ajout de créneau */}
-      {showSlotModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Ajouter un créneau
-              </h3>
-              <button
-                onClick={() => setShowSlotModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-700">{error}</p>
-              </div>
-            )}
-            <form onSubmit={handleAddSlot} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Heure de début
-                  </label>
-                  <input
-                    type="time"
-                    value={newSlotStart}
-                    onChange={(e) => setNewSlotStart(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Heure de fin
-                  </label>
-                  <input
-                    type="time"
-                    value={newSlotEnd}
-                    onChange={(e) => setNewSlotEnd(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={repeatWeekly}
-                    onChange={(e) => setRepeatWeekly(e.target.checked)}
-                    className="rounded border-gray-300"
-                  />
-                  <span className="text-sm text-gray-700">Répéter chaque semaine (4 semaines)</span>
-                </label>
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowSlotModal(false)}
-                  className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
-                  disabled={isSaving}
-                >
-                  Annuler
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                  Ajouter
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Modal Confirmation Suppression Créneau */}
-      {slotToDelete && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <AlertCircle className="w-5 h-5 text-red-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Supprimer ce créneau ?
-              </h3>
-            </div>
-            <p className="text-gray-600 mb-6">
-              Ce créneau sera supprimé et ne sera plus visible par vos clients. Cette action est irréversible.
-            </p>
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-700">{error}</p>
-              </div>
-            )}
-            <div className="flex gap-3">
-              <button
-                onClick={() => { setSlotToDelete(null); setError(null) }}
-                className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
-                disabled={isDeleting}
-              >
-                Annuler
-              </button>
-              <button
-                onClick={() => handleDeleteSlot(slotToDelete)}
-                disabled={isDeleting}
-                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {isDeleting && <Loader2 className="w-4 h-4 animate-spin" />}
-                Supprimer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal Détails Réservation */}
-      {showBookingDetailModal && selectedBooking && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Détails de la réservation
-              </h3>
-              <button
-                onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(null) }}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 pb-4 border-b">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-lg">{selectedBooking.clientName}</div>
-                  <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium ${
-                    selectedBooking.status === 'confirmed'
-                      ? 'bg-green-100 text-green-700'
-                      : selectedBooking.status === 'pending'
-                      ? 'bg-yellow-100 text-yellow-700'
-                      : 'bg-gray-100 text-gray-700'
-                  }`}>
-                    {selectedBooking.status === 'confirmed' ? 'Confirmé' :
-                     selectedBooking.status === 'pending' ? 'En attente' :
-                     selectedBooking.status === 'cancelled' ? 'Annulé' :
-                     selectedBooking.status}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Service demandé</div>
-                <div className="font-medium text-gray-900">{selectedBooking.service}</div>
-              </div>
-              {selectedBooking.phone && (
-                <div>
-                  <div className="text-sm text-gray-500 mb-1">Téléphone</div>
-                  <a
-                    href={`tel:${selectedBooking.phone.replace(/[\s.\-()]/g, '')}`}
-                    className="font-medium text-blue-600 hover:text-blue-700"
-                  >
-                    {selectedBooking.phone}
-                  </a>
-                </div>
-              )}
-              {selectedBooking.email && (
-                <div>
-                  <div className="text-sm text-gray-500 mb-1">Email</div>
-                  <a
-                    href={`mailto:${selectedBooking.email}`}
-                    className="font-medium text-blue-600 hover:text-blue-700"
-                  >
-                    {selectedBooking.email}
-                  </a>
-                </div>
-              )}
-            </div>
-            <div className="mt-6 pt-4 border-t flex gap-3">
-              <button
-                onClick={() => { setShowBookingDetailModal(false); setSelectedBooking(null) }}
-                className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
-              >
-                Fermer
-              </button>
-              <Link
-                href={`/espace-artisan/demandes-recues`}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center font-medium"
-              >
-                Voir les demandes
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal Paramètres */}
-      {showSettingsModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-lg w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Paramètres du calendrier
-              </h3>
-              <button
-                onClick={() => setShowSettingsModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3">Créneaux par défaut</h4>
-                <div className="space-y-2">
-                  {editableDefaultSlots.length === 0 ? (
-                    <p className="text-sm text-gray-500 text-center py-2">Aucun créneau par défaut</p>
-                  ) : (
-                    editableDefaultSlots.map((slot, i) => (
-                      <div key={i} className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded-lg">
-                        <span className="text-gray-700">{slot.start} - {slot.end}</span>
-                        <button
-                          onClick={() => handleRemoveDefaultSlot(i)}
-                          className="text-red-500 hover:text-red-700"
-                          title="Supprimer ce créneau par défaut"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3">Notifications</h4>
-                <div className="space-y-3">
-                  <label className="flex items-center justify-between">
-                    <span className="text-gray-700">Email pour nouvelle réservation</span>
-                    <input
-                      type="checkbox"
-                      checked={settings.emailNotifications}
-                      onChange={(e) => setSettings({ ...settings, emailNotifications: e.target.checked })}
-                      className="rounded border-gray-300"
-                    />
-                  </label>
-                  <label className="flex items-center justify-between">
-                    <span className="text-gray-700">SMS de rappel (J-1)</span>
-                    <input
-                      type="checkbox"
-                      checked={settings.smsReminders}
-                      onChange={(e) => setSettings({ ...settings, smsReminders: e.target.checked })}
-                      className="rounded border-gray-300"
-                    />
-                  </label>
-                  <label className="flex items-center justify-between">
-                    <span className="text-gray-700">Synchronisation Google Calendar</span>
-                    <input
-                      type="checkbox"
-                      checked={settings.googleCalendarSync}
-                      onChange={(e) => setSettings({ ...settings, googleCalendarSync: e.target.checked })}
-                      className="rounded border-gray-300"
-                    />
-                  </label>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3">Zone d'intervention</h4>
-                <input
-                  type="text"
-                  placeholder="Ex: Paris et petite couronne (20km)"
-                  value={settings.serviceRadius}
-                  onChange={(e) => setSettings({ ...settings, serviceRadius: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
-                />
-              </div>
-              <button
-                onClick={handleSaveSettings}
-                disabled={isSaving}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
-                Enregistrer les paramètres
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

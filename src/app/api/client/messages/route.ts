@@ -6,8 +6,10 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { notifyNewMessage } from '@/lib/notifications/message-notifications'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
@@ -249,6 +251,52 @@ export async function POST(request: Request) {
         { status: 500 }
       )
     }
+
+    // Fire-and-forget: notify the artisan by email
+    const effectiveConvId = resolvedConversationId
+    const effectiveProviderId = provider_id
+    ;(async () => {
+      try {
+        const adminSupabase = createAdminClient()
+
+        // Resolve provider_id from conversation if not provided directly
+        let pid = effectiveProviderId
+        if (!pid && effectiveConvId) {
+          const { data: conv } = await adminSupabase
+            .from('conversations')
+            .select('provider_id')
+            .eq('id', effectiveConvId)
+            .single()
+          pid = conv?.provider_id ?? null
+        }
+        if (!pid) return
+
+        const { data: provider } = await adminSupabase
+          .from('providers')
+          .select('name, email')
+          .eq('id', pid)
+          .single()
+
+        if (!provider?.email) return
+
+        // Get sender name
+        const { data: senderProfile } = await adminSupabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single()
+
+        await notifyNewMessage({
+          recipientEmail: provider.email,
+          recipientName: provider.name || 'Artisan',
+          senderName: senderProfile?.full_name || 'Un client',
+          messageContent: content,
+          recipientRole: 'artisan',
+        })
+      } catch (err) {
+        logger.error('Failed to send message notification to artisan:', err)
+      }
+    })()
 
     return NextResponse.json({
       success: true,

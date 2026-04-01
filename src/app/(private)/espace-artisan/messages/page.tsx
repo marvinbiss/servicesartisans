@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { MessageSquare, ArrowLeft, Send, Search, Paperclip, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { getArtisanUrl } from '@/lib/utils'
+import { useRealtimeMessages } from '@/lib/hooks/use-realtime-messages'
 
 interface Partner {
   id: string
@@ -41,6 +42,27 @@ export default function MessagesArtisanPage() {
   const [error, setError] = useState<string | null>(null)
   const [sendError, setSendError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // Real-time: append new messages from Supabase Realtime without re-fetching
+  const handleRealtimeMessage = useCallback((msg: { id: string; sender_id: string; conversation_id: string; content: string; created_at: string; read_at: string | null }) => {
+    setMessages((prev) => {
+      // Deduplicate: skip if already present (e.g. optimistic add after own send)
+      if (prev.some((m) => m.id === msg.id)) return prev
+      return [...prev, msg]
+    })
+  }, [])
+
+  const handleRealtimeUpdate = useCallback((msg: { id: string; sender_id: string; conversation_id: string; content: string; created_at: string; read_at: string | null }) => {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === msg.id ? { ...m, ...msg } : m))
+    )
+  }, [])
+
+  useRealtimeMessages(
+    selectedConversation?.id,
+    handleRealtimeMessage,
+    handleRealtimeUpdate,
+  )
 
   useEffect(() => {
     fetchConversations()

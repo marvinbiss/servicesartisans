@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -92,22 +92,34 @@ export default function LeadDetailPage() {
     fetchEvents()
   }, [fetchLead, fetchEvents])
 
-  // Auto-mark as viewed on first load
+  // Mark as viewed ONLY on first detail page open (not on list load).
+  // useRef prevents duplicate calls caused by React Strict Mode double-mount
+  // or re-renders that keep assignment.status === 'pending'.
+  const viewMarkedRef = useRef(false)
+
   useEffect(() => {
-    if (assignment && assignment.status === 'pending') {
-      let cancelled = false
+    if (
+      assignment &&
+      assignment.status === 'pending' &&
+      !viewMarkedRef.current
+    ) {
+      viewMarkedRef.current = true
       fetch(`/api/artisan/leads/${id}/action`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'view' }),
-      }).then(() => {
-        if (cancelled) return
-        setAssignment((prev) =>
-          prev ? { ...prev, status: 'viewed', viewed_at: new Date().toISOString() } : prev
-        )
-        fetchEvents()
       })
-      return () => { cancelled = true }
+        .then((res) => {
+          if (!res.ok) return
+          setAssignment((prev) =>
+            prev ? { ...prev, status: 'viewed', viewed_at: new Date().toISOString() } : prev
+          )
+          fetchEvents()
+        })
+        .catch(() => {
+          // Allow retry on network error
+          viewMarkedRef.current = false
+        })
     }
   }, [assignment?.status, id, fetchEvents])
 

@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { Star, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X } from 'lucide-react'
+import { Star, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X, ArrowUpDown } from 'lucide-react'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
+import { Pagination } from '@/components/dashboard/Pagination'
 
 interface Avis {
   id: string
@@ -28,24 +29,25 @@ export default function AvisRecusPage() {
     total: 0,
     distribution: [5, 4, 3, 2, 1].map(note => ({ note, count: 0 })),
   })
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [sort, setSort] = useState<'recent' | 'oldest' | 'rating_high' | 'rating_low'>('recent')
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [replyError, setReplyError] = useState<string | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchAvis()
-  }, [])
-
-  const fetchAvis = async () => {
+  const fetchAvis = useCallback(async () => {
+    setLoading(true)
     try {
-      const response = await fetch('/api/artisan/avis')
+      const response = await fetch(`/api/artisan/avis?page=${page}&limit=20&sort=${sort}`)
       const data = await response.json()
 
       if (response.ok) {
         setAvis(data.avis || [])
         setStats(data.stats || stats)
+        setTotalPages(data.totalPages || 1)
       } else {
         setFetchError('Impossible de charger les avis.')
       }
@@ -55,7 +57,12 @@ export default function AvisRecusPage() {
     } finally {
       setLoading(false)
     }
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sort])
+
+  useEffect(() => {
+    fetchAvis()
+  }, [fetchAvis])
 
   const handleReply = async (reviewId: string) => {
     if (!replyText.trim()) return
@@ -163,9 +170,27 @@ export default function AvisRecusPage() {
 
             {/* Avis list */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">
-                Derniers avis
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Derniers avis
+                </h2>
+                <div className="flex items-center gap-2">
+                  <ArrowUpDown className="w-4 h-4 text-gray-400" />
+                  <select
+                    value={sort}
+                    onChange={(e) => {
+                      setSort(e.target.value as typeof sort)
+                      setPage(1)
+                    }}
+                    className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  >
+                    <option value="recent">Récents</option>
+                    <option value="oldest">Anciens</option>
+                    <option value="rating_high">Meilleures notes</option>
+                    <option value="rating_low">Moins bonnes notes</option>
+                  </select>
+                </div>
+              </div>
               <div className="space-y-6">
                 {avis.map((item) => (
                   <div key={item.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
@@ -246,6 +271,12 @@ export default function AvisRecusPage() {
                   </div>
                 ))}
               </div>
+
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
             </div>
 
             {/* Tips */}
