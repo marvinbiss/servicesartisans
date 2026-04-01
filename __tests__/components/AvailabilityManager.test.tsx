@@ -70,7 +70,7 @@ describe('AvailabilityManager', () => {
     expect(screen.getByLabelText('Date')).toBeInTheDocument()
 
     // Les selects d'heure sont présents
-    expect(screen.getByLabelText('Debut')).toBeInTheDocument()
+    expect(screen.getByLabelText('Début')).toBeInTheDocument()
     expect(screen.getByLabelText('Fin')).toBeInTheDocument()
 
     // Le bouton Ajouter est présent
@@ -98,7 +98,7 @@ describe('AvailabilityManager', () => {
     render(<AvailabilityManager />)
 
     // Mettre début et fin à la même heure
-    const debutSelect = screen.getByLabelText('Debut')
+    const debutSelect = screen.getByLabelText('Début')
     const finSelect = screen.getByLabelText('Fin')
     fireEvent.change(debutSelect, { target: { value: '10:00' } })
     fireEvent.change(finSelect, { target: { value: '10:00' } })

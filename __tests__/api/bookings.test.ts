@@ -70,9 +70,11 @@ vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
+let mockAdminResult: { data: unknown; error: unknown } = { data: null, error: null }
+
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: vi.fn(() => ({
-    from: vi.fn(() => makeBuilder(mockProfileResult)),
+    from: vi.fn(() => makeBuilder(mockAdminResult)),
   })),
 }))
 
@@ -109,6 +111,7 @@ beforeEach(() => {
   mockQueryResult = { data: null, error: null }
   mockRpcResult = { data: null, error: null }
   mockProfileResult = { data: null, error: null }
+  mockAdminResult = { data: null, error: null }
 })
 
 // ============================================
@@ -131,6 +134,8 @@ describe('GET /api/bookings', () => {
   })
 
   it('returns slots grouped by date when month param provided', async () => {
+    // Admin client returns provider with matching user_id for IDOR check
+    mockAdminResult = { data: { user_id: '550e8400-e29b-41d4-a716-446655440099' }, error: null }
     mockQueryResult = {
       data: [
         { id: 's1', artisan_id: ARTISAN_UUID, date: '2026-03-05', start_time: '09:00', end_time: '10:00', is_available: true },
@@ -152,6 +157,7 @@ describe('GET /api/bookings', () => {
   })
 
   it('returns slots with booking info when date param provided', async () => {
+    mockAdminResult = { data: { user_id: '550e8400-e29b-41d4-a716-446655440099' }, error: null }
     mockQueryResult = {
       data: [
         { id: 's1', artisan_id: ARTISAN_UUID, date: '2026-03-05', start_time: '09:00', end_time: '10:00', is_available: false, booking: { id: 'b1', client_name: 'Alice', status: 'confirmed' } },
@@ -170,6 +176,7 @@ describe('GET /api/bookings', () => {
   })
 
   it('returns bookings list by default (no date/month)', async () => {
+    mockAdminResult = { data: { user_id: '550e8400-e29b-41d4-a716-446655440099' }, error: null }
     mockQueryResult = {
       data: [
         { id: 'b1', provider_id: ARTISAN_UUID, status: 'confirmed', client_name: 'Alice', created_at: '2026-02-01T00:00:00Z' },
@@ -189,6 +196,7 @@ describe('GET /api/bookings', () => {
   })
 
   it('returns 500 on database error', async () => {
+    mockAdminResult = { data: { user_id: '550e8400-e29b-41d4-a716-446655440099' }, error: null }
     mockQueryResult = { data: null, error: { message: 'DB connection failed', code: '08000' } }
 
     const { GET } = await import('@/app/api/bookings/route')
@@ -229,6 +237,7 @@ describe('POST /api/bookings', () => {
       },
       error: null,
     }
+    mockAdminResult = { data: { full_name: 'Martin Plombier', email: 'martin@example.com' }, error: null }
     mockProfileResult = { data: { full_name: 'Martin Plombier', email: 'martin@example.com' }, error: null }
 
     const { POST } = await import('@/app/api/bookings/route')

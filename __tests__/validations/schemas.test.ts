@@ -251,6 +251,7 @@ describe('createReviewSchema', () => {
     bookingId: validUUID,
     rating: 5,
     comment: 'Excellent travail, je recommande vivement !',
+    reviewToken: 'abc123def456',
   }
 
   it('should accept a valid review', () => {

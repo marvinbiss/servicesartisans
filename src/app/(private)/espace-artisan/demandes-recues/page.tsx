@@ -442,7 +442,7 @@ export default function DemandesRecuesPage() {
             <form onSubmit={handleSendDevis} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Montant du devis (EUR) *
+                  Montant du devis (€) *
                 </label>
                 <input
                   type="number"

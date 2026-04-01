@@ -186,7 +186,7 @@ describe('TwoFactorAuthService', () => {
 
       expect(result.backupCodes).toHaveLength(10)
       for (const code of result.backupCodes) {
-        expect(code).toMatch(/^[A-F0-9]{4}-[A-F0-9]{4}$/)
+        expect(code).toMatch(/^[A-F0-9]{8}-[A-F0-9]{8}$/)
       }
 
       const tfaUpsert = upsertCaptures.find((c) => c.table === 'two_factor_auth')
@@ -392,10 +392,9 @@ describe('TwoFactorAuthService', () => {
   // 8-9. Backup code verification
   // ------------------------------------------
   describe('backup codes', () => {
-    // The source code detects backup codes with: code.length === 8 && code.includes('-')
-    // Generated backup codes are XXXX-XXXX (9 chars), so we use a 7-char + dash = 8-char code
-    // to match the detection logic. Format: XXX-XXXX (3+1+4 = 8 chars)
-    const BACKUP_CODE = 'AB1-CD34'
+    // The source code detects backup codes with: code.length === 17 && code.includes('-')
+    // Generated backup codes are XXXXXXXX-XXXXXXXX (17 chars)
+    const BACKUP_CODE = 'AB12CD34-EF56GH78'
 
     // 8. Backup code verification works
     it('verifies a valid backup code', async () => {
@@ -407,7 +406,7 @@ describe('TwoFactorAuthService', () => {
           id: 'tfa-1',
           user_id: TEST_USER_ID,
           secret: encryptedSecret,
-          backup_codes: [hashedBackup, hashCode('BB2-EF56')],
+          backup_codes: [hashedBackup, hashCode('BB22EE56-FF789012')],
           verified: true,
           verified_at: new Date().toISOString(),
           last_used_at: null,
@@ -481,7 +480,7 @@ describe('TwoFactorAuthService', () => {
           id: 'tfa-1',
           user_id: TEST_USER_ID,
           secret: encryptedSecret,
-          backup_codes: [hashCode('AB1-REAL')],
+          backup_codes: [hashCode('AB11REAL0-CD22FAKE')],
           verified: true,
           verified_at: new Date().toISOString(),
           last_used_at: null,
@@ -492,8 +491,8 @@ describe('TwoFactorAuthService', () => {
       mockResults['security_logs'] = { data: [], error: null }
 
       const svc = await getService()
-      // Use a code that is 8 chars with dash (detected as backup) but does not match
-      const result = await svc.verifyCode(TEST_USER_ID, 'ZZZ-FAKE')
+      // Use a code that is 17 chars with dash (detected as backup) but does not match
+      const result = await svc.verifyCode(TEST_USER_ID, 'ZZZZZZZZ-FAKEFAKE')
 
       expect(result).toBe(false)
     })

@@ -22,6 +22,25 @@ vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }))
 
+vi.mock('@/lib/sanitize', () => ({
+  sanitizeUserInput: vi.fn((input: string) => input),
+}))
+
+vi.mock('@/lib/notifications/message-notifications', () => ({
+  notifyNewMessage: vi.fn().mockResolvedValue(undefined),
+}))
+
+vi.mock('@/lib/supabase/admin', () => ({
+  createAdminClient: vi.fn(() => ({
+    from: vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockReturnThis(),
+      then: (resolve: (v: unknown) => unknown) => resolve({ data: null, error: null }),
+    })),
+  })),
+}))
+
 // Supabase builder tracking
 let fromCallIndex = 0
 type BuilderResult = { data: unknown; error: unknown; count?: number | null }
@@ -203,7 +222,7 @@ describe('GET /api/client/messages', () => {
     const result = (await GET(makeGetRequest({ conversation_id: 'not-a-uuid' }))) as unknown as MockResult
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toBe('Invalid parameters')
+    expect(result.body.error).toBe('Paramètres invalides')
   })
 
   it('returns 500 when messages query fails', async () => {
@@ -261,7 +280,7 @@ describe('POST /api/client/messages', () => {
     const result = (await POST(makePostRequest({ content: '' }))) as unknown as MockResult
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toBe('Validation error')
+    expect(result.body.error).toBe('Erreur de validation')
   })
 
   it('returns 400 for missing content', async () => {
@@ -271,7 +290,7 @@ describe('POST /api/client/messages', () => {
     const result = (await POST(makePostRequest({ conversation_id: CONV_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toBe('Validation error')
+    expect(result.body.error).toBe('Erreur de validation')
   })
 
   it('creates a new message in existing conversation (200)', async () => {

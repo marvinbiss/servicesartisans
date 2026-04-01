@@ -1,7 +1,12 @@
 /**
  * Tests — Review Vote API (/api/reviews/vote)
- * POST: Zod validation, fingerprint deduplication, vote upsert, recount,
- *       fallback on missing table, DB errors
+ * POST: Zod validation, rate limiting, in-memory deduplication,
+ *       direct increment, review lookup, DB errors
+ *
+ * The route was rewritten to use:
+ * - Rate limiting via checkRateLimit
+ * - In-memory dedup (IP+reviewId) instead of review_votes table
+ * - Direct helpful_count increment on reviews table
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
@@ -9,79 +14,60 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Mocks
 // ============================================
 
-const mockJsonFn = vi.fn((body: unknown, init?: { status?: number }) => ({
+const mockJsonFn = vi.fn((body: unknown, init?: { status?: number; headers?: Record<string, string> }) => ({
   body,
   status: init?.status ?? 200,
+  headers: init?.headers ?? {},
 }))
 
 vi.mock('next/server', () => ({
-  NextResponse: { json: (body: unknown, init?: { status?: number }) => mockJsonFn(body, init) },
+  NextResponse: { json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => mockJsonFn(body, init) },
 }))
 
 vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }))
 
+// Rate limiter mock — always allow by default
+let mockRateLimitAllowed = true
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn().mockImplementation(() =>
+    Promise.resolve({ allowed: mockRateLimitAllowed, resetTime: Date.now() + 3600000 })
+  ),
+  getClientIp: vi.fn().mockImplementation((headers: Headers) => {
+    return headers.get('x-forwarded-for') || '127.0.0.1'
+  }),
+}))
+
 // State for controlling mock behaviour per test
-let mockAuthUser: { id: string; email: string } | null = null
 let mockReviewResult: { data: unknown; error: unknown } = { data: null, error: null }
-let mockUpsertResult: { data: unknown; error: unknown } = { data: null, error: null }
-let mockCountResult: { count: number | null; error: unknown } = { count: null, error: null }
 let mockUpdateResult: { data: unknown; error: unknown } = { data: null, error: null }
 let adminFromCallCount = 0
 
-/**
- * Build a thenable chain builder that resolves to `result` at the end.
- * Each chained method returns the same builder, and `.then` resolves the result.
- */
-function makeBuilder(result: { data?: unknown; error?: unknown; count?: number | null }) {
+function makeBuilder(result: { data?: unknown; error?: unknown }) {
   const b: Record<string, unknown> = {}
   b.select = vi.fn().mockReturnValue(b)
   b.eq = vi.fn().mockReturnValue(b)
   b.single = vi.fn().mockReturnValue(b)
   b.update = vi.fn().mockReturnValue(b)
-  b.upsert = vi.fn().mockReturnValue(b)
   ;(b as Record<string, unknown>).then = (resolve: (v: unknown) => unknown) =>
-    resolve({ data: result.data ?? null, error: result.error ?? null, count: result.count ?? null })
+    resolve({ data: result.data ?? null, error: result.error ?? null })
   return b
 }
 
-// The admin client needs to return different builders depending on the table
-// and the operation sequence: reviews select -> review_votes upsert ->
-// review_votes count -> reviews update
 function makeAdminFrom(_table: string) {
   adminFromCallCount++
-  const call = adminFromCallCount
-
   // Call 1: reviews.select(...).eq(...).eq(...).single() -> mockReviewResult
-  if (call === 1) {
+  if (adminFromCallCount === 1) {
     return makeBuilder(mockReviewResult)
   }
-  // Call 2: review_votes.upsert(...) -> mockUpsertResult
-  if (call === 2) {
-    return makeBuilder(mockUpsertResult)
-  }
-  // Call 3: review_votes.select('id', {count, head}).eq.eq -> mockCountResult
-  if (call === 3) {
-    return makeBuilder({ data: null, error: mockCountResult.error, count: mockCountResult.count })
-  }
-  // Call 4+: reviews.update(...).eq(...) -> mockUpdateResult
+  // Call 2+: reviews.update(...).eq(...) -> mockUpdateResult
   return makeBuilder(mockUpdateResult)
 }
 
 const mockAdminSupabase = {
   from: vi.fn((_table: string) => makeAdminFrom(_table)),
 }
-
-const mockSupabase = {
-  auth: {
-    getUser: vi.fn(),
-  },
-}
-
-vi.mock('@/lib/supabase/server', () => ({
-  createClient: vi.fn().mockResolvedValue(mockSupabase),
-}))
 
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: vi.fn(() => mockAdminSupabase),
@@ -92,13 +78,21 @@ vi.mock('@/lib/supabase/admin', () => ({
 // ============================================
 
 const REVIEW_UUID = '550e8400-e29b-41d4-a716-446655440010'
-const USER_UUID = '550e8400-e29b-41d4-a716-446655440099'
+
+// Use unique IPs per test to avoid in-memory dedup collisions
+let testIpCounter = 0
+function nextIp() {
+  testIpCounter++
+  return `10.0.0.${testIpCounter}`
+}
 
 function makePostRequest(body: unknown, headers?: Record<string, string>) {
+  const ip = headers?.['x-forwarded-for'] || nextIp()
   return new Request('http://localhost/api/reviews/vote', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'x-forwarded-for': ip,
       ...headers,
     },
     body: JSON.stringify(body),
@@ -110,17 +104,9 @@ type MockResult = { body: Record<string, unknown>; status: number }
 beforeEach(() => {
   vi.clearAllMocks()
   adminFromCallCount = 0
-  mockAuthUser = null
+  mockRateLimitAllowed = true
   mockReviewResult = { data: null, error: null }
-  mockUpsertResult = { data: null, error: null }
-  mockCountResult = { count: null, error: null }
   mockUpdateResult = { data: null, error: null }
-
-  // Default auth: no user (anonymous)
-  mockSupabase.auth.getUser.mockResolvedValue({
-    data: { user: mockAuthUser },
-    error: null,
-  })
 })
 
 // ============================================
@@ -144,140 +130,85 @@ describe('POST /api/reviews/vote', () => {
     expect(result.body.error).toMatchObject({ message: 'Requête invalide' })
   })
 
-  it('uses ip-based fingerprint for unauthenticated user', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: null },
-      error: null,
-    })
-    mockReviewResult = { data: { id: REVIEW_UUID, helpful_count: 3 }, error: null }
-    mockUpsertResult = { data: null, error: null }
-    mockCountResult = { count: 4, error: null }
-    mockUpdateResult = { data: null, error: null }
-
-    const { POST } = await import('@/app/api/reviews/vote/route')
-    const result = (await POST(
-      makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': '1.2.3.4' })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(200)
-    // Verify the upsert was called with ip fingerprint
-    const upsertCall = mockAdminSupabase.from.mock.results[1].value.upsert
-    expect(upsertCall).toHaveBeenCalledWith(
-      { review_id: REVIEW_UUID, voter_fingerprint: 'ip:1.2.3.4', is_helpful: true },
-      { onConflict: 'review_id,voter_fingerprint', ignoreDuplicates: true }
-    )
-  })
-
-  it('uses user-based fingerprint for authenticated user', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: { id: USER_UUID, email: 'test@example.com' } },
-      error: null,
-    })
-    mockReviewResult = { data: { id: REVIEW_UUID, helpful_count: 5 }, error: null }
-    mockUpsertResult = { data: null, error: null }
-    mockCountResult = { count: 6, error: null }
-    mockUpdateResult = { data: null, error: null }
-
-    const { POST } = await import('@/app/api/reviews/vote/route')
-    const result = (await POST(
-      makePostRequest({ reviewId: REVIEW_UUID })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(200)
-    // Verify the upsert was called with user fingerprint
-    const upsertCall = mockAdminSupabase.from.mock.results[1].value.upsert
-    expect(upsertCall).toHaveBeenCalledWith(
-      { review_id: REVIEW_UUID, voter_fingerprint: `user:${USER_UUID}`, is_helpful: true },
-      { onConflict: 'review_id,voter_fingerprint', ignoreDuplicates: true }
-    )
-  })
-
   it('returns 404 when review does not exist', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: null },
-      error: null,
-    })
     mockReviewResult = { data: null, error: { message: 'Row not found', code: 'PGRST116' } }
 
     const { POST } = await import('@/app/api/reviews/vote/route')
-    const result = (await POST(
-      makePostRequest({ reviewId: REVIEW_UUID })
-    )) as unknown as MockResult
+    const result = (await POST(makePostRequest({ reviewId: REVIEW_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(404)
     expect(result.body.error).toEqual({ message: 'Avis non trouvé ou non publié' })
   })
 
   it('returns 404 when review is not published', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: null },
-      error: null,
-    })
-    // Simulating .single() returning null because the status='published' filter excludes it
+    // .single() returns null because the status='published' filter excludes it
     mockReviewResult = { data: null, error: null }
 
     const { POST } = await import('@/app/api/reviews/vote/route')
-    const result = (await POST(
-      makePostRequest({ reviewId: REVIEW_UUID })
-    )) as unknown as MockResult
+    const result = (await POST(makePostRequest({ reviewId: REVIEW_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(404)
     expect(result.body.error).toEqual({ message: 'Avis non trouvé ou non publié' })
   })
 
-  it('returns success with recounted helpful_count after vote', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: null },
-      error: null,
-    })
+  it('returns success with incremented helpful_count after vote', async () => {
     mockReviewResult = { data: { id: REVIEW_UUID, helpful_count: 7 }, error: null }
-    mockUpsertResult = { data: null, error: null }
-    mockCountResult = { count: 8, error: null }
     mockUpdateResult = { data: null, error: null }
 
     const { POST } = await import('@/app/api/reviews/vote/route')
-    const result = (await POST(
-      makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': '10.0.0.1' })
-    )) as unknown as MockResult
+    const result = (await POST(makePostRequest({ reviewId: REVIEW_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(200)
     expect(result.body).toEqual({ success: true, helpful_count: 8 })
   })
 
-  it('falls back to simple increment when review_votes table is missing (42P01)', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: null },
-      error: null,
-    })
+  it('returns 409 when same IP votes twice for same review', async () => {
     mockReviewResult = { data: { id: REVIEW_UUID, helpful_count: 3 }, error: null }
-    // Upsert returns 42P01 (table not found)
-    mockUpsertResult = { data: null, error: { message: 'relation "review_votes" does not exist', code: '42P01' } }
     mockUpdateResult = { data: null, error: null }
 
+    const ip = nextIp()
     const { POST } = await import('@/app/api/reviews/vote/route')
-    const result = (await POST(
-      makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': '10.0.0.1' })
-    )) as unknown as MockResult
 
-    expect(result.status).toBe(200)
-    expect(result.body).toEqual({ success: true, helpful_count: 4 })
+    // First vote succeeds
+    const result1 = (await POST(makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': ip }))) as unknown as MockResult
+    expect(result1.status).toBe(200)
+
+    // Second vote from same IP is rejected
+    adminFromCallCount = 0
+    const result2 = (await POST(makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': ip }))) as unknown as MockResult
+    expect(result2.status).toBe(409)
+    expect(result2.body.error).toMatchObject({ message: 'Vous avez déjà voté pour cet avis' })
   })
 
-  it('returns 500 on unexpected database error', async () => {
-    mockSupabase.auth.getUser.mockResolvedValue({
-      data: { user: null },
-      error: null,
-    })
+  it('returns 500 on unexpected database error during update', async () => {
     mockReviewResult = { data: { id: REVIEW_UUID, helpful_count: 0 }, error: null }
-    // Upsert returns a non-42P01 error
-    mockUpsertResult = { data: null, error: { message: 'connection refused', code: '08000' } }
+    mockUpdateResult = { data: null, error: { message: 'connection refused', code: '08000' } }
 
     const { POST } = await import('@/app/api/reviews/vote/route')
-    const result = (await POST(
-      makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': '10.0.0.1' })
-    )) as unknown as MockResult
+    const result = (await POST(makePostRequest({ reviewId: REVIEW_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(500)
     expect(result.body.error).toEqual({ message: 'Erreur serveur lors du vote' })
+  })
+
+  it('returns 429 when rate limited', async () => {
+    mockRateLimitAllowed = false
+
+    const { POST } = await import('@/app/api/reviews/vote/route')
+    const result = (await POST(makePostRequest({ reviewId: REVIEW_UUID }))) as unknown as MockResult
+
+    expect(result.status).toBe(429)
+    expect(result.body.error).toMatchObject({ message: 'Trop de votes, veuillez réessayer plus tard' })
+  })
+
+  it('handles null helpful_count gracefully', async () => {
+    mockReviewResult = { data: { id: REVIEW_UUID, helpful_count: null }, error: null }
+    mockUpdateResult = { data: null, error: null }
+
+    const { POST } = await import('@/app/api/reviews/vote/route')
+    const result = (await POST(makePostRequest({ reviewId: REVIEW_UUID }))) as unknown as MockResult
+
+    expect(result.status).toBe(200)
+    expect(result.body).toEqual({ success: true, helpful_count: 1 })
   })
 })

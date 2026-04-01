@@ -33,7 +33,7 @@ export async function GET() {
     const dbLatency = Date.now() - dbStart
 
     if (error) {
-      checks.database = { status: 'unhealthy', latency: dbLatency }
+      checks.database = { status: 'unhealthy', latency: dbLatency, error: error.message }
     } else if (dbLatency > 5000) {
       checks.database = { status: 'degraded', latency: dbLatency, error: 'High latency' }
     } else {

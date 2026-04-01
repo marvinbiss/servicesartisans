@@ -4,6 +4,7 @@
  * POST: validation, HMAC token, duplicate check, fraud detection, 201 success
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { createHmac } from 'crypto'
 
 // ============================================
 // Mocks
@@ -20,6 +21,35 @@ vi.mock('next/server', () => ({
 
 vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+}))
+
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn().mockResolvedValue({ allowed: true, resetTime: Date.now() + 60000 }),
+  getClientIp: vi.fn().mockReturnValue('127.0.0.1'),
+}))
+
+vi.mock('next/cache', () => ({
+  revalidatePath: vi.fn(),
+}))
+
+vi.mock('@/lib/utils', () => ({
+  slugify: vi.fn((s: string) => s.toLowerCase().replace(/\s+/g, '-')),
+}))
+
+// Auth mock for POST (createServerClient)
+let mockAuthUser: { id: string; email: string } | null = null
+
+const mockServerSupabase = {
+  auth: {
+    getUser: vi.fn(() => Promise.resolve({
+      data: { user: mockAuthUser },
+      error: mockAuthUser ? null : { message: 'not authenticated' },
+    })),
+  },
+}
+
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn().mockImplementation(() => Promise.resolve(mockServerSupabase)),
 }))
 
 // Supabase state
@@ -73,19 +103,31 @@ function makePostRequest(body: Record<string, unknown>) {
   })
 }
 
+const HMAC_SECRET = 'test-hmac-secret'
+
+function generateValidToken(bookingId: string): string {
+  return createHmac('sha256', HMAC_SECRET)
+    .update(bookingId)
+    .digest('hex')
+    .slice(0, 32)
+}
+
 const validReviewBody = {
   bookingId: BOOKING_UUID,
   rating: 5,
   comment: 'Excellent travail, très professionnel et ponctuel.',
+  reviewToken: generateValidToken(BOOKING_UUID),
 }
 
 // Env setup
 const OLD_ENV = process.env
+const CLIENT_UUID = '550e8400-e29b-41d4-a716-446655440050'
 
 beforeEach(() => {
   vi.clearAllMocks()
   fromCallIndex = 0
   queryResults.length = 0
+  mockAuthUser = null
   process.env = { ...OLD_ENV }
   delete process.env.REVIEW_HMAC_SECRET
   process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co'
@@ -228,6 +270,8 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 404 when booking not found', async () => {
+    mockAuthUser = { id: CLIENT_UUID, email: 'client@test.com' }
+    process.env.REVIEW_HMAC_SECRET = HMAC_SECRET
     queryResults.push({ data: null, error: { message: 'No rows', code: 'PGRST116' } })
 
     const { POST } = await import('@/app/api/reviews/route')
@@ -237,7 +281,9 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 400 when booking status is pending (not reviewable)', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'pending' }, error: null })
+    mockAuthUser = { id: CLIENT_UUID, email: 'client@test.com' }
+    process.env.REVIEW_HMAC_SECRET = HMAC_SECRET
+    queryResults.push({ data: { id: BOOKING_UUID, client_id: CLIENT_UUID, provider_id: ARTISAN_UUID, status: 'pending', client: null }, error: null })
 
     const { POST } = await import('@/app/api/reviews/route')
     const result = await POST(makePostRequest(validReviewBody)) as unknown as { body: Record<string, unknown>; status: number }
@@ -246,7 +292,9 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 409 when review already exists', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
+    mockAuthUser = { id: CLIENT_UUID, email: 'client@test.com' }
+    process.env.REVIEW_HMAC_SECRET = HMAC_SECRET
+    queryResults.push({ data: { id: BOOKING_UUID, client_id: CLIENT_UUID, provider_id: ARTISAN_UUID, status: 'confirmed', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
     queryResults.push({ data: { id: 'existing-review' }, error: null }) // existing review
 
     const { POST } = await import('@/app/api/reviews/route')
@@ -256,11 +304,14 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 201 on successful review submission', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'confirmed' }, error: null })
+    mockAuthUser = { id: CLIENT_UUID, email: 'client@test.com' }
+    process.env.REVIEW_HMAC_SECRET = HMAC_SECRET
+    queryResults.push({ data: { id: BOOKING_UUID, client_id: CLIENT_UUID, provider_id: ARTISAN_UUID, status: 'confirmed', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
     queryResults.push({ data: null, error: { code: 'PGRST116' } }) // no existing review
     queryResults.push({ data: { id: 'new-review-id', status: 'published' }, error: null }) // insert
     queryResults.push({ data: [{ rating: 5 }], error: null }) // update rating query
-    queryResults.push({ data: null, error: null }) // profiles update
+    queryResults.push({ data: null, error: null }) // providers update
+    queryResults.push({ data: { specialty: 'plombier', address_city: 'Paris', slug: 'martin-plombier', stable_id: '123' }, error: null }) // provider data for revalidation
 
     const { POST } = await import('@/app/api/reviews/route')
     const result = await POST(makePostRequest(validReviewBody)) as unknown as {
@@ -273,10 +324,14 @@ describe('POST /api/reviews', () => {
   })
 
   it('marks review as pending_review when fraud indicators detected', async () => {
-    queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'completed' }, error: null })
+    mockAuthUser = { id: CLIENT_UUID, email: 'client@test.com' }
+    process.env.REVIEW_HMAC_SECRET = HMAC_SECRET
+    queryResults.push({ data: { id: BOOKING_UUID, client_id: CLIENT_UUID, provider_id: ARTISAN_UUID, status: 'completed', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
     queryResults.push({ data: null, error: { code: 'PGRST116' } })
     queryResults.push({ data: { id: 'new-review-id', status: 'pending_review' }, error: null })
     queryResults.push({ data: [], error: null })
+    queryResults.push({ data: null, error: null }) // providers update
+    queryResults.push({ data: { specialty: 'plombier', address_city: 'Paris', slug: 'martin-plombier', stable_id: '123' }, error: null })
 
     // All-caps comment with link = fraud indicators
     const fraudBody = { ...validReviewBody, comment: 'THIS IS AMAZING CHECK HTTP://SPAM.COM NOW!!!' }
@@ -292,7 +347,10 @@ describe('POST /api/reviews', () => {
   })
 
   it('returns 401 when HMAC token is invalid', async () => {
-    process.env.REVIEW_HMAC_SECRET = 'test-secret'
+    mockAuthUser = { id: CLIENT_UUID, email: 'client@test.com' }
+    process.env.REVIEW_HMAC_SECRET = HMAC_SECRET
+    // Provide booking that matches the client
+    queryResults.push({ data: { id: BOOKING_UUID, client_id: CLIENT_UUID, provider_id: ARTISAN_UUID, status: 'confirmed', client: { full_name: 'Alice', email: 'alice@test.com', phone_e164: null } }, error: null })
 
     const { POST } = await import('@/app/api/reviews/route')
     const result = await POST(makePostRequest({ ...validReviewBody, reviewToken: 'deadbeefdeadbeefdeadbeefdeadbeef' })) as unknown as {
