@@ -29,6 +29,13 @@ jobs:
 
       - run: npm ci
 
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*') }}
+          restore-keys: nextjs-${{ hashFiles('package-lock.json') }}-
+
       - name: TypeScript check
         run: npx tsc --noEmit
 
@@ -133,7 +140,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Generate PR diff
+      - name: Generate PR diff + context
         if: steps.check.outputs.selected == 'true'
         run: |
           git diff origin/${{ github.base_ref }}...HEAD > /tmp/pr-diff.txt
@@ -144,16 +151,30 @@ jobs:
             echo "SKIP=true" >> $GITHUB_ENV
           fi
 
+          # Build context: CLAUDE.md conventions + recent commits
+          echo "" > /tmp/repo-context.txt
+          if [ -f CLAUDE.md ]; then
+            echo "<project-conventions>" >> /tmp/repo-context.txt
+            head -c 8000 CLAUDE.md >> /tmp/repo-context.txt
+            echo "</project-conventions>" >> /tmp/repo-context.txt
+          fi
+          echo "<recent-commits>" >> /tmp/repo-context.txt
+          git log --oneline -20 >> /tmp/repo-context.txt
+          echo "</recent-commits>" >> /tmp/repo-context.txt
+
       - name: Run Claude agent — ${{ matrix.agent }}
         if: steps.check.outputs.selected == 'true' && env.SKIP != 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           PROMPT=$(cat scripts/ci/agents/${{ matrix.agent }}.md)
-          DIFF=$(head -c 100000 /tmp/pr-diff.txt)
+          DIFF=$(head -c 90000 /tmp/pr-diff.txt)
+          CONTEXT=$(cat /tmp/repo-context.txt)
 
           FULL_PROMPT=$(cat <<PROMPT_EOF
           $PROMPT
+
+          $CONTEXT
 
           <pr-diff>
           $DIFF

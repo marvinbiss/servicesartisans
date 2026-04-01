@@ -34,6 +34,6 @@ Identify data integrity issues, schema violations, and database anti-patterns in
 
 ## Output format
 Respond with ONLY a JSON object, no markdown fences, no explanation:
-{"agent":"data-integrity","findings":[{"severity":"P0","title":"Short title","file":"path/to/file.ts","line":42,"description":"What is wrong","suggestion":"How to fix"}]}
+{"agent":"data-integrity","findings":[{"severity":"P0","title":"Short title","file":"path/to/file.ts","line":42,"description":"What is wrong","suggestion":"How to fix","fix_code":"exact code to add/change (1-5 lines)","test_hint":"how to verify the fix"}]}
 
 If no issues found: {"agent":"data-integrity","findings":[]}

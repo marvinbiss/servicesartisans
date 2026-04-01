@@ -33,6 +33,6 @@ Identify SEO regressions and issues in changed code only.
 
 ## Output format
 Respond with ONLY a JSON object, no markdown fences, no explanation:
-{"agent":"seo","findings":[{"severity":"P0","title":"Short title","file":"path/to/file.ts","line":42,"description":"What is wrong","suggestion":"How to fix"}]}
+{"agent":"seo","findings":[{"severity":"P0","title":"Short title","file":"path/to/file.ts","line":42,"description":"What is wrong","suggestion":"How to fix","fix_code":"exact code to add/change (1-5 lines)","test_hint":"how to verify the fix"}]}
 
 If no issues found: {"agent":"seo","findings":[]}
