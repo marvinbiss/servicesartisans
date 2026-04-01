@@ -46,7 +46,7 @@ function formatRelative(dateStr: string): string {
   if (diffH < 24) return `il y a ${diffH}h`
   const diffD = Math.floor(diffH / 24)
   if (diffD < 7) return `il y a ${diffD}j`
-  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'Europe/Paris' })
 }
 
 interface PaginationMeta {

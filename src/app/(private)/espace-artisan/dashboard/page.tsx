@@ -452,7 +452,7 @@ export default function DashboardArtisanPage() {
                                     <span>{demande.city || 'Non précisé'}</span>
                                     <span className="flex items-center gap-1">
                                       <Calendar className="w-4 h-4" aria-hidden="true" />
-                                      {new Date(demande.created_at).toLocaleDateString('fr-FR')}
+                                      {new Date(demande.created_at).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}
                                     </span>
                                   </div>
                                   {demande.postal_code && (

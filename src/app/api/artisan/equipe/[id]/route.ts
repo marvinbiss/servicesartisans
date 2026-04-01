@@ -7,6 +7,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { isValidUUID } from '@/lib/validation/uuid'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -27,6 +28,13 @@ export async function PUT(
   try {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+
+    if (!isValidUUID(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     const body: unknown = await request.json()
     const validation = memberUpdateSchema.safeParse(body)
@@ -90,6 +98,13 @@ export async function DELETE(
   try {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+
+    if (!isValidUUID(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     // Verify ownership before delete
     const { data: existing, error: fetchError } = await supabase

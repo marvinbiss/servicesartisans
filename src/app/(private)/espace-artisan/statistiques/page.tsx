@@ -223,7 +223,7 @@ export default function StatistiquesPage() {
                 {Math.abs(Math.round(stats.monthlyRevenueChange))}%
               </span>
             </div>
-            <div className="text-3xl font-bold text-gray-900">{stats.monthlyRevenue.toFixed(0)}EUR</div>
+            <div className="text-3xl font-bold text-gray-900">{stats.monthlyRevenue.toFixed(0)} €</div>
             <div className="text-sm text-gray-500">Revenus ce mois</div>
           </div>
 

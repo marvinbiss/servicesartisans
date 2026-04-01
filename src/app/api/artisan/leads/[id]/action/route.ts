@@ -10,6 +10,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { isValidUUID } from '@/lib/validation/uuid'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
@@ -39,6 +40,13 @@ export async function POST(
 
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     const rawBody = await request.json()
     const result = actionSchema.safeParse(rawBody)

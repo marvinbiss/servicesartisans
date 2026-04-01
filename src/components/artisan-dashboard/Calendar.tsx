@@ -261,7 +261,7 @@ export default function Calendar({
                   >
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${today ? 'text-primary-600' : 'text-charcoal-900'}`}>
-                        {date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}
+                        {date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Paris' })}
                       </span>
                       {today && (
                         <span className="text-xs text-primary-500 font-medium">
@@ -330,6 +330,7 @@ export default function Calendar({
               day: 'numeric',
               month: 'long',
               year: 'numeric',
+              timeZone: 'Europe/Paris',
             })}
           </h4>
 

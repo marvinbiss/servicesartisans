@@ -348,7 +348,7 @@ export default function DemandesRecuesPage() {
                               </span>
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                {new Date(lead.created_at).toLocaleDateString('fr-FR')}
+                                {new Date(lead.created_at).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}
                               </span>
                             </div>
                           </div>
@@ -566,6 +566,7 @@ export default function DemandesRecuesPage() {
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',
+                      timeZone: 'Europe/Paris',
                     })}
                   </p>
                 </div>

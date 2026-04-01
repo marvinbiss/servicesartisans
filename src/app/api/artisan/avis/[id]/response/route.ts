@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { isValidUUID } from '@/lib/validation/uuid'
 import { z } from 'zod'
 import { sanitizeUserInput } from '@/lib/sanitize'
 
@@ -21,6 +22,13 @@ export async function POST(
     const { id } = await params
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     const body = await request.json()
     const result = reviewResponseSchema.safeParse(body)

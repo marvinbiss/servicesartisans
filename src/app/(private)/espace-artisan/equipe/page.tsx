@@ -414,10 +414,9 @@ export default function EquipePage() {
         <div className="mt-8 p-4 bg-blue-50 rounded-lg">
           <h4 className="font-medium text-blue-900 mb-2">Comment ça fonctionne ?</h4>
           <ul className="text-sm text-blue-700 space-y-1">
-            <li>1. Ajoutez les membres de votre équipe</li>
-            <li>2. Assignez-leur des créneaux de disponibilité dans le calendrier</li>
-            <li>3. Les clients peuvent choisir un membre spécifique lors de la réservation</li>
-            <li>4. Chaque membre reçoit ses propres notifications</li>
+            <li>1. Ajoutez les membres de votre équipe avec leur nom et rôle</li>
+            <li>2. Définissez leur rôle (employé ou apprenti)</li>
+            <li>3. Gérez votre équipe depuis cette page</li>
           </ul>
         </div>
           </div>

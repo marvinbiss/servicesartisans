@@ -73,6 +73,7 @@ function formatDateLabel(dateStr: string): string {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
+    timeZone: 'Europe/Paris',
   })
 }
 
@@ -263,7 +264,7 @@ function AvailabilityManagerInner() {
           {/* Heure debut */}
           <div className="flex flex-col gap-1">
             <label htmlFor="slot-start" className="text-xs font-medium text-charcoal-600">
-              Debut
+              Début
             </label>
             <select
               id="slot-start"

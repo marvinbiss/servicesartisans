@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { MessageSquare, ArrowLeft, Send, Search, Paperclip, Loader2 } from 'lucide-react'
+import { MessageSquare, ArrowLeft, Send, Search, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { getArtisanUrl } from '@/lib/utils'
@@ -215,13 +215,13 @@ export default function MessagesArtisanPage() {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
     if (days === 0) {
-      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
     } else if (days === 1) {
       return 'Hier'
     } else if (days < 7) {
-      return date.toLocaleDateString('fr-FR', { weekday: 'short' })
+      return date.toLocaleDateString('fr-FR', { weekday: 'short', timeZone: 'Europe/Paris' })
     }
-    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })
+    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })
   }
 
   return (
@@ -389,12 +389,6 @@ export default function MessagesArtisanPage() {
                           <p className="text-red-600 text-sm mb-2">{sendError}</p>
                         )}
                         <div className="flex gap-2">
-                          <button
-                            type="button"
-                            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                          >
-                            <Paperclip className="w-5 h-5" />
-                          </button>
                           <input
                             type="text"
                             value={newMessage}

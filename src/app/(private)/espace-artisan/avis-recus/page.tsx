@@ -218,7 +218,7 @@ export default function AvisRecusPage() {
                           </div>
                         </div>
                         <p className="text-sm text-gray-500">
-                          {new Date(item.created_at).toLocaleDateString('fr-FR')}
+                          {new Date(item.created_at).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}
                         </p>
                       </div>
                       {!item.artisan_response && (

@@ -266,7 +266,7 @@ export default function LeadDetailPage() {
                       <p className="text-xs text-gray-400">Reçu le</p>
                       <p className="text-sm text-gray-700">
                         {new Date(lead.created_at).toLocaleDateString('fr-FR', {
-                          day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                          day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris'
                         })}
                       </p>
                     </div>
@@ -431,7 +431,7 @@ export default function LeadDetailPage() {
                   <span className="text-gray-500">Assigné le</span>
                   <span className="text-gray-700">
                     {new Date(assignment.assigned_at).toLocaleDateString('fr-FR', {
-                      day: 'numeric', month: 'short'
+                      day: 'numeric', month: 'short', timeZone: 'Europe/Paris'
                     })}
                   </span>
                 </div>
@@ -440,7 +440,7 @@ export default function LeadDetailPage() {
                     <span className="text-gray-500">Vu le</span>
                     <span className="text-gray-700">
                       {new Date(assignment.viewed_at).toLocaleDateString('fr-FR', {
-                        day: 'numeric', month: 'short'
+                        day: 'numeric', month: 'short', timeZone: 'Europe/Paris'
                       })}
                     </span>
                   </div>

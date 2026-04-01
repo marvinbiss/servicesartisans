@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { isValidUUID } from '@/lib/validation/uuid'
 import { z } from 'zod'
 
 const patchQuoteSchema = z.object({
@@ -29,6 +30,13 @@ export async function DELETE(
     const { id } = await params
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     const { data: provider } = await supabase
       .from('providers')
@@ -90,6 +98,13 @@ export async function PATCH(
     const { id } = await params
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     const { data: provider } = await supabase
       .from('providers')

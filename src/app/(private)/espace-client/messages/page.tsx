@@ -184,13 +184,13 @@ export default function MessagesClientPage() {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
     if (days === 0) {
-      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
     } else if (days === 1) {
       return 'Hier'
     } else if (days < 7) {
-      return date.toLocaleDateString('fr-FR', { weekday: 'short' })
+      return date.toLocaleDateString('fr-FR', { weekday: 'short', timeZone: 'Europe/Paris' })
     }
-    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })
+    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })
   }
 
   return (

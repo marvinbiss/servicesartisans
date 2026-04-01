@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { isValidUUID } from '@/lib/validation/uuid'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
@@ -17,6 +18,13 @@ export async function GET(
     const { id } = await params
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     // Get provider linked to this user
     const { data: provider } = await supabase

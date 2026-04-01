@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { isValidUUID } from '@/lib/validation/uuid'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -62,6 +63,13 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
       )
     }
 
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { error: 'Identifiant invalide' },
+        { status: 400 }
+      )
+    }
+
     // Fetch portfolio item
     const { data: item, error } = await supabase
       .from('portfolio_items')
@@ -113,6 +121,13 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
+      )
+    }
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { error: 'Identifiant invalide' },
+        { status: 400 }
       )
     }
 
@@ -223,6 +238,13 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
+      )
+    }
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json(
+        { error: 'Identifiant invalide' },
+        { status: 400 }
       )
     }
 
