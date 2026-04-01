@@ -386,7 +386,9 @@ export default function MessagesArtisanPage() {
                       {/* Input */}
                       <form onSubmit={handleSendMessage} className="p-4 border-t">
                         {sendError && (
-                          <p className="text-red-600 text-sm mb-2">{sendError}</p>
+                          <div role="alert" className="p-2 mb-2 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+                            {sendError}
+                          </div>
                         )}
                         <div className="flex gap-2">
                           <input

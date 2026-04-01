@@ -1,20 +1,12 @@
 /**
  * Artisan Reviews API
  * GET: Fetch reviews for the artisan
- * POST: Reply to a review
+ * POST reply is handled by /api/artisan/avis/[id]/response
  */
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
-import { z } from 'zod'
-import { sanitizeUserInput } from '@/lib/sanitize'
-
-// POST request schema (reply to review)
-const replyToReviewSchema = z.object({
-  review_id: z.string().uuid(),
-  response: z.string().min(10, 'La réponse doit contenir au moins 10 caractères').max(2000),
-})
 
 export const dynamic = 'force-dynamic'
 
@@ -123,70 +115,6 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     logger.error('Reviews GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const { error: guardError, user, supabase } = await requireArtisan()
-    if (guardError) return guardError
-
-    const body = await request.json()
-    const result = replyToReviewSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Erreur de validation', details: result.error.flatten() },
-        { status: 400 }
-      )
-    }
-    const { review_id, response } = result.data
-
-    // Verify the review belongs to this artisan and has no existing response
-    const { data: review } = await supabase
-      .from('reviews')
-      .select('artisan_id, artisan_response')
-      .eq('id', review_id)
-      .single()
-
-    if (!review || review.artisan_id !== user!.id) {
-      return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
-        { status: 403 }
-      )
-    }
-
-    // Guard against double-response
-    if (review.artisan_response !== null) {
-      return NextResponse.json(
-        { error: 'Une réponse existe déjà pour cet avis' },
-        { status: 409 }
-      )
-    }
-
-    // Update with response
-    const { error: updateError } = await supabase
-      .from('reviews')
-      .update({ artisan_response: sanitizeUserInput(response.trim()), artisan_responded_at: new Date().toISOString() })
-      .eq('id', review_id)
-
-    if (updateError) {
-      logger.error('Error updating review:', updateError)
-      return NextResponse.json(
-        { error: 'Erreur lors de la réponse' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Réponse enregistrée',
-    })
-  } catch (error) {
-    logger.error('Reviews POST error:', error)
     return NextResponse.json(
       { error: 'Erreur serveur' },
       { status: 500 }

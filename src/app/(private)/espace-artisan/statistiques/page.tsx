@@ -24,8 +24,6 @@ interface Stats {
   monthlyRevenueChange: number
   averageRating: number
   totalReviews: number
-  newClients: number
-  newClientsChange: number
   cancelRate: number
   bookingsByDay: { day: string; count: number }[]
   bookingsByMonth: { month: string; count: number }[]
@@ -78,8 +76,6 @@ export default function StatistiquesPage() {
           monthlyRevenueChange: s.monthlyRevenueChange ?? 0,
           averageRating: s.averageRating ?? 0,
           totalReviews: s.totalReviews ?? 0,
-          newClients: s.clientsSatisfaits?.value ?? 0,
-          newClientsChange: parseInt(s.clientsSatisfaits?.change ?? '0', 10) || 0,
           cancelRate: s.cancelRate ?? 0,
           bookingsByDay: s.bookingsByDay ?? [],
           bookingsByMonth: s.bookingsByMonth ?? [],
