@@ -76,7 +76,31 @@ export async function POST(request: Request) {
       )
     }
 
-    // Delete existing slots for this date
+    // Verifier qu'aucune reservation active n'est liee aux creneaux de cette date
+    const { data: existingSlots } = await supabase
+      .from('availability_slots')
+      .select('id')
+      .eq('artisan_id', artisanId)
+      .eq('date', date)
+
+    if (existingSlots && existingSlots.length > 0) {
+      const slotIds = existingSlots.map(s => s.id)
+      const { data: activeBookings } = await supabase
+        .from('bookings')
+        .select('id')
+        .in('slot_id', slotIds)
+        .in('status', ['pending', 'confirmed'])
+        .limit(1)
+
+      if (activeBookings && activeBookings.length > 0) {
+        return NextResponse.json(
+          { success: false, error: { message: 'Des créneaux de cette date ont des réservations actives' } },
+          { status: 409 }
+        )
+      }
+    }
+
+    // Supprimer les creneaux existants pour cette date
     await supabase
       .from('availability_slots')
       .delete()

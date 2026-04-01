@@ -74,28 +74,36 @@ export async function GET(request: Request) {
     const total = count ?? 0
     const totalPages = Math.ceil(total / limit)
 
-    // Calculate stats from a separate lightweight query (all reviews, not just current page)
-    const { data: allRatings, error: statsError } = await supabase
-      .from('reviews')
-      .select('rating')
-      .eq('artisan_id', user!.id)
+    // Calcul des stats via COUNT SQL (pas de fetch de toutes les lignes)
+    const [count1, count2, count3, count4, count5] = await Promise.all(
+      [1, 2, 3, 4, 5].map(rating =>
+        supabase
+          .from('reviews')
+          .select('*', { count: 'exact', head: true })
+          .eq('artisan_id', user!.id)
+          .eq('rating', rating)
+      )
+    )
+
+    const counts = [count1, count2, count3, count4, count5]
+    const hasStatsError = counts.some(c => c.error)
 
     let stats
-    if (statsError || !allRatings) {
+    if (hasStatsError) {
       stats = {
         moyenne: 0,
         total: 0,
         distribution: [5, 4, 3, 2, 1].map(note => ({ note, count: 0 })),
       }
     } else {
-      const totalReviews = allRatings.length
-      const averageRating = totalReviews > 0
-        ? allRatings.reduce((sum, r) => sum + r.rating, 0) / totalReviews
-        : 0
+      const ratingCounts = counts.map(c => c.count || 0) // index 0 = rating 1, index 4 = rating 5
+      const totalReviews = ratingCounts.reduce((sum, c) => sum + c, 0)
+      const weightedSum = ratingCounts.reduce((sum, c, i) => sum + (i + 1) * c, 0)
+      const averageRating = totalReviews > 0 ? weightedSum / totalReviews : 0
 
       const distribution = [5, 4, 3, 2, 1].map(note => ({
         note,
-        count: allRatings.filter(r => r.rating === note).length,
+        count: ratingCounts[note - 1],
       }))
 
       stats = {

@@ -506,7 +506,7 @@ async function updateArtisanRating(supabase: SupabaseClientType, artisanId: stri
     await supabase
       .from('providers')
       .update({
-        average_rating: Math.round(avgRating * 10) / 10,
+        rating_average: Math.round(avgRating * 10) / 10,
         review_count: reviews.length,
       })
       .eq('id', artisanId)

@@ -5,6 +5,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { providerArtisanUpdateSchema } from '@/schemas/provider'
@@ -107,10 +108,10 @@ export async function PUT(request: Request) {
       )
     }
 
-    // Get provider by user_id (need provider.id for update)
+    // Get provider by user_id (need provider.id for update + fields for revalidation)
     const { data: provider, error: providerError } = await supabase
       .from('providers')
-      .select('id')
+      .select('id, specialty, address_city, slug, stable_id')
       .eq('user_id', user.id)
       .single()
 
@@ -181,6 +182,19 @@ export async function PUT(request: Request) {
         { error: 'Erreur lors de la mise à jour du profil artisan' },
         { status: 500 }
       )
+    }
+
+    // Revalidate public artisan page (ISR cache bust)
+    try {
+      const toSlug = (s: string) => s.toLowerCase().replace(/\s+/g, '-')
+      const serviceSlug = toSlug(provider.specialty || '')
+      const locationSlug = toSlug(provider.address_city || '')
+      if (serviceSlug && locationSlug && provider.stable_id) {
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}/${provider.stable_id}`)
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}`)
+      }
+    } catch (revalidateError) {
+      logger.error('Revalidation error after provider update:', revalidateError)
     }
 
     // Sync overlapping fields to profiles (best-effort, fire and forget)

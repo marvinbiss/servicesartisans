@@ -222,23 +222,50 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   }
 
   // CSRF protection — validate Origin header for mutating API requests
+  // Sécurité : comparaison stricte du hostname (pas de .includes()),
+  // fail-closed si Origin absent (sauf Bearer token ou CRON_SECRET)
   const method = request.method
   if (
     method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS' &&
     (pathname.startsWith('/api/artisan/') || pathname.startsWith('/api/client/'))
   ) {
     const origin = request.headers.get('origin')
-    if (origin) {
+
+    // Exceptions : les requêtes avec Bearer token (Supabase auth) ou CRON_SECRET
+    // peuvent légitimement ne pas avoir d'en-tête Origin
+    const authHeader = request.headers.get('authorization') || ''
+    const hasBearerToken = authHeader.startsWith('Bearer ')
+    const cronSecret = request.headers.get('x-cron-secret') || request.nextUrl.searchParams.get('cron_secret')
+    const hasValidCronSecret = !!(cronSecret && process.env.CRON_SECRET && cronSecret === process.env.CRON_SECRET)
+    const isExempted = hasBearerToken || hasValidCronSecret
+
+    if (!origin) {
+      // Fail-closed : rejeter si pas d'Origin sur les requêtes mutantes (sauf exceptions)
+      if (!isExempted) {
+        return new NextResponse(
+          JSON.stringify({ error: 'En-tête Origin requis' }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } }
+        )
+      }
+    } else {
+      // Vérification stricte du hostname (=== ou sous-domaine légitime)
       const allowedOrigin = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
       try {
-        if (!origin.includes(new URL(allowedOrigin).hostname)) {
+        const allowedHostname = new URL(allowedOrigin).hostname
+        const originHostname = new URL(origin).hostname
+        const isAllowed = originHostname === allowedHostname || originHostname.endsWith('.' + allowedHostname)
+        if (!isAllowed) {
           return new NextResponse(
             JSON.stringify({ error: 'Origine non autorisée' }),
             { status: 403, headers: { 'Content-Type': 'application/json' } }
           )
         }
       } catch {
-        // If URL parsing fails, allow through (fail-open for safety)
+        // Fail-closed : si le parsing URL échoue, rejeter la requête
+        return new NextResponse(
+          JSON.stringify({ error: 'Origine invalide' }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } }
+        )
       }
     }
   }

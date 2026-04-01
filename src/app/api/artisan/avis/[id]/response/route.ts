@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
@@ -64,6 +65,27 @@ export async function POST(
       .eq('id', id)
 
     if (updateError) throw updateError
+
+    // Revalidate public artisan page (ISR cache bust)
+    try {
+      const { data: provider } = await supabase
+        .from('providers')
+        .select('specialty, address_city, slug, stable_id')
+        .eq('user_id', user!.id)
+        .single()
+
+      if (provider) {
+        const toSlug = (s: string) => s.toLowerCase().replace(/\s+/g, '-')
+        const serviceSlug = toSlug(provider.specialty || '')
+        const locationSlug = toSlug(provider.address_city || '')
+        if (serviceSlug && locationSlug && provider.stable_id) {
+          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${provider.stable_id}`)
+          revalidatePath(`/services/${serviceSlug}/${locationSlug}`)
+        }
+      }
+    } catch (revalidateError) {
+      logger.error('Revalidation error after review response:', revalidateError)
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {

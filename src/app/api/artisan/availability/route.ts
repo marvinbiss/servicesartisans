@@ -190,6 +190,22 @@ export async function DELETE(request: Request) {
       )
     }
 
+    // Verifier qu'aucune reservation active n'est liee a ce creneau
+    const { data: activeBooking } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('slot_id', slotId)
+      .in('status', ['pending', 'confirmed'])
+      .limit(1)
+      .single()
+
+    if (activeBooking) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Ce créneau a une réservation active et ne peut pas être supprimé' } },
+        { status: 409 },
+      )
+    }
+
     const { error: deleteErr } = await supabase
       .from('availability_slots')
       .delete()
