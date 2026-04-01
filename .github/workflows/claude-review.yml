@@ -47,6 +47,33 @@ jobs:
           NEXT_BUILD_SKIP_DB: '1'
         run: npx next build
 
+      - name: Smoke tests (non-LLM verification)
+        run: |
+          # Start the built app in background
+          npx next start -p 3777 &
+          SERVER_PID=$!
+
+          # Wait for server to be ready
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:3777/api/health > /dev/null 2>&1; then
+              break
+            fi
+            sleep 1
+          done
+
+          # Run smoke tests against real server
+          node scripts/ci/smoke-tests.mjs http://localhost:3777 || SMOKE_FAILED=1
+
+          # Cleanup
+          kill $SERVER_PID 2>/dev/null || true
+
+          if [ "$SMOKE_FAILED" = "1" ]; then
+            echo "::error::Smoke tests failed — real runtime issues detected"
+            exit 1
+          fi
+        env:
+          NEXT_BUILD_SKIP_DB: '1'
+
   # ─── Risk Router: analyze diff and select agents ───────────────────────────
   risk-router:
     name: Risk Router

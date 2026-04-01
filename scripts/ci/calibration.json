@@ -1,18 +1,16 @@
 {
-  "_comment": "Pipeline calibration data. Updated manually after reviewing PR results.",
-  "_instructions": "After each PR review, update metrics below. This tracks precision/recall over time.",
-  "version": 1,
-  "created": "2026-04-02",
+  "_comment": "Pipeline calibration — updated manually after reviewing PR results.",
+  "version": 2,
+  "updated": "2026-04-02",
 
   "severity_weights": {
-    "_comment": "Adjust these if P0/P1/P2 scoring is too aggressive or too lenient",
+    "_comment": "Score = 100 - (P0 × P0_weight) - (P1_confirmed × P1_weight) - (P1_warning × 3) - (P2 × P2_weight)",
     "P0": 25,
     "P1": 10,
     "P2": 2
   },
 
   "risk_router_thresholds": {
-    "_comment": "Tune these based on false negative rate (missed issues on skipped agents)",
     "medium_min_score": 3,
     "low_min_score": 5,
     "large_diff_threshold": 500,
@@ -21,24 +19,49 @@
   },
 
   "dedup_settings": {
-    "_comment": "Tune based on duplicate rate. Lower similarity = more aggressive merging.",
     "line_proximity": 5,
     "title_similarity_threshold": 0.5,
     "exact_title_merge": true
   },
 
-  "historical_metrics": {
-    "_comment": "Fill after each PR. Format: { pr: number, date: string, raw: number, deduped: number, true_positives: number, false_positives: number, missed_in_prod: number }",
-    "reviews": []
+  "business_impact_zones": {
+    "_comment": "Files in these zones get severity escalation. P1→P0, P2→P1. This aligns pipeline decisions with actual business risk.",
+    "critical": {
+      "_comment": "P1 escalates to P0, P2 escalates to P1",
+      "patterns": [
+        "src/app/api/auth",
+        "src/middleware",
+        "src/lib/auth",
+        "src/lib/supabase/admin",
+        "supabase/migrations"
+      ],
+      "reason": "Auth, security, data schema — breach or corruption risk"
+    },
+    "high": {
+      "_comment": "P2 escalates to P1 (no P1→P0 escalation)",
+      "patterns": [
+        "src/app/api/artisan/leads",
+        "src/app/api/artisan/bookings",
+        "src/app/api/artisan/provider",
+        "src/app/api/client",
+        "src/app/(private)/espace-artisan/demandes",
+        "src/app/(private)/espace-artisan/leads"
+      ],
+      "reason": "Lead routing, bookings, provider profiles — direct revenue impact"
+    },
+    "standard": {
+      "_comment": "No escalation. Default for all other paths.",
+      "patterns": []
+    }
   },
 
   "known_false_positives": {
-    "_comment": "Patterns that agents flag incorrectly. Add here to suppress in future.",
+    "_comment": "Regex patterns. Findings matching these are suppressed before scoring.",
     "patterns": []
   },
 
   "critical_paths": {
-    "_comment": "Files/patterns that always trigger high-risk. Update as codebase evolves.",
+    "_comment": "Files that force risk_level=high in the router.",
     "always_high": [
       "src/middleware",
       "src/lib/auth",
@@ -47,5 +70,11 @@
       "src/app/api/admin",
       ".env"
     ]
+  },
+
+  "historical_metrics": {
+    "_comment": "Fill after each PR review. This is the data that makes the pipeline self-correcting.",
+    "_fields": "pr, date, raw_findings, deduped, true_positives, false_positives, missed_in_prod, human_action (merged/fixed/dismissed)",
+    "reviews": []
   }
 }

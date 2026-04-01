@@ -1,12 +1,12 @@
 /**
- * Claude Code Review — Report Aggregator v3
+ * Claude Code Review — Report Aggregator v4
  *
- * v3 improvements:
- * - Confidence-based blocking: P1 from single agent = WARNING (not blocker)
- *   Only P0 (any confidence) or P1 with confidence >= medium (2+ agents) block
- * - Reads calibration.json for severity weights + false positive suppression
- * - Semantic deduplication with cross-agent confidence scoring
- * - Metrics tracking (JSONL) for precision/recall analysis
+ * v4 improvements over v3:
+ * - Business impact escalation: findings on critical paths get severity bumped
+ *   P1 on auth/middleware → P0. P2 on revenue paths → P1.
+ * - Reads business_impact_zones from calibration.json
+ * - Confidence-based blocking unchanged (P1 single = warning)
+ * - False positive suppression, dedup, metrics all preserved
  *
  * Usage: node aggregate-reports.mjs <reports-directory> [--skipped agent1,agent2]
  */
@@ -36,6 +36,31 @@ if (existsSync(calibrationPath)) {
 }
 const weights = calibration.severity_weights || { P0: 25, P1: 10, P2: 2 }
 const falsePositivePatterns = (calibration.known_false_positives?.patterns || []).map(p => new RegExp(p, 'i'))
+
+// Business impact zones for severity escalation
+const bizZones = calibration.business_impact_zones || {}
+const criticalPatterns = (bizZones.critical?.patterns || []).map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+const highPatterns = (bizZones.high?.patterns || []).map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+
+function getBusinessZone(filePath) {
+  if (!filePath) return 'standard'
+  if (criticalPatterns.some(p => filePath.includes(p))) return 'critical'
+  if (highPatterns.some(p => filePath.includes(p))) return 'high'
+  return 'standard'
+}
+
+function escalateSeverity(severity, zone) {
+  if (zone === 'critical') {
+    // P1 → P0, P2 → P1
+    if (severity === 'P1') return 'P0'
+    if (severity === 'P2') return 'P1'
+  }
+  if (zone === 'high') {
+    // P2 → P1 only
+    if (severity === 'P2') return 'P1'
+  }
+  return severity
+}
 
 // ─── Recursively find all JSON report files ─────────────────────────────────
 
@@ -168,6 +193,22 @@ const dedupedFindings = dedupGroups.map(group => {
   }
 })
 
+// ─── Business impact escalation ─────────────────────────────────────────────
+// Escalate severity based on which files are touched.
+// A P1 on auth code is a P0. A P2 on lead routing is a P1.
+
+let escalatedCount = 0
+for (const f of dedupedFindings) {
+  const zone = getBusinessZone(f.file)
+  const original = f.severity
+  f.severity = escalateSeverity(f.severity, zone)
+  if (f.severity !== original) {
+    f.escalated_from = original
+    f.escalation_zone = zone
+    escalatedCount++
+  }
+}
+
 // ─── Compute totals ─────────────────────────────────────────────────────────
 
 const totalP0 = dedupedFindings.filter(f => f.severity === 'P0').length
@@ -218,6 +259,7 @@ md += `**Score: ${score}/100** | ${activeAgents} agents`
 if (skippedAgents.length > 0) md += ` | ${skippedAgents.length} skipped`
 if (deduped > 0) md += ` | ${deduped} merged`
 if (suppressedCount > 0) md += ` | ${suppressedCount} suppressed`
+if (escalatedCount > 0) md += ` | ${escalatedCount} escalated`
 md += '\n\n'
 
 // Agent table
@@ -251,13 +293,15 @@ const blockers = dedupedFindings.filter(f =>
 if (blockers.length > 0) {
   md += '\n## Blocking Issues\n\n'
   for (const f of blockers) {
-    md += `### ${f.severity}: ${f.title}\n`
+    const escalateTag = f.escalated_from ? ` (escalated from ${f.escalated_from} — ${f.escalation_zone} zone)` : ''
+    md += `### ${f.severity}: ${f.title}${escalateTag}\n`
     md += `**Agent${f.agents.length > 1 ? 's' : ''}:** ${f.agents.join(', ')} (confidence: ${f.confidence})`
     if (f.file) md += ` | **File:** \`${f.file}\``
     if (f.line) md += `:${f.line}`
     md += '\n\n'
     md += `${f.description}\n\n`
     if (f.suggestion) md += `**Fix:** ${f.suggestion}\n\n`
+    if (f.fix_code) md += `\`\`\`\n${f.fix_code}\n\`\`\`\n\n`
     md += '---\n\n'
   }
 }
@@ -312,6 +356,7 @@ const metricsEntry = {
   deduped_findings: totalFindings,
   duplicates_merged: deduped,
   suppressed: suppressedCount,
+  escalated: escalatedCount,
   p0: totalP0,
   p1_confirmed: confirmedP1,
   p1_warning: warningP1,
@@ -340,13 +385,14 @@ if (outputFile) {
 // ─── Console summary ────────────────────────────────────────────────────────
 
 console.log('========================================')
-console.log('  Claude Code Review — Aggregated v3')
+console.log('  Claude Code Review — Aggregated v4')
 console.log('========================================')
 console.log(`  Agents:        ${activeAgents} run, ${skippedAgents.length} skipped`)
 console.log(`  Score:         ${score}/100`)
 console.log(`  Raw findings:  ${rawCount}`)
 console.log(`  Suppressed:    ${suppressedCount} (known false positives)`)
 console.log(`  After dedup:   ${totalFindings} (${deduped} merged)`)
+console.log(`  Escalated:     ${escalatedCount} (business impact zones)`)
 console.log(`  P0:            ${totalP0} (always block)`)
 console.log(`  P1 confirmed:  ${confirmedP1} (2+ agents, blocks)`)
 console.log(`  P1 warning:    ${warningP1} (single agent, does NOT block)`)
