@@ -22,7 +22,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
-    const { error, user, provider, supabase } = await requireArtisan()
+    const { error, user, supabase } = await requireArtisan()
     if (error) return error
 
     const { searchParams } = new URL(request.url)
@@ -70,64 +70,10 @@ export async function GET(request: Request) {
 
     if (dbError) {
       logger.error('Error fetching artisan bookings', { error: dbError })
-
-      // Fallback: essayer sans le join si availability_slots ne match pas
-      const { data: fallbackBookings, error: fallbackError } = await supabase
-        .from('bookings')
-        .select(`
-          id,
-          client_name,
-          client_email,
-          client_phone,
-          service_description,
-          status,
-          scheduled_date,
-          created_at
-        `)
-        .eq('provider_id', provider!.id)
-        .in('status', ['confirmed', 'pending', 'completed'])
-        .gte('scheduled_date', startStr)
-        .lte('scheduled_date', endStr)
-        .order('scheduled_date', { ascending: true })
-
-      if (fallbackError) {
-        logger.error('Fallback bookings query also failed', { error: fallbackError })
-        return NextResponse.json(
-          { error: 'Erreur lors de la récupération des réservations' },
-          { status: 500 }
-        )
-      }
-
-      // Tenter aussi de récupérer les slots dans le fallback
-      const { data: fallbackSlots } = await supabase
-        .from('availability_slots')
-        .select('id, date, start_time, end_time, is_available')
-        .eq('artisan_id', user!.id)
-        .gte('date', startStr)
-        .lte('date', endStr)
-        .eq('is_available', true)
-        .order('date', { ascending: true })
-        .order('start_time', { ascending: true })
-
-      return NextResponse.json({
-        bookings: (fallbackBookings ?? []).map(b => ({
-          id: b.id,
-          client_name: b.client_name,
-          client_email: b.client_email,
-          client_phone: b.client_phone,
-          service_description: b.service_description,
-          status: b.status,
-          date: b.scheduled_date,
-          start_time: null,
-          end_time: null,
-        })),
-        availabilitySlots: (fallbackSlots ?? []).map(s => ({
-          id: s.id,
-          date: s.date,
-          start_time: s.start_time,
-          end_time: s.end_time,
-        })),
-      })
+      return NextResponse.json(
+        { error: 'Erreur lors de la récupération des réservations' },
+        { status: 500 }
+      )
     }
 
     // Filtrer par date du slot dans le mois demandé

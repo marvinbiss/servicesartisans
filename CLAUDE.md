@@ -80,7 +80,7 @@ supabase/migrations/      # 47 fichiers de migration SQL
 | `profiles` | id, email, full_name, is_admin, role, user_type, phone_e164, average_rating, review_count | `user_type` = 'client' ou 'artisan' |
 | `providers` | id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_region, user_id, claimed_at, claimed_by | `name` (PAS company_name), colonnes dropped ci-dessous |
 | `provider_claims` | id, provider_id, user_id, siret_provided, status, rejection_reason, reviewed_by, reviewed_at, created_at | status IN ('pending', 'approved', 'rejected') |
-| `bookings` | provider_id, client_id, status, scheduled_date | `provider_id` (PAS artisan_id) |
+| `bookings` | artisan_id, provider_id, client_id, status, scheduled_date, slot_id | `artisan_id` = auth.uid() (FK profiles), `provider_id` = FK providers. Les deux colonnes existent. |
 | `audit_logs` | user_id → auth.users, action, resource_type, resource_id, old_value, new_value, metadata | FK vers auth.users (PAS profiles) |
 | `user_reports` | reviewed_by, reviewed_at, resolution | PAS resolved_by, resolved_at, resolution_notes |
 | `prospection_contacts` | company_name, ... | Distinct de providers.name |

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import {
   Users,
   Plus,
@@ -243,8 +244,15 @@ export default function EquipePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid lg:grid-cols-4 gap-8">
+            <ArtisanSidebar activePage="equipe" />
+            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
+              <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -270,6 +278,9 @@ export default function EquipePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          <ArtisanSidebar activePage="equipe" />
+          <div className="lg:col-span-3">
         {/* Error message */}
         {error && (
           <div role="alert" className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
@@ -408,6 +419,8 @@ export default function EquipePage() {
             <li>3. Les clients peuvent choisir un membre spécifique lors de la réservation</li>
             <li>4. Chaque membre reçoit ses propres notifications</li>
           </ul>
+        </div>
+          </div>
         </div>
       </div>
 

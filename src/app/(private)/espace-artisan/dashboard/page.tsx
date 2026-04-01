@@ -30,6 +30,7 @@ interface StatsData {
   phoneClicks: { value: number; change: string }
   demandesRecues: { value: number; change: string }
   unreadMessages: number
+  pendingDemandesCount: number
   portfolioPhotoCount?: number
 }
 
@@ -40,7 +41,7 @@ interface Demande {
   city: string | null
   postal_code: string | null
   created_at: string
-  status: string
+  status: 'pending' | 'viewed' | 'quoted' | 'declined' | 'sent' | 'accepted' | 'refused' | 'completed'
 }
 
 interface Profile {
@@ -97,24 +98,34 @@ function parseTrend(change: string): { value: number; isPositive: boolean } | un
   return { value: Math.abs(num), isPositive: num >= 0 }
 }
 
-function getStatusLabel(status: string): string {
+function getStatusLabel(status: Demande['status']): string {
   switch (status) {
+    // Statuts lead_assignments
     case 'pending': return 'Nouveau'
+    case 'viewed': return 'Consulté'
+    case 'quoted': return 'Devis envoyé'
+    case 'declined': return 'Refusé'
+    // Statuts devis_requests (compatibilité)
     case 'sent': return 'Devis envoyé'
     case 'accepted': return 'Accepté'
     case 'refused': return 'Refusé'
-    case 'expired': return 'Expiré'
+    case 'completed': return 'Terminé'
     default: return status
   }
 }
 
-function getStatusClasses(status: string): string {
+function getStatusClasses(status: Demande['status']): string {
   switch (status) {
+    // Statuts lead_assignments
     case 'pending': return 'bg-red-100 text-red-700'
+    case 'viewed': return 'bg-yellow-100 text-yellow-700'
+    case 'quoted': return 'bg-blue-100 text-blue-700'
+    case 'declined': return 'bg-red-100 text-red-700'
+    // Statuts devis_requests (compatibilité)
     case 'sent': return 'bg-yellow-100 text-yellow-700'
     case 'accepted': return 'bg-green-100 text-green-700'
     case 'refused': return 'bg-gray-100 text-gray-700'
-    case 'expired': return 'bg-gray-100 text-gray-700'
+    case 'completed': return 'bg-green-100 text-green-800'
     default: return 'bg-gray-100 text-gray-600'
   }
 }
@@ -332,7 +343,7 @@ export default function DashboardArtisanPage() {
         <div className="grid lg:grid-cols-4 gap-8">
           <ArtisanSidebar
             activePage="dashboard"
-            newDemandesCount={stats?.demandesRecues?.value || 0}
+            newDemandesCount={stats?.pendingDemandesCount ?? 0}
             unreadMessagesCount={stats?.unreadMessages ?? 0}
             publicUrl={publicUrl}
           />

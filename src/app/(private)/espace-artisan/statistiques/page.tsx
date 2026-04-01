@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 import Link from 'next/link'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import {
   TrendingUp,
   Calendar,
@@ -98,49 +99,58 @@ export default function StatistiquesPage() {
     return () => controller.abort()
   }, [period])
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+  const sidebarWrapper = (children: ReactNode) => (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          <ArtisanSidebar activePage="statistiques" />
+          <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
+            {children}
+          </div>
+        </div>
       </div>
+    </div>
+  )
+
+  if (isLoading) {
+    return sidebarWrapper(
+      <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
     )
   }
 
   if (noProvider) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">Aucun profil artisan trouvé</h2>
-          <p className="text-gray-500">Vous devez créer votre profil artisan pour accéder aux statistiques.</p>
-          <Link
-            href="/espace-artisan/profil"
-            className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Créer mon profil
-          </Link>
-        </div>
+    return sidebarWrapper(
+      <div className="text-center">
+        <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <h2 className="text-xl font-semibold text-gray-700 mb-2">Aucun profil artisan trouvé</h2>
+        <p className="text-gray-500">Vous devez créer votre profil artisan pour accéder aux statistiques.</p>
+        <Link
+          href="/espace-artisan/profil"
+          className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Créer mon profil
+        </Link>
       </div>
     )
   }
 
   if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Réessayer
-          </button>
-        </div>
+    return sidebarWrapper(
+      <div className="text-center">
+        <p className="text-red-600 mb-4">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Réessayer
+        </button>
       </div>
     )
   }
 
-  if (!stats) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-gray-500">Aucune donnée disponible</div>
+  if (!stats) return sidebarWrapper(
+    <p className="text-gray-500">Aucune donnée disponible</p>
+  )
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -163,6 +173,9 @@ export default function StatistiquesPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          <ArtisanSidebar activePage="statistiques" />
+          <div className="lg:col-span-3">
         {/* Period selector */}
         <div className="flex gap-2 mb-6">
           {[
@@ -349,6 +362,8 @@ export default function StatistiquesPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>

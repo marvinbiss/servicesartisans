@@ -158,6 +158,7 @@ export async function GET(request: Request) {
     const [
       conversationsResult,
       leadAssignmentsCountResult,
+      pendingLeadAssignmentsResult,
       curLeadAssignmentsResult,
       prevLeadAssignmentsResult,
       recentAssignmentsResult,
@@ -188,6 +189,15 @@ export async function GET(request: Request) {
             .from('lead_assignments')
             .select('id', { count: 'exact', head: true })
             .eq('provider_id', providerId)
+        : Promise.resolve({ count: 0 }),
+
+      // Pending lead_assignments count (nouvelles demandes non consultées)
+      providerId
+        ? supabase
+            .from('lead_assignments')
+            .select('id', { count: 'exact', head: true })
+            .eq('provider_id', providerId)
+            .eq('status', 'pending')
         : Promise.resolve({ count: 0 }),
 
       // Lead assignments in current period (for change %)
@@ -302,6 +312,8 @@ export async function GET(request: Request) {
     // -----------------------------------------------------------------------
     const demandesRecuesCount = ('count' in leadAssignmentsCountResult
       ? leadAssignmentsCountResult.count : 0) ?? 0
+    const pendingDemandesCount = ('count' in pendingLeadAssignmentsResult
+      ? pendingLeadAssignmentsResult.count : 0) ?? 0
     const curLeadAssignments = ('count' in curLeadAssignmentsResult
       ? curLeadAssignmentsResult.count : 0) ?? 0
     const prevLeadAssignments = ('count' in prevLeadAssignmentsResult
@@ -374,6 +386,7 @@ export async function GET(request: Request) {
       averageRating: rpcStats?.averageRating || 0,
       totalReviews: rpcStats?.totalReviews || 0,
       unreadMessages: unreadResult.count ?? 0,
+      pendingDemandesCount,
       portfolioPhotoCount,
 
       // Enhanced stats
@@ -449,6 +462,7 @@ async function getLegacyStats(
   const [
     conversationsResult,
     leadAssignmentsCountResult,
+    pendingLeadAssignmentsResult,
     curLeadAssignmentsResult,
     prevLeadAssignmentsResult,
     recentAssignmentsResult,
@@ -475,6 +489,15 @@ async function getLegacyStats(
           .from('lead_assignments')
           .select('id', { count: 'exact', head: true })
           .eq('provider_id', providerId)
+      : Promise.resolve({ count: 0 }),
+
+    // Pending lead_assignments count (nouvelles demandes non consultées)
+    providerId
+      ? supabase
+          .from('lead_assignments')
+          .select('id', { count: 'exact', head: true })
+          .eq('provider_id', providerId)
+          .eq('status', 'pending')
       : Promise.resolve({ count: 0 }),
 
     // Lead assignments in current period (for change %)
@@ -593,6 +616,8 @@ async function getLegacyStats(
   // -----------------------------------------------------------------------
   const demandesRecuesCount = ('count' in leadAssignmentsCountResult
     ? leadAssignmentsCountResult.count : 0) ?? 0
+  const pendingDemandesCount = ('count' in pendingLeadAssignmentsResult
+    ? pendingLeadAssignmentsResult.count : 0) ?? 0
   const legacyCurLeadAssignments = ('count' in curLeadAssignmentsResult
     ? curLeadAssignmentsResult.count : 0) ?? 0
   const legacyPrevLeadAssignments = ('count' in prevLeadAssignmentsResult
@@ -648,6 +673,7 @@ async function getLegacyStats(
     averageRating: Math.round(averageRating * 10) / 10,
     totalReviews: reviewCount,
     unreadMessages: unreadResult.count ?? 0,
+    pendingDemandesCount,
     portfolioPhotoCount,
 
     // Empty enhanced stats for backward compatibility

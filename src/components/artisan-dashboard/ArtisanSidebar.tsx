@@ -2,14 +2,29 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X } from 'lucide-react'
+import useSWR from 'swr'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X, Users } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 import { getSupabaseClient } from '@/lib/supabase/client'
 
+// Fetcher léger pour les badges de la sidebar
+interface SidebarBadgeData {
+  stats: {
+    pendingDemandesCount: number
+    unreadMessages: number
+  }
+}
+
+const badgeFetcher = (url: string): Promise<SidebarBadgeData> =>
+  fetch(url).then((r) => {
+    if (!r.ok) throw new Error('Failed to fetch sidebar badges')
+    return r.json()
+  })
+
 interface ArtisanSidebarProps {
-  activePage?: 'dashboard' | 'leads' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement'
+  activePage?: 'dashboard' | 'leads' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement' | 'equipe' | 'parametres'
   newDemandesCount?: number
   unreadMessagesCount?: number
   publicUrl?: string | null
@@ -38,6 +53,7 @@ const navSections: NavSection[] = [
       { key: 'leads', href: '/espace-artisan/leads', icon: Inbox, label: 'Leads reçus' },
       { key: 'demandes-recues', href: '/espace-artisan/demandes-recues', icon: FileText, label: 'Demandes reçues' },
       { key: 'calendrier', href: '/espace-artisan/calendrier', icon: Calendar, label: 'Calendrier' },
+      { key: 'equipe', href: '/espace-artisan/equipe', icon: Users, label: 'Équipe' },
       { key: 'messages', href: '/espace-artisan/messages', icon: MessageSquare, label: 'Messages' },
     ],
   },
@@ -53,6 +69,7 @@ const navSections: NavSection[] = [
     title: 'Paramètres',
     items: [
       { key: 'profil', href: '/espace-artisan/profil', icon: Settings, label: 'Mon profil' },
+      { key: 'parametres', href: '/espace-artisan/parametres', icon: Settings, label: 'Paramètres' },
       { key: 'abonnement', href: '/espace-artisan/abonnement', icon: Euro, label: 'Mon compte' },
     ],
   },
@@ -60,11 +77,24 @@ const navSections: NavSection[] = [
 
 const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount = 0, unreadMessagesCount = 0, publicUrl, subscriptionPlan }: ArtisanSidebarProps) {
+export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount, unreadMessagesCount, publicUrl, subscriptionPlan }: ArtisanSidebarProps) {
   const [userId, setUserId] = useState<string | undefined>(undefined)
   const [mobileOpen, setMobileOpen] = useState(false)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const mobileSidebarRef = useRef<HTMLDivElement>(null)
+
+  // SWR interne : fetch les badges si les props ne sont pas fournies
+  // Cela rend la sidebar autonome sur toutes les pages (pas seulement le dashboard)
+  const propsProvided = newDemandesCount !== undefined && unreadMessagesCount !== undefined
+  const { data: badgeData } = useSWR<SidebarBadgeData>(
+    propsProvided ? null : '/api/artisan/stats',
+    badgeFetcher,
+    { revalidateOnFocus: true, refreshInterval: 60_000, dedupingInterval: 10_000 }
+  )
+
+  // Utiliser les props si fournies, sinon fallback sur le SWR interne
+  const effectiveDemandesCount = newDemandesCount ?? badgeData?.stats?.pendingDemandesCount ?? 0
+  const effectiveMessagesCount = unreadMessagesCount ?? badgeData?.stats?.unreadMessages ?? 0
 
   useEffect(() => {
     const supabase = getSupabaseClient()
@@ -125,25 +155,25 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
   }, [])
 
   function getBadge(key: string) {
-    if (key === 'demandes-recues' && newDemandesCount > 0) {
+    if (key === 'demandes-recues' && effectiveDemandesCount > 0) {
       return (
         <span
           role="status"
-          aria-label={`${newDemandesCount} nouvelle${newDemandesCount > 1 ? 's' : ''} demande${newDemandesCount > 1 ? 's' : ''}`}
+          aria-label={`${effectiveDemandesCount} nouvelle${effectiveDemandesCount > 1 ? 's' : ''} demande${effectiveDemandesCount > 1 ? 's' : ''}`}
           className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full"
         >
-          {newDemandesCount}
+          {effectiveDemandesCount}
         </span>
       )
     }
-    if (key === 'messages' && unreadMessagesCount > 0) {
+    if (key === 'messages' && effectiveMessagesCount > 0) {
       return (
         <span
           role="status"
-          aria-label={`${unreadMessagesCount} message${unreadMessagesCount > 1 ? 's' : ''} non lu${unreadMessagesCount > 1 ? 's' : ''}`}
+          aria-label={`${effectiveMessagesCount} message${effectiveMessagesCount > 1 ? 's' : ''} non lu${effectiveMessagesCount > 1 ? 's' : ''}`}
           className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full"
         >
-          {unreadMessagesCount}
+          {effectiveMessagesCount}
         </span>
       )
     }

@@ -18,7 +18,7 @@ export interface Lead {
   client_name: string
   client_email: string | null
   client_phone: string
-  status: string
+  status: 'pending' | 'sent' | 'accepted' | 'refused' | 'completed'
   created_at: string
 }
 

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import {
   Loader2,
   AlertCircle,
@@ -155,10 +156,17 @@ export default function LeadDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="text-sm text-gray-500 mt-2">Chargement...</p>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid lg:grid-cols-4 gap-8">
+            <ArtisanSidebar activePage="leads" />
+            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
+              <div className="text-center">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+                <p className="text-sm text-gray-500 mt-2">Chargement...</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -166,13 +174,20 @@ export default function LeadDetailPage() {
 
   if (error && !assignment) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
-          <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
-          <p className="text-red-700 font-medium">{error}</p>
-          <Link href="/espace-artisan/leads" className="text-blue-600 hover:underline text-sm mt-4 block">
-            Retour aux leads
-          </Link>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid lg:grid-cols-4 gap-8">
+            <ArtisanSidebar activePage="leads" />
+            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
+              <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
+                <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
+                <p className="text-red-700 font-medium">{error}</p>
+                <Link href="/espace-artisan/leads" className="text-blue-600 hover:underline text-sm mt-4 block">
+                  Retour aux leads
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -198,7 +213,10 @@ export default function LeadDetailPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          <ArtisanSidebar activePage="leads" />
+          <div className="lg:col-span-3">
         <Link
           href="/espace-artisan/leads"
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors"
@@ -429,6 +447,8 @@ export default function LeadDetailPage() {
                 )}
               </div>
             </div>
+            </div>
+          </div>
           </div>
         </div>
       </div>

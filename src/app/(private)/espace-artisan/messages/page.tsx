@@ -132,12 +132,12 @@ export default function MessagesArtisanPage() {
     try {
       const response = await fetch('/api/artisan/stats')
       const data = await response.json()
-      if (response.ok && data.profile) {
+      if (response.ok && data.provider) {
         const url = getArtisanUrl({
-          stable_id: data.profile.stable_id ?? null,
-          slug: data.profile.slug ?? null,
-          specialty: data.profile.specialty ?? null,
-          city: data.profile.address_city ?? null,
+          stable_id: data.provider.stable_id ?? null,
+          slug: data.provider.slug ?? null,
+          specialty: data.provider.specialty ?? null,
+          city: data.provider.address_city ?? null,
         })
         setPublicUrl(url)
       }

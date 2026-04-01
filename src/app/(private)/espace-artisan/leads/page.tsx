@@ -18,6 +18,7 @@ import {
   Download,
 } from 'lucide-react'
 import Link from 'next/link'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { URGENCY_META, STATUS_META, type Lead, type AssignmentStatusFilter } from '@/types/leads'
 import { StatusTabs } from '@/components/dashboard/StatusTabs'
 import { Pagination } from '@/components/dashboard/Pagination'
@@ -193,10 +194,17 @@ export default function ArtisanLeadsInbox() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
-          <p className="text-sm text-charcoal-500 mt-2">Chargement des leads...</p>
+      <div className="min-h-screen bg-sand-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid lg:grid-cols-4 gap-8">
+            <ArtisanSidebar activePage="leads" />
+            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
+              <div className="text-center">
+                <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
+                <p className="text-sm text-charcoal-500 mt-2">Chargement des leads...</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -244,7 +252,10 @@ export default function ArtisanLeadsInbox() {
         </div>
       </div>
 
-      <main id="main-content" className="max-w-5xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          <ArtisanSidebar activePage="leads" />
+          <main id="main-content" className="lg:col-span-3">
         {/* Quick stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <StatCard
@@ -399,6 +410,8 @@ export default function ArtisanLeadsInbox() {
           </>
         )}
       </main>
+        </div>
+      </div>
     </div>
   )
 }

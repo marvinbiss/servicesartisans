@@ -151,11 +151,12 @@ export interface BookingSlot {
   start_time: string
   end_time: string
   is_available: boolean
-  provider_id?: string
+  artisan_id?: string
 }
 
 export interface Booking {
   id: string
+  artisan_id?: string
   provider_id: string
   client_id?: string
   client_email: string
