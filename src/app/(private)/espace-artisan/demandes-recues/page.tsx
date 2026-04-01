@@ -417,8 +417,8 @@ export default function DemandesRecuesPage() {
 
       {/* Modal Envoyer Devis */}
       {showDevisModal && selectedLead?.lead && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setShowDevisModal(false)} onKeyDown={(e) => { if (e.key === 'Escape') setShowDevisModal(false) }}>
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">
                 Envoyer un devis
@@ -510,8 +510,8 @@ export default function DemandesRecuesPage() {
 
       {/* Modal Détails */}
       {showDetailModal && selectedLead?.lead && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setShowDetailModal(false)} onKeyDown={(e) => { if (e.key === 'Escape') setShowDetailModal(false) }}>
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">
                 Détails de la demande

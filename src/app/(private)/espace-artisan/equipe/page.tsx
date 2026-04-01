@@ -264,7 +264,7 @@ export default function EquipePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center gap-4">
             <Link
-              href="/espace-artisan/calendrier"
+              href="/espace-artisan/dashboard"
               className="p-2 hover:bg-white/10 rounded-lg"
             >
               <ChevronLeft className="w-5 h-5" />
