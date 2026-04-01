@@ -98,6 +98,17 @@ export async function GET(request: Request) {
         )
       }
 
+      // Tenter aussi de récupérer les slots dans le fallback
+      const { data: fallbackSlots } = await supabase
+        .from('availability_slots')
+        .select('id, date, start_time, end_time, is_available')
+        .eq('artisan_id', user!.id)
+        .gte('date', startStr)
+        .lte('date', endStr)
+        .eq('is_available', true)
+        .order('date', { ascending: true })
+        .order('start_time', { ascending: true })
+
       return NextResponse.json({
         bookings: (fallbackBookings ?? []).map(b => ({
           id: b.id,
@@ -109,6 +120,12 @@ export async function GET(request: Request) {
           date: b.scheduled_date,
           start_time: null,
           end_time: null,
+        })),
+        availabilitySlots: (fallbackSlots ?? []).map(s => ({
+          id: s.id,
+          date: s.date,
+          start_time: s.start_time,
+          end_time: s.end_time,
         })),
       })
     }
@@ -145,7 +162,30 @@ export async function GET(request: Request) {
         return (a.start_time ?? '').localeCompare(b.start_time ?? '')
       })
 
-    return NextResponse.json({ bookings: filtered })
+    // ─── Récupérer les créneaux de disponibilité du mois ──────────────
+    const { data: availabilitySlots, error: slotsError } = await supabase
+      .from('availability_slots')
+      .select('id, date, start_time, end_time, is_available')
+      .eq('artisan_id', user!.id)
+      .gte('date', startStr)
+      .lte('date', endStr)
+      .eq('is_available', true)
+      .order('date', { ascending: true })
+      .order('start_time', { ascending: true })
+
+    if (slotsError) {
+      logger.warn('Error fetching availability slots (non-blocking)', { error: slotsError })
+    }
+
+    return NextResponse.json({
+      bookings: filtered,
+      availabilitySlots: (availabilitySlots ?? []).map(s => ({
+        id: s.id,
+        date: s.date,
+        start_time: s.start_time,
+        end_time: s.end_time,
+      })),
+    })
   } catch (err) {
     logger.error('Unexpected error in GET /api/artisan/bookings', { error: err })
     return NextResponse.json(

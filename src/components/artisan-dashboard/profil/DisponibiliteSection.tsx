@@ -4,6 +4,7 @@ import { Clock } from 'lucide-react'
 import { SectionCard } from './SectionCard'
 import { useProviderForm } from './useProviderForm'
 import { OpeningHoursEditor, DEFAULT_OPENING_HOURS } from '../OpeningHoursEditor'
+import { AvailabilityManager } from '../AvailabilityManager'
 
 interface DisponibiliteSectionProps {
   provider: Record<string, unknown>
@@ -98,6 +99,11 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
               />
             </button>
           </div>
+        </div>
+
+        {/* Separator */}
+        <div className="border-t border-gray-200 pt-6">
+          <AvailabilityManager />
         </div>
       </div>
     </SectionCard>

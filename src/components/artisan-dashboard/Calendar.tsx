@@ -18,10 +18,18 @@ export interface CalendarBooking {
   end_time: string | null
 }
 
+export interface CalendarAvailabilitySlot {
+  id: string
+  date: string
+  start_time: string
+  end_time: string
+}
+
 interface CalendarProps {
   year: number
   month: number // 0-11
   bookings: CalendarBooking[]
+  availabilitySlots?: CalendarAvailabilitySlot[]
   selectedDate: string | null // YYYY-MM-DD
   onSelectDate: (dateStr: string) => void
   onPreviousMonth: () => void
@@ -74,6 +82,7 @@ export default function Calendar({
   year,
   month,
   bookings,
+  availabilitySlots = [],
   selectedDate,
   onSelectDate,
   onPreviousMonth,
@@ -91,10 +100,22 @@ export default function Calendar({
     return map
   }, [bookings])
 
+  // Indexer les créneaux de disponibilité par date
+  const slotsByDate = useMemo(() => {
+    const map: Record<string, CalendarAvailabilitySlot[]> = {}
+    for (const s of availabilitySlots) {
+      if (!s.date) continue
+      if (!map[s.date]) map[s.date] = []
+      map[s.date].push(s)
+    }
+    return map
+  }, [availabilitySlots])
+
   const days = getDaysInMonth(year, month)
   const offset = getFirstDayOffset(year, month)
 
   const selectedBookings = selectedDate ? (bookingsByDate[selectedDate] ?? []) : []
+  const selectedSlots = selectedDate ? (slotsByDate[selectedDate] ?? []) : []
 
   return (
     <div className="space-y-6">
@@ -151,7 +172,9 @@ export default function Calendar({
               {days.map(date => {
                 const dateStr = formatDateLocal(date)
                 const dayBookings = bookingsByDate[dateStr] ?? []
+                const daySlots = slotsByDate[dateStr] ?? []
                 const count = dayBookings.length
+                const hasSlots = daySlots.length > 0
                 const isSelected = selectedDate === dateStr
                 const today = isToday(date)
 
@@ -165,10 +188,12 @@ export default function Calendar({
                         ? 'border-primary-400 bg-primary-50'
                         : today
                           ? 'border-primary-200 bg-primary-50/50'
-                          : 'border-transparent hover:bg-sand-100'
+                          : hasSlots && count === 0
+                            ? 'border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50'
+                            : 'border-transparent hover:bg-sand-100'
                       }
                     `}
-                    aria-label={`${date.getDate()} ${MONTH_NAMES[month]} ${year}${count > 0 ? ` - ${count} RDV` : ''}`}
+                    aria-label={`${date.getDate()} ${MONTH_NAMES[month]} ${year}${count > 0 ? ` - ${count} RDV` : ''}${hasSlots ? ` - ${daySlots.length} créneaux disponibles` : ''}`}
                     aria-pressed={isSelected}
                   >
                     <span className={`text-sm font-medium ${
@@ -176,6 +201,10 @@ export default function Calendar({
                     }`}>
                       {date.getDate()}
                     </span>
+                    {/* Indicateurs : dispo (vert) en bas à gauche, bookings en bas à droite */}
+                    {hasSlots && (
+                      <span className="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-emerald-500" title={`${daySlots.length} créneau(x) disponible(s)`} />
+                    )}
                     {count > 0 && (
                       <span className={`
                         absolute bottom-1 right-1 min-w-[18px] h-[18px] flex items-center justify-center
@@ -208,11 +237,13 @@ export default function Calendar({
               {days.map(date => {
                 const dateStr = formatDateLocal(date)
                 const dayBookings = bookingsByDate[dateStr] ?? []
+                const daySlots = slotsByDate[dateStr] ?? []
                 const count = dayBookings.length
+                const hasSlots = daySlots.length > 0
                 const isSelected = selectedDate === dateStr
                 const today = isToday(date)
 
-                if (count === 0 && !today && !isSelected) return null
+                if (count === 0 && !hasSlots && !today && !isSelected) return null
 
                 return (
                   <button
@@ -222,34 +253,46 @@ export default function Calendar({
                       w-full flex items-center justify-between p-3 rounded-lg border transition-all text-left
                       ${isSelected
                         ? 'border-primary-400 bg-primary-50'
-                        : 'border-sand-300 hover:bg-sand-100'
+                        : hasSlots && count === 0
+                          ? 'border-emerald-200 bg-emerald-50/50'
+                          : 'border-sand-300 hover:bg-sand-100'
                       }
                     `}
                   >
-                    <div>
+                    <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${today ? 'text-primary-600' : 'text-charcoal-900'}`}>
                         {date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}
                       </span>
                       {today && (
-                        <span className="ml-2 text-xs text-primary-500 font-medium">
+                        <span className="text-xs text-primary-500 font-medium">
                           Aujourd&apos;hui
                         </span>
                       )}
+                      {hasSlots && (
+                        <span className="text-xs text-emerald-600 font-medium">
+                          {daySlots.length} dispo
+                        </span>
+                      )}
                     </div>
-                    {count > 0 && (
-                      <span className={`
-                        min-w-[24px] h-[24px] flex items-center justify-center
-                        text-xs font-bold rounded-full
-                        ${count >= 3
-                          ? 'bg-red-500 text-white'
-                          : count >= 2
-                            ? 'bg-secondary-500 text-white'
-                            : 'bg-primary-400 text-white'
-                        }
-                      `}>
-                        {count}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {hasSlots && (
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+                      )}
+                      {count > 0 && (
+                        <span className={`
+                          min-w-[24px] h-[24px] flex items-center justify-center
+                          text-xs font-bold rounded-full
+                          ${count >= 3
+                            ? 'bg-red-500 text-white'
+                            : count >= 2
+                              ? 'bg-secondary-500 text-white'
+                              : 'bg-primary-400 text-white'
+                          }
+                        `}>
+                          {count}
+                        </span>
+                      )}
+                    </div>
                   </button>
                 )
               })}
@@ -257,6 +300,10 @@ export default function Calendar({
 
             {/* Légende */}
             <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-sand-200 text-xs text-charcoal-500">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                Disponible
+              </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-primary-400" />
                 1 RDV
@@ -286,12 +333,44 @@ export default function Calendar({
             })}
           </h4>
 
-          {selectedBookings.length === 0 ? (
+          {/* Créneaux de disponibilité */}
+          {selectedSlots.length > 0 && (
+            <div className="mb-4">
+              <h5 className="text-sm font-semibold text-emerald-700 mb-2 flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                Créneaux disponibles ({selectedSlots.length})
+              </h5>
+              <div className="flex flex-wrap gap-2">
+                {selectedSlots.map(slot => (
+                  <div
+                    key={slot.id}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-sm text-emerald-700"
+                  >
+                    <Clock className="w-3.5 h-3.5" />
+                    {slot.start_time.slice(0, 5)} - {slot.end_time.slice(0, 5)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Rendez-vous */}
+          {selectedBookings.length === 0 && selectedSlots.length === 0 ? (
             <p className="text-charcoal-500 text-sm py-4 text-center">
+              Aucun rendez-vous ni créneau ce jour
+            </p>
+          ) : selectedBookings.length === 0 ? (
+            <p className="text-charcoal-500 text-sm py-2 text-center">
               Aucun rendez-vous ce jour
             </p>
           ) : (
             <div className="space-y-3">
+              {selectedSlots.length > 0 && (
+                <h5 className="text-sm font-semibold text-charcoal-700 flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-full bg-primary-400" />
+                  Rendez-vous ({selectedBookings.length})
+                </h5>
+              )}
               {selectedBookings.map(booking => (
                 <div
                   key={booking.id}

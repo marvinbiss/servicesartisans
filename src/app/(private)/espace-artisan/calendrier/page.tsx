@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import { Calendar as CalendarIcon, AlertCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
-import Calendar, { type CalendarBooking } from '@/components/artisan-dashboard/Calendar'
+import Calendar, { type CalendarBooking, type CalendarAvailabilitySlot } from '@/components/artisan-dashboard/Calendar'
 import { getArtisanUrl } from '@/lib/utils'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -23,6 +23,7 @@ interface StatsResponse {
 
 interface BookingsResponse {
   bookings: CalendarBooking[]
+  availabilitySlots?: CalendarAvailabilitySlot[]
   error?: string
 }
 
@@ -59,6 +60,7 @@ export default function CalendrierPage() {
   )
 
   const bookings = bookingsData?.bookings ?? []
+  const availabilitySlots = bookingsData?.availabilitySlots ?? []
   const profile = statsData?.profile
   const provider = statsData?.provider
 
@@ -124,7 +126,7 @@ export default function CalendrierPage() {
               <h1 className="text-xl sm:text-2xl font-bold">Mon Calendrier</h1>
               <p className="text-charcoal-300 text-sm">
                 {profile?.full_name ? `${profile.full_name} — ` : ''}
-                Consultez vos rendez-vous
+                Consultez vos rendez-vous et disponibilités
               </p>
             </div>
           </div>
@@ -159,6 +161,7 @@ export default function CalendrierPage() {
               year={year}
               month={month}
               bookings={bookings}
+              availabilitySlots={availabilitySlots}
               selectedDate={selectedDate}
               onSelectDate={setSelectedDate}
               onPreviousMonth={handlePreviousMonth}
