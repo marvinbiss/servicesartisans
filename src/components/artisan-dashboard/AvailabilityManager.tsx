@@ -103,7 +103,7 @@ function AvailabilityManagerInner() {
   const [newStart, setNewStart] = useState('09:00')
   const [newEnd, setNewEnd] = useState('10:00')
   const [saving, setSaving] = useState(false)
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [fadingId, setFadingId] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
   const [formSuccess, setFormSuccess] = useState<string | null>(null)
 
@@ -176,28 +176,47 @@ function AvailabilityManagerInner() {
 
   const handleDelete = useCallback(
     async (slotId: string) => {
-      setDeletingId(slotId)
       setFormError(null)
 
-      try {
-        const res = await fetch(`/api/artisan/availability?slotId=${slotId}`, {
-          method: 'DELETE',
-        })
-        const result = await res.json()
+      // Fade-out animation then optimistic removal
+      setFadingId(slotId)
+      await new Promise((r) => setTimeout(r, 300))
+      setFadingId(null)
 
-        if (!res.ok) {
-          setFormError(result?.error?.message ?? 'Erreur lors de la suppression')
-          return
-        }
+      // Optimistic: remove slot from cache immediately
+      const previousData = data
+      mutate(
+        async () => {
+          const res = await fetch(`/api/artisan/availability?slotId=${slotId}`, {
+            method: 'DELETE',
+          })
+          const result = await res.json()
 
-        mutate()
-      } catch {
-        setFormError('Erreur reseau. Reessayez.')
-      } finally {
-        setDeletingId(null)
-      }
+          if (!res.ok) {
+            throw new Error(result?.error?.message ?? 'Erreur lors de la suppression')
+          }
+
+          // Return updated data matching server state
+          return {
+            ...previousData,
+            slots: (previousData?.slots ?? []).filter((s) => s.id !== slotId),
+          } as SlotsResponse
+        },
+        {
+          optimisticData: previousData
+            ? {
+                ...previousData,
+                slots: previousData.slots.filter((s) => s.id !== slotId),
+              }
+            : undefined,
+          rollbackOnError: true,
+          revalidate: false,
+        },
+      ).catch((err: Error) => {
+        setFormError(err.message || 'Erreur lors de la suppression')
+      })
     },
-    [mutate],
+    [mutate, data],
   )
 
   // ----- Render -----
@@ -364,7 +383,9 @@ function AvailabilityManagerInner() {
               {daySlots.map((slot) => (
                 <div
                   key={slot.id}
-                  className="flex items-center justify-between px-4 py-3 hover:bg-sand-50 transition-colors"
+                  className={`flex items-center justify-between px-4 py-3 hover:bg-sand-50 transition-all duration-300 ${
+                    fadingId === slot.id ? 'opacity-0 scale-95' : 'opacity-100'
+                  }`}
                 >
                   <div className="flex items-center gap-3">
                     <Clock className="w-4 h-4 text-charcoal-400" />
@@ -381,15 +402,11 @@ function AvailabilityManagerInner() {
                   <button
                     type="button"
                     onClick={() => handleDelete(slot.id)}
-                    disabled={deletingId === slot.id}
+                    disabled={fadingId === slot.id}
                     aria-label={`Supprimer le créneau ${slot.start_time} - ${slot.end_time}`}
                     className="p-1.5 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                   >
-                    {deletingId === slot.id ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Trash2 className="w-4 h-4" />
-                    )}
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               ))}

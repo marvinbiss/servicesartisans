@@ -9,6 +9,7 @@ import {
   Loader2,
   AlertCircle,
   Filter,
+  X,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
@@ -31,6 +32,7 @@ export default function PortfolioPage() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const fetchPortfolio = useCallback(async () => {
     try {
@@ -69,21 +71,35 @@ export default function PortfolioPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Supprimer cet élément du portfolio ?')) return
 
+    // Optimistic: remove from list immediately
+    const previousItems = items
+    setItems((prev) => prev.filter((item) => item.id !== id))
+
     try {
       const response = await fetch(`/api/portfolio/${id}`, { method: 'DELETE' })
-      if (response.ok) {
-        setItems((prev) => prev.filter((item) => item.id !== id))
-      } else {
-        const data = await response.json()
-        alert(data.error || 'Erreur lors de la suppression')
+      if (!response.ok) {
+        // Rollback on error
+        setItems(previousItems)
+        const data = await response.json().catch(() => ({}))
+        setActionError(data.error || 'Erreur lors de la suppression')
+        setTimeout(() => setActionError(null), 5000)
       }
     } catch (err) {
       console.error('Error deleting item:', err)
-      alert('Erreur lors de la suppression')
+      // Rollback on network error
+      setItems(previousItems)
+      setActionError('Erreur lors de la suppression')
+      setTimeout(() => setActionError(null), 5000)
     }
   }
 
   const handleToggleVisibility = async (item: PortfolioItem) => {
+    // Optimistic: toggle visibility immediately
+    const previousItems = items
+    setItems((prev) =>
+      prev.map((i) => (i.id === item.id ? { ...i, is_visible: !i.is_visible } : i))
+    )
+
     try {
       const response = await fetch(`/api/portfolio/${item.id}`, {
         method: 'PUT',
@@ -91,20 +107,33 @@ export default function PortfolioPage() {
         body: JSON.stringify({ is_visible: !item.is_visible }),
       })
       if (response.ok) {
+        // Sync with server response for any additional fields
         const data = await response.json()
         setItems((prev) =>
           prev.map((i) => (i.id === item.id ? data.item : i))
         )
       } else {
-        setError('Impossible de modifier la visibilité. Veuillez réessayer.')
+        // Rollback on error
+        setItems(previousItems)
+        setActionError('Impossible de modifier la visibilité. Veuillez réessayer.')
+        setTimeout(() => setActionError(null), 5000)
       }
     } catch (err) {
       console.error('Error toggling visibility:', err)
-      setError('Erreur de connexion. Veuillez réessayer.')
+      // Rollback on network error
+      setItems(previousItems)
+      setActionError('Erreur de connexion. Veuillez réessayer.')
+      setTimeout(() => setActionError(null), 5000)
     }
   }
 
   const handleToggleFeatured = async (item: PortfolioItem) => {
+    // Optimistic: toggle featured immediately
+    const previousItems = items
+    setItems((prev) =>
+      prev.map((i) => (i.id === item.id ? { ...i, is_featured: !i.is_featured } : i))
+    )
+
     try {
       const response = await fetch(`/api/portfolio/${item.id}`, {
         method: 'PUT',
@@ -112,16 +141,23 @@ export default function PortfolioPage() {
         body: JSON.stringify({ is_featured: !item.is_featured }),
       })
       if (response.ok) {
+        // Sync with server response for any additional fields
         const data = await response.json()
         setItems((prev) =>
           prev.map((i) => (i.id === item.id ? data.item : i))
         )
       } else {
-        setError('Impossible de modifier la mise en avant. Veuillez réessayer.')
+        // Rollback on error
+        setItems(previousItems)
+        setActionError('Impossible de modifier la mise en avant. Veuillez réessayer.')
+        setTimeout(() => setActionError(null), 5000)
       }
     } catch (err) {
       console.error('Error toggling featured:', err)
-      setError('Erreur de connexion. Veuillez réessayer.')
+      // Rollback on network error
+      setItems(previousItems)
+      setActionError('Erreur de connexion. Veuillez réessayer.')
+      setTimeout(() => setActionError(null), 5000)
     }
   }
 
@@ -179,6 +215,17 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Action error toast */}
+      {actionError && (
+        <div className="fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg bg-red-600 text-white text-sm font-medium transition-all">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{actionError}</span>
+          <button onClick={() => setActionError(null)} className="ml-2 hover:opacity-75">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

@@ -34,7 +34,7 @@ export default function AvisRecusPage() {
   const [sort, setSort] = useState<'recent' | 'oldest' | 'rating_high' | 'rating_low'>('recent')
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  // Note: submitting spinner removed — reply is shown optimistically (instant UI)
   const [replyError, setReplyError] = useState<string | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
 
@@ -67,32 +67,40 @@ export default function AvisRecusPage() {
   const handleReply = async (reviewId: string) => {
     if (!replyText.trim()) return
 
-    setSubmitting(true)
+    const trimmedReply = replyText.trim()
     setReplyError(null)
+
+    // Optimistic: show the reply immediately
+    const previousAvis = avis
+    setAvis(prev =>
+      prev.map(a =>
+        a.id === reviewId ? { ...a, artisan_response: trimmedReply } : a
+      )
+    )
+    setReplyingTo(null)
+    setReplyText('')
+
     try {
       const response = await fetch(`/api/artisan/avis/${reviewId}/response`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response: replyText.trim() }),
+        body: JSON.stringify({ response: trimmedReply }),
       })
 
-      if (response.ok) {
-        // Update local state
-        setAvis(prev =>
-          prev.map(a =>
-            a.id === reviewId ? { ...a, artisan_response: replyText.trim() } : a
-          )
-        )
-        setReplyingTo(null)
-        setReplyText('')
-      } else {
-        const data = await response.json()
+      if (!response.ok) {
+        // Rollback on error
+        setAvis(previousAvis)
+        setReplyingTo(reviewId)
+        setReplyText(trimmedReply)
+        const data = await response.json().catch(() => ({}))
         setReplyError(data.error || 'Erreur lors de l\'envoi de la réponse')
       }
     } catch {
+      // Rollback on network error
+      setAvis(previousAvis)
+      setReplyingTo(reviewId)
+      setReplyText(trimmedReply)
       setReplyError('Erreur lors de l\'envoi de la réponse')
-    } finally {
-      setSubmitting(false)
     }
   }
   if (loading) {
@@ -253,10 +261,9 @@ export default function AvisRecusPage() {
                         )}
                         <button
                           onClick={() => handleReply(item.id)}
-                          disabled={submitting || !replyText.trim()}
+                          disabled={!replyText.trim()}
                           className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
                         >
-                          {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                           Envoyer
                         </button>
                       </div>

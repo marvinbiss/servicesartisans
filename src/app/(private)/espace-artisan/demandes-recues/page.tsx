@@ -136,23 +136,30 @@ export default function DemandesRecuesPage() {
 
   const markLeadAsViewed = async (lead: Lead) => {
     if (lead.status !== 'pending') return
+
+    // Optimistic: update local state immediately
+    const previousLeads = leads
+    setLeads((prev) =>
+      prev.map((l) =>
+        l.id === lead.id
+          ? { ...l, status: 'viewed', viewed_at: new Date().toISOString() }
+          : l
+      )
+    )
+
     try {
       const res = await fetch(`/api/artisan/leads/${lead.id}/action`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'view' }),
       })
-      if (res.ok) {
-        setLeads((prev) =>
-          prev.map((l) =>
-            l.id === lead.id
-              ? { ...l, status: 'viewed', viewed_at: new Date().toISOString() }
-              : l
-          )
-        )
+      if (!res.ok) {
+        // Rollback on error
+        setLeads(previousLeads)
       }
     } catch {
-      // Non-blocking — lead stays pending visually
+      // Rollback on network error
+      setLeads(previousLeads)
     }
   }
 
