@@ -156,7 +156,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   // Uploader le nouveau fichier dans Storage (fileBlob, pas file)
   const ext = extensionFromMime(file.type)
-  const storagePath = `${provider.id}/avatar.${ext}`
+  const storagePath = `${user!.id}/avatar.${ext}`
 
   const { error: uploadError } = await supabase.storage
     .from('avatars')
