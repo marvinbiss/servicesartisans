@@ -135,14 +135,15 @@ export async function GET(request: Request) {
       .from('providers')
       .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, bio, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
       .eq('user_id', user.id)
+      .eq('is_active', true)
       .limit(1)
 
     const providerForUnread = providerRows?.[0] ?? null
 
     if (!providerForUnread) {
       return NextResponse.json(
-        { error: 'Profil artisan introuvable' },
-        { status: 404 }
+        { error: 'Profil artisan introuvable ou désactivé' },
+        { status: 403 }
       )
     }
 
@@ -428,14 +429,15 @@ async function getLegacyStats(
     .from('providers')
     .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, bio, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
     .eq('user_id', user.id)
+    .eq('is_active', true)
     .limit(1)
 
   const legacyProvider = legacyProviderRows?.[0] ?? null
 
   if (!legacyProvider) {
     return NextResponse.json(
-      { error: 'Profil artisan introuvable' },
-      { status: 404 }
+      { error: 'Profil artisan introuvable ou désactivé' },
+      { status: 403 }
     )
   }
 

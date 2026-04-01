@@ -10,6 +10,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { notifyNewMessage } from '@/lib/notifications/message-notifications'
+import { sanitizeUserInput } from '@/lib/sanitize'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
@@ -35,7 +36,7 @@ export async function GET(request: Request) {
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Invalid parameters', details: result.error.flatten() },
+        { error: 'Paramètres invalides', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -104,7 +105,7 @@ export async function GET(request: Request) {
         created_at,
         booking_id,
         provider:providers!provider_id(id, name),
-        booking:bookings!booking_id(service_name)
+        booking:bookings!booking_id(service_description)
       `)
       .eq('client_id', user.id)
       .eq('status', 'active')
@@ -140,7 +141,7 @@ export async function GET(request: Request) {
           partner: conv.provider,
           lastMessage: lastMessages?.[0] || null,
           unreadCount: unreadCount || 0,
-          service: (conv.booking as unknown as { service_name: string } | null)?.service_name || null,
+          service: (conv.booking as unknown as { service_description: string } | null)?.service_description || null,
         }
       })
     )
@@ -173,7 +174,7 @@ export async function POST(request: Request) {
     const result = sendMessageSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Erreur de validation', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -239,7 +240,7 @@ export async function POST(request: Request) {
         conversation_id: resolvedConversationId,
         sender_id: user.id,
         sender_type: 'client',
-        content,
+        content: sanitizeUserInput(content),
       })
       .select()
       .single()

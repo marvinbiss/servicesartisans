@@ -10,6 +10,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { notifyNewMessage } from '@/lib/notifications/message-notifications'
+import { sanitizeUserInput } from '@/lib/sanitize'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
@@ -37,7 +38,7 @@ export async function GET(request: Request) {
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -207,7 +208,7 @@ export async function POST(request: Request) {
     const result = sendMessageSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -287,7 +288,7 @@ export async function POST(request: Request) {
         conversation_id: resolvedConversationId,
         sender_id: user.id,
         sender_type: 'artisan',
-        content,
+        content: sanitizeUserInput(content),
       })
       .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
       .single()

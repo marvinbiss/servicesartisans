@@ -131,7 +131,7 @@ function AvailabilityManagerInner() {
 
   // ----- Validation inline -----
   const timeError = useMemo(() => {
-    if (newEnd <= newStart) return "L'heure de fin doit etre apres l'heure de debut"
+    if (newEnd <= newStart) return "L'heure de fin doit être après l'heure de début"
     return null
   }, [newStart, newEnd])
 
@@ -160,15 +160,15 @@ function AvailabilityManagerInner() {
       const result = await res.json()
 
       if (!res.ok) {
-        setFormError(result?.error?.message ?? 'Erreur lors de la creation')
+        setFormError(result?.error?.message ?? 'Erreur lors de la création')
         return
       }
 
-      setFormSuccess('Creneau ajoute')
+      setFormSuccess('Créneau ajouté')
       setTimeout(() => setFormSuccess(null), 3000)
       mutate()
     } catch {
-      setFormError('Erreur reseau. Reessayez.')
+      setFormError('Erreur réseau. Réessayez.')
     } finally {
       setSaving(false)
     }
@@ -208,21 +208,21 @@ function AvailabilityManagerInner() {
       <div className="flex items-center gap-2">
         <Calendar className="w-5 h-5 text-primary-600" />
         <h3 className="text-base font-semibold text-charcoal-900">
-          Creneaux de disponibilite
+          Créneaux de disponibilité
         </h3>
       </div>
 
       <p className="text-sm text-charcoal-500">
-        Ajoutez des creneaux sur lesquels vos clients peuvent prendre rendez-vous.
-        Les horaires d&apos;ouverture ci-dessus definissent vos heures generales ;
-        les creneaux ci-dessous sont les plages horaires precises ouvertes a la reservation.
+        Ajoutez des créneaux sur lesquels vos clients peuvent prendre rendez-vous.
+        Les horaires d&apos;ouverture ci-dessus définissent vos heures générales ;
+        les créneaux ci-dessous sont les plages horaires précises ouvertes à la réservation.
       </p>
 
       {/* ---------- Formulaire d'ajout ---------- */}
       <div className="bg-sand-50 border border-sand-200 rounded-xl p-4 space-y-4">
         <p className="text-sm font-medium text-charcoal-700 flex items-center gap-2">
           <Plus className="w-4 h-4" />
-          Ajouter un creneau
+          Ajouter un créneau
         </p>
 
         <div className="flex flex-wrap items-end gap-3">
@@ -317,25 +317,25 @@ function AvailabilityManagerInner() {
         </div>
       )}
 
-      {/* ---------- Liste des creneaux ---------- */}
+      {/* ---------- Liste des créneaux ---------- */}
       {isLoading && (
         <div className="flex items-center gap-2 text-charcoal-500 text-sm py-4">
           <Loader2 className="w-4 h-4 animate-spin" />
-          Chargement des creneaux...
+          Chargement des créneaux...
         </div>
       )}
 
       {loadError && (
         <div role="alert" className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-          Impossible de charger les creneaux : {loadError.message}
+          Impossible de charger les créneaux : {loadError.message}
         </div>
       )}
 
       {!isLoading && !loadError && sortedDates.length === 0 && (
         <div className="text-center py-8 text-charcoal-400 text-sm">
           <Clock className="w-8 h-8 mx-auto mb-2 opacity-40" />
-          Aucun creneau a venir. Ajoutez-en un ci-dessus.
+          Aucun créneau à venir. Ajoutez-en un ci-dessus.
         </div>
       )}
 
@@ -355,7 +355,7 @@ function AvailabilityManagerInner() {
                 {formatDateLabel(date)}
               </span>
               <span className="ml-auto text-xs text-charcoal-400">
-                {daySlots.length} creneau{daySlots.length > 1 ? 'x' : ''}
+                {daySlots.length} créneau{daySlots.length > 1 ? 'x' : ''}
               </span>
             </div>
 
@@ -382,7 +382,7 @@ function AvailabilityManagerInner() {
                     type="button"
                     onClick={() => handleDelete(slot.id)}
                     disabled={deletingId === slot.id}
-                    aria-label={`Supprimer le creneau ${slot.start_time} - ${slot.end_time}`}
+                    aria-label={`Supprimer le créneau ${slot.start_time} - ${slot.end_time}`}
                     className="p-1.5 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                   >
                     {deletingId === slot.id ? (
