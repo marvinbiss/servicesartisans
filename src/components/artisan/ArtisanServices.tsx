@@ -6,9 +6,10 @@ import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanServicesProps {
   artisan: LegacyArtisan
+  isClaimed?: boolean
 }
 
-export function ArtisanServices({ artisan }: ArtisanServicesProps) {
+export function ArtisanServices({ artisan, isClaimed = false }: ArtisanServicesProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -82,7 +83,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
               </motion.div>
             ))}
           </div>
-        ) : (
+        ) : isClaimed ? (
           <div className="bg-primary-50 rounded-xl border border-primary-200 p-6 text-center mt-4">
             <p className="text-charcoal-700 font-medium mb-2">Tarifs sur devis personnalisé</p>
             <p className="text-sm text-charcoal-500 mb-4">Cet artisan propose des tarifs adaptés à chaque projet. Demandez un devis gratuit pour connaître ses prix.</p>
@@ -92,6 +93,10 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
             >
               Obtenir mon devis gratuit
             </a>
+          </div>
+        ) : (
+          <div className="bg-sand-50 rounded-xl border border-sand-200 p-6 text-center mt-4">
+            <p className="text-charcoal-500 text-sm">Les tarifs seront disponibles lorsque cet artisan aura rejoint la plateforme.</p>
           </div>
         )}
 

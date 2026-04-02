@@ -613,12 +613,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Artisans disponibles — visible showcase with real providers */}
+      {/* JSON-LD LocalBusiness schemas for top providers (SEO only, no visual cards
+           — the visual listing is handled by ServiceLocationPageClient below to avoid
+           duplicate "Voir le profil" buttons for the same artisan on desktop) */}
       <LocalProviderShowcase
         providers={(providers || []).slice(0, 3)}
         serviceName={service.name}
         cityName={location.name}
         max={3}
+        jsonLdOnly
       />
 
       {/* SSR provider links — crawlable by Googlebot even without JS execution */}

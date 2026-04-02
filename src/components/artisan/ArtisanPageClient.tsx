@@ -125,7 +125,7 @@ export default function ArtisanPageClient({
   initialReviews,
   artisanId,
   similarArtisans,
-  isClaimed = true,
+  isClaimed = false,
   hasSiret = false,
 }: ArtisanPageClientProps) {
   const artisan = initialArtisan
@@ -293,10 +293,12 @@ export default function ArtisanPageClient({
               <section aria-label="À propos">
                 <ArtisanAbout artisan={artisan} />
               </section>
-              {/* 7. Services & pricing — transactional detail */}
-              <section id="services" aria-label="Services et tarifs">
-                <ArtisanServices artisan={artisan} />
-              </section>
+              {/* 7. Services & pricing — transactional detail (hidden for unclaimed) */}
+              {isClaimed && (
+                <section id="services" aria-label="Services et tarifs">
+                  <ArtisanServices artisan={artisan} isClaimed={isClaimed} />
+                </section>
+              )}
               {/* 8. Business card — verification details */}
               <section aria-label="Fiche entreprise">
                 <ArtisanBusinessCard artisan={artisan} />

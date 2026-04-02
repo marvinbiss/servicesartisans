@@ -26,6 +26,10 @@ interface LocalProviderShowcaseProps {
   cityName: string
   /** Max providers to display (default 3) */
   max?: number
+  /** When true, only emit JSON-LD scripts — no visible cards.
+   *  Useful when the visual listing is handled by another component
+   *  (e.g. ServiceLocationPageClient) to avoid duplicate cards. */
+  jsonLdOnly?: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -122,10 +126,26 @@ export default function LocalProviderShowcase({
   serviceName,
   cityName,
   max = 3,
+  jsonLdOnly = false,
 }: LocalProviderShowcaseProps) {
   if (!providers || providers.length === 0) return null
 
   const sorted = sortProviders(providers).slice(0, max)
+
+  // When jsonLdOnly is true, only emit the structured data scripts
+  if (jsonLdOnly) {
+    return (
+      <>
+        {sorted.map((p) => (
+          <script
+            key={`jsonld-${p.id}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: safeJsonStringify(buildLocalBusinessJsonLd(p, cityName)) }}
+          />
+        ))}
+      </>
+    )
+  }
 
   // Grid: 1 col if 1-2 providers, 2 cols md / 3 cols lg if 3+
   const gridCols = sorted.length <= 2

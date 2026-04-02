@@ -53,7 +53,8 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.5 }}
-      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6 relative z-0"
+      style={{ isolation: 'isolate' }}
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <MapPin className="w-5 h-5 text-clay-400" aria-hidden="true" />
