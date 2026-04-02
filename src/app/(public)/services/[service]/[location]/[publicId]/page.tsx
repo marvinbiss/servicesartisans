@@ -596,6 +596,8 @@ export default async function ProviderPage({ params }: PageProps) {
     // Graceful degradation — page renders without reviews/similar artisans
   }
 
+  const isClaimed = !!provider.user_id
+
   return (
     <>
       {/* Preload hints */}
@@ -609,12 +611,12 @@ export default async function ProviderPage({ params }: PageProps) {
         initialReviews={reviews}
         artisanId={provider.id}
         similarArtisans={similarArtisans}
-        isClaimed={!!provider.user_id}
+        isClaimed={isClaimed}
         hasSiret={!!provider.siret}
       />
 
-      {/* ─── DEVIS CTA BANNER ────────────────────────────────── */}
-      <section className="py-8 bg-gradient-to-r from-primary-50 to-sand-100 border-t border-b border-primary-200/40">
+      {/* ─── DEVIS CTA BANNER — only for claimed profiles ───── */}
+      {isClaimed && <section className="py-8 bg-gradient-to-r from-primary-50 to-sand-100 border-t border-b border-primary-200/40">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
@@ -636,7 +638,7 @@ export default async function ProviderPage({ params }: PageProps) {
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}
       <section className="py-6 bg-white border-t border-sand-200">

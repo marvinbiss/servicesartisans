@@ -160,7 +160,7 @@ export default async function ConfidentialitePage() {
               <li><strong>Droit de rectification :</strong> corriger vos données inexactes</li>
               <li><strong>Droit à l'effacement :</strong> demander la suppression de vos données</li>
               <li><strong>Droit à la portabilité :</strong> récupérer vos données dans un format standard</li>
-              <li><strong>Droit d'opposition :</strong> vous opposer à certains traitements</li>
+              <li><strong>Droit d'opposition :</strong> vous opposer à certains traitements (<a href="/droit-opposition" className="text-blue-600 hover:underline">en savoir plus</a>)</li>
               <li><strong>Droit à la limitation :</strong> limiter l'utilisation de vos données</li>
             </ul>
             <p>

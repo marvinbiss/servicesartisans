@@ -17,6 +17,7 @@ import {
   Flag,
   Shield,
   Lock,
+  Trash2,
   Settings,
   ArrowRight,
   Wrench,
@@ -54,6 +55,7 @@ const nav = [
   { name: 'Signalements', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },
   { name: 'RGPD', href: '/admin/rgpd', icon: Lock },
+  { name: 'Demandes suppression', href: '/admin/demandes-suppression', icon: Trash2 },
   { name: 'Prospection', href: '/admin/prospection', icon: Megaphone },
   { name: 'Paramètres', href: '/admin/parametres', icon: Settings },
 ]

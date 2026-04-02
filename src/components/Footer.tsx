@@ -185,6 +185,11 @@ export default function Footer() {
                   Accessibilité
                 </Link>
               </li>
+              <li>
+                <Link href="/droit-opposition" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Droit d&apos;opposition
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

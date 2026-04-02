@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { AlertCircle, ArrowLeft, Heart } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Heart, Info } from 'lucide-react'
 import {
   Review,
   getDisplayName,
@@ -24,6 +24,7 @@ import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
+import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
@@ -227,6 +228,21 @@ export default function ArtisanPageClient({
 
         {/* Main content */}
         <main id="main-content" className="max-w-7xl mx-auto px-4 py-6" aria-label={`Profil de ${displayName}`}>
+          {/* Bandeau fiche non-revendiquee */}
+          {!isClaimed && (
+            <div className="mb-6 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3.5" role="status">
+              <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <div>
+                <p className="text-sm font-semibold text-blue-800">
+                  Cet artisan n&apos;a pas encore rejoint ServicesArtisans
+                </p>
+                <p className="text-sm text-blue-700 mt-0.5">
+                  Les informations affichées proviennent de sources publiques. Le contact direct n&apos;est pas disponible tant que l&apos;artisan n&apos;a pas revendiqué sa fiche.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Breadcrumb */}
           <nav className="mb-6" aria-label="Fil d'Ariane">
             <ArtisanBreadcrumb artisan={artisan} />
@@ -247,18 +263,24 @@ export default function ArtisanPageClient({
               <section aria-label="Informations principales">
                 <ArtisanHero artisan={artisan} />
               </section>
-              {/* 1b. Quick Quote CTA — reduce friction, capture intent early */}
-              <section aria-label="Demande de devis rapide">
-                <ArtisanQuickQuote artisan={artisan} />
-              </section>
-              {/* 2. Urgency — availability signals push to action */}
-              <section aria-label="Disponibilité et avantages">
-                <ArtisanUrgencyBanner artisan={artisan} />
-              </section>
-              {/* 3. DEVIS FORM — above the fold on desktop, 2nd scroll on mobile */}
-              <section id="devis" aria-label="Demande de devis">
-                <ArtisanQuoteForm artisan={artisan} />
-              </section>
+              {/* 1b. Quick Quote CTA — only if claimed */}
+              {isClaimed && (
+                <section aria-label="Demande de devis rapide">
+                  <ArtisanQuickQuote artisan={artisan} />
+                </section>
+              )}
+              {/* 2. Urgency — only if claimed */}
+              {isClaimed && (
+                <section aria-label="Disponibilité et avantages">
+                  <ArtisanUrgencyBanner artisan={artisan} />
+                </section>
+              )}
+              {/* 3. DEVIS FORM — only if claimed */}
+              {isClaimed && (
+                <section id="devis" aria-label="Demande de devis">
+                  <ArtisanQuoteForm artisan={artisan} />
+                </section>
+              )}
               {/* 4. Stats — social proof reinforces after form view */}
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
@@ -279,13 +301,19 @@ export default function ArtisanPageClient({
               <section aria-label="Fiche entreprise">
                 <ArtisanBusinessCard artisan={artisan} />
               </section>
-              {/* Mobile-only contact section */}
-              <section className="lg:hidden" aria-label="Contacter cet artisan">
-                <ArtisanContactCard artisan={artisan} />
-              </section>
+              {/* Mobile-only contact section — only if claimed */}
+              {isClaimed && (
+                <section className="lg:hidden" aria-label="Contacter cet artisan">
+                  <ArtisanContactCard artisan={artisan} />
+                </section>
+              )}
+              {/* Claim button on mobile — only if NOT claimed */}
               {!isClaimed && (
                 <section className="lg:hidden" aria-label="Revendiquer cette fiche">
                   <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                  <div className="text-center mt-2">
+                    <RemovalRequestButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                  </div>
                 </section>
               )}
               {/* 9. FAQ — address remaining objections */}
@@ -301,28 +329,39 @@ export default function ArtisanPageClient({
               </section>
             </div>
 
-            {/* Right column - Sticky sidebar with CTA ALWAYS visible */}
+            {/* Right column - Sticky sidebar */}
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
               <div className="space-y-6 sticky top-20">
-                <ArtisanSidebar artisan={artisan} />
-                <ArtisanProfileStrength artisan={artisan} />
-                {!isClaimed && (
-                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                {isClaimed ? (
+                  <>
+                    <ArtisanSidebar artisan={artisan} />
+                    <ArtisanProfileStrength artisan={artisan} />
+                  </>
+                ) : (
+                  <>
+                    <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                    <div className="text-center mt-2">
+                      <RemovalRequestButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                    </div>
+                    <ArtisanProfileStrength artisan={artisan} />
+                  </>
                 )}
               </div>
             </aside>
           </div>
         </main>
 
-        {/* Mobile CTA - ALWAYS visible, impossible to miss */}
-        <ArtisanMobileCTA artisan={artisan} />
+        {/* Mobile CTA - only visible for claimed profiles */}
+        {isClaimed && <ArtisanMobileCTA artisan={artisan} />}
       </div>
 
-      {/* Exit intent slide-in */}
-      <ArtisanExitIntent
-        artisan={artisan}
-        onOpenEstimation={() => {}}
-      />
+      {/* Exit intent slide-in — only for claimed profiles */}
+      {isClaimed && (
+        <ArtisanExitIntent
+          artisan={artisan}
+          onOpenEstimation={() => {}}
+        />
+      )}
     </>
   )
 }
