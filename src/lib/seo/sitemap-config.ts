@@ -17,10 +17,10 @@ export const STATIC_BATCH = 10_000
 export const LARGE_BATCH = 25_000
 
 /** Batch size for provider sitemaps (DB-dependent, served via API route) */
-export const PROVIDER_BATCH_SIZE = 5_000
+export const PROVIDER_BATCH_SIZE = 25_000
 
-/** Cap on provider sitemaps to avoid declaring hundreds of broken sitemaps */
-export const MAX_PROVIDER_SITEMAPS = 20
+/** Cap on provider sitemaps — 200 × 25K = 5M URLs max (covers 900K+ providers) */
+export const MAX_PROVIDER_SITEMAPS = 200
 
 /**
  * City counts for sitemap generation — tiered strategy.

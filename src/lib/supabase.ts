@@ -355,7 +355,7 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   'storiste': ['storiste'],                                        // NAF 43.32A
   'salle-de-bain': ['salle-de-bain'],                              // NAF 43.22A + 43.33Z
   'architecte-interieur': ['architecte-interieur'],                // NAF 71.11Z
-  'decorateur': ['decorateur'],                                    // NAF 74.10Z
+  'decorateur': ['decorateur', 'decorateur-interieur'],             // NAF 74.10Z
   'cuisiniste': ['cuisiniste'],                                    // NAF 43.32C + 31.02Z
 
   // === Énergie / Chauffage ===

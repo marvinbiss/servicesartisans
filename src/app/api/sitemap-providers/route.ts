@@ -6,7 +6,7 @@ import inseeCommunes from '@/lib/data/insee-communes.json'
 
 export const maxDuration = 60
 
-const PROVIDER_BATCH_SIZE = 5_000
+const PROVIDER_BATCH_SIZE = 25_000
 
 /** Escape XML special characters in sitemap URLs to prevent invalid XML */
 function escapeXml(s: string): string {
@@ -70,6 +70,7 @@ const specialtyToSlug: Record<string, string> = {
   'architecte-d-interieur': 'architecte-interieur',
   'decoration': 'decorateur',
   'decorateur': 'decorateur',
+  'decorateur-interieur': 'decorateur',
   'peintre-decorateur': 'decorateur',
   'domoticien': 'domoticien',
   'domotique': 'domoticien',

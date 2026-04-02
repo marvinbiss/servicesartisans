@@ -85,6 +85,7 @@ const _specialtyToServiceSlug: Record<string, string> = {
   'installateur-de-salle-de-bain': 'salle-de-bain',
   'architecte-d-interieur': 'architecte-interieur',
   'decoration': 'decorateur',
+  'decorateur-interieur': 'decorateur',
   'peintre-decorateur': 'decorateur',
   'domotique': 'domoticien',
   'pac': 'pompe-a-chaleur',
