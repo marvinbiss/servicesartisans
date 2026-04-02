@@ -54,6 +54,7 @@ export async function GET() {
       .from('providers')
       .select('id, stable_id, name, slug, email, phone, phone_secondary, website, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, avatar_url, created_at, updated_at, opening_hours, accepts_new_clients, free_quote, available_24h, intervention_radius_km, services_offered, service_prices, faq, team_size')
       .eq('user_id', user.id)
+      .or('is_active.eq.true,is_active.is.null')
       .single()
 
     if (providerError || !provider) {
@@ -113,6 +114,7 @@ export async function PUT(request: Request) {
       .from('providers')
       .select('id, specialty, address_city, slug, stable_id')
       .eq('user_id', user.id)
+      .or('is_active.eq.true,is_active.is.null')
       .single()
 
     if (providerError || !provider) {
