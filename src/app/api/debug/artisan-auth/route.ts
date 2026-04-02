@@ -95,19 +95,35 @@ export async function GET(request: NextRequest) {
       error: providerActiveRlsError?.message ?? null,
     }
 
-    // Step 7: RPC call
-    let step7: { hasData: boolean; error: string | null }
+    // Step 7: Exact same SELECT as /api/artisan/stats (to find column errors)
+    const { data: providerFull, error: providerFullError } = await supabase
+      .from('providers')
+      .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, bio, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      .limit(1)
+
+    const step7 = {
+      provider: providerFull?.[0] ? { id: providerFull[0].id, name: providerFull[0].name } : null,
+      columnCount: providerFull?.[0] ? Object.keys(providerFull[0]).length : 0,
+      error: providerFullError?.message ?? null,
+      errorCode: providerFullError?.code ?? null,
+      errorDetails: providerFullError?.details ?? null,
+    }
+
+    // Step 8: RPC call
+    let step8: { hasData: boolean; error: string | null }
     try {
       const { data: rpcData, error: rpcError } = await supabase.rpc(
         'get_artisan_dashboard_stats',
         { p_artisan_id: userId, p_period: 'month' }
       )
-      step7 = {
+      step8 = {
         hasData: rpcData != null,
         error: rpcError?.message ?? null,
       }
     } catch (rpcCatchError) {
-      step7 = {
+      step8 = {
         hasData: false,
         error:
           rpcCatchError instanceof Error
@@ -125,7 +141,8 @@ export async function GET(request: NextRequest) {
       step4_provider_rls: step4,
       step5_provider_admin: step5,
       step6_provider_active_rls: step6,
-      step7_rpc: step7,
+      step7_provider_full_select: step7,
+      step8_rpc: step8,
     })
   } catch (err) {
     return NextResponse.json({
