@@ -17,6 +17,7 @@ import {
   Briefcase,
   Loader2,
   RefreshCw,
+  Trash2,
 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { Toast } from '@/components/admin/Toast'
@@ -59,6 +60,11 @@ export default function AdminProvidersPage() {
   const [suspendModal, setSuspendModal] = useState<{ open: boolean; providerId: string }>({
     open: false,
     providerId: '',
+  })
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; providerId: string; providerName: string }>({
+    open: false,
+    providerId: '',
+    providerName: '',
   })
 
   // Debounce search
@@ -118,6 +124,20 @@ export default function AdminProvidersPage() {
       mutate()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Action échouée'
+      setToast({ message: `Erreur: ${message}`, type: 'error' })
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleDelete = async (providerId: string) => {
+    try {
+      setActionLoading(providerId)
+      await adminMutate(`/api/admin/providers/${providerId}`, { method: 'DELETE' })
+      setToast({ message: 'Artisan supprimé définitivement', type: 'success' })
+      mutate()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Suppression échouée'
       setToast({ message: `Erreur: ${message}`, type: 'error' })
     } finally {
       setActionLoading(null)
@@ -354,6 +374,17 @@ export default function AdminProvidersPage() {
                               </button>
                             )}
 
+                            {/* Delete button */}
+                            <button
+                              onClick={() => setDeleteModal({ open: true, providerId: provider.id, providerName: provider.name })}
+                              disabled={actionLoading === provider.id}
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                              title="Supprimer définitivement"
+                              aria-label="Supprimer définitivement"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+
                             {/* Suspend/Activate button */}
                             {provider.is_active ? (
                               <button
@@ -432,6 +463,22 @@ export default function AdminProvidersPage() {
         title="Suspendre l'artisan"
         message="Êtes-vous sûr de vouloir suspendre cet artisan ? Il ne sera plus visible sur la plateforme."
         confirmText="Suspendre"
+        variant="danger"
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteModal.open}
+        onClose={() => setDeleteModal({ open: false, providerId: '', providerName: '' })}
+        onConfirm={async () => {
+          const id = deleteModal.providerId
+          setDeleteModal({ open: false, providerId: '', providerName: '' })
+          await handleDelete(id)
+        }}
+        title="Supprimer définitivement"
+        message={`Êtes-vous sûr de vouloir supprimer "${deleteModal.providerName}" ? Cette action est irréversible. Toutes les données liées (avis, réservations, leads) seront aussi supprimées.`}
+        confirmText="Supprimer"
+        requireConfirmation="SUPPRIMER"
         variant="danger"
       />
     </div>

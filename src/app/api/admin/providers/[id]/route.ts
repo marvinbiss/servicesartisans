@@ -247,7 +247,7 @@ export async function PATCH(
   }
 }
 
-// DELETE - Soft delete
+// DELETE - Hard delete (suppression définitive)
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
@@ -267,9 +267,16 @@ export async function DELETE(
 
     const supabase = createAdminClient()
 
+    // Nettoyer les données liées avant suppression
+    await supabase.from('provider_claims').delete().eq('provider_id', providerId)
+    await supabase.from('reviews').delete().eq('provider_id', providerId)
+    await supabase.from('lead_assignments').delete().eq('provider_id', providerId)
+    await supabase.from('bookings').delete().eq('provider_id', providerId)
+
+    // Suppression définitive du provider
     const { error } = await supabase
       .from('providers')
-      .update({ is_active: false, updated_at: new Date().toISOString() })
+      .delete()
       .eq('id', providerId)
 
     if (error) {
@@ -278,12 +285,12 @@ export async function DELETE(
     }
 
     try {
-      await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', providerId)
+      await logAdminAction(authResult.admin.id, 'provider.hard_delete', 'provider', providerId)
     } catch (auditError) {
       logger.warn('Audit log failed')
     }
 
-    return NextResponse.json({ success: true, message: 'Artisan supprimé' })
+    return NextResponse.json({ success: true, message: 'Artisan supprimé définitivement' })
   } catch (error) {
     const err = error as Error
     logger.error('Unexpected DELETE error', { message: err.message })
