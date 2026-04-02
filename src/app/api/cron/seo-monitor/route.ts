@@ -19,46 +19,16 @@ export async function GET(request: Request) {
     const supabase = createAdminClient()
 
     // Run all queries in parallel for performance
-    const [
-      overviewResult,
-      byTypeResult,
-      topPagesResult,
-      worstOrphansResult,
-      trendsResult,
-    ] = await Promise.all([
-      // 1. Overview aggregation
-      supabase.rpc('exec_sql', {
-        query: `
-          SELECT
-            COUNT(*)::int AS total_pages,
-            COUNT(*) FILTER (WHERE is_orphan = true AND internal_links_in = 0)::int AS orphan_critical,
-            COUNT(*) FILTER (WHERE is_orphan = true AND internal_links_in > 0)::int AS orphan_weak,
-            ROUND(AVG(link_score)::numeric, 2) AS avg_link_score,
-            MAX(updated_at) FILTER (WHERE source_run_id LIKE '%link-scores%') AS last_link_score_run,
-            MAX(updated_at) FILTER (WHERE source_run_id LIKE '%orphan%') AS last_orphan_check_run
-          FROM seo_page_scores
-        `,
-      }).then(res => {
-        // Fallback: if rpc doesn't exist, use direct queries
-        if (res.error) return null
-        return res.data
-      }),
-
-      // 2. By type aggregation
-      supabase
-        .from('seo_page_scores')
-        .select('page_type')
-        .not('page_type', 'is', null)
-        .limit(1),
-
-      // 3. Top 20 pages by link_score
+    // Fetch top pages and worst orphans
+    const [topPagesResult, worstOrphansResult] = await Promise.all([
+      // Top 20 pages by link_score
       supabase
         .from('seo_page_scores')
         .select('page_path, page_type, link_score, internal_links_in, internal_links_out')
         .order('link_score', { ascending: false })
         .limit(20),
 
-      // 4. Worst 20 orphans (critical: is_orphan + lowest link_score)
+      // Worst 20 orphans (critical: is_orphan + lowest link_score)
       supabase
         .from('seo_page_scores')
         .select('page_path, page_type, link_score, internal_links_in, internal_links_out, is_indexed')
@@ -66,13 +36,6 @@ export async function GET(request: Request) {
         .order('internal_links_in', { ascending: true })
         .order('link_score', { ascending: true })
         .limit(20),
-
-      // 5. Trends: orphans now vs 7 days ago
-      supabase
-        .from('seo_page_scores')
-        .select('is_orphan, updated_at')
-        .eq('is_orphan', true)
-        .limit(1), // just to check connectivity
     ])
 
     // --- Build overview via direct queries (more reliable than rpc) ---
