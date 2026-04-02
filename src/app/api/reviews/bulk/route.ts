@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/server'
+import { requirePermission } from '@/lib/admin-auth'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,29 +14,8 @@ const bulkModerateSchema = z.object({
 // PATCH /api/reviews/bulk - Bulk moderate reviews (Admin only)
 export async function PATCH(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non authentifié' } },
-        { status: 401 }
-      )
-    }
-
-    // Admin role check: only admins can bulk moderate reviews
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile?.is_admin) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Accès réservé aux administrateurs' } },
-        { status: 403 }
-      )
-    }
+    const auth = await requirePermission('reviews', 'write')
+    if (!auth.success) return auth.error
 
     const body = await request.json()
     const parsed = bulkModerateSchema.safeParse(body)
@@ -54,6 +34,7 @@ export async function PATCH(request: NextRequest) {
       updated_at: new Date().toISOString(),
     }
 
+    const supabase = createAdminClient()
     const { data, error } = await supabase
       .from('reviews')
       .update(updates)

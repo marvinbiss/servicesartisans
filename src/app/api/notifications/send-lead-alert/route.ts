@@ -17,6 +17,13 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
  */
 export async function POST(request: NextRequest) {
   try {
+    // Auth: internal-only endpoint — require CRON_SECRET
+    const authHeader = request.headers.get('authorization') || ''
+    const cronSecret = process.env.CRON_SECRET
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    }
+
     // Rate limiting: 3 requests per minute per IP
     const ip = getClientIp(request.headers)
     const rl = await checkRateLimit(`send-lead-alert:${ip}`, { window: 60_000, max: 3 })

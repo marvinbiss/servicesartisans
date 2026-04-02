@@ -227,7 +227,12 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   const method = request.method
   if (
     method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS' &&
-    (pathname.startsWith('/api/artisan/') || pathname.startsWith('/api/client/'))
+    pathname.startsWith('/api/') &&
+    !pathname.startsWith('/api/webhooks/') &&
+    !pathname.startsWith('/api/cron/') &&
+    !pathname.startsWith('/api/sitemap') &&
+    !pathname.startsWith('/api/indexnow') &&
+    pathname !== '/api/health'
   ) {
     const origin = request.headers.get('origin')
 

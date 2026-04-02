@@ -203,7 +203,6 @@ export function transformToProvider(etab: SireneEtablissement): {
   naf_code: string | null
   is_verified: boolean
   is_active: boolean
-  is_premium: boolean
   source: string
   source_id: string
 } {
@@ -256,7 +255,6 @@ export function transformToProvider(etab: SireneEtablissement): {
     naf_code: periode?.activitePrincipaleEtablissement || ul.activitePrincipaleUniteLegale || null,
     is_verified: false,
     is_active: true,
-    is_premium: false,
     source: 'sirene',
     source_id: etab.siret,
   }

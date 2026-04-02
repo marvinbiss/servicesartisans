@@ -179,7 +179,6 @@ export function transformOpenResultToProvider(result: SearchResult): {
   naf_code: string | null
   is_verified: boolean
   is_active: boolean
-  is_premium: boolean
   source: string
   source_id: string
 } {
@@ -222,7 +221,6 @@ export function transformOpenResultToProvider(result: SearchResult): {
     naf_code: result.activite_principale || null,
     is_verified: false,
     is_active: true,
-    is_premium: false,
     source: 'sirene-open',
     source_id: result.siege?.siret || result.siren,
   }

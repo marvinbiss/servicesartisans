@@ -139,7 +139,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/badge-artisan`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
       { url: `${SITE_URL}/verifier-artisan`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
       { url: `${SITE_URL}/widget-prix`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/plan-du-site`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.1 },
     ]
 
     // Guide pages
