@@ -509,6 +509,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-jardinier-paysagiste-2026": {
     title: "Prix Jardinier Paysagiste 2026 : Tarifs",
     excerpt: "Tarifs jardinier paysagiste 2026 : entretien, création d'espaces verts, élagage, tonte. Tous les prix détaillés. Devis gratuit.",
+    metaTitle: "Prix Jardinier 2026 : 25-80€/h — Barème complet",
+    metaDescription: "Tarifs jardinier 2026 : tonte 30-80€, élagage 200-1 500€, création jardin 50-150€/m². Crédit d'impôt 50%. Comparez 3 devis gratuits.",
     content: [
       "Votre jardin ressemble plus à une jungle qu'à un espace de détente ? Vous rêvez d'une terrasse paysagée, d'un potager structuré ou simplement d'une pelouse impeccable ? Un jardin bien entretenu valorise votre patrimoine immobilier de **5 à 20 %** selon les professionnels de l'immobilier. Mais entre un simple entretien et un aménagement paysager complet, les tarifs varient du simple au décuple. Ce guide 2026 vous donne toutes les clés pour **budgéter précisément vos travaux d'extérieur** et profiter du crédit d'impôt de 50 %. Comparez les devis de [jardiniers et paysagistes près de chez vous](/services/jardinier).",
 
@@ -601,6 +603,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-vitrier-2026-remplacement-vitrage": {
     title: "Prix Vitrier 2026 : Tarifs Vitrage",
     excerpt: "Tarifs vitrier 2026 : remplacement de vitre, double vitrage, vitrine, miroir sur mesure. Tous les prix détaillés. Devis gratuit.",
+    metaTitle: "Prix Vitrier 2026 : 60-450€ — Tarifs réels",
+    metaDescription: "Tarifs vitrier 2026 : vitre simple 60-150€, double vitrage 100-350€/m², urgence +50%. Prix réels + devis gratuit en 2 min.",
     content: [
       "Une vitre brisée par un ballon de football, une tentative d'effraction qui a fissuré votre double vitrage, ou simplement des fenêtres anciennes qui laissent passer le froid : les raisons de faire appel à un vitrier sont nombreuses. Mais combien cela coûte-t-il réellement ? En 2026, le marché de la vitrerie est porté par les exigences croissantes en matière d'isolation thermique et acoustique, avec des technologies de vitrage toujours plus performantes. Ce guide complet vous donne les **prix réels** pour chaque type d'intervention, de l'urgence au projet de rénovation énergétique. Trouvez un [vitrier qualifié dans votre ville](/services/vitrier) pour un devis rapide.",
 
@@ -683,6 +687,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-climaticien-2026-installation-entretien": {
     title: "Prix Climaticien 2026 : Tarifs",
     excerpt: "Tarifs climaticien 2026 : clim réversible, gainable, entretien annuel. Rafraîchissez au meilleur prix. Devis gratuit.",
+    metaTitle: "Prix Clim 2026 : 1 500-15 000€ — Guide complet",
+    metaDescription: "Tarifs climatisation 2026 : monosplit 1 500-3 500€, multisplit 3 000-12 000€, gainable 6 000-15 000€. Comparez les devis gratuits.",
     content: [
       "L'été 2025 a battu de nouveaux records de température en France, avec des pics à plus de 42°C dans le sud-ouest. Résultat : les ventes de climatiseurs ont explosé de 35 % et les délais d'installation ont dépassé 3 mois en pleine canicule. Avec des étés de plus en plus chauds et des épisodes caniculaires récurrents, la climatisation n'est plus un luxe mais une **nécessité** pour de nombreux foyers. Ce guide vous donne les prix 2026 pour **anticiper votre projet** et éviter l'urgence estivale. Trouvez dès maintenant un [climaticien certifié près de chez vous](/services/climaticien).",
 
@@ -755,6 +761,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-cuisiniste-2026-pose-cuisine": {
     title: "Prix Cuisiniste 2026 : Cuisine Équipée",
     excerpt: "Prix cuisine équipée 2026 : du premier prix au haut de gamme. Tarifs fourniture et pose complète. Devis gratuit.",
+    metaTitle: "Prix Cuisine Équipée 2026 : 3 000-40 000€",
+    metaDescription: "Prix cuisine 2026 : entrée de gamme 3 000-6 000€, milieu 6 000-15 000€, haut de gamme 15 000€+. Tarifs pose + fourniture détaillés.",
     content: [
       "La cuisine est la pièce que vous utilisez 3 à 5 heures par jour, tous les jours. C'est aussi celle dont la rénovation génère le **meilleur retour sur investissement** : une cuisine refaite augmente la valeur d'un bien de 10 à 15 % selon les agents immobiliers. Mais entre une cuisine en kit à 3 000 € et un aménagement sur mesure à 40 000 €, comment s'y retrouver ? En 2026, les prix varient considérablement selon le niveau de gamme, les matériaux et la complexité de l'installation. Ce guide vous aide à **budgéter chaque poste** avec précision. Consultez notre annuaire de [cuisinistes professionnels](/services/cuisiniste) pour comparer les offres.",
 
@@ -830,6 +838,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-solier-revetement-sol-2026": {
     title: "Prix Solier 2026 : Revêtements de Sol",
     excerpt: "Tarifs solier 2026 : parquet, vinyle, moquette, béton ciré. Tous les prix au m² pour choisir votre revêtement. Devis gratuit.",
+    metaTitle: "Prix Sol 2026 : 15-250€/m² — Comparatif complet",
+    metaDescription: "Tarifs revêtement sol 2026 : stratifié 15-45€/m², parquet massif 80-250€/m², vinyle 20-50€/m². Comparatif + devis gratuit.",
     content: [
       "Parquet massif chaleureux, vinyle ultra-résistant, béton ciré contemporain ou moquette cocooning ? Le choix du revêtement de sol influence considérablement l'ambiance, le confort acoustique et la valeur de votre intérieur. Mais les écarts de prix sont vertigineux : de **15 €/m²** pour un stratifié basique à **250 €/m²** pour un parquet massif en noyer. En 2026, la palette d'options s'élargit avec des matériaux toujours plus performants. Ce guide comparatif vous permet de choisir en connaissance de cause. Trouvez un [solier professionnel](/services/solier) ou un [poseur de parquet](/services/poseur-de-parquet) près de chez vous.",
 
@@ -905,6 +915,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-nettoyage-professionnel-2026": {
     title: "Prix Nettoyage Professionnel 2026 : Tarifs",
     excerpt: "Tarifs nettoyage 2026 : ménage régulier, fin de chantier, remise en état, copropriété. Tous les prix détaillés. Devis gratuit.",
+    metaTitle: "Prix Nettoyage Pro 2026 : 20-70€/h — Barème",
+    metaDescription: "Tarifs nettoyage 2026 : ménage 20-45€/h, fin de chantier 3-10€/m², copropriété 150-700€. Crédit d'impôt 50%. Devis gratuit.",
     content: [
       "Votre chantier de rénovation est terminé mais l'appartement est recouvert d'une fine couche de poussière de plâtre ? Votre copropriété cherche un prestataire fiable pour l'entretien des parties communes ? Ou vous souhaitez simplement un ménage régulier sans vous ruiner ? Le nettoyage professionnel répond à des besoins variés, et les prix oscillent entre **20 et 70 € de l'heure** selon la prestation. Bonne nouvelle : le ménage à domicile bénéficie d'un **crédit d'impôt de 50 %**, ce qui divise la facture par deux. Trouvez une [entreprise de nettoyage professionnelle](/services/nettoyage) sur notre annuaire. Voici tous les tarifs 2026 détaillés.",
 
@@ -969,6 +981,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-renovation-appartement-2026-budget": {
     title: "Prix Rénovation Appartement 2026",
     excerpt: "Prix rénovation appartement 2026 : du rafraîchissement à la rénovation complète. Tous les prix au m² poste par poste. Devis gratuit.",
+    metaTitle: "Prix Rénovation Appart 2026 : 200-2 500€/m²",
+    metaDescription: "Prix rénovation appartement 2026 : légère 200-500€/m², complète 1 000-2 000€/m². Budgets types par surface + aides. Devis gratuit.",
     content: [
       "Vous venez d'acquérir un appartement à rénover et vous vous demandez combien cela va coûter ? Ou vous vivez dans un logement vieillissant dont l'électricité n'est plus aux normes et la salle de bain date des années 80 ? Rénover un appartement est un projet ambitieux dont le budget peut varier de **200 à 2 500 €/m²** selon l'ampleur des travaux. En 2026, les coûts restent soutenus par la hausse des matériaux et de la main-d'œuvre qualifiée, mais les **aides financières** permettent de réduire significativement la facture. Ce guide vous donne les clés pour estimer votre budget avec précision, poste par poste.",
 
@@ -1035,6 +1049,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-extension-maison-2026": {
     title: "Prix Extension Maison 2026 : Tarifs",
     excerpt: "Prix extension maison 2026 : extension latérale, surélévation, véranda. Tous les prix au m² détaillés. Devis gratuit.",
+    metaTitle: "Prix Extension Maison 2026 : 600-3 000€/m²",
+    metaDescription: "Prix extension 2026 : combles 600-1 500€/m², maçonnerie 1 200-2 200€/m², bois 1 400-2 500€/m², surélévation 1 800-3 000€/m². Devis gratuit.",
     content: [
       "Votre famille s'agrandit, vous avez besoin d'un bureau pour le télétravail, ou vous rêvez d'une suite parentale avec salle de bain ? Face à la hausse des prix de l'immobilier, l'extension de maison constitue une alternative séduisante au [déménagement](/services/demenageur). Gagner **20 à 40 m² habitables** coûte souvent moins cher qu'acheter plus grand (et sans frais de notaire !). En 2026, les solutions se diversifient. Ce guide vous aide à **chiffrer précisément** votre projet.",
 
@@ -1107,6 +1123,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-ravalement-facade-2026": {
     title: "Prix Ravalement de Façade 2026 : Tarifs",
     excerpt: "Prix ravalement façade 2026 : nettoyage, enduit, peinture, ITE. Tous les prix au m² selon la technique. Devis gratuit.",
+    metaTitle: "Prix Ravalement Façade 2026 : 40-300€/m²",
+    metaDescription: "Tarifs ravalement 2026 : nettoyage 15-40€/m², enduit 30-80€/m², ITE 100-300€/m². Aides MaPrimeRénov' jusqu'à 75€/m². Devis gratuit.",
     content: [
       "Votre façade est grise, fissurée, ou recouverte de mousse ? Vous avez reçu un courrier de la mairie vous demandant de procéder au ravalement ? Le ravalement de façade est une **obligation légale** : certaines communes exigent un ravalement tous les 10 ans. Mais au-delà de l'obligation, c'est aussi l'occasion de **valoriser votre bien** (plus-value de 5 à 10 %) et d'améliorer son isolation thermique. En 2026, les prix varient de **40 à 300 €/m²** selon la technique. Ce guide vous aide à faire le bon choix. Trouvez un [façadier qualifié](/services/facadier) pour obtenir des devis comparatifs.",
 
@@ -1159,6 +1177,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-terrasse-exterieure-2026": {
     title: "Prix Terrasse Extérieure 2026 : Tarifs",
     excerpt: "Prix terrasse 2026 : bois, composite, béton, pierre naturelle, carrelage. Comparez les prix au m² avec pose. Devis gratuit.",
+    metaTitle: "Prix Terrasse 2026 : 40-250€/m² — Comparatif",
+    metaDescription: "Tarifs terrasse 2026 : bois 40-200€/m², composite 80-180€/m², béton 40-150€/m², pierre 80-250€/m². Comparez les devis gratuits.",
     content: [
       "Une terrasse bien conçue peut augmenter la surface habitable perçue de **20 à 30 %** et valoriser votre bien de **3 à 10 %** selon la région et le type de bien (source : Notaires de France). Mais entre le pin traité à 40 €/m² et la pierre naturelle à 250 €/m², les écarts de prix sont considérables. En 2026, les options de matériaux sont plus nombreuses que jamais. Ce guide compare objectivement **chaque solution** pour vous aider à faire le meilleur choix selon votre budget, votre climat et vos goûts. Consultez un [paysagiste professionnel](/services/paysagiste) pour concevoir un projet harmonieux.",
       "## Terrasse en bois naturel",
@@ -1208,6 +1228,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-cloture-portail-2026": {
     title: "Prix Clôture et Portail 2026 : Tarifs",
     excerpt: "Prix clôture et portail 2026 : grillage, PVC, aluminium, bois, fer forgé. Prix au mètre linéaire avec pose. Devis gratuit.",
+    metaTitle: "Prix Clôture et Portail 2026 : 15-600€/ml",
+    metaDescription: "Tarifs clôture 2026 : grillage 15-70€/ml, PVC 60-150€/ml, alu 100-300€/ml. Portail 700-8 000€. Comparez 3 devis gratuits.",
     content: [
       "Clôturer sa propriété et installer un portail répondent à des besoins de sécurité, d'intimité et d'esthétique. En 2026, le choix de matériaux est vaste et les prix varient considérablement d'une solution à l'autre. Du simple grillage au portail motorisé en aluminium sur mesure, ce guide vous aide à chiffrer précisément votre projet de clôture. Faites appel à un [métallier](/services/metallier) pour des réalisations sur mesure.",
       "## Clôture en grillage",
@@ -1259,6 +1281,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-fenetre-double-vitrage-2026": {
     title: "Prix Fenêtre Double Vitrage 2026 : Tarifs",
     excerpt: "Prix fenêtre double vitrage 2026 : PVC, aluminium, bois. Comparez les prix avec pose et aides disponibles. Devis gratuit.",
+    metaTitle: "Prix Fenêtre Double Vitrage 2026 : 300-3 500€",
+    metaDescription: "Prix fenêtre 2026 : PVC 300-700€, alu 500-1 200€, bois 500-1 300€ posée. Aides MaPrimeRénov' + TVA 5,5%. Comparez les devis.",
     content: [
       "Les fenêtres représentent 10 à 15 % des déperditions thermiques d'un logement mal isolé. Remplacer des fenêtres anciennes par du double vitrage performant est l'un des investissements les plus rentables en matière de rénovation énergétique. En 2026, les technologies de vitrage ne cessent de progresser et les aides financières restent attractives. Voici un tour d'horizon complet des prix. Comparez les devis de [menuisiers qualifiés](/services/menuisier) pour votre projet de remplacement.",
       "## Fenêtres PVC : le meilleur rapport qualité-prix",
@@ -1311,6 +1335,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-installation-electrique-neuve-2026": {
     title: "Prix Installation Électrique 2026 : Tarifs",
     excerpt: "Installation électrique neuve : de 80 à 120 €/m² en 2026. Tableau, câblage, prises, domotique. Comparez les devis gratuits.",
+    metaTitle: "Prix Électricité Neuve 2026 : 80-150€/m²",
+    metaDescription: "Prix installation électrique 2026 : neuf 8 000-15 000€ (100m²), mise aux normes 80-150€/m², domotique 1 000-20 000€. Devis gratuit.",
     content: [
       "L'installation électrique est un poste technique majeur dans toute construction neuve ou rénovation lourde. En 2026, la norme NF C 15-100 impose des exigences strictes en matière de sécurité et de confort, tandis que la domotique transforme progressivement nos habitations. Ce guide détaille les tarifs des électriciens pour tous les types de prestations. Trouvez un [électricien certifié près de chez vous](/services/electricien).",
       "## Tarif horaire d'un électricien",
@@ -1365,6 +1391,8 @@ export const prixArticles: Record<string, BlogArticle> = {
   "prix-salle-de-bain-complete-2026": {
     title: "Prix Salle de Bain Complète 2026 : Tarifs",
     excerpt: "Prix salle de bain 2026 : du premier prix au haut de gamme. Tous les tarifs détaillés poste par poste. Devis gratuit.",
+    metaTitle: "Prix Salle de Bain 2026 : 3 000-25 000€",
+    metaDescription: "Prix salle de bain 2026 : entrée de gamme 3 000-6 000€, milieu 6 000-12 000€, haut de gamme 12 000€+. Tarifs poste par poste. Devis gratuit.",
     content: [
       "La salle de bain est, avec la cuisine, la pièce dont la rénovation apporte la plus grande plus-value immobilière. En 2026, les tendances sont à la douche à l'italienne, aux meubles suspendus et aux matériaux naturels. Mais derrière l'esthétique, c'est surtout le budget qu'il faut maîtriser. Ce guide vous livre un chiffrage complet et réaliste pour votre projet de salle de bain. Trouvez un [spécialiste salle de bain](/services/salle-de-bain) ou un [plombier qualifié](/services/plombier) pour concrétiser votre projet.",
       "## Les trois niveaux de budget",

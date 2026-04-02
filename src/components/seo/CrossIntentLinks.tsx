@@ -35,27 +35,12 @@ const ALL_INTENTS: IntentDef[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Contextual intent filtering — avoids showing all 6 on every page
-// Show 4-5 intents depending on page type (always exclude currentIntent anyway)
+// Full cross-linking: show ALL other intents on every page.
+// Each service×ville page links to the 4 other intents — no deprioritization.
+// This maximizes internal linking between intent clusters for SEO.
 // ---------------------------------------------------------------------------
-
-/** Intents to deprioritize per page type — these are dropped when we need to trim */
-const DEPRIORITIZED: Record<CurrentIntent, Intent[]> = {
-  services: ['devis'],        // service page: devis less relevant, keep tarifs/avis/urgence
-  tarifs: ['urgence'],        // tarifs page: urgence less relevant
-  avis: ['urgence'],          // avis page: urgence less relevant
-  devis: ['avis'],            // devis page: avis less relevant
-  urgence: ['avis'],          // urgence page: avis less relevant
-  problemes: ['devis'],       // problemes page: devis less relevant
-}
-
 function selectIntents(currentIntent?: CurrentIntent): IntentDef[] {
-  const deprioritized = currentIntent ? new Set(DEPRIORITIZED[currentIntent] || []) : new Set<Intent>()
-  return ALL_INTENTS.filter(i => {
-    if (i.key === currentIntent) return false
-    if (deprioritized.has(i.key)) return false
-    return true
-  })
+  return ALL_INTENTS.filter(i => i.key !== currentIntent)
 }
 
 // ---------------------------------------------------------------------------

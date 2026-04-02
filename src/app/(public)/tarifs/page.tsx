@@ -19,8 +19,8 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Prix Artisans 2026 — Tarifs et Barèmes',
-  description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon et tous les métiers du bâtiment. Grille tarifaire complète pour estimer votre budget.',
+  title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
+  description: 'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
   alternates: {
     canonical: `${SITE_URL}/tarifs`,
   },
@@ -32,16 +32,16 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Prix Artisans 2026 — Tarifs et Barèmes',
-    description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon. Grille tarifaire complète.',
+    title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
+    description: 'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
     url: `${SITE_URL}/tarifs`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tarifs artisans' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Prix Artisans 2026 — Tarifs et Barèmes',
-    description: 'Prix artisans 2026 : tarifs plombier, électricien, peintre, couvreur, maçon. Grille tarifaire complète.',
+    title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
+    description: 'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

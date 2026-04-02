@@ -4,6 +4,8 @@ export const conseilsArticles: Record<string, BlogArticle> = {
   'entretien-annuel-maison-checklist-complete': {
     title: 'Entretien Maison 2026 : Checklist',
     excerpt: 'Liste exhaustive des vérifications et travaux d\'entretien à réaliser chaque année pour préserver votre maison en parfait état. Devis gratuit.',
+    metaTitle: 'Entretien Maison : checklist annuelle 2026',
+    metaDescription: 'Checklist entretien maison complète : toiture, plomberie, chauffage, façade. Évitez 15-20% de dépréciation. Téléchargez la liste.',
     content: [
       'Entretenir sa maison régulièrement, c\'est comme faire la révision de sa voiture : cela évite les pannes coûteuses. Selon la FNAIM, un défaut d\'entretien peut entraîner une **dépréciation de 15 à 20 %** de la valeur d\'un bien immobilier en seulement dix ans. Chaque année, des milliers de propriétaires découvrent trop tard des dégâts qui auraient pu être évités par un simple contrôle régulier. Voici la checklist complète, poste par poste, pour ne rien oublier et préserver la valeur de votre patrimoine. Trouvez un [couvreur](/services/couvreur) ou un [plombier](/services/plombier) pour les vérifications techniques.',
 
@@ -290,6 +292,8 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
   'humidite-moisissure-maison-solutions': {
     title: 'Humidité et Moisissures : Solutions',
+    metaTitle: 'Humidité et Moisissures : solutions durables',
+    metaDescription: 'Moisissures, condensation, remontées capillaires : identifier la cause et traiter durablement. Solutions de 50 à 5 000€ selon le cas.',
     excerpt: 'Condensation, infiltrations, remontées capillaires : identifiez l\'origine de l\'humidité et découvrez les solutions pour un traitement durable.',
     content: [
       'L\'humidité touche près de **20 % des logements en France** selon l\'Observatoire de la qualité de l\'air intérieur (OQAI). Au-delà de l\'inconvénient esthétique (taches, décollements, odeurs), elle dégrade la structure du bâtiment et représente un **risque sanitaire sérieux** : allergies, asthme, infections respiratoires. Comprendre l\'origine du problème est la clé d\'un traitement efficace et durable. Faites appel à un [plombier](/services/plombier) pour diagnostiquer d\'éventuelles fuites ou à un [façadier](/services/facadier) pour les infiltrations de façade.',
@@ -336,6 +340,8 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
   'depannage-urgence-artisan-bons-reflexes': {
     title: 'Dépannage Urgence : Bons Réflexes',
+    metaTitle: 'Dépannage Urgence Maison : les bons réflexes',
+    metaDescription: 'Fuite d\'eau, panne électrique, serrure bloquée : les réflexes à avoir AVANT d\'appeler un artisan. Évitez les arnaques en urgence.',
     excerpt: 'Fuite d\'eau, panne électrique, serrure bloquée : comment réagir face à une urgence domestique et éviter les arnaques des dépanneurs peu scrupuleux.',
     content: [
       'Une urgence domestique peut survenir à tout moment : fuite d\'eau en pleine nuit, panne de chauffage par grand froid, serrure cassée au retour de vacances. Dans la panique, on accepte parfois des tarifs exorbitants ou des interventions bâclées. Voici les réflexes à adopter pour gérer sereinement ces situations. Identifiez dès maintenant un [plombier](/services/plombier) et un [serrurier](/services/serrurier) de confiance dans votre ville.',
@@ -373,6 +379,8 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
   'travaux-locataire-proprietaire-qui-paye': {
     title: 'Locataire vs Propriétaire 2026 : Qui Paye ?',
+    metaTitle: 'Locataire ou Propriétaire : qui paye quoi ?',
+    metaDescription: 'Réparations locataire vs propriétaire : qui paye la chaudière, la plomberie, les volets ? Liste officielle des charges par poste.',
     excerpt: 'Réparations locatives, gros travaux, vétusté : démêlez les responsabilités financières entre locataire et propriétaire pour éviter les litiges.',
     content: [
       'La répartition des charges de travaux entre locataire et propriétaire est une source inépuisable de conflits. Selon l\'ANIL, c\'est le premier motif de saisine des commissions départementales de conciliation. Pourtant, la loi est claire : voici ce que dit le décret du 26 août 1987 et la loi du 6 juillet 1989. Pour les travaux courants, trouvez un [plombier](/services/plombier) ou un [électricien](/services/electricien) qualifié.',
@@ -410,6 +418,8 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
   'economiser-facture-energie-astuces': {
     title: '15 Astuces pour Réduire sa Facture Énergie',
+    metaTitle: '15 Astuces pour Réduire sa Facture Énergie',
+    metaDescription: '15 astuces testées pour baisser sa facture énergie de 20 à 40%. Isolation, chauffage, habitudes : du plus simple au plus rentable.',
     excerpt: 'Des gestes simples aux investissements rentables, découvrez 15 astuces concrètes et chiffrées pour réduire votre facture énergétique de 20 à 50 %.',
     content: [
       'La facture énergétique moyenne d\'un ménage français s\'élève à environ 2 800 euros par an selon le ministère de la Transition énergétique. Avec la hausse des prix de l\'énergie, ce montant ne cesse d\'augmenter. Voici 15 astuces classées par ordre de rentabilité pour alléger significativement votre facture. Pensez aussi à consulter un [spécialiste en rénovation énergétique](/services/renovation-energetique) pour un bilan complet.',
@@ -634,6 +644,8 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
   'bruit-isolation-phonique-solutions': {
     title: 'Isolation Phonique : Contre le Bruit',
+    metaTitle: 'Isolation Phonique : solutions anti-bruit 2026',
+    metaDescription: 'Isolation phonique murs, sols, plafonds : solutions de 15 à 100€/m². Réduisez le bruit de 30 à 50 dB. Guide technique + prix.',
     excerpt: 'Bruits aériens, bruits d\'impact, nuisances extérieures : toutes les solutions d\'isolation acoustique pour retrouver le calme chez soi. Devis gratuit.',
     content: [
       'Le bruit est la première source de nuisance pour les Français selon l\'ADEME. Près de 25 millions de personnes se déclarent gênées par le bruit à leur domicile. Au-delà de l\'inconfort, l\'exposition chronique au bruit provoque stress, troubles du sommeil et problèmes cardiovasculaires. Heureusement, des solutions existent pour chaque situation. Consultez un [plâtrier](/services/platrier) ou un [spécialiste en isolation](/services/isolation-thermique) pour un diagnostic acoustique.',
@@ -671,6 +683,8 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
   'securiser-maison-cambriolage-solutions': {
     title: 'Sécuriser sa Maison : Anti-Cambriolage',
+    metaTitle: 'Sécuriser sa Maison : guide anti-cambriolage',
+    metaDescription: 'Comment sécuriser sa maison ? Serrure A2P, alarme, caméra, éclairage : les solutions de 80 à 5 000€. 70% des cambrioleurs fuient en 3 min.',
     excerpt: 'Serrures, alarmes, éclairage, habitudes : toutes les solutions pour dissuader les cambrioleurs et protéger votre domicile. Devis gratuit.',
     content: [
       'En France, près de 230 000 cambriolages sont commis chaque année selon le ministère de l\'Intérieur. Dans 80 % des cas, le cambrioleur pénètre par la porte d\'entrée ou une fenêtre du rez-de-chaussée. La bonne nouvelle : dans 30 % des tentatives, le voleur renonce face à un système de protection visible. Faites appel à un [serrurier](/services/serrurier) pour sécuriser votre porte et à un [spécialiste alarme et sécurité](/services/alarme-securite) pour une protection complète.',

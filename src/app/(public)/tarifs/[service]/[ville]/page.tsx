@@ -122,9 +122,10 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 42): string {
+/** Truncate title to maxLen chars on a word boundary */
+function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
 
 export async function generateMetadata({
@@ -145,23 +146,22 @@ export async function generateMetadata({
   const dept = villeData.departement
 
   const titleHash = Math.abs(hashCode(`tarif-title-${service}-${villeSlug}`))
-  const priceShort = `${minPrice}–${maxPrice}€`
   const titleTemplates = [
-    `Prix ${tradeLower} ${villeData.name} (2026) — ${priceShort}`,
-    `Prix ${tradeLower} à ${villeData.name} — ${priceShort}`,
-    `Tarif ${tradeLower} ${villeData.name} — ${priceShort}`,
-    `Prix ${tradeLower} ${villeData.name} : ${priceShort}`,
-    `Tarifs ${tradeLower} ${villeData.name} (2026)`,
+    `Prix ${trade.name} ${villeData.name} 2026 : ${minPrice}–${maxPrice}€`,
+    `Tarifs ${trade.name} ${villeData.name} : ${minPrice} à ${maxPrice}€`,
+    `Coût ${trade.name} à ${villeData.name} (2026) : dès ${minPrice}€`,
+    `${trade.name} ${villeData.name} : Tarifs ${minPrice}–${maxPrice}€`,
+    `Prix ${trade.name} à ${villeData.name} | ${minPrice}–${maxPrice}€`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}-${villeSlug}`))
   const descTemplates = [
-    `Prix ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${unit} en 2026. Barème local et devis gratuit en 2 min.`,
-    `Tarif ${tradeLower} à ${villeData.name} (${dept}) : de ${minPrice} à ${maxPrice} ${unit}. Comparez et demandez un devis gratuit.`,
-    `Combien coûte un ${tradeLower} à ${villeData.name} ? ${minPrice}–${maxPrice} ${unit} en 2026. Guide complet + devis gratuit.`,
-    `Tarifs ${tradeLower} à ${villeData.name} en 2026 : ${minPrice}–${maxPrice} ${unit}. Prix locaux, conseils et devis sans engagement.`,
-    `${trade.name} à ${villeData.name} : ${minPrice} à ${maxPrice} ${unit}. Prix ajustés ${villeData.region}. Devis gratuit en 2 min.`,
+    `Prix ${tradeLower} à ${villeData.name} en 2026 : ${minPrice} à ${maxPrice} ${unit}. Tarifs locaux ajustés ${villeData.region} + devis gratuit en 2 min.`,
+    `Tarifs ${tradeLower} à ${villeData.name} (${dept}) : ${minPrice}–${maxPrice} ${unit}. Comparez les prix locaux et obtenez un devis gratuit.`,
+    `Combien coûte un ${tradeLower} à ${villeData.name} ? De ${minPrice} à ${maxPrice} ${unit} en 2026. Guide tarifaire local + devis sans engagement.`,
+    `${trade.name} à ${villeData.name} : ${minPrice}–${maxPrice} ${unit} en 2026. Prix par prestation, barème local et devis gratuit.`,
+    `Prix ${tradeLower} ${villeData.name} 2026 : ${minPrice} à ${maxPrice} ${unit}. Tarifs ajustés ${villeData.region}. Devis gratuit en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 

@@ -21,6 +21,7 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
+import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
@@ -46,10 +47,12 @@ export function generateStaticParams() {
 export const dynamicParams = true
 export const revalidate = 86400
 
-function truncateTitle(title: string, maxLen = 42): string {
+/** Truncate title to maxLen chars on a word boundary */
+function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
+
 
 export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
   const { service } = await params
@@ -58,23 +61,27 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const tradeLower = trade.name.toLowerCase()
 
+  const priceMin = trade.priceRange.min
+  const priceMax = trade.priceRange.max
+  const unit = trade.priceRange.unit
+
   const titleHash = Math.abs(hashCode(`tarif-title-${service}`))
   const titleTemplates = [
-    `Prix ${tradeLower} 2026 — Tarifs détaillés`,
-    `Prix ${tradeLower} 2026 : guide complet`,
-    `Tarif ${tradeLower} 2026 : grille des prix`,
-    `Prix ${tradeLower} : combien ça coûte ?`,
-    `Tarifs ${tradeLower} 2026 — Barème et devis`,
+    `Tarifs ${trade.name} 2026 : de ${priceMin}€ à ${priceMax}€/h`,
+    `Prix ${trade.name} 2026 : ${priceMin}–${priceMax} ${unit}`,
+    `Coût ${trade.name} 2026 : Tarifs de ${priceMin}€ à ${priceMax}€`,
+    `Prix ${trade.name} 2026 | ${priceMin}–${priceMax} ${unit} + Devis`,
+    `Tarifs ${trade.name} 2026 : Grille des Prix Détaillée`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}`))
   const descTemplates = [
-    `Tarifs ${tradeLower} 2026 : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Prix détaillés par prestation, comparatif régional. Devis gratuit.`,
-    `Prix ${tradeLower} en 2026 : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Grille tarifaire complète et devis en ligne.`,
-    `Combien coûte un ${tradeLower} ? ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} en 2026. Tarifs par région et devis gratuit.`,
-    `Guide des tarifs ${tradeLower} 2026 : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparez les prix et demandez un devis.`,
-    `Tarifs ${tradeLower} : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Prix par prestation, variations régionales. Devis gratuit.`,
+    `Tarifs ${tradeLower} 2026 : ${priceMin} à ${priceMax} ${unit}. Prix par prestation, écarts régionaux et devis gratuit en 2 min.`,
+    `Prix ${tradeLower} en 2026 : de ${priceMin} à ${priceMax} ${unit}. Grille tarifaire complète + comparatif par région. Devis gratuit.`,
+    `Combien coûte un ${tradeLower} en 2026 ? ${priceMin}–${priceMax} ${unit}. Barème détaillé et devis sans engagement.`,
+    `${trade.name} : ${priceMin} à ${priceMax} ${unit} en 2026. Comparez les prix par prestation et obtenez un devis gratuit.`,
+    `Tarifs ${tradeLower} 2026 : ${priceMin}–${priceMax} ${unit}. Prix par intervention, variations régionales. Devis gratuit en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -102,7 +109,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   }
 }
 
-const topCities = villes.slice(0, 6)
+const topCities = villes.slice(0, 20)
 
 export default async function TarifsServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
@@ -560,33 +567,13 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      {/* Cities */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
-            Trouver un {trade.name.toLowerCase()} près de chez vous
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {topCities.map((ville) => (
-              <Link
-                key={ville.slug}
-                href={`/services/${service}/${ville.slug}`}
-                className="bg-sand-50 hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group text-center"
-              >
-                <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
-                  {trade.name} à {ville.name}
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center mt-6">
-            <Link href="/villes" className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
-              Voir les tarifs {trade.name.toLowerCase()} dans toutes les villes ({villes.length})
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Top 20 villes — maillage interne SEO */}
+      <TopCitiesGrid
+        serviceSlug={service}
+        serviceName={trade.name}
+        intent="tarifs"
+        className="bg-white"
+      />
 
       {/* Urgence */}
       {trade.emergencyInfo && (

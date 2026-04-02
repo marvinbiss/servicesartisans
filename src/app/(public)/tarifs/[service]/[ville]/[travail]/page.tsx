@@ -87,6 +87,12 @@ function applyMultiplier(priceText: string, multiplier: number): string {
 // Metadata
 // ---------------------------------------------------------------------------
 
+/** Truncate title to maxLen chars on a word boundary */
+function truncateTitle(title: string, maxLen = 60): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -104,10 +110,13 @@ export async function generateMetadata({
   const multiplier = getRegionalMultiplier(villeData.region)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
 
-  const title = `Prix ${currentTask.name.toLowerCase()} à ${villeData.name} — Tarifs 2026 | ${SITE_NAME}`
+  const taskLower = currentTask.name.toLowerCase()
+  const title = truncateTitle(priceRange
+    ? `${currentTask.name} ${villeData.name} : ${priceRange.low}–${priceRange.high}€ (2026)`
+    : `Prix ${taskLower} à ${villeData.name} — Tarifs 2026`)
   const description = priceRange
-    ? `Combien coûte ${currentTask.name.toLowerCase()} à ${villeData.name} ? ${priceRange.low} à ${priceRange.high} €. Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié.`
-    : `Combien coûte ${currentTask.name.toLowerCase()} à ${villeData.name} ? Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié.`
+    ? `${currentTask.name} à ${villeData.name} en 2026 : ${priceRange.low} à ${priceRange.high} €. Tarif local ajusté + devis gratuit ${trade.name.toLowerCase()} en 2 min.`
+    : `Prix ${taskLower} à ${villeData.name} en 2026. Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié. Devis gratuit.`
   const canonicalUrl = `${SITE_URL}/tarifs/${service}/${villeSlug}/${travail}`
 
   return {

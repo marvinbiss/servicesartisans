@@ -16,6 +16,7 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
+import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 
@@ -83,7 +84,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   }
 }
 
-const topCities = villes.slice(0, 6)
+const topCities = villes.slice(0, 20)
 
 export default async function DevisServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
@@ -258,33 +259,13 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
         </div>
       </section>
 
-      {/* ─── Trouver par ville ────────────────────────────── */}
-      <section className="py-16 bg-sand-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
-            Devis {tradeLower} par ville
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {topCities.map((ville) => (
-              <Link
-                key={ville.slug}
-                href={`/devis/${service}/${ville.slug}`}
-                className="bg-white hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group text-center"
-              >
-                <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
-                  Devis {tradeLower} à {ville.name}
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center mt-6">
-            <Link href="/villes" className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
-              Voir devis {tradeLower} dans toutes les villes ({villes.length})
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ─── Top 20 villes — maillage interne SEO ────────── */}
+      <TopCitiesGrid
+        serviceSlug={service}
+        serviceName={trade.name}
+        intent="devis"
+        className="bg-sand-50"
+      />
 
       {/* ─── Certifications ──────────────────────────────── */}
       {trade.certifications.length > 0 && (

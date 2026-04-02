@@ -17,22 +17,22 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Blog Travaux & Artisanat — Conseils 2026',
-  description: `Conseils, guides et actualités sur l'artisanat, les travaux de rénovation, les prix et la réglementation. ${allArticlesMeta.length}+ articles par des experts.`,
+  title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,
+  description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment. Tarifs réels + devis gratuit.`,
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: 'Blog Travaux & Artisanat — Conseils 2026',
-    description: 'Conseils, guides et actualités sur les travaux de rénovation et l\'artisanat.',
+    title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,
+    description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment.`,
     url: `${SITE_URL}/blog`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Blog travaux et artisanat' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Blog Travaux & Artisanat — Conseils 2026',
-    description: 'Conseils, guides et actualités sur les travaux de rénovation et l\'artisanat.',
+    title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,
+    description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment.`,
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

@@ -4,6 +4,8 @@ export const reglementationArticles: Record<string, BlogArticle> = {
   'assurance-dommages-ouvrage-guide-complet': {
     title: 'Assurance Dommages-Ouvrage : Guide 2026',
     excerpt: 'Obligatoire pour tout maître d\'ouvrage, l\'assurance dommages-ouvrage garantit une réparation rapide des désordres. Fonctionnement, coût et pièges.',
+    metaTitle: 'Dommages-Ouvrage : obligatoire ? (Guide 2026)',
+    metaDescription: 'Assurance dommages-ouvrage expliquée : coût 1-4% du chantier, amende 75 000€ sans. Qui doit souscrire, quand et pourquoi.',
     content: [
       "L'assurance dommages-ouvrage (DO) est l'une des protections les plus importantes — et les plus méconnues — du particulier qui fait construire ou rénover. Instituée par la loi Spinetta du 4 janvier 1978 (articles L.242-1 et suivants du Code des assurances), elle permet d'obtenir la réparation des désordres relevant de la garantie décennale, sans attendre qu'un tribunal désigne un responsable.",
       "## Qui doit souscrire une dommages-ouvrage ?\n\nL'article L.242-1 du Code des assurances impose la souscription à tout maître d'ouvrage : particulier, promoteur, SCI, syndicat de copropriété. Si vous faites construire une maison, une extension de plus de 20 m² ou des travaux de gros œuvre réalisés par un [maçon](/services/macon) ou tout autre corps de métier, vous devez impérativement souscrire avant l'ouverture du chantier.\n\n:::warning Attention\nLe défaut de souscription est sanctionné pénalement par une amende de 75 000 € (article L.243-3 du Code des assurances). En cas de revente dans les 10 ans, l'absence de DO engage votre responsabilité vis-à-vis de l'acquéreur qui pourra demander une réduction de prix.\n:::",
@@ -34,6 +36,8 @@ export const reglementationArticles: Record<string, BlogArticle> = {
   },
   'tva-reduite-travaux-renovation-guide': {
     title: 'TVA Travaux : 5,5 %, 10 % ou 20 % ?',
+    metaTitle: 'TVA Travaux 2026 : 5,5%, 10% ou 20% ?',
+    metaDescription: 'Quel taux de TVA pour vos travaux ? 5,5% (réno énergétique), 10% (rénovation), 20% (neuf). Conditions détaillées + exemples.',
     excerpt: 'Le taux de TVA applicable à vos travaux dépend de la nature des interventions et de l\'ancienneté du logement. Décryptage des règles en vigueur en 2026.',
     content: [
       "La TVA représente une part significative du coût de vos travaux. Selon le type d'intervention et l'âge du logement, vous pouvez bénéficier de taux réduits avantageux. Ce guide fait le point sur les règles applicables en 2026, conformément aux articles 278-0 bis A, 279-0 bis et 278 du Code général des impôts (CGI).",
@@ -64,6 +68,8 @@ export const reglementationArticles: Record<string, BlogArticle> = {
   },
   'permis-construire-declaration-prealable-guide': {
     title: 'Permis ou Déclaration Préalable ?',
+    metaTitle: 'Permis ou Déclaration Préalable ? (2026)',
+    metaDescription: 'Permis de construire ou déclaration préalable ? Le seuil des 20m² (40m² en PLU). Délais, documents et cas concrets expliqués.',
     excerpt: 'Selon la nature et l\'ampleur de vos travaux, vous devez déposer un permis de construire ou une simple déclaration préalable. Voici comment faire le bon choix.',
     content: [
       "Avant de lancer vos travaux, une question administrative cruciale se pose : faut-il un permis de construire (PC) ou une déclaration préalable de travaux (DP) ? Le Code de l'urbanisme (articles R.421-1 à R.421-17) définit précisément les seuils. Se tromper de procédure expose à des sanctions pouvant aller jusqu'à la démolition de l'ouvrage.",
@@ -554,6 +560,8 @@ export const reglementationArticles: Record<string, BlogArticle> = {
   },
   'aides-renovation-2026-cumul-guide': {
     title: 'Cumuler les Aides Rénovation 2026',
+    metaTitle: 'Cumuler les Aides Rénovation 2026 : méthode',
+    metaDescription: 'Comment cumuler MaPrimeRénov\' + CEE + éco-PTZ + TVA 5,5% ? Jusqu\'à 70% financés. Ordre de cumul + simulation. Guide complet.',
     excerpt: 'MaPrimeRénov\', CEE, éco-PTZ, TVA réduite, aides locales... En 2026, le cumul des aides peut couvrir jusqu\'à 80 % du coût de vos travaux. Stratégie optimale.',
     content: [
       "La France dispose d'un arsenal d'aides à la rénovation énergétique parmi les plus généreux d'Europe. La bonne nouvelle : la plupart sont cumulables. La mauvaise : les règles de cumul sont complexes. Ce guide vous donne la stratégie optimale pour maximiser votre financement.",

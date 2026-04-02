@@ -10,31 +10,23 @@ import Link from 'next/link'
 // Liens statiques, pas de DB — safe pour le footer global.
 // ---------------------------------------------------------------------------
 
-/** Top services par volume de recherche */
+/** Top 6 services par volume de recherche (reduced for link equity concentration) */
 const TOP_SERVICES: { slug: string; name: string }[] = [
   { slug: 'plombier', name: 'Plombier' },
   { slug: 'electricien', name: 'Électricien' },
   { slug: 'serrurier', name: 'Serrurier' },
   { slug: 'chauffagiste', name: 'Chauffagiste' },
-  { slug: 'peintre-en-batiment', name: 'Peintre' },
-  { slug: 'menuisier', name: 'Menuisier' },
   { slug: 'couvreur', name: 'Couvreur' },
-  { slug: 'carreleur', name: 'Carreleur' },
   { slug: 'macon', name: 'Maçon' },
-  { slug: 'climaticien', name: 'Climaticien' },
 ]
 
-/** Top villes par population */
+/** Top 6 villes par population (reduced for link equity concentration) */
 const TOP_CITIES: { slug: string; name: string }[] = [
   { slug: 'paris', name: 'Paris' },
   { slug: 'lyon', name: 'Lyon' },
   { slug: 'marseille', name: 'Marseille' },
   { slug: 'toulouse', name: 'Toulouse' },
   { slug: 'bordeaux', name: 'Bordeaux' },
-  { slug: 'nantes', name: 'Nantes' },
-  { slug: 'nice', name: 'Nice' },
-  { slug: 'strasbourg', name: 'Strasbourg' },
-  { slug: 'montpellier', name: 'Montpellier' },
   { slug: 'lille', name: 'Lille' },
 ]
 
@@ -44,11 +36,11 @@ interface FooterLink {
 }
 
 export default function FooterClusterLinks() {
-  // Services populaires — 1 lien service + 1 lien tarifs par service
-  const serviceLinks: FooterLink[] = TOP_SERVICES.slice(0, 8).flatMap(s => [
-    { href: `/services/${s.slug}`, label: s.name },
-    { href: `/tarifs/${s.slug}`, label: `Tarifs ${s.name.toLowerCase()}` },
-  ])
+  // Services populaires — 1 lien par service (no tarifs duplicates, link equity focused)
+  const serviceLinks: FooterLink[] = TOP_SERVICES.map(s => ({
+    href: `/services/${s.slug}`,
+    label: s.name,
+  }))
 
   // Villes populaires
   const cityLinks: FooterLink[] = TOP_CITIES.map(c => ({
@@ -56,15 +48,11 @@ export default function FooterClusterLinks() {
     label: `Artisans ${c.name}`,
   }))
 
-  // Pages utiles (guides, outils, comparaisons)
+  // Pages utiles — only high-value hubs (link equity concentrated)
   const utilityLinks: FooterLink[] = [
     { href: '/guides', label: 'Guides travaux' },
     { href: '/barometre', label: 'Baromètre prix' },
     { href: '/comparaison', label: 'Comparatifs' },
-    { href: '/glossaire', label: 'Glossaire' },
-    { href: '/normes', label: 'Normes' },
-    { href: '/calendrier-travaux', label: 'Calendrier travaux' },
-    { href: '/problemes', label: 'Problèmes courants' },
     { href: '/urgence', label: 'Artisan urgence' },
   ]
 

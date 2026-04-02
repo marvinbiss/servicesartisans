@@ -4,6 +4,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "prix-artisans-ile-de-france": {
     title: "Prix des artisans en Île-de-France : le guide complet",
     excerpt: "Les artisans franciliens sont-ils vraiment plus chers ? Découvrez les vrais tarifs par corps de métier en Île-de-France et comment obtenir le meilleur prix en 2026.",
+    metaTitle: "Prix Artisans Île-de-France 2026 : +25 à 40%",
+    metaDescription: "Tarifs artisans en Île-de-France 2026 : 25 à 40% plus cher qu'en province. Prix réels par métier + astuces pour économiser. Devis gratuit.",
     content: [
       "L'Île-de-France concentre **12 millions d'habitants** et une densité de logements parmi les plus élevées d'Europe. La demande en travaux y est colossale — et les prix s'en ressentent. En moyenne, les tarifs des artisans franciliens sont **25 à 40 % supérieurs** à la moyenne nationale, avec des pics à +60 % dans Paris intra-muros. Ce guide détaille les vrais prix par corps de métier et vous donne les clés pour optimiser votre budget travaux en région parisienne.",
 
@@ -48,6 +50,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "prix-artisans-province-vs-paris": {
     title: "Artisans en province vs Paris : les vrais écarts de prix",
     excerpt: "Paris vs province : quels sont les vrais écarts de prix pour les travaux ? Comparaison détaillée des tarifs artisans 2026 dans les principales villes de France.",
+    metaTitle: "Paris vs Province 2026 : vrais écarts de prix",
+    metaDescription: "Comparatif tarifs artisans Paris vs province 2026 : écarts de 25 à 60% selon le métier. 10 villes comparées + conseils pour économiser.",
     content: [
       "« Tout est plus cher à Paris » — c'est un lieu commun, mais est-ce toujours vrai pour les travaux ? Si les tarifs horaires parisiens dépassent effectivement ceux de province de **25 à 50 %**, la réalité est plus nuancée qu'il n'y paraît. Certaines grandes métropoles comme Lyon, Bordeaux ou Nice affichent des prix qui se rapprochent de ceux de la capitale. Et dans certains cas, la province n'est pas forcément synonyme d'économies. Décryptage chiffré.",
 
@@ -95,6 +99,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "cout-renovation-par-region": {
     title: "Coût de la rénovation en France : comparatif par région",
     excerpt: "Le coût de la rénovation varie fortement d'une région à l'autre. Découvrez le comparatif détaillé des prix au m² dans les 13 régions métropolitaines en 2026.",
+    metaTitle: "Prix Rénovation par Région 2026 : 450-3 500€/m²",
+    metaDescription: "Comparatif prix rénovation 2026 dans les 13 régions. Écarts de 40 à 60%. IdF la plus chère, Centre-Val de Loire la moins chère. Devis gratuit.",
     content: [
       "Rénover un logement en France ne coûte pas le même prix selon que vous êtes en Île-de-France, en Bretagne ou en Occitanie. Les écarts peuvent atteindre **40 à 60 %** entre les régions les plus chères et les plus abordables. En 2026, avec la hausse des coûts de l'énergie et des matériaux (+18 % depuis 2022), connaître les prix régionaux est essentiel pour budgétiser vos travaux. Voici le comparatif complet.",
 
@@ -139,6 +145,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "tarifs-plombier-grandes-villes": {
     title: "Tarifs plombier dans les grandes villes de France",
     excerpt: "Combien coûte un plombier à Paris, Lyon, Marseille ou Bordeaux ? Comparatif détaillé des tarifs plombier 2026 dans les 10 plus grandes villes françaises.",
+    metaTitle: "Tarifs Plombier par Ville 2026 : Paris vs Lyon...",
+    metaDescription: "Prix plombier 2026 dans 10 grandes villes : Paris 60-90€/h, Lyon 45-70€/h, Marseille 40-65€/h. Écarts jusqu'à 70%. Comparez les devis.",
     content: [
       "Le prix d'un plombier varie considérablement d'une ville à l'autre. Entre Paris et une ville comme Saint-Étienne, l'écart peut atteindre **50 à 70 %** pour la même prestation. En 2026, avec l'augmentation des charges et le manque de main-d'œuvre qualifiée (la plomberie fait partie des métiers en tension), les tarifs continuent de progresser. Voici le comparatif ville par ville pour les interventions les plus courantes.",
 
@@ -185,6 +193,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "prix-electricien-par-departement": {
     title: "Prix d'un électricien : variations par département",
     excerpt: "Les tarifs électricien varient fortement d'un département à l'autre. Découvrez les prix 2026 par zone géographique et les facteurs qui influencent la facture.",
+    metaTitle: "Prix Électricien par Département 2026 : 35-95€/h",
+    metaDescription: "Tarifs électricien 2026 par département : 35-65€/h en province, 55-95€/h à Paris. Carte des prix + facteurs d'écart. Devis gratuit.",
     content: [
       "Faire refaire l'installation électrique d'un logement ancien, poser un tableau neuf aux normes NF C 15-100, ou installer des prises dans une extension : ces travaux électriques courants affichent des prix qui varient de **30 à 50 %** d'un département à l'autre. En 2026, avec le renforcement des normes et la montée en puissance des bornes de recharge pour véhicules électriques, la demande en électriciens qualifiés explose. Voici la carte des prix.",
 
@@ -234,6 +244,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "cout-construction-maison-par-region": {
     title: "Coût de construction d'une maison par région en 2026",
     excerpt: "Construire une maison en 2026 : combien ça coûte selon votre région ? Comparatif détaillé du prix au m² dans toutes les régions de France métropolitaine.",
+    metaTitle: "Prix Construction Maison 2026 : 1 500-2 500€/m²",
+    metaDescription: "Prix construction maison 2026 par région : de 150 000€ (Centre) à 250 000€ (IdF) pour 100m². Comparatif 13 régions + RE2020. Devis gratuit.",
     content: [
       "Le rêve de la maison individuelle reste vivace en France, mais le budget nécessaire a considérablement augmenté : **+25 à 35 %** entre 2020 et 2026 sous l'effet de l'inflation des matériaux (bois +40 %, acier +30 %, ciment +20 %) et de la RE2020 (réglementation environnementale). En 2026, le prix moyen de construction d'une maison de 100 m² varie de **150 000 € en Centre-Val de Loire à 250 000 € en Île-de-France** — hors terrain. Décryptage par région.",
 
@@ -281,6 +293,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "prix-travaux-sud-france": {
     title: "Prix des travaux dans le Sud de la France",
     excerpt: "Découvrez les tarifs artisans dans le Sud de la France en 2026 : PACA, Occitanie, Nouvelle-Aquitaine. Pourquoi les prix varient et comment bien budgétiser.",
+    metaTitle: "Prix Travaux Sud France 2026 : PACA, Occitanie",
+    metaDescription: "Tarifs artisans Sud France 2026 : PACA +15-25%, Occitanie dans la moyenne. Comparatif 3 régions + astuces pour économiser. Devis gratuit.",
     content: [
       "Le Sud de la France attire par son cadre de vie, mais les travaux y coûtent-ils plus cher qu'ailleurs ? La réponse est nuancée : si la **Côte d'Azur** (Alpes-Maritimes, Var) affiche des tarifs proches de Paris, l'**Occitanie intérieure** et la **Nouvelle-Aquitaine rurale** restent parmi les zones les plus abordables de France. Tour d'horizon des prix dans les trois grandes régions du Sud.",
 
@@ -328,6 +342,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "tarifs-artisans-bretagne-normandie": {
     title: "Tarifs artisans en Bretagne et Normandie",
     excerpt: "Combien coûtent les artisans en Bretagne et Normandie en 2026 ? Découvrez les tarifs par corps de métier et les spécificités régionales du bâtiment.",
+    metaTitle: "Prix Artisans Bretagne-Normandie 2026 : Barème",
+    metaDescription: "Tarifs artisans Bretagne et Normandie 2026 : 10-20% sous la moyenne nationale. Prix par métier + spécificités régionales. Devis gratuit.",
     content: [
       "La Bretagne et la Normandie partagent un patrimoine architectural riche (colombages, granit, ardoise, torchis) et un climat océanique qui impose des exigences spécifiques en matière de construction et de rénovation. Les tarifs des artisans y sont **20 à 30 % inférieurs** à l'Île-de-France, mais avec des variations notables entre le littoral (Saint-Malo, Dinard, Deauville) et l'intérieur des terres.",
 
@@ -375,6 +391,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "cout-renovation-energetique-region": {
     title: "Rénovation énergétique : les prix varient-ils par région ?",
     excerpt: "Le coût de la rénovation énergétique varie-t-il d'une région à l'autre ? Analyse des prix, des aides et des spécificités régionales en 2026.",
+    metaTitle: "Prix Rénovation Énergétique par Région 2026",
+    metaDescription: "Rénovation énergétique 2026 : prix de 150 à 600€/m² selon la région. Aides régionales cumulables (40-70% financés). Comparez les devis.",
     content: [
       "La rénovation énergétique est au cœur des politiques publiques françaises, avec l'objectif de rénover **700 000 logements par an** d'ici 2030. Mais le coût de ces travaux varie significativement selon les régions : de **200 à 400 €/m²** en Centre-Val de Loire à **350 à 600 €/m²** en Île-de-France pour un gain de 2 classes DPE. Les aides (MaPrimeRénov', CEE) sont nationales, mais les besoins et les prix diffèrent selon le climat et le bâti local.",
 
@@ -422,6 +440,8 @@ export const prixRegionauxArticles: Record<string, BlogArticle> = {
   "index-prix-travaux-2026": {
     title: "Index des prix des travaux en France 2026",
     excerpt: "L'index complet des prix des travaux en France pour 2026 : évolution des coûts, tendances par corps de métier et prévisions. Référence pour vos devis.",
+    metaTitle: "Index Prix Travaux France 2026 : +18% depuis 2022",
+    metaDescription: "Index officiel des prix travaux 2026 : évolution par métier, tendances des matériaux (+18%). Référence pour comparer vos devis.",
     content: [
       "Après une période d'inflation intense entre 2022 et 2024 (**+18 à 25 %** sur les matériaux et la main-d'œuvre), le marché du bâtiment se stabilise en 2026. Les prix des matériaux se sont normalisés (sauf le cuivre, toujours volatile), mais la main-d'œuvre continue de progresser de **3 à 5 % par an** en raison de la pénurie d'artisans qualifiés. Cet index vous donne les références de prix actualisées pour tous les corps de métier en 2026.",
 

@@ -5,15 +5,17 @@ import { companyIdentity } from '@/lib/config/company-identity'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import FooterClusterLinks from '@/components/seo/FooterClusterLinks'
 
-// Information links
-const informationLinks = [
-  { name: 'À propos', href: '/a-propos' },
+// Navigation links — money pages & essential hubs only (link equity optimization)
+const navigationLinks = [
+  { name: 'Services', href: '/services' },
+  { name: 'Tarifs', href: '/tarifs' },
+  { name: 'Devis gratuit', href: '/devis' },
+  { name: 'Départements', href: '/departements' },
+  { name: 'Villes', href: '/villes' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Avis artisans', href: '/avis' },
-  { name: 'Outils', href: '/outils' },
-  { name: 'Checklist travaux', href: '/checklist-travaux' },
+  { name: 'Devenir partenaire', href: '/inscription-artisan' },
 ]
 
 
@@ -96,7 +98,7 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Logo & Description */}
           <div className="col-span-2">
             <Link href="/" className="inline-flex items-center gap-3 mb-4 group">
@@ -145,59 +147,17 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Informations */}
-          <div>
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Informations</h4>
-            <ul className="space-y-3 text-sm">
-              {informationLinks.map((link) => (
+          {/* Navigation — money pages & essential hubs */}
+          <div className="col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2">
+            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Navigation</h4>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+              {navigationLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                     {link.name}
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-
-          {/* Découvrir */}
-          <div>
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Découvrir</h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/carte-artisans" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Carte des artisans
-                </Link>
-              </li>
-              <li>
-                <Link href="/avant-apres" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Avant / Après travaux
-                </Link>
-              </li>
-              <li>
-                <Link href="/badge-artisan" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Badge Artisan Vérifié
-                </Link>
-              </li>
-              <li>
-                <Link href="/inscription-artisan" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Devenir partenaire
-                </Link>
-              </li>
-              <li>
-                <Link href="/notre-processus-de-verification" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Processus de vérification
-                </Link>
-              </li>
-              <li>
-                <Link href="/garantie" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Notre garantie
-                </Link>
-              </li>
-              <li>
-                <Link href="/widget-prix" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Widget prix
-                </Link>
-              </li>
             </ul>
           </div>
 

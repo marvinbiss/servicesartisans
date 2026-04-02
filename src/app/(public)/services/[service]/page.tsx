@@ -28,6 +28,7 @@ import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
+import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
@@ -461,38 +462,20 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Search by city */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">
-            Trouver un {service.name.toLowerCase()} par ville
-          </h2>
+      {/* Top 20 villes — maillage interne SEO avec anchor texts optimisés */}
+      <TopCitiesGrid
+        serviceSlug={serviceSlug}
+        serviceName={service.name}
+        intent="services"
+      />
 
-          {/* Popular cities grid — top 12 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
-            {limitedCities.slice(0, 12).map((city) => (
-              <Link
-                key={city.id}
-                href={`/services/${serviceSlug}/${city.slug}`}
-                className="bg-white rounded-lg border border-sand-200 p-4 hover:border-primary-300 hover:shadow-card-hover transition-all group"
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500" />
-                  <span className="font-medium text-charcoal-900 group-hover:text-primary-500 truncate">
-                    {city.name}
-                  </span>
-                </div>
-                {city.department_code && (
-                  <span className="text-xs text-charcoal-500 mt-1 block">
-                    ({city.department_code})
-                  </span>
-                )}
-              </Link>
-            ))}
-          </div>
-
-          {/* Cities by region — limited to top 50 cities total */}
-          {Object.keys(citiesByRegion).length > 0 && (
+      {/* Villes par région — liens complémentaires */}
+      {Object.keys(citiesByRegion).length > 0 && (
+        <section className="py-12 border-t border-sand-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 tracking-tight">
+              {service.name} par région
+            </h2>
             <div className="space-y-8">
               {Object.entries(citiesByRegion)
                 .map(([region, cities]) => (
@@ -514,23 +497,23 @@ export default async function ServicePage({ params }: PageProps) {
                   </div>
                 ))}
             </div>
-          )}
 
-          {/* CTA "Voir toutes les villes" if there are more than 50 */}
-          {totalCityCount > MAX_CITIES && (
-            <div className="mt-8 text-center">
-              <Link
-                href="/villes"
-                className="inline-flex items-center gap-2 bg-primary-50 hover:bg-primary-100 text-primary-600 hover:text-primary-700 font-semibold px-6 py-3 rounded-xl transition-colors border border-primary-200"
-              >
-                <MapPin className="w-4 h-4" />
-                Voir {service.name.toLowerCase()} dans toutes les villes ({totalCityCount})
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
+            {/* CTA "Voir toutes les villes" if there are more than 50 */}
+            {totalCityCount > MAX_CITIES && (
+              <div className="mt-8 text-center">
+                <Link
+                  href="/villes"
+                  className="inline-flex items-center gap-2 bg-primary-50 hover:bg-primary-100 text-primary-600 hover:text-primary-700 font-semibold px-6 py-3 rounded-xl transition-colors border border-primary-200"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Voir {service.name.toLowerCase()} dans toutes les villes ({totalCityCount})
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Par département — SEO internal links to service+ville pages */}
       <section className="py-12 border-t border-sand-200">
