@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, ShieldCheck, CheckCircle } from 'lucide-react'
+import { Mail, MessageCircle, ShieldCheck, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -26,7 +26,6 @@ interface ArtisanSidebarProps {
 }
 
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
-  const [showPhone, setShowPhone] = useState(false)
   const [shouldPulse, setShouldPulse] = useState(false)
 
   useEffect(() => {
@@ -36,12 +35,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
     }, 8000)
     return () => clearInterval(interval)
   }, [])
-
-  const handleCall = () => {
-    if (artisan.phone) {
-      window.location.href = `tel:${artisan.phone.replace(/[\s.\-()]/g, '')}`
-    }
-  }
 
   const handleEmail = () => {
     if (artisan.email) {
@@ -117,35 +110,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             <span>Réponse rapide</span>
           </div>
 
-          {artisan.phone && (
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                if (showPhone) {
-                  trackEvent('phone_reveal', {
-                    artisanId: artisan.id,
-                    artisanName: artisan.business_name || '',
-                    source: 'sidebar',
-                  })
-                  handleCall()
-                } else {
-                  trackEvent('phone_reveal', {
-                    artisanId: artisan.id,
-                    artisanName: artisan.business_name || '',
-                    source: 'sidebar',
-                  })
-                  setShowPhone(true)
-                }
-              }}
-              className="w-full py-3.5 px-4 rounded-xl bg-charcoal-800 hover:bg-charcoal-900 text-white font-semibold flex items-center justify-center gap-2 shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-600 focus:ring-offset-2"
-              aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numéro de téléphone'}
-            >
-              <Phone className="w-5 h-5" aria-hidden="true" />
-              {showPhone ? artisan.phone : 'Afficher le téléphone'}
-            </motion.button>
-          )}
-
           {artisan.email && (
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -186,14 +150,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
 // Mobile CTA bar -- Single dominant CTA, ALWAYS visible
 export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
-  const [showPhone, setShowPhone] = useState(false)
-
-  const handleCall = () => {
-    if (artisan.phone) {
-      window.location.href = `tel:${artisan.phone.replace(/[\s.\-()]/g, '')}`
-    }
-  }
-
   // Subtle pulse animation every 8 seconds
   const pulseVariants = {
     initial: { boxShadow: '0 0 0 0 rgba(232, 107, 75, 0)' },
@@ -247,38 +203,6 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           <span>Gratuit - Sans engagement - Réponse rapide</span>
         </div>
 
-        {/* Secondary: Small phone text link */}
-        {artisan.phone && (
-          <button
-            type="button"
-            onClick={() => {
-              if (showPhone) {
-                trackEvent('phone_reveal', {
-                  artisanId: artisan.id,
-                  artisanName: artisan.business_name || '',
-                  source: 'mobile_cta',
-                })
-                handleCall()
-              } else {
-                trackEvent('phone_reveal', {
-                  artisanId: artisan.id,
-                  artisanName: artisan.business_name || '',
-                  source: 'mobile_cta',
-                })
-                setShowPhone(true)
-              }
-            }}
-            className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-700 transition-colors py-1 focus:outline-none focus:underline"
-            aria-label={showPhone ? `Appeler le ${artisan.phone}` : 'Afficher le numéro de téléphone'}
-          >
-            <Phone className="w-3.5 h-3.5" aria-hidden="true" />
-            {showPhone ? (
-              <span className="font-medium text-charcoal-700">{artisan.phone}</span>
-            ) : (
-              <span>ou appeler directement</span>
-            )}
-          </button>
-        )}
       </div>
     </motion.div>
   )

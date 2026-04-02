@@ -7,7 +7,6 @@ import { motion } from 'framer-motion'
 import {
   Star,
   MapPin,
-  Phone,
   Clock,
   ShieldCheck,
   Heart,
@@ -72,7 +71,6 @@ export function ArtisanProfileCard({
   yearsExperience,
   completedJobs,
   specialties = [],
-  phone,
   priceRange,
   badges = [],
   variant = 'card',
@@ -269,16 +267,6 @@ export function ArtisanProfileCard({
 
           {/* CTA Buttons */}
           <div className="flex gap-3 mt-6">
-            {phone && (
-              <a
-                href={`tel:${phone.replace(/[\s.\-()]/g, '')}`}
-                onClick={(e) => e.stopPropagation()}
-                className="flex-1 flex items-center justify-center gap-2 bg-charcoal-800 hover:bg-charcoal-900 text-white py-3 rounded-xl font-semibold transition-colors"
-              >
-                <Phone className="w-4 h-4" />
-                Appeler
-              </a>
-            )}
             <Link
               href={`${href}#reserver`}
               className="flex-1 flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-600 text-white py-3 rounded-xl font-semibold transition-colors shadow-cta"
@@ -411,16 +399,6 @@ export function ArtisanProfileCard({
 
             {/* Mobile CTAs */}
             <div className="flex gap-2 mt-4 sm:hidden">
-              {phone && (
-                <a
-                  href={`tel:${phone.replace(/[\s.\-()]/g, '')}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex-1 flex items-center justify-center gap-1 bg-charcoal-800 text-white py-2.5 rounded-lg font-medium text-sm"
-                >
-                  <Phone className="w-4 h-4" />
-                  Appeler
-                </a>
-              )}
               <span className="flex-1 flex items-center justify-center gap-1 bg-primary-400 text-white py-2.5 rounded-lg font-medium text-sm shadow-cta">
                 <Calendar className="w-4 h-4" />
                 Reserver

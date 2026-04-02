@@ -5,7 +5,6 @@ import Image from 'next/image'
 import {
   Star,
   MapPin,
-  Phone,
   Mail,
   Globe,
   CheckCircle,
@@ -170,15 +169,6 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
 
             {/* Contact buttons */}
             <div className="flex flex-col gap-3 md:min-w-[200px]">
-              {provider.phone && (
-                <a
-                  href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
-                  className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  <Phone className="w-5 h-5" />
-                  {provider.phone}
-                </a>
-              )}
               {provider.email && (
                 <a
                   href={`mailto:${provider.email}`}

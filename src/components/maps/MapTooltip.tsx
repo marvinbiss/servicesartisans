@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Star, MapPin, Phone, Clock } from 'lucide-react'
+import { Star, MapPin, Clock } from 'lucide-react'
 
 interface Provider {
   id: string
@@ -88,14 +88,6 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
             <div className="flex items-center gap-1.5 text-xs text-gray-600">
               <MapPin className="w-3 h-3 text-gray-400 flex-shrink-0" />
               <span className="truncate">{provider.address_city}</span>
-            </div>
-          )}
-
-          {/* Phone */}
-          {provider.phone && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-600">
-              <Phone className="w-3 h-3 text-gray-400 flex-shrink-0" />
-              <span className="truncate">{provider.phone}</span>
             </div>
           )}
 

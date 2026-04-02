@@ -3,7 +3,7 @@
 import type { Ref } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Star, Phone, ChevronDown, ChevronUp,
+  Star, ChevronDown, ChevronUp,
   Loader2, X, Shield, Heart, ExternalLink, MapPin
 } from 'lucide-react'
 import Link from 'next/link'
@@ -169,15 +169,6 @@ export function DesktopResultsSidebar({
                       >
                         Voir profil
                       </Link>
-                      {provider.phone && (
-                        <a
-                          href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          <Phone className="w-4 h-4 text-gray-600" />
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>

@@ -1,33 +1,14 @@
 'use client'
 
-import { Phone, Mail, MessageCircle, ShieldCheck, Star, CheckCircle } from 'lucide-react'
+import { Mail, MessageCircle, ShieldCheck, Star, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { cleanPhone } from '@/lib/validation/phone'
 
 interface ArtisanContactCardProps {
   artisan: LegacyArtisan
 }
 
-/** Check if a phone number is valid (not empty, not placeholder) */
-function isValidPhone(phone: string | undefined | null): phone is string {
-  if (!phone) return false
-  const digits = phone.replace(/\D/g, '')
-  return digits.length >= 10
-}
-
-/** Format French phone: 0X XX XX XX XX */
-function formatFrenchPhone(phone: string): string {
-  const digits = phone.replace(/\D/g, '')
-  const normalized = digits.startsWith('33') && digits.length === 11
-    ? '0' + digits.slice(2)
-    : digits
-  if (normalized.length !== 10 || !normalized.startsWith('0')) return phone
-  return `${normalized.slice(0, 2)} ${normalized.slice(2, 4)} ${normalized.slice(4, 6)} ${normalized.slice(6, 8)} ${normalized.slice(8, 10)}`
-}
-
 export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
-  const hasPhone = isValidPhone(artisan.phone)
   const hasEmail = !!artisan.email
 
   return (
@@ -87,23 +68,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <span>Réponse rapide</span>
           </div>
 
-          {/* 2. Telephone */}
-          {hasPhone && (
-            <button
-              type="button"
-              onClick={() => {
-                trackEvent('phone_click' as any, { artisanId: artisan.id, artisanName: artisan.business_name || '', artisan_slug: artisan.slug, source: 'contact_card' })
-                window.location.href = `tel:${cleanPhone(artisan.phone!)}`
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-charcoal-800 hover:bg-charcoal-900 text-white font-medium transition-colors"
-              aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}
-            >
-              <Phone className="w-4 h-4" />
-              {formatFrenchPhone(artisan.phone!)}
-            </button>
-          )}
-
-          {/* 3. Email */}
+          {/* 2. Email */}
           {hasEmail && (
             <a
               href={`mailto:${artisan.email}`}

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, MapPin, Phone, CheckCircle, Clock } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Clock } from 'lucide-react'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getArtisanUrl } from '@/lib/utils'
 
@@ -138,16 +138,6 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
           >
             Voir le profil
           </Link>
-          {provider.phone && (
-            <a
-              href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-              <span className="hidden sm:inline">{provider.phone}</span>
-              <span className="sm:hidden">Appeler</span>
-            </a>
-          )}
         </div>
       </div>
     </div>

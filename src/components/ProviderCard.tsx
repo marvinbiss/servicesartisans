@@ -1,16 +1,10 @@
 import Link from 'next/link'
-import { MapPin, Phone, Star, ChevronRight, ShieldCheck } from 'lucide-react'
+import { MapPin, Star, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 
 type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
-
-function isValidPhone(phone: string | undefined | null): boolean {
-  if (!phone) return false
-  const digits = phone.replace(/\D/g, '')
-  return digits.length >= 10
-}
 
 interface ProviderCardProps {
   provider: ProviderCardProvider
@@ -148,15 +142,6 @@ export default function ProviderCard({
         >
           Voir le profil
         </Link>
-        {isValidPhone(provider.phone) && (
-          <a
-            href={`tel:${provider.phone!.replace(/[\s.\-()]/g, '')}`}
-            className="flex items-center justify-center gap-2 px-5 py-3 min-h-[48px] border-2 border-sand-400 text-charcoal-700 rounded-xl font-semibold hover:bg-sand-100 hover:border-primary-200 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
-          >
-            <Phone className="w-5 h-5" />
-            <span className="hidden sm:inline">Appeler</span>
-          </a>
-        )}
       </div>
     </div>
   )

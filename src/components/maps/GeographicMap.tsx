@@ -254,13 +254,6 @@ export default function GeographicMap({
 
       const profileUrl = getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
 
-      const phoneBtn = provider.phone
-        ? `<a href="tel:${provider.phone.replace(/[\s.\-()]/g, '')}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;background:linear-gradient(to right,#44403c,#292524);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Appeler
-          </a>`
-        : ''
-
       const popupHtml = `
         <div style="padding:16px">
           <div style="display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:8px">
@@ -271,7 +264,6 @@ export default function GeographicMap({
           ${ratingHtml}
           ${addressText ? `<p style="font-size:14px;color:#4b5563;margin:0 0 12px;display:flex;align-items:start;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${addressText}</span></p>` : ''}
           <div style="display:flex;gap:8px">
-            ${phoneBtn}
             <a href="${profileUrl}" style="flex:1;text-align:center;padding:8px 12px;background:linear-gradient(to right,#E86B4B,#D4573D);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">Voir le profil</a>
           </div>
         </div>

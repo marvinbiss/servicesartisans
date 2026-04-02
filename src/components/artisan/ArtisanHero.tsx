@@ -5,10 +5,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Users, Clock, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
-import { BookingFunnel, trackEvent } from '@/lib/analytics/tracking'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 const DevisBottomSheet = dynamic(
   () => import('@/components/conversion/DevisBottomSheet'),
@@ -21,7 +21,6 @@ interface ArtisanHeroProps {
 
 export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
-  const [showPhone, setShowPhone] = useState(false)
   const [isDevisOpen, setIsDevisOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
@@ -153,27 +152,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 </>
               )}
             </div>
-
-            {/* Phone - click-to-reveal then call */}
-            {artisan.phone && (
-              <button
-                type="button"
-                onClick={() => {
-                  if (showPhone) {
-                    BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'hero')
-                    window.location.href = `tel:${artisan.phone!.replace(/[\s.\-()]/g, '')}`
-                  } else {
-                    BookingFunnel.revealPhone(artisan.id, artisan.business_name || '', 'hero')
-                    setShowPhone(true)
-                  }
-                }}
-                className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-600 font-medium mb-3 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded"
-                aria-label={showPhone ? `Appeler au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
-              >
-                <Phone className="w-4 h-4" />
-                <span>{showPhone ? artisan.phone : 'Afficher le numéro'}</span>
-              </button>
-            )}
 
             {/* Member since */}
             {artisan.member_since && (
