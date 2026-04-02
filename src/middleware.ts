@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse, type NextFetchEvent } from 'next/server'
+import { type CookieOptions } from '@supabase/ssr'
 import { updateSession } from '@/lib/supabase/middleware'
 import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
@@ -143,9 +144,19 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // so 'strict-dynamic' CSP breaks all /_next/static/chunks/*.js loading
 
   // Auth guard for private spaces
+  // Uses proper cookie handling to avoid token rotation race condition:
+  // the Supabase client may refresh an expired JWT, so set() MUST persist
+  // the new tokens — otherwise updateSession re-reads stale cookies and
+  // the already-rotated refresh token is rejected, destroying the session.
+  // authGuardResponse carries refreshed Set-Cookie headers to the browser.
+  let authGuardResponse: NextResponse | null = null
   if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || (pathname.startsWith('/admin') && pathname !== '/admin/connexion')) {
     try {
       const { createServerClient } = await import('@supabase/ssr')
+
+      let pendingResponse = NextResponse.next({
+        request: { headers: request.headers },
+      })
 
       const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -155,8 +166,20 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
             get(name: string) {
               return request.cookies.get(name)?.value
             },
-            set() {},
-            remove() {},
+            set(name: string, value: string, options: CookieOptions) {
+              request.cookies.set({ name, value, ...options })
+              pendingResponse = NextResponse.next({
+                request: { headers: request.headers },
+              })
+              pendingResponse.cookies.set({ name, value, ...options })
+            },
+            remove(name: string, options: CookieOptions) {
+              request.cookies.set({ name, value: '', ...options })
+              pendingResponse = NextResponse.next({
+                request: { headers: request.headers },
+              })
+              pendingResponse.cookies.set({ name, value: '', ...options })
+            },
           },
         }
       )
@@ -182,6 +205,9 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
           return NextResponse.redirect(new URL('/espace-artisan', request.url))
         }
       }
+
+      // Keep the response with refreshed cookies for use as the final response
+      authGuardResponse = pendingResponse
     } catch (error) {
       logger.error('Middleware auth error:', error)
       const loginUrl = new URL('/connexion', request.url)
@@ -276,9 +302,13 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   }
 
   // Refresh session — only for routes that need auth (skip Supabase call for public pages)
+  // If auth guard already refreshed the session, reuse its response (carries Set-Cookie headers)
   let response: NextResponse
   const needsAuth = pathname.startsWith('/espace-') || pathname.startsWith('/admin') || pathname.startsWith('/booking')
-  if (needsAuth) {
+  if (authGuardResponse) {
+    // Auth guard already refreshed the session — reuse its response with Set-Cookie headers
+    response = authGuardResponse
+  } else if (needsAuth) {
     try {
       response = await updateSession(request)
     } catch {
