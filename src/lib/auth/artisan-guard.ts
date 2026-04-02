@@ -20,7 +20,7 @@ export async function requireArtisan() {
     .from('providers')
     .select('id')
     .eq('user_id', user.id)
-    .eq('is_active', true)
+    .or('is_active.eq.true,is_active.is.null')
     .single()
   if (!provider) {
     return { error: NextResponse.json({ error: 'Profil artisan incomplet' }, { status: 403 }), user: null, provider: null, supabase }

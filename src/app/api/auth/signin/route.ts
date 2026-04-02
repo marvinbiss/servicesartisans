@@ -94,7 +94,7 @@ export async function POST(request: Request) {
         )
       }
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, error.message),
+        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Erreur d\'authentification'),
         { status: 401 }
       )
     }
