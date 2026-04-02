@@ -74,6 +74,33 @@ jobs:
         env:
           NEXT_BUILD_SKIP_DB: '1'
 
+      - name: E2E critical flows (Playwright)
+        run: |
+          npx playwright install --with-deps chromium
+
+          # Start the built app in background
+          npx next start -p 3778 &
+          SERVER_PID=$!
+
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:3778/api/health > /dev/null 2>&1; then
+              break
+            fi
+            sleep 1
+          done
+
+          npx playwright test --grep @critical --project=chromium || E2E_FAILED=1
+
+          kill $SERVER_PID 2>/dev/null || true
+
+          if [ "$E2E_FAILED" = "1" ]; then
+            echo "::error::E2E critical flows failed"
+            exit 1
+          fi
+        env:
+          NEXT_BUILD_SKIP_DB: '1'
+          BASE_URL: 'http://localhost:3778'
+
   # ─── Risk Router: analyze diff and select agents ───────────────────────────
   risk-router:
     name: Risk Router
@@ -84,6 +111,7 @@ jobs:
       agents: ${{ steps.route.outputs.agents }}
       skipped: ${{ steps.route.outputs.skipped }}
       risk_level: ${{ steps.route.outputs.risk_level }}
+      diff_lines: ${{ steps.route.outputs.diff_lines }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -115,11 +143,14 @@ jobs:
             console.log(r.risk_level);
           ")
 
+          DIFF_LINES=$(wc -l < /tmp/pr-diff.txt)
+
           echo "agents=$AGENTS" >> $GITHUB_OUTPUT
           echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
           echo "risk_level=$RISK" >> $GITHUB_OUTPUT
+          echo "diff_lines=$DIFF_LINES" >> $GITHUB_OUTPUT
 
-          echo "Risk: $RISK | Agents: $AGENTS | Skipped: $SKIPPED"
+          echo "Risk: $RISK | Agents: $AGENTS | Skipped: $SKIPPED | Diff: $DIFF_LINES lines"
 
   # ─── Parallel Claude Code agents (only selected by risk router) ────────────
   claude-agent:
@@ -296,6 +327,7 @@ jobs:
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
+          DIFF_LINES: ${{ needs.risk-router.outputs.diff_lines }}
         run: |
           node scripts/ci/aggregate-reports.mjs /tmp/claude-reports \
             --skipped "${{ needs.risk-router.outputs.skipped }}"

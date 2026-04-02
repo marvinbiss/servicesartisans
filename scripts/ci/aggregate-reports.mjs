@@ -1,12 +1,11 @@
 /**
- * Claude Code Review — Report Aggregator v4
+ * Claude Code Review — Report Aggregator v5
  *
- * v4 improvements over v3:
- * - Business impact escalation: findings on critical paths get severity bumped
- *   P1 on auth/middleware → P0. P2 on revenue paths → P1.
- * - Reads business_impact_zones from calibration.json
- * - Confidence-based blocking unchanged (P1 single = warning)
- * - False positive suppression, dedup, metrics all preserved
+ * v5 improvements over v4:
+ * - Decision model: learned blocking function replaces heuristic rules
+ *   Falls back to rule-based scoring when <15 training samples
+ * - Agent degradation: noisy agents (precision <70%) capped to P2-only
+ * - All v4 features preserved (escalation, dedup, metrics)
  *
  * Usage: node aggregate-reports.mjs <reports-directory> [--skipped agent1,agent2]
  */
@@ -14,6 +13,7 @@
 import { readFileSync, writeFileSync, readdirSync, statSync, appendFileSync, existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { score as decisionScore, extractFeatures } from './decision-model.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -36,6 +36,9 @@ if (existsSync(calibrationPath)) {
 }
 const weights = calibration.severity_weights || { P0: 25, P1: 10, P2: 2 }
 const falsePositivePatterns = (calibration.known_false_positives?.patterns || []).map(p => new RegExp(p, 'i'))
+
+// Per-agent calibration stats (rolling precision from annotate-review.mjs)
+const agentStats = calibration.agent_stats || {}
 
 // Business impact zones for severity escalation
 const bizZones = calibration.business_impact_zones || {}
@@ -209,6 +212,26 @@ for (const f of dedupedFindings) {
   }
 }
 
+// ─── Agent degradation (precision < 70% → cap findings at P2) ───────────
+// A noisy agent's P0/P1 findings are demoted to P2 until its precision recovers.
+// This prevents unreliable agents from blocking PRs.
+
+let degradedCount = 0
+for (const f of dedupedFindings) {
+  // Only degrade single-agent findings (multi-agent agreement overrides)
+  if (f.agents.length > 1) continue
+  const agent = f.agents[0]
+  const stats = agentStats[agent]
+  if (stats && stats.degraded && stats.reviews_counted >= 5) {
+    if (f.severity === 'P0' || f.severity === 'P1') {
+      f.degraded_from = f.severity
+      f.degraded_agent = agent
+      f.severity = 'P2'
+      degradedCount++
+    }
+  }
+}
+
 // ─── Compute totals ─────────────────────────────────────────────────────────
 
 const totalP0 = dedupedFindings.filter(f => f.severity === 'P0').length
@@ -219,14 +242,7 @@ const rawCount = allFindings.length
 const deduped = rawCount - totalFindings
 const activeAgents = agentSummaries.length
 
-// ─── Confidence-based blocking ──────────────────────────────────────────────
-// P0: ALWAYS blocks (any confidence)
-// P1 with confidence medium/high (2+ agents agree): blocks
-// P1 with confidence single (1 agent only): WARNING, does NOT block
-// P2: never blocks
-//
-// This dramatically reduces false positive blocking rate. A single agent
-// claiming P1 is often noise. Two agents agreeing is a real signal.
+// ─── Confidence-based counts ────────────────────────────────────────────────
 
 const confirmedP1 = dedupedFindings.filter(f =>
   f.severity === 'P1' && (f.confidence === 'medium' || f.confidence === 'high')
@@ -234,7 +250,49 @@ const confirmedP1 = dedupedFindings.filter(f =>
 const warningP1 = dedupedFindings.filter(f =>
   f.severity === 'P1' && f.confidence === 'single'
 ).length
-const hasBlockers = totalP0 > 0 || confirmedP1 > 0
+
+// ─── Decision model (replaces heuristic rules) ─────────────────────────────
+// Uses learned weights when trained on 15+ annotations.
+// Falls back to rule-based logic otherwise.
+// Hard override: P0 always blocks regardless of model output.
+
+const criticalZoneHits = dedupedFindings.filter(f => f.escalation_zone === 'critical').length
+const highZoneHits = dedupedFindings.filter(f => f.escalation_zone === 'high').length
+
+// Compute average agent precision from stats
+const agentPrecisions = Object.values(agentStats)
+  .filter(s => s.rolling_precision !== null && s.reviews_counted >= 5)
+  .map(s => s.rolling_precision / 100)
+const avgAgentPrecision = agentPrecisions.length > 0
+  ? agentPrecisions.reduce((a, b) => a + b, 0) / agentPrecisions.length
+  : 0.75
+const degradedAgentRatio = Object.values(agentStats).filter(s => s.degraded).length / Math.max(activeAgents, 1)
+
+let hasBlockers
+let decisionInfo
+
+try {
+  const decision = decisionScore({
+    p0: totalP0,
+    p1_confirmed: confirmedP1,
+    p1_warning: warningP1,
+    p2: totalP2,
+    critical_zone_hits: criticalZoneHits,
+    high_zone_hits: highZoneHits,
+    diff_lines: parseInt(process.env.DIFF_LINES || '0', 10),
+    agents_run: activeAgents,
+    avg_agent_precision: avgAgentPrecision,
+    degraded_agent_ratio: degradedAgentRatio,
+  })
+
+  // Hard override: P0 always blocks, regardless of model
+  hasBlockers = totalP0 > 0 || decision.block
+  decisionInfo = decision
+} catch {
+  // Fallback to rule-based if model fails
+  hasBlockers = totalP0 > 0 || confirmedP1 > 0
+  decisionInfo = { score: null, source: 'fallback (rule-based)' }
+}
 
 // ─── Build Markdown summary ─────────────────────────────────────────────────
 
@@ -260,6 +318,8 @@ if (skippedAgents.length > 0) md += ` | ${skippedAgents.length} skipped`
 if (deduped > 0) md += ` | ${deduped} merged`
 if (suppressedCount > 0) md += ` | ${suppressedCount} suppressed`
 if (escalatedCount > 0) md += ` | ${escalatedCount} escalated`
+if (degradedCount > 0) md += ` | ${degradedCount} degraded`
+if (decisionInfo.score !== null) md += ` | decision: ${decisionInfo.score} (${decisionInfo.source})`
 md += '\n\n'
 
 // Agent table
@@ -357,11 +417,17 @@ const metricsEntry = {
   duplicates_merged: deduped,
   suppressed: suppressedCount,
   escalated: escalatedCount,
+  degraded: degradedCount,
   p0: totalP0,
   p1_confirmed: confirmedP1,
   p1_warning: warningP1,
   p2: totalP2,
   blocked: hasBlockers,
+  decision_score: decisionInfo.score,
+  decision_source: decisionInfo.source,
+  critical_zone_hits: criticalZoneHits,
+  high_zone_hits: highZoneHits,
+  avg_agent_precision: Math.round(avgAgentPrecision * 100),
   // Fill manually after human review for calibration:
   // true_positives: null,
   // false_positives: null,
@@ -393,9 +459,11 @@ console.log(`  Raw findings:  ${rawCount}`)
 console.log(`  Suppressed:    ${suppressedCount} (known false positives)`)
 console.log(`  After dedup:   ${totalFindings} (${deduped} merged)`)
 console.log(`  Escalated:     ${escalatedCount} (business impact zones)`)
+console.log(`  Degraded:      ${degradedCount} (noisy agent → capped P2)`)
 console.log(`  P0:            ${totalP0} (always block)`)
 console.log(`  P1 confirmed:  ${confirmedP1} (2+ agents, blocks)`)
 console.log(`  P1 warning:    ${warningP1} (single agent, does NOT block)`)
 console.log(`  P2:            ${totalP2}`)
 console.log(`  Decision:      ${hasBlockers ? 'BLOCKED' : 'PASS'}`)
+console.log(`  Model score:   ${decisionInfo.score !== null ? decisionInfo.score : 'N/A'} (${decisionInfo.source})`)
 console.log('========================================')

@@ -119,6 +119,20 @@ const rules = {
   },
 }
 
+// ─── Load per-agent calibration stats ───────────────────────────────────────
+// precision < 70% → agent triggered less often (threshold +2)
+// precision > 85% → agent triggered more often (threshold -1)
+
+const agentStats = calibration.agent_stats || {}
+
+function getAgentThresholdAdjust(agent) {
+  const stats = agentStats[agent]
+  if (!stats || stats.rolling_precision === null || stats.reviews_counted < 5) return 0
+  if (stats.rolling_precision < 70) return 2   // noisy → harder to trigger
+  if (stats.rolling_precision >= 85) return -1  // precise → easier to trigger
+  return 0
+}
+
 // ─── Score agents ───────────────────────────────────────────────────────────
 
 const agentScores = {}
@@ -161,13 +175,15 @@ if (riskLevel === 'high') {
     .map(([agent]) => agent)
   reasons.push(`High risk (${touchesCritical ? 'critical paths' : `${diffSize} lines`})`)
 } else if (riskLevel === 'medium') {
+  const base = thresholds.medium_min_score || 3
   selectedAgents = Object.entries(agentScores)
-    .filter(([, score]) => score >= (thresholds.medium_min_score || 3))
+    .filter(([agent, score]) => score >= base + getAgentThresholdAdjust(agent))
     .map(([agent]) => agent)
   reasons.push(`Medium risk (${changedFiles.length} files, ${diffSize} lines)`)
 } else {
+  const base = thresholds.low_min_score || 5
   selectedAgents = Object.entries(agentScores)
-    .filter(([, score]) => score >= (thresholds.low_min_score || 5))
+    .filter(([agent, score]) => score >= base + getAgentThresholdAdjust(agent))
     .map(([agent]) => agent)
   reasons.push(`Low risk (${changedFiles.length} files, ${diffSize} lines)`)
 }
@@ -188,6 +204,19 @@ if (fileCategories.migrations.length) contextLines.push(`Migrations: ${fileCateg
 if (fileCategories.lib.length) contextLines.push(`Lib: ${fileCategories.lib.length}`)
 if (fileCategories.tests.length) contextLines.push(`Tests: ${fileCategories.tests.length}`)
 
+// Build per-agent calibration info for output
+const agentCalibration = {}
+for (const agent of Object.keys(rules)) {
+  const stats = agentStats[agent]
+  if (stats && stats.reviews_counted >= 5) {
+    agentCalibration[agent] = {
+      precision: stats.rolling_precision,
+      degraded: stats.degraded || false,
+      threshold_adjust: getAgentThresholdAdjust(agent),
+    }
+  }
+}
+
 const result = {
   agents: selectedAgents,
   risk_level: riskLevel,
@@ -200,6 +229,7 @@ const result = {
   file_categories: Object.fromEntries(
     Object.entries(fileCategories).filter(([, files]) => files.length > 0).map(([k, v]) => [k, v.length])
   ),
+  agent_calibration: Object.keys(agentCalibration).length > 0 ? agentCalibration : undefined,
 }
 
 console.log(JSON.stringify(result, null, 2))

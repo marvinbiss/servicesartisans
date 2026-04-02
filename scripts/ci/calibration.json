@@ -72,6 +72,19 @@
     ]
   },
 
+  "agent_stats": {
+    "_comment": "Auto-populated by annotate-review.mjs. Rolling precision per agent. degraded=true → capped to P2-only. boosted=true → lower trigger threshold."
+  },
+
+  "decision_model": {
+    "_comment": "Learned blocking function. Run 'node decision-model.mjs train' after 15+ annotated PRs. Until then, default weights (hand-tuned from rule-based logic).",
+    "w": [4.0, 2.5, 0.3, 0.05, 1.5, 2.0, 1.0, 0.2, -0.1, -1.5, -0.5],
+    "b": -2.0,
+    "threshold": 0.5,
+    "trained_on": 0,
+    "version": 1
+  },
+
   "historical_metrics": {
     "_comment": "Fill after each PR review. This is the data that makes the pipeline self-correcting.",
     "_fields": "pr, date, raw_findings, deduped, true_positives, false_positives, missed_in_prod, human_action (merged/fixed/dismissed)",

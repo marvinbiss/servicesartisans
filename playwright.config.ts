@@ -11,7 +11,7 @@ export default defineConfig({
     ['list'],
   ],
   use: {
-    baseURL: 'http://localhost:3099',
+    baseURL: process.env.BASE_URL || 'http://localhost:3099',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -40,10 +40,13 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    command: 'npm run dev -- --port 3099',
-    url: 'http://localhost:3099',
-    reuseExistingServer: true,
-    timeout: 180 * 1000,
-  },
+  // In CI, the server is started externally (next start on BASE_URL port)
+  ...(!process.env.CI ? {
+    webServer: {
+      command: 'npm run dev -- --port 3099',
+      url: 'http://localhost:3099',
+      reuseExistingServer: true,
+      timeout: 180 * 1000,
+    },
+  } : {}),
 })
