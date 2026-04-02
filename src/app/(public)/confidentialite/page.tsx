@@ -72,7 +72,7 @@ export default async function ConfidentialitePage() {
             Politique de confidentialité
           </h1>
           <p className="text-gray-600 mt-2">
-            Dernière mise à jour : Janvier 2026
+            Dernière mise à jour : Avril 2026
           </p>
         </div>
       </section>
@@ -138,12 +138,64 @@ export default async function ConfidentialitePage() {
             <p>Vos données peuvent être partagées avec :</p>
             <ul>
               <li>Les artisans partenaires (uniquement pour répondre à vos demandes)</li>
-              <li>Nos sous-traitants techniques (hébergement, emailing)</li>
+              <li>Nos sous-traitants techniques (détaillés ci-dessous)</li>
               <li>Les autorités compétentes (en cas d'obligation légale)</li>
             </ul>
             <p>
               Nous ne vendons jamais vos données personnelles à des tiers.
             </p>
+
+            <h3>Liste des sous-traitants</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm border border-gray-200 rounded-lg">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Sous-traitant</th>
+                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Finalité</th>
+                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Pays</th>
+                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">Garanties</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-gray-900">Vercel Inc.</td>
+                    <td className="px-4 py-3 text-gray-600">Hébergement, CDN, edge computing</td>
+                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
+                    <td className="px-4 py-3 text-gray-600">Data Privacy Framework, SCCs</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-gray-900">Supabase Inc.</td>
+                    <td className="px-4 py-3 text-gray-600">Base de données, authentification, stockage</td>
+                    <td className="px-4 py-3 text-gray-600">États-Unis (AWS eu-west)</td>
+                    <td className="px-4 py-3 text-gray-600">SOC2 Type II, SCCs</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-gray-900">Stripe Inc.</td>
+                    <td className="px-4 py-3 text-gray-600">Traitement des paiements</td>
+                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
+                    <td className="px-4 py-3 text-gray-600">PCI DSS Level 1, Data Privacy Framework</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-gray-900">Resend Inc.</td>
+                    <td className="px-4 py-3 text-gray-600">Envoi d'emails transactionnels</td>
+                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
+                    <td className="px-4 py-3 text-gray-600">SCCs</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-gray-900">Google LLC</td>
+                    <td className="px-4 py-3 text-gray-600">Analytics (Google Analytics 4, Tag Manager)</td>
+                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
+                    <td className="px-4 py-3 text-gray-600">Data Privacy Framework</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-gray-900">Microsoft Corp.</td>
+                    <td className="px-4 py-3 text-gray-600">Analytics comportemental (Clarity)</td>
+                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
+                    <td className="px-4 py-3 text-gray-600">Data Privacy Framework, SCCs</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             <h2>5. Durée de conservation</h2>
             <p>Vos données sont conservées :</p>
@@ -156,8 +208,8 @@ export default async function ConfidentialitePage() {
             <h2>6. Vos droits</h2>
             <p>Conformément au RGPD, vous disposez des droits suivants :</p>
             <ul>
-              <li><strong>Droit d'accès :</strong> obtenir une copie de vos données</li>
-              <li><strong>Droit de rectification :</strong> corriger vos données inexactes</li>
+              <li><strong>Droit d'accès :</strong> obtenir une copie de vos données (<a href="/droit-acces" className="text-blue-600 hover:underline">exercer ce droit</a>)</li>
+              <li><strong>Droit de rectification :</strong> corriger vos données inexactes (<a href="/droit-acces" className="text-blue-600 hover:underline">exercer ce droit</a>)</li>
               <li><strong>Droit à l'effacement :</strong> demander la suppression de vos données</li>
               <li><strong>Droit à la portabilité :</strong> récupérer vos données dans un format standard</li>
               <li><strong>Droit d'opposition :</strong> vous opposer à certains traitements (<a href="/droit-opposition" className="text-blue-600 hover:underline">en savoir plus</a>)</li>
@@ -185,22 +237,61 @@ export default async function ConfidentialitePage() {
               pour protéger vos données contre tout accès non autorisé, modification, divulgation
               ou destruction. Nos serveurs sont sécurisés et les données sensibles sont chiffrées.
             </p>
+            <p>
+              En cas de violation de données, nous appliquons une procédure stricte de notification
+              conformément aux articles 33 et 34 du RGPD (<a href="/violation-donnees" className="text-blue-600 hover:underline">en savoir plus</a>).
+            </p>
 
             <h2>9. Transferts internationaux</h2>
             <p>
-              Certaines de nos données peuvent être hébergées en dehors de l'Union Européenne
-              (notamment aux États-Unis). Dans ce cas, nous nous assurons que des garanties
-              appropriées sont en place (clauses contractuelles types, cadre de protection des données UE-États-Unis (EU-US Data Privacy Framework)).
+              Certains de nos sous-traitants sont établis aux États-Unis, ce qui implique un
+              transfert de données personnelles hors de l'Union Européenne. Ces transferts sont
+              encadrés par les mécanismes suivants :
+            </p>
+            <ul>
+              <li>
+                <strong>EU-US Data Privacy Framework (DPF) :</strong> Vercel, Stripe, Google et
+                Microsoft sont certifiés au titre du cadre de protection des données UE-États-Unis,
+                reconnu adéquat par la Commission Européenne (décision du 10 juillet 2023).
+              </li>
+              <li>
+                <strong>Clauses Contractuelles Types (SCCs) :</strong> L'ensemble de nos sous-traitants
+                (Vercel, Supabase, Stripe, Resend, Google, Microsoft) ont signé les Clauses
+                Contractuelles Types adoptées par la Commission Européenne (décision 2021/914),
+                garantissant un niveau de protection équivalent au RGPD.
+              </li>
+              <li>
+                <strong>Localisation des données Supabase :</strong> Notre base de données est
+                hébergée sur AWS eu-west (Irlande), au sein de l'Union Européenne. Seuls les
+                services d'administration de Supabase Inc. sont basés aux États-Unis.
+              </li>
+            </ul>
+            <h3>Détail des données transférées</h3>
+            <ul>
+              <li><strong>Vercel :</strong> Pages web, assets statiques, logs de requêtes (adresse IP, user-agent)</li>
+              <li><strong>Supabase :</strong> Données de compte, profils, demandes de devis, avis, messagerie</li>
+              <li><strong>Stripe :</strong> Données de paiement (nom, email, informations bancaires tokenisées)</li>
+              <li><strong>Resend :</strong> Adresse email, nom, contenu des emails transactionnels</li>
+              <li><strong>Google Analytics / Tag Manager :</strong> Données de navigation anonymisées (pages vues, durée, appareil)</li>
+              <li><strong>Microsoft Clarity :</strong> Données comportementales anonymisées (clics, scrolls, sessions)</li>
+            </ul>
+
+            <h2>10. Mineurs</h2>
+            <p>
+              ServicesArtisans est destiné aux personnes de 18 ans et plus. Nous ne collectons
+              pas sciemment les données de mineurs. Si nous apprenons que des données personnelles
+              d'un mineur ont été collectées sans le consentement d'un parent ou tuteur, nous
+              prendrons les mesures nécessaires pour les supprimer dans les meilleurs délais.
             </p>
 
-            <h2>10. Modifications</h2>
+            <h2>11. Modifications</h2>
             <p>
               Nous pouvons modifier cette politique de confidentialité à tout moment.
               La date de dernière mise à jour est indiquée en haut de cette page.
               Nous vous informerons de toute modification substantielle par email ou via le site.
             </p>
 
-            <h2>11. Contact</h2>
+            <h2>12. Contact</h2>
             <p>
               Pour toute question concernant cette politique ou vos données personnelles :
             </p>

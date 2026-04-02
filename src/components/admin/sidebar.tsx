@@ -28,6 +28,8 @@ import {
   FileEdit,
   BadgeCheck,
   BarChart3,
+  ClipboardList,
+  ShieldAlert,
   Menu,
   X,
 } from 'lucide-react'
@@ -55,6 +57,8 @@ const nav = [
   { name: 'Signalements', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },
   { name: 'RGPD', href: '/admin/rgpd', icon: Lock },
+  { name: 'Registre RGPD', href: '/admin/registre-traitements', icon: ClipboardList },
+  { name: 'DPIA', href: '/admin/dpia', icon: ShieldAlert },
   { name: 'Demandes suppression', href: '/admin/demandes-suppression', icon: Trash2 },
   { name: 'Prospection', href: '/admin/prospection', icon: Megaphone },
   { name: 'Paramètres', href: '/admin/parametres', icon: Settings },

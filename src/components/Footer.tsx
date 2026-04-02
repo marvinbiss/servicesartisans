@@ -186,8 +186,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/droit-acces" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Droit d&apos;acc&egrave;s
+                </Link>
+              </li>
+              <li>
                 <Link href="/droit-opposition" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Droit d&apos;opposition
+                </Link>
+              </li>
+              <li>
+                <Link href="/violation-donnees" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  Violation de données
                 </Link>
               </li>
             </ul>
