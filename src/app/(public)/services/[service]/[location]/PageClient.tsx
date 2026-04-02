@@ -59,7 +59,7 @@ export default function ServiceLocationPageClient({
   // Read initial values from URL params
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
   const [sortOrder, setSortOrder] = useState<'default' | 'name' | 'rating'>(
-    (searchParams.get('sort') as 'default' | 'name' | 'rating') || 'default'
+    (searchParams.get('sort') as 'default' | 'name' | 'rating') || 'name'
   )
 
   // Update URL params when search/sort change

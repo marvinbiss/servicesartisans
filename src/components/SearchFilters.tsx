@@ -6,7 +6,7 @@ import { Filter, ChevronDown, X, BadgeCheck, Star } from 'lucide-react'
 interface FilterState {
   verified: boolean
   minRating: number | null
-  sortBy: 'relevance' | 'rating' | 'name'
+  sortBy: 'rating' | 'name'
 }
 
 interface SearchFiltersProps {
@@ -18,7 +18,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
     minRating: null,
-    sortBy: 'relevance',
+    sortBy: 'name',
   })
   const [isOpen, setIsOpen] = useState(false)
   const sortLabelId = useId()
@@ -34,7 +34,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
     const defaultFilters: FilterState = {
       verified: false,
       minRating: null,
-      sortBy: 'relevance',
+      sortBy: 'name',
     }
     setFilters(defaultFilters)
     onFilterChange(defaultFilters)
@@ -75,9 +75,8 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
               aria-labelledby={sortLabelId}
               className="appearance-none bg-sand-100 border border-sand-300 rounded-lg px-3 py-2 pr-8 text-sm text-charcoal-700 focus:ring-2 focus:ring-primary-400 focus:border-transparent cursor-pointer transition-colors duration-200"
             >
-              <option value="relevance">Pertinence</option>
-              <option value="rating">Meilleures notes</option>
               <option value="name">Nom A-Z</option>
+              <option value="rating">Meilleures notes</option>
             </select>
             <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none" aria-hidden="true" />
           </div>

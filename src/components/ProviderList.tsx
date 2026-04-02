@@ -20,7 +20,7 @@ interface ProviderListProps {
 interface FilterState {
   verified: boolean
   minRating: number | null
-  sortBy: 'relevance' | 'rating' | 'name'
+  sortBy: 'rating' | 'name'
 }
 
 export default function ProviderList({
@@ -35,7 +35,7 @@ export default function ProviderList({
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
     minRating: null,
-    sortBy: 'relevance',
+    sortBy: 'name',
   })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
@@ -77,15 +77,8 @@ export default function ProviderList({
           return a.name.localeCompare(b.name)
         case 'rating':
           return (b.rating_average ?? 0) - (a.rating_average ?? 0)
-        case 'relevance':
-        default: {
-          // STRICT RULE: providers with phone always rank above those without
-          const aPhone = !!a.phone
-          const bPhone = !!b.phone
-          if (aPhone !== bPhone) return aPhone ? -1 : 1
-          if (a.is_verified !== b.is_verified) return a.is_verified ? -1 : 1
-          return 0
-        }
+        default:
+          return a.name.localeCompare(b.name)
       }
     })
   }, [providers, filters, searchQuery, effectiveSortBy])

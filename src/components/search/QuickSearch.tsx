@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, Wrench, X } from 'lucide-react'
+import { Search, MapPin, Wrench, X, Building2 } from 'lucide-react'
 import { services, villesLight, type Ville } from '@/lib/data/france-light'
 
 // Full villes loaded on demand (lazy — only when user types)
@@ -88,7 +88,7 @@ function searchServices(query: string, limit = 5): typeof services {
 }
 
 // ── Types for suggestion items ──────────────────────────────────────
-type SuggestionType = 'service' | 'city' | 'combined'
+type SuggestionType = 'service' | 'city' | 'combined' | 'enterprise'
 
 interface Suggestion {
   type: SuggestionType
@@ -99,6 +99,9 @@ interface Suggestion {
   cityName?: string
   cityDept?: string
   cityPop?: string
+  providerSlug?: string
+  siret?: string
+  verified?: boolean
 }
 
 // ── Build suggestions from input ────────────────────────────────────
@@ -317,10 +320,45 @@ export default function QuickSearch() {
     })
   }, [input])
 
+  // Enterprise search — debounced API call
+  const [enterpriseResults, setEnterpriseResults] = useState<Suggestion[]>([])
+  useEffect(() => {
+    if (!input || input.trim().length < 3) {
+      setEnterpriseResults([])
+      return
+    }
+    const controller = new AbortController()
+    const timer = setTimeout(() => {
+      fetch(`/api/search/suggestions?q=${encodeURIComponent(input.trim())}`, { signal: controller.signal })
+        .then(r => r.json())
+        .then(data => {
+          const results: Suggestion[] = (data.suggestions || [])
+            .filter((s: { type: string }) => s.type === 'provider')
+            .slice(0, 3)
+            .map((s: { label: string; slug: string; siret?: string; verified?: boolean; subtitle?: string }) => ({
+              type: 'enterprise' as SuggestionType,
+              label: s.label,
+              providerSlug: s.slug,
+              siret: s.siret,
+              verified: s.verified,
+              cityName: s.subtitle,
+            }))
+          setEnterpriseResults(results)
+        })
+        .catch(() => {})
+    }, 300)
+    return () => { clearTimeout(timer); controller.abort() }
+  }, [input])
+
+  // Merge local suggestions + enterprise results
+  const allSuggestions = useMemo(() => {
+    return [...suggestions, ...enterpriseResults].slice(0, 10)
+  }, [suggestions, enterpriseResults])
+
   // Reset highlight when suggestions change
   useEffect(() => {
     setHighlightedIndex(-1)
-  }, [suggestions.length, input])
+  }, [allSuggestions.length, input])
 
   // Scroll highlighted item into view
   useEffect(() => {
@@ -352,6 +390,8 @@ export default function QuickSearch() {
       router.push(`/services/${suggestion.serviceSlug}`)
     } else if (suggestion.type === 'city' && suggestion.citySlug) {
       router.push(`/villes/${suggestion.citySlug}`)
+    } else if (suggestion.type === 'enterprise' && suggestion.providerSlug) {
+      router.push(`/artisan/${suggestion.providerSlug}`)
     }
   }, [router])
 
@@ -360,26 +400,26 @@ export default function QuickSearch() {
     e?.preventDefault()
     if (!input.trim()) return
 
-    if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
-      navigateToSuggestion(suggestions[highlightedIndex])
-    } else if (suggestions.length > 0) {
-      navigateToSuggestion(suggestions[0])
+    if (highlightedIndex >= 0 && allSuggestions[highlightedIndex]) {
+      navigateToSuggestion(allSuggestions[highlightedIndex])
+    } else if (allSuggestions.length > 0) {
+      navigateToSuggestion(allSuggestions[0])
     } else {
       // Fallback: go to search page with query
       router.push(`/recherche?q=${encodeURIComponent(input.trim())}`)
       setShowDropdown(false)
       setInput('')
     }
-  }, [input, highlightedIndex, suggestions, navigateToSuggestion, router])
+  }, [input, highlightedIndex, allSuggestions, navigateToSuggestion, router])
 
   // Keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!showDropdown || suggestions.length === 0) {
+    if (!showDropdown || allSuggestions.length === 0) {
       if (e.key === 'Enter') {
         e.preventDefault()
         handleSubmit()
       }
-      if (e.key === 'ArrowDown' && suggestions.length > 0) {
+      if (e.key === 'ArrowDown' && allSuggestions.length > 0) {
         e.preventDefault()
         setShowDropdown(true)
         setHighlightedIndex(0)
@@ -391,19 +431,19 @@ export default function QuickSearch() {
       case 'ArrowDown':
         e.preventDefault()
         setHighlightedIndex(prev =>
-          prev < suggestions.length - 1 ? prev + 1 : 0
+          prev < allSuggestions.length - 1 ? prev + 1 : 0
         )
         break
       case 'ArrowUp':
         e.preventDefault()
         setHighlightedIndex(prev =>
-          prev > 0 ? prev - 1 : suggestions.length - 1
+          prev > 0 ? prev - 1 : allSuggestions.length - 1
         )
         break
       case 'Enter':
         e.preventDefault()
-        if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
-          navigateToSuggestion(suggestions[highlightedIndex])
+        if (highlightedIndex >= 0 && allSuggestions[highlightedIndex]) {
+          navigateToSuggestion(allSuggestions[highlightedIndex])
         } else {
           handleSubmit()
         }
@@ -417,13 +457,14 @@ export default function QuickSearch() {
         setShowDropdown(false)
         break
     }
-  }, [showDropdown, suggestions, highlightedIndex, navigateToSuggestion, handleSubmit])
+  }, [showDropdown, allSuggestions, highlightedIndex, navigateToSuggestion, handleSubmit])
 
   // Determine the "query" part to highlight in suggestions
   // For a combined suggestion, highlight the city portion from the input
   const getHighlightQuery = (suggestion: Suggestion): string => {
     if (suggestion.type === 'service') return input.trim()
     if (suggestion.type === 'city') return input.trim()
+    if (suggestion.type === 'enterprise') return input.trim()
     // For combined, we don't highlight the label directly
     return ''
   }
@@ -435,6 +476,9 @@ export default function QuickSearch() {
     }
     if (type === 'city') {
       return <MapPin className="w-4 h-4 text-rose-500" />
+    }
+    if (type === 'enterprise') {
+      return <Building2 className="w-4 h-4 text-amber-500" />
     }
     // combined
     return <Search className="w-4 h-4 text-emerald-500" />
@@ -462,10 +506,10 @@ export default function QuickSearch() {
               }
             }}
             onKeyDown={handleKeyDown}
-            placeholder="Rechercher un artisan, un service, une ville..."
+            placeholder="Rechercher un artisan, service, ville, SIRET ou SIREN..."
             autoComplete="off"
             aria-label="Recherche rapide"
-            aria-expanded={showDropdown && suggestions.length > 0}
+            aria-expanded={showDropdown && allSuggestions.length > 0}
             aria-haspopup="listbox"
             aria-autocomplete="list"
             className="w-full rounded-full bg-gray-50 border border-gray-200 pl-10 pr-10 py-2 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-all duration-200 hover:border-gray-300 hover:shadow-sm focus:border-blue-400 focus:bg-white focus:shadow-md focus:ring-2 focus:ring-blue-100"
@@ -499,14 +543,14 @@ export default function QuickSearch() {
       </form>
 
       {/* Suggestions Dropdown */}
-      {showDropdown && suggestions.length > 0 && (
+      {showDropdown && allSuggestions.length > 0 && (
         <div
           className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden"
           role="listbox"
           aria-label="Suggestions"
         >
           <div ref={listRef} className="max-h-80 overflow-y-auto py-1">
-            {suggestions.map((suggestion, idx) => {
+            {allSuggestions.map((suggestion, idx) => {
               const isHighlighted = idx === highlightedIndex
               const highlightQuery = getHighlightQuery(suggestion)
 
@@ -534,7 +578,9 @@ export default function QuickSearch() {
                         ? 'bg-blue-100'
                         : suggestion.type === 'city'
                           ? 'bg-rose-100'
-                          : 'bg-emerald-100'
+                          : suggestion.type === 'enterprise'
+                            ? 'bg-amber-100'
+                            : 'bg-emerald-100'
                       : 'bg-gray-100'
                   }`}>
                     <SuggestionIcon type={suggestion.type} />
@@ -568,6 +614,13 @@ export default function QuickSearch() {
                         {suggestion.cityPop ? ` · ${suggestion.cityPop}` : ''}
                       </div>
                     )}
+                    {suggestion.type === 'enterprise' && (
+                      <div className="text-xs text-gray-400 truncate">
+                        {suggestion.siret ? `SIREN ${suggestion.siret.slice(0, 9)} · SIRET ${suggestion.siret}` : ''}
+                        {suggestion.siret && suggestion.cityName ? ' · ' : ''}
+                        {suggestion.cityName || ''}
+                      </div>
+                    )}
                   </div>
 
                   {/* Type badge */}
@@ -576,9 +629,11 @@ export default function QuickSearch() {
                       ? 'bg-blue-50 text-blue-600'
                       : suggestion.type === 'city'
                         ? 'bg-rose-50 text-rose-600'
-                        : 'bg-emerald-50 text-emerald-600'
+                        : suggestion.type === 'enterprise'
+                          ? 'bg-amber-50 text-amber-600'
+                          : 'bg-emerald-50 text-emerald-600'
                   }`}>
-                    {suggestion.type === 'service' ? 'Service' : suggestion.type === 'city' ? 'Ville' : 'Service + Ville'}
+                    {suggestion.type === 'service' ? 'Service' : suggestion.type === 'city' ? 'Ville' : suggestion.type === 'enterprise' ? 'Entreprise' : 'Service + Ville'}
                   </span>
                 </button>
               )

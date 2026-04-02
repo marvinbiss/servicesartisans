@@ -39,9 +39,9 @@ export async function GET(request: NextRequest) {
     const [providersResult, servicesResult] = await Promise.all([
       supabase
         .from('providers')
-        .select('id, name, slug, specialty, address_city, is_verified')
+        .select('id, name, slug, specialty, address_city, is_verified, siret')
         .eq('is_active', true)
-        .ilike('name', `%${sanitized}%`)
+        .or(`name.ilike.%${sanitized}%,siret.ilike.%${sanitized}%`)
         .order('is_verified', { ascending: false })
         .limit(5),
       supabase
@@ -61,6 +61,7 @@ export async function GET(request: NextRequest) {
       subtitle?: string
       icon?: string
       verified?: boolean
+      siret?: string
     }> = []
 
     // Ajouter les services en premier (plus pertinent pour la recherche)
@@ -89,6 +90,7 @@ export async function GET(request: NextRequest) {
             .filter(Boolean)
             .join(' — ') || undefined,
           verified: provider.is_verified || false,
+          siret: provider.siret || undefined,
         })
       }
     }
