@@ -130,12 +130,21 @@ export default function ProviderCard({
 
       {/* Boutons */}
       <div className="flex gap-3 relative z-20 mt-4">
-        <Link
-          href={`${providerUrl}#devis`}
-          className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
-        >
-          Demander un devis
-        </Link>
+        {provider.user_id ? (
+          <Link
+            href={`${providerUrl}#devis`}
+            className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
+          >
+            Demander un devis
+          </Link>
+        ) : (
+          <Link
+            href={providerUrl}
+            className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
+          >
+            Voir le profil
+          </Link>
+        )}
         <Link
           href={providerUrl}
           className="hidden md:flex items-center justify-center gap-1 px-5 py-3 min-h-[48px] border-2 border-sand-400 text-charcoal-700 rounded-xl font-semibold hover:bg-sand-100 hover:border-primary-200 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"

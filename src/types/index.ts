@@ -70,6 +70,8 @@ export interface Provider {
   team_size?: number
   services_offered?: string[]
   bio?: string
+  user_id?: string | null
+  claimed_at?: string | null
   // GUARD: Do NOT add is_premium, trust_badge, trust_score here.
   // Legacy fields live in src/types/legacy/ (LegacyProvider).
   // Relations

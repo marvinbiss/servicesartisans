@@ -57,9 +57,10 @@ interface Provider {
 interface ProviderDetailProps {
   provider: Provider
   showQuoteForm?: boolean
+  isClaimed?: boolean
 }
 
-export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetailProps) {
+export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = false }: ProviderDetailProps) {
   const [activeTab, setActiveTab] = useState<'about' | 'services' | 'reviews'>('about')
 
   const renderStars = (rating: number) => {
@@ -306,7 +307,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            {showQuoteForm && (
+            {showQuoteForm && isClaimed && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Demander un devis

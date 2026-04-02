@@ -51,6 +51,7 @@ interface ProviderListRow {
   siret: string | null
   latitude: number | null
   longitude: number | null
+  user_id: string | null
   created_at: string | null
   updated_at: string | null
 }
@@ -127,6 +128,7 @@ const PROVIDER_LIST_SELECT = [
   'rating_average', 'review_count',
   'phone', 'siret',
   'latitude', 'longitude',
+  'user_id',
   'created_at', 'updated_at',
 ].join(',')
 

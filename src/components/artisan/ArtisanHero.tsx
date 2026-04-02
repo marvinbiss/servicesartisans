@@ -17,9 +17,10 @@ const DevisBottomSheet = dynamic(
 
 interface ArtisanHeroProps {
   artisan: LegacyArtisan
+  isClaimed?: boolean
 }
 
-export function ArtisanHero({ artisan }: ArtisanHeroProps) {
+export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
   const [isDevisOpen, setIsDevisOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
@@ -174,43 +175,45 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               </div>
             )}
 
-            {/* Prominent CTA — above the fold */}
-            <div className="mt-5">
-              <motion.button
-                whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-                onClick={() => {
-                  trackEvent('artisan_devis_click', {
-                    artisanId: artisan.id,
-                    artisanName: artisan.business_name || displayName,
-                    source: 'hero_cta',
-                  })
-                  const isDesktop = window.matchMedia('(min-width: 768px)').matches
-                  if (isDesktop) {
-                    const devisSection = document.getElementById('devis')
-                    if (devisSection) {
-                      devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            {/* Prominent CTA — above the fold (only for claimed profiles) */}
+            {isClaimed && (
+              <div className="mt-5">
+                <motion.button
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                  onClick={() => {
+                    trackEvent('artisan_devis_click', {
+                      artisanId: artisan.id,
+                      artisanName: artisan.business_name || displayName,
+                      source: 'hero_cta',
+                    })
+                    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+                    if (isDesktop) {
+                      const devisSection = document.getElementById('devis')
+                      if (devisSection) {
+                        devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      } else {
+                        window.location.href = '/devis'
+                      }
                     } else {
-                      window.location.href = '/devis'
+                      setIsDevisOpen(true)
                     }
-                  } else {
-                    setIsDevisOpen(true)
-                  }
-                }}
-                className="w-full sm:w-auto py-3.5 px-8 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta hover:shadow-lg transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
-                aria-label={`Demander un devis gratuit à ${displayName}`}
-              >
-                <FileText className="w-5 h-5" aria-hidden="true" />
-                Demander un devis gratuit
-              </motion.button>
-              <p className="text-xs text-charcoal-500 mt-2 flex items-center gap-1.5">
-                <span>Gratuit</span>
-                <span className="text-charcoal-300" aria-hidden="true">·</span>
-                <span>Sans engagement</span>
-                <span className="text-charcoal-300" aria-hidden="true">·</span>
-                <span>Réponse sous 24h</span>
-              </p>
-            </div>
+                  }}
+                  className="w-full sm:w-auto py-3.5 px-8 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta hover:shadow-lg transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
+                  aria-label={`Demander un devis gratuit à ${displayName}`}
+                >
+                  <FileText className="w-5 h-5" aria-hidden="true" />
+                  Demander un devis gratuit
+                </motion.button>
+                <p className="text-xs text-charcoal-500 mt-2 flex items-center gap-1.5">
+                  <span>Gratuit</span>
+                  <span className="text-charcoal-300" aria-hidden="true">·</span>
+                  <span>Sans engagement</span>
+                  <span className="text-charcoal-300" aria-hidden="true">·</span>
+                  <span>Réponse sous 24h</span>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
