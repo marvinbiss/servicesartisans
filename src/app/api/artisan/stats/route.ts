@@ -133,7 +133,7 @@ export async function GET(request: Request) {
     // -----------------------------------------------------------------------
     const { data: providerRows } = await supabase
       .from('providers')
-      .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, bio, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
+      .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
       .eq('user_id', user.id)
       .eq('is_active', true)
       .limit(1)
@@ -440,7 +440,7 @@ async function getLegacyStats(
   // Provider record — use limit(1) instead of single() to avoid crash on multi-provider
   const { data: legacyProviderRows } = await supabase
     .from('providers')
-    .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, bio, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
+    .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
     .eq('user_id', user.id)
     .eq('is_active', true)
     .limit(1)
