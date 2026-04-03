@@ -277,7 +277,13 @@ export default function ArtisanPageClient({
             <div className="lg:col-span-2 space-y-6">
               {/* 1. Hero — first impression, identity, trust signals */}
               <section aria-label="Informations principales">
-                <ArtisanHero artisan={artisan} isClaimed={isClaimed} />
+                <ArtisanHero
+                  artisan={artisan}
+                  isClaimed={isClaimed}
+                  specialty={specialty}
+                  specialtySlug={specialtySlug}
+                  city={city}
+                />
               </section>
               {/* 1b. Quick Quote CTA — only if claimed */}
               {isClaimed && (

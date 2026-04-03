@@ -2,8 +2,11 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, CheckCircle } from 'lucide-react'
+import { MessageCircle, CheckCircle, Phone } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+
+const URGENCY_TRADES = ['plombier', 'serrurier', 'electricien', 'chauffagiste', 'vitrier', 'depanneur']
 
 interface UnclaimedMobileCTAProps {
   specialty: string
@@ -11,6 +14,7 @@ interface UnclaimedMobileCTAProps {
   city: string
   citySlug: string
   weeklyDevisCount?: number
+  isUrgencyTrade?: boolean
 }
 
 export function UnclaimedMobileCTA({
@@ -19,8 +23,11 @@ export function UnclaimedMobileCTA({
   city,
   citySlug,
   weeklyDevisCount = 0,
+  isUrgencyTrade = false,
 }: UnclaimedMobileCTAProps) {
   const [visible, setVisible] = useState(false)
+
+  const isUrgent = isUrgencyTrade || URGENCY_TRADES.includes(specialtySlug)
 
   // Show after scrolling past 45% of the page
   useEffect(() => {
@@ -53,6 +60,14 @@ export function UnclaimedMobileCTA({
     }
   }, [specialty, specialtySlug, city, citySlug])
 
+  const handlePhoneClick = useCallback(() => {
+    trackEvent('phone_click', {
+      source: 'unclaimed_mobile_cta',
+      specialty,
+      city,
+    })
+  }, [specialty, city])
+
   return (
     <AnimatePresence>
       {visible && (
@@ -71,14 +86,49 @@ export function UnclaimedMobileCTA({
             </p>
           )}
 
-          {/* Main CTA button */}
-          <button
-            onClick={handleClick}
-            className="w-full py-4 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base active:scale-[0.98] transition-all touch-manipulation flex items-center justify-center gap-2"
-          >
-            <MessageCircle className="w-5 h-5 flex-shrink-0" />
-            Devis gratuit {specialty} {city}
-          </button>
+          {/* CTA buttons */}
+          <div className="flex items-center gap-2">
+            {isUrgent ? (
+              <>
+                {/* Urgent: 50/50 split — phone PRIMARY + devis SECONDARY */}
+                <a
+                  href={PHONE_TEL}
+                  className="flex-1 h-12 flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-600 text-white font-bold text-base rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation"
+                  aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
+                  onClick={handlePhoneClick}
+                >
+                  <Phone className="w-5 h-5 flex-shrink-0" />
+                  Appeler
+                </a>
+                <button
+                  onClick={handleClick}
+                  className="flex-1 h-12 px-4 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base active:scale-[0.96] transition-all touch-manipulation flex items-center justify-center gap-2"
+                >
+                  <MessageCircle className="w-5 h-5 flex-shrink-0" />
+                  Devis gratuit
+                </button>
+              </>
+            ) : (
+              <>
+                {/* Non-urgent: small square phone button + large devis button */}
+                <a
+                  href={PHONE_TEL}
+                  className="w-12 h-12 flex items-center justify-center bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
+                  aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
+                  onClick={handlePhoneClick}
+                >
+                  <Phone className="w-5 h-5" />
+                </a>
+                <button
+                  onClick={handleClick}
+                  className="flex-1 h-12 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base active:scale-[0.98] transition-all touch-manipulation flex items-center justify-center gap-2"
+                >
+                  <MessageCircle className="w-5 h-5 flex-shrink-0" />
+                  Devis gratuit {specialty} {city}
+                </button>
+              </>
+            )}
+          </div>
 
           {/* Trust line */}
           <p className="text-[11px] text-charcoal-500 text-center mt-2 flex items-center justify-center gap-1">
