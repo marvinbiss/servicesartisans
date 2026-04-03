@@ -363,8 +363,8 @@ export const existingArticles: Record<string, BlogArticle> = {
   'prix-plombier-2026-tarifs-horaires': {
     title: 'Prix Plombier 2026 : Tarifs Horaires',
     excerpt: 'Tarif horaire moyen, coût d\'un dépannage, prix des installations... Tous les tarifs plomberie actualisés pour 2026.',
-    metaTitle: 'Prix Plombier 2026 : 45-75€/h — Barème officiel',
-    metaDescription: 'Tarif horaire moyen et prix par intervention en 2026. Débouchage, fuite, chauffe-eau : coûts réels constatés. Comparez 3 devis gratuits.',
+    metaTitle: 'Prix Plombier 2026 : Tarifs Dépannage, Réparation et Devis Gratuit',
+    metaDescription: 'Combien coûte un plombier en 2026 ? Tarifs dépannage, réparation, installation. Comparez les prix et demandez un devis gratuit immédiat.',
     content: [
       "Les tarifs des plombiers évoluent chaque année en fonction de l'inflation, du coût des matériaux et de la demande. En 2026, les prix restent stables par rapport à 2025, avec une légère hausse de 2 à 3 % sur la main-d'œuvre. Voici le guide complet et actualisé des prix de plomberie pour vous aider à estimer votre budget et [comparer efficacement les devis](/blog/devis-travaux-comment-comparer-choisir). Trouvez un [plombier qualifié](/services/plombier) près de chez vous.",
       "## Tarif horaire moyen en 2026\n\n### Les fourchettes par région\n\nLe tarif horaire moyen d'un plombier en 2026 est de 45 à 75 euros HT en province et de 65 à 95 euros HT en Île-de-France. Ces tarifs n'incluent pas les fournitures ni les frais de déplacement.\n\n### Les frais de déplacement\n\nLe forfait déplacement varie de 20 à 50 € selon la distance. Certains plombiers l'incluent dans le tarif horaire, d'autres le facturent en supplément. Vérifiez ce point dans le devis.\n\n:::budget\n| Zone | Tarif horaire HT | Déplacement |\n| Province (ville moyenne) | 45 - 65 € | 20 - 30 € |\n| Grande métropole | 55 - 75 € | 25 - 40 € |\n| Île-de-France | 65 - 95 € | 30 - 50 € |\n:::",
@@ -548,8 +548,8 @@ export const existingArticles: Record<string, BlogArticle> = {
   'prix-electricien-2026-tarifs-travaux': {
     title: 'Prix Électricien 2026 : Tarifs Travaux',
     excerpt: 'Mise aux normes, installation, dépannage... Tous les prix des travaux d\'électricité en 2026 pour estimer votre budget et comparer les devis.',
-    metaTitle: 'Prix Électricien 2026 : 40-85€/h — Guide complet',
-    metaDescription: 'Tarifs électricien 2026 : mise aux normes 70-120€/m², dépannage, installation. Prix réels par région et type de travaux.',
+    metaTitle: 'Prix Électricien 2026 : Tarifs au m², Intervention et Devis Gratuit',
+    metaDescription: 'Découvrez les tarifs d\'un électricien en 2026 : prix au m², coût intervention, dépannage. Comparez et obtenez un devis gratuit en 2 minutes.',
     content: [
       "Les travaux d'électricité sont parmi les plus techniques et les plus réglementés du bâtiment. Ils doivent obligatoirement être réalisés dans le respect de la [norme NF C 15-100](/blog/electricite-normes-securite) et, pour les installations neuves ou entièrement rénovées, validés par un contrôle Consuel. Voici le guide complet des prix d'un électricien en 2026. Trouvez un [électricien qualifié](/services/electricien) près de chez vous pour un devis gratuit.",
       "## Tarif horaire moyen\n\n### Les fourchettes par région\n\nLe tarif horaire moyen d'un électricien est de 40 à 65 euros HT en province et de 55 à 85 euros HT en Île-de-France. Ces tarifs couvrent la main-d'œuvre uniquement.\n\n:::budget\n| Zone | Tarif horaire HT |\n| Province | 40 - 65 € |\n| Grande métropole | 50 - 75 € |\n| Île-de-France | 55 - 85 € |\n:::",

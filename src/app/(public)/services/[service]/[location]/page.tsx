@@ -112,8 +112,8 @@ interface PageProps {
 // Valid slug: lowercase alphanumeric + hyphens, 2-80 chars, no leading/trailing hyphen
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
 
-/** Truncate title to ~42 chars to leave room for " | ServicesArtisans" suffix (18 chars → total ~60, Google's display limit) */
-function truncateTitle(title: string, maxLen = 42): string {
+/** Truncate title to ~60 chars for Google's display limit */
+function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -175,18 +175,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const seoPairs = hasProviders
     ? [
-        { title: `${serviceName} ${locationName} (2026) — ${providerCount} vérifiés`, h1: `${serviceName} à ${locationName}` },
-        { title: `${serviceName} à ${locationName} — ${providerCount} artisans`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
-        { title: `${serviceName} ${locationName} — ${providerCount} pros`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${serviceName} ${locationName} (2026) — Devis gratuit`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${serviceName} ${locationName} 2026 — Devis Gratuit`, h1: `${serviceName} à ${locationName}` },
+        { title: `${serviceName} à ${locationName} : ${providerCount} Pros + Devis`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
+        { title: `${serviceName} ${locationName} 2026 : ${providerCount} Artisans`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${serviceName} à ${locationName} — Devis Gratuit 2026`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
     : [
-        { title: `${serviceName} ${locationName} (2026) — Annuaire`, h1: `${serviceName} à ${locationName}` },
-        { title: `${serviceName} à ${locationName} — Devis Gratuit`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} 2026`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
-        { title: `${serviceName} à ${locationName} — Artisans vérifiés`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${serviceName} ${locationName} : devis gratuit 2026`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        { title: `${serviceName} ${locationName} 2026 — Devis Gratuit`, h1: `${serviceName} à ${locationName}` },
+        { title: `${serviceName} à ${locationName} : Devis Gratuit 2026`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
+        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
+        { title: `${serviceName} à ${locationName} — Artisans 2026`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
+        { title: `${serviceName} ${locationName} : Devis Gratuit 2026`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
       ]
 
   const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)

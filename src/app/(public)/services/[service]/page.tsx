@@ -88,7 +88,7 @@ interface PageProps {
   params: Promise<{ service: string }>
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -121,11 +121,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`hub-title-${serviceSlug}`))
   const titleTemplates = [
-    `${serviceName} en France — Devis Gratuit 2026`,
-    `${serviceName} : tarifs et devis gratuit 2026`,
-    `${serviceName} France — Artisans vérifiés`,
-    `${serviceName} — Comparez les artisans 2026`,
-    `${serviceName} en France — Artisans qualifiés`,
+    `${serviceName} France 2026 : Devis Gratuit`,
+    `${serviceName} : Artisans Vérifiés + Devis Gratuit`,
+    `${serviceName} France 2026 — Comparez + Devis`,
+    `${serviceName} : Tarifs 2026 + Devis Gratuit`,
+    `${serviceName} 2026 — Artisans Vérifiés en France`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

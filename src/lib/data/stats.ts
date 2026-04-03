@@ -164,15 +164,24 @@ export async function getHomepageData(): Promise<HomepageData> {
 
   try {
     const supabase = createAdminClient()
-    const { getProviderCountByService } = await import('@/lib/supabase')
 
     const [countsResults, providersRes, reviewsRes] = await Promise.all([
-      Promise.all(
-        HOMEPAGE_SERVICE_SLUGS.map(async (slug) => {
-          const count = await getProviderCountByService(slug)
-          return [slug, count] as const
-        })
-      ),
+      // Batch: single query instead of N+1 sequential calls
+      supabase
+        .from('providers')
+        .select('specialty')
+        .eq('is_active', true)
+        .in('specialty', HOMEPAGE_SERVICE_SLUGS)
+        .then(({ data }) => {
+          const counts = new Map<string, number>()
+          for (const slug of HOMEPAGE_SERVICE_SLUGS) counts.set(slug, 0)
+          if (data) {
+            for (const row of data) {
+              if (row.specialty) counts.set(row.specialty, (counts.get(row.specialty) || 0) + 1)
+            }
+          }
+          return Array.from(counts.entries()) as [string, number][]
+        }),
       supabase
         .from('providers')
         .select('name, slug, specialty, address_city, address_postal_code, is_verified, rating_average, review_count, stable_id')

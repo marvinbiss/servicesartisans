@@ -31,6 +31,15 @@ function toDateStr(d: string | null | undefined): string | undefined {
 }
 
 /**
+ * Normalize a string for use as a Map key.
+ * Must match the normalizeName() in src/app/sitemap.ts:
+ * strip diacritics via NFD decomposition, then lowercase + trim.
+ */
+function normalizeKey(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
+}
+
+/**
  * Safely create admin client. Returns null if env vars are missing
  * (e.g., during local dev build without Supabase credentials).
  */
@@ -79,7 +88,7 @@ export async function getLastmodByCity(): Promise<LastmodMap> {
     if (error || !data) return map
 
     for (const row of data) {
-      const city = row.address_city?.toLowerCase().trim()
+      const city = row.address_city ? normalizeKey(row.address_city) : null
       if (!city) continue
       // First occurrence = most recent (ordered DESC)
       if (!map.has(city)) {
@@ -114,7 +123,7 @@ export async function getLastmodByDepartment(): Promise<LastmodMap> {
     if (error || !data) return map
 
     for (const row of data) {
-      const dept = row.address_department?.toLowerCase().trim()
+      const dept = row.address_department ? normalizeKey(row.address_department) : null
       if (!dept) continue
       if (!map.has(dept)) {
         const d = toDateStr(row.updated_at)
@@ -148,7 +157,7 @@ export async function getLastmodByRegion(): Promise<LastmodMap> {
     if (error || !data) return map
 
     for (const row of data) {
-      const region = row.address_region?.toLowerCase().trim()
+      const region = row.address_region ? normalizeKey(row.address_region) : null
       if (!region) continue
       if (!map.has(region)) {
         const d = toDateStr(row.updated_at)
@@ -182,7 +191,7 @@ export async function getLastmodByService(): Promise<LastmodMap> {
     if (error || !data) return map
 
     for (const row of data) {
-      const svc = row.specialty?.toLowerCase().trim()
+      const svc = row.specialty ? normalizeKey(row.specialty) : null
       if (!svc) continue
       if (!map.has(svc)) {
         const d = toDateStr(row.updated_at)
@@ -218,8 +227,8 @@ export async function getLastmodByDeptService(): Promise<LastmodMap> {
     if (error || !data) return map
 
     for (const row of data) {
-      const dept = row.address_department?.toLowerCase().trim()
-      const svc = row.specialty?.toLowerCase().trim()
+      const dept = row.address_department ? normalizeKey(row.address_department) : null
+      const svc = row.specialty ? normalizeKey(row.specialty) : null
       if (!dept || !svc) continue
       const key = `${dept}::${svc}`
       if (!map.has(key)) {
@@ -255,8 +264,8 @@ export async function getLastmodByRegionService(): Promise<LastmodMap> {
     if (error || !data) return map
 
     for (const row of data) {
-      const region = row.address_region?.toLowerCase().trim()
-      const svc = row.specialty?.toLowerCase().trim()
+      const region = row.address_region ? normalizeKey(row.address_region) : null
+      const svc = row.specialty ? normalizeKey(row.specialty) : null
       if (!region || !svc) continue
       const key = `${region}::${svc}`
       if (!map.has(key)) {
@@ -309,7 +318,7 @@ export async function getLastReviewByService(): Promise<LastmodMap> {
     const specialtyByUserId = new Map<string, string>()
     for (const p of providers) {
       if (p.user_id && p.specialty) {
-        specialtyByUserId.set(p.user_id, p.specialty.toLowerCase().trim())
+        specialtyByUserId.set(p.user_id, normalizeKey(p.specialty))
       }
     }
 

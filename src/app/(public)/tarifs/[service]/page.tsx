@@ -59,6 +59,42 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const trade = tradeContent[service]
   if (!trade) return {}
 
+  // SEO overrides for high-impression pages (GSC CTR optimization)
+  const metaOverrides: Record<string, { title: string; description: string }> = {
+    electricien: {
+      title: 'Tarif Électricien 2026 : Grille Complète + Devis Gratuit Immédiat',
+      description: 'Grille tarifaire complète électricien 2026 : prix installation, rénovation, dépannage. Estimez votre budget et obtenez un devis gratuit.',
+    },
+    plombier: {
+      title: 'Tarif Plombier 2026 : Prix Intervention, Installation — Devis Gratuit',
+      description: 'Tous les tarifs plombier 2026 : intervention urgente, installation sanitaire, chauffe-eau. Comparez et recevez un devis gratuit sans engagement.',
+    },
+  }
+
+  if (metaOverrides[service]) {
+    const override = metaOverrides[service]
+    const serviceImage = getServiceImage(service)
+    return {
+      title: override.title,
+      description: override.description,
+      alternates: { canonical: `${SITE_URL}/tarifs/${service}` },
+      openGraph: {
+        locale: 'fr_FR',
+        title: override.title,
+        description: override.description,
+        url: `${SITE_URL}/tarifs/${service}`,
+        type: 'website',
+        siteName: 'ServicesArtisans',
+        images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Tarifs ${trade.name}` }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: override.title,
+        description: override.description,
+      },
+    }
+  }
+
   const tradeLower = trade.name.toLowerCase()
 
   const priceMin = trade.priceRange.min
