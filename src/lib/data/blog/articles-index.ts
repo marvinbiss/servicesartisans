@@ -64,6 +64,36 @@ const existingEmojis: Record<string, string> = {
   'renovation-salle-de-bain-budget-etapes': '🚿',
   'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026': '🔥',
   'droits-obligations-travaux-chez-soi': '⚖️',
+  // Batch prix-btp
+  'prix-terrassier-2026-tarifs-travaux': '🏗️',
+  'prix-charpentier-2026-tarifs-travaux': '🪵',
+  'prix-zingueur-2026-tarifs-travaux': '💧',
+  'prix-etancheiste-2026-tarifs-travaux': '🛡️',
+  'prix-platrier-2026-tarifs-travaux': '🏠',
+  // Batch prix-metal-bois
+  'prix-metallier-2026-tarifs-travaux': '⚙️',
+  'prix-ferronnier-2026-tarifs-travaux': '🔗',
+  'prix-poseur-de-parquet-2026-tarifs-travaux': '🪵',
+  'prix-miroitier-2026-tarifs-travaux': '🪞',
+  'prix-storiste-2026-tarifs-travaux': '🏠',
+  // Batch prix-design
+  'prix-architecte-interieur-2026-tarifs-travaux': '📐',
+  'prix-decorateur-2026-tarifs-travaux': '🎨',
+  'prix-ramoneur-2026-tarifs-travaux': '🔥',
+  'prix-paysagiste-2026-tarifs-travaux': '🌳',
+  'prix-pisciniste-2026-tarifs-travaux': '🏊',
+  // Batch prix-tech
+  'prix-alarme-securite-2026-tarifs-travaux': '🚨',
+  'prix-antenniste-2026-tarifs-travaux': '📡',
+  'prix-ascensoriste-2026-tarifs-travaux': '🛗',
+  'prix-diagnostiqueur-2026-tarifs-travaux': '📋',
+  'prix-geometre-2026-tarifs-travaux': '📍',
+  // Batch prix-services
+  'prix-desinsectisation-2026-tarifs-travaux': '🐛',
+  'prix-deratisation-2026-tarifs-travaux': '🐭',
+  'prix-demenageur-2026-tarifs-travaux': '🚚',
+  'prix-isolation-thermique-2026-tarifs-travaux': '❄️',
+  'prix-renovation-energetique-2026-tarifs-travaux': '🌱',
 }
 
 /** Normalize non-accented category names to their accented equivalents */
