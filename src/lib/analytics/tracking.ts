@@ -31,6 +31,11 @@ export type BookingEvent =
   | 'header_devis_click'
   | 'client_signup'
   | 'artisan_signup'
+  | 'unclaimed_devis_click'
+  | 'unclaimed_exit_intent_click'
+  | 'unclaimed_quote_service_selected'
+  | 'unclaimed_quote_submitted'
+  | 'artisan_listing_click'
 
 export interface TrackingData {
   event: BookingEvent

@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Star, MapPin, ChevronLeft, ChevronRight, Users, BadgeCheck } from 'lucide-react'
+import { Star, MapPin, ChevronLeft, ChevronRight, Users, BadgeCheck, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getArtisanUrl } from '@/lib/utils'
 
@@ -22,9 +22,10 @@ interface SimilarArtisan {
 interface ArtisanSimilarProps {
   artisan: LegacyArtisan
   similarArtisans?: SimilarArtisan[]
+  isClaimed?: boolean
 }
 
-export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSimilarProps) {
+export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed = true }: ArtisanSimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Fallback: show hub link when no similar artisans available
@@ -37,10 +38,16 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
       <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
-          Artisans similaires
+          {!isClaimed
+            ? `Professionnels vérifiés disponibles à ${_artisan.city}`
+            : 'Artisans similaires'
+          }
         </h2>
         <p className="text-gray-600 mb-4">
-          Découvrez d'autres {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city}
+          {!isClaimed
+            ? `Ces artisans ont rejoint ServicesArtisans et acceptent les demandes de devis`
+            : `Découvrez d'autres ${_artisan.specialty?.toLowerCase() || 'artisans'} à ${_artisan.city}`
+          }
         </p>
         <Link
           href={hubUrl}
@@ -64,6 +71,10 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
     }
   }
 
+  const hubUrl = _artisan.specialty_slug && _artisan.city_slug
+    ? `/services/${_artisan.specialty_slug}/${_artisan.city_slug}`
+    : null
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -71,10 +82,13 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
       transition={{ duration: 0.4, delay: 0.6 }}
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-2">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
-          Artisans similaires
+          {!isClaimed
+            ? `Professionnels vérifiés disponibles à ${_artisan.city}`
+            : 'Artisans similaires'
+          }
         </h2>
 
         {/* Navigation buttons */}
@@ -99,6 +113,14 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
           </motion.button>
         </div>
       </div>
+
+      {/* Subtitle for unclaimed */}
+      {!isClaimed && (
+        <p className="text-sm text-gray-500 mb-4">
+          Ces artisans ont rejoint ServicesArtisans et acceptent les demandes de devis
+        </p>
+      )}
+      {isClaimed && <div className="mb-4" />}
 
       {/* Horizontal scroll container */}
       <div
@@ -144,6 +166,12 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                       Vérifié
                     </span>
                   )}
+                  {!isClaimed && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium">
+                      <CheckCircle className="w-3 h-3" aria-hidden="true" />
+                      Disponible
+                    </span>
+                  )}
                 </div>
 
                 {/* Info */}
@@ -164,6 +192,18 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
           </motion.div>
         ))}
       </div>
+
+      {/* CTA bottom link for unclaimed */}
+      {!isClaimed && hubUrl && (
+        <div className="mt-4 pt-4 border-t border-stone-200/60 text-center">
+          <Link
+            href={hubUrl}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:text-primary-700 transition-colors"
+          >
+            Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
+          </Link>
+        </div>
+      )}
     </motion.div>
   )
 }

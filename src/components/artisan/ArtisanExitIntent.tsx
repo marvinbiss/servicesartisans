@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getDisplayName } from '@/components/artisan/types'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 const SESSION_KEY = 'sa:exit-intent-shown'
 const AUTO_DISMISS_MS = 10_000
@@ -13,9 +14,20 @@ const MOBILE_IDLE_MS = 45_000
 interface ArtisanExitIntentProps {
   artisan: LegacyArtisan
   onOpenEstimation: () => void
+  isClaimed?: boolean
+  specialty?: string
+  city?: string
+  specialtySlug?: string
+  citySlug?: string
 }
 
-export function ArtisanExitIntent({ artisan, onOpenEstimation }: ArtisanExitIntentProps) {
+export function ArtisanExitIntent({
+  artisan,
+  onOpenEstimation,
+  isClaimed = true,
+  specialty,
+  city,
+}: ArtisanExitIntentProps) {
   const [visible, setVisible] = useState(false)
   const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const mobileTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -40,8 +52,16 @@ export function ArtisanExitIntent({ artisan, onOpenEstimation }: ArtisanExitInte
 
   const handleCTA = useCallback(() => {
     close()
-    onOpenEstimation()
-  }, [close, onOpenEstimation])
+    if (isClaimed) {
+      onOpenEstimation()
+    } else {
+      trackEvent('unclaimed_exit_intent_click', { specialty, city })
+      const devisSection = document.getElementById('devis')
+      if (devisSection) {
+        devisSection.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [close, isClaimed, onOpenEstimation, specialty, city])
 
   // Auto-dismiss after 10s
   useEffect(() => {
@@ -109,22 +129,38 @@ export function ArtisanExitIntent({ artisan, onOpenEstimation }: ArtisanExitInte
               <X className="w-4 h-4" />
             </button>
 
-            {/* Content */}
-            <p className="text-sm font-medium text-slate-500 mb-1">Avant de partir...</p>
-            <p className="text-base font-semibold text-gray-900 font-heading mb-2 pr-6">
-              {displayName}
-            </p>
-            <p className="text-sm text-slate-600 mb-4">
-              Obtenez votre estimation gratuite en 30 secondes
-            </p>
-
-            {/* CTA */}
-            <button
-              onClick={handleCTA}
-              className="w-full py-2.5 px-4 bg-gradient-to-r from-clay-400 to-clay-500 text-white text-sm font-semibold rounded-xl hover:from-clay-500 hover:to-clay-600 transition-all shadow-md shadow-glow-clay"
-            >
-              Estimer mon projet
-            </button>
+            {isClaimed ? (
+              <>
+                {/* Claimed: existing content */}
+                <p className="text-sm font-medium text-slate-500 mb-1">Avant de partir...</p>
+                <p className="text-base font-semibold text-gray-900 font-heading mb-2 pr-6">
+                  {displayName}
+                </p>
+                <p className="text-sm text-slate-600 mb-4">
+                  Obtenez votre estimation gratuite en 30 secondes
+                </p>
+                <button
+                  onClick={handleCTA}
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-clay-400 to-clay-500 text-white text-sm font-semibold rounded-xl hover:from-clay-500 hover:to-clay-600 transition-all shadow-md shadow-glow-clay"
+                >
+                  Estimer mon projet
+                </button>
+              </>
+            ) : (
+              <>
+                {/* Unclaimed: generic content métier+ville */}
+                <p className="text-sm font-medium text-slate-500 mb-1">Vous partez sans devis ?</p>
+                <p className="text-base font-semibold text-gray-900 font-heading mb-2 pr-6">
+                  Recevez jusqu&apos;à 3 devis gratuits de {specialty}s à {city}
+                </p>
+                <button
+                  onClick={handleCTA}
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-clay-400 to-clay-500 text-white text-sm font-semibold rounded-xl hover:from-clay-500 hover:to-clay-600 transition-all shadow-md shadow-glow-clay"
+                >
+                  Comparer les {specialty}s disponibles
+                </button>
+              </>
+            )}
           </div>
         </motion.div>
       )}

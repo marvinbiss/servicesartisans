@@ -25,6 +25,9 @@ import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
+import { SocialProofBadge, useWeeklyDevisCount } from '@/components/artisan/SocialProofBadge'
+import { UnclaimedSidebarCTA } from '@/components/artisan/UnclaimedSidebarCTA'
+import { UnclaimedMobileCTA } from '@/components/artisan/UnclaimedMobileCTA'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
@@ -32,6 +35,12 @@ import { BookingFunnel } from '@/lib/analytics/tracking'
 const ArtisanExitIntent = dynamic(
   () => import('@/components/artisan/ArtisanExitIntent').then(mod => ({ default: mod.ArtisanExitIntent })),
   { ssr: false }
+)
+
+// Dynamic import for unclaimed quote wizard (heavy, not needed on first paint for claimed)
+const UnclaimedQuoteWizard = dynamic(
+  () => import('@/components/artisan/UnclaimedQuoteWizard'),
+  { loading: () => <SectionSkeleton height="h-96" /> }
 )
 
 // Loading skeleton for lazy-loaded sections
@@ -132,6 +141,13 @@ export default function ArtisanPageClient({
   const reviews = initialReviews
   const { isFavorite, toggleFavorite } = useFavorites()
 
+  // Derive specialty/city info for unclaimed CTAs
+  const specialty = artisan?.specialty || 'Artisan'
+  const specialtySlug = artisan?.specialty_slug || 'artisan'
+  const city = artisan?.city || ''
+  const citySlug = artisan?.city_slug || ''
+  const weeklyDevisCount = useWeeklyDevisCount(specialtySlug, citySlug)
+
   // Track profile view
   useEffect(() => {
     if (artisan) {
@@ -150,7 +166,7 @@ export default function ArtisanPageClient({
         >
           <AlertCircle className="w-16 h-16 text-charcoal-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-charcoal-900 font-heading mb-2">Artisan non trouvé</h1>
-          <p className="text-charcoal-600 mb-6">Cet artisan n'existe pas ou n'est plus disponible.</p>
+          <p className="text-charcoal-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
           <Link
             href="/recherche"
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary-400 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors shadow-cta"
@@ -275,12 +291,31 @@ export default function ArtisanPageClient({
                   <ArtisanUrgencyBanner artisan={artisan} />
                 </section>
               )}
-              {/* 3. DEVIS FORM — only if claimed */}
-              {isClaimed && (
+
+              {/* 3. DEVIS — claimed: direct form / unclaimed: social proof + wizard */}
+              {isClaimed ? (
                 <section id="devis" aria-label="Demande de devis">
                   <ArtisanQuoteForm artisan={artisan} />
                 </section>
+              ) : (
+                <>
+                  {/* Social proof badge */}
+                  <SocialProofBadge
+                    specialty={specialty}
+                    specialtySlug={specialtySlug}
+                    city={city}
+                    citySlug={citySlug}
+                  />
+                  {/* Inline multi-step quote wizard */}
+                  <UnclaimedQuoteWizard
+                    specialty={specialty}
+                    specialtySlug={specialtySlug}
+                    city={city}
+                    citySlug={citySlug}
+                  />
+                </>
               )}
+
               {/* 4. Stats — social proof reinforces after form view */}
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
@@ -293,6 +328,14 @@ export default function ArtisanPageClient({
               <section aria-label="À propos">
                 <ArtisanAbout artisan={artisan} />
               </section>
+
+              {/* 6b. Similar artisans — boosted for unclaimed (moved up from position 10) */}
+              {!isClaimed && (
+                <section aria-label="Professionnels disponibles">
+                  <ArtisanSimilar artisan={artisan} similarArtisans={similarArtisans} isClaimed={false} />
+                </section>
+              )}
+
               {/* 7. Services & pricing — transactional detail (hidden for unclaimed) */}
               {isClaimed && (
                 <section id="services" aria-label="Services et tarifs">
@@ -322,13 +365,15 @@ export default function ArtisanPageClient({
               <section aria-label="Questions fréquentes">
                 <ArtisanFAQ artisan={artisan} />
               </section>
-              {/* 10. Map + similar — secondary info */}
+              {/* 10. Map + similar (claimed only here, unclaimed is above) */}
               <section aria-label="Localisation">
                 <ArtisanMap artisan={artisan} />
               </section>
-              <section aria-label="Artisans similaires">
-                <ArtisanSimilar artisan={artisan} similarArtisans={similarArtisans} />
-              </section>
+              {isClaimed && (
+                <section aria-label="Artisans similaires">
+                  <ArtisanSimilar artisan={artisan} similarArtisans={similarArtisans} />
+                </section>
+              )}
             </div>
 
             {/* Right column - Sticky sidebar */}
@@ -341,10 +386,16 @@ export default function ArtisanPageClient({
                   </>
                 ) : (
                   <>
-                    <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
-                    <div className="text-center mt-2">
-                      <RemovalRequestButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
-                    </div>
+                    <UnclaimedSidebarCTA
+                      specialty={specialty}
+                      specialtySlug={specialtySlug}
+                      city={city}
+                      citySlug={citySlug}
+                      weeklyDevisCount={weeklyDevisCount}
+                      providerId={artisanId}
+                      providerName={artisan.business_name || displayName}
+                      hasSiret={hasSiret}
+                    />
                     <ArtisanProfileStrength artisan={artisan} />
                   </>
                 )}
@@ -353,17 +404,30 @@ export default function ArtisanPageClient({
           </div>
         </main>
 
-        {/* Mobile CTA - only visible for claimed profiles */}
-        {isClaimed && <ArtisanMobileCTA artisan={artisan} />}
+        {/* Mobile CTA - claimed: direct / unclaimed: generic */}
+        {isClaimed ? (
+          <ArtisanMobileCTA artisan={artisan} />
+        ) : (
+          <UnclaimedMobileCTA
+            specialty={specialty}
+            specialtySlug={specialtySlug}
+            city={city}
+            citySlug={citySlug}
+            weeklyDevisCount={weeklyDevisCount}
+          />
+        )}
       </div>
 
-      {/* Exit intent slide-in — only for claimed profiles */}
-      {isClaimed && (
-        <ArtisanExitIntent
-          artisan={artisan}
-          onOpenEstimation={() => {}}
-        />
-      )}
+      {/* Exit intent — now works for both claimed and unclaimed */}
+      <ArtisanExitIntent
+        artisan={artisan}
+        onOpenEstimation={() => {}}
+        isClaimed={isClaimed}
+        specialty={specialty}
+        city={city}
+        specialtySlug={specialtySlug}
+        citySlug={citySlug}
+      />
     </>
   )
 }
