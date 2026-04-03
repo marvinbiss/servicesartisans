@@ -209,7 +209,15 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 
 - Clé : via `INDEXNOW_API_KEY` env var, fallback `d438ef72ba5465680fecf42737f316b4` (fichier de vérification dans `/public/`)
 - `POST /api/indexnow` — soumission d'URLs à Bing/Yandex
-- Cron quotidien `/api/cron/indexnow-submit` — soumet ~212 URLs stratégiques
+- Cron quotidien `/api/cron/indexnow-submit` — soumet ~500 URLs/jour avec rotation sur 3 jours
+  - Pages prioritaires (homepage, /services, /blog, /tarifs) — toujours
+  - 46 services hub (/services/{slug} + /tarifs/{slug}) — rotation 1/3 par jour
+  - Service × 10 villes top (/services/{slug}/{city}) — rotation 1/3 par jour
+  - Devis pSEO (/devis/{slug}/{city}) × 30 villes — rotation 1/3 par jour
+  - Articles prix (blog/prix-*) — rotation quotidienne
+  - Articles récents (<48h) — toujours
+  - Guides — dimanche uniquement
+  - Providers hub pages — dynamique (nouveaux providers dernières 24h)
 
 ### Monitoring
 

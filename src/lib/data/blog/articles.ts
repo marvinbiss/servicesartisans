@@ -28,6 +28,7 @@ import { prixMetalBoisArticles } from './batch-prix-metal-bois'
 import { prixDesignArticles } from './batch-prix-design'
 import { prixTechArticles } from './batch-prix-tech'
 import { prixServicesArticles } from './batch-prix-services'
+import { prixVillesArticles } from './batch-prix-villes'
 
 export interface BlogArticle {
   title: string
@@ -81,6 +82,7 @@ export const allArticles: Record<string, BlogArticle> = {
   ...prixDesignArticles,
   ...prixTechArticles,
   ...prixServicesArticles,
+  ...prixVillesArticles, // 200 articles prix x ville generés programmatiquement
 }
 
 /** All slugs for generateStaticParams */

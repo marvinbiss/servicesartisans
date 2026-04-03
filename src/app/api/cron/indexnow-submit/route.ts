@@ -7,6 +7,15 @@ import { logger } from '@/lib/logger'
 
 const TOP_CITIES = ['paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes', 'strasbourg', 'montpellier', 'bordeaux', 'lille']
 
+/** Extended city list for /devis/ rotation (top 30 French cities by population) */
+const EXTENDED_CITIES = [
+  ...TOP_CITIES,
+  'rennes', 'reims', 'saint-etienne', 'toulon', 'le-havre',
+  'grenoble', 'dijon', 'angers', 'nimes', 'villeurbanne',
+  'clermont-ferrand', 'le-mans', 'aix-en-provence', 'brest', 'tours',
+  'amiens', 'limoges', 'perpignan', 'metz', 'besancon',
+]
+
 /** All guide slugs — submitted once a week (Sundays) */
 const GUIDE_SLUGS = [
   'aides-renovation-2026',
@@ -34,16 +43,44 @@ const GUIDE_SLUGS = [
   'trouver-artisan',
 ]
 
-/** Max URLs per daily run to stay reasonable */
+/** Max URLs per daily run — target 500/day, well under IndexNow 10K limit */
 const MAX_URLS_PER_DAY = 500
+
+/** Number of rotation buckets (days) to cycle through all URLs */
+const ROTATION_DAYS = 3
+
+/**
+ * Deterministic daily rotation index based on UTC date.
+ * Returns 0, 1, or 2 — cycles every ROTATION_DAYS.
+ */
+function getDayBucket(): number {
+  const now = new Date()
+  const dayOfYear = Math.floor(
+    (now.getTime() - new Date(now.getUTCFullYear(), 0, 1).getTime()) / (24 * 60 * 60 * 1000)
+  )
+  return dayOfYear % ROTATION_DAYS
+}
+
+/**
+ * Return every Nth element from an array based on the current day bucket.
+ * This ensures full coverage across ROTATION_DAYS.
+ */
+function rotateSlice<T>(items: T[], bucket: number): T[] {
+  return items.filter((_, i) => i % ROTATION_DAYS === bucket)
+}
 
 /**
  * Cron job: Submit strategic URLs to IndexNow after each deploy.
  * Runs daily to ensure Bing always has fresh data.
  *
+ * Target: ~500 URLs/day with rotation to cover all pages in ~3 days.
+ *
  * Categories:
- * - Strategic pages: homepage + top services × top cities (~212 URLs)
- * - Blog articles: published/modified in last 48h
+ * - Priority pages: homepage, /services index, /blog index (always)
+ * - Service hub pages: all 46 services (rotated)
+ * - Service × top cities: /services/{slug}/{city} (rotated)
+ * - Devis pages: /devis/{slug}/{city} with extended cities (rotated)
+ * - Blog articles: prix articles + recent articles (rotated + fresh)
  * - New providers: created in last 24h (hub pages impacted)
  * - Guides: all guide pages, once per week (Sundays)
  */
@@ -53,42 +90,78 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const counts = { strategic: 0, blog: 0, providers: 0, guides: 0 }
+  const bucket = getDayBucket()
+  const counts = { strategic: 0, serviceHubs: 0, devis: 0, blog: 0, blogPrix: 0, providers: 0, guides: 0 }
 
-  // ── 1. Strategic URLs (existing logic) ──────────────────────────────
+  // ── 1. Always-submit priority pages ─────────────────────────────────
   const urls: string[] = [
     SITE_URL,
     `${SITE_URL}/services`,
+    `${SITE_URL}/blog`,
+    `${SITE_URL}/tarifs`,
   ]
-
-  for (const service of services.slice(0, 10)) {
-    urls.push(`${SITE_URL}/services/${service.slug}`)
-    for (const city of TOP_CITIES) {
-      urls.push(`${SITE_URL}/services/${service.slug}/${city}`)
-      urls.push(`${SITE_URL}/devis/${service.slug}/${city}`)
-    }
-  }
   counts.strategic = urls.length
 
-  // ── 2. Blog articles published/modified in last 48h ─────────────────
+  // ── 2. Service hub pages — all 46 services, rotated ─────────────────
+  const serviceBatch = rotateSlice(services, bucket)
+  for (const service of serviceBatch) {
+    urls.push(`${SITE_URL}/services/${service.slug}`)
+    urls.push(`${SITE_URL}/tarifs/${service.slug}`)
+  }
+  counts.serviceHubs = serviceBatch.length * 2
+
+  // ── 3. Service × top cities (rotated by service) ────────────────────
+  for (const service of serviceBatch) {
+    for (const city of TOP_CITIES) {
+      urls.push(`${SITE_URL}/services/${service.slug}/${city}`)
+    }
+  }
+
+  // ── 4. Devis pSEO pages — all services × extended cities (rotated) ──
+  // Build the full matrix and rotate it for broad daily coverage
+  const allDevisUrls: string[] = []
+  for (const service of services) {
+    for (const city of EXTENDED_CITIES) {
+      allDevisUrls.push(`${SITE_URL}/devis/${service.slug}/${city}`)
+    }
+  }
+  const devisBatch = rotateSlice(allDevisUrls, bucket)
+  urls.push(...devisBatch)
+  counts.devis = devisBatch.length
+
+  // ── 5. Blog articles — fresh first, then prix articles in rotation ──
   const now = Date.now()
   const hours48 = 48 * 60 * 60 * 1000
+
+  // 5a. Recent articles (published/modified in last 48h) — always submitted
   const recentArticles = allArticlesMeta.filter(a => {
     const articleDate = new Date(a.date).getTime()
     return now - articleDate < hours48
   })
-
   for (const article of recentArticles) {
     urls.push(`${SITE_URL}/blog/${article.slug}`)
   }
   counts.blog = recentArticles.length
 
-  // Also always submit the blog index when there are new articles
-  if (recentArticles.length > 0) {
-    urls.push(`${SITE_URL}/blog`)
+  // 5b. Prix articles — rotated daily for continuous re-submission
+  const prixArticles = allArticlesMeta.filter(a => a.slug.startsWith('prix-'))
+  const prixBatch = rotateSlice(prixArticles, bucket)
+  for (const article of prixBatch) {
+    urls.push(`${SITE_URL}/blog/${article.slug}`)
+  }
+  counts.blogPrix = prixBatch.length
+
+  // 5c. Non-prix, non-recent articles — rotated for background coverage
+  const recentSlugs = new Set(recentArticles.map(a => a.slug))
+  const otherArticles = allArticlesMeta.filter(
+    a => !a.slug.startsWith('prix-') && !recentSlugs.has(a.slug)
+  )
+  const otherBatch = rotateSlice(otherArticles, bucket)
+  for (const article of otherBatch) {
+    urls.push(`${SITE_URL}/blog/${article.slug}`)
   }
 
-  // ── 3. New providers created in last 24h ────────────────────────────
+  // ── 6. New providers created in last 24h ────────────────────────────
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -105,9 +178,6 @@ export async function GET(request: Request) {
     if (error) {
       logger.warn('IndexNow cron: failed to fetch new providers', { error: error.message })
     } else if (newProviders && newProviders.length > 0) {
-      // Submit the hub pages (service/ville) impacted by new providers.
-      // These are the pages whose content actually changed (new provider listed).
-      // We use a Set to deduplicate since multiple providers may share the same hub.
       const hubPages = new Set<string>()
       const serviceMap = new Map(services.map(s => [
         s.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(),
@@ -125,12 +195,13 @@ export async function GET(request: Request) {
         if (!citySlug) continue
 
         hubPages.add(`${SITE_URL}/services/${serviceSlug}/${citySlug}`)
+        // Also notify the devis page for this service+city
+        hubPages.add(`${SITE_URL}/devis/${serviceSlug}/${citySlug}`)
       }
 
       urls.push(...Array.from(hubPages))
       counts.providers = hubPages.size
 
-      // Also submit the artisans listing page
       if (hubPages.size > 0) {
         urls.push(`${SITE_URL}/artisans`)
       }
@@ -142,14 +213,14 @@ export async function GET(request: Request) {
     })
   }
 
-  // ── 4. Guides — once per week (Sundays) ─────────────────────────────
+  // ── 7. Guides — once per week (Sundays) ─────────────────────────────
   const isSunday = new Date().getUTCDay() === 0
   if (isSunday) {
     urls.push(`${SITE_URL}/guides`)
     for (const slug of GUIDE_SLUGS) {
       urls.push(`${SITE_URL}/guides/${slug}`)
     }
-    counts.guides = GUIDE_SLUGS.length + 1 // +1 for the index page
+    counts.guides = GUIDE_SLUGS.length + 1
   }
 
   // ── Deduplicate and cap at MAX_URLS_PER_DAY ─────────────────────────
@@ -157,10 +228,15 @@ export async function GET(request: Request) {
 
   logger.info('IndexNow cron: submitting URLs', {
     action: 'indexnow-cron',
+    bucket,
     strategic: counts.strategic,
+    serviceHubs: counts.serviceHubs,
+    devis: counts.devis,
     blog: counts.blog,
+    blogPrix: counts.blogPrix,
     providers: counts.providers,
     guides: counts.guides,
+    totalBeforeCap: urls.length,
     totalUnique: uniqueUrls.length,
     capped: urls.length > MAX_URLS_PER_DAY,
   })
@@ -172,5 +248,6 @@ export async function GET(request: Request) {
     ...result,
     urlCount: uniqueUrls.length,
     breakdown: counts,
+    rotation: { bucket, totalDays: ROTATION_DAYS },
   })
 }
