@@ -10,6 +10,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
+import { cleanPhone } from '@/lib/validation/phone'
 import { dispatchLead } from '@/app/actions/dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 
@@ -37,7 +38,9 @@ const devisSchema = z.object({
   ville: z.string().optional(),
   nom: z.string().min(2, 'Le nom est requis').optional().or(z.literal('')),
   email: z.string().email('Email invalide').optional().or(z.literal('')),
-  telephone: z.string().min(10, 'Numéro de téléphone invalide').regex(/^(\+33|0033|0)[1-9]\d{8}$/, 'Format de téléphone français invalide'),
+  telephone: z.string().transform(cleanPhone).pipe(
+    z.string().min(10, 'Numéro de téléphone invalide').regex(/^(\+33|0033|0)[1-9]\d{8}$/, 'Format de téléphone français invalide')
+  ),
 })
 
 const serviceNames: Record<string, string> = {

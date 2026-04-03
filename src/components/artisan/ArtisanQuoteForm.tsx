@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle, AlertCircle, Shield } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
+import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 
 interface ArtisanQuoteFormProps {
   artisan: Artisan
@@ -25,7 +26,6 @@ interface FormErrors {
   email?: string
 }
 
-const PHONE_REGEX = /^(0[1-9]\d{8}|\+33[1-9]\d{8}|0033[1-9]\d{8})$/
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
@@ -52,10 +52,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
     if (!formData.nom.trim()) {
       errs.nom = 'Veuillez indiquer votre nom'
     }
-    const cleanPhone = formData.telephone.replace(/[\s.\-()]/g, '')
-    if (!cleanPhone) {
+    const cleaned = cleanPhone(formData.telephone)
+    if (!cleaned) {
       errs.telephone = 'Veuillez indiquer votre téléphone'
-    } else if (!PHONE_REGEX.test(cleanPhone)) {
+    } else if (!isValidFrenchPhone(formData.telephone)) {
       errs.telephone = 'Numéro de téléphone invalide'
     }
     if (!formData.email.trim()) {
@@ -91,7 +91,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
           description: formData.description.trim(),
           nom: formData.nom.trim(),
           email: formData.email.trim(),
-          telephone: formData.telephone.replace(/[\s.\-()]/g, ''),
+          telephone: cleanPhone(formData.telephone),
           ville: artisan.city || '',
         }),
       })

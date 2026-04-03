@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button, Input, Textarea } from '@/components/ui'
-import { isValidFrenchPhone } from '@/lib/validation/phone'
+import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 
 interface QuoteFormProps {
   providerId: string
@@ -59,7 +59,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
           description: formData.description,
           nom: formData.client_name,
           email: formData.client_email,
-          telephone: formData.client_phone.replace(/[\s.\-()]/g, ''),
+          telephone: cleanPhone(formData.client_phone),
           ville: formData.city,
           codePostal: formData.postal_code,
         }),

@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { isValidFrenchPhone } from '../utils'
+import { cleanPhone } from '@/lib/validation/phone'
 import type { EstimationContext, ChatMessage } from '../utils'
 
 export interface UseLeadSubmitReturn {
@@ -77,7 +78,7 @@ export function useLeadSubmit(
           body: JSON.stringify({
             service: context.metierSlug || 'general',
             urgency: 'semaine',
-            telephone: leadPhone.replace(/[\s.\-()]/g, ''),
+            telephone: cleanPhone(leadPhone),
             nom: leadName || undefined,
             email: leadEmail || undefined,
             ville: context.ville || undefined,
@@ -135,7 +136,7 @@ export function useLeadSubmit(
           body: JSON.stringify({
             service: context.metierSlug || 'general',
             urgency: 'semaine',
-            telephone: callbackPhone.replace(/[\s.\-()]/g, ''),
+            telephone: cleanPhone(callbackPhone),
             ville: context.ville || undefined,
             description: `Demande de rappel — ${context.metier}${context.ville ? ` à ${context.ville}` : ''}`,
           }),

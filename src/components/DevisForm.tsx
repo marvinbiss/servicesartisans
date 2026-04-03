@@ -13,7 +13,7 @@ function getAllVilles(): Promise<Ville[]> {
 }
 import { ArrowRight, ArrowLeft, ChevronDown, Check, MapPin, Users, Shield, Clock } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { isValidFrenchPhone } from '@/lib/validation/phone'
+import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 
 interface FormData {
@@ -505,7 +505,7 @@ export default function DevisForm({
           ville: formData.ville,
           nom: formData.nom,
           email: formData.email,
-          telephone: formData.telephone.replace(/[\s.\-()]/g, ''),
+          telephone: cleanPhone(formData.telephone),
         }),
       })
 
@@ -627,13 +627,21 @@ export default function DevisForm({
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Trust micro-banner */}
-      <div className="flex items-center justify-center gap-2 mb-4 px-4 py-2.5 bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl border border-primary-200/50">
-        <Shield className="w-4 h-4 text-primary-500 flex-shrink-0" />
-        <p className="text-sm font-medium text-primary-700">
-          Gratuit · Sans engagement · Données confidentielles
-        </p>
+    <div className="max-w-2xl mx-auto" data-devis-form>
+      {/* Trust badges */}
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
+        <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
+          <Shield className="w-3.5 h-3.5" />
+          100% Gratuit
+        </span>
+        <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
+          <Clock className="w-3.5 h-3.5" />
+          Réponse sous 24h
+        </span>
+        <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
+          <Check className="w-3.5 h-3.5" />
+          Sans engagement
+        </span>
       </div>
 
       {showResumeBanner && (

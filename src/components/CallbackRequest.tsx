@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Phone, CheckCircle, Loader2 } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { isValidFrenchPhone } from '@/lib/validation/phone'
+import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 
 interface CallbackRequestProps {
   serviceSlug?: string
@@ -42,7 +42,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service: serviceSlug || 'general',
-          telephone: phone.trim().replace(/[\s.\-()]/g, ''),
+          telephone: cleanPhone(phone),
           description: 'Demande de rappel',
           urgency: 'semaine',
           ...(cityName && { ville: cityName }),

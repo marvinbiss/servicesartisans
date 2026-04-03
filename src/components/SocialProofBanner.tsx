@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { Users, Clock, TrendingUp, FileText } from 'lucide-react'
+import { Users, Clock, TrendingUp, FileText, Shield } from 'lucide-react'
 
 interface DemandStats {
   requests_this_week: number
@@ -19,6 +19,9 @@ interface SocialProofBannerProps {
   /** Activer l'animation compteur (requiert IntersectionObserver) */
   animated?: boolean
 }
+
+/** Seuil minimum de demandes/semaine pour afficher le compteur réel */
+const MIN_WEEKLY_REQUESTS = 5
 
 /**
  * Hook : anime un nombre de 0 à `target` avec easeOutCubic
@@ -64,27 +67,9 @@ function useAnimatedNumber(target: number, duration = 1800, enabled = true) {
   return { value, play }
 }
 
-/**
- * Deterministic fallback counter — same value for all visitors on the same day
- */
-function getDailyFallback(): DemandStats {
-  const now = new Date()
-  const dayOfYear = Math.floor(
-    (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000,
-  )
-  return {
-    requests_this_week: 8 + ((dayOfYear * 3) % 20),
-    requests_this_month: 47 + ((dayOfYear * 7 + 13) % 137),
-    active_providers: 200 + ((dayOfYear * 11) % 400),
-  }
-}
-
-// Computed once per day, stable across renders
-const dailyFallback = getDailyFallback()
-
 export function SocialProofBanner({ metier, ville, variant = 'inline', animated = true }: SocialProofBannerProps) {
-  const fallback = dailyFallback
   const [stats, setStats] = useState<DemandStats | null>(null)
+  const [loaded, setLoaded] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const observedRef = useRef(false)
 
@@ -99,6 +84,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
         const parsed = JSON.parse(cached)
         if (Date.now() - parsed.ts < 300_000) {
           setStats(parsed.data)
+          setLoaded(true)
           return
         }
       }
@@ -112,24 +98,26 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
       .then(r => r.json())
       .then((data: DemandStats) => {
         setStats(data)
+        setLoaded(true)
         try {
           sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }))
         } catch { /* ignore */ }
       })
       .catch((err) => {
         if (err instanceof DOMException && err.name === 'AbortError') return
-        setStats(fallback)
+        // Supabase down — fail graceful, show nothing
+        setLoaded(true)
       })
 
     return () => controller.abort()
-  }, [metier, ville, fallback])
+  }, [metier, ville])
 
-  const rawDevisCount = stats?.requests_this_month ?? fallback.requests_this_month
-  // Only show devis count if >= 120 to maintain trust — low numbers hurt credibility
-  const devisCount = rawDevisCount >= 120 ? rawDevisCount : fallback.requests_this_month
-  const providerCount = stats?.active_providers ?? fallback.active_providers
+  // Vrais chiffres uniquement — pas de fallback bidon
+  const weeklyRequests = stats?.requests_this_week ?? 0
+  const providerCount = stats?.active_providers ?? 0
+  const hasEnoughRequests = weeklyRequests >= MIN_WEEKLY_REQUESTS
 
-  const devisAnim = useAnimatedNumber(devisCount, 1800, animated)
+  const devisAnim = useAnimatedNumber(weeklyRequests, 1800, animated && hasEnoughRequests)
   const providerAnim = useAnimatedNumber(providerCount, 2000, animated)
 
   // IntersectionObserver pour déclencher l'animation
@@ -157,27 +145,72 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
     return () => observer.disconnect()
   }, [animated, stats, devisAnim.play, providerAnim.play])
 
-  const devisDisplay = (animated ? devisAnim.value : devisCount).toLocaleString('fr-FR')
+  // Ne rien afficher tant que les données ne sont pas chargées
+  if (!loaded) return null
+
+  const devisDisplay = (animated ? devisAnim.value : weeklyRequests).toLocaleString('fr-FR')
   const providerDisplay = (animated ? providerAnim.value : providerCount).toLocaleString('fr-FR')
 
   // ── Compact variant: minimal inline stats ──
   if (variant === 'compact') {
+    if (!hasEnoughRequests) {
+      return (
+        <div ref={containerRef} className="flex items-center gap-2 text-xs text-charcoal-500">
+          <Shield className="w-3.5 h-3.5" />
+          <span>Rejoignez les professionnels qui nous font confiance</span>
+        </div>
+      )
+    }
     return (
       <div ref={containerRef} className="flex flex-wrap items-center gap-4 text-xs text-charcoal-500">
         <span className="flex items-center gap-1">
           <FileText className="w-3.5 h-3.5" />
-          {devisDisplay} devis ce mois
+          {devisDisplay} demandes de devis cette semaine
         </span>
-        <span className="flex items-center gap-1">
-          <Users className="w-3.5 h-3.5" />
-          {providerDisplay} artisans actifs
-        </span>
+        {providerCount > 0 && (
+          <span className="flex items-center gap-1">
+            <Users className="w-3.5 h-3.5" />
+            {providerDisplay} artisans actifs
+          </span>
+        )}
       </div>
     )
   }
 
   // ── Card variant: full card with stats grid ──
   if (variant === 'card') {
+    // Pas assez de demandes : message de confiance alternatif
+    if (!hasEnoughRequests) {
+      return (
+        <div
+          ref={containerRef}
+          className="bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 rounded-xl p-4"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
+              <Shield className="w-5 h-5 text-primary-500" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-charcoal-800">
+                Rejoignez les professionnels qui nous font confiance
+              </p>
+              <p className="text-xs text-charcoal-500 mt-0.5">
+                Devis gratuit, sans engagement, en moins de 2 minutes
+              </p>
+            </div>
+          </div>
+          {providerCount > 0 && (
+            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-primary-100">
+              <Users className="w-4 h-4 text-accent-600" />
+              <span className="text-sm text-charcoal-600">
+                {providerDisplay} artisans disponibles{ville ? ` à ${ville}` : ''}
+              </span>
+            </div>
+          )}
+        </div>
+      )
+    }
+
     return (
       <div
         ref={containerRef}
@@ -187,7 +220,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
           <div className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-primary-500" />
             <span className="text-sm font-semibold text-charcoal-800">
-              {metier ? `Forte demande en ${metier.toLowerCase()}` : 'Forte demande ce mois'}
+              {metier ? `Forte demande en ${metier.toLowerCase()}` : 'Forte demande cette semaine'}
             </span>
           </div>
         </div>
@@ -200,20 +233,22 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
               <p className="text-lg font-heading font-bold text-charcoal-900" aria-live="polite">
                 {devisDisplay}
               </p>
-              <p className="text-xs text-charcoal-500">devis ce mois</p>
+              <p className="text-xs text-charcoal-500">demandes cette semaine</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center">
-              <Users className="w-4 h-4 text-accent-600" />
+          {providerCount > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center">
+                <Users className="w-4 h-4 text-accent-600" />
+              </div>
+              <div>
+                <p className="text-lg font-heading font-bold text-charcoal-900" aria-live="polite">
+                  {providerDisplay}
+                </p>
+                <p className="text-xs text-charcoal-500">artisans disponibles</p>
+              </div>
             </div>
-            <div>
-              <p className="text-lg font-heading font-bold text-charcoal-900" aria-live="polite">
-                {providerDisplay}
-              </p>
-              <p className="text-xs text-charcoal-500">artisans disponibles</p>
-            </div>
-          </div>
+          )}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
               <Clock className="w-4 h-4 text-amber-600" />
@@ -234,20 +269,37 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
   }
 
   // ── Inline variant (default): pill badges ──
+  if (!hasEnoughRequests) {
+    return (
+      <div ref={containerRef} className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+        <span className="flex items-center gap-1.5 text-primary-600 bg-primary-50 px-3 py-1.5 rounded-full">
+          <Shield className="w-3.5 h-3.5" />
+          Rejoignez les professionnels qui nous font confiance
+        </span>
+        <span className="flex items-center gap-1.5 text-primary-600 bg-primary-50 px-3 py-1.5 rounded-full">
+          <Clock className="w-3.5 h-3.5" />
+          Réponse en ~2h
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div ref={containerRef} className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
       <span className="flex items-center gap-1.5 text-accent-700 bg-accent-50 px-3 py-1.5 rounded-full">
         <TrendingUp className="w-3.5 h-3.5" />
-        {devisDisplay} demandes ce mois{ville ? ` à ${ville}` : ''}
+        {devisDisplay} demandes de devis cette semaine{ville ? ` à ${ville}` : ''}
       </span>
       <span className="flex items-center gap-1.5 text-primary-600 bg-primary-50 px-3 py-1.5 rounded-full">
         <Clock className="w-3.5 h-3.5" />
         Réponse en ~2h
       </span>
-      <span className="flex items-center gap-1.5 text-charcoal-600 bg-sand-50 px-3 py-1.5 rounded-full">
-        <Users className="w-3.5 h-3.5" />
-        {providerDisplay} artisans
-      </span>
+      {providerCount > 0 && (
+        <span className="flex items-center gap-1.5 text-charcoal-600 bg-sand-50 px-3 py-1.5 rounded-full">
+          <Users className="w-3.5 h-3.5" />
+          {providerDisplay} artisans
+        </span>
+      )}
     </div>
   )
 }

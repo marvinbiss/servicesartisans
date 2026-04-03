@@ -6,9 +6,11 @@
  *
  * Supported events:
  * - artisan_profile_view, phone_reveal, phone_click (artisan interactions)
- * - artisan_devis_click, artisan_email_click, artisan_website_click (artisan CTA clicks)
+ * - artisan_devis_click, artisan_email_click (artisan CTA clicks)
  * - header_devis_click, blog_cta_click (site-wide CTA clicks)
  * - chat_opened, chat_message_sent, chat_lead_form_shown, estimation_lead_submitted (estimation chat)
+ * - devis_submitted, devis_completed (devis funnel)
+ * - client_signup, artisan_signup (account creation)
  * - page_view (page navigation tracking with visitor_id)
  */
 
@@ -33,25 +35,18 @@ const ALLOWED_EVENTS = [
   'form_completed',
   'booking_initiated',
   'booking_completed',
-  'booking_cancelled',
-  'booking_rescheduled',
-  'payment_started',
-  'payment_completed',
-  'payment_failed',
-  'review_submitted',
-  'waitlist_joined',
-  'reminder_sent',
-  'reminder_clicked',
   'devis_submitted',
+  'devis_completed',
   'header_devis_click',
   'artisan_devis_click',
   'artisan_email_click',
-  'artisan_website_click',
   'blog_cta_click',
   'chat_opened',
   'chat_message_sent',
   'chat_lead_form_shown',
   'estimation_lead_submitted',
+  'client_signup',
+  'artisan_signup',
 ] as const
 
 const analyticsSchema = z.object({

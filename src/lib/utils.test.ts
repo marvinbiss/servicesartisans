@@ -147,9 +147,29 @@ describe('isValidFrenchPhone', () => {
     expect(isValidFrenchPhone('+33 6 12 34 56 78')).toBe(true)
   })
 
+  it('should accept numbers with dots, dashes, parentheses', () => {
+    expect(isValidFrenchPhone('06.12.34.56.78')).toBe(true)
+    expect(isValidFrenchPhone('06-12-34-56-78')).toBe(true)
+    expect(isValidFrenchPhone('(06) 12 34 56 78')).toBe(true)
+  })
+
+  it('should accept numbers with non-breaking spaces (mobile keyboards)', () => {
+    // U+00A0 non-breaking space (common on iOS)
+    expect(isValidFrenchPhone('06\u00A012\u00A034\u00A056\u00A078')).toBe(true)
+    // U+202F narrow no-break space
+    expect(isValidFrenchPhone('06\u202F12\u202F34\u202F56\u202F78')).toBe(true)
+  })
+
+  it('should accept 0033 prefix', () => {
+    expect(isValidFrenchPhone('0033612345678')).toBe(true)
+    expect(isValidFrenchPhone('0033 6 12 34 56 78')).toBe(true)
+  })
+
   it('should reject invalid phone numbers', () => {
     expect(isValidFrenchPhone('123')).toBe(false)
     expect(isValidFrenchPhone('abcdefghij')).toBe(false)
+    expect(isValidFrenchPhone('0012345678')).toBe(false)
+    expect(isValidFrenchPhone('')).toBe(false)
   })
 })
 

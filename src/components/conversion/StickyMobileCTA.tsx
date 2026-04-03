@@ -37,6 +37,7 @@ export default function StickyMobileCTA({
   const [visible, setVisible] = useState(false)
   const [hasAnimated, setHasAnimated] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [formInView, setFormInView] = useState(false)
 
   // Hide on /devis pages, connected areas, and when estimation widget is open
   const shouldHide =
@@ -44,6 +45,38 @@ export default function StickyMobileCTA({
     pathname.startsWith('/espace-client') ||
     pathname.startsWith('/espace-artisan') ||
     pathname.startsWith('/admin')
+
+  // Hide when a devis form/section is visible in the viewport
+  useEffect(() => {
+    if (shouldHide) return
+
+    const selectors = [
+      '[data-devis-form]',
+      '#devis',
+      '#devis-section',
+      'form[data-devis]',
+    ]
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const anyVisible = entries.some((e) => e.isIntersecting)
+        setFormInView(anyVisible)
+      },
+      { threshold: 0.1 }
+    )
+
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      selectors.forEach((sel) => {
+        document.querySelectorAll(sel).forEach((el) => observer.observe(el))
+      })
+    }, 500)
+
+    return () => {
+      clearTimeout(timer)
+      observer.disconnect()
+    }
+  }, [shouldHide])
 
   // Show after scrolling past hero (~300px)
   useEffect(() => {
@@ -88,7 +121,7 @@ export default function StickyMobileCTA({
         className={`
           fixed left-0 right-0 z-[45] md:hidden
           transition-all duration-300 ease-out
-          ${visible && hasAnimated
+          ${visible && hasAnimated && !formInView
             ? 'translate-y-0 opacity-100'
             : 'translate-y-full opacity-0 pointer-events-none'
           }

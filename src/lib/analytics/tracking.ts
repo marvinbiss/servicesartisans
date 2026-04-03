@@ -19,25 +19,18 @@ export type BookingEvent =
   | 'form_completed'
   | 'booking_initiated'
   | 'booking_completed'
-  | 'booking_cancelled'
-  | 'booking_rescheduled'
-  | 'payment_started'
-  | 'payment_completed'
-  | 'payment_failed'
-  | 'review_submitted'
-  | 'waitlist_joined'
-  | 'reminder_sent'
-  | 'reminder_clicked'
   | 'devis_submitted'
+  | 'devis_completed'
   | 'chat_opened'
   | 'chat_message_sent'
   | 'chat_lead_form_shown'
   | 'estimation_lead_submitted'
   | 'artisan_devis_click'
   | 'artisan_email_click'
-  | 'artisan_website_click'
   | 'blog_cta_click'
   | 'header_devis_click'
+  | 'client_signup'
+  | 'artisan_signup'
 
 export interface TrackingData {
   event: BookingEvent
@@ -239,6 +232,47 @@ export const BookingFunnel = {
       depositAmount,
       funnelStep: 8,
       conversionValue: depositAmount || 0,
+    })
+  },
+}
+
+// Signup tracking
+export const SignupTracking = {
+  // Client creates an account
+  clientSignup: (userId: string, source?: string) => {
+    trackEvent('client_signup', {
+      userId,
+      source,
+      userType: 'client',
+    })
+  },
+
+  // Artisan creates an account
+  artisanSignup: (userId: string, source?: string) => {
+    trackEvent('artisan_signup', {
+      userId,
+      source,
+      userType: 'artisan',
+    })
+  },
+}
+
+// Devis tracking
+export const DevisTracking = {
+  // Devis request is finalized and sent to artisan(s)
+  devisCompleted: (
+    devisId: string,
+    serviceSlug: string,
+    city?: string,
+    artisanCount?: number
+  ) => {
+    trackEvent('devis_completed', {
+      devisId,
+      serviceSlug,
+      city,
+      artisanCount,
+      value: 25,
+      currency: 'EUR',
     })
   },
 }

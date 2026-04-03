@@ -13,7 +13,7 @@ function getAllVilles(): Promise<Ville[]> {
   return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
 }
 import { trackEvent } from '@/lib/analytics/tracking'
-import { isValidFrenchPhone } from '@/lib/validation/phone'
+import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
@@ -304,7 +304,7 @@ export default function DevisBottomSheet({
           description: formData.description,
           urgency: formData.urgence,
           nom: formData.nom,
-          telephone: formData.telephone.replace(/[\s.\-()]/g, ''),
+          telephone: cleanPhone(formData.telephone),
           email: formData.email,
         }),
       })

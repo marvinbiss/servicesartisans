@@ -6,15 +6,18 @@ import { z } from 'zod'
 import { dispatchLead } from './dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
+import { cleanPhone } from '@/lib/validation/phone'
 
 const leadSchema = z.object({
   providerId: z.string().min(1).optional(),
   serviceName: z.string().min(1),
   name: z.string().min(1, 'Votre nom est requis'),
   email: z.string().email('Email invalide'),
-  phone: z.string().regex(
-    /^(?:\+33|0)[1-9](?:[0-9]{8})$/,
-    'Numero de telephone invalide'
+  phone: z.string().transform(cleanPhone).pipe(
+    z.string().regex(
+      /^(?:\+33|0033|0)[1-9](?:[0-9]{8})$/,
+      'Numero de telephone invalide'
+    )
   ),
   postalCode: z.string().optional(),
   city: z.string().optional(),
@@ -36,7 +39,7 @@ export async function submitLead(
     serviceName: formData.get('serviceName'),
     name: formData.get('name'),
     email: formData.get('email'),
-    phone: String(formData.get('phone') || '').replace(/[\s.\-()]/g, ''),
+    phone: String(formData.get('phone') || ''),
     postalCode: formData.get('postalCode') || undefined,
     city: formData.get('city') || undefined,
     description: formData.get('description'),

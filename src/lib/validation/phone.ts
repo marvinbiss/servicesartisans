@@ -1,8 +1,10 @@
 /**
- * Clean phone number: remove spaces, dots, dashes, parentheses
+ * Clean phone number: keep only digits and leading +
+ * Strips ALL non-digit characters (spaces, dots, dashes, parentheses,
+ * non-breaking spaces U+00A0, narrow no-break spaces U+202F, etc.)
  */
 export function cleanPhone(phone: string): string {
-  return phone.replace(/[\s.\-()]/g, '')
+  return phone.replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '')
 }
 
 /**
