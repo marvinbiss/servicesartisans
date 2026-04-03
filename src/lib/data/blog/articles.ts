@@ -29,6 +29,9 @@ import { prixDesignArticles } from './batch-prix-design'
 import { prixTechArticles } from './batch-prix-tech'
 import { prixServicesArticles } from './batch-prix-services'
 import { prixVillesArticles } from './batch-prix-villes'
+import { aides2026Articles } from './batch-aides-2026'
+import { urgencesGuidesArticles } from './batch-urgences-guides'
+import { saisonniers2026Articles } from './batch-saisonniers-2026'
 
 export interface BlogArticle {
   title: string
@@ -83,6 +86,9 @@ export const allArticles: Record<string, BlogArticle> = {
   ...prixTechArticles,
   ...prixServicesArticles,
   ...prixVillesArticles, // 200 articles prix x ville generés programmatiquement
+  ...aides2026Articles,
+  ...urgencesGuidesArticles,
+  ...saisonniers2026Articles,
 }
 
 /** All slugs for generateStaticParams */

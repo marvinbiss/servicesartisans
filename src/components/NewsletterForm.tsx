@@ -27,10 +27,10 @@ export default function NewsletterForm() {
     setError(null)
 
     try {
-      const response = await fetch('/api/newsletter', {
+      const response = await fetch('/api/newsletter/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, source: 'footer' }),
       })
 
       const data = await response.json()
@@ -101,6 +101,9 @@ export default function NewsletterForm() {
           </Link>.
         </span>
       </label>
+      <p className="text-white/50 text-xs mt-2">
+        Recevez nos guides travaux et bons plans chaque semaine. Désinscription en un clic.
+      </p>
     </form>
   )
 }

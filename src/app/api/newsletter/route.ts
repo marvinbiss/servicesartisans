@@ -1,20 +1,19 @@
 /**
- * Newsletter API - ServicesArtisans
- * Handles newsletter subscriptions
+ * Newsletter API - ServicesArtisans (legacy route)
+ * Forwards to /api/newsletter/subscribe for backward compatibility.
  */
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 
-const getResend = () => getResendClient()
-
 const newsletterSchema = z.object({
-  email: z.string().email('Email invalide'),
+  email: z.string().email('Email invalide').max(254),
 })
 
 export async function POST(request: Request) {
@@ -41,12 +40,33 @@ export async function POST(request: Request) {
     }
 
     const { email } = validation.data
+    const normalizedEmail = email.toLowerCase().trim()
+
+    // Store in Supabase (upsert — re-subscribe if previously unsubscribed)
+    try {
+      const supabase = createAdminClient()
+      await supabase
+        .from('newsletter_subscribers')
+        .upsert(
+          {
+            email: normalizedEmail,
+            subscribed_at: new Date().toISOString(),
+            unsubscribed_at: null,
+            source: 'legacy',
+          },
+          { onConflict: 'email' }
+        )
+    } catch (dbError) {
+      logger.error('Newsletter DB insert failed (legacy route)', dbError)
+      // Don't fail the subscription if DB fails
+    }
 
     // Send welcome email (non-blocking — don't crash signup if email fails)
     try {
-      await getResend().emails.send({
-        from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
-        to: email,
+      const resend = getResendClient()
+      await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+        to: normalizedEmail,
         subject: 'Bienvenue dans la newsletter ServicesArtisans !',
         html: `
           <h2>Bienvenue !</h2>
