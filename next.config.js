@@ -390,12 +390,81 @@ const nextConfig = {
       { source: '/services/peintre/:location', destination: '/services/peintre-en-batiment/:location', permanent: true },
       { source: '/services/peintre/:location/:id', destination: '/services/peintre-en-batiment/:location/:id', permanent: true },
       // Blog cannibalisation fixes — 301 redirects to canonical articles
-      // Isolation: canonical = isolation-maison-guide-complet-materiaux-prix-aides
-      { source: '/blog/isolation-thermique-guide', destination: '/blog/isolation-maison-guide-complet-materiaux-prix-aides', permanent: true },
-      { source: '/blog/isolation-thermique-meilleures-solutions-2026', destination: '/blog/isolation-maison-guide-complet-materiaux-prix-aides', permanent: true },
+      // Isolation: canonical = prix-isolation-thermique-2026-tarifs (updated 2026-04-03, was isolation-maison-guide-complet)
+      { source: '/blog/isolation-thermique-guide', destination: '/blog/prix-isolation-thermique-2026-tarifs', permanent: true },
+      { source: '/blog/isolation-thermique-meilleures-solutions-2026', destination: '/blog/prix-isolation-thermique-2026-tarifs', permanent: true },
       // Toiture/prix: canonical = prix-toiture-2026-refection-reparation-materiaux
       { source: '/blog/prix-couvreur-2026-cout-refection-toiture', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
       { source: '/blog/refaire-toiture-guide-proprietaire', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
+
+      // ====== SEO Cannibalization Audit 2026-04-03 — 22 redirects (23 in audit, 1 eco-ptz was same slug) ======
+      // See: scripts/gsc-data/cannibalization-audit.md
+
+      // --- batch-seo-boost1 (all 5 articles → pillar) ---
+      // G1: MaPrimeRénov 2026
+      { source: '/blog/maprimerenov-2026-guide-complet-aides-renovation', destination: '/blog/maprimerénov-2026-conditions-montants', permanent: true },
+      // G8: Choisir/Vérifier Artisan
+      { source: '/blog/comment-choisir-artisan-confiance-guide-2026', destination: '/blog/comment-verifier-artisan-avant-engager', permanent: true },
+      // G16: Prix Rénovation Maison
+      { source: '/blog/prix-renovation-maison-2026-budget-complet', destination: '/blog/renovation-maison-prix-m2-2026', permanent: true },
+      // G9: Pompe à Chaleur
+      { source: '/blog/pompe-a-chaleur-guide-complet-2026', destination: '/blog/prix-pompe-a-chaleur-2026', permanent: true },
+      // G15: Isolation Maison
+      { source: '/blog/isolation-maison-guide-complet-materiaux-prix-aides', destination: '/blog/prix-isolation-thermique-2026-tarifs', permanent: true },
+
+      // --- batch-seo-boost2 (all 5 articles → pillar) ---
+      // G18: DPE
+      { source: '/blog/dpe-diagnostic-performance-energetique-tout-savoir', destination: '/blog/dpe-obligatoire-2026-guide', permanent: true },
+      // G7: Devis Travaux
+      { source: '/blog/devis-travaux-comprendre-comparer-negocier', destination: '/blog/devis-travaux-comprendre', permanent: true },
+      // G6: Rénovation Salle de Bain
+      { source: '/blog/renovation-salle-de-bain-guide-complet-prix-2026', destination: '/blog/renovation-salle-de-bain-budget-etapes', permanent: true },
+      // G12: Entretien Maison
+      { source: '/blog/entretien-maison-calendrier-annuel-checklist', destination: '/blog/entretien-annuel-maison-checklist-complete', permanent: true },
+      // G11: Arnaques Artisans
+      { source: '/blog/arnaques-artisans-reconnaitre-eviter-recours', destination: '/blog/10-arnaques-courantes-batiment', permanent: true },
+
+      // --- batch-seo-boost3 (4 of 5 articles → pillar, kept prix-toiture) ---
+      // G2: Éco-PTZ — eco-ptz-2026-pret-taux-zero-renovation exists in batch-aides-2026 (pillar), no redirect needed
+      // The boost3 duplicate was removed; the aides-2026 version remains as the canonical article
+      // G13: Rénovation Énergétique
+      { source: '/blog/renovation-energetique-par-ou-commencer', destination: '/blog/travaux-renovation-energetique-par-ou-commencer', permanent: true },
+      // G26: Normes NF C 15-100
+      { source: '/blog/normes-electriques-2026-nfc-15-100-guide', destination: '/blog/electricite-normes-securite', permanent: true },
+      // G27: Fuite d'Eau Urgence
+      { source: '/blog/fuite-eau-urgence-guide-complet-gestes-couts', destination: '/blog/fuite-eau-que-faire-urgence', permanent: true },
+
+      // --- batch-renovation-2026 (3 articles → pillar) ---
+      // G6: Rénovation Salle de Bain (bis)
+      { source: '/blog/renovation-salle-de-bain-prix-guide-2026', destination: '/blog/renovation-salle-de-bain-budget-etapes', permanent: true },
+      // G7: Devis Travaux (bis)
+      { source: '/blog/devis-travaux-guide-complet', destination: '/blog/devis-travaux-comprendre', permanent: true },
+      // G20: Cuisine Équipée
+      { source: '/blog/cuisine-equipee-prix-pose-2026', destination: '/blog/prix-cuisiniste-2026-pose-cuisine', permanent: true },
+
+      // --- batch-securite-energie (1 article → pillar) ---
+      // G9: PAC air-eau
+      { source: '/blog/pompe-chaleur-air-eau-guide-2026', destination: '/blog/prix-pompe-a-chaleur-2026', permanent: true },
+
+      // --- batch-reglementation (1 article → pillar) ---
+      // G14: Cumul Aides
+      { source: '/blog/aides-renovation-2026-cumul-guide', destination: '/blog/cumul-aides-renovation-2026-tableau', permanent: true },
+
+      // --- batch-aides-saisonnier (1 article → pillar) ---
+      // G14: Cumul Aides (bis)
+      { source: '/blog/cumul-aides-renovation-energetique-2026', destination: '/blog/cumul-aides-renovation-2026-tableau', permanent: true },
+
+      // --- batch-conseils (1 article → pillar) ---
+      // G21: Préparer Maison Hiver
+      { source: '/blog/preparer-maison-hiver-guide-complet', destination: '/blog/preparer-maison-hiver-checklist', permanent: true },
+
+      // --- batch-saisonnier-urgence (1 article → pillar) ---
+      // G21: Préparer Maison Hiver (bis)
+      { source: '/blog/preparer-maison-hiver', destination: '/blog/preparer-maison-hiver-checklist', permanent: true },
+
+      // --- batch-energie-2026 (1 article → pillar) ---
+      // G23: Extension Maison
+      { source: '/blog/extension-maison-prix-m2-2026', destination: '/blog/prix-extension-maison-2026', permanent: true },
     ]
   },
 

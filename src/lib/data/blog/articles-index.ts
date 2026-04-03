@@ -41,7 +41,7 @@ const existingEmojis: Record<string, string> = {
   'renovation-energetique-aides-2026': '🏠',
   'tendances-salle-de-bain-2026': '🛁',
   'devis-travaux-comprendre': '📋',
-  // 'isolation-thermique-guide' removed — redirected to isolation-maison-guide-complet-materiaux-prix-aides
+  // 'isolation-thermique-guide' removed — redirected to prix-isolation-thermique-2026-tarifs
   'electricite-normes-securite': '⚡',
   'peinture-interieure-conseils': '🎨',
   'chauffage-solution-economique': '🔥',
@@ -59,7 +59,7 @@ const existingEmojis: Record<string, string> = {
   'prix-peintre-batiment-2026-guide-complet': '🎨',
   'garantie-decennale-tout-savoir': '🛡️',
   'comment-choisir-cuisine-equipee-guide': '🍳',
-  // 'isolation-thermique-meilleures-solutions-2026' removed — redirected to isolation-maison-guide-complet-materiaux-prix-aides
+  // 'isolation-thermique-meilleures-solutions-2026' removed — redirected to prix-isolation-thermique-2026-tarifs
   // 'prix-couvreur-2026-cout-refection-toiture' removed — redirected to prix-toiture-2026-refection-reparation-materiaux
   'renovation-salle-de-bain-budget-etapes': '🚿',
   'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026': '🔥',
@@ -97,6 +97,17 @@ const existingEmojis: Record<string, string> = {
   // 200 articles prix x ville (batch-prix-villes.ts) — catégorie Tarifs, emoji par défaut via categoryEmoji
   // 50 articles thématiques (aides, urgences, guides, saisonniers) — emoji par défaut via categoryEmoji
   // 22 articles prestations/problèmes/projets (batch-prestations-problemes.ts) — catégories Tarifs/Conseils/Guides/Sécurité, emoji par défaut via categoryEmoji
+  // 10 articles piliers 3000+ mots (batch-piliers-2026.ts)
+  'renovation-maison-guide-ultime-2026': '🏠',
+  'prix-renovation-salle-de-bain-guide-complet-2026': '🚿',
+  'prix-renovation-cuisine-guide-complet-2026': '🍳',
+  'isolation-maison-guide-ultime-2026': '❄️',
+  'pompe-a-chaleur-guide-achat-2026': '🔥',
+  'travaux-maison-par-ou-commencer-guide-2026': '🏗️',
+  'extension-maison-prix-demarches-2026': '📐',
+  'choisir-artisan-guide-anti-arnaque-2026': '🛡️',
+  'aides-renovation-energetique-cumul-2026': '🏛️',
+  'prix-toiture-refection-complete-2026': '🏠',
 }
 
 /** Normalize non-accented category names to their accented equivalents */

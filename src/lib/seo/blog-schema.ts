@@ -68,6 +68,10 @@ export function getBlogArticleSchema(article: {
     articleSection: article.category,
     keywords: article.tags.join(', '),
     inLanguage: 'fr-FR',
+    about: [
+      { '@type': 'Thing', name: article.category },
+      ...article.tags.slice(0, 5).map(tag => ({ '@type': 'Thing', name: tag })),
+    ],
   })
 
   // FAQPage schema is generated separately in the blog page component via getFAQSchema()

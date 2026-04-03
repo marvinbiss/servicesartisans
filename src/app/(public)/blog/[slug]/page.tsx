@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { Calendar, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAuthorByName } from '@/lib/data/authors'
-import { getBreadcrumbSchema, getArticleSpeakableSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getArticleSpeakableSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
@@ -638,7 +638,28 @@ export default async function BlogArticlePage({ params }: PageProps) {
     excerpt: article.excerpt,
   })
 
-  const allSchemas = [breadcrumbSchema, ...schemas, speakableSchema, ...(faqSchema ? [faqSchema] : [])]
+  // HowTo schema for "comment-choisir-*" articles — extract steps from H2 headings
+  const howToSchema = slug.startsWith('comment-choisir-')
+    ? (() => {
+        const h2Blocks = blocks.filter((b): b is H2Block => b.type === 'h2')
+        if (h2Blocks.length < 2) return null
+        const steps = h2Blocks.map((h2) => {
+          // Find the first paragraph after this H2 for the step text
+          const h2Index = blocks.indexOf(h2)
+          const nextBlock = blocks.slice(h2Index + 1).find((b) => b.type === 'p')
+          return {
+            name: h2.text,
+            text: nextBlock && nextBlock.type === 'p' ? nextBlock.text.replace(/<[^>]+>/g, '').slice(0, 300) : h2.text,
+          }
+        })
+        return getHowToSchema(steps, {
+          name: article.title,
+          description: article.excerpt,
+        })
+      })()
+    : null
+
+  const allSchemas = [breadcrumbSchema, ...schemas, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(howToSchema ? [howToSchema] : [])]
 
   const articleUrl = `${SITE_URL}/blog/${slug}`
   const encodedUrl = encodeURIComponent(articleUrl)

@@ -1,5 +1,9 @@
 import type { BlogArticle } from "./articles"
 
+// Removed articles (301 redirected — see cannibalization-audit.md):
+// - renovation-salle-de-bain-prix-guide-2026 -> existing-articles/renovation-salle-de-bain-budget-etapes (G6)
+// - cuisine-equipee-prix-pose-2026 -> batch-prix/prix-cuisiniste-2026-pose-cuisine (G20)
+// - devis-travaux-guide-complet -> existing-articles/devis-travaux-comprendre (G7)
 export const renovationArticles: Record<string, BlogArticle> = {
   "renovation-salle-de-bain-prix-guide-2026": {
     title: "Rénovation Salle de Bain : Prix et Guide 2026",

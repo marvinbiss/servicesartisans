@@ -63,7 +63,7 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, serv
             {isPlombier ? (
               <>
                 <BlogLink href="/blog/comment-choisir-son-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les critères essentiels pour trouver un plombier fiable et compétent." />
-                <BlogLink href="/blog/fuite-eau-urgence-guide-complet-gestes-couts" emoji="&#128680;" title="Fuite d'eau : guide complet des gestes et coûts" desc="Les bons réflexes en cas de fuite ou de dégât des eaux." />
+                <BlogLink href="/blog/fuite-eau-que-faire-urgence" emoji="&#128680;" title="Fuite d'eau : guide complet des gestes et coûts" desc="Les bons réflexes en cas de fuite ou de dégât des eaux." />
               </>
             ) : isBatiment ? (
               <>

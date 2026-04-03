@@ -106,7 +106,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       "Pour le parcours accompagné, un DPE réalisé après travaux est obligatoire pour prouver le gain de classes énergétiques promis. Prévoyez ce coût (150 à 250 €) dans votre budget.",
 
       "### Piège 5 : Négliger les aides cumulables",
-      "MaPrimeRénov' se cumule avec les CEE, l'éco-PTZ, la TVA à 5,5 % et certaines aides locales. Ne pas les demander revient à laisser de l'argent sur la table. Consultez notre article sur le [cumul des aides](/blog/cumul-aides-renovation-energetique-2026) pour maximiser votre financement.",
+      "MaPrimeRénov' se cumule avec les CEE, l'éco-PTZ, la TVA à 5,5 % et certaines aides locales. Ne pas les demander revient à laisser de l'argent sur la table. Consultez notre article sur le [cumul des aides](/blog/cumul-aides-renovation-2026-tableau) pour maximiser votre financement.",
 
       ":::warning Attention\nMéfiez-vous des démarchages téléphoniques ou à domicile proposant des travaux « entièrement gratuits grâce à MaPrimeRénov' ». Depuis 2023, le démarchage téléphonique pour la rénovation énergétique est interdit par la loi. Ces pratiques dissimulent souvent des arnaques avec des travaux bâclés, des devis gonflés et des entreprises fantômes. Signalez tout démarchage suspect à la DGCCRF via signal.conso.gouv.fr.\n:::",
 
@@ -265,7 +265,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       ":::takeaway\n- Le cumul MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales peut couvrir **jusqu'à 100 %** du coût des travaux\n- Demandez les **CEE avant** la signature du devis, puis MaPrimeRénov' avant le début des travaux\n- L'éco-PTZ permet d'emprunter jusqu'à **50 000 € sans intérêts** sur 20 ans\n- Le reste à charge peut être quasi nul pour une rénovation globale, même pour les revenus intermédiaires\n- Consultez **aides-territoires.beta.gouv.fr** pour identifier les aides locales de votre commune\n:::"
     ],
-    image: '/images/blog/cumul-aides-renovation-energetique-2026.webp',
+    image: '/images/blog/cumul-aides-renovation-2026-tableau.webp',
     author: 'ServicesArtisans',
     date: '2026-02-18',
     readTime: '14 min',

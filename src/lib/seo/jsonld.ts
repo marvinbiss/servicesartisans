@@ -143,13 +143,27 @@ export function getFAQSchema(faqs: { question: string; answer: string }[]) {
   }
 }
 
-// HowTo schema — DEPRECATED by Google (Aug 2023) for non-governmental/non-health sites.
-// Kept as no-op stub so existing callers don't break. Returns null → schemas skip it.
+// HowTo schema — Google removed rich result display (Aug 2023) for most sites,
+// but the schema remains valid and is used by Bing, DuckDuckGo, Yahoo, and Google AI Overviews.
 export function getHowToSchema(
-  _steps: { name: string; text: string; image?: string }[],
-  _options?: { name?: string; description?: string; totalTime?: string }
-): null {
-  return null
+  steps: { name: string; text: string; image?: string }[],
+  options?: { name?: string; description?: string; totalTime?: string }
+): Record<string, unknown> | null {
+  if (!steps || steps.length === 0) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    ...(options?.name && { name: options.name }),
+    ...(options?.description && { description: options.description }),
+    ...(options?.totalTime && { totalTime: options.totalTime }),
+    step: steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+      ...(step.image && { image: step.image }),
+    })),
+  }
 }
 
 // Schema.org ItemList (pour les pages de listing SEO programmatique style TripAdvisor)

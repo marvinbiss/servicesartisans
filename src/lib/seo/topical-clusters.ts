@@ -39,8 +39,8 @@ export interface TopicalCluster {
 // ---------------------------------------------------------------------------
 
 const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
-  'plombier': ['prix-plombier-2026-tarifs-horaires', 'comment-choisir-son-plombier', 'fuite-eau-urgence-guide-complet-gestes-couts'],
-  'electricien': ['prix-electricien-2026-tarifs-travaux', 'comment-choisir-electricien-guide', 'normes-electriques-2026-nfc-15-100-guide'],
+  'plombier': ['prix-plombier-2026-tarifs-horaires', 'comment-choisir-son-plombier', 'fuite-eau-que-faire-urgence'],
+  'electricien': ['prix-electricien-2026-tarifs-travaux', 'comment-choisir-electricien-guide', 'electricite-normes-securite'],
   'serrurier': ['prix-serrurier-2026-tarifs-interventions', 'comment-choisir-serrurier-conseils', 'securiser-maison-cambriolage-solutions'],
   'chauffagiste': ['prix-chauffagiste-2026-installation-entretien', 'comment-choisir-chauffagiste-guide', 'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026'],
   'peintre-en-batiment': ['prix-peintre-batiment-2026-guide-complet', 'peinture-interieure-conseils', 'renover-facade-ravalement-guide'],
@@ -60,14 +60,14 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
   'etancheiste': ['etancheite-toiture-terrasse-solutions', 'humidite-moisissure-maison-solutions', 'prix-toiture-2026-refection-reparation-materiaux'],
   'facadier': ['prix-ravalement-facade-2026', 'renover-facade-ravalement-guide', 'types-enduit-facade'],
   'platrier': ['plaque-de-platre-ba13-guide', 'prix-renovation-appartement-2026-budget', 'renovation-maison-par-ou-commencer'],
-  'pompe-a-chaleur': ['pompe-a-chaleur-guide-complet-2026', 'prix-pompe-a-chaleur-2026', 'aides-renovation-2026-cumul-guide'],
+  'pompe-a-chaleur': ['prix-pompe-a-chaleur-2026', 'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026', 'cumul-aides-renovation-2026-tableau'],
   'panneaux-solaires': ['panneaux-solaires-rentabilite-2026', 'prix-panneaux-solaires-2026', 'installer-panneau-solaire-maison-2026'],
-  'isolation-thermique': ['isolation-maison-guide-complet-materiaux-prix-aides', 'isolation-combles-materiaux-guide', 'aides-renovation-2026-cumul-guide'],
-  'renovation-energetique': ['renovation-energetique-par-ou-commencer', 'dpe-diagnostic-performance-energetique-tout-savoir', 'eco-ptz-2026-pret-taux-zero-renovation'],
-  'salle-de-bain': ['renovation-salle-de-bain-guide-complet-prix-2026', 'tendances-salle-de-bain-2026', 'renovation-salle-de-bain-budget-etapes'],
+  'isolation-thermique': ['prix-isolation-thermique-2026-tarifs', 'isolation-combles-materiaux-guide', 'cumul-aides-renovation-2026-tableau'],
+  'renovation-energetique': ['travaux-renovation-energetique-par-ou-commencer', 'dpe-obligatoire-2026-guide', 'eco-ptz-2026-conditions-montant'],
+  'salle-de-bain': ['renovation-salle-de-bain-budget-etapes', 'tendances-salle-de-bain-2026', 'prix-salle-de-bain-complete-2026'],
   'ramoneur': ['ramonage-obligatoire-avant-hiver', 'entretien-chaudiere-annuel', 'preparer-maison-hiver-checklist'],
   'domoticien': ['comment-choisir-domoticien-guide', 'domotique-maison-connectee-guide-debutant', 'prix-domotique-maison-2026'],
-  'borne-recharge': ['prix-borne-recharge-domicile-2026', 'normes-electriques-2026-nfc-15-100-guide', 'domotique-maison-connectee-guide-debutant'],
+  'borne-recharge': ['prix-borne-recharge-domicile-2026', 'electricite-normes-securite', 'domotique-maison-connectee-guide-debutant'],
   'alarme-securite': ['securite-alarme-maison-guide-2026', 'securiser-maison-cambriolage-solutions', 'domotique-maison-connectee-guide-debutant'],
 }
 

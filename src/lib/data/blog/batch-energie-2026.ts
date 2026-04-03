@@ -430,6 +430,16 @@ Pour une installation conforme et sécurisée, faites appel à un électricien c
         answer:
           "Le locataire peut saisir le tribunal pour obtenir une mise en conformité du logement, une réduction de loyer ou des dommages et intérêts. Le juge peut également ordonner la réalisation de travaux sous astreinte. En cas de vente, l'acquéreur peut demander une réduction du prix ou l'annulation de la vente si le DPE est erroné.",
       },
+      {
+        question: "Quelle est la durée de validité d'un DPE ?",
+        answer:
+          "Depuis le 1er janvier 2023, la durée de validité d'un DPE est de 10 ans. Les DPE réalisés entre le 1er janvier 2018 et le 30 juin 2021 étaient valables jusqu'au 31 décembre 2022. Ceux réalisés entre le 1er juillet 2021 et le 31 décembre 2022 sont valables jusqu'au 31 décembre 2024.",
+      },
+      {
+        question: "Peut-on contester un DPE erroné ?",
+        answer:
+          "Oui, depuis la réforme de 2021, le DPE est opposable juridiquement. En cas d'erreur manifeste, contactez le diagnostiqueur par lettre recommandée, saisissez l'organisme certificateur (COFRAC, Bureau Veritas, DEKRA), puis mandatez un second diagnostiqueur pour un contre-DPE. Le délai de prescription est de 10 ans.",
+      },
     ],
     content: [
       `# DPE Obligatoire 2026 : Tout ce qui Change pour les Propriétaires

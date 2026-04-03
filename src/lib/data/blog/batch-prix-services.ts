@@ -362,7 +362,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
 
       "À lire aussi : notre guide complet sur les [prix rénovation énergétique](/blog/prix-renovation-energetique-2026-tarifs) pour compléter votre recherche.",
 
-      "À lire aussi : notre guide complet sur les [guide MaPrimeRénov' 2026](/blog/maprimerenov-2026-guide-complet-aides-renovation) pour compléter votre recherche.",
+      "À lire aussi : notre guide complet sur les [guide MaPrimeRénov' 2026](/blog/maprimerénov-2026-conditions-montants) pour compléter votre recherche.",
 
       ":::takeaway\n- Combles perdus : **20 – 40 €/m²** — meilleur rapport coût/efficacité\n- ITI murs : **40 – 90 €/m²** | ITE murs : **120 – 250 €/m²**\n- MaPrimeRénov + CEE + TVA 5,5 % = jusqu'à **70 % du coût couvert**\n- Éco-PTZ : **50 000 € max** à taux zéro pour financer le reste\n- Artisan **RGE obligatoire** pour bénéficier de toutes les aides\n:::"
     ],
@@ -474,7 +474,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
 
       "À lire aussi : notre guide complet sur les [prix isolation thermique](/blog/prix-isolation-thermique-2026-tarifs) pour compléter votre recherche.",
 
-      "À lire aussi : notre guide complet sur les [guide MaPrimeRénov' 2026](/blog/maprimerenov-2026-guide-complet-aides-renovation) pour compléter votre recherche.",
+      "À lire aussi : notre guide complet sur les [guide MaPrimeRénov' 2026](/blog/maprimerénov-2026-conditions-montants) pour compléter votre recherche.",
 
       ":::takeaway\n- Rénovation globale (maison 100 m²) : **25 000 – 60 000 €** avant aides\n- MaPrimeRénov parcours accompagné : jusqu'à **63 000 €** d'aides (profil Bleu)\n- CEE + TVA 5,5 % + éco-PTZ = reste à charge finançable à **0 % d'intérêts**\n- Passage DPE F → C : retour sur investissement en **5 à 7 ans**\n- Accompagnateur Rénov' **obligatoire** pour le parcours accompagné\n:::"
     ],
