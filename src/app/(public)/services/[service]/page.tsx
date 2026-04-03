@@ -28,6 +28,7 @@ import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
+import RelatedArticles from '@/components/seo/RelatedArticles'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
@@ -826,6 +827,9 @@ export default async function ServicePage({ params }: PageProps) {
           </section>
         )
       })()}
+
+      {/* Articles utiles — blog articles liés au service */}
+      <RelatedArticles serviceSlug={serviceSlug} />
 
       {/* CTA */}
       <section className="relative py-16 overflow-hidden bg-gradient-hero">

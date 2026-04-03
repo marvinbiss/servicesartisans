@@ -496,6 +496,82 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
 }
 
 /**
+ * Top 20 villes françaises par population pour le maillage interne local.
+ */
+const TOP_20_CITIES: { name: string; slug: string }[] = [
+  { name: 'Paris', slug: 'paris' },
+  { name: 'Marseille', slug: 'marseille' },
+  { name: 'Lyon', slug: 'lyon' },
+  { name: 'Toulouse', slug: 'toulouse' },
+  { name: 'Nice', slug: 'nice' },
+  { name: 'Nantes', slug: 'nantes' },
+  { name: 'Montpellier', slug: 'montpellier' },
+  { name: 'Strasbourg', slug: 'strasbourg' },
+  { name: 'Bordeaux', slug: 'bordeaux' },
+  { name: 'Lille', slug: 'lille' },
+  { name: 'Rennes', slug: 'rennes' },
+  { name: 'Reims', slug: 'reims' },
+  { name: 'Saint-Étienne', slug: 'saint-etienne' },
+  { name: 'Toulon', slug: 'toulon' },
+  { name: 'Le Havre', slug: 'le-havre' },
+  { name: 'Grenoble', slug: 'grenoble' },
+  { name: 'Dijon', slug: 'dijon' },
+  { name: 'Angers', slug: 'angers' },
+  { name: 'Nîmes', slug: 'nimes' },
+  { name: 'Clermont-Ferrand', slug: 'clermont-ferrand' },
+]
+
+/**
+ * Maps "service + ville" keyword patterns to local service pages.
+ * Covers the 10 most searched services × 20 largest French cities = 200 entries.
+ * Used to generate links to /services/[service]/[ville] pages (pSEO).
+ */
+const localServiceMapping: Record<string, { serviceSlug: string; citySlug: string; label: string; cityName: string }> = (() => {
+  const TOP_10_SERVICES = [
+    { slug: 'plombier', label: 'plombier', keywords: ['plombier'] },
+    { slug: 'electricien', label: 'électricien', keywords: ['electricien', 'électricien'] },
+    { slug: 'serrurier', label: 'serrurier', keywords: ['serrurier'] },
+    { slug: 'chauffagiste', label: 'chauffagiste', keywords: ['chauffagiste'] },
+    { slug: 'peintre-en-batiment', label: 'peintre en bâtiment', keywords: ['peintre'] },
+    { slug: 'menuisier', label: 'menuisier', keywords: ['menuisier'] },
+    { slug: 'macon', label: 'maçon', keywords: ['macon', 'maçon'] },
+    { slug: 'couvreur', label: 'couvreur', keywords: ['couvreur'] },
+    { slug: 'carreleur', label: 'carreleur', keywords: ['carreleur'] },
+    { slug: 'platrier-plaquiste', label: 'plaquiste', keywords: ['plaquiste'] },
+  ]
+
+  const mapping: Record<string, { serviceSlug: string; citySlug: string; label: string; cityName: string }> = {}
+
+  for (const service of TOP_10_SERVICES) {
+    for (const city of TOP_20_CITIES) {
+      for (const keyword of service.keywords) {
+        // "plombier paris", "électricien lyon", etc.
+        const key = `${keyword} ${city.slug}`
+        mapping[key] = {
+          serviceSlug: service.slug,
+          citySlug: city.slug,
+          label: service.label,
+          cityName: city.name,
+        }
+        // Also match with city name in lowercase (e.g. "plombier saint-étienne")
+        const cityNameLower = city.name.toLowerCase()
+        if (cityNameLower !== city.slug) {
+          const keyName = `${keyword} ${cityNameLower}`
+          mapping[keyName] = {
+            serviceSlug: service.slug,
+            citySlug: city.slug,
+            label: service.label,
+            cityName: city.name,
+          }
+        }
+      }
+    }
+  }
+
+  return mapping
+})()
+
+/**
  * Determines which service pages are relevant for a given article
  * based on its slug, category and tags.
  */
@@ -506,23 +582,31 @@ export function getRelatedServiceLinks(
 ): InternalLink[] {
   const links: InternalLink[] = []
   const addedSlugs = new Set<string>()
+  const addedLocalKeys = new Set<string>()
 
   // Build search terms from the slug (split on hyphens) and lowered tags
   const slugWords = slug.toLowerCase()
   const searchTerms = [slugWords, ...tags.map((t) => t.toLowerCase())]
 
-  // Top 5 cities for service×ville cross-links
-  const TOP_CITIES = [
-    { name: 'Paris', slug: 'paris' },
-    { name: 'Lyon', slug: 'lyon' },
-    { name: 'Marseille', slug: 'marseille' },
-    { name: 'Toulouse', slug: 'toulouse' },
-    { name: 'Nice', slug: 'nice' },
-  ]
-
   let firstServiceSlug: string | null = null
 
   for (const term of searchTerms) {
+    // 1. Check local service×ville mappings first (more specific = higher priority)
+    for (const [keyword, local] of Object.entries(localServiceMapping)) {
+      const localKey = `${local.serviceSlug}/${local.citySlug}`
+      if (term.includes(keyword) && !addedLocalKeys.has(localKey)) {
+        const capitalizedLabel = local.label.charAt(0).toUpperCase() + local.label.slice(1)
+        links.push({
+          text: `${capitalizedLabel} à ${local.cityName}`,
+          href: `/services/${local.serviceSlug}/${local.citySlug}`,
+        })
+        addedLocalKeys.add(localKey)
+        // Also mark the service as added so we don't duplicate the generic link
+        addedSlugs.add(local.serviceSlug)
+      }
+    }
+
+    // 2. Check generic service mappings
     for (const [keyword, service] of Object.entries(serviceMapping)) {
       if (term.includes(keyword) && !addedSlugs.has(service.slug)) {
         links.push({
@@ -534,14 +618,19 @@ export function getRelatedServiceLinks(
           text: `Tarifs ${service.label}`,
           href: `/tarifs/${service.slug}`,
         })
-        // Add top-city variants for the first matched service only
+        // Add top-city variants for the first matched service only (5 cities for breadth)
         if (!firstServiceSlug) {
           firstServiceSlug = service.slug
-          for (const city of TOP_CITIES) {
-            links.push({
-              text: `${service.label.charAt(0).toUpperCase() + service.label.slice(1)} à ${city.name}`,
-              href: `/services/${service.slug}/${city.slug}`,
-            })
+          const citiesToShow = TOP_20_CITIES.slice(0, 5)
+          for (const city of citiesToShow) {
+            const localKey = `${service.slug}/${city.slug}`
+            if (!addedLocalKeys.has(localKey)) {
+              links.push({
+                text: `${service.label.charAt(0).toUpperCase() + service.label.slice(1)} à ${city.name}`,
+                href: `/services/${service.slug}/${city.slug}`,
+              })
+              addedLocalKeys.add(localKey)
+            }
           }
         }
         addedSlugs.add(service.slug)

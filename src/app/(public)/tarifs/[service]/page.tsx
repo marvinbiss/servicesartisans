@@ -19,6 +19,7 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import RelatedArticles from '@/components/seo/RelatedArticles'
 import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
@@ -703,6 +704,9 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         serviceName={trade.name}
         currentIntent="tarifs"
       />
+
+      {/* Articles utiles — blog articles liés au service */}
+      <RelatedArticles serviceSlug={service} />
 
       {/* Voir aussi */}
       <section className="py-12 bg-white border-t">
