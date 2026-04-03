@@ -24,6 +24,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nNe versez **jamais plus de 30 % d'acompte** à la signature du devis. Le solde doit être payé à la réception des travaux, après vérification du bon fonctionnement de l'installation. Conservez toujours le certificat Consuel et l'attestation de garantie décennale dans vos documents importants.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de électricien en 2026](/blog/prix-electricien-2026-tarifs-travaux) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Vérifier le **SIRET** et la certification **Qualifelec**\n- Exiger l'**attestation d'assurance décennale** à jour\n- Comparer **trois devis détaillés** (marques, modèles, prix unitaires)\n- Exiger le certificat **Consuel** après installation neuve\n- Ne jamais verser plus de **30 % d'acompte**\n:::"
     ],
     image: "/images/blog/choisir-electricien.jpg",
@@ -69,6 +71,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nLe secteur de la serrurerie d'urgence est l'un des plus touchés par les arnaques en France. La DGCCRF reçoit des centaines de plaintes chaque année. Les techniques les plus courantes : **prix d'appel à 39 €** suivi d'une facture de 800 €, diagnostic alarmiste (« il faut tout changer »), facturation de pièces haut de gamme sans accord préalable, et paiement exigé en espèces. Ne cédez **jamais** à la pression.\n:::",
 
       ":::tip Conseil pro\nLe meilleur réflexe anti-arnaque : **identifiez un serrurier de confiance AVANT l'urgence** et enregistrez ses coordonnées dans votre téléphone. En situation de stress, vous appellerez directement un professionnel vérifié au lieu de chercher en catastrophe sur internet, terrain de chasse des faux serruriers.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de serrurier en 2026](/blog/prix-serrurier-2026-tarifs-interventions) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Trouver un serrurier **avant** l'urgence via ServicesArtisans\n- Connaître les prix normaux : ouverture simple **80 – 150 €** en journée\n- Exiger un **devis écrit** avant toute intervention (obligatoire au-delà de 150 €)\n- Se méfier des tarifs excessifs et des diagnostics alarmistes\n- Vérifier le **SIRET** et demander une **facture détaillée**\n:::"
     ],
@@ -116,6 +120,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
 
       ":::info Bon à savoir\nLe label **RGE** est obligatoire pour que vos travaux soient éligibles aux aides : MaPrimeRénov' (jusqu'à 5 000 € pour une PAC air-eau), CEE (2 000 – 4 000 €), éco-PTZ (jusqu'à 50 000 € à taux zéro). Un chauffagiste non RGE vous fait perdre des milliers d'euros d'aides. Vérifiez la validité du certificat sur [france-renov.gouv.fr](https://france-renov.gouv.fr).\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de chauffagiste en 2026](/blog/prix-chauffagiste-2026-installation-entretien) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Exiger le label **RGE** et les certifications spécifiques (QualiPAC, QualiBois)\n- Vérifier l'**assurance décennale** avant signature\n- Exiger un **bilan thermique** avant tout dimensionnement\n- Comparer **trois devis** incluant marque, modèle et COP\n- Privilégier un professionnel proposant l'**entretien** sur le long terme\n:::"
     ],
     image: "/images/blog/choisir-chauffagiste.jpg",
@@ -160,6 +166,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nUn menuisier qui prend les mesures **au téléphone**, qui ne propose qu'une seule marque sans justification technique, qui refuse de montrer des réalisations antérieures ou qui ne mentionne pas la conformité au DTU applicable : autant de raisons de poursuivre vos recherches. En menuiserie, **un millimètre compte**.\n:::",
 
       ":::tip Conseil pro\nPour les fenêtres, exigez le coefficient **Uw** (performance thermique de la fenêtre complète) sur le devis. Un Uw ≤ 1,3 W/m².K est nécessaire pour bénéficier de la TVA à 5,5 % et des aides MaPrimeRénov'. Pour les escaliers, demandez à visiter un chantier terminé ou à voir des photos de réalisations similaires à votre projet.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de menuisier en 2026](/blog/prix-menuisier-2026-tarifs-travaux) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Identifier votre besoin : menuisier **intérieur**, **extérieur** ou **ébéniste**\n- Vérifier **Qualibat** et **RGE** (pour les fenêtres éligibles aux aides)\n- Exiger une **prise de cotes sur site** (jamais à distance)\n- Comparer trois devis avec **coefficients thermiques** (Uw)\n- Choisir un menuisier proposant un **SAV** sérieux\n:::"
     ],
@@ -208,6 +216,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
 
       ":::info Bon à savoir\nLe **DTU 52.2** est la norme de référence pour la pose de carrelage en France. Il impose notamment le double encollage pour les formats supérieurs à 30 x 30 cm, l'utilisation d'un primaire d'accrochage adapté au support, et des joints de dilatation tous les 60 m² maximum. Un carreleur qui connaît et respecte le DTU est un professionnel sérieux.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de carreleur en 2026](/blog/prix-carreleur-2026-pose-fourniture) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Vérifier **CAP Carreleur-mosaïste** et certification **Qualibat**\n- Demander des **photos** de réalisations récentes\n- Exiger un devis incluant la **préparation du support**\n- Pour la douche italienne : exiger l'expérience en **étanchéité SPEC**\n- Contrôler les **assurances** (décennale + parfait achèvement)\n:::"
     ],
     image: "/images/blog/choisir-carreleur.jpg",
@@ -250,6 +260,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nUn maçon qui ne parle **jamais d'étude de sol**, qui refuse de détailler la composition de ses bétons, qui ne mentionne pas les DTU applicables ou qui sous-estime systématiquement les délais : autant de raisons de poursuivre vos recherches. Depuis la **loi Élan de 2018**, l'étude géotechnique est obligatoire dans les zones argileuses.\n:::",
 
       ":::tip Conseil pro\nÀ la fin du chantier, la **réception des travaux** est un acte juridique essentiel qui marque le point de départ des garanties (parfait achèvement 1 an, biennale 2 ans, décennale 10 ans). Inspectez minutieusement les ouvrages et notez **toutes les réserves** sur le procès-verbal. Ne signez jamais sans réserve sous la pression.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de maçon en 2026](/blog/prix-macon-2026-gros-oeuvre-renovation) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Vérifier **CAP Maçon** et certification **Qualibat** gros œuvre\n- Exiger l'attestation de **garantie décennale** avant toute signature\n- Demander un devis détaillant **fondations et matériaux**\n- Faire réaliser une **étude de sol** si nécessaire\n- Suivre le chantier de près et formaliser la **réception des travaux**\n:::"
     ],
@@ -296,6 +308,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nEn cas de fuite urgente, **bâchez temporairement** la zone si possible, contactez immédiatement un couvreur et prévenez votre assurance habitation. Un couvreur sérieux intervient dans les **24 à 48 heures**. Ne tentez jamais de monter sur le toit vous-même : les chutes de hauteur sont la première cause d'accidents mortels dans le bâtiment.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de couvreur en 2026](/blog/prix-toiture-2026-refection-reparation-materiaux) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Vérifier **CAP Couvreur**, **Qualibat** et **RGE** (si isolation)\n- Exiger la **montée sur toit** pour le diagnostic (pas de devis depuis le sol)\n- Contrôler la **garantie décennale** couvrant les travaux de couverture\n- **Méfiez-vous du démarchage** abusif au porte-à-porte\n- Choisir un couvreur respectant les **règles de sécurité** (harnais, échafaudage)\n:::"
     ],
     image: "/images/blog/choisir-couvreur.jpg",
@@ -340,6 +354,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::info Bon à savoir\nLes travaux d'entretien de jardin ouvrent droit à un **crédit d'impôt de 50 %** (dans la limite de 5 000 €/an) si le professionnel est agréé « services à la personne ». **Attention** : les travaux de création ne sont pas éligibles. Pour l'élagage d'arbres de grande hauteur, exigez un élagueur titulaire du **CS Taille et soins des arbres**.\n:::",
 
       ":::warning Attention\nUn paysagiste qui **ne visite pas le terrain**, qui ne tient pas compte de l'exposition et de la nature du sol, qui propose des essences inadaptées au climat local, ou qui ne mentionne pas la **garantie de reprise** sur les plantations : autant de signaux négatifs. Un bon paysagiste adapte ses propositions à votre terrain, pas l'inverse.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de jardinier paysagiste en 2026](/blog/prix-jardinier-paysagiste-2026) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Distinguer **entretien** (jardinier) et **création** (paysagiste)\n- Vérifier **BTSA**, **Qualipaysage** ou **CS élagage** selon le besoin\n- Exiger un **plan et un devis détaillé** pour les aménagements\n- Privilégier les professionnels qui **visitent le terrain** avant de chiffrer\n- Profiter du **crédit d'impôt de 50 %** pour l'entretien courant\n:::"
     ],
@@ -386,6 +402,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nIdentifiez un vitrier de confiance **avant l'urgence**. En cas de bris de glace, sécurisez la zone, prenez des photos pour l'assurance, et protégez l'ouverture avec un panneau provisoire. Déclarez le sinistre dans les **5 jours ouvrés**. Privilégiez le **double vitrage VIR** pour toute rénovation.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de vitrier en 2026](/blog/prix-vitrier-2026-remplacement-vitrage) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Identifier un vitrier de confiance **avant l'urgence**\n- Connaître les prix normaux : double vitrage **100 – 250 €/m²**\n- Exiger un devis avec le coefficient **Ug** du vitrage\n- Déclarer le bris de glace à l'assurance dans les **5 jours**\n- Privilégier le **double vitrage VIR** pour la rénovation\n:::"
     ],
     image: "/images/blog/choisir-vitrier.jpg",
@@ -428,6 +446,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nUn climaticien qui ne réalise pas de **visite préalable**, qui propose un équipement sans **bilan thermique**, qui ne mentionne pas les contraintes acoustiques ou qui ignore la réglementation sur l'emplacement de l'unité extérieure est à éviter. En copropriété, l'installation nécessite l'**accord de l'assemblée générale**.\n:::",
 
       ":::info Bon à savoir\nTout professionnel manipulant des fluides frigorigènes doit détenir une **attestation de capacité** délivrée par un organisme agréé (Afnor, Bureau Veritas). C'est une obligation légale depuis 2015 (règlement F-Gas). Demandez à voir ce document **avant toute intervention**. Sans cette attestation, le professionnel est en infraction.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de climaticien en 2026](/blog/prix-climaticien-2026-installation-entretien) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Vérifier l'**attestation de capacité** (fluides frigorigènes) et **QualiPAC**\n- Exiger un **bilan thermique** avant le dimensionnement\n- Comparer trois devis avec **SEER, SCOP** et niveau sonore\n- Tenir compte des contraintes **acoustiques** et de copropriété\n- Prévoir un **contrat d'entretien** annuel (100 – 200 €)\n:::"
     ],
@@ -474,6 +494,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nUn cuisiniste qui n'inclut **pas la pose** dans son devis, qui exige plus de **40 % d'acompte** à la commande, ou qui ne précise pas **qui réalise la pose** (équipes internes ou sous-traitants) doit vous alerter. Les grandes enseignes sous-traitent souvent la pose : la qualité dépend alors du poseur local.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de cuisiniste en 2026](/blog/prix-cuisiniste-2026-pose-cuisine) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Comparer les approches : **enseigne**, **indépendant** ou **artisan menuisier**\n- Exiger une **prise de cotes sur site** et un **plan 3D**\n- Décortiquer les devis **poste par poste** (mobilier, électroménager, pose, travaux)\n- Vérifier **qui réalise la pose** et les garanties associées\n- Inspecter minutieusement à la **réception** et noter les réserves\n:::"
     ],
     image: "/images/blog/choisir-cuisiniste.jpg",
@@ -518,6 +540,8 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::warning Attention\nUne entreprise qui propose des tarifs anormalement bas (risque de **travail dissimulé**), qui ne fournit pas d'attestation d'assurance, qui ne visite pas les locaux avant de chiffrer, ou qui n'a aucune procédure de contrôle qualité est à éviter. Exigez l'**attestation de vigilance URSSAF** prouvant que l'entreprise est à jour de ses cotisations sociales.\n:::",
 
       ":::tip Conseil pro\nRédigez un **cahier des charges précis** avant de demander des devis : surfaces, fréquence, prestations détaillées, horaires et exigences particulières. Plus votre cahier des charges est précis, plus les devis seront comparables et plus le résultat sera conforme à vos attentes.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de nettoyage professionnel en 2026](/blog/prix-nettoyage-professionnel-2026) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Rédiger un **cahier des charges précis** avant de demander des devis\n- Vérifier la certification **Qualipropre** et l'**attestation URSSAF**\n- Comparer les devis sur des **bases identiques**\n- Poser les questions sur le **personnel** et le **contrôle qualité**\n- Privilégier les entreprises avec une **démarche qualité** structurée\n:::"
     ],

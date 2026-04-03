@@ -4,6 +4,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "plombier-urgence-nuit-tarifs": {
     title: "Plombier d'urgence la nuit : tarifs et conseils 2026",
     excerpt: "Fuite d'eau en pleine nuit ? Découvrez les tarifs réels d'un plombier d'urgence nocturne en 2026, les majorations légales et nos conseils pour éviter les arnaques.",
+    metaTitle: "Plombier Urgence Nuit 2026 : Tarifs Réels",
+    metaDescription: "Découvrez les vrais tarifs d'un plombier d'urgence la nuit en 2026. Majorations légales et conseils anti-arnaques. Devis gratuit.",
     content: [
       "Il est 2 heures du matin, une fuite d'eau inonde votre cuisine, et la panique s'installe. Chaque année en France, plus de **500 000 dégâts des eaux** sont déclarés aux assurances, et une part significative survient la nuit ou le week-end. Dans ces moments de stress, il est tentant d'appeler le premier numéro trouvé sur Google — mais c'est aussi le meilleur moyen de se faire facturer trois fois le prix normal. Ce guide vous donne les **vrais tarifs 2026** d'un [plombier d'urgence](/services/plombier) intervenant la nuit, et les réflexes à adopter pour limiter la facture.",
 
@@ -33,6 +35,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       "1. **Coupez l'eau** immédiatement au compteur — cela stoppe la fuite et vous donne le temps de réfléchir\n2. **Demandez un devis téléphonique** avec une fourchette de prix avant que le plombier ne se déplace\n3. **Vérifiez le SIRET** de l'entreprise sur societe.com\n4. **Appelez votre assurance** : de nombreux contrats multirisques habitation incluent un service d'assistance 24h/24 qui envoie un plombier agréé à tarif encadré\n5. **Consultez notre [annuaire de plombiers vérifiés](/services/plombier)** pour trouver un professionnel fiable dans votre ville",
 
       "## Votre assurance peut-elle couvrir l'intervention ?",
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix plombier 2026](/blog/prix-plombier-2026-tarifs-horaires).",
+
       "La plupart des contrats multirisques habitation couvrent les dégâts des eaux et proposent une assistance d'urgence 24h/24. Le plombier envoyé par l'assurance effectue une **recherche de fuite** et un **colmatage provisoire** sans frais pour l'assuré (hors franchise, généralement 150 à 300 €). La réparation définitive reste souvent à votre charge, mais est remboursée si le dégât est couvert. Appelez le numéro d'assistance figurant sur votre contrat **avant** de chercher un plombier vous-même."
     ],
     image: "/images/blog/plombier-urgence-nuit-tarifs.webp",
@@ -59,6 +63,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "chauffagiste-urgence-hiver": {
     title: "Panne de chauffage en hiver : trouver un chauffagiste en urgence",
     excerpt: "Chauffage en panne en plein hiver ? Découvrez comment trouver un chauffagiste en urgence, les tarifs de dépannage hivernal et les gestes à adopter en attendant.",
+    metaTitle: "Chauffagiste Urgence Hiver 2026 : Tarifs",
+    metaDescription: "Panne de chauffage en hiver ? Découvrez les tarifs dépannage chauffagiste et les gestes d'urgence. Obtenez un devis gratuit.",
     content: [
       "Quand le thermomètre descend sous zéro et que votre chaudière tombe en panne, c'est une situation critique — surtout si vous avez des enfants en bas âge ou des personnes âgées au foyer. Chaque hiver, les chauffagistes français enregistrent un pic d'appels d'urgence entre décembre et février, avec des délais d'intervention pouvant atteindre **48 à 72 heures** lors des vagues de froid. Ce guide vous explique comment réagir efficacement et trouver un [chauffagiste en urgence](/services/chauffagiste) sans vous ruiner.",
 
@@ -82,6 +88,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Prévenir plutôt que subir",
       "L'entretien annuel de la chaudière est **obligatoire** (décret du 9 juin 2009) et coûte entre **80 et 180 €**. Il réduit le risque de panne de 70 % et prolonge la durée de vie de l'appareil de 3 à 5 ans. Idéalement, planifiez cet entretien en **septembre-octobre**, avant la mise en route du chauffage. Pour les pompes à chaleur, un contrat de maintenance annuel (200 à 400 €) est vivement recommandé.",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix chauffagiste 2026](/blog/prix-chauffagiste-2026-installation-entretien).",
 
       ":::tip Conseil pro\nSouscrivez un **contrat d'entretien avec dépannage inclus** (150 à 300 €/an selon l'équipement). Ces contrats garantissent une intervention prioritaire sous 24 h en cas de panne, pièces d'usure incluses. C'est le meilleur investissement pour passer l'hiver sereinement.\n:::"
     ],
@@ -108,6 +116,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "climatisation-panne-canicule": {
     title: "Climatisation en panne pendant la canicule : que faire ?",
     excerpt: "Clim en panne en pleine canicule ? Découvrez les gestes d'urgence, les tarifs de dépannage climatisation et comment trouver un technicien rapidement en été 2026.",
+    metaTitle: "Panne Clim Canicule 2026 : Urgence et Tarifs",
+    metaDescription: "Climatisation en panne pendant la canicule ? Gestes d'urgence et tarifs dépannage 2026. Obtenez un devis gratuit rapidement.",
     content: [
       "Quand le thermomètre dépasse les 40 °C — ce qui est devenu courant chaque été en France depuis 2022 — une climatisation en panne peut transformer votre logement en fournaise. Selon Météo-France, la France a connu **8 épisodes caniculaires** entre 2022 et 2025, et les projections 2026 ne sont pas plus optimistes. Le problème : les techniciens frigoristes sont débordés en période de canicule, avec des délais d'intervention de **5 à 10 jours**. Voici comment réagir et trouver un [spécialiste climatisation](/services/climatisation) rapidement.",
 
@@ -132,6 +142,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Prévenir les pannes : l'entretien au printemps",
       "L'entretien annuel d'un climatiseur split coûte entre **100 et 180 €** et comprend : nettoyage des filtres, vérification de la charge de gaz, contrôle électrique, et nettoyage de l'unité extérieure. Idéalement, planifiez cet entretien en **avril-mai**, avant la saison chaude. Les appareils de plus de 2 kg de fluide frigorigène doivent faire l'objet d'un **contrôle d'étanchéité obligatoire** annuel (règlement F-Gas).",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix climaticien 2026](/blog/prix-climaticien-2026-installation-entretien).",
 
       ":::tip Conseil pro\nSi votre climatisation a plus de 12 ans et utilise du R410A, anticipez son remplacement. Le R410A sera progressivement interdit (règlement F-Gas révisé 2024), rendant les recharges de plus en plus coûteuses. Les nouveaux modèles au R32 consomment 10 à 15 % d'énergie en moins.\n:::"
     ],
@@ -158,6 +170,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "ramonage-obligatoire-avant-hiver": {
     title: "Ramonage avant l'hiver : obligations et tarifs 2026",
     excerpt: "Le ramonage est obligatoire avant l'hiver. Découvrez la réglementation, les tarifs 2026 par région et les risques encourus en cas de non-conformité.",
+    metaTitle: "Ramonage 2026 : Obligations et Tarifs",
+    metaDescription: "Découvrez les obligations de ramonage avant l'hiver : réglementation et tarifs 2026 par région. Obtenez un devis gratuit ramoneur.",
     content: [
       "Chaque année en France, **les intoxications au monoxyde de carbone** causées par des conduits de cheminée mal entretenus provoquent environ **3 000 hospitalisations et 100 décès**. Le ramonage n'est pas qu'une obligation légale : c'est une question de sécurité vitale. À l'approche de l'hiver 2026, voici tout ce que vous devez savoir sur vos obligations, les tarifs pratiqués et comment trouver un [ramoneur qualifié](/services/ramoneur) près de chez vous.",
 
@@ -181,6 +195,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Locataire ou propriétaire : qui paie ?",
       "Le ramonage fait partie des **charges locatives** (décret du 26 août 1987) : c'est donc le **locataire** qui en assume le coût et qui doit prendre l'initiative de faire ramoner. Le propriétaire reste néanmoins responsable de la conformité du conduit (tubage, étanchéité). En copropriété, le ramonage des conduits collectifs est géré par le syndic et inclus dans les charges communes.",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix ramoneur en 2026](/blog/prix-ramoneur-2026-tarifs) dans notre guide tarifaire dédié.",
 
       ":::warning Attention\nUn conduit non ramoné peut provoquer un **feu de cheminée** (température des suies enflammées : 1 000 °C) ou une **intoxication au monoxyde de carbone** (gaz incolore et inodore). Si votre détecteur de CO se déclenche, évacuez immédiatement et appelez les pompiers (18 ou 112). Le CO tue en quelques minutes dans un espace confiné.\n:::"
     ],
@@ -207,6 +223,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "degats-gel-canalisation": {
     title: "Dégâts du gel sur les canalisations : prévention et réparation",
     excerpt: "Le gel peut faire éclater vos canalisations et causer des dégâts considérables. Découvrez comment protéger vos tuyaux et que faire en cas de canalisation gelée.",
+    metaTitle: "Gel Canalisations : Prévention et Réparation",
+    metaDescription: "Découvrez comment protéger vos canalisations du gel et que faire en cas de tuyau gelé. Prévention et réparation. Devis gratuit plombier.",
     content: [
       "L'eau gèle à 0 °C et augmente de volume de **9 %** en se transformant en glace. Cette expansion exerce une pression de **200 à 400 bars** sur les parois des tuyaux — largement suffisante pour faire éclater une canalisation en cuivre, en PER ou même en acier. Chaque hiver rigoureux, les assureurs français enregistrent entre **200 000 et 400 000 sinistres** liés au gel, pour un coût moyen de **2 500 à 5 000 €** par dégât. Voici comment protéger votre installation et réagir si le gel a déjà frappé.",
 
@@ -230,6 +248,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Assurance et dégâts du gel",
       "La garantie dégât des eaux de votre assurance multirisques habitation couvre généralement les dommages causés par le gel des canalisations. Cependant, l'assureur peut invoquer un **défaut de précaution** (logement laissé sans chauffage prolongé, canalisations non protégées) pour réduire ou refuser l'indemnisation. Déclarez le sinistre dans les **5 jours ouvrés** et conservez les tuyaux endommagés comme preuve. Contactez un [plombier agréé](/services/plombier) pour la réparation et conservez la facture.",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix plombier 2026](/blog/prix-plombier-2026-tarifs-horaires).",
 
       ":::tip Conseil pro\nSi vous vous absentez en hiver plus de 48 heures, coupez l'arrivée d'eau générale et vidangez le circuit (ouvrez tous les robinets). C'est la seule protection à 100 % contre le gel. Réglez le chauffage en mode hors-gel (8 °C minimum) pour protéger les canalisations non vidangeables (circuit de chauffage, chauffe-eau).\n:::"
     ],
@@ -256,6 +276,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "nettoyage-gouttiere-automne": {
     title: "Nettoyage des gouttières en automne : pourquoi c'est essentiel",
     excerpt: "Des gouttières bouchées peuvent causer infiltrations et dégâts structurels. Découvrez pourquoi le nettoyage d'automne est crucial et combien ça coûte en 2026.",
+    metaTitle: "Nettoyage Gouttières Automne 2026 : Prix",
+    metaDescription: "Découvrez pourquoi nettoyer vos gouttières en automne est crucial. Tarifs 2026 et risques d'infiltration. Obtenez un devis gratuit.",
     content: [
       "Chaque automne, les feuilles mortes, mousse et débris s'accumulent dans les gouttières et descentes pluviales. Ce phénomène banal peut avoir des conséquences graves : **infiltrations en toiture**, remontées capillaires dans les murs, érosion des fondations, et même **fissures structurelles** dues à l'eau stagnante qui gèle en hiver. Le coût d'un nettoyage préventif (100 à 300 €) est dérisoire face à une facture de réparation d'infiltration (2 000 à 15 000 €).",
 
@@ -274,6 +296,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Solutions pour réduire l'entretien",
       "Les **crapaudines** (grilles en forme de dôme) placées à l'entrée des descentes bloquent les gros débris pour 3 à 8 € pièce. Les **grilles pare-feuilles** posées sur toute la longueur de la gouttière (15 à 30 €/m posé) réduisent le nettoyage à une fois par an. Les **gouttières avec filtre intégré** (type Filclair) sont une solution haut de gamme qui limite l'entretien au strict minimum.",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix zingueur en 2026](/blog/prix-zingueur-2026-tarifs-gouttiere) dans notre guide tarifaire dédié.",
 
       ":::tip Conseil pro\nLors du nettoyage, inspectez l'état des joints, des fixations et de la pente des gouttières. Une gouttière doit avoir une pente de **5 mm par mètre** vers la descente. Si l'eau stagne en certains points, resserrez les crochets ou recalez la pente. C'est le moment idéal pour repérer les fissures avant qu'elles ne provoquent des infiltrations.\n:::"
     ],
@@ -300,6 +324,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "entretien-chaudiere-annuel": {
     title: "Entretien annuel de la chaudière : obligations et prix 2026",
     excerpt: "L'entretien annuel de la chaudière est obligatoire en France. Découvrez ce que comprend la visite, les tarifs 2026 et les risques en cas de non-respect.",
+    metaTitle: "Entretien Chaudière 2026 : Obligations et Prix",
+    metaDescription: "Découvrez l'entretien annuel obligatoire de la chaudière : contenu de la visite, tarifs 2026 et risques. Obtenez un devis gratuit.",
     content: [
       "L'entretien annuel de la chaudière est une **obligation légale** depuis le décret du 9 juin 2009, applicable à toutes les chaudières dont la puissance est comprise entre 4 et 400 kW (gaz, fioul, bois, granulés). Au-delà de la conformité réglementaire, cet entretien réduit la consommation d'énergie de **8 à 12 %**, prolonge la durée de vie de l'appareil et prévient les risques d'intoxication au monoxyde de carbone. Trouvez un [chauffagiste qualifié](/services/chauffagiste) pour votre entretien annuel.",
 
@@ -323,6 +349,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Quand programmer l'entretien",
       "Le meilleur moment est **septembre-octobre**, avant la remise en route du chauffage. Les professionnels sont moins sollicités et les délais plus courts. Évitez novembre-décembre, période de forte demande où les prix peuvent augmenter de 10 à 20 %. L'entretien peut être réalisé même pendant la saison de chauffe, sans éteindre la chaudière plus de 2 heures.",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix chauffagiste en 2026](/blog/prix-chauffagiste-2026-installation-entretien) dans notre guide tarifaire dédié.",
 
       ":::warning Attention\nSans attestation d'entretien valide, votre assureur peut refuser l'indemnisation en cas de sinistre lié au chauffage (incendie, intoxication CO, dégât des eaux). De plus, en cas d'accident mortel dû au CO, l'absence d'entretien peut engager la responsabilité pénale du locataire ou du propriétaire.\n:::"
     ],
@@ -349,6 +377,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "preparer-maison-hiver": {
     title: "Préparer sa maison pour l'hiver : checklist complète",
     excerpt: "Découvrez la checklist complète pour préparer votre maison avant l'hiver : chauffage, isolation, plomberie, toiture. Tous les travaux à réaliser avant le froid.",
+    metaTitle: "Préparer sa Maison pour l'Hiver 2026",
+    metaDescription: "Découvrez la checklist complète avant l'hiver : chauffage, isolation, plomberie et toiture. Tous les travaux essentiels. Devis gratuit.",
     content: [
       "L'hiver met votre maison à rude épreuve : froid, humidité, gel, vent et neige sollicitent chaque élément de votre habitation. Une préparation minutieuse en **octobre-novembre** peut vous éviter des milliers d'euros de réparations et réduire votre facture de chauffage de **15 à 30 %**. Voici la checklist complète des vérifications et travaux à réaliser, avec les coûts indicatifs pour chaque poste.",
 
@@ -395,6 +425,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "entretien-climatisation-printemps": {
     title: "Entretien climatisation au printemps : les étapes clés",
     excerpt: "Préparez votre climatisation pour l'été ! Découvrez les étapes d'entretien à réaliser au printemps, les tarifs 2026 et l'importance d'un contrôle professionnel.",
+    metaTitle: "Entretien Clim Printemps 2026 : Guide",
+    metaDescription: "Découvrez les étapes d'entretien climatisation au printemps : contrôle, nettoyage et tarifs 2026. Obtenez un devis gratuit.",
     content: [
       "Votre climatisation a passé l'hiver au repos et accumule poussière, moisissures et bactéries dans ses filtres et échangeurs. La remettre en route sans entretien préalable, c'est s'exposer à des **problèmes de santé** (allergies, syndrome des bâtiments malsains), une **surconsommation d'énergie** de 15 à 25 %, et un risque élevé de **panne en pleine canicule**. Le printemps est le moment idéal pour un entretien complet. Trouvez un [technicien climatisation](/services/climatisation) qualifié près de chez vous.",
 
@@ -416,6 +448,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Réglementation F-Gas : vos obligations",
       "Le règlement européen F-Gas impose un **contrôle d'étanchéité annuel** pour les climatiseurs contenant plus de 2 kg de fluide frigorigène (la plupart des multisplits et systèmes commerciaux). Ce contrôle doit être réalisé par un technicien titulaire d'une **attestation de capacité**. Le registre d'équipement (carnet de suivi du fluide) doit être tenu à jour sous peine d'amende.",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix climaticien en 2026](/blog/prix-climaticien-2026-installation-entretien) dans notre guide tarifaire dédié.",
 
       ":::tip Conseil pro\nDemandez à votre technicien de mesurer le **SEER** (coefficient d'efficacité énergétique saisonnière) réel de votre installation lors de l'entretien. Si le SEER a chuté de plus de 20 % par rapport aux spécifications d'origine, une recharge de gaz ou un nettoyage approfondi s'impose. Un SEER en baisse constante sur 2-3 ans annonce une fin de vie du compresseur.\n:::"
     ],
@@ -442,6 +476,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "jardin-printemps-paysagiste": {
     title: "Préparer son jardin au printemps : quand appeler un paysagiste",
     excerpt: "Le printemps est le moment clé pour votre jardin. Découvrez les travaux à planifier, quand faire appel à un paysagiste et les tarifs 2026 des prestations courantes.",
+    metaTitle: "Jardin Printemps 2026 : Travaux et Tarifs",
+    metaDescription: "Découvrez les travaux jardin à planifier au printemps : paysagiste, tarifs 2026 et conseils. Obtenez un devis gratuit paysagiste.",
     content: [
       "Après l'hiver, votre jardin a besoin d'un réveil en douceur. Mars à mai constitue la **fenêtre idéale** pour les plantations, la taille, le désherbage et l'aménagement. Mais tous les travaux ne sont pas à la portée du jardinier amateur : la taille d'un grand arbre, l'aménagement d'une terrasse ou la création d'un système d'arrosage automatique nécessitent l'expertise d'un [paysagiste professionnel](/services/paysagiste). Voici les travaux de printemps, ceux que vous pouvez réaliser vous-même et ceux qui justifient un appel au pro.",
 
@@ -463,6 +499,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Comment choisir un bon paysagiste",
       "Vérifiez que le professionnel possède un **diplôme reconnu** (BTS Aménagements paysagers, BTSA) ou une expérience justifiable. Demandez **3 devis détaillés** et des **références de chantiers réalisés** dans votre région. Un bon paysagiste propose un **plan d'aménagement** avant les travaux et peut vous guider sur le choix des végétaux adaptés à votre sol et votre exposition. Consultez notre [annuaire de paysagistes](/services/paysagiste) pour trouver un professionnel qualifié.",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix jardinier paysagiste en 2026](/blog/prix-jardinier-paysagiste-2026) dans notre guide tarifaire dédié.",
 
       ":::tip Conseil pro\nDemandez à votre paysagiste un **plan d'entretien annuel** avec les interventions mois par mois. Cela permet de budgétiser l'entretien sur l'année et d'anticiper les périodes clés (taille, traitement, fertilisation). Un jardin bien entretenu valorise votre bien immobilier de 5 à 15 %.\n:::"
     ],
@@ -489,6 +527,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "terrasse-ete-preparation": {
     title: "Préparer sa terrasse pour l'été : nettoyage et réparations",
     excerpt: "Terrasse terne ou abîmée après l'hiver ? Découvrez les étapes de nettoyage et réparation pour profiter de votre terrasse cet été, avec les tarifs artisans 2026.",
+    metaTitle: "Terrasse : Nettoyage et Réparation Été 2026",
+    metaDescription: "Découvrez comment nettoyer et réparer votre terrasse pour l'été. Tarifs artisans 2026 détaillés. Obtenez un devis gratuit.",
     content: [
       "Après des mois d'exposition au gel, à la pluie et aux feuilles mortes, votre terrasse a probablement besoin d'un sérieux rafraîchissement. Mousse, taches noires, lames de bois grisées, joints de carrelage fissurés — ces signes d'usure ne sont pas que visuels. Une terrasse mal entretenue se dégrade rapidement et peut devenir **dangereuse** (lames pourries, dalles descellées, surface glissante). Voici comment la remettre en état pour profiter de l'été 2026.",
 
@@ -512,6 +552,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Protéger sa terrasse pour la saison",
       "Après le nettoyage et les réparations, protégez votre terrasse pour l'été : un **traitement anti-mousse préventif** (effet 6-12 mois, 5-10 €/m²), un **saturateur ou une huile** pour le bois (protection UV et hydrofuge), et un **hydrofuge** pour la pierre naturelle (10-15 €/m²). Ces traitements prolongent la durée de vie du revêtement et espacent les nettoyages.",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix terrasse extérieure en 2026](/blog/prix-terrasse-exterieure-2026) dans notre guide tarifaire dédié.",
 
       ":::tip Conseil pro\nPlanifiez le nettoyage et le traitement de votre terrasse en **avril-mai**, quand les températures sont douces (10-25 °C) et les précipitations modérées. Les produits de traitement (saturateur, huile, hydrofuge) nécessitent un temps de séchage de 24 à 48 h sans pluie. Évitez l'application en plein soleil qui provoque un séchage trop rapide et des traces.\n:::"
     ],
@@ -538,6 +580,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
   "serrure-bloquee-nuit-weekend": {
     title: "Serrure bloquée la nuit ou le week-end : solutions et tarifs",
     excerpt: "Serrure bloquée en pleine nuit ou un dimanche ? Découvrez les solutions d'urgence, les tarifs réels 2026 des serruriers et comment éviter les arnaques nocturnes.",
+    metaTitle: "Serrurier Urgence Nuit/Weekend 2026 : Tarifs",
+    metaDescription: "Serrure bloquée la nuit ou le weekend ? Découvrez les tarifs réels serrurier 2026 et nos conseils anti-arnaques. Devis gratuit.",
     content: [
       "Porte claquée avec les clés à l'intérieur, clé cassée dans la serrure, cylindre bloqué après une tentative d'effraction — ces situations surviennent souvent aux pires moments : tard le soir, un dimanche ou un jour férié. C'est aussi dans ces circonstances que les **arnaques sont les plus fréquentes**. La DGCCRF reçoit chaque année des milliers de plaintes contre des serruriers frauduleux qui profitent de l'urgence pour facturer 3 à 5 fois le prix normal. Ce guide vous arme avec les vrais tarifs et les bons réflexes.",
 
@@ -565,6 +609,8 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
 
       "## Prise en charge par l'assurance",
       "Votre assurance multirisques habitation couvre généralement : l'ouverture de porte après **perte de clés** (souvent plafonnée à 300-500 €), le remplacement de serrure après **effraction ou tentative** (intégralement, sur présentation du dépôt de plainte), et le **gardiennage ou relogement temporaire** si la porte ne peut être sécurisée dans la nuit. Contactez le numéro d'assistance de votre contrat **avant** d'appeler un serrurier — l'assureur envoie souvent un professionnel agréé à tarif encadré.",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix serrurier 2026](/blog/prix-serrurier-2026-tarifs-interventions).",
 
       ":::tip Conseil pro\nFaites faire un **double de vos clés** et confiez-le à une personne de confiance (voisin, famille). Coût : 5 à 30 € pour une clé standard, 20 à 80 € pour une clé protégée (avec carte de propriété). C'est la meilleure assurance contre la porte claquée.\n:::"
     ],

@@ -74,6 +74,8 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       "Consultez notre annuaire pour trouver un installateur alarme et sécurité qualifié dans votre ville :\n\n- [Alarme et sécurité à Paris](/services/alarme-securite/paris)\n- [Alarme et sécurité à Lyon](/services/alarme-securite/lyon)\n- [Alarme et sécurité à Marseille](/services/alarme-securite/marseille)\n- [Alarme et sécurité à Toulouse](/services/alarme-securite/toulouse)\n- [Alarme et sécurité à Bordeaux](/services/alarme-securite/bordeaux)\n- [Alarme et sécurité à Nantes](/services/alarme-securite/nantes)\n- [Alarme et sécurité à Lille](/services/alarme-securite/lille)\n- [Alarme et sécurité à Strasbourg](/services/alarme-securite/strasbourg)\n- [Alarme et sécurité à Nice](/services/alarme-securite/nice)\n- [Alarme et sécurité à Montpellier](/services/alarme-securite/montpellier)",
 
+      "À lire aussi : notre guide complet sur les [guide alarme maison](/blog/alarme-maison-guide-complet-2026) pour compléter votre recherche.",
+
       ":::takeaway\n- Alarme sans fil maison : **400 – 1 800 €** selon le nombre de zones\n- Vidéosurveillance 2-4 caméras : **800 – 3 500 €** fourni-posé\n- Interphone/visiophone connecté : **300 – 2 000 €**\n- Télésurveillance : **20 – 60 €/mois** (1 200 – 5 400 € sur 5 ans)\n- Exigez un installateur certifié **APSAD** ou **NF Service** pour la reconnaissance assureur\n:::"
     ],
     image: "/images/blog/placeholder.webp",
@@ -169,6 +171,10 @@ export const prixTechArticles: Record<string, BlogArticle> = {
       "## Trouver un antenniste près de chez vous",
 
       "Consultez notre annuaire pour trouver un antenniste qualifié dans votre ville :\n\n- [Antenniste à Paris](/services/antenniste/paris)\n- [Antenniste à Lyon](/services/antenniste/lyon)\n- [Antenniste à Marseille](/services/antenniste/marseille)\n- [Antenniste à Toulouse](/services/antenniste/toulouse)\n- [Antenniste à Bordeaux](/services/antenniste/bordeaux)\n- [Antenniste à Nantes](/services/antenniste/nantes)\n- [Antenniste à Lille](/services/antenniste/lille)\n- [Antenniste à Strasbourg](/services/antenniste/strasbourg)\n- [Antenniste à Nice](/services/antenniste/nice)\n- [Antenniste à Montpellier](/services/antenniste/montpellier)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son antenniste](/blog/comment-choisir-antenniste-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix d'un électricien](/blog/prix-electricien-2026-tarifs-travaux) pour compléter votre recherche.",
 
       ":::takeaway\n- Antenne TNT standard installée : **100 – 300 €**\n- Parabole satellite : **200 – 600 €** selon la configuration\n- Tirage fibre intérieur : **150 – 500 €** selon le nombre de prises\n- Dépannage/réglage : **60 – 150 €** déplacement inclus\n- Vérifiez le droit à l'antenne et la mise à la terre obligatoire\n:::"
     ],
@@ -271,6 +277,10 @@ export const prixTechArticles: Record<string, BlogArticle> = {
       "## Trouver un ascensoriste près de chez vous",
 
       "Consultez notre annuaire pour trouver un ascensoriste qualifié dans votre ville :\n\n- [Ascensoriste à Paris](/services/ascensoriste/paris)\n- [Ascensoriste à Lyon](/services/ascensoriste/lyon)\n- [Ascensoriste à Marseille](/services/ascensoriste/marseille)\n- [Ascensoriste à Toulouse](/services/ascensoriste/toulouse)\n- [Ascensoriste à Bordeaux](/services/ascensoriste/bordeaux)\n- [Ascensoriste à Nantes](/services/ascensoriste/nantes)\n- [Ascensoriste à Lille](/services/ascensoriste/lille)\n- [Ascensoriste à Strasbourg](/services/ascensoriste/strasbourg)\n- [Ascensoriste à Nice](/services/ascensoriste/nice)\n- [Ascensoriste à Montpellier](/services/ascensoriste/montpellier)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son ascensoriste](/blog/comment-choisir-ascensoriste-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [aides adaptation logement senior](/blog/adaptation-logement-senior-aides-2026) pour compléter votre recherche.",
 
       ":::takeaway\n- Monte-escalier droit : **3 000 – 6 000 €**, tournant : **7 000 – 12 000 €**\n- Ascenseur privatif (maison) : **15 000 – 40 000 €** selon la technologie\n- Entretien annuel obligatoire : **1 500 – 3 500 €/an** (collectif)\n- Mise aux normes : **15 000 – 60 000 €** selon l'état de l'équipement\n- Contrôle technique quinquennal obligatoire : **500 – 1 500 €**\n:::"
     ],
@@ -380,6 +390,10 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       "Consultez notre annuaire pour trouver un diagnostiqueur certifié dans votre ville :\n\n- [Diagnostiqueur à Paris](/services/diagnostiqueur/paris)\n- [Diagnostiqueur à Lyon](/services/diagnostiqueur/lyon)\n- [Diagnostiqueur à Marseille](/services/diagnostiqueur/marseille)\n- [Diagnostiqueur à Toulouse](/services/diagnostiqueur/toulouse)\n- [Diagnostiqueur à Bordeaux](/services/diagnostiqueur/bordeaux)\n- [Diagnostiqueur à Nantes](/services/diagnostiqueur/nantes)\n- [Diagnostiqueur à Lille](/services/diagnostiqueur/lille)\n- [Diagnostiqueur à Strasbourg](/services/diagnostiqueur/strasbourg)\n- [Diagnostiqueur à Nice](/services/diagnostiqueur/nice)\n- [Diagnostiqueur à Montpellier](/services/diagnostiqueur/montpellier)",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son diagnostiqueur](/blog/comment-choisir-diagnostiqueur-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [énergie et audit énergétique obligatoire](/blog/audit-energetique-obligatoire-2026) pour compléter votre recherche.",
+
       ":::takeaway\n- DPE : **120 – 250 €** selon la surface (valable 10 ans)\n- Pack complet vente (5-8 diagnostics) : **300 – 700 €**\n- Audit énergétique réglementaire (F/G) : **500 – 1 200 €**\n- Vérifiez les certifications COFRAC du diagnostiqueur\n- Commandez un pack complet pour économiser 20 à 35 %\n:::"
     ],
     image: "/images/blog/placeholder.webp",
@@ -483,6 +497,10 @@ export const prixTechArticles: Record<string, BlogArticle> = {
       "## Trouver un géomètre-expert près de chez vous",
 
       "Consultez notre annuaire pour trouver un géomètre-expert qualifié dans votre ville :\n\n- [Géomètre à Paris](/services/geometre/paris)\n- [Géomètre à Lyon](/services/geometre/lyon)\n- [Géomètre à Marseille](/services/geometre/marseille)\n- [Géomètre à Toulouse](/services/geometre/toulouse)\n- [Géomètre à Bordeaux](/services/geometre/bordeaux)\n- [Géomètre à Nantes](/services/geometre/nantes)\n- [Géomètre à Lille](/services/geometre/lille)\n- [Géomètre à Strasbourg](/services/geometre/strasbourg)\n- [Géomètre à Nice](/services/geometre/nice)\n- [Géomètre à Montpellier](/services/geometre/montpellier)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son géomètre](/blog/comment-choisir-geometre-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [permis de construire](/blog/permis-construire-declaration-prealable-guide) pour compléter votre recherche.",
 
       ":::takeaway\n- Bornage amiable : **800 – 2 500 €** selon la taille du terrain\n- Division parcellaire : **1 500 – 4 000 €** selon le nombre de lots\n- Relevé topographique : **500 – 2 000 €** selon la surface\n- Plan d'implantation : **800 – 1 500 €**\n- Vérifiez que le géomètre est inscrit à l'Ordre (OGE) pour tout bornage\n:::"
     ],

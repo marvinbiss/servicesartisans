@@ -4,6 +4,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-deboucher-wc-guide': {
     title: "Comment Déboucher un WC : 7 Méthodes Efficaces",
     excerpt: "Découvrez 7 méthodes pour déboucher vos toilettes vous-même, de la ventouse au furet en passant par les solutions naturelles. Guide pratique avec les gestes de sécurité et les cas où appeler un plombier.",
+    metaTitle: "Déboucher WC : 7 Méthodes Efficaces 2026",
+    metaDescription: "Découvrez 7 méthodes pour déboucher vos WC : ventouse, furet et solutions naturelles. Guide pratique et sécurité. Devis plombier si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-01-21',
@@ -62,6 +64,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-peindre-mur-guide': {
     title: "Comment Peindre un Mur : Guide Étape par Étape",
     excerpt: "Apprenez à peindre un mur comme un professionnel avec notre guide complet. De la préparation du support au choix de la peinture, toutes les étapes pour un résultat impeccable.",
+    metaTitle: "Peindre un Mur : Guide Étape par Étape 2026",
+    metaDescription: "Apprenez à peindre un mur comme un pro : préparation, choix de peinture et technique au rouleau. Obtenez un devis peintre si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-01-23',
@@ -120,6 +124,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-poser-carrelage-sol': {
     title: "Comment Poser du Carrelage au Sol : Tutoriel Complet",
     excerpt: "Apprenez à poser du carrelage au sol étape par étape. Préparation du support, encollage, découpes et joints : tout ce qu'il faut savoir pour un résultat durable.",
+    metaTitle: "Poser du Carrelage au Sol : Tutoriel DIY 2026",
+    metaDescription: "Apprenez à poser du carrelage au sol : préparation, encollage, découpes et joints. Tutoriel complet. Devis carreleur si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-01-25',
@@ -178,6 +184,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-changer-robinet-cuisine': {
     title: "Comment Changer un Robinet de Cuisine Soi-Même",
     excerpt: "Remplacez votre mitigeur de cuisine en suivant ce guide étape par étape. Outils nécessaires, démontage, installation et raccordement : tout est expliqué simplement.",
+    metaTitle: "Changer Robinet Cuisine DIY : Tutoriel 2026",
+    metaDescription: "Apprenez à changer un robinet de cuisine : démontage, installation et raccordement. Tutoriel pas à pas. Devis plombier si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-01-27',
@@ -236,6 +244,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-installer-prise-electrique': {
     title: "Installer une Prise Électrique : Guide et Sécurité",
     excerpt: "Comment installer ou remplacer une prise électrique en toute sécurité. Respect de la norme NF C 15-100, outils nécessaires et précautions indispensables.",
+    metaTitle: "Installer Prise Électrique : Guide Sécurité",
+    metaDescription: "Apprenez à installer une prise électrique en sécurité : norme NF C 15-100 et précautions. Tutoriel DIY. Devis électricien si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-01-29',
@@ -298,6 +308,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-refaire-joint-salle-de-bain': {
     title: "Refaire un Joint de Salle de Bain : Tutoriel",
     excerpt: "Apprenez à retirer un joint de salle de bain moisi et à en poser un nouveau proprement. Silicone sanitaire, préparation et technique de lissage pour un résultat étanche.",
+    metaTitle: "Refaire Joint Salle de Bain : Tutoriel DIY",
+    metaDescription: "Apprenez à refaire un joint de salle de bain : retrait, silicone sanitaire et lissage. Tutoriel pour un résultat étanche.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-01-31',
@@ -356,6 +368,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-poser-parquet-flottant': {
     title: "Poser du Parquet Flottant : Guide Pas à Pas",
     excerpt: "Découvrez comment poser du parquet flottant vous-même avec ce tutoriel détaillé. Acclimatation, sous-couche, pose clipsée et finitions pour un sol impeccable.",
+    metaTitle: "Poser Parquet Flottant DIY : Guide Pas à Pas",
+    metaDescription: "Découvrez comment poser du parquet flottant : acclimatation, sous-couche et pose clipsée. Tutoriel complet. Devis poseur si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-02-02',
@@ -414,6 +428,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-peindre-plafond': {
     title: "Comment Peindre un Plafond Sans Traces",
     excerpt: "Apprenez les techniques professionnelles pour peindre un plafond sans laisser de traces ni de marques de rouleau. Guide complet avec les erreurs à éviter absolument.",
+    metaTitle: "Peindre un Plafond Sans Traces : Tutoriel 2026",
+    metaDescription: "Apprenez à peindre un plafond sans traces ni marques de rouleau. Techniques pro et erreurs à éviter. Devis peintre si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-02-04',
@@ -472,6 +488,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-reboucher-trou-mur': {
     title: "Reboucher un Trou dans un Mur : Techniques",
     excerpt: "Apprenez à reboucher tous types de trous dans un mur, du simple trou de cheville à la grosse cavité. Enduit, technique de lissage et finition pour un mur comme neuf.",
+    metaTitle: "Reboucher Trou dans un Mur : Techniques DIY",
+    metaDescription: "Apprenez à reboucher un trou dans un mur : enduit, lissage et finition. Du trou de cheville à la grosse cavité. Tutoriel complet.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-02-06',
@@ -530,6 +548,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-changer-joint-robinet': {
     title: "Changer un Joint de Robinet qui Fuit",
     excerpt: "Réparez un robinet qui goutte en changeant le joint en quelques minutes. Tutoriel simple avec les outils nécessaires et les techniques pour arrêter une fuite.",
+    metaTitle: "Changer Joint Robinet qui Fuit : Tutoriel DIY",
+    metaDescription: "Réparez un robinet qui fuit en changeant le joint en quelques minutes. Tutoriel simple avec outils nécessaires. Devis plombier si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-02-08',
@@ -588,6 +608,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-installer-wc-suspendu': {
     title: "Installer un WC Suspendu : Guide Complet",
     excerpt: "Découvrez comment installer un WC suspendu avec bâti-support. Ce guide détaille les étapes, les outils et les précautions pour une installation réussie.",
+    metaTitle: "Installer WC Suspendu : Guide Complet DIY",
+    metaDescription: "Découvrez comment installer un WC suspendu avec bâti-support : étapes, outils et précautions. Tutoriel complet. Devis plombier si besoin.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-02-10',
@@ -646,6 +668,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-poser-etagere-murale': {
     title: "Poser une Étagère Murale : Fixation et Niveaux",
     excerpt: "Apprenez à poser une étagère murale solidement et de niveau. Choix des chevilles, perçage, fixation : toutes les étapes pour un résultat sûr et esthétique.",
+    metaTitle: "Poser Étagère Murale : Fixation et Niveau DIY",
+    metaDescription: "Apprenez à poser une étagère murale de niveau : choix des chevilles, perçage et fixation. Tutoriel pas à pas pour un résultat parfait.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-02-12',
@@ -704,6 +728,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-refaire-electricite-appartement': {
     title: "Refaire l'Électricité d'un Appartement : Guide",
     excerpt: "Tout savoir sur la rénovation électrique complète d'un appartement. Normes, étapes, budget et raisons de faire appel à un électricien certifié.",
+    metaTitle: "Refaire Électricité Appartement : Guide 2026",
+    metaDescription: "Découvrez le guide rénovation électrique appartement : normes, étapes et budget. Obtenez un devis gratuit électricien certifié.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-02-14',
@@ -762,6 +788,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-isoler-fenetre-froid': {
     title: "Isoler une Fenêtre du Froid : Solutions Efficaces",
     excerpt: "Découvrez les solutions pour isoler vos fenêtres du froid sans les remplacer. Joints, films isolants, rideaux thermiques : guide pratique pour réduire les déperditions.",
+    metaTitle: "Isoler Fenêtre du Froid : Solutions DIY 2026",
+    metaDescription: "Découvrez comment isoler vos fenêtres du froid sans les remplacer : joints, films isolants et rideaux thermiques. Guide pratique.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-02-16',
@@ -824,6 +852,8 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
   'comment-deboucher-canalisation-naturellement': {
     title: "Déboucher une Canalisation Naturellement : 5 Astuces",
     excerpt: "Découvrez 5 méthodes naturelles et écologiques pour déboucher une canalisation sans produits chimiques. Bicarbonate, vinaigre, eau bouillante et autres astuces efficaces.",
+    metaTitle: "Déboucher Canalisation Naturellement : 5 Astuces",
+    metaDescription: "Découvrez 5 méthodes naturelles pour déboucher une canalisation : bicarbonate, vinaigre et eau bouillante. Écologique et efficace.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-02-18',

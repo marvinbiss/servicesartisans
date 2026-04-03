@@ -5,6 +5,8 @@ export const inspirationArticles: Record<string, BlogArticle> = {
     title: 'Tendances cuisine 2026 : aménagement, matériaux et couleurs',
     excerpt:
       'Découvrez les tendances cuisine 2026 : îlot central multifonction, plans de travail en quartz ou céramique, couleurs vert sauge et terracotta, éclairage LED et budget détaillé par gamme.',
+    metaTitle: 'Tendances Cuisine 2026 : Idées et Budget',
+    metaDescription: 'Découvrez les tendances cuisine 2026 : îlot central, quartz, couleurs tendance. Budget détaillé par gamme. Obtenez un devis gratuit.',
     image: '/images/blog/tendances-cuisine-2026.webp',
     author: 'ServicesArtisans',
     date: '2026-01-28',
@@ -210,6 +212,8 @@ En combinant les tendances 2026 avec l'expertise d'un professionnel qualifié, v
     title: 'Aménagement terrasse et extérieur 2026 : idées et budget',
     excerpt:
       "Toutes les idées pour aménager votre terrasse en 2026 : revêtements, pergola bioclimatique, cuisine d'été, éclairage extérieur et budget détaillé de 3 000 à 20 000 €.",
+    metaTitle: 'Aménagement Terrasse 2026 : Idées et Budget',
+    metaDescription: "Découvrez les meilleures idées terrasse 2026 : pergola, cuisine d'été, éclairage. Budget 3 000-20 000 €. Obtenez un devis gratuit.",
     image: '/images/blog/amenagement-terrasse-exterieur-2026.webp',
     author: 'ServicesArtisans',
     date: '2026-02-15',
@@ -445,6 +449,8 @@ Demandez toujours plusieurs devis détaillés, vérifiez les assurances des arti
     title: 'Aménager ses combles en 2026 : idées, contraintes et budget',
     excerpt:
       "Guide complet pour l'aménagement de combles en 2026 : faisabilité, isolation RE2020, fenêtres de toit, escalier, budget de 800 à 1 500 €/m² et démarches administratives.",
+    metaTitle: 'Aménager ses Combles 2026 : Guide et Budget',
+    metaDescription: "Découvrez comment aménager vos combles en 2026 : faisabilité, isolation, budget 800-1 500 €/m². Obtenez un devis gratuit.",
     image: '/images/blog/renovation-combles-amenagement.webp',
     author: 'ServicesArtisans',
     date: '2026-03-02',

@@ -55,6 +55,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nRepérez et testez votre robinet d'arrêt général **maintenant**, avant l'urgence. Beaucoup de robinets inutilisés depuis des années sont grippés et impossibles à fermer le jour J. Faites un quart de tour tous les 6 mois pour éviter le blocage. Si votre robinet est défectueux, faites-le remplacer : c'est un investissement de 60 à 120 € qui peut vous sauver d'un sinistre à 10 000 €.\n:::",
 
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix plombier 2026](/blog/prix-plombier-2026-tarifs-horaires).",
+
       ":::takeaway\n- Coupez l'arrivée d'eau immédiatement — c'est le geste qui sauve\n- Coupez l'électricité si l'eau atteint des installations électriques\n- Les fuites sur raccords visibles sont souvent réparables soi-même (joint, téflon)\n- Fuite encastrée ou canalisation éclatée = plombier professionnel obligatoire\n- Prévenez votre assureur sous 5 jours et conservez toutes les preuves\n:::"
     ],
     image: "/images/blog/fuite-eau-que-faire-urgence.webp",
@@ -127,6 +129,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nFaites réaliser un **diagnostic électrique** de votre installation si elle a plus de 15 ans (obligatoire pour la vente, recommandé pour la sécurité). Coût : 100 à 200 € pour un logement standard. Ce diagnostic identifie les points dangereux (absence de différentiel 30 mA, prises non reliées à la terre, fils vétustes) et peut vous éviter une urgence nocturne.\n:::",
 
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix électricien 2026](/blog/prix-electricien-2026-tarifs-travaux).",
+
       ":::takeaway\n- 70 % des pannes nocturnes se résolvent en vérifiant le tableau électrique\n- Panne de quartier = appelez Enedis, pas un électricien\n- Odeur de brûlé ou étincelles = coupez tout et appelez un professionnel immédiatement\n- Procédez par élimination pour identifier le circuit ou l'appareil fautif\n- Un diagnostic électrique préventif coûte 100-200 € et prévient les urgences\n:::"
     ],
     image: "/images/blog/panne-electricite-nuit-que-faire.webp",
@@ -195,6 +199,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       "- Déposez un double de clé chez un **voisin de confiance** ou dans un **coffre à clé à code** (25-50 €)\n- Ajoutez la garantie \"perte de clé\" à votre assurance habitation si elle n'y est pas\n- Identifiez un serrurier local fiable **maintenant** et enregistrez son numéro\n- Envisagez une **serrure connectée** pour un accès de secours par smartphone (250-700 €)\n- En immeuble, vérifiez si le gardien dispose d'un passe partout ou d'un double",
 
       ":::tip Conseil pro\nLe réflexe numéro un qui vous sauvera des arnaques : **appelez votre assurance habitation avant tout serrurier**. Leur serrurier conventionné pratique des tarifs encadrés. Si vous devez appeler directement, ne prenez jamais le premier résultat Google sponsorisé : ce sont souvent des plateformes d'intermédiation qui prennent 50 à 70 % de commission, gonflant mécaniquement la facture.\n:::",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix serrurier 2026](/blog/prix-serrurier-2026-tarifs-interventions).",
 
       ":::takeaway\n- Appelez votre assurance habitation en premier : serrurier conventionné = prix garanti\n- Ouverture porte claquée en journée : 80-150 € (prix juste)\n- Exigez toujours un devis écrit et vérifiez le SIRET\n- Prix d'appel à 29-49 € = arnaque quasi certaine\n- Signalez toute surfacturation sur signal.conso.gouv.fr\n:::"
     ],
@@ -265,6 +271,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       "- Faites l'**entretien annuel obligatoire** avant novembre (90-180 €). C'est le meilleur investissement contre les pannes hivernales\n- Purgez vos radiateurs chaque automne pour optimiser la circulation d'eau\n- Vérifiez la pression du circuit tous les mois (1-1,5 bar)\n- Protégez les tuyaux extérieurs contre le gel\n- Souscrivez un **contrat d'entretien** avec votre [chauffagiste](/services/chauffagiste) : il inclut souvent le dépannage prioritaire et les pièces d'usure",
 
       ":::tip Conseil pro\nL'entretien annuel de votre chaudière est **obligatoire par la loi** (décret du 9 juin 2009) et réduit de 5 à 10 % votre consommation de gaz. C'est aussi une condition de validité de votre assurance habitation en cas de sinistre. Planifiez-le en septembre-octobre, avant le rush hivernal, pour un rendez-vous rapide et un tarif sans majoration.\n:::",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix chauffagiste 2026](/blog/prix-chauffagiste-2026-installation-entretien).",
 
       ":::takeaway\n- 50 % des pannes se résolvent en vérifiant pression, thermostat et alimentation\n- Odeur de gaz = évacuez et appelez le 0 800 47 33 33 immédiatement\n- Un radiateur bain d'huile est le chauffage d'appoint le plus sûr en attendant la réparation\n- L'entretien annuel obligatoire (90-180 €) prévient la majorité des pannes hivernales\n- Contrat d'entretien = dépannage prioritaire sous 24-48h\n:::"
     ],
@@ -341,6 +349,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nCréez un **dossier sinistre** numérique dès la découverte : photos horodatées, vidéos, copies des factures, échanges écrits avec le voisin et l'assureur. Ce dossier est votre meilleur allié pour une indemnisation rapide et complète. En cas de désaccord sur le montant, la médiation de l'assurance est gratuite avant tout recours judiciaire.\n:::",
 
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix plombier 2026](/blog/prix-plombier-2026-tarifs-horaires).",
+
       ":::takeaway\n- Déclarez le sinistre à votre assureur sous 5 jours ouvrés impérativement\n- Remplissez le constat amiable dans les 24-48 h avec le voisin concerné\n- Photographiez tous les dégâts avant de nettoyer ou jeter quoi que ce soit\n- Convention IRSI : sinistres < 5 000 € gérés directement par votre assureur\n- Franchise habitation classique : 150 à 300 €\n:::"
     ],
     image: "/images/blog/degat-des-eaux-que-faire-2026.webp",
@@ -409,6 +419,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       "- Faites inspecter votre toiture **tous les 2 ans** par un [couvreur professionnel](/services/couvreur)\n- Nettoyez les gouttières **deux fois par an** (automne et printemps)\n- Faites traiter la mousse tous les 3 à 5 ans (démoussage + traitement hydrofuge : 15-30 €/m²)\n- Vérifiez l'état des solins et du faîtage après chaque épisode venteux\n- En zone exposée, fixez vos tuiles avec des crochets anti-tempête",
 
       ":::tip Conseil pro\nAprès une tempête, ne montez pas sur votre toit pour constater les dégâts. Utilisez des jumelles depuis le sol ou un drone si vous en avez un. Les couvreurs sont très sollicités après une tempête : méfiez-vous des démarcheurs qui sonnent à votre porte le lendemain. Privilégiez un artisan local vérifié plutôt qu'un « couvreur de passage ».\n:::",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix couvreur 2026](/blog/prix-toiture-2026-refection-reparation-materiaux).",
 
       ":::takeaway\n- Ne montez jamais sur un toit mouillé ou par vent fort — risque mortel\n- Percez le plafond gonflé d'eau pour une évacuation contrôlée\n- Bâchage extérieur = solution temporaire, à réaliser en toute sécurité\n- Réparation de tuiles cassées : 200-600 € en intervention courante\n- Faites inspecter votre toiture tous les 2 ans pour prévenir les fuites\n:::"
     ],
@@ -490,6 +502,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nLa cause numéro un de bouchon d'évier est la **graisse de cuisson** qui se solidifie dans les canalisations. Astuce de plombier : après chaque vaisselle grasse, versez une casserole d'eau bouillante avec une cuillère de liquide vaisselle. Le savon émulsionne la graisse et l'eau chaude la transporte loin dans la canalisation. Coût : 0 €. Efficacité : excellente.\n:::",
 
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix plombier 2026](/blog/prix-plombier-2026-tarifs-horaires).",
+
       ":::takeaway\n- Eau bouillante + bicarbonate/vinaigre résout 70 % des bouchons d'évier\n- La ventouse est l'outil le plus efficace pour les bouchons mécaniques\n- Évitez les déboucheurs chimiques : dangereux et corrosifs\n- Plusieurs évacuations bouchées = bouchon profond = plombier nécessaire\n- Des crépines à 2-5 € par évacuation préviennent 80 % des bouchons\n:::"
     ],
     image: "/images/blog/canalisation-bouchee-urgence.webp",
@@ -557,6 +571,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       "- Remplacez le simple vitrage par du **double vitrage** : meilleure isolation et résistance\n- En rez-de-chaussée, optez pour du **vitrage feuilleté** (44.2 ou 44.4) qui résiste aux chocs et retarde l'effraction\n- Posez un **film de sécurité anti-effraction** sur vos vitrages existants (30-60 €/m²)\n- Installez des **volets** ou des barreaux sur les fenêtres vulnérables\n- Assurez-vous que votre contrat inclut la **garantie bris de glace**",
 
       ":::tip Conseil pro\nLors du remplacement, profitez-en pour **upgrader votre vitrage**. Passer du simple au double vitrage réduit les pertes de chaleur de 40 % et peut être partiellement financé par MaPrimeRénov' si l'ensemble de la fenêtre est remplacé. Le surcoût est amorti en 3 à 5 ans sur la facture de chauffage.\n:::",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix vitrier 2026](/blog/prix-vitrier-2026-remplacement-vitrage).",
 
       ":::takeaway\n- Portez des gants et des chaussures fermées avant de toucher du verre brisé\n- Sécurisez l'ouverture avec une bâche ou du contreplaqué en attendant le vitrier\n- Remplacement double vitrage standard : 150-300 € (fourniture + pose)\n- Tentative d'effraction : ne touchez à rien et appelez le 17 avant le vitrier\n- Profitez du remplacement pour upgrader vers un vitrage plus performant\n:::"
     ],
@@ -630,6 +646,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nPréparez un **kit de survie hivernale** : radiateur bain d'huile d'appoint, bouillottes, couvertures supplémentaires, lampe torche. Coût total : moins de 100 €. Avoir ce kit sous la main vous permet de passer la nuit en sécurité et d'attendre l'intervention d'un chauffagiste aux heures normales (tarif jour) plutôt que de payer une majoration de nuit.\n:::",
 
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix chauffagiste 2026](/blog/prix-chauffagiste-2026-installation-entretien).",
+
       ":::takeaway\n- En dessous de 16 °C avec un bébé ou une personne âgée = urgence sanitaire\n- Concentrez tout le monde dans une seule pièce bien isolée\n- Radiateur bain d'huile = chauffage d'appoint le plus sûr pour les personnes vulnérables\n- JAMAIS de chauffage à combustion en intérieur : risque mortel de monoxyde de carbone\n- Signes d'hypothermie : confusion, somnolence, peau marbrée → appelez le 15\n:::"
     ],
     image: "/images/blog/panne-chauffage-bebe-personnes-agees.webp",
@@ -697,6 +715,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       "Les cambrioleurs reviennent dans **30 % des cas** dans les 18 mois suivant le premier cambriolage. Renforcez votre sécurité :\n- **Porte blindée + serrure A2P** : dissuasion maximale\n- **Alarme avec détection d'intrusion** : réduit le risque de 85 %\n- **Éclairage extérieur à détection de mouvement** : 20-50 €\n- **Simulation de présence** (minuteries sur lampes, radio) en cas d'absence prolongée\n- **Voisins vigilants** : prévenez un voisin de confiance de vos absences\n- Ne publiez **jamais** vos dates de vacances sur les réseaux sociaux",
 
       ":::tip Conseil pro\nFaites établir un **diagnostic sécurité** par un serrurier qualifié après le cambriolage (souvent gratuit si des travaux suivent). Il identifiera tous les points faibles de votre logement (porte, fenêtres, volets) et vous proposera un plan de sécurisation progressif selon votre budget. Commencez par la porte d'entrée (80 % des cambriolages passent par la porte) puis les fenêtres du rez-de-chaussée.\n:::",
+
+      "Pour connaître les tarifs pratiqués en 2026 et éviter les surfacturations, consultez notre [guide des prix serrurier 2026](/blog/prix-serrurier-2026-tarifs-interventions).",
 
       ":::takeaway\n- N'entrez pas dans le logement si la porte est forcée — appelez le 17\n- Déposez plainte (pas une main courante) et déclarez sous 2 jours ouvrés à l'assurance\n- Sécurisation d'urgence : remplacement cylindre (80-200 €)\n- Sécurisation définitive : blindage 600-1 200 €, bloc-porte blindé 1 500-3 500 €\n- 30 % de récidive dans les 18 mois : investissez dans la sécurisation\n:::"
     ],
@@ -766,6 +786,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nLa préparation des surfaces (ponçage, enduit, sous-couche) représente **60 % de la qualité du résultat final**. Un peintre qui minimise la préparation pour baisser le prix livre un résultat médiocre qui s'écaillera en 2-3 ans. Exigez que le devis détaille précisément les étapes de préparation — c'est le meilleur indicateur du sérieux du professionnel.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de peintre en bâtiment en 2026](/blog/prix-peintre-batiment-2026-guide-complet) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Exigez Qualibat, assurance décennale et RC pro en cours de validité\n- Un bon peintre consacre 60 % du temps à la préparation des surfaces\n- Prix de référence : 20-40 €/m² en peinture intérieure (2 couches + fourniture)\n- Comparez 3 devis et méfiez-vous du moins-disant\n- Un peintre sérieux a un carnet de commandes de 3-6 semaines\n:::"
     ],
     image: "/images/blog/comment-choisir-peintre-guide.webp",
@@ -830,6 +852,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       ":::budget\n| Prestation | Prix indicatif |\n| Décaissement terrain (au m³) | 25 – 55 €/m³ |\n| Fouilles pour fondations | 30 – 60 €/ml |\n| Terrassement piscine | 1 500 – 4 000 € |\n| Viabilisation terrain | 3 000 – 10 000 € |\n| Évacuation des terres | 15 – 30 €/m³ |\n| Enrochement/mur de soutènement | 100 – 300 €/m² |\n:::",
 
       ":::tip Conseil pro\nLa **demande DICT** est gratuite et obligatoire avant tout terrassement. Elle permet de localiser les réseaux enterrés (gaz, électricité, eau, fibre) et d'éviter des accidents potentiellement mortels. Si votre terrassier ne mentionne pas la DICT, changez de terrassier. Faites votre propre déclaration sur reseaux-et-canalisations.gouv.fr en complément.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de terrassier en 2026](/blog/prix-terrassier-2026-tarifs-travaux) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Exigez CACES, Qualibat, assurance décennale et RC professionnelle\n- La demande DICT est obligatoire avant tout terrassement : vérifiez qu'elle est faite\n- Un devis sérieux détaille les volumes en m³, la destination des terres et le compactage\n- Prix de référence : 25-55 €/m³ pour un décaissement standard\n- Méfiez-vous des prix très bas : risque de dépôt sauvage des terres\n:::"
     ],
@@ -974,6 +998,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nAvant tout travail de charpente en rénovation, faites réaliser un **diagnostic parasitaire** (termites, capricornes, vrillettes, mérule). Il coûte 100 à 300 € et peut révéler des infestations invisibles à l'œil nu qui compromettraient les travaux. Un bon charpentier le recommandera spontanément. En zone termitée (Sud-Ouest, littoral), c'est indispensable.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de charpentier en 2026](/blog/prix-charpentier-2026-tarifs-charpente) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Qualibat 2311 (traditionnelle) ou 2312 (fermettes) et décennale sont non négociables\n- Plans et calculs de structure sont obligatoires pour tout ouvrage de charpente\n- Le choix de l'essence et du traitement du bois détermine la longévité (30 à 100 ans)\n- Charpente traditionnelle : 80-150 €/m², fermettes : 50-90 €/m²\n- Faites un diagnostic parasitaire avant tout travail en rénovation\n:::"
     ],
     image: "/images/blog/comment-choisir-charpentier-guide.webp",
@@ -1041,6 +1067,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       ":::budget\n| Prestation | Prix au m² TTC |\n| Étanchéité bitume toiture-terrasse | 40 – 80 €/m² |\n| Étanchéité membrane PVC | 50 – 90 €/m² |\n| Étanchéité EPDM | 45 – 85 €/m² |\n| Étanchéité résine (terrasse accessible) | 60 – 120 €/m² |\n| Cuvelage sous-sol | 80 – 200 €/m² |\n| Toiture-terrasse isolée complète | 100 – 200 €/m² |\n| Toiture végétalisée (complexe complet) | 120 – 250 €/m² |\n:::",
 
       ":::tip Conseil pro\nL'étanchéité est un métier où le **moins cher coûte toujours plus cher** à long terme. Une membrane économique qui fuit après 5 ans nécessite une dépose complète et une reprise (coût : 2 à 3 fois le prix initial). Investissez dans un système de qualité posé par un étanchéiste certifié, avec une garantie décennale solide. C'est le seul lot du bâtiment où il n'existe aucune marge d'erreur.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de étanchéiste en 2026](/blog/prix-etancheiste-2026-tarifs-etancheite) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Qualibat 3211/3212 et assurance décennale sont indispensables\n- L'épreuve d'eau (48-72h) est obligatoire pour vérifier l'étanchéité\n- 80 % des fuites proviennent des points singuliers : exigez leur traitement détaillé\n- Étanchéité toiture-terrasse : 40-90 €/m² selon le système\n- Ne choisissez jamais le moins-disant en étanchéité : c'est le lot zéro erreur\n:::"
     ],
@@ -1260,6 +1288,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nSouscrivez un **contrat annuel** avec votre ramoneur (90-150 € pour 2 passages). Vous bénéficiez d'un rappel automatique, de tarifs préférentiels et de la certitude de ne jamais oublier cette obligation légale. Beaucoup de ramoneurs proposent aussi l'entretien de votre poêle ou chaudière dans le même contrat.\n:::",
 
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de ramoneur en 2026](/blog/prix-ramoneur-2026-tarifs) avec les prix moyens constatés dans toute la France.",
+
       ":::takeaway\n- Le ramonage est obligatoire : 1 à 2 fois/an selon le combustible\n- Le certificat de ramonage est indispensable pour votre assurance\n- La bûche de ramonage seule n'est PAS un ramonage légal\n- Prix de référence : 50-80 € pour un ramonage simple, 90-150 € en contrat annuel\n- Conservez tous vos certificats : l'assureur les demandera en cas de sinistre\n:::"
     ],
     image: "/images/blog/comment-choisir-ramoneur-guide.webp",
@@ -1332,6 +1362,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       "Si vous vendez votre bien, le home staging par un décorateur professionnel est un investissement rentable :\n- **Coût** : 1 à 2 % du prix de vente (1 000-5 000 €)\n- **Gain** : 5 à 15 % de plus sur le prix de vente selon les études\n- **Délai de vente** réduit de 30 à 50 %\n- Le décorateur neutralise et valorise l'espace pour plaire au plus grand nombre",
 
       ":::tip Conseil pro\nAvant de mandater un décorateur, constituez un **dossier d'inspiration** : photos Pinterest, pages de magazines, photos de chez des amis. Plus votre brief est clair, plus le décorateur sera efficace et moins vous aurez d'allers-retours (et donc de coût). Un bon décorateur vous fera aussi découvrir des idées auxquelles vous n'aviez pas pensé, mais la base doit venir de vous.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de décorateur en 2026](/blog/prix-decorateur-2026-tarifs) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Le décorateur conseille sur l'esthétique sans toucher à la structure\n- Le portfolio est le critère n°1 : vérifiez que le style correspond à vos goûts\n- Budget : 50-150 €/h ou 500-2 000 € par pièce (forfait)\n- Exigez la transparence sur les commissions et les tarifs fournisseurs\n- Pour du home staging, investissement de 1-2 % du prix de vente = gain de 5-15 %\n:::"
     ],
@@ -1411,6 +1443,8 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       "- **Inspection annuelle** : vérifiez l'apparition de rouille, surtout aux points de soudure et de fixation\n- **Retouche peinture** dès l'apparition de rouille : un pinceau de peinture antirouille suffit\n- **Nettoyage** : eau savonneuse et brosse douce, 1-2 fois par an\n- **Re-traitement complet** tous les 10-15 ans (décapage + primaire antirouille + finition)\n- La **galvanisation à chaud** est la meilleure protection : aucun entretien pendant 50+ ans",
 
       ":::tip Conseil pro\nPour un ouvrage extérieur durable, exigez la **galvanisation à chaud** (trempage dans un bain de zinc à 450 °C) avant toute mise en peinture ou thermolaquage. C'est un surcoût de 15-25 % mais la protection contre la rouille dure 50+ ans, contre 5-10 ans pour une simple peinture antirouille. Sur la durée de vie de l'ouvrage, c'est la solution la plus économique.\n:::",
+
+      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de ferronnier en 2026](/blog/prix-ferronnier-2026-tarifs-ferronnerie) avec les prix moyens constatés dans toute la France.",
 
       ":::takeaway\n- Ferronnier d'art (forge, sur mesure) vs métallier (soudure, standard) : choisissez selon votre projet\n- Visitez l'atelier pour juger du savoir-faire réel\n- Garde-corps : la norme NF P01-012 est obligatoire (hauteur 1 m, barreaux ≤ 11 cm)\n- Exigez la galvanisation à chaud pour les ouvrages extérieurs : 50+ ans sans rouille\n- Portail fer forgé sur mesure : 2 000-8 000 €, garde-corps : 150-500 €/ml\n:::"
     ],

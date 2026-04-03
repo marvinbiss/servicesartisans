@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
-import { getComparisonReviewSchema } from "@/lib/seo/jsonld"
+import { getComparisonReviewSchema, getFAQSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
 import { comparisons } from "@/lib/data/comparisons"
 import {
@@ -135,8 +135,7 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
     ],
   }
 
-  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
-  const faqSchema = null
+  const faqSchema = comparison.faq.length > 0 ? getFAQSchema(comparison.faq) : null
 
   // Related comparisons (same category, excluding current)
   const relatedComparisons = comparisons

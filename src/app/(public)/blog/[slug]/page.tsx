@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { Calendar, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAuthorByName } from '@/lib/data/authors'
-import { getBreadcrumbSchema, getArticleSpeakableSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getArticleSpeakableSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
@@ -623,8 +623,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
     ? article.faq
     : extractFAQFromBlocks(blocks)
 
-  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
-  const faqSchema = null
+  const faqSchema = faqItems.length > 0 ? getFAQSchema(faqItems) : null
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },

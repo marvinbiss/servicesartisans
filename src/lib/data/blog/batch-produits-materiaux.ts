@@ -4,6 +4,8 @@ export const produitsArticles: Record<string, BlogArticle> = {
   'guide-pompe-chaleur-air-eau-2026': {
     title: "Pompe à Chaleur Air-Eau : Guide Complet 2026",
     excerpt: "Tout savoir sur la pompe à chaleur air-eau en 2026 : fonctionnement, prix, modèles, aides financières et conseils d'installation par des professionnels RGE.",
+    metaTitle: "PAC Air-Eau 2026 : Guide Prix et Aides",
+    metaDescription: "Découvrez la PAC air-eau en 2026 : fonctionnement, prix, aides MaPrimeRénov' et conseils d'installation RGE. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Jean-Pierre Duval',
     date: '2026-01-18',
@@ -62,6 +64,8 @@ Pour trouver un installateur qualifié près de chez vous, consultez notre annua
   'chauffe-eau-thermodynamique-guide': {
     title: "Chauffe-Eau Thermodynamique : Prix, Avantages et Installation",
     excerpt: "Guide complet du chauffe-eau thermodynamique en 2026 : fonctionnement, prix, économies réalisées, aides et conseils pour bien choisir votre modèle.",
+    metaTitle: "Chauffe-Eau Thermodynamique 2026 : Prix et Aides",
+    metaDescription: "Découvrez le chauffe-eau thermodynamique en 2026 : prix, économies et aides disponibles. Comparez les modèles. Devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Sophie Martin',
     date: '2026-01-20',
@@ -118,6 +122,8 @@ Trouvez un plombier-chauffagiste RGE sur ServicesArtisans pour un devis personna
   'guide-carrelage-salle-de-bain': {
     title: "Carrelage Salle de Bain : Matériaux, Prix et Tendances 2026",
     excerpt: "Grès cérame, faïence, mosaïque ou pierre naturelle : découvrez les meilleurs carrelages pour votre salle de bain en 2026, avec les prix et tendances du moment.",
+    metaTitle: "Carrelage Salle de Bain 2026 : Prix et Tendances",
+    metaDescription: "Comparez grès cérame, faïence et mosaïque pour votre salle de bain. Prix et tendances 2026. Obtenez un devis carreleur gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Marie Lefèvre',
     date: '2026-01-22',
@@ -178,6 +184,8 @@ Un carreleur expérimenté garantit une pose durable et étanche. Vérifiez ses 
   'parquet-flottant-guide-choix': {
     title: "Parquet Flottant : Guide de Choix et Prix 2026",
     excerpt: "Parquet contrecollé ou stratifié ? Découvrez les différences, les prix au m², les essences de bois et nos conseils pour choisir le bon parquet flottant en 2026.",
+    metaTitle: "Parquet Flottant 2026 : Guide de Choix et Prix",
+    metaDescription: "Contrecollé ou stratifié ? Comparez les prix au m² et essences de bois en 2026. Découvrez le parquet idéal. Devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Jean-Pierre Duval',
     date: '2026-01-24',
@@ -232,6 +240,8 @@ Aspirez régulièrement et nettoyez avec un balai humide (pas trempé). Utilisez
   'chaudiere-gaz-condensation-guide': {
     title: "Chaudière Gaz à Condensation : Prix et Alternatives 2026",
     excerpt: "La chaudière gaz à condensation reste-t-elle pertinente en 2026 ? Prix, rendement, nouvelles réglementations et alternatives pour votre chauffage.",
+    metaTitle: "Chaudière Gaz Condensation 2026 : Prix et Avis",
+    metaDescription: "Chaudière gaz condensation en 2026 : prix, rendement et alternatives. Découvrez si elle reste pertinente. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Sophie Martin',
     date: '2026-01-26',
@@ -290,6 +300,8 @@ Pour un remplacement de chaudière ou une installation de PAC, faites appel à u
   'guide-fenetre-double-vitrage': {
     title: "Fenêtres Double Vitrage : Prix, Types et Aides 2026",
     excerpt: "Guide complet des fenêtres double vitrage en 2026 : PVC, aluminium ou bois, prix au m², performances thermiques, aides MaPrimeRénov\" et conseils de pose.",
+    metaTitle: "Fenêtres Double Vitrage 2026 : Prix et Aides",
+    metaDescription: "Comparez fenêtres PVC, alu et bois en double vitrage. Prix au m², aides MaPrimeRénov' 2026. Obtenez un devis gratuit menuisier.",
     image: '/images/blog/placeholder.webp',
     author: 'Marie Lefèvre',
     date: '2026-01-28',
@@ -344,6 +356,8 @@ La pose par un artisan RGE est obligatoire pour bénéficier des aides. Vérifie
   'isolation-combles-materiaux-guide': {
     title: "Isolation des Combles : Matériaux, Prix et Aides",
     excerpt: "Laine de verre, ouate de cellulose ou polyuréthane ? Comparatif des matériaux d\"isolation des combles avec prix, performances et aides disponibles en 2026.",
+    metaTitle: "Isolation Combles 2026 : Matériaux, Prix, Aides",
+    metaDescription: "Comparez laine de verre, ouate de cellulose et polyuréthane pour vos combles. Prix et aides 2026. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Jean-Pierre Duval',
     date: '2026-01-30',
@@ -408,6 +422,8 @@ La certification RGE est obligatoire pour bénéficier des aides. Vérifiez la m
   'guide-volet-roulant-electrique': {
     title: "Volet Roulant Électrique : Prix, Pose et Domotique",
     excerpt: "Tout savoir sur les volets roulants électriques en 2026 : prix, motorisation, commande connectée, isolation thermique et aides à la rénovation.",
+    metaTitle: "Volet Roulant Électrique 2026 : Prix et Pose",
+    metaDescription: "Découvrez les volets roulants électriques 2026 : prix, motorisation et commande connectée. Aides rénovation. Devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Marie Lefèvre',
     date: '2026-02-01',
@@ -462,6 +478,8 @@ Faites appel à un menuisier ou un spécialiste domotique pour la pose. Vérifie
   'poele-a-bois-guide-2026': {
     title: "Poêle à Bois : Guide, Prix et Aides 2026",
     excerpt: "Poêle à bûches ou à granulés ? Découvrez les prix, les performances, les aides MaPrimeRénov\" et nos conseils pour choisir votre poêle à bois en 2026.",
+    metaTitle: "Poêle à Bois 2026 : Guide, Prix et Aides",
+    metaDescription: "Bûches ou granulés ? Comparez les poêles à bois en 2026 : prix, performances et aides MaPrimeRénov'. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Jean-Pierre Duval',
     date: '2026-02-03',
@@ -522,6 +540,8 @@ Un installateur RGE Qualibois est obligatoire pour bénéficier des aides. Il r�
   'climatisation-reversible-guide': {
     title: "Climatisation Réversible : Prix et Installation 2026",
     excerpt: "Guide complet de la climatisation réversible (PAC air-air) en 2026 : prix mono-split et multi-split, installation, consommation et alternatives.",
+    metaTitle: "Clim Réversible 2026 : Prix et Installation",
+    metaDescription: "Comparez mono-split et multi-split en 2026 : prix, installation et consommation. Guide climatisation réversible. Devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Sophie Martin',
     date: '2026-02-05',
@@ -574,6 +594,8 @@ Nettoyez les filtres tous les 15 jours en période d"utilisation (rinçage à l"
   'ballon-eau-chaude-guide-choix': {
     title: "Ballon d\"Eau Chaude : Comment Choisir en 2026",
     excerpt: "Électrique, thermodynamique ou solaire ? Guide complet pour choisir votre ballon d\"eau chaude en 2026 : capacité, prix, consommation et installation.",
+    metaTitle: "Ballon d'Eau Chaude 2026 : Guide de Choix",
+    metaDescription: "Électrique, thermodynamique ou solaire ? Comparez les ballons d'eau chaude 2026 : prix et consommation. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Jean-Pierre Duval',
     date: '2026-02-07',
@@ -632,6 +654,8 @@ L"installation doit respecter les normes NF et DTU en vigueur. Un plombier-chauf
   'porte-entree-guide-securite-isolation': {
     title: "Porte d\"Entrée : Sécurité, Isolation et Prix 2026",
     excerpt: "Comment choisir sa porte d\"entrée en 2026 ? Guide complet : matériaux, niveaux de sécurité, performances thermiques, prix et aides à la rénovation.",
+    metaTitle: "Porte d'Entrée 2026 : Sécurité, Prix et Aides",
+    metaDescription: "Découvrez comment choisir votre porte d'entrée en 2026 : matériaux, sécurité A2P et prix. Aides rénovation. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Sophie Martin',
     date: '2026-02-09',

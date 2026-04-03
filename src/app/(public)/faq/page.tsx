@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { faqItems } from '@/lib/data/faq-data'
 
 import FAQPageClient from './FAQPageClient'
 import { getPageContent } from '@/lib/cms'
@@ -40,7 +41,8 @@ const breadcrumbSchema = getBreadcrumbSchema([
   { name: 'FAQ', url: '/faq' },
 ])
 
-// WebPage schema for the FAQ page (FAQPage rich results deprecated by Google Aug 2023)
+const faqPageSchema = getFAQSchema(faqItems)
+
 const faqWebPageSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -64,7 +66,7 @@ export default async function FAQPage() {
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <JsonLd data={[faqWebPageSchema, breadcrumbSchema]} />
+        <JsonLd data={[faqWebPageSchema, faqPageSchema, breadcrumbSchema]} />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'FAQ' }]} className="mb-4" />
@@ -87,7 +89,7 @@ export default async function FAQPage() {
 
   return (
     <>
-      <JsonLd data={[faqWebPageSchema, breadcrumbSchema]} />
+      <JsonLd data={[faqWebPageSchema, faqPageSchema, breadcrumbSchema]} />
       <FAQPageClient />
       <GeoPageCTA variant="sticky-only" />
     </>

@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import JsonLd from "@/components/JsonLd"
-import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
+import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/jsonld"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import Breadcrumb from "@/components/Breadcrumb"
 import VerifierClient from "./VerifierClient"
@@ -89,8 +89,7 @@ const faqItems = [
   },
 ]
 
-// FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
-const faqSchema = null
+const faqSchema = getFAQSchema(faqItems)
 
 const webAppSchema = {
   "@context": "https://schema.org",

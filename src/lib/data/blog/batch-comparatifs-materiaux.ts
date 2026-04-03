@@ -4,6 +4,8 @@ export const comparatifsArticles: Record<string, BlogArticle> = {
   'meilleur-isolant-thermique-comparatif': {
     title: "Quel est le meilleur isolant thermique ? Comparatif 2026",
     excerpt: "Laine de verre, laine de roche, polyuréthane, ouate de cellulose, liège : comparatif complet des isolants thermiques avec performances, prix et usages recommandés.",
+    metaTitle: "Meilleur Isolant Thermique : Comparatif 2026",
+    metaDescription: "Comparez laine de verre, polyuréthane, ouate de cellulose et liège : performances, prix au m² et usages. Obtenez un devis gratuit isolation.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-02',
@@ -68,6 +70,8 @@ Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur c
   'peinture-interieure-guide-choix': {
     title: "Peinture intérieure : guide pour choisir la bonne",
     excerpt: "Acrylique, glycéro, alkyde : quel type de peinture choisir pour chaque pièce ? Finitions, rendement, prix et conseils de professionnels pour un résultat parfait.",
+    metaTitle: "Peinture Intérieure : Guide d'Achat 2026",
+    metaDescription: "Acrylique, glycéro ou alkyde ? Comparez finitions, rendement et prix pour chaque pièce. Obtenez un devis peintre gratuit.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-04',
@@ -132,6 +136,8 @@ Investissez dans des outils de qualité : rouleau anti-gouttes pour les grandes 
   'robinetterie-laiton-vs-inox': {
     title: "Robinetterie : laiton, inox ou zamak ?",
     excerpt: "Laiton chromé, inox brossé ou zamak : comparatif des matériaux de robinetterie. Durabilité, prix, entretien et comment reconnaître la qualité.",
+    metaTitle: "Robinetterie : Laiton vs Inox vs Zamak 2026",
+    metaDescription: "Comparez laiton, inox et zamak pour votre robinetterie : durabilité, prix et entretien. Découvrez comment reconnaître la qualité.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-06',
@@ -192,6 +198,8 @@ Pour un rapport qualité-prix optimal, choisissez du **laiton chromé** de marqu
   'types-de-carrelage-guide': {
     title: "Types de carrelage : grès cérame, faïence, pierre naturelle",
     excerpt: "Grès cérame, faïence, pierre naturelle, terre cuite : guide complet des types de carrelage avec usages, avantages, prix et critères de choix pour chaque pièce.",
+    metaTitle: "Types de Carrelage : Guide d'Achat 2026",
+    metaDescription: "Comparez grès cérame, faïence et pierre naturelle : usages, prix et critères de choix par pièce. Obtenez un devis carreleur gratuit.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-08',
@@ -252,6 +260,8 @@ Faites appel à un carreleur professionnel pour les grands formats (risque de ca
   'parquet-massif-vs-contrecolle-vs-stratifie': {
     title: "Parquet massif, contrecollé ou stratifié ?",
     excerpt: "Parquet massif, contrecollé ou stratifié : comparatif détaillé des revêtements de sol en bois. Durabilité, confort, prix et guide de choix selon vos besoins.",
+    metaTitle: "Parquet : Massif vs Contrecollé vs Stratifié",
+    metaDescription: "Comparez parquet massif, contrecollé et stratifié : durabilité, confort et prix. Découvrez le meilleur choix pour votre sol en 2026.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-10',
@@ -324,6 +334,8 @@ Pour une **rénovation d'appartement**, le contrecollé chêne en pose flottante
   'menuiseries-bois-pvc-alu-comparatif': {
     title: "Menuiseries bois, PVC ou aluminium : le comparatif",
     excerpt: "Fenêtres et portes en bois, PVC ou aluminium : comparatif performances thermiques, prix, entretien et durabilité pour choisir vos menuiseries en 2026.",
+    metaTitle: "Menuiseries : Bois vs PVC vs Alu - Comparatif",
+    metaDescription: "Comparez bois, PVC et aluminium pour vos fenêtres : isolation, prix et durabilité. Obtenez un devis menuisier gratuit en 2026.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-12',
@@ -380,6 +392,8 @@ La pose de menuiseries doit être réalisée par un artisan RGE (Reconnu Garant 
   'types-de-tuiles-guide': {
     title: "Tuiles terre cuite, béton ou ardoise : que choisir ?",
     excerpt: "Tuile terre cuite, tuile béton ou ardoise naturelle : comparatif complet des couvertures de toiture avec durée de vie, prix, esthétique et entretien.",
+    metaTitle: "Tuiles : Terre Cuite vs Béton vs Ardoise 2026",
+    metaDescription: "Comparez tuile terre cuite, béton et ardoise : durée de vie, prix et entretien. Obtenez un devis couvreur gratuit.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-14',
@@ -440,6 +454,8 @@ Pour un **budget maîtrisé**, la tuile terre cuite à emboîtement offre le mei
   'plaque-de-platre-ba13-guide': {
     title: "Plaque de plâtre BA13 : types et usages",
     excerpt: "BA13 standard, hydrofuge, coupe-feu, phonique : guide complet des plaques de plâtre avec caractéristiques, prix et usages recommandés pour chaque situation.",
+    metaTitle: "Plaque de Plâtre BA13 : Guide Complet 2026",
+    metaDescription: "Découvrez les types de BA13 : standard, hydrofuge, coupe-feu. Caractéristiques, prix et usages pour chaque situation. Devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-16',
@@ -500,6 +516,8 @@ La qualité des finitions fait toute la différence. **Bande à joint** : papier
   'types-enduit-facade': {
     title: "Enduit de façade : monocouche, traditionnel ou chaux ?",
     excerpt: "Enduit monocouche, traditionnel ou à la chaux : comparatif des enduits de façade avec avantages, prix, mise en œuvre et durabilité pour chaque type.",
+    metaTitle: "Enduit Façade : Comparatif et Prix 2026",
+    metaDescription: "Comparez enduit monocouche, traditionnel et chaux : prix, mise en oeuvre et durabilité. Obtenez un devis façadier gratuit.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-18',
@@ -562,6 +580,8 @@ Un enduit de façade mal appliqué peut se fissurer, se décoller ou laisser pas
   'beton-cire-vs-resine-vs-carrelage': {
     title: "Béton ciré, résine ou carrelage : quel sol choisir ?",
     excerpt: "Béton ciré, résine de sol ou carrelage grand format : comparatif des revêtements de sol sans joint. Esthétique, entretien, prix et guide de choix pour chaque pièce.",
+    metaTitle: "Béton Ciré vs Résine vs Carrelage : Guide 2026",
+    metaDescription: "Comparez béton ciré, résine et carrelage grand format : esthétique, entretien et prix. Découvrez le sol idéal pour chaque pièce.",
     image: '/images/blog/placeholder.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-20',

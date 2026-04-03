@@ -59,6 +59,10 @@ export const prixMetalBoisArticles: Record<string, BlogArticle> = {
       "Pour obtenir des devis comparatifs et trouver un métallier qualifié, consultez notre annuaire dans les principales villes de France :",
       "- [Métallier à Paris](/services/metallier/paris)\n- [Métallier à Lyon](/services/metallier/lyon)\n- [Métallier à Marseille](/services/metallier/marseille)\n- [Métallier à Bordeaux](/services/metallier/bordeaux)\n- [Métallier à Toulouse](/services/metallier/toulouse)\n- [Métallier à Nantes](/services/metallier/nantes)\n- [Métallier à Lille](/services/metallier/lille)\n- [Métallier à Strasbourg](/services/metallier/strasbourg)\n- [Métallier à Nice](/services/metallier/nice)\n- [Métallier à Rennes](/services/metallier/rennes)",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son métallier](/blog/comment-choisir-metallier-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix ferronnier](/blog/prix-ferronnier-2026-tarifs-ferronnerie) pour compléter votre recherche.",
+
       ":::takeaway\n- Taux horaire métallier : **50 – 100 € HT** selon zone et spécialité\n- Garde-corps acier thermolaqué : **150 – 300 €/ml**\n- Escalier métallique : **3 000 – 12 000 €** selon le type\n- Verrière atelier : **800 – 4 000 €** selon dimensions et options\n- Toujours demander **3 devis comparatifs** et vérifier l'assurance décennale\n:::"
     ],
     image: "/images/blog/prix-metallier-2026-tarifs-travaux.webp",
@@ -143,6 +147,10 @@ export const prixMetalBoisArticles: Record<string, BlogArticle> = {
       "Comparez les artisans ferronniers dans votre ville :",
       "- [Ferronnier à Paris](/services/ferronnier/paris)\n- [Ferronnier à Lyon](/services/ferronnier/lyon)\n- [Ferronnier à Marseille](/services/ferronnier/marseille)\n- [Ferronnier à Bordeaux](/services/ferronnier/bordeaux)\n- [Ferronnier à Toulouse](/services/ferronnier/toulouse)\n- [Ferronnier à Nantes](/services/ferronnier/nantes)\n- [Ferronnier à Lille](/services/ferronnier/lille)\n- [Ferronnier à Strasbourg](/services/ferronnier/strasbourg)\n- [Ferronnier à Nice](/services/ferronnier/nice)\n- [Ferronnier à Montpellier](/services/ferronnier/montpellier)",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son ferronnier](/blog/comment-choisir-ferronnier-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix métallier](/blog/prix-metallier-2026-tarifs-travaux) pour compléter votre recherche.",
+
       ":::takeaway\n- Taux horaire ferronnier d'art : **55 – 120 € HT** selon zone et expertise\n- Rampe en fer forgé : **200 – 500 €/ml** selon la complexité des motifs\n- Portail fer forgé sur mesure : **2 500 – 8 000 €** selon le style\n- Restauration de ferronnerie ancienne : **1 500 – 6 000 €** selon l'ouvrage\n- Exigez de voir l'atelier et le book de réalisations avant de signer\n:::"
     ],
     image: "/images/blog/prix-ferronnier-2026-tarifs-ferronnerie.webp",
@@ -225,6 +233,10 @@ export const prixMetalBoisArticles: Record<string, BlogArticle> = {
 
       "Demandez vos devis gratuits auprès de poseurs de parquet vérifiés :",
       "- [Poseur de parquet à Paris](/services/poseur-de-parquet/paris)\n- [Poseur de parquet à Lyon](/services/poseur-de-parquet/lyon)\n- [Poseur de parquet à Marseille](/services/poseur-de-parquet/marseille)\n- [Poseur de parquet à Bordeaux](/services/poseur-de-parquet/bordeaux)\n- [Poseur de parquet à Toulouse](/services/poseur-de-parquet/toulouse)\n- [Poseur de parquet à Nantes](/services/poseur-de-parquet/nantes)\n- [Poseur de parquet à Lille](/services/poseur-de-parquet/lille)\n- [Poseur de parquet à Strasbourg](/services/poseur-de-parquet/strasbourg)\n- [Poseur de parquet à Nice](/services/poseur-de-parquet/nice)\n- [Poseur de parquet à Rennes](/services/poseur-de-parquet/rennes)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son poseur de parquet](/blog/comment-choisir-poseur-parquet-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix solier revêtement sol](/blog/prix-solier-revetement-sol-2026) pour compléter votre recherche.",
 
       ":::takeaway\n- Stratifié fourni posé : **23 – 55 €/m²** — le plus économique\n- Contrecollé chêne fourni posé : **45 – 110 €/m²** — le meilleur rapport qualité/prix\n- Massif chêne fourni posé : **70 – 180 €/m²** — le plus durable\n- Ponçage + vitrification : **25 – 45 €/m²** pour rénover sans remplacer\n- Comparez au moins **3 devis** et vérifiez les certifications Qualibat\n:::"
     ],
@@ -313,6 +325,10 @@ export const prixMetalBoisArticles: Record<string, BlogArticle> = {
       "Obtenez des devis gratuits auprès de miroitiers vérifiés :",
       "- [Miroitier à Paris](/services/miroitier/paris)\n- [Miroitier à Lyon](/services/miroitier/lyon)\n- [Miroitier à Marseille](/services/miroitier/marseille)\n- [Miroitier à Bordeaux](/services/miroitier/bordeaux)\n- [Miroitier à Toulouse](/services/miroitier/toulouse)\n- [Miroitier à Nantes](/services/miroitier/nantes)\n- [Miroitier à Lille](/services/miroitier/lille)\n- [Miroitier à Strasbourg](/services/miroitier/strasbourg)\n- [Miroitier à Nice](/services/miroitier/nice)\n- [Miroitier à Montpellier](/services/miroitier/montpellier)",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son miroitier](/blog/comment-choisir-miroitier-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix vitrier](/blog/prix-vitrier-2026-remplacement-vitrage) pour compléter votre recherche.",
+
       ":::takeaway\n- Miroir sur mesure : **80 – 250 €/m²** selon épaisseur et qualité\n- Crédence verre laqué : **150 – 300 €/m²** — idéal pour la cuisine\n- Paroi de douche : **300 – 1 200 €** selon le type (fixe, pivotante, coulissante)\n- Vitrine commerce : **200 – 500 €/m²** en verre feuilleté sécurit\n- Toujours exiger du **verre trempé** pour les zones à risque (salle de bains, cuisine)\n:::"
     ],
     image: "/images/blog/prix-miroitier-2026-tarifs-vitrage.webp",
@@ -396,6 +412,10 @@ export const prixMetalBoisArticles: Record<string, BlogArticle> = {
 
       "Comparez les devis de storistes qualifiés dans votre ville :",
       "- [Storiste à Paris](/services/storiste/paris)\n- [Storiste à Lyon](/services/storiste/lyon)\n- [Storiste à Marseille](/services/storiste/marseille)\n- [Storiste à Bordeaux](/services/storiste/bordeaux)\n- [Storiste à Toulouse](/services/storiste/toulouse)\n- [Storiste à Nantes](/services/storiste/nantes)\n- [Storiste à Lille](/services/storiste/lille)\n- [Storiste à Strasbourg](/services/storiste/strasbourg)\n- [Storiste à Nice](/services/storiste/nice)\n- [Storiste à Montpellier](/services/storiste/montpellier)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son storiste](/blog/comment-choisir-storiste-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix fenêtre double vitrage](/blog/prix-fenetre-double-vitrage-2026) pour compléter votre recherche.",
 
       ":::takeaway\n- Store banne motorisé : **1 200 – 4 500 €** selon taille et options\n- Volet roulant alu motorisé : **450 – 900 €** par fenêtre\n- Pergola bioclimatique : **5 000 – 15 000 €** — l'investissement terrasse par excellence\n- BSO : **500 – 1 200 €** par fenêtre — la solution RE 2020\n- Toujours inclure un **capteur vent** sur un store banne motorisé\n:::"
     ],

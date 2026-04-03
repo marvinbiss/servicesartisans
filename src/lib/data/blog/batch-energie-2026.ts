@@ -5,6 +5,8 @@ export const energieArticles: Record<string, BlogArticle> = {
     title: "Prix Pompe à Chaleur en 2026 : Coûts, Aides et Rentabilité",
     excerpt:
       "Combien coûte une pompe à chaleur en 2026 ? Découvrez les prix par type (air-eau, air-air, géothermique), les aides disponibles et le retour sur investissement réel.",
+    metaTitle: "Prix Pompe à Chaleur 2026 : Tarifs et Aides",
+    metaDescription: "Comparez les prix PAC air-eau, air-air et géothermique en 2026. Aides MaPrimeRénov' incluses. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Jean-Pierre Duval',
     date: '2026-02-13',
@@ -131,6 +133,8 @@ Pour obtenir le meilleur rapport qualité-prix, comparez les devis de 3 installa
     title: "Prix Panneaux Solaires en 2026 : Installation, Rentabilité et Aides",
     excerpt:
       "Quel est le prix d'une installation de panneaux solaires en 2026 ? Guide complet avec les coûts par puissance, les aides, le tarif de rachat et le calcul de rentabilité.",
+    metaTitle: "Prix Panneaux Solaires 2026 : Coûts et Aides",
+    metaDescription: "Découvrez les prix panneaux solaires 2026 par puissance, aides et tarif de rachat. Calculez votre rentabilité. Devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Sophie Martin',
     date: '2026-02-15',
@@ -253,6 +257,8 @@ Comparez les devis sur ServicesArtisans pour trouver un installateur qualifié p
     title: "Prix Borne de Recharge à Domicile en 2026 : Coûts et Installation",
     excerpt:
       "Combien coûte l'installation d'une borne de recharge (wallbox) à domicile en 2026 ? Découvrez les prix, les aides et les étapes pour recharger votre voiture électrique chez vous.",
+    metaTitle: "Prix Borne de Recharge 2026 : Coûts et Aides",
+    metaDescription: "Découvrez le prix d'une wallbox en 2026 : installation, aides et étapes. Rechargez votre voiture chez vous. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-02-17',
@@ -383,6 +389,8 @@ Pour une installation conforme et sécurisée, faites appel à un électricien c
     title: "DPE Obligatoire 2026 : Tout ce qui Change pour les Propriétaires",
     excerpt:
       "Le DPE évolue en 2026 avec de nouvelles obligations pour les propriétaires. Découvrez les changements, les échéances et les conséquences sur la location et la vente.",
+    metaTitle: "DPE Obligatoire 2026 : Guide Propriétaires",
+    metaDescription: "Découvrez les nouvelles obligations DPE 2026 pour propriétaires : échéances, conséquences location et vente. Obtenez un devis diagnostic.",
     image: '/images/blog/placeholder.webp',
     author: 'Claire Dubois',
     date: '2026-02-19',
@@ -517,10 +525,12 @@ Ne tardez pas : les artisans RGE sont de plus en plus sollicités et les délais
     ],
   },
 
-  'passoire-thermique-interdiction-location-2026': {
+  'passoire-thermique-interdiction-location-2026-guide-complet': {
     title: "Passoires Thermiques : Interdiction de Location en 2026",
     excerpt:
       "Les logements classés G sont interdits à la location depuis 2025. Quelles conséquences pour les propriétaires ? Quelles solutions pour rénover et quelles aides disponibles ?",
+    metaTitle: "Passoires Thermiques 2026 : Interdiction Location",
+    metaDescription: "Logement classé G interdit à la location. Découvrez les solutions de rénovation et aides disponibles. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-02-21',
@@ -657,6 +667,8 @@ N'attendez pas : faites réaliser un audit énergétique et commencez les démar
     title: "Éco-PTZ 2026 : Conditions, Montants et Comment en Bénéficier",
     excerpt:
       "L'éco-prêt à taux zéro reste un levier majeur pour financer la rénovation énergétique en 2026. Découvrez les conditions, les montants et les étapes pour en bénéficier.",
+    metaTitle: "Éco-PTZ 2026 : Conditions et Montants",
+    metaDescription: "Découvrez les conditions de l'éco-PTZ 2026 : jusqu'à 50 000 € sans intérêts pour vos travaux de rénovation. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Sophie Martin',
     date: '2026-02-23',
@@ -787,6 +799,8 @@ Trouvez des artisans RGE qualifiés sur ServicesArtisans et commencez votre proj
     title: "Prix Véranda en 2026 : Matériaux, Surfaces et Devis",
     excerpt:
       "Combien coûte une véranda en 2026 ? Découvrez les prix par matériau (aluminium, bois, PVC, acier), par surface et les démarches administratives à connaître.",
+    metaTitle: "Prix Véranda 2026 : Tarifs par Matériau",
+    metaDescription: "Comparez les prix véranda 2026 : aluminium, bois, PVC et acier. Démarches et surfaces détaillées. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Jean-Pierre Duval',
     date: '2026-02-25',
@@ -909,6 +923,8 @@ Pour trouver un vérandaliste ou un menuisier qualifié près de chez vous, comp
     title: "Extension Maison : Prix au m² en 2026 selon le Type",
     excerpt:
       "Quel est le prix au m² pour agrandir sa maison en 2026 ? Comparatif des coûts par type d'extension : surélévation, extension latérale, véranda, ossature bois.",
+    metaTitle: "Extension Maison 2026 : Prix au m² et Devis",
+    metaDescription: "Comparez les prix au m² pour agrandir votre maison en 2026 : surélévation, extension, véranda. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Marc Lefebvre',
     date: '2026-02-27',
@@ -1040,10 +1056,12 @@ Comparez les devis de constructeurs et artisans qualifiés sur ServicesArtisans 
     ],
   },
 
-  'prix-domotique-maison-2026': {
+  'prix-domotique-maison-2026-installation': {
     title: "Prix Domotique Maison en 2026 : Solutions et Installation",
     excerpt:
       "Combien coûte la domotique en 2026 ? Découvrez les prix des solutions connectées (éclairage, volets, chauffage, sécurité) et le budget pour une maison intelligente.",
+    metaTitle: "Prix Domotique Maison 2026 : Budget Complet",
+    metaDescription: "Découvrez les prix domotique 2026 : éclairage, volets, chauffage connecté. Budget maison intelligente. Obtenez un devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Thomas Bernard',
     date: '2026-03-01',
@@ -1189,6 +1207,8 @@ Trouvez un électricien ou un intégrateur domotique qualifié sur ServicesArtis
     title: "Adaptation Logement Senior : Aides MaPrimeAdapt' et Prix en 2026",
     excerpt:
       "Comment adapter son logement pour le maintien à domicile ? Découvrez les travaux essentiels, le dispositif MaPrimeAdapt' et les autres aides pour les seniors et PMR en 2026.",
+    metaTitle: "Adaptation Logement Senior 2026 : Aides et Prix",
+    metaDescription: "Découvrez MaPrimeAdapt' 2026 et les aides pour adapter votre logement senior/PMR. Travaux essentiels et devis gratuit.",
     image: '/images/blog/placeholder.webp',
     author: 'Claire Dubois',
     date: '2026-03-03',

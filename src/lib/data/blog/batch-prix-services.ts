@@ -65,6 +65,8 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       "Comparez les devis de désinsectiseurs certifiés dans votre ville :",
       "- [Désinsectisation à Paris](/services/desinsectisation/paris)\n- [Désinsectisation à Lyon](/services/desinsectisation/lyon)\n- [Désinsectisation à Marseille](/services/desinsectisation/marseille)\n- [Désinsectisation à Toulouse](/services/desinsectisation/toulouse)\n- [Désinsectisation à Bordeaux](/services/desinsectisation/bordeaux)\n- [Désinsectisation à Nice](/services/desinsectisation/nice)\n- [Désinsectisation à Nantes](/services/desinsectisation/nantes)\n- [Désinsectisation à Strasbourg](/services/desinsectisation/strasbourg)\n- [Désinsectisation à Montpellier](/services/desinsectisation/montpellier)\n- [Désinsectisation à Lille](/services/desinsectisation/lille)",
 
+      "À lire aussi : notre guide complet sur les [prix dératisation](/blog/prix-deratisation-2026-tarifs) pour compléter votre recherche.",
+
       ":::takeaway\n- Traitement cafards (appartement) : **80 – 250 €**\n- Traitement punaises de lit : **150 – 900 €** selon la méthode\n- Destruction nid de guêpes/frelons : **80 – 250 €**\n- Traitement fourmis : **70 – 350 €**\n- Toujours exiger un devis avec **passages de suivi inclus**\n:::"
     ],
     image: "/images/blog/prix-desinsectisation-2026-tarifs.webp",
@@ -153,6 +155,8 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       "Comparez les devis de dératiseurs certifiés dans votre ville :",
       "- [Dératisation à Paris](/services/deratisation/paris)\n- [Dératisation à Lyon](/services/deratisation/lyon)\n- [Dératisation à Marseille](/services/deratisation/marseille)\n- [Dératisation à Toulouse](/services/deratisation/toulouse)\n- [Dératisation à Bordeaux](/services/deratisation/bordeaux)\n- [Dératisation à Nice](/services/deratisation/nice)\n- [Dératisation à Nantes](/services/deratisation/nantes)\n- [Dératisation à Strasbourg](/services/deratisation/strasbourg)\n- [Dératisation à Montpellier](/services/deratisation/montpellier)\n- [Dératisation à Lille](/services/deratisation/lille)",
 
+      "À lire aussi : notre guide complet sur les [prix désinsectisation](/blog/prix-desinsectisation-2026-tarifs) pour compléter votre recherche.",
+
       ":::takeaway\n- Dératisation souris (appartement) : **80 – 200 €**\n- Dératisation rats : **120 – 500 €** selon la surface\n- Contrat annuel (4 passages) : **300 – 1 200 €**\n- Rat d'égout + clapet anti-retour : **300 – 800 €**\n- Choisir un professionnel certifié **Certibiocide**\n:::"
     ],
     image: "/images/blog/prix-deratisation-2026-tarifs.webp",
@@ -239,6 +243,10 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
 
       "Comparez les devis de déménageurs certifiés dans votre ville :",
       "- [Déménageur à Paris](/services/demenageur/paris)\n- [Déménageur à Lyon](/services/demenageur/lyon)\n- [Déménageur à Marseille](/services/demenageur/marseille)\n- [Déménageur à Toulouse](/services/demenageur/toulouse)\n- [Déménageur à Bordeaux](/services/demenageur/bordeaux)\n- [Déménageur à Nice](/services/demenageur/nice)\n- [Déménageur à Nantes](/services/demenageur/nantes)\n- [Déménageur à Strasbourg](/services/demenageur/strasbourg)\n- [Déménageur à Montpellier](/services/demenageur/montpellier)\n- [Déménageur à Lille](/services/demenageur/lille)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son déménageur](/blog/comment-choisir-demenageur-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [travaux rentables avant vente](/blog/travaux-avant-vendre-maison-rentables) pour compléter votre recherche.",
 
       ":::takeaway\n- Studio local : **400 – 800 €** | Longue distance : **800 – 1 500 €**\n- T3 local : **900 – 2 000 €** | Longue distance : **1 800 – 3 200 €**\n- Maison local : **1 500 – 3 500 €** | Longue distance : **3 000 – 5 500 €**\n- Le **groupage** permet d'économiser 20 à 40 % sur la longue distance\n- Comparez au moins **3 devis** avec visite technique préalable\n:::"
     ],
@@ -352,6 +360,10 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       "Comparez les devis d'artisans certifiés RGE dans votre ville :",
       "- [Isolation thermique à Paris](/services/isolation-thermique/paris)\n- [Isolation thermique à Lyon](/services/isolation-thermique/lyon)\n- [Isolation thermique à Marseille](/services/isolation-thermique/marseille)\n- [Isolation thermique à Toulouse](/services/isolation-thermique/toulouse)\n- [Isolation thermique à Bordeaux](/services/isolation-thermique/bordeaux)\n- [Isolation thermique à Nice](/services/isolation-thermique/nice)\n- [Isolation thermique à Nantes](/services/isolation-thermique/nantes)\n- [Isolation thermique à Strasbourg](/services/isolation-thermique/strasbourg)\n- [Isolation thermique à Montpellier](/services/isolation-thermique/montpellier)\n- [Isolation thermique à Lille](/services/isolation-thermique/lille)",
 
+      "À lire aussi : notre guide complet sur les [prix rénovation énergétique](/blog/prix-renovation-energetique-2026-tarifs) pour compléter votre recherche.",
+
+      "À lire aussi : notre guide complet sur les [guide MaPrimeRénov' 2026](/blog/maprimerenov-2026-guide-complet-aides-renovation) pour compléter votre recherche.",
+
       ":::takeaway\n- Combles perdus : **20 – 40 €/m²** — meilleur rapport coût/efficacité\n- ITI murs : **40 – 90 €/m²** | ITE murs : **120 – 250 €/m²**\n- MaPrimeRénov + CEE + TVA 5,5 % = jusqu'à **70 % du coût couvert**\n- Éco-PTZ : **50 000 € max** à taux zéro pour financer le reste\n- Artisan **RGE obligatoire** pour bénéficier de toutes les aides\n:::"
     ],
     image: "/images/blog/prix-isolation-thermique-2026-tarifs.webp",
@@ -459,6 +471,10 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
 
       "Comparez les devis de professionnels certifiés RGE dans votre ville :",
       "- [Rénovation énergétique à Paris](/services/renovation-energetique/paris)\n- [Rénovation énergétique à Lyon](/services/renovation-energetique/lyon)\n- [Rénovation énergétique à Marseille](/services/renovation-energetique/marseille)\n- [Rénovation énergétique à Toulouse](/services/renovation-energetique/toulouse)\n- [Rénovation énergétique à Bordeaux](/services/renovation-energetique/bordeaux)\n- [Rénovation énergétique à Nice](/services/renovation-energetique/nice)\n- [Rénovation énergétique à Nantes](/services/renovation-energetique/nantes)\n- [Rénovation énergétique à Strasbourg](/services/renovation-energetique/strasbourg)\n- [Rénovation énergétique à Montpellier](/services/renovation-energetique/montpellier)\n- [Rénovation énergétique à Lille](/services/renovation-energetique/lille)",
+
+      "À lire aussi : notre guide complet sur les [prix isolation thermique](/blog/prix-isolation-thermique-2026-tarifs) pour compléter votre recherche.",
+
+      "À lire aussi : notre guide complet sur les [guide MaPrimeRénov' 2026](/blog/maprimerenov-2026-guide-complet-aides-renovation) pour compléter votre recherche.",
 
       ":::takeaway\n- Rénovation globale (maison 100 m²) : **25 000 – 60 000 €** avant aides\n- MaPrimeRénov parcours accompagné : jusqu'à **63 000 €** d'aides (profil Bleu)\n- CEE + TVA 5,5 % + éco-PTZ = reste à charge finançable à **0 % d'intérêts**\n- Passage DPE F → C : retour sur investissement en **5 à 7 ans**\n- Accompagnateur Rénov' **obligatoire** pour le parcours accompagné\n:::"
     ],

@@ -4,6 +4,8 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
   'diy-travaux-soi-meme-ou-artisan': {
     title: 'Quels travaux faire soi-même et quand appeler un artisan ?',
     excerpt: 'Peinture, plomberie, électricité… Découvrez quels travaux vous pouvez réaliser en DIY et ceux qui exigent un professionnel qualifié. Guide complet avec budgets comparatifs.',
+    metaTitle: 'DIY ou Artisan ? Guide Travaux Maison 2026',
+    metaDescription: 'Découvrez quels travaux faire soi-même et quand appeler un pro. Budgets comparatifs et règles de sécurité. Devis gratuit.',
     image: '/images/blog/diy-travaux-soi-meme-ou-artisan.webp',
     author: 'ServicesArtisans',
     date: '2026-01-18',
@@ -115,6 +117,8 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
   'tendances-salle-de-bain-2026': {
     title: 'Tendances rénovation salle de bain 2026 : styles, matériaux et budget',
     excerpt: 'Douche à l\'italienne, vasque suspendue, carrelage grand format, robinetterie noire mate… Toutes les tendances salle de bain 2026 avec budgets détaillés par gamme.',
+    metaTitle: 'Salle de Bain 2026 : Tendances et Budget',
+    metaDescription: 'Découvrez les tendances salle de bain 2026 : douche italienne, vasque suspendue, robinetterie noire. Budget par gamme. Devis gratuit.',
     image: '/images/blog/tendances-salle-de-bain-2026.webp',
     author: 'ServicesArtisans',
     date: '2026-01-25',
@@ -222,6 +226,8 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
   'prix-domotique-maison-2026': {
     title: 'Prix installation domotique 2026 : budget complet détaillé',
     excerpt: 'KNX, Zigbee, Matter, Z-Wave : comparatif des protocoles domotiques et prix détaillés par poste. Budget complet pour une maison connectée de 100 m² en 2026.',
+    metaTitle: 'Prix Domotique 2026 : Budget et Comparatif',
+    metaDescription: 'Comparez KNX, Zigbee, Matter et Z-Wave. Budget domotique complet pour 100 m² en 2026. Obtenez un devis gratuit domoticien.',
     image: '/images/blog/prix-domotique-maison-2026.webp',
     author: 'ServicesArtisans',
     date: '2026-02-12',
@@ -322,6 +328,8 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
   'preparer-maison-revente-travaux-rentables': {
     title: 'Préparer sa maison pour la revente : les travaux les plus rentables',
     excerpt: 'DPE, cuisine, salle de bain, façade, home staging : découvrez les travaux qui maximisent la plus-value à la revente et ceux à éviter. ROI détaillé par poste.',
+    metaTitle: 'Travaux Avant Revente : Guide Rentabilité 2026',
+    metaDescription: 'Découvrez les travaux les plus rentables avant de vendre : cuisine, DPE, façade. ROI détaillé par poste. Obtenez un devis gratuit.',
     image: '/images/blog/preparer-maison-revente-travaux-rentables.webp',
     author: 'ServicesArtisans',
     date: '2026-03-05',

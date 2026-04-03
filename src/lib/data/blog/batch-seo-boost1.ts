@@ -4,6 +4,8 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   'maprimerenov-2026-guide-complet-aides-renovation': {
     title: "MaPrimeRénov' 2026 : Aides Rénovation",
     excerpt: "Montants, conditions d\'éligibilité, démarches : tout savoir sur MaPrimeRénov\' 2026. Profils bleu, jaune, violet, rose. Comparez.",
+    metaTitle: "MaPrimeRénov' 2026 : Guide Aides Rénovation",
+    metaDescription: "Découvrez MaPrimeRénov' 2026 : montants par profil, conditions et démarches. Comparez les aides rénovation. Devis gratuit.",
     image: '/images/blog/maprimerenov-2026-guide-complet-aides-renovation.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -39,6 +41,10 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
       "## 8. Délais et calendrier type d\'un projet MaPrimeRénov\'\n\n### Parcours par geste (isolation ou chauffage)\n\n| Étape | Délai |\n| Simulation + choix de l\'artisan RGE | 1 à 3 semaines |\n| Dépôt du dossier + accord ANAH | 2 à 4 semaines |\n| Réalisation des travaux | 1 à 5 jours |\n| Envoi des factures | J+15 maximum |\n| Versement de l\'aide | 4 à 6 semaines |\n| **Durée totale** | **2 à 4 mois** |\n\n### Parcours accompagné (Rénovation d\'Ampleur)\n\n| Étape | Délai |\n| Audit énergétique | 2 à 4 semaines |\n| Choix du MAR + élaboration du plan | 4 à 8 semaines |\n| Dépôt du dossier + accord ANAH | 4 à 8 semaines |\n| Réalisation des travaux | 1 à 6 mois |\n| Contrôle post-travaux + DPE final | 2 à 4 semaines |\n| Versement du solde | 4 à 8 semaines |\n| **Durée totale** | **6 à 18 mois** |\n\n:::info Bon à savoir\nL\'ANAH verse souvent une **avance de 30 %** de l\'aide dès la validation du dossier pour les ménages Bleu et Jaune, afin de faciliter le démarrage des travaux sans attendre la fin du chantier.\n:::",
 
       "## 9. Cas particuliers : copropriétés et bailleurs\n\n### Copropriétés\n\nDepuis 2024, les copropriétés peuvent accéder au Parcours accompagné. Le vote en assemblée générale (à la majorité de l\'article 25) est nécessaire. L\'aide est versée au syndicat de copropriété et peut être répercutée sur les charges ou sur un fonds de travaux spécifique.\n\n### Propriétaires bailleurs\n\nLes propriétaires bailleurs sont éligibles à MaPrimeRénov\' pour leurs logements loués, à condition que :\n- Le logement soit loué à titre de résidence principale du locataire\n- Le loyer respecte des plafonds selon la zone géographique pendant **6 ans** après les travaux\n- La location soit effective dans les **6 mois** suivant la fin des travaux\n\nLes plafonds de loyer mensuels en 2026 varient de **8,5 €/m²** en zone B2 à **17,5 €/m²** en zone A bis.\n\n:::tip Conseil pro\nPour les logements classés G loués, la loi oblige à des travaux avant fin 2025 pour maintenir la location. MaPrimeRénov\' peut financer ces travaux obligatoires tout en évitant les amendes liées à l\'interdiction de louer des passoires thermiques.\n:::",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix de l'isolation thermique en 2026](/blog/prix-isolation-thermique-2026-tarifs).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix chauffagiste en 2026](/blog/prix-chauffagiste-2026-installation-entretien).",
 
       "## 10. Simulation et outils pratiques\n\n### Calculer votre aide en ligne\n\n- **Simulateur officiel** : france-renov.gouv.fr/aides-et-travaux/ma-prime-renov\n- **Simulateur CEE** : jedeclaremonchantier.gouv.fr\n- **Carte des artisans RGE** : france-renov.gouv.fr/trouvez-un-professionnel\n- **Trouver un MAR** : monaccompagnateurrénov.fr\n\n### Documents à préparer\n\n1. Avis d\'imposition de l\'année N-2 (ou connexion FranceConnect+)\n2. Titre de propriété ou justificatif de propriété du logement\n3. Devis détaillé de l\'artisan RGE (avec numéro de certification)\n4. Audit énergétique (Parcours accompagné uniquement)\n5. RIB du compte bancaire pour le versement\n\n:::takeaway\n- Déposez TOUJOURS votre demande avant de signer le moindre devis ou acompte\n- Vérifiez le profil de revenus applicable (RFR N-2 / nombre d\'UC / zone géographique)\n- Choisissez le Parcours accompagné si vous pouvez gagner 2 classes DPE ou plus\n- Cumulez systématiquement avec les CEE, l\'éco-PTZ et les aides locales\n- Vérifiez la validité et le périmètre du certificat RGE de chaque artisan\n:::",
     ],
@@ -81,6 +87,8 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   'comment-choisir-artisan-confiance-guide-2026': {
     title: "Choisir un Artisan de Confiance 2026",
     excerpt: "Les 10 critères pour ne jamais se tromper d\'artisan : SIRET, assurance décennale, devis, red flags et recours en cas de litige. Devis gratuit.",
+    metaTitle: "Choisir un Artisan de Confiance 2026 : Guide",
+    metaDescription: "Découvrez les 10 critères pour choisir un artisan fiable : SIRET, décennale et red flags. Évitez les arnaques. Devis gratuit.",
     image: '/images/blog/comment-choisir-artisan-confiance-guide-2026.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -158,6 +166,8 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   'prix-renovation-maison-2026-budget-complet': {
     title: "Prix Rénovation Maison 2026 : Budget",
     excerpt: "Combien coûte une rénovation maison en 2026 ? Prix au m², par pièce et par corps de métier, avec les aides déductibles. Devis gratuit.",
+    metaTitle: "Prix Rénovation Maison 2026 : Budget Complet",
+    metaDescription: "Découvrez les prix rénovation maison 2026 : au m², par pièce et par métier. Aides déductibles incluses. Obtenez un devis gratuit.",
     image: '/images/blog/prix-renovation-maison-2026-budget-complet.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -235,6 +245,8 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   'pompe-a-chaleur-guide-complet-2026': {
     title: "Pompe à Chaleur 2026 : Prix et Aides",
     excerpt: "Pompes à chaleur 2026 : air-air, air-eau, géothermique. Prix d\'installation, aides MaPrimeRénov\' + CEE, COP et entretien. Comparez.",
+    metaTitle: "Pompe à Chaleur 2026 : Prix, Aides et Guide",
+    metaDescription: "Comparez PAC air-air, air-eau et géothermique en 2026 : prix, aides MaPrimeRénov' + CEE et COP. Obtenez un devis gratuit.",
     image: '/images/blog/pompe-a-chaleur-guide-complet-2026.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",
@@ -308,6 +320,8 @@ export const seoBoost1Articles: Record<string, BlogArticle> = {
   'isolation-maison-guide-complet-materiaux-prix-aides': {
     title: "Isolation Maison 2026 : Prix et Aides",
     excerpt: "Isolation combles, murs, plancher bas, fenêtres : comparatif des matériaux, prix au m² et aides MaPrimeRénov\' + CEE en 2026. Comparez.",
+    metaTitle: "Isolation Maison 2026 : Prix, Matériaux, Aides",
+    metaDescription: "Comparez les matériaux d'isolation : combles, murs, fenêtres. Prix au m² et aides MaPrimeRénov' 2026. Obtenez un devis gratuit.",
     image: '/images/blog/isolation-maison-guide-complet-materiaux-prix-aides.webp',
     author: 'ServicesArtisans',
     authorBio: "L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les réglementations pour aider chaque propriétaire à financer ses travaux au meilleur coût.",

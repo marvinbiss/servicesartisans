@@ -32,6 +32,8 @@ import { prixVillesArticles } from './batch-prix-villes'
 import { aides2026Articles } from './batch-aides-2026'
 import { urgencesGuidesArticles } from './batch-urgences-guides'
 import { saisonniers2026Articles } from './batch-saisonniers-2026'
+import { metiers5Articles } from './batch-metiers-5'
+import { prestationsArticles } from './batch-prestations-problemes'
 
 export interface BlogArticle {
   title: string
@@ -89,6 +91,8 @@ export const allArticles: Record<string, BlogArticle> = {
   ...aides2026Articles,
   ...urgencesGuidesArticles,
   ...saisonniers2026Articles,
+  ...metiers5Articles,
+  ...prestationsArticles,
 }
 
 /** All slugs for generateStaticParams */

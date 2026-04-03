@@ -4,6 +4,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-reparer-fuite-toilette": {
     title: "Réparer une Fuite de Toilette Soi-Même",
     excerpt: "Votre toilette fuit à la base, au niveau du réservoir ou en continu ? Découvrez comment diagnostiquer et réparer les fuites les plus courantes sans appeler un plombier.",
+    metaTitle: "Réparer Fuite Toilette DIY : Tutoriel 2026",
+    metaDescription: "Découvrez comment réparer une fuite de toilette soi-même : diagnostic et réparation pas à pas. Obtenez un devis plombier si besoin.",
     image: "/images/blog/placeholder.webp",
     author: "Thomas Bernard",
     date: "2026-02-22",
@@ -38,6 +40,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-installer-mitigeur-douche": {
     title: "Installer un Mitigeur de Douche : Tutoriel",
     excerpt: "Remplacez votre ancien mélangeur par un mitigeur thermostatique en suivant ce guide étape par étape. Outils, raccords, étanchéité : tout est expliqué.",
+    metaTitle: "Installer Mitigeur Douche DIY : Tutoriel 2026",
+    metaDescription: "Apprenez à installer un mitigeur de douche pas à pas : outils, raccords et étanchéité. Obtenez un devis plombier si besoin.",
     image: "/images/blog/placeholder.webp",
     author: "Marc Lefebvre",
     date: "2026-02-24",
@@ -73,6 +77,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-changer-interrupteur": {
     title: "Changer un Interrupteur Électrique en Sécurité",
     excerpt: "Interrupteur cassé ou obsolète ? Apprenez à le remplacer en toute sécurité en suivant ce guide : coupure du courant, câblage, test et normes à respecter.",
+    metaTitle: "Changer un Interrupteur : Tutoriel Sécurité",
+    metaDescription: "Apprenez à changer un interrupteur en sécurité : coupure courant, câblage et normes. Tutoriel pas à pas. Devis électricien si besoin.",
     image: "/images/blog/placeholder.webp",
     author: "Thomas Bernard",
     date: "2026-02-26",
@@ -107,6 +113,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-poser-credence-cuisine": {
     title: "Poser une Crédence de Cuisine : Guide",
     excerpt: "Carrelage, verre, inox ou stratifié : découvrez comment poser une crédence de cuisine étape par étape, quel que soit le matériau choisi.",
+    metaTitle: "Poser une Crédence Cuisine DIY : Guide 2026",
+    metaDescription: "Découvrez comment poser une crédence de cuisine : carrelage, verre, inox ou stratifié. Tutoriel pas à pas. Devis gratuit.",
     image: "/images/blog/placeholder.webp",
     author: "Marc Lefebvre",
     date: "2026-02-28",
@@ -142,6 +150,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-reparer-volet-roulant": {
     title: "Réparer un Volet Roulant Bloqué : Solutions",
     excerpt: "Volet roulant bloqué, qui descend de travers ou dont la sangle est cassée ? Voici les solutions de dépannage à faire soi-même avant d\"appeler un réparateur.",
+    metaTitle: "Réparer Volet Roulant Bloqué : Solutions DIY",
+    metaDescription: "Volet roulant bloqué ou sangle cassée ? Découvrez les solutions de dépannage DIY avant d'appeler un réparateur. Devis gratuit.",
     image: "/images/blog/placeholder.webp",
     author: "Thomas Bernard",
     date: "2026-03-02",
@@ -176,6 +186,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-changer-chasse-eau": {
     title: "Changer un Mécanisme de Chasse d\"Eau",
     excerpt: "Chasse d\"eau qui coule en permanence ou bouton qui ne fonctionne plus ? Apprenez à remplacer le mécanisme complet en 30 minutes, sans plombier.",
+    metaTitle: "Changer Mécanisme Chasse d'Eau : Tutoriel DIY",
+    metaDescription: "Chasse d'eau qui coule ? Apprenez à remplacer le mécanisme en 30 minutes sans plombier. Tutoriel pas à pas. Devis si besoin.",
     image: "/images/blog/placeholder.webp",
     author: "Marc Lefebvre",
     date: "2026-03-04",
@@ -211,6 +223,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-installer-store-fenetre": {
     title: "Installer un Store de Fenêtre : Tutoriel",
     excerpt: "Store enrouleur, vénitien ou bateau : apprenez à poser un store de fenêtre vous-même, en perçant ou sans perçage, avec ce tutoriel illustré.",
+    metaTitle: "Installer un Store Fenêtre DIY : Tutoriel 2026",
+    metaDescription: "Apprenez à poser un store de fenêtre vous-même : enrouleur, vénitien ou bateau. Avec ou sans perçage. Tutoriel pas à pas.",
     image: "/images/blog/placeholder.webp",
     author: "Thomas Bernard",
     date: "2026-03-06",
@@ -245,6 +259,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-poser-lambris-mur": {
     title: "Poser du Lambris sur un Mur : Guide",
     excerpt: "Lambris bois, PVC ou MDF : apprenez à poser du lambris mural pour habiller une pièce en quelques heures, avec ou sans tasseaux.",
+    metaTitle: "Poser du Lambris Mural DIY : Guide 2026",
+    metaDescription: "Apprenez à poser du lambris mural : bois, PVC ou MDF. Avec ou sans tasseaux. Tutoriel pas à pas pour habiller vos murs.",
     image: "/images/blog/placeholder.webp",
     author: "Marc Lefebvre",
     date: "2026-03-07",
@@ -280,6 +296,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-enduire-mur-abime": {
     title: "Enduire un Mur Abîmé avant Peinture",
     excerpt: "Fissures, trous, irrégularités : apprenez à préparer un mur abîmé avec de l\"enduit pour obtenir une surface parfaitement lisse avant peinture.",
+    metaTitle: "Enduire un Mur Abîmé : Tutoriel DIY 2026",
+    metaDescription: "Apprenez à enduire un mur abîmé avant peinture : rebouchage, lissage et finition. Tutoriel pas à pas pour un mur parfait.",
     image: "/images/blog/placeholder.webp",
     author: "Thomas Bernard",
     date: "2026-03-09",
@@ -315,6 +333,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-installer-robinet-machine-laver": {
     title: "Installer un Robinet de Machine à Laver",
     excerpt: "Découvrez comment installer ou remplacer un robinet d\"arrêt pour machine à laver : percement, raccordement et test d\"étanchéité en 45 minutes.",
+    metaTitle: "Installer Robinet Machine à Laver : Tutoriel",
+    metaDescription: "Découvrez comment installer un robinet machine à laver en 45 min : percement, raccordement et étanchéité. Tutoriel DIY.",
     image: "/images/blog/placeholder.webp",
     author: "Marc Lefebvre",
     date: "2026-03-11",
@@ -349,6 +369,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-remplacer-joint-fenetre": {
     title: "Remplacer un Joint de Fenêtre : Isolation",
     excerpt: "Courants d\"air, condensation, bruit : un joint de fenêtre usé est souvent la cause. Apprenez à le remplacer pour améliorer l\"isolation de votre logement.",
+    metaTitle: "Remplacer Joint Fenêtre : Isolation DIY 2026",
+    metaDescription: "Courants d'air ou condensation ? Apprenez à remplacer un joint de fenêtre pour améliorer votre isolation. Tutoriel pas à pas.",
     image: "/images/blog/placeholder.webp",
     author: "Thomas Bernard",
     date: "2026-03-12",
@@ -384,6 +406,8 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
   "comment-fixer-meuble-mur-placo": {
     title: "Fixer un Meuble Lourd sur un Mur en Placo",
     excerpt: "Étagère, meuble TV, meuble de cuisine : découvrez les chevilles et techniques adaptées pour fixer des charges lourdes sur du placo sans risque.",
+    metaTitle: "Fixer Meuble Lourd sur Placo : Guide DIY 2026",
+    metaDescription: "Découvrez les chevilles et techniques pour fixer des charges lourdes sur placo : étagère, meuble TV. Tutoriel pas à pas.",
     image: "/images/blog/placeholder.webp",
     author: "Marc Lefebvre",
     date: "2026-03-13",

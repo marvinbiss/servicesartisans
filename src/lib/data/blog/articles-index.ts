@@ -96,6 +96,7 @@ const existingEmojis: Record<string, string> = {
   'prix-renovation-energetique-2026-tarifs-travaux': '🌱',
   // 200 articles prix x ville (batch-prix-villes.ts) — catégorie Tarifs, emoji par défaut via categoryEmoji
   // 50 articles thématiques (aides, urgences, guides, saisonniers) — emoji par défaut via categoryEmoji
+  // 22 articles prestations/problèmes/projets (batch-prestations-problemes.ts) — catégories Tarifs/Conseils/Guides/Sécurité, emoji par défaut via categoryEmoji
 }
 
 /** Normalize non-accented category names to their accented equivalents */

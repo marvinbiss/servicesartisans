@@ -237,7 +237,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     },
   }
 
-  // FAQPage Schema — REMOVED: deprecated by Google (Aug 2023) for non-gov/non-health sites
+  // FAQPage Schema — not applicable (no FAQ data on individual artisan pages)
   const faqSchema = null
 
   // BreadcrumbList Schema — 5 levels matching visible breadcrumb

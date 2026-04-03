@@ -4,6 +4,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'renover-cuisine-guide-complet-etapes': {
     title: 'Rénover sa Cuisine 2026 : Guide Étapes',
     excerpt: 'De la conception à la réception des travaux, toutes les étapes pour réussir la rénovation de votre cuisine. Devis gratuit.',
+    metaTitle: 'Rénover sa Cuisine 2026 : Étapes et Budget',
+    metaDescription: 'Découvrez toutes les étapes pour rénover votre cuisine en 2026. Budget 5 000-25 000 €. Obtenez un devis gratuit cuisiniste.',
     content: [
       "La cuisine est le coeur de la maison. Sa rénovation est l\'un des projets les plus valorisants pour un logement, mais aussi l\'un des plus complexes à orchestrer. Entre la plomberie, l\'électricité, l\'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un [cuisiniste professionnel](/services/cuisiniste) pour concevoir votre projet.",
       "## 1. Définir le projet et le budget",
@@ -51,6 +53,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'amenager-combles-guide-habitables': {
     title: 'Aménager ses Combles 2026 : Guide',
     excerpt: 'Faisabilité, isolation, plancher, lumière et budget : le guide complet pour aménager vos combles en surface habitable. Devis gratuit.',
+    metaTitle: 'Aménager ses Combles 2026 : Guide et Devis',
+    metaDescription: 'Découvrez comment aménager vos combles : faisabilité, isolation et budget. Guide complet 2026. Obtenez un devis gratuit.',
     content: [
       "L\'aménagement des combles est la solution la plus rentable pour gagner de la surface habitable sans agrandir l\'emprise au sol de la maison. Un projet bien mené peut ajouter 20 à 50 m² à votre logement et valoriser votre bien de 15 à 20 %. Faites appel à un [charpentier](/services/charpentier) pour évaluer votre charpente.",
       "## 1. Vérifier la faisabilité",
@@ -99,6 +103,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'installer-pompe-chaleur-air-eau-guide': {
     title: 'Pompe à Chaleur Air-Eau 2026 : Guide',
     excerpt: 'Fonctionnement, dimensionnement, coût d\'installation et aides financières : tout savoir avant d\'installer une PAC air-eau. Comparez.',
+    metaTitle: 'PAC Air-Eau 2026 : Installation et Aides',
+    metaDescription: 'Découvrez le coût d\'installation d\'une PAC air-eau en 2026. Dimensionnement et aides financières. Comparez les devis gratuits.',
     content: [
       "La pompe à chaleur (PAC) air-eau est devenue la solution de chauffage la plus plébiscitée en France. Elle capte les calories de l\'air extérieur pour chauffer l\'eau de votre circuit de chauffage, avec un rendement trois à cinq fois supérieur à celui d\'un radiateur électrique. En 2026, les aides financières rendent cet investissement particulièrement attractif. Trouvez un [spécialiste pompe à chaleur](/services/pompe-a-chaleur) certifié RGE.",
       "## 1. Comprendre le fonctionnement",
@@ -146,6 +152,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'installer-panneau-solaire-maison-2026': {
     title: 'Panneaux Solaires 2026 : Installation',
     excerpt: 'Autoconsommation, revente, budget, rentabilité et démarches : le guide pratique pour passer au solaire en 2026.',
+    metaTitle: 'Panneaux Solaires 2026 : Guide et Rentabilité',
+    metaDescription: 'Découvrez le guide panneaux solaires 2026 : autoconsommation, revente et rentabilité. Budget et démarches. Devis gratuit.',
     content: [
       "En 2026, le photovoltaïque résidentiel atteint un niveau de maturité et de rentabilité inédit. Les prix des panneaux ont baissé de 30 % en cinq ans tandis que le tarif de rachat reste attractif. C\'est le moment idéal pour franchir le pas et produire votre propre électricité. Consultez un [installateur de panneaux solaires](/services/panneaux-solaires) qualifié.",
       "## 1. Évaluer le potentiel solaire de votre toiture",
@@ -193,6 +201,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'creer-salle-de-bain-sous-combles': {
     title: 'Salle de Bain sous Combles 2026 : Prix',
     excerpt: 'Contraintes techniques, choix des équipements, étanchéité et budget : tout savoir pour créer une salle de bain fonctionnelle sous les toits.',
+    metaTitle: 'Salle de Bain sous Combles 2026 : Prix et Guide',
+    metaDescription: 'Découvrez comment créer une salle de bain sous combles : contraintes, équipements et budget 2026. Obtenez un devis gratuit.',
     content: [
       "Créer une salle de bain sous les combles est l\'un des projets les plus demandés lors d\'un aménagement de combles. C\'est aussi l\'un des plus exigeants sur le plan technique : la pente du toit, l\'évacuation des eaux usées et l\'étanchéité imposent des solutions spécifiques. Faites appel à un [plombier qualifié](/services/plombier) et un [spécialiste salle de bain](/services/salle-de-bain) pour ce type de projet.",
       "## 1. Vérifier la faisabilité technique",
@@ -239,6 +249,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'agrandir-maison-extension-guide': {
     title: 'Agrandir sa Maison 2026 : Les Options',
     excerpt: 'Comparez les trois solutions pour gagner de la surface : extension latérale, surélévation et véranda. Budget, démarches et conseils.',
+    metaTitle: 'Agrandir sa Maison 2026 : Options et Budget',
+    metaDescription: 'Comparez extension, surélévation et véranda pour agrandir votre maison en 2026. Budget et démarches. Obtenez un devis gratuit.',
     content: [
       "Quand la famille s\'agrandit ou que les besoins évoluent, l\'agrandissement de la maison est souvent préférable à un [déménagement](/services/demenageur). Trois solutions s\'offrent à vous : l\'extension latérale, la surélévation et la véranda. Chacune présente des avantages, des contraintes et des budgets très différents. Consultez un [maçon qualifié](/services/macon) pour évaluer la faisabilité.",
       "## L\'extension latérale : la solution classique",
@@ -288,6 +300,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'renover-facade-ravalement-guide': {
     title: 'Ravalement Façade 2026 : Types et Prix',
     excerpt: 'Ravalement obligatoire, techniques de nettoyage, enduits et peintures : le guide complet pour redonner vie à votre façade.',
+    metaTitle: 'Ravalement Façade 2026 : Types, Prix et Devis',
+    metaDescription: 'Découvrez les techniques de ravalement de façade : nettoyage, enduits et peintures. Prix 2026 détaillés. Obtenez un devis gratuit.',
     content: [
       "Le ravalement de façade est une obligation légale dans de nombreuses communes (tous les dix ans à Paris). Au-delà de l\'esthétique, une façade en bon état protège la structure du bâtiment contre les infiltrations et améliore l\'isolation thermique du logement. Faites appel à un [façadier professionnel](/services/facadier) pour votre projet.",
       "## 1. Diagnostiquer l\'état de la façade",
@@ -334,6 +348,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'amenager-terrasse-exterieure-guide': {
     title: 'Terrasse Extérieure 2026 : Prix',
     excerpt: 'Bois, composite, pierre, carrelage : comparez les matériaux et découvrez les étapes pour créer la terrasse de vos rêves. Devis gratuit.',
+    metaTitle: 'Terrasse Extérieure 2026 : Matériaux et Prix',
+    metaDescription: 'Comparez bois, composite, pierre et carrelage pour votre terrasse 2026. Étapes et prix détaillés. Obtenez un devis gratuit.',
     content: [
       "La terrasse extérieure prolonge l\'espace de vie de la maison et constitue un véritable atout pour la qualité de vie comme pour la valeur du bien. Encore faut-il choisir le bon matériau et respecter les règles de construction pour une terrasse durable et esthétique. Consultez un [paysagiste](/services/paysagiste) pour la conception de votre projet.",
       "## 1. Définir le projet",
@@ -380,6 +396,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'installer-climatisation-maison-guide': {
     title: 'Climatisation 2026 : Guide Installation',
     excerpt: 'Split, multisplit, gainable ou réversible : comparez les systèmes de climatisation, leurs coûts et les aides disponibles.',
+    metaTitle: 'Climatisation 2026 : Guide et Devis Gratuit',
+    metaDescription: 'Comparez split, multisplit et gainable en 2026. Coûts et aides disponibles pour votre climatisation. Obtenez un devis gratuit.',
     content: [
       "Avec des étés de plus en plus chauds, la climatisation n\'est plus un luxe mais une nécessité dans de nombreuses régions françaises. Le marché propose des solutions adaptées à tous les budgets et à toutes les configurations de logement. Trouvez un [climaticien certifié](/services/climaticien) pour un dimensionnement adapté.",
       "## 1. Choisir le type de climatisation",
@@ -426,6 +444,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'refaire-electricite-maison-ancienne': {
     title: 'Électricité Maison Ancienne 2026',
     excerpt: 'Diagnostic, mise aux normes NF C 15-100, budget par poste et déroulement du chantier : le guide pour rénover votre installation électrique.',
+    metaTitle: 'Électricité Maison Ancienne 2026 : Guide',
+    metaDescription: 'Découvrez comment rénover votre installation électrique : normes NF C 15-100, budget par poste. Obtenez un devis gratuit électricien.',
     content: [
       "En France, sept millions de logements présentent une installation électrique vétuste ou dangereuse. Si votre maison date d\'avant 1990 et n\'a jamais été rénovée électriquement, une mise aux normes s\'impose. C\'est un impératif de sécurité autant qu\'un investissement pour le confort et la valeur du bien. Faites appel à un [électricien certifié](/services/electricien) pour ce type de travaux.",
       "## 1. Faire réaliser un diagnostic",
@@ -474,6 +494,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'refaire-plomberie-maison-ancienne': {
     title: 'Plomberie Maison Ancienne 2026 : Guide',
     excerpt: 'Diagnostic des canalisations, remplacement des tuyaux en plomb, budget par poste et étapes du chantier de rénovation plomberie.',
+    metaTitle: 'Plomberie Maison Ancienne 2026 : Guide et Prix',
+    metaDescription: 'Découvrez le guide rénovation plomberie : diagnostic, remplacement plomb et budget par poste. Obtenez un devis gratuit plombier.',
     content: [
       "Les canalisations en plomb, les tuyaux en acier galvanisé rouillé ou les joints en fibrociment sont autant de signaux indiquant qu\'une rénovation de la plomberie est nécessaire. Dans une maison d\'avant 1970, la reprise complète des réseaux d\'eau est souvent incontournable pour garantir la salubrité et le confort. Consultez un [plombier professionnel](/services/plombier) pour un diagnostic complet.",
       "## 1. Diagnostiquer l\'état du réseau",
@@ -522,6 +544,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'poser-carrelage-guide-complet-techniques': {
     title: 'Poser du Carrelage 2026 : Guide',
     excerpt: 'Pose droite, diagonale, décalée ou en chevrons : maîtrisez les techniques de pose et évitez les erreurs les plus courantes.',
+    metaTitle: 'Poser du Carrelage 2026 : Guide Technique',
+    metaDescription: 'Découvrez les techniques de pose carrelage : droite, diagonale, chevrons. Évitez les erreurs courantes. Devis gratuit carreleur.',
     content: [
       "Le carrelage est le revêtement le plus résistant et le plus hygiénique pour les sols et les murs. Sa pose demande rigueur et méthode : un carrelage mal posé se fissure, se décolle et vieillit prématurément. Ce guide vous accompagne étape par étape, que vous fassiez appel à un [carreleur professionnel](/services/carreleur) ou que vous posiez vous-même.",
       "## 1. Choisir le bon carrelage",
@@ -570,6 +594,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'installer-parquet-massif-contrecolle-guide': {
     title: 'Parquet 2026 : Massif ou Stratifié ?',
     excerpt: 'Comparez les trois types de parquet, leurs techniques de pose et leurs budgets pour faire le choix adapté à votre logement.',
+    metaTitle: 'Parquet 2026 : Massif, Contrecollé ou Stratifié',
+    metaDescription: 'Comparez parquet massif, contrecollé et stratifié : techniques de pose et budgets 2026. Obtenez un devis gratuit poseur.',
     content: [
       "Le parquet reste le revêtement de sol préféré des Français. Chaleureux, durable et valorisant pour le bien immobilier, il se décline en trois grandes familles qui répondent à des besoins et des budgets très différents. Ce guide vous aide à faire le bon choix et à comprendre les techniques de pose. Trouvez un [poseur de parquet](/services/poseur-de-parquet) qualifié pour un résultat impeccable.",
       "## 1. Le parquet massif : l\'authenticité",
@@ -620,6 +646,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'construire-garage-guide-permis-budget': {
     title: 'Construire un Garage 2026 : Budget',
     excerpt: 'Garage accolé ou indépendant, démarches d\'urbanisme, fondations et budget détaillé : le guide complet pour votre projet de garage.',
+    metaTitle: 'Construire un Garage 2026 : Budget et Démarches',
+    metaDescription: 'Découvrez le budget pour construire un garage en 2026 : accolé ou indépendant, démarches et fondations. Obtenez un devis gratuit.',
     content: [
       "Le garage protège votre véhicule, augmente l\'espace de rangement et valorise votre propriété de 5 à 10 %. C\'est un projet de construction à part entière qui nécessite des fondations solides, des démarches administratives et un budget bien défini. Faites appel à un [maçon](/services/macon) pour la construction du gros oeuvre.",
       "## 1. Choisir le type de garage",
@@ -670,6 +698,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'amenager-jardin-paysagiste-guide': {
     title: 'Jardin Paysagiste 2026 : Idées et Prix',
     excerpt: 'Conception paysagère, choix des végétaux, éclairage et arrosage automatique : le guide pour transformer votre jardin avec un professionnel.',
+    metaTitle: 'Jardin Paysagiste 2026 : Idées et Prix',
+    metaDescription: 'Découvrez comment transformer votre jardin avec un paysagiste : conception, végétaux et éclairage. Prix 2026. Devis gratuit.',
     content: [
       "Un jardin bien conçu est une pièce à vivre à part entière. Faire appel à un paysagiste permet de valoriser chaque mètre carré de votre extérieur tout en limitant les erreurs coûteuses. De la conception à la réalisation, voici les étapes d\'un aménagement paysager réussi. Trouvez un [paysagiste qualifié](/services/paysagiste) ou un [jardinier](/services/jardinier) près de chez vous.",
       "## 1. Définir ses besoins et ses envies",
@@ -718,6 +748,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'installer-portail-automatique-guide': {
     title: 'Portail Automatique 2026 : Achat et Pose',
     excerpt: 'Battant ou coulissant, motorisation, matériaux et budget : tout savoir pour choisir et installer un portail automatique. Devis gratuit.',
+    metaTitle: 'Portail Automatique 2026 : Guide et Prix',
+    metaDescription: 'Comparez portails battants et coulissants : motorisation, matériaux et budget 2026. Obtenez un devis gratuit installation.',
     content: [
       "Le portail automatique allie confort, sécurité et esthétique. Il valorise l\'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un [métallier](/services/metallier) pour une réalisation sur mesure.",
       "## 1. Battant ou coulissant : le bon choix",
@@ -766,6 +798,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'remplacer-fenetres-guide-performances': {
     title: 'Remplacer ses Fenêtres 2026 : Économies',
     excerpt: 'Double ou triple vitrage, matériaux de menuiserie, aides financières et retour sur investissement : le guide pour changer vos fenêtres.',
+    metaTitle: 'Remplacer ses Fenêtres 2026 : Guide et Aides',
+    metaDescription: 'Découvrez le guide remplacement fenêtres 2026 : double/triple vitrage, aides financières et ROI. Obtenez un devis gratuit.',
     content: [
       "Les fenêtres représentent 10 à 15 % des déperditions thermiques d\'un logement. Le remplacement de fenêtres simple vitrage par du double ou triple vitrage réduit considérablement les pertes de chaleur, améliore le confort acoustique et valorise le bien immobilier. Comparez les devis de [menuisiers qualifiés](/services/menuisier) pour votre remplacement de fenêtres.",
       "## 1. Évaluer le besoin de remplacement",
@@ -815,6 +849,8 @@ export const projetsArticles: Record<string, BlogArticle> = {
   'installer-vmc-ventilation-guide': {
     title: 'VMC 2026 : Ventilation et Qualité Air',
     excerpt: 'Simple flux, double flux ou hygroréglable : choisissez la VMC adaptée à votre logement pour un air sain et des économies d\'énergie.',
+    metaTitle: 'VMC 2026 : Guide Ventilation et Qualité Air',
+    metaDescription: 'Comparez VMC simple flux, double flux et hygroréglable en 2026. Air sain et économies d\'énergie. Obtenez un devis gratuit.',
     content: [
       "La ventilation mécanique contrôlée (VMC) est indispensable pour renouveler l\'air intérieur, évacuer l\'humidité et les polluants, et préserver la santé des occupants comme la structure du bâtiment. Un logement mal ventilé favorise les moisissures, les acariens et la dégradation des matériaux. Faites appel à un [électricien](/services/electricien) ou un [climaticien](/services/climaticien) pour l\'installation.",
       "## 1. Pourquoi une VMC est indispensable",

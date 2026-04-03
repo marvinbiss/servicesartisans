@@ -5,6 +5,8 @@ export const saisonnierArticles: Record<string, BlogArticle> = {
     title: 'Préparer sa maison pour l\'hiver : la check-list complète',
     excerpt:
       'Chauffage, isolation, toiture, plomberie… Suivez notre check-list en 8 étapes pour hiverner votre maison sereinement et éviter les mauvaises surprises dès les premiers froids.',
+    metaTitle: 'Préparer sa Maison pour l\'Hiver : Checklist 2026',
+    metaDescription: 'Découvrez la checklist en 8 étapes pour hiverner votre maison : chauffage, isolation, toiture et plomberie. Obtenez un devis gratuit.',
     image: '/images/blog/preparer-maison-hiver-checklist.webp',
     author: 'ServicesArtisans',
     date: '2026-03-06',

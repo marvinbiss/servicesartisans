@@ -125,10 +125,22 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
   }
 }
 
-// FAQPage schema — DEPRECATED by Google (Aug 2023) for non-governmental/non-health sites.
-// Kept as no-op stub so existing callers don't break. Returns null → schemas skip it.
-export function getFAQSchema(_faqs: { question: string; answer: string }[]): null {
-  return null
+// FAQPage schema — Google restricted rich results display (Aug 2023) to gov/health sites,
+// but the schema remains valid and is used by Bing, DuckDuckGo, Yahoo, and Google AI Overviews.
+export function getFAQSchema(faqs: { question: string; answer: string }[]) {
+  if (!faqs || faqs.length === 0) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((q) => ({
+      '@type': 'Question',
+      name: q.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: q.answer,
+      },
+    })),
+  }
 }
 
 // HowTo schema — DEPRECATED by Google (Aug 2023) for non-governmental/non-health sites.

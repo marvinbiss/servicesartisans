@@ -76,6 +76,10 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
 
       "Comparez les devis d'architectes d'intérieur dans les principales villes françaises :\n- [Architecte d'intérieur à Paris](/services/architecte-interieur/paris)\n- [Architecte d'intérieur à Lyon](/services/architecte-interieur/lyon)\n- [Architecte d'intérieur à Marseille](/services/architecte-interieur/marseille)\n- [Architecte d'intérieur à Bordeaux](/services/architecte-interieur/bordeaux)\n- [Architecte d'intérieur à Toulouse](/services/architecte-interieur/toulouse)\n- [Architecte d'intérieur à Nice](/services/architecte-interieur/nice)\n- [Architecte d'intérieur à Nantes](/services/architecte-interieur/nantes)\n- [Architecte d'intérieur à Strasbourg](/services/architecte-interieur/strasbourg)\n- [Architecte d'intérieur à Montpellier](/services/architecte-interieur/montpellier)\n- [Architecte d'intérieur à Lille](/services/architecte-interieur/lille)",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son architecte d'intérieur](/blog/comment-choisir-architecte-interieur-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix décorateur](/blog/prix-decorateur-2026-tarifs) pour compléter votre recherche.",
+
       ":::takeaway\n- Consultation sur site : **150 – 500 €** (2-3 heures)\n- Projet complet appartement : **1 500 – 5 000 €** (plans + 3D + cahier des charges)\n- Suivi de chantier : **8 – 15 %** du montant des travaux\n- Rénovation complète : **80 – 150 €/m²** d'honoraires\n- Toujours exiger un **contrat de mission écrit** détaillant livrables et tarifs\n:::"
     ],
     image: "/images/blog/prix-architecte-interieur-2026-tarifs.webp",
@@ -177,6 +181,10 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
       "## Trouver un décorateur près de chez vous",
 
       "Comparez les devis de décorateurs dans les principales villes françaises :\n- [Décorateur à Paris](/services/decorateur/paris)\n- [Décorateur à Lyon](/services/decorateur/lyon)\n- [Décorateur à Marseille](/services/decorateur/marseille)\n- [Décorateur à Bordeaux](/services/decorateur/bordeaux)\n- [Décorateur à Toulouse](/services/decorateur/toulouse)\n- [Décorateur à Nice](/services/decorateur/nice)\n- [Décorateur à Nantes](/services/decorateur/nantes)\n- [Décorateur à Strasbourg](/services/decorateur/strasbourg)\n- [Décorateur à Montpellier](/services/decorateur/montpellier)\n- [Décorateur à Lille](/services/decorateur/lille)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son décorateur](/blog/comment-choisir-decorateur-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix architecte d'intérieur](/blog/prix-architecte-interieur-2026-tarifs) pour compléter votre recherche.",
 
       ":::takeaway\n- Conseil déco sur site : **150 – 400 €** (2-3 heures)\n- Planche tendance / moodboard : **300 – 800 €**\n- Shopping list complète : **300 – 800 €** par pièce\n- Home staging : **1 500 – 5 000 €** (appartement)\n- Le home staging se rentabilise quasi systématiquement à la revente\n:::"
     ],
@@ -280,6 +288,10 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
       "## Trouver un ramoneur près de chez vous",
 
       "Comparez les devis de ramoneurs dans les principales villes françaises :\n- [Ramoneur à Paris](/services/ramoneur/paris)\n- [Ramoneur à Lyon](/services/ramoneur/lyon)\n- [Ramoneur à Marseille](/services/ramoneur/marseille)\n- [Ramoneur à Bordeaux](/services/ramoneur/bordeaux)\n- [Ramoneur à Toulouse](/services/ramoneur/toulouse)\n- [Ramoneur à Nice](/services/ramoneur/nice)\n- [Ramoneur à Nantes](/services/ramoneur/nantes)\n- [Ramoneur à Strasbourg](/services/ramoneur/strasbourg)\n- [Ramoneur à Lille](/services/ramoneur/lille)\n- [Ramoneur à Clermont-Ferrand](/services/ramoneur/clermont-ferrand)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son ramoneur](/blog/comment-choisir-ramoneur-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [préparer son chauffage pour l'hiver](/blog/preparer-chauffage-hiver-2026-check-list) pour compléter votre recherche.",
 
       ":::takeaway\n- Ramonage cheminée standard : **50 – 90 €** (certificat inclus)\n- Ramonage poêle à bois/granulés : **60 – 180 €** selon le type\n- Inspection vidéo : **100 – 200 €** (recommandée pour conduits anciens)\n- Débistrage : **150 – 400 €** selon l'encrassement\n- Le ramonage est **obligatoire** 1 à 2 fois par an — amende de 450 € en cas de défaut\n:::"
     ],
@@ -396,6 +408,8 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
 
       "Comparez les devis de paysagistes dans les principales villes françaises :\n- [Paysagiste à Paris](/services/paysagiste/paris)\n- [Paysagiste à Lyon](/services/paysagiste/lyon)\n- [Paysagiste à Marseille](/services/paysagiste/marseille)\n- [Paysagiste à Bordeaux](/services/paysagiste/bordeaux)\n- [Paysagiste à Toulouse](/services/paysagiste/toulouse)\n- [Paysagiste à Nice](/services/paysagiste/nice)\n- [Paysagiste à Nantes](/services/paysagiste/nantes)\n- [Paysagiste à Montpellier](/services/paysagiste/montpellier)\n- [Paysagiste à Rennes](/services/paysagiste/rennes)\n- [Paysagiste à Strasbourg](/services/paysagiste/strasbourg)",
 
+      "À lire aussi : notre guide complet sur les [prix jardinier paysagiste](/blog/prix-jardinier-paysagiste-2026) pour compléter votre recherche.",
+
       ":::takeaway\n- Création de jardin paysager : **30 – 80 €/m²** tout compris\n- Terrasse bois ou composite : **80 – 250 €/m²** pose comprise\n- Élagage arbre moyen : **200 – 500 €**\n- Entretien annuel : **150 – 400 €/mois** (éligible crédit d'impôt 50 %)\n- Le jardin sec est la tendance 2026 : beau, économe en eau, faible entretien\n:::"
     ],
     image: "/images/blog/prix-paysagiste-2026-tarifs.webp",
@@ -510,6 +524,10 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
       "## Trouver un pisciniste près de chez vous",
 
       "Comparez les devis de piscinistes dans les principales villes françaises :\n- [Pisciniste à Paris](/services/pisciniste/paris)\n- [Pisciniste à Lyon](/services/pisciniste/lyon)\n- [Pisciniste à Marseille](/services/pisciniste/marseille)\n- [Pisciniste à Bordeaux](/services/pisciniste/bordeaux)\n- [Pisciniste à Toulouse](/services/pisciniste/toulouse)\n- [Pisciniste à Nice](/services/pisciniste/nice)\n- [Pisciniste à Montpellier](/services/pisciniste/montpellier)\n- [Pisciniste à Nantes](/services/pisciniste/nantes)\n- [Pisciniste à Aix-en-Provence](/services/pisciniste/aix-en-provence)\n- [Pisciniste à Perpignan](/services/pisciniste/perpignan)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son pisciniste](/blog/comment-choisir-pisciniste-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [entretien piscine](/blog/entretien-piscine-ouverture-printemps) pour compléter votre recherche.",
 
       ":::takeaway\n- Piscine coque 8x4 m : **15 000 – 30 000 €** (solution la plus populaire)\n- Piscine béton 8x4 m : **25 000 – 60 000 €** (liberté totale de forme)\n- Remplacement de liner : **1 500 – 4 000 €** tous les 8-12 ans\n- Entretien annuel : **1 200 – 2 400 €/an** en contrat\n- Dispositif de sécurité **obligatoire** — amende de 45 000 € en cas de défaut\n:::"
     ],

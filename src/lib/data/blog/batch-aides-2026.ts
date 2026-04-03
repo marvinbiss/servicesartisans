@@ -163,6 +163,10 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       "## Trouver un artisan RGE près de chez vous",
       "Pour bénéficier des CEE, un artisan RGE est obligatoire. Nos artisans vérifiés : [chauffagiste à Paris](/services/chauffagiste/paris), [couvreur à Lyon](/services/couvreur/lyon), [façadier à Marseille](/services/facadier/marseille), [plombier à Bordeaux](/services/plombier/bordeaux), [chauffagiste à Toulouse](/services/chauffagiste/toulouse), [couvreur à Nantes](/services/couvreur/nantes).",
 
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix de l'isolation thermique en 2026](/blog/prix-isolation-thermique-2026-tarifs).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix chauffagiste en 2026](/blog/prix-chauffagiste-2026-installation-entretien).",
+
       ":::takeaway\n- Les CEE offrent des **primes de 150 à 5 000 €** selon les travaux et votre profil de revenus\n- Le dispositif « Coup de pouce » bonifie les primes pour le remplacement de chaudières fossiles\n- **Cumulable à 100 %** avec MaPrimeRénov', l'éco-PTZ et la TVA réduite\n- Inscription obligatoire **avant** la signature du devis (délai de 14 jours)\n- Comparez au moins 3 opérateurs CEE : les écarts de primes atteignent 30 à 50 %\n:::"
     ],
     image: "/images/blog/cee-certificats-economies-energie-2026.webp",
@@ -251,6 +255,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "## Trouver un artisan RGE près de chez vous",
       "L'artisan doit être RGE pour que les travaux soient éligibles à l'éco-PTZ. Trouvez un professionnel : [chauffagiste à Paris](/services/chauffagiste/paris), [électricien à Lyon](/services/electricien/lyon), [plombier à Marseille](/services/plombier/marseille), [couvreur à Bordeaux](/services/couvreur/bordeaux), [chauffagiste à Toulouse](/services/chauffagiste/toulouse).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
 
       ":::takeaway\n- L'éco-PTZ finance jusqu'à **50 000 €** de travaux à taux zéro, sans condition de revenus\n- Remboursement sur **15 à 20 ans** selon le projet, soit des mensualités très faibles\n- 7 catégories de travaux éligibles : isolation, chauffage, eau chaude, ventilation, fenêtres\n- **Cumulable** avec MaPrimeRénov' et les CEE — idéal pour financer le reste à charge\n- Version simplifiée disponible sur présentation de l'accord MaPrimeRénov'\n:::"
     ],
@@ -346,6 +352,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       "## Trouver un artisan près de chez vous",
       "Pour bénéficier de la TVA réduite, les travaux doivent être facturés par un professionnel. Trouvez le vôtre : [plombier à Paris](/services/plombier/paris), [électricien à Lyon](/services/electricien/lyon), [peintre à Marseille](/services/peintre/marseille), [menuisier à Bordeaux](/services/menuisier/bordeaux), [maçon à Toulouse](/services/macon/toulouse).",
 
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
+
       ":::takeaway\n- **TVA 5,5 %** sur les travaux d'amélioration énergétique (isolation, chauffage, ventilation)\n- **TVA 10 %** sur les travaux de rénovation et d'entretien (plomberie, électricité, peinture)\n- **TVA 20 %** sur les constructions neuves et les agrandissements > 10 %\n- Attestation obligatoire à remettre à l'artisan avant les travaux\n- Ne jamais acheter les matériaux soi-même : perte du taux réduit sur les fournitures\n:::"
     ],
     image: "/images/blog/tva-reduite-travaux-5-5-10-2026.webp",
@@ -431,6 +439,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "### 4. Choisir un artisan RGE à Paris",
       "Trouvez un professionnel certifié : [chauffagiste à Paris](/services/chauffagiste/paris), [plombier à Paris](/services/plombier/paris), [électricien à Paris](/services/electricien/paris), [peintre à Paris](/services/peintre/paris), [menuisier à Paris](/services/menuisier/paris).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
 
       ":::takeaway\n- **Éco-Rénovons Paris+** offre jusqu'à 20 000 € par logement pour une rénovation globale\n- La **Région IDF** complète avec 1 000 à 3 000 € d'aides supplémentaires\n- Le **cumul total** (MaPrimeRénov' + Paris + CEE + IDF) peut dépasser **50 000 €**\n- L'Agence Parisienne du Climat (APC) est le guichet unique gratuit pour les Parisiens\n- Anticipez les délais : 3 à 6 mois d'instruction, 18 à 24 mois pour les copropriétés\n:::"
     ],
@@ -519,6 +529,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       "### 4. Trouver un artisan RGE à Lyon",
       "Artisans vérifiés : [chauffagiste à Lyon](/services/chauffagiste/lyon), [plombier à Lyon](/services/plombier/lyon), [couvreur à Lyon](/services/couvreur/lyon), [électricien à Lyon](/services/electricien/lyon), [façadier à Lyon](/services/facadier/lyon).",
 
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
+
       ":::takeaway\n- **ÉcoRénov** offre jusqu'à 12 000 € par logement pour les ménages modestes à Lyon\n- La **Région AURA** complète avec 2 000 à 4 000 € supplémentaires\n- Le cumul total peut atteindre **43 000 € et plus** pour une rénovation globale\n- L'**ALEC de Lyon** est le guichet unique gratuit (04 37 48 22 42)\n- Budget limité : déposer le dossier dès le 1er trimestre de l'année\n:::"
     ],
     image: "/images/blog/aide-renovation-energetique-lyon-2026.webp",
@@ -594,6 +606,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "### 4. Trouver un artisan RGE à Marseille",
       "Artisans certifiés : [chauffagiste à Marseille](/services/chauffagiste/marseille), [plombier à Marseille](/services/plombier/marseille), [couvreur à Marseille](/services/couvreur/marseille), [électricien à Marseille](/services/electricien/marseille).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
 
       ":::takeaway\n- La **Métropole Aix-Marseille** offre jusqu'à 10 000 € par logement pour la rénovation globale\n- La **Région Sud** complète avec 1 500 à 3 000 € (chèque rénovation)\n- Le cumul total peut atteindre **39 500 € et plus** pour une rénovation globale\n- Priorité à Marseille : **isolation de la toiture** (efficace été comme hiver en zone H3)\n- Programme « Marseille Rénove » dédié aux copropriétés dégradées\n:::"
     ],
@@ -679,6 +693,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       "### 4. Artisans RGE à Bordeaux",
       "Trouvez un professionnel : [chauffagiste à Bordeaux](/services/chauffagiste/bordeaux), [plombier à Bordeaux](/services/plombier/bordeaux), [couvreur à Bordeaux](/services/couvreur/bordeaux), [électricien à Bordeaux](/services/electricien/bordeaux), [façadier à Bordeaux](/services/facadier/bordeaux).",
 
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
+
       ":::takeaway\n- **Bordeaux Métropole** offre jusqu'à 8 000 € par logement pour la rénovation globale\n- La **Région Nouvelle-Aquitaine** ajoute 2 000 à 4 000 € selon le profil\n- Le cumul total peut atteindre **41 500 €** pour une rénovation complète\n- Le guichet **Rénov'Habitat** est le point d'entrée unique et gratuit\n- Contraintes ABF en secteur UNESCO : privilégier ITI et solutions non visibles\n:::"
     ],
     image: "/images/blog/aide-renovation-energetique-bordeaux-2026.webp",
@@ -762,6 +778,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "### 4. Artisans RGE à Toulouse",
       "Trouvez un professionnel : [chauffagiste à Toulouse](/services/chauffagiste/toulouse), [plombier à Toulouse](/services/plombier/toulouse), [électricien à Toulouse](/services/electricien/toulouse), [couvreur à Toulouse](/services/couvreur/toulouse).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
 
       ":::takeaway\n- **Toulouse Métropole** offre jusqu'à 7 000 € + bonus passoire de 2 000 € par logement\n- L'**éco-chèque Occitanie** ajoute 1 500 à 3 000 € supplémentaires\n- Le cumul total peut atteindre **42 500 €** pour une rénovation globale\n- Les maisons en brique foraine ont un potentiel d'amélioration énergétique considérable\n- L'EIE de Toulouse est le guichet unique gratuit pour toutes les aides\n:::"
     ],
@@ -855,6 +873,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       "## Trouver un artisan RGE pour votre projet",
       "Le MAR vous aide à sélectionner des artisans RGE, mais vous pouvez aussi consulter notre annuaire : [chauffagiste à Paris](/services/chauffagiste/paris), [plombier à Lyon](/services/plombier/lyon), [électricien à Marseille](/services/electricien/marseille), [couvreur à Bordeaux](/services/couvreur/bordeaux), [chauffagiste à Toulouse](/services/chauffagiste/toulouse).",
 
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
+
       ":::takeaway\n- Le MAR est **obligatoire** pour le parcours accompagné MaPrimeRénov' (gain ≥ 2 classes DPE)\n- Son coût (800 à 2 000 €) est pris en charge à **80-100 %** pour les ménages modestes\n- Il accompagne de A à Z : diagnostic, plan de travaux, montage financier, suivi chantier\n- Trouvez un MAR agréé sur **france-renov.gouv.fr** ou via votre Espace Conseil local\n- Le MAR doit être **indépendant** des entreprises de travaux\n:::"
     ],
     image: "/images/blog/mon-accompagnateur-renov-2026-guide.webp",
@@ -932,6 +952,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "## Trouver un auditeur certifié",
       "Consultez l'annuaire france-renov.gouv.fr pour trouver un auditeur certifié, ou un [diagnostiqueur immobilier](/services/diagnostiqueur-immobilier) sur notre plateforme. Pour les travaux suite à l'audit : [chauffagiste à Paris](/services/chauffagiste/paris), [plombier à Lyon](/services/plombier/lyon), [électricien à Marseille](/services/electricien/marseille), [couvreur à Bordeaux](/services/couvreur/bordeaux).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix diagnostiqueur en 2026](/blog/prix-diagnostiqueur-2026-tarifs).",
 
       ":::takeaway\n- L'audit énergétique est **obligatoire** pour vendre un logement classé E, F ou G en 2026\n- Prix : **800 à 1 500 €**, financé en partie par MaPrimeRénov' (jusqu'à 500 €) et les aides locales\n- Il va plus loin que le DPE : **2 scénarios de travaux chiffrés** avec gains attendus\n- Obligatoire aussi pour le **parcours accompagné MaPrimeRénov'**\n- Exigez un auditeur **certifié** (RGE audit, OPQIBI 1905/1911)\n:::"
     ],
@@ -1011,6 +1033,10 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "## Trouver un artisan RGE pour rénover",
       "La certification RGE est indispensable pour accéder aux aides. Nos artisans : [chauffagiste à Paris](/services/chauffagiste/paris), [plombier à Lyon](/services/plombier/lyon), [couvreur à Marseille](/services/couvreur/marseille), [électricien à Bordeaux](/services/electricien/bordeaux), [chauffagiste à Toulouse](/services/chauffagiste/toulouse), [plombier à Nantes](/services/plombier/nantes).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix de l'isolation thermique en 2026](/blog/prix-isolation-thermique-2026-tarifs).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
 
       ":::takeaway\n- Les logements **DPE G** sont interdits à la location depuis le 1er janvier 2025\n- Les **DPE F** seront interdits en 2028, les **DPE E** en 2034\n- La rénovation est la meilleure option : le cumul des aides couvre 60 à 90 % du coût\n- Le **déficit foncier renforcé** (21 400 €) est un levier fiscal puissant pour les bailleurs\n- L'inaction coûte cher : loyer perdu + décote à la revente + charges élevées\n:::"
     ],
@@ -1100,6 +1126,10 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "## Trouver un artisan RGE",
       "Artisan RGE obligatoire pour MaPrimeRénov' et les CEE : [chauffagiste à Paris](/services/chauffagiste/paris), [plombier à Lyon](/services/plombier/lyon), [couvreur à Marseille](/services/couvreur/marseille), [électricien à Bordeaux](/services/electricien/bordeaux), [chauffagiste à Toulouse](/services/chauffagiste/toulouse).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix de l'isolation thermique en 2026](/blog/prix-isolation-thermique-2026-tarifs).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
 
       ":::takeaway\n- **Toutes les grandes aides sont cumulables** : MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales\n- Plafond de cumul : **90 %** (Bleu), **75 %** (Jaune), **60 %** (Violet), **40 %** (Rose) du coût TTC\n- L'éco-PTZ et la TVA réduite ne comptent **pas** dans le plafond\n- Un ménage modeste peut réduire son reste à charge à **moins de 10 %** du coût total\n- Respectez l'**ordre chronologique** : CEE → MaPrimeRénov' → aides locales → éco-PTZ\n:::"
     ],
@@ -1191,6 +1221,8 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       "## Trouver un électricien IRVE",
       "L'installation IRVE doit être réalisée par un professionnel qualifié : [électricien à Paris](/services/electricien/paris), [électricien à Lyon](/services/electricien/lyon), [électricien à Marseille](/services/electricien/marseille), [électricien à Bordeaux](/services/electricien/bordeaux), [électricien à Toulouse](/services/electricien/toulouse).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix d'un électricien en 2026](/blog/prix-electricien-2026-tarifs-travaux).",
 
       ":::takeaway\n- **Crédit d'impôt de 300 €** par borne, sans condition de revenus\n- Programme **ADVENIR** : 50 % du coût en copropriété (jusqu'à 960 € par borne)\n- **TVA 5,5 %** pour les logements de plus de 2 ans\n- Coût final d'une borne 7 kW : environ **1 000 €** après toutes les aides\n- Électricien **qualifié IRVE** obligatoire pour bénéficier des aides\n:::"
     ],

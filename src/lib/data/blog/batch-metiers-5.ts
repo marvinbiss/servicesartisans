@@ -4,6 +4,8 @@ export const metiers5Articles: Record<string, BlogArticle> = {
   "alarme-maison-guide-complet-2026": {
     title: "Alarme Maison 2026 : Guide Complet pour Protéger Votre Domicile",
     excerpt: "Systèmes filaires, sans fil, connectés, télésurveillance : comparatif des alarmes maison 2026, prix, normes NF A2P et conseils d'installation par un professionnel.",
+    metaTitle: "Alarme Maison 2026 : Comparatif et Prix",
+    metaDescription: "Comparez alarmes filaires, sans fil et connectées en 2026. Prix, normes NF A2P et conseils d'installation. Obtenez un devis gratuit.",
     content: [
       "En France, un cambriolage a lieu toutes les **90 secondes** selon les chiffres du ministère de l'Intérieur pour 2025. Soit plus de **350 000 effractions** par an, dont 80 % concernent des résidences principales. Face à ce constat, l'installation d'une alarme maison n'est plus un luxe mais une nécessité. Pourtant, le marché regorge d'offres — du kit à 99 € sur Amazon au système professionnel à 5 000 € — et il est difficile de s'y retrouver. Ce guide décrypte les technologies disponibles en 2026, les normes à exiger et les pièges à éviter. Pour une installation dans les règles de l'art, consultez nos [installateurs d'alarmes vérifiés](/services/alarme).",
 
@@ -51,6 +53,8 @@ export const metiers5Articles: Record<string, BlogArticle> = {
   "protection-cambriolage-securiser-maison-2026": {
     title: "Protection Cambriolage 2026 : 12 Mesures pour Sécuriser Votre Maison",
     excerpt: "Serrures, volets, éclairage, habitudes : les 12 mesures anti-cambriolage les plus efficaces en 2026, validées par les statistiques et les experts en sécurité.",
+    metaTitle: "Anti-Cambriolage 2026 : 12 Mesures Efficaces",
+    metaDescription: "Découvrez 12 mesures anti-cambriolage validées par les experts : serrures, volets, éclairage. Protégez votre maison en 2026.",
     content: [
       "Les chiffres du ministère de l'Intérieur sont sans appel : **233 200 ménages** ont déclaré un cambriolage ou une tentative en 2025, un chiffre en hausse de 4 % par rapport à 2024. Mais derrière ces statistiques nationales se cache une réalité encourageante : **60 % des tentatives de cambriolage échouent** lorsque le logement dispose de protections physiques et électroniques adaptées. Les cambrioleurs sont des opportunistes — ils cherchent la facilité et abandonnent en moyenne après **3 minutes** de tentative infructueuse. Ce guide détaille les 12 mesures les plus efficaces pour transformer votre domicile en forteresse, sans dépenser une fortune. Pour faire appel à un professionnel, consultez nos [serruriers](/services/serrurier) et [installateurs d'alarmes](/services/alarme) vérifiés.",
 

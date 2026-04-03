@@ -4,6 +4,8 @@ export const diyArticles: Record<string, BlogArticle> = {
   'peinture-interieure-diy-guide': {
     title: 'Peindre son intérieur soi-même : guide complet',
     excerpt: 'Choix de peinture, préparation des murs, technique d\'application au rouleau… Tout ce qu\'il faut savoir pour réussir sa peinture intérieure en DIY, avec les erreurs à éviter et les cas où appeler un professionnel.',
+    metaTitle: 'Peinture Intérieure DIY : Tutoriel Complet 2026',
+    metaDescription: 'Découvrez comment peindre vos murs comme un pro : choix peinture, préparation, technique au rouleau. Budget 5-15 €/m². Obtenez un devis gratuit.',
     image: '/images/blog/peinture-interieure-diy-guide.webp',
     author: 'ServicesArtisans',
     date: '2026-01-20',
@@ -84,6 +86,8 @@ export const diyArticles: Record<string, BlogArticle> = {
   'poser-parquet-flottant-diy': {
     title: 'Poser du parquet flottant soi-même : tutoriel pas à pas',
     excerpt: 'Stratifié ou contrecollé, sous-couche, acclimatation, pose clipsée, découpes et plinthes : le guide complet pour poser votre parquet flottant en DIY sans mauvaise surprise.',
+    metaTitle: 'Poser du Parquet Flottant : Tutoriel DIY 2026',
+    metaDescription: 'Apprenez à poser votre parquet flottant pas à pas : sous-couche, pose clipsée, découpes et plinthes. Obtenez un devis gratuit si besoin.',
     image: '/images/blog/poser-parquet-flottant-diy.webp',
     author: 'ServicesArtisans',
     date: '2026-02-08',
@@ -162,6 +166,8 @@ export const diyArticles: Record<string, BlogArticle> = {
   'installer-etageres-rangement-diy': {
     title: 'Installer étagères et rangements muraux : guide pratique',
     excerpt: 'Chevilles Molly, Fischer, chimiques : quel système de fixation pour quel type de mur ? Guide complet pour installer vos étagères et rangements muraux en toute sécurité.',
+    metaTitle: 'Étagères Murales DIY : Guide Fixation 2026',
+    metaDescription: 'Chevilles Molly, Fischer ou chimiques ? Découvrez le bon système de fixation selon votre mur. Guide pratique pas à pas.',
     image: '/images/blog/installer-etageres-rangement-diy.webp',
     author: 'ServicesArtisans',
     date: '2026-02-22',

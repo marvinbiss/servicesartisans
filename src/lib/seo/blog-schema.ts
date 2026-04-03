@@ -70,7 +70,7 @@ export function getBlogArticleSchema(article: {
     inLanguage: 'fr-FR',
   })
 
-  // FAQPage schema REMOVED — deprecated by Google (Aug 2023) for non-gov/non-health sites
+  // FAQPage schema is generated separately in the blog page component via getFAQSchema()
 
   return schemas
 }

@@ -4,6 +4,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
   "renovation-salle-de-bain-prix-guide-2026": {
     title: "Rénovation Salle de Bain : Prix et Guide 2026",
     excerpt: "Découvrez les prix actualisés pour rénover votre salle de bain en 2026, de 3 000 à 30 000 euros selon la gamme. Notre guide détaille chaque poste de dépense pour vous aider à budgétiser votre projet.",
+    metaTitle: "Rénovation Salle de Bain 2026 : Prix et Guide",
+    metaDescription: "Découvrez les prix rénovation salle de bain 2026 : 3 000-30 000 € selon la gamme. Budget détaillé par poste. Obtenez un devis gratuit.",
     content: [
       "## Quel budget prévoir pour rénover sa salle de bain en 2026 ?",
       "La rénovation de salle de bain reste un des projets les plus rentables pour valoriser son logement. En 2026, les prix varient considérablement selon le niveau de prestation choisi. Avant de vous lancer, il est essentiel de comprendre les différentes gammes de prix et ce qui les justifie.",
@@ -61,6 +63,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
   "renovation-maison-prix-m2-2026": {
     title: "Prix Rénovation Maison au m² en 2026",
     excerpt: "Les prix de rénovation au m² en 2026 varient de 200 à 2 000 euros selon le type de travaux. Découvrez notre grille tarifaire détaillée pour estimer votre budget de rénovation.",
+    metaTitle: "Prix Rénovation Maison au m² en 2026",
+    metaDescription: "Découvrez les prix rénovation maison 2026 : 200 à 2 000 €/m² selon les travaux. Grille tarifaire détaillée. Obtenez un devis gratuit.",
     content: [
       "## Comprendre les prix de rénovation au m² en 2026",
       "Le prix de rénovation d'une maison dépend de trois facteurs principaux : le type de rénovation (rafraîchissement, partielle ou lourde), la surface à traiter et la région. En 2026, les prix ont légèrement augmenté en raison de la hausse des matériaux, mais la concurrence entre artisans maintient des tarifs compétitifs.",
@@ -118,6 +122,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
   "cuisine-equipee-prix-pose-2026": {
     title: "Prix Cuisine Équipée avec Pose en 2026",
     excerpt: "Le prix d'une cuisine équipée avec pose varie de 5 000 à 25 000 euros en 2026 selon la gamme et la surface. Découvrez les tarifs détaillés pour chaque type de cuisine et les coûts de pose.",
+    metaTitle: "Prix Cuisine Équipée 2026 : Tarifs et Pose",
+    metaDescription: "Découvrez les prix cuisine équipée avec pose en 2026 : 5 000-25 000 € selon la gamme. Tarifs détaillés. Obtenez un devis gratuit.",
     content: [
       "## Combien coûte une cuisine équipée posée en 2026 ?",
       "Installer une cuisine équipée est un investissement majeur qui impacte directement la valeur de votre logement. En 2026, les prix se répartissent en trois gammes distinctes. Le coût total inclut les meubles, le plan de travail, l'électroménager et la pose par un professionnel.",
@@ -175,6 +181,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
   "toiture-renovation-prix-2026": {
     title: "Rénovation Toiture : Prix au m² en 2026",
     excerpt: "La rénovation de toiture coûte entre 80 et 350 euros par m² en 2026 selon les matériaux et travaux nécessaires. Découvrez les tarifs par type de couverture et les aides disponibles.",
+    metaTitle: "Rénovation Toiture 2026 : Prix au m² et Aides",
+    metaDescription: "Découvrez les prix rénovation toiture 2026 : 80-350 €/m² selon les matériaux. Tarifs et aides disponibles. Obtenez un devis gratuit.",
     content: [
       "## Prix de rénovation de toiture en 2026",
       "La toiture est un élément crucial qui protège votre maison des intempéries et contribue à son isolation thermique. En 2026, les prix de rénovation varient selon le type de couverture, la surface, la pente du toit et la nécessité ou non de refaire la charpente.",
@@ -232,6 +240,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
   "devis-travaux-guide-complet": {
     title: "Devis Travaux : Guide pour Comparer et Négocier",
     excerpt: "Savoir lire, comparer et négocier un devis travaux est essentiel pour éviter les mauvaises surprises. Notre guide vous donne les clés pour analyser chaque ligne et obtenir le meilleur rapport qualité-prix.",
+    metaTitle: "Devis Travaux : Guide pour Comparer en 2026",
+    metaDescription: "Découvrez comment lire, comparer et négocier un devis travaux. Évitez les pièges et obtenez le meilleur prix. Devis gratuit.",
     content: [
       "## Pourquoi bien comparer les devis est indispensable",
       "Un devis mal compris peut coûter des milliers d'euros de surcoût. En 2026, les artisans sont tenus par la loi de fournir un devis détaillé et gratuit pour tout chantier dépassant 150 euros. Pourtant, tous les devis ne se valent pas : certains cachent des coûts, d'autres omettent des prestations essentielles. Apprendre à les décrypter est la meilleure protection du consommateur.",

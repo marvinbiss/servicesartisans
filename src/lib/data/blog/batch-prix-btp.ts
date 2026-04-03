@@ -64,6 +64,10 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
 
       "Voici les principales villes où trouver un terrassier qualifié sur notre annuaire :\n\n- [Terrassier Paris](/services/terrassier/paris)\n- [Terrassier Lyon](/services/terrassier/lyon)\n- [Terrassier Marseille](/services/terrassier/marseille)\n- [Terrassier Toulouse](/services/terrassier/toulouse)\n- [Terrassier Bordeaux](/services/terrassier/bordeaux)\n- [Terrassier Nantes](/services/terrassier/nantes)\n- [Terrassier Lille](/services/terrassier/lille)\n- [Terrassier Strasbourg](/services/terrassier/strasbourg)\n- [Terrassier Montpellier](/services/terrassier/montpellier)\n- [Terrassier Rennes](/services/terrassier/rennes)",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son terrassier](/blog/comment-choisir-terrassier-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix maçon](/blog/prix-macon-2026-gros-oeuvre-renovation) pour compléter votre recherche.",
+
       ":::takeaway\n- Décaissement terrain : **25 – 45 €/m³** évacuation incluse\n- Fouilles fondations : **30 – 55 €/m³** en rigole\n- VRD (tranchées réseaux) : **50 – 120 €/ml** selon complexité\n- Enrochement : **80 – 180 €/m³** de rochers posés\n- Toujours comparer **3 devis minimum** et vérifier l'assurance décennale\n:::"
     ],
     image: "/images/blog/prix-terrassier-2026-tarifs-travaux.webp",
@@ -152,6 +156,10 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
       "## Trouver un charpentier près de chez vous",
 
       "Voici les principales villes où trouver un charpentier qualifié :\n\n- [Charpentier Paris](/services/charpentier/paris)\n- [Charpentier Lyon](/services/charpentier/lyon)\n- [Charpentier Marseille](/services/charpentier/marseille)\n- [Charpentier Toulouse](/services/charpentier/toulouse)\n- [Charpentier Bordeaux](/services/charpentier/bordeaux)\n- [Charpentier Nantes](/services/charpentier/nantes)\n- [Charpentier Lille](/services/charpentier/lille)\n- [Charpentier Strasbourg](/services/charpentier/strasbourg)\n- [Charpentier Montpellier](/services/charpentier/montpellier)\n- [Charpentier Rennes](/services/charpentier/rennes)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son charpentier](/blog/comment-choisir-charpentier-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix toiture couvreur](/blog/prix-toiture-2026-refection-reparation-materiaux) pour compléter votre recherche.",
 
       ":::takeaway\n- Charpente fermette (économique) : **50 – 80 €/m²** fourni-posé\n- Charpente traditionnelle : **80 – 150 €/m²** selon l'essence de bois\n- Surélévation de toiture : **1 200 – 2 000 €/m²** de surface créée\n- TVA réduite à 5,5 % si isolation intégrée (logement > 2 ans)\n- Vérifiez l'assurance **décennale** et la qualification **Qualibat** du charpentier\n:::"
     ],
@@ -247,6 +255,10 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
 
       "Voici les principales villes où trouver un zingueur qualifié :\n\n- [Zingueur Paris](/services/zingueur/paris)\n- [Zingueur Lyon](/services/zingueur/lyon)\n- [Zingueur Marseille](/services/zingueur/marseille)\n- [Zingueur Toulouse](/services/zingueur/toulouse)\n- [Zingueur Bordeaux](/services/zingueur/bordeaux)\n- [Zingueur Nantes](/services/zingueur/nantes)\n- [Zingueur Lille](/services/zingueur/lille)\n- [Zingueur Strasbourg](/services/zingueur/strasbourg)\n- [Zingueur Montpellier](/services/zingueur/montpellier)\n- [Zingueur Rennes](/services/zingueur/rennes)",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son zingueur](/blog/comment-choisir-zingueur-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix toiture couvreur](/blog/prix-toiture-2026-refection-reparation-materiaux) pour compléter votre recherche.",
+
       ":::takeaway\n- Gouttière zinc : **45 – 90 €/ml** fourni-posé (durée de vie 50-80 ans)\n- Descente zinc : **35 – 70 €/ml** avec colliers de fixation\n- Abergement cheminée : **250 – 600 €** par cheminée\n- Solin (jonction toit/mur) : **60 – 120 €/ml**\n- TVA à 10 % pour les logements de plus de 2 ans\n:::"
     ],
     image: "/images/blog/prix-zingueur-2026-tarifs-gouttiere.webp",
@@ -337,6 +349,10 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
       "## Trouver un étanchéiste près de chez vous",
 
       "Voici les principales villes où trouver un étanchéiste qualifié :\n\n- [Étanchéiste Paris](/services/etancheiste/paris)\n- [Étanchéiste Lyon](/services/etancheiste/lyon)\n- [Étanchéiste Marseille](/services/etancheiste/marseille)\n- [Étanchéiste Toulouse](/services/etancheiste/toulouse)\n- [Étanchéiste Bordeaux](/services/etancheiste/bordeaux)\n- [Étanchéiste Nantes](/services/etancheiste/nantes)\n- [Étanchéiste Lille](/services/etancheiste/lille)\n- [Étanchéiste Strasbourg](/services/etancheiste/strasbourg)\n- [Étanchéiste Montpellier](/services/etancheiste/montpellier)\n- [Étanchéiste Rennes](/services/etancheiste/rennes)",
+
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son étanchéiste](/blog/comment-choisir-etancheiste-guide) afin de sélectionner un artisan fiable et qualifié.",
+
+      "À lire aussi : notre guide complet sur les [prix toiture couvreur](/blog/prix-toiture-2026-refection-reparation-materiaux) pour compléter votre recherche.",
 
       ":::takeaway\n- Toiture-terrasse bitumineuse : **40 – 70 €/m²** (solution la plus courante)\n- Membrane PVC/TPO : **30 – 60 €/m²** (légère et durable)\n- Cuvelage sous-sol : **80 – 200 €/m²** selon la technique\n- TVA réduite à 5,5 % si isolation intégrée (logement > 2 ans)\n- Exigez la qualification **Qualibat 3311** et la garantie décennale\n:::"
     ],
@@ -430,6 +446,8 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
       "## Trouver un plâtrier près de chez vous",
 
       "Voici les principales villes où trouver un plâtrier qualifié :\n\n- [Plâtrier Paris](/services/platrier/paris)\n- [Plâtrier Lyon](/services/platrier/lyon)\n- [Plâtrier Marseille](/services/platrier/marseille)\n- [Plâtrier Toulouse](/services/platrier/toulouse)\n- [Plâtrier Bordeaux](/services/platrier/bordeaux)\n- [Plâtrier Nantes](/services/platrier/nantes)\n- [Plâtrier Lille](/services/platrier/lille)\n- [Plâtrier Strasbourg](/services/platrier/strasbourg)\n- [Plâtrier Montpellier](/services/platrier/montpellier)\n- [Plâtrier Rennes](/services/platrier/rennes)",
+
+      "À lire aussi : notre guide complet sur les [prix peintre bâtiment](/blog/prix-peintre-batiment-2026-guide-complet) pour compléter votre recherche.",
 
       ":::takeaway\n- Cloison placo standard : **35 – 65 €/m²** fourni-posé\n- Faux-plafond placo : **40 – 80 €/m²** sur ossature suspendue\n- Enduit plâtre : **20 – 40 €/m²** (15-30 €/m² en projeté mécanique)\n- Staff et moulures : **25 – 60 €/ml** selon la complexité\n- TVA à 5,5 % si isolation intégrée, 10 % en rénovation simple\n:::"
     ],

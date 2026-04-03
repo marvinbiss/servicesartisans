@@ -1,9 +1,11 @@
 import type { BlogArticle } from './articles'
 
 export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
-  'maprimerenovv-guide-complet-2026': {
+  'maprimerenov-guide-complet-2026': {
     title: "MaPrimeRénov' 2026 : montants, conditions et démarches complètes",
     excerpt: "Guide complet MaPrimeRénov' 2026 : barèmes par profil (Bleu, Jaune, Violet, Rose), travaux éligibles, montants par geste, démarches pas à pas et pièges à éviter. Demandez votre devis gratuit.",
+    metaTitle: "MaPrimeRénov' 2026 : Montants et Démarches",
+    metaDescription: "Découvrez les barèmes MaPrimeRénov' 2026 par profil, travaux éligibles et montants par geste. Obtenez un devis gratuit pour vos travaux.",
     content: [
       "En 2025, MaPrimeRénov' a permis de financer plus de **700 000 projets de rénovation énergétique** en France, pour un montant total dépassant les 3 milliards d'euros. Pourtant, un dossier sur cinq est encore rejeté pour vice de forme ou non-respect des conditions. Ce guide exhaustif vous livre tout ce qu'il faut savoir sur le dispositif en 2026 : les barèmes actualisés, les parcours disponibles, les montants exacts par geste et les démarches à suivre pour toucher votre prime sans mauvaise surprise. Si vous cherchez un [chauffagiste qualifié RGE](/services/chauffagiste) pour vos travaux, notre annuaire vous met en relation avec des professionnels certifiés.",
 
@@ -116,9 +118,13 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       "Retrouvez ci-dessous les réponses aux questions les plus fréquentes sur le dispositif. Pour une aide personnalisée, consultez votre Espace Conseil France Rénov' ou demandez un [devis](/devis) à un artisan certifié RGE.",
 
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix de l'isolation thermique en 2026](/blog/prix-isolation-thermique-2026-tarifs).",
+
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix chauffagiste en 2026](/blog/prix-chauffagiste-2026-installation-entretien).",
+
       ":::takeaway\n- MaPrimeRénov' 2026 dispose d'un budget de **4 milliards d'euros** et finance jusqu'à 90 % des travaux pour les ménages modestes\n- Quatre profils de revenus (Bleu, Jaune, Violet, Rose) déterminent le montant de votre aide\n- Le **parcours accompagné** (rénovation globale) impose un audit, un accompagnateur MAR et au moins deux gestes de travaux\n- Le **parcours par geste** (décarbonation) finance le remplacement de chauffage fossile par un équipement décarboné\n- Ne commencez **jamais** les travaux avant l'accord de l'ANAH — c'est la première cause de rejet\n- Cumulez MaPrimeRénov' avec les CEE, l'éco-PTZ et la TVA réduite pour minimiser votre reste à charge\n- Vérifiez systématiquement la **certification RGE** de vos artisans avant de signer le devis\n:::"
     ],
-    image: '/images/blog/maprimerenovv-guide-complet-2026.webp',
+    image: '/images/blog/maprimerenov-guide-complet-2026.webp',
     author: 'ServicesArtisans',
     date: '2026-02-10',
     readTime: '16 min',
@@ -167,6 +173,8 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
   'cumul-aides-renovation-energetique-2026': {
     title: "Cumul des aides rénovation 2026 : MaPrimeRénov' + CEE + éco-PTZ",
     excerpt: "Comment cumuler MaPrimeRénov', CEE, éco-PTZ, TVA 5,5 % et aides locales en 2026. Exemples chiffrés, plafonds et erreurs à éviter pour maximiser vos financements.",
+    metaTitle: "Cumul Aides Rénovation 2026 : Guide Complet",
+    metaDescription: "Comparez et cumulez MaPrimeRénov', CEE, éco-PTZ et aides locales en 2026. Réduisez votre reste à charge de 70 à 95 %. Devis gratuit.",
     content: [
       "Un propriétaire français sur deux ignore qu'il peut cumuler plusieurs aides pour financer sa rénovation énergétique. Résultat : des milliers d'euros laissés sur la table chaque année. En 2026, le cumul intelligent de **MaPrimeRénov'**, des **CEE** (Certificats d'Économies d'Énergie), de l'**éco-PTZ**, de la **TVA à 5,5 %** et des **aides locales** peut réduire votre reste à charge de 70 à 95 % selon vos revenus. Ce guide détaille les règles de cumul, les plafonds à respecter et des exemples concrets pour chaque type de projet. Demandez un [devis gratuit](/devis) pour évaluer le financement de vos travaux.",
 
@@ -253,6 +261,8 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
 
       "Chaque aide suit son propre calendrier de versement. Voici ce qu'il faut anticiper pour votre trésorerie :\n\n- **CEE** : versement sous 4 à 6 semaines après réception du dossier complet (factures + attestation sur l'honneur). Certains obligés proposent un versement par virement, d'autres par chèque ou bon d'achat.\n- **MaPrimeRénov'** : versement sous 4 à 8 semaines après dépôt des factures. Acompte de 70 % possible pour les profils Bleu et Jaune.\n- **Éco-PTZ** : déblocage des fonds sous 2 à 4 semaines après accord de la banque. Peut être versé directement au ménage ou à l'artisan.\n- **Aides locales** : délais très variables (1 à 6 mois selon la collectivité).\n\nAu total, prévoyez une **avance de trésorerie de 3 à 6 mois** avant le remboursement complet de toutes les aides. L'éco-PTZ permet de couvrir cette avance sans frais.",
 
+      "Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).",
+
       ":::takeaway\n- Le cumul MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales peut couvrir **jusqu'à 100 %** du coût des travaux\n- Demandez les **CEE avant** la signature du devis, puis MaPrimeRénov' avant le début des travaux\n- L'éco-PTZ permet d'emprunter jusqu'à **50 000 € sans intérêts** sur 20 ans\n- Le reste à charge peut être quasi nul pour une rénovation globale, même pour les revenus intermédiaires\n- Consultez **aides-territoires.beta.gouv.fr** pour identifier les aides locales de votre commune\n:::"
     ],
     image: '/images/blog/cumul-aides-renovation-energetique-2026.webp',
@@ -299,6 +309,8 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
   'entretien-maison-printemps-2026': {
     title: "Check-list entretien maison printemps 2026 : 15 points essentiels",
     excerpt: "Les 15 vérifications indispensables pour entretenir votre maison au printemps 2026. Toiture, plomberie, électricité, jardin : planning complet de mars à juin avec budget prévisionnel.",
+    metaTitle: "Entretien Maison Printemps 2026 : Checklist",
+    metaDescription: "Découvrez les 15 points essentiels pour entretenir votre maison au printemps. Toiture, plomberie, jardin. Obtenez un devis gratuit.",
     content: [
       "L'hiver met votre maison à rude épreuve. Gel, humidité, vent, accumulation de débris — chaque année, les mois froids infligent des micro-dommages qui, ignorés, se transforment en réparations coûteuses. Selon la FNAIM, un défaut d'entretien régulier peut déprécier un bien immobilier de **15 à 20 %** en moins de dix ans. Le printemps est le moment idéal pour inspecter, réparer et préparer votre maison pour les beaux jours. Voici les **15 points essentiels** à vérifier, organisés par zone, avec pour chacun un verdict clair : vous pouvez le faire vous-même (DIY) ou il faut appeler un professionnel. Si vous repérez un problème, trouvez un [couvreur](/services/couvreur), un [plombier](/services/plombier) ou un [électricien](/services/electricien) qualifié sur notre annuaire.",
 

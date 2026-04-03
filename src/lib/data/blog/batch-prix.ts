@@ -198,6 +198,8 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nMéfiez-vous des offres « pompe à chaleur à 1 € » ou des démarcheurs téléphoniques promettant des installations gratuites. Ces pratiques, fréquemment dénoncées par la DGCCRF, cachent souvent des équipements sous-dimensionnés, des marques inconnues sans SAV, ou des montages financiers douteux. Un artisan sérieux ne démarche **jamais** par téléphone.\n:::",
 
+      "Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son chauffagiste](/blog/comment-choisir-chauffagiste-guide) afin de sélectionner un artisan fiable et qualifié.",
+
       ":::takeaway\n- PAC air-eau : **8 000 – 16 000 €** (avant aides : reste à charge de 3 000 – 8 000 €)\n- Chaudière gaz condensation : **2 500 – 8 000 €** (plus d'aides MaPrimeRénov')\n- Entretien annuel obligatoire : **90 – 250 €** selon l'équipement\n- Aides cumulables MaPrimeRénov' + CEE + éco-PTZ : jusqu'à **70 % de prise en charge**\n- Toujours choisir un artisan **certifié RGE** pour bénéficier des aides\n:::"
     ],
     image: "/images/blog/prix-chauffagiste-2026-installation-entretien.jpg",

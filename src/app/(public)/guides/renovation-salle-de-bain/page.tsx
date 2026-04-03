@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
+import { getFAQSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
 import dynamic from 'next/dynamic'
 
@@ -274,8 +275,7 @@ export default function RenovationSalleDeBainPage() {
     ],
   }
 
-  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
-  const faqSchema = null
+  const faqSchema = getFAQSchema(faqItems)
 
   return (
     <>

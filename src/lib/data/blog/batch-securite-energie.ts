@@ -4,6 +4,8 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
   "securite-alarme-maison-guide-2026": {
     title: "Alarme maison 2026 : comparatif, prix et installation",
     excerpt: "Guide complet des alarmes maison en 2026 : filaires, sans fil, hybrides. Comparatif des marques (Somfy, Ajax, Daitem, Verisure), certifications NF A2P, prix de 500 à 3 000 € et conseils d'installation.",
+    metaTitle: "Alarme Maison 2026 : Comparatif et Prix",
+    metaDescription: "Comparez les alarmes maison 2026 : Somfy, Ajax, Verisure. Prix 500-3 000 €, certifications NF A2P. Obtenez un devis gratuit installation.",
     image: "/images/blog/securite-alarme-maison-guide-2026.webp",
     author: "ServicesArtisans",
     date: "2026-01-15",
@@ -139,6 +141,8 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
   "pompe-chaleur-air-eau-guide-2026": {
     title: "Pompe à chaleur air-eau en 2026 : prix, aides et rentabilité",
     excerpt: "Guide complet sur la pompe à chaleur air-eau en 2026 : fonctionnement, COP/SCOP, dimensionnement, marques (Daikin, Atlantic, Mitsubishi), prix de 8 000 à 18 000 €, aides MaPrimeRénov et CEE.",
+    metaTitle: "PAC Air-Eau 2026 : Prix, Marques et Aides",
+    metaDescription: "Comparez les PAC air-eau 2026 : Daikin, Atlantic, Mitsubishi. Prix 8 000-18 000 € et aides MaPrimeRénov'. Obtenez un devis gratuit.",
     image: "/images/blog/pompe-chaleur-air-eau-guide-2026.webp",
     author: "ServicesArtisans",
     date: "2026-01-22",
@@ -272,6 +276,8 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
   "panneaux-solaires-rentabilite-2026": {
     title: "Panneaux solaires 2026 : rentabilité réelle et retour sur investissement",
     excerpt: "Analyse complète de la rentabilité des panneaux solaires en 2026 : autoconsommation vs revente EDF OA, prix au Wc, rendement par région, aides, amortissement réel de 8 à 12 ans.",
+    metaTitle: "Panneaux Solaires 2026 : Rentabilité Réelle",
+    metaDescription: "Découvrez la rentabilité réelle des panneaux solaires 2026 : autoconsommation vs revente, amortissement 8-12 ans. Obtenez un devis gratuit.",
     image: "/images/blog/panneaux-solaires-rentabilite-2026.webp",
     author: "ServicesArtisans",
     date: "2026-02-01",

@@ -45,6 +45,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       ":::budget\n| Intervention | Prix indicatif 2026 | DIY possible ? |\n| Entretien chaudière gaz | 90 – 150 € | Non (obligatoire pro) |\n| Entretien chaudière fioul | 150 – 200 € | Non (obligatoire pro) |\n| Ramonage conduit | 50 – 120 € | Non (certificat obligatoire) |\n| Purge radiateurs | Gratuit | Oui |\n| Joints de fenêtres | 5 – 15 €/fenêtre | Oui |\n| Manchons isolants | 2 – 8 €/m | Oui |\n| Désembouage circuit | 300 – 800 € | Non |\n| Thermostat connecté | 100 – 300 € | Oui (pose simple) |\n:::",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix chauffagiste en 2026](/blog/prix-chauffagiste-2026-installation-entretien) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- L'entretien chaudière est **obligatoire** chaque année (décret 2009-649) — prix : 90 à 200 €\n- Purgez vos radiateurs avant la mise en route pour gagner 10 à 15 % d'efficacité\n- Faites ramoner vos conduits bois/granulés 2 fois/an (50 à 120 €/passage)\n- Protégez vos canalisations du gel dès octobre (manchons à 2-8 €/m)\n:::"
     ],
     image: '/images/blog/preparer-chauffage-hiver-2026-check-list.webp',
@@ -109,6 +111,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       "Même avec une clim bien entretenue, adoptez ces réflexes :\n1. Réglez la température à **26 °C** maximum (chaque degré en moins = +7 % de consommation)\n2. Fermez les volets et rideaux côté soleil pendant la journée\n3. Utilisez la **programmation horaire** pour ne pas climatiser inutilement\n4. Ne climatisez que les pièces occupées (fermez les portes)\n5. Préférez le mode **déshumidification** quand la chaleur est humide mais supportable",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix climaticien en 2026](/blog/prix-climaticien-2026-installation-entretien) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- Faites entretenir votre clim en **avril-mai**, avant la première vague de chaleur\n- Entretien annuel pro : **80 à 250 €** selon le nombre d'unités\n- Nettoyez les filtres vous-même toutes les 2 semaines d'utilisation\n- L'obligation de contrôle d'étanchéité concerne les systèmes de plus de 2 kg de fluide\n:::"
     ],
     image: '/images/blog/entretien-climatisation-ete-2026.webp',
@@ -170,6 +174,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       "## Récapitulatif budgétaire",
 
       ":::budget\n| Poste | Prix DIY | Prix professionnel |\n| Nettoyage gouttières | 0 € (temps) | 80 – 200 € |\n| Démoussage toiture (100 m²) | 150 – 300 € (produit) | 1 500 – 3 000 € |\n| Réparation fissure façade | 10 – 30 € | 200 – 500 € |\n| Nettoyage terrasse (30 m²) | 20 – 50 € | 150 – 400 € |\n| Peinture volets (x6) | 200 – 400 € | 600 – 1 200 € |\n| Entretien jardin complet | 50 – 150 € | 300 – 800 € |\n:::",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix jardinier paysagiste en 2026](/blog/prix-jardinier-paysagiste-2026) dans notre guide tarifaire dédié.",
 
       ":::takeaway\n- Inspectez toiture et gouttières en priorité : les dégâts d'hiver non traités s'aggravent vite\n- Traitez la mousse de toiture au printemps, avant qu'elle ne soulève les tuiles\n- Profitez d'avril-juin pour les peintures extérieures (conditions de séchage idéales)\n- Réservez vos artisans dès mars pour éviter les délais de mai-juin\n:::"
     ],
@@ -301,6 +307,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       "1. Vérifiez qu'il est **inscrit au registre des métiers** (attestation de qualification ou certification Qualibat)\n2. Demandez son **assurance responsabilité civile professionnelle**\n3. Exigez un **devis écrit** avant intervention\n4. Comparez au moins **2 à 3 devis** pour les interventions non urgentes\n5. Vérifiez les avis clients sur notre [annuaire de ramoneurs](/services/ramoneur)",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix ramoneur en 2026](/blog/prix-ramoneur-2026-tarifs) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- Le ramonage est obligatoire : **2 fois/an** pour le bois, **1 fois/an** pour le gaz et le fioul\n- Prix standard : **50 à 120 €** par passage (certificat inclus)\n- Le certificat de ramonage est indispensable pour l'assurance habitation\n- Planifiez en **septembre-octobre** pour éviter les délais d'automne\n:::"
     ],
     image: '/images/blog/ramonage-obligatoire-2026-reglementation.webp',
@@ -368,6 +376,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       ":::warning Attention embouage\nSi l'eau qui sort lors de la purge est **noire ou très chargée en boue**, votre circuit est emboué. L'embouage réduit l'efficacité de chauffage de 20 à 40 % et accélère la corrosion des radiateurs. Un désembouage professionnel (300 à 800 €) est nécessaire. Un [chauffagiste](/services/chauffagiste) injecte un produit de nettoyage puis rince l'ensemble du circuit.\n:::",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix chauffagiste en 2026](/blog/prix-chauffagiste-2026-installation-entretien) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- La purge des radiateurs est **gratuite et prend 30 minutes** — faites-la chaque automne\n- Commencez par le radiateur le plus proche de la chaudière, chaudière éteinte\n- Vérifiez la pression du circuit après purge : **1 à 1,5 bar**\n- Si l'eau est noire ou un radiateur reste froid en bas, appelez un chauffagiste\n:::"
     ],
     image: '/images/blog/purger-radiateurs-avant-hiver-guide.webp',
@@ -425,6 +435,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       "## Le calendrier d'entretien annuel de la toiture",
 
       "- **Mars-avril** : inspection post-hiver, remplacement des tuiles endommagées par le gel\n- **Juin-juillet** : traitement anti-mousse préventif (temps sec pour la pulvérisation)\n- **Octobre-novembre** : nettoyage gouttières, inspection complète, petites réparations avant l'hiver\n- **Après chaque tempête** : inspection visuelle rapide depuis le sol",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix toiture et couvreur en 2026](/blog/prix-toiture-2026-refection-reparation-materiaux) dans notre guide tarifaire dédié.",
 
       ":::takeaway\n- Nettoyez les gouttières en **octobre-novembre**, avant les pluies d'hiver (80-200 € par un pro)\n- Traitez la mousse en automne quand les conditions sont idéales (10-20 °C, temps humide)\n- Inspectez tuiles, faîtage et solins depuis le sol ou les combles\n- Ne montez jamais sur un toit mouillé — confiez les travaux en hauteur à un couvreur\n:::"
     ],
@@ -484,6 +496,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       ":::budget\n| Solution | Coût | Protection |\n| Manchons mousse (10 m) | 20 – 80 € | Bonne (jusqu'à -10 °C) |\n| Protection compteur | 20 – 50 € | Bonne |\n| Câble chauffant (10 m) | 150 – 400 € | Excellente (toute température) |\n| Calorifugeage pro (10 m) | 100 – 250 € | Excellente + durable |\n| Réparation tuyau éclaté | 200 – 800 € | – |\n| Dégâts des eaux (moyenne) | 3 500 € | – |\n:::",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix plombier en 2026](/blog/prix-plombier-2026-tarifs-horaires) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- Isolez les canalisations exposées au gel avec des manchons (2 à 8 €/m) dès octobre\n- Vidangez et fermez les robinets extérieurs avant les premières gelées\n- En cas de grand froid, laissez couler un filet d'eau au robinet le plus éloigné\n- Ne dégelez jamais un tuyau avec une flamme nue — utilisez un sèche-cheveux\n:::"
     ],
     image: '/images/blog/proteger-canalisations-gel-hiver.webp',
@@ -537,6 +551,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       "## Les erreurs à éviter",
 
       "1. **Ouvrir trop tard** (eau > 18 °C) : les algues ont déjà colonisé le bassin\n2. **Négliger le pH** avant le traitement choc : le chlore est inefficace si le pH est trop haut\n3. **Se baigner trop tôt** : attendez que le taux de chlore redescende sous 3 mg/L après le choc\n4. **Oublier le backwash** : un filtre encrassé ne nettoie rien, il redistribue les impuretés\n5. **Remplir avec de l'eau de puits** non traitée : risque de métaux (fer, manganèse) qui colorent l'eau",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix pisciniste en 2026](/blog/prix-pisciniste-2026-tarifs) dans notre guide tarifaire dédié.",
 
       ":::takeaway\n- Ouvrez votre piscine quand l'eau atteint **12-15 °C** (avril-mai)\n- Ajustez le pH **avant** le traitement choc pour maximiser son efficacité\n- Budget produits : **80 à 145 €** pour un bassin standard de 8x4 m\n- Déshivernage par un pisciniste : **150 à 350 €** tout compris\n:::"
     ],
@@ -593,6 +609,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       "1. **Hiverner avec une eau trouble** : les dépôts se fixent sur le liner et laissent des taches permanentes\n2. **Oublier de vidanger le circuit** (passif) : la pompe gèle et éclate (remplacement 300-800 €)\n3. **Ne pas baisser le niveau d'eau** : le gel endommage les skimmers et les buses\n4. **Laisser la piscine sans couverture** : les feuilles mortes se décomposent et créent un milieu propice aux algues et aux taches\n5. **Hiverner trop tôt** (eau > 15 °C) : les algues prolifèrent sous la bâche et l'eau sera irrécupérable au printemps",
 
       ":::tip Conseil pro\nSi vous hésitez entre actif et passif, l'hivernage actif est presque toujours préférable en résidence principale. Il préserve mieux l'eau, simplifie le déshivernage et prolonge la durée de vie du liner. Le surcoût électrique (30-60 €/hiver) est largement compensé par l'économie de produits et de temps au printemps.\n:::",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix pisciniste en 2026](/blog/prix-pisciniste-2026-tarifs) dans notre guide tarifaire dédié.",
 
       ":::takeaway\n- Hivernez quand l'eau passe **durablement sous 12 °C** (octobre-novembre)\n- **Actif** : filtration réduite + coffret hors-gel — idéal en climat doux\n- **Passif** : circuit vidangé + flotteurs — obligatoire en zone de gel fréquent\n- Budget produits : **50 à 100 €** (hors couverture et coffret hors-gel)\n:::"
     ],
@@ -658,6 +676,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       "- **Abattage d'arbre en zone urbaine** : vérifiez le PLU (Plan Local d'Urbanisme) de votre commune. Certains arbres sont classés « remarquables » et ne peuvent être abattus sans autorisation\n- **Haie en lotissement** : le règlement de lotissement peut imposer un type de haie, une hauteur et un calendrier d'entretien\n- **Arbre en zone protégée** (périmètre ABF, site classé) : déclaration préalable obligatoire",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix jardinier paysagiste en 2026](/blog/prix-jardinier-paysagiste-2026) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- **Février-mars** et **septembre-octobre** sont les meilleures périodes de taille\n- Respectez la distance de plantation : **2 m** pour les végétaux > 2 m, **0,50 m** pour les autres\n- Ne taillez jamais une haie contenant un **nid actif** (amende jusqu'à 150 000 €)\n- La taille de haie pro coûte **5 à 15 €/ml** — l'élagage d'arbre **100 à 1 000 €**\n:::"
     ],
     image: '/images/blog/taille-haies-arbres-reglementation-2026.webp',
@@ -721,6 +741,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       "Les produits vendus en grande surface de bricolage (5-15 €/litre) sont généralement moins concentrés que les produits professionnels (15-30 €/litre). Un produit pro coûte plus cher au litre mais couvre plus de surface et offre une action plus longue. Les marques de référence : Algimouss, Guard Industrie, Sika.",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix ravalement façade en 2026](/blog/prix-ravalement-facade-2026) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- Démoussez en **automne** (sept-nov) ou au **printemps** (mars-mai) — jamais en plein été ni en hiver\n- Prix pro : **15 à 25 €/m²** sans hydrofuge, **25 à 40 €/m²** avec hydrofuge\n- L'hydrofuge prolonge la protection de **8 à 15 ans** — investissement très rentable\n- Façade nord : démoussage tous les 3-5 ans ; façade sud : tous les 8-12 ans\n:::"
     ],
     image: '/images/blog/demoussage-facade-meilleure-periode.webp',
@@ -776,6 +798,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       "Pour une maison de 100 m² de combles perdus avec une facture de chauffage de 2 000 €/an :\n- **Coût de l'isolation** (après aides) : 800 à 2 000 €\n- **Économie annuelle** : 500 à 600 € (25-30 % de la facture)\n- **Retour sur investissement** : 1,5 à 4 ans\n- **Durée de vie de l'isolation** : 30 à 50 ans\n\nC'est l'un des rares investissements immobiliers qui se rentabilise en moins de 5 ans.",
 
       ":::tip Confort été + hiver\nL'isolation des combles ne protège pas que du froid : elle réduit aussi la chaleur estivale de 3 à 5 °C dans les pièces sous les toits. Si vous isolez en été, vous bénéficiez immédiatement de ce confort thermique avant même le premier hiver.\n:::",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix isolation thermique en 2026](/blog/prix-isolation-thermique-2026-tarifs) dans notre guide tarifaire dédié.",
 
       ":::takeaway\n- Les combles représentent **25 à 30 %** des pertes de chaleur — c'est la priorité n° 1\n- L'été est la saison idéale : artisans disponibles, conditions de pose optimales\n- Soufflage en combles perdus : **20 à 35 €/m²** posé, le meilleur rapport coût/efficacité\n- Retour sur investissement en **1,5 à 4 ans** grâce aux aides + économies de chauffage\n:::"
     ],
@@ -839,6 +863,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       ":::warning Légionellose\nLa température de l'eau dans le ballon ne doit **jamais descendre sous 50 °C** : en dessous, les bactéries legionella prolifèrent et peuvent provoquer une maladie respiratoire grave (légionellose). La température idéale de consigne est **55-60 °C** : suffisante pour tuer les bactéries, pas trop élevée pour limiter l'entartrage.\n:::",
 
+      "Pour budgéter cette intervention, retrouvez tous les [prix plombier en 2026](/blog/prix-plombier-2026-tarifs-horaires) dans notre guide tarifaire dédié.",
+
       ":::takeaway\n- Détartrez votre chauffe-eau tous les **2-3 ans** (1-2 ans en eau très dure)\n- Prix du détartrage : **150 à 300 €** selon la capacité\n- Actionnez le groupe de sécurité **1 fois par mois** pour évacuer le calcaire\n- Réglez la température à **55-60 °C** : anti-légionelle et économe\n:::"
     ],
     image: '/images/blog/entretien-chauffe-eau-detartrage-annuel.webp',
@@ -899,6 +925,8 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       "## Les aides 2026 pour la rénovation énergétique",
 
       "- **MaPrimeRénov'** : jusqu'à 90 % du coût pour les ménages très modestes\n- **CEE** : primes complémentaires via les fournisseurs d'énergie\n- **Éco-PTZ** : jusqu'à 50 000 € à taux zéro pour un bouquet de travaux\n- **TVA à 5,5 %** : sur tous les travaux d'amélioration énergétique par un pro\n\nConsultez notre article sur les [aides à la rénovation énergétique](/blog/renovation-energetique-aides-2026) pour le détail des montants et conditions.",
+
+      "Pour budgéter cette intervention, retrouvez tous les [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs) dans notre guide tarifaire dédié.",
 
       ":::takeaway\n- **Isolation** : mai à septembre (combles) ou avril à octobre (ITE)\n- **Chauffage** : mars à juin — jamais en urgence à l'automne\n- **Fenêtres** : printemps et automne — commandez 6-8 semaines avant\n- Isolez **avant** de changer le chauffage : l'ordre des travaux impacte le coût et l'efficacité\n:::"
     ],

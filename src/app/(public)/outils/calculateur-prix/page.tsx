@@ -58,7 +58,7 @@ export default function CalculateurPrixPage() {
   // HowTo JSON-LD removed — Google no longer supports HowTo rich results
   const howToSchema = null
 
-  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
+  // FAQPage schema not applicable here — FAQ content is per-trade and rendered client-side
   const faqSchema = null
 
   // Serialize trade content for client component (only what's needed)
