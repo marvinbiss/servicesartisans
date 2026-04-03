@@ -30,12 +30,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne sous-estimez jamais le poste électricité et plomberie, qui représente souvent 20 à 30 % du budget total. Évitez de commander les meubles avant d\'avoir validé l\'état des murs et du sol. Ne négligez pas la ventilation : une hotte efficace (débit de 300 à 600 m³/h) est indispensable pour préserver la qualité de l\'air."
     ],
     image: '/images/blog/renover-cuisine.jpg',
-    author: 'Thomas Bernard',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-10',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Cuisine', 'Rénovation', 'Budget', 'Étapes'],
-    authorBio: 'Thomas Bernard, architecte d\'intérieur et consultant en rénovation, conseille les propriétaires sur l\'optimisation de leur habitat.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte la rénovation d\'une cuisine ?', answer: 'Le budget dépend de l\'ampleur : rafraîchissement simple (peinture, crédence) de 3 000 à 5 000 euros, rénovation intermédiaire (meubles, électroménager, revêtements) de 8 000 à 15 000 euros, rénovation haut de gamme (sur mesure, matériaux nobles) de 15 000 à 30 000 euros et plus. Prévoyez 10 à 15 % de marge pour les imprévus.' },
@@ -81,12 +81,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne négligez pas la ventilation : une VMC est indispensable dans les combles aménagés. Prévoyez des rangements intégrés dans les parties basses (moins de 1,40 m de hauteur) pour exploiter chaque recoin. Vérifiez la portance du plancher avant d\'installer une baignoire ou un meuble lourd."
     ],
     image: '/images/blog/amenager-combles.jpg',
-    author: 'Thomas Bernard',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-06',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Combles', 'Aménagement', 'Surface habitable', 'Isolation'],
-    authorBio: 'Thomas Bernard, architecte d\'intérieur et consultant en rénovation, conseille les propriétaires sur l\'optimisation de leur habitat.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Comment savoir si mes combles sont aménageables ?', answer: 'Trois critères : hauteur sous faîtage d\'au moins 1,80 m sur un tiers de la surface, pente de toit idéalement supérieure à 35°, et plancher suffisamment solide. Une charpente en fermettes (W) nécessite une modification coûteuse, tandis qu\'une charpente traditionnelle offre généralement un volume libre suffisant.' },
@@ -129,12 +129,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne négligez pas le bruit de l\'unité extérieure : choisissez un modèle avec un niveau sonore inférieur à 40 dB(A) à 5 mètres. Prévoyez un chauffage d\'appoint pour les jours les plus froids (en dessous de -10 °C, le rendement chute). Souscrivez un contrat de maintenance pour garantir la longévité de l\'installation (durée de vie moyenne : 15 à 20 ans)."
     ],
     image: '/images/blog/pompe-chaleur.jpg',
-    author: 'Marc Lefebvre',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-04',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Pompe à chaleur', 'Chauffage', 'Énergie', 'Aides'],
-    authorBio: 'Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte l\'installation d\'une pompe à chaleur air-eau ?', answer: 'PAC monobloc : 8 000 à 12 000 € fourniture et pose. PAC bibloc : 10 000 à 16 000 €. PAC haute température : 12 000 à 18 000 €. Les aides financières (MaPrimeRénov\', CEE, TVA 5,5 %) peuvent couvrir 40 à 65 % du coût pour les ménages modestes.' },
@@ -178,18 +178,18 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne surdimensionnez pas votre installation par rapport à votre consommation réelle. Évitez les crédits à la consommation proposés par les installateurs (taux souvent élevés). Ne signez jamais le jour même d\'un démarchage : prenez le temps de comparer au moins trois devis."
     ],
     image: '/images/blog/panneau-solaire.jpg',
-    author: 'Marc Lefebvre',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-02',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Solaire', 'Photovoltaïque', 'Énergie', 'Autoconsommation'],
-    authorBio: 'Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Les panneaux solaires sont-ils rentables en France ?', answer: 'Oui, le retour sur investissement se situe entre 8 et 12 ans pour une durée de vie de 25 à 30 ans. Une installation de 3 kWc (7 000 à 10 000 €) produit 3 000 à 4 000 kWh par an, soit 500 à 800 euros d\'économie annuelle en autoconsommation.' },
       { question: 'Faut-il choisir l\'autoconsommation ou la revente totale ?', answer: 'L\'autoconsommation avec vente du surplus est le modèle le plus intéressant en 2026. Vous consommez directement l\'électricité produite (économie au tarif plein) et revendez l\'excédent à EDF OA au tarif CRE en vigueur (révisé trimestriellement — vérifiez sur edf-oa.fr), avec un tarif garanti pendant 20 ans.' },
       { question: 'Quelles sont les démarches pour installer des panneaux solaires ?', answer: 'Quatre étapes administratives : déclaration préalable en mairie (1 mois), demande de raccordement Enedis (2-3 mois), contrat d\'achat EDF OA, et attestation Consuel. Prévoyez 3 à 4 mois entre le premier contact et la mise en service.' },
-      { question: 'Comment éviter les arnaques aux panneaux solaires ?', answer: 'Méfiez-vous des démarcheurs téléphoniques proposant du solaire à 1 € : c\'est une arnaque. Choisissez un installateur certifié RGE QualiPV, ne signez jamais le jour même d\'un démarchage, et comparez au moins 3 devis. Évitez les crédits à la consommation proposés par les installateurs (taux souvent élevés).' }
+      { question: 'Comment éviter les arnaques aux panneaux solaires ?', answer: 'Méfiez-vous des démarcheurs téléphoniques proposant du solaire à 1 € : c\'est une arnaque. Choisissez un installateur certifié RGE QualiPV, ne signez jamais le jour même d\'un démarchage, et faites jouer la concurrence entre installateurs. Évitez les crédits à la consommation proposés par les installateurs (taux souvent élevés).' }
     ],
     keyTakeaways: [
       "Une installation photovoltaïque de 3 kWc coûte entre 7 000 et 12 000 € et produit environ 3 500 kWh/an.",
@@ -227,12 +227,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne faites jamais l\'impasse sur l\'étanchéité : un dégât des eaux dans les combles peut endommager tous les niveaux inférieurs. Ne posez pas de baignoire sans avoir vérifié la portance du plancher. Ne raccordez pas l\'évacuation sur un simple tuyau flexible : utilisez des canalisations rigides avec des raccords étanches."
     ],
     image: '/images/blog/sdb-combles.jpg',
-    author: 'Sophie Martin',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-31',
     readTime: '11 min',
     category: 'Guides',
     tags: ['Salle de bain', 'Combles', 'Plomberie', 'Étanchéité'],
-    authorBio: 'Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte une salle de bain sous les combles ?', answer: 'Salle d\'eau de 4 m² (douche, lavabo, WC) : 5 000 à 10 000 euros. Salle de bain de 6 à 8 m² (baignoire, douche, double vasque, WC) : 10 000 à 20 000 euros. Ces budgets incluent la plomberie, l\'électricité, l\'étanchéité et les revêtements.' },
@@ -277,12 +277,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne négligez pas l\'étude de sol, surtout en terrain argileux. Prévoyez l\'harmonie architecturale entre l\'existant et l\'extension (choix des matériaux, des couleurs, de la toiture). Anticipez l\'impact sur la taxe foncière et la taxe d\'aménagement. Vérifiez les servitudes et les distances réglementaires par rapport aux limites de propriété."
     ],
     image: '/images/blog/extension-maison.jpg',
-    author: 'Thomas Bernard',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-29',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Extension', 'Surélévation', 'Véranda', 'Agrandissement'],
-    authorBio: 'Thomas Bernard, architecte d\'intérieur et consultant en rénovation, conseille les propriétaires sur l\'optimisation de leur habitat.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Quelle est la solution la moins chère pour agrandir sa maison ?', answer: 'La véranda est la solution la moins coûteuse (800 à 2 000 €/m²) et la plus rapide (2 à 4 semaines). L\'extension maçonnée coûte 1 200 à 2 500 €/m² et la surélévation 1 800 à 3 500 €/m². Le choix dépend de la configuration du terrain et de vos besoins.' },
@@ -326,12 +326,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Si le ravalement inclut une isolation thermique : MaPrimeRénov\' (jusqu\'à 75 euros/m² pour les ménages très modestes), CEE (10 à 20 euros/m²), TVA à 5,5 %. Pour un ravalement sans isolation, la TVA est de 10 % (logement de plus de deux ans). Certaines communes proposent des subventions pour les ravalements en centre-ville."
     ],
     image: '/images/blog/ravalement-facade.jpg',
-    author: 'Jean-Pierre Duval',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-27',
     readTime: '11 min',
     category: 'Guides',
     tags: ['Façade', 'Ravalement', 'ITE', 'Isolation'],
-    authorBio: 'Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Le ravalement de façade est-il obligatoire ?', answer: 'Dans de nombreuses communes (notamment Paris), le ravalement est obligatoire tous les 10 ans. Le non-respect peut entraîner une mise en demeure par la mairie suivie de travaux d\'office aux frais du propriétaire. Renseignez-vous auprès de votre mairie.' },
@@ -374,12 +374,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Bois : dégriseur et saturateur une à deux fois par an (15 à 25 euros/m²). Composite : simple nettoyage à l\'eau savonneuse. Pierre naturelle : hydrofuge tous les trois à cinq ans. Carrelage : nettoyage régulier, pas de traitement particulier. Le choix du matériau conditionne directement le coût d\'entretien sur le long terme."
     ],
     image: '/images/blog/terrasse-exterieure.jpg',
-    author: 'Claire Dubois',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-25',
     readTime: '11 min',
     category: 'Guides',
     tags: ['Terrasse', 'Extérieur', 'Matériaux', 'Aménagement'],
-    authorBio: 'Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Quel est le meilleur matériau pour une terrasse extérieure ?', answer: 'Cela dépend de vos priorités. Le bois exotique (ipé, cumaru) est le plus noble et durable (25-30 ans) mais coûteux (80-150 €/m²). Le composite est sans entretien et imputrescible (60-120 €/m²). La pierre naturelle est élégante et pérenne (80-200 €/m²). Le grès cérame 20 mm est antidérapant et facile d\'entretien (50-120 €/m²).' },
@@ -422,12 +422,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Respectez la distance minimale entre l\'unité extérieure et les ouvertures des voisins. Prévoyez un bac de récupération des condensats pour l\'unité extérieure. Ne placez pas l\'unité intérieure face à un canapé ou un lit (flux d\'air direct inconfortable). Privilégiez les modèles avec détection de présence et programmation horaire pour optimiser la consommation."
     ],
     image: '/images/blog/climatisation.jpg',
-    author: 'Marc Lefebvre',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-23',
     readTime: '11 min',
     category: 'Guides',
     tags: ['Climatisation', 'PAC air-air', 'Confort', 'Énergie'],
-    authorBio: 'Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Quel type de climatisation choisir pour sa maison ?', answer: 'Monosplit (1 500-3 000 € posé) pour une seule pièce, multisplit (3 500-8 000 €) pour plusieurs pièces, gainable (5 000-12 000 €) pour une discrétion totale dans toute la maison. Optez pour un modèle réversible pour chauffer aussi en hiver.' },
@@ -472,12 +472,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Faites toujours appel à un électricien qualifié et assuré. Demandez l\'attestation de conformité du Consuel à la fin des travaux. Ne faites jamais cohabiter ancien et nouveau câblage sans vérification de compatibilité. Conservez le plan de l\'installation électrique pour les interventions futures."
     ],
     image: '/images/blog/electricite-maison.jpg',
-    author: 'Jean-Pierre Duval',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-21',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Électricité', 'Normes', 'Rénovation', 'Maison ancienne'],
-    authorBio: 'Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte la rénovation électrique d\'une maison ancienne ?', answer: 'Rénovation partielle (mise en sécurité du tableau et des protections) : 3 000 à 6 000 euros. Rénovation totale (reprise de tout le câblage) : 8 000 à 20 000 euros pour une maison de 100 m². La main-d\'oeuvre représente 40 à 70 % du budget total.' },
@@ -522,12 +522,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Exigez un essai de pression (test d\'étanchéité à 10 bars pendant 30 minutes) avant la mise en service du nouveau réseau. Conservez le plan des canalisations pour les interventions futures. Faites réaliser les travaux avant la pose des revêtements de sol et de mur pour éviter les reprises coûteuses."
     ],
     image: '/images/blog/plomberie-renovation.jpg',
-    author: 'Sophie Martin',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-19',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Plomberie', 'Rénovation', 'Maison ancienne', 'Canalisations'],
-    authorBio: 'Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte la rénovation de la plomberie d\'une maison ?', answer: 'Rénovation partielle (alimentations et robinetterie) : 3 000 à 6 000 euros pour une maison de 100 m². Rénovation complète (alimentations, évacuations, eau chaude, sanitaires) : 8 000 à 18 000 euros fourniture et main-d\'oeuvre incluses.' },
@@ -572,12 +572,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne posez jamais sur un support humide ou instable. Ne négligez pas le double encollage pour les grands formats. Vérifiez la planéité du support avant de commencer. Mélangez les carreaux de plusieurs boîtes pour homogénéiser les variations de teinte. Commencez toujours par le fond de la pièce pour finir vers la porte de sortie."
     ],
     image: '/images/blog/poser-carrelage.jpg',
-    author: 'Thomas Bernard',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-17',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Carrelage', 'Pose', 'Techniques', 'Revêtement'],
-    authorBio: 'Thomas Bernard, architecte d\'intérieur et consultant en rénovation, conseille les propriétaires sur l\'optimisation de leur habitat.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte la pose de carrelage au m² ?', answer: 'Grès cérame standard (30x30 cm) : 20 à 40 €/m² fourni posé. Grand format (60x60 cm) : 40 à 80 €/m². Imitation parquet (20x120 cm) : 35 à 70 €/m². Pierre naturelle : 60 à 150 €/m². Ajoutez 5 à 10 €/m² pour le mortier-colle et les joints.' },
@@ -624,12 +624,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "N\'oubliez jamais le jeu de dilatation périphérique. Laissez les lames s\'acclimater 48 heures dans la pièce avant la pose. Ne posez pas de parquet massif sur chauffage au sol sans vérifier la compatibilité de l\'essence. Évitez le stratifié dans les pièces humides (salle de bain, buanderie) sauf s\'il est spécifiquement conçu pour."
     ],
     image: '/images/blog/parquet-guide.jpg',
-    author: 'Thomas Bernard',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-15',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Parquet', 'Sol', 'Pose', 'Bois'],
-    authorBio: 'Thomas Bernard, architecte d\'intérieur et consultant en rénovation, conseille les propriétaires sur l\'optimisation de leur habitat.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Quel type de parquet choisir pour sa maison ?', answer: 'Le parquet massif (60-150 €/m² posé) offre une durabilité exceptionnelle (50-100 ans, poncé 5 à 8 fois). Le contrecollé (35-90 €/m²) combine esthétique du bois et stabilité. Le stratifié (15-40 €/m²) est le plus économique mais ne peut pas être rénové. Pour un sol chauffant, privilégiez le contrecollé collé.' },
@@ -676,12 +676,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne sous-estimez pas les fondations : un garage qui s\'affaisse est un désastre coûteux. Prévoyez une pente de 1 % vers l\'extérieur pour l\'évacuation des eaux de lavage et de pluie. Ne construisez pas en limite de propriété sans vérifier les distances réglementaires. Pensez à l\'accès : le rayon de braquage nécessite un dégagement suffisant devant la porte."
     ],
     image: '/images/blog/construire-garage.jpg',
-    author: 'Jean-Pierre Duval',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-13',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Garage', 'Construction', 'Permis', 'Budget'],
-    authorBio: 'Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte la construction d\'un garage ?', answer: 'Garage simple en parpaings (18 m²) : 8 000 à 15 000 €. Garage double (36 m²) : 15 000 à 28 000 €. Garage en ossature bois (18 m²) : 10 000 à 20 000 €. Carport simple : 2 000 à 6 000 €. Ces budgets incluent fondations, structure, toiture, porte et dalle.' },
@@ -726,12 +726,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne plantez pas d\'arbres à grand développement trop près de la maison (minimum 3 m pour les petits arbres, 7 m pour les grands). Prévoyez l\'entretien futur : un jardin trop planté devient un fardeau. Ne négligez pas le drainage : un terrain mal drainé provoque la stagnation de l\'eau et la mort des plantes."
     ],
     image: '/images/blog/jardin-paysagiste.jpg',
-    author: 'Claire Dubois',
+    author: "L'équipe ServicesArtisans",
     date: '2026-01-11',
     readTime: '11 min',
     category: 'Guides',
     tags: ['Jardin', 'Paysagiste', 'Aménagement', 'Extérieur'],
-    authorBio: 'Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Combien coûte l\'aménagement d\'un jardin par un paysagiste ?', answer: 'Jardin de 100 m² (aménagement complet) : 5 000 à 15 000 €. Jardin de 300 m² : 10 000 à 30 000 €. Jardin de 500 m² et plus : 20 000 à 50 000 €. Ces budgets incluent la conception, le terrassement, les plantations, les circulations et l\'éclairage de base.' },
@@ -776,12 +776,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne sous-dimensionnez pas les piliers : un portail en aluminium de 4 m pèse 80 à 120 kg et exerce des contraintes importantes. Prévoyez l\'ouverture vers l\'intérieur de la propriété (obligation légale si le portail donne sur la voie publique). N\'oubliez pas le système de débrayage manuel pour les coupures de courant. Vérifiez les distances de sécurité par rapport à la voie publique."
     ],
     image: '/images/blog/portail-automatique.jpg',
-    author: 'Sophie Martin',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-09',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Portail', 'Motorisation', 'Sécurité', 'Extérieur'],
-    authorBio: 'Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Portail battant ou coulissant : lequel choisir ?', answer: 'Le portail battant est le plus traditionnel et le moins coûteux en terrain plat avec de la place. Le coulissant est idéal pour les entrées en pente ou les espaces réduits (il glisse latéralement sur un rail). En terrain contraint, le coulissant s\'impose malgré un coût supérieur.' },
@@ -826,12 +826,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne choisissez pas le vitrage le moins cher sans vérifier ses performances (coefficient Uw). Exigez la certification NF ou CEKAL pour le vitrage et QualiBAT ou RGE pour l\'installateur. Ne négligez pas les joints de finition (silicone extérieur, couvre-joints intérieurs) : ils conditionnent l\'étanchéité à l\'air et à l\'eau. Vérifiez la compatibilité du nouveau vitrage avec l\'épaisseur des dormants existants en cas de pose rénovation."
     ],
     image: '/images/blog/fenetres-performances.jpg',
-    author: 'Marc Lefebvre',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-07',
     readTime: '12 min',
     category: 'Guides',
     tags: ['Fenêtres', 'Vitrage', 'Isolation', 'Économies'],
-    authorBio: 'Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Double ou triple vitrage : que choisir ?', answer: 'Le double vitrage ITR (isolation thermique renforcée) avec gaz argon est le standard actuel (Uw de 1,1 à 1,4). Le triple vitrage (Uw de 0,6 à 0,8) est recommandé pour les façades nord et les régions froides, mais son surcoût de 30 à 50 % n\'est pas toujours justifié en climat tempéré.' },
@@ -879,12 +879,12 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "Ne bouchez jamais les entrées d\'air pour éviter les courants d\'air : vous supprimeriez la ventilation et favoriseriez la condensation. Ne raccordez pas la hotte de cuisine sur la VMC (risque de graisse dans les gaines et le moteur). Vérifiez que les gaines sont étanches à chaque raccord (bande adhésive aluminium). Ne placez pas le caisson d\'une VMC double flux dans un local non isolé (perte de rendement de l\'échangeur)."
     ],
     image: '/images/blog/vmc-ventilation.jpg',
-    author: 'Marc Lefebvre',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-05',
     readTime: '12 min',
     category: 'Guides',
     tags: ['VMC', 'Ventilation', 'Qualité d\'air', 'Énergie'],
-    authorBio: 'Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: '2026-02-12',
     faq: [
       { question: 'VMC simple flux ou double flux : que choisir ?', answer: 'La VMC simple flux hygroréglable (500 à 1 200 €) est suffisante pour la plupart des logements : elle adapte le débit à l\'humidité et coûte peu en entretien. La VMC double flux (3 000 à 7 000 €) récupère 85 à 95 % de la chaleur de l\'air extrait et est recommandée pour les maisons bien isolées (BBC, RE 2020) et les régions froides.' },

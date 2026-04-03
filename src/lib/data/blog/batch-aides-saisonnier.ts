@@ -125,7 +125,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- MaPrimeRénov' 2026 dispose d'un budget de **4 milliards d'euros** et finance jusqu'à 90 % des travaux pour les ménages modestes\n- Quatre profils de revenus (Bleu, Jaune, Violet, Rose) déterminent le montant de votre aide\n- Le **parcours accompagné** (rénovation globale) impose un audit, un accompagnateur MAR et au moins deux gestes de travaux\n- Le **parcours par geste** (décarbonation) finance le remplacement de chauffage fossile par un équipement décarboné\n- Ne commencez **jamais** les travaux avant l'accord de l'ANAH — c'est la première cause de rejet\n- Cumulez MaPrimeRénov' avec les CEE, l'éco-PTZ et la TVA réduite pour minimiser votre reste à charge\n- Vérifiez systématiquement la **certification RGE** de vos artisans avant de signer le devis\n:::"
     ],
     image: '/images/blog/maprimerenov-guide-complet-2026.webp',
-    author: 'ServicesArtisans',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-10',
     readTime: '16 min',
     category: 'Aides & Subventions',
@@ -266,7 +266,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Le cumul MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales peut couvrir **jusqu'à 100 %** du coût des travaux\n- Demandez les **CEE avant** la signature du devis, puis MaPrimeRénov' avant le début des travaux\n- L'éco-PTZ permet d'emprunter jusqu'à **50 000 € sans intérêts** sur 20 ans\n- Le reste à charge peut être quasi nul pour une rénovation globale, même pour les revenus intermédiaires\n- Consultez **aides-territoires.beta.gouv.fr** pour identifier les aides locales de votre commune\n:::"
     ],
     image: '/images/blog/cumul-aides-renovation-2026-tableau.webp',
-    author: 'ServicesArtisans',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-18',
     readTime: '14 min',
     category: 'Aides & Subventions',
@@ -408,7 +408,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Planifiez l'entretien de mars à juin en commençant par les **urgences post-hiver** (toiture, façade, plomberie extérieure)\n- **8 points sur 15** sont réalisables en DIY — concentrez le budget pro sur la toiture, l'électricité et la structure\n- Budget total estimé : **280 à 850 €** en DIY, **1 530 à 4 200 €** avec professionnels\n- Ne montez **jamais** sur un toit sans équipement de sécurité — appelez un [couvreur](/services/couvreur)\n- Un entretien régulier préserve la **valeur de votre bien** et prévient les sinistres coûteux\n:::"
     ],
     image: '/images/blog/entretien-maison-printemps-2026.webp',
-    author: 'ServicesArtisans',
+    author: "L'équipe ServicesArtisans",
     date: '2026-02-28',
     readTime: '12 min',
     category: 'Saisonnier',

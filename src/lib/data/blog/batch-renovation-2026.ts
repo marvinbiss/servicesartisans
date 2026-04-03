@@ -32,8 +32,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "## Aides financières disponibles en 2026",
       "Pour les logements de plus de 15 ans, certains travaux de rénovation de salle de bain ouvrent droit à la TVA réduite à 10 %. Les personnes en situation de handicap ou les seniors peuvent bénéficier de MaPrimeAdapt pour adapter leur salle de bain (douche accessible, barres de maintien). Renseignez-vous auprès de votre mairie ou de l'ANAH."
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    image: "🏗️",
+    author: "L'équipe ServicesArtisans",
     date: "2026-03-02",
     readTime: "8 min",
     category: "Tarifs",
@@ -91,8 +91,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "## Financement et aides à la rénovation",
       "MaPrimeRénov reste le dispositif phare pour les travaux d'amélioration énergétique. L'éco-PTZ permet d'emprunter jusqu'à 50 000 euros à taux zéro pour financer une rénovation globale. Les CEE (Certificats d'Économie d'Énergie) offrent des primes pour l'isolation et le changement de chauffage. Cumuler ces aides peut couvrir 30 à 50 % du coût total."
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    image: "🏗️",
+    author: "L'équipe ServicesArtisans",
     date: "2026-03-05",
     readTime: "8 min",
     category: "Tarifs",
@@ -150,8 +150,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "## Comment choisir son cuisiniste ?",
       "Comparez au minimum 3 devis en vérifiant que chacun détaille les mêmes prestations. Demandez à visiter des réalisations récentes. Un bon cuisiniste propose une visite technique à domicile gratuite pour prendre les mesures et identifier les contraintes. Vérifiez les avis en ligne et demandez des références."
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    image: "🏗️",
+    author: "L'équipe ServicesArtisans",
     date: "2026-03-08",
     readTime: "8 min",
     category: "Tarifs",
@@ -204,13 +204,13 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "Ne négligez pas les postes complémentaires : gouttières (30 à 60 euros/ml posées), zinguerie de raccord (500 à 2 000 euros), velux ou fenêtres de toit (500 à 1 500 euros pose comprise), et échafaudage (15 à 25 euros/m² de façade). Le nettoyage de chantier et l'évacuation des gravats ajoutent 500 à 1 500 euros au devis.",
 
       "## Choisir son couvreur : les points de vigilance",
-      "Exigez la qualification RGE si vous souhaitez bénéficier des aides à la rénovation énergétique. Vérifiez l'assurance décennale du couvreur (obligatoire). Demandez un devis détaillé mentionnant la marque et le type de tuiles, le nombre de m², et le détail de la main-d'oeuvre. Comparez au moins 3 devis avant de vous engager.",
+      "Exigez la qualification RGE si vous souhaitez bénéficier des aides à la rénovation énergétique. Vérifiez l'assurance décennale du couvreur (obligatoire). Demandez un devis détaillé mentionnant la marque et le type de tuiles, le nombre de m², et le détail de la main-d'oeuvre.",
 
       "## Aides financières pour la rénovation de toiture",
       "MaPrimeRénov finance l'isolation de toiture (jusqu'à 75 euros/m² selon les revenus). L'éco-PTZ permet d'emprunter à taux zéro pour financer les travaux. Les CEE offrent des primes allant de 10 à 25 euros/m² pour l'isolation des combles. La TVA est réduite à 5,5 % pour les travaux d'isolation et à 10 % pour la réfection de couverture."
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    image: "🏗️",
+    author: "L'équipe ServicesArtisans",
     date: "2026-03-10",
     readTime: "8 min",
     category: "Tarifs",
@@ -268,8 +268,8 @@ export const renovationArticles: Record<string, BlogArticle> = {
       "## Que faire en cas de litige ?",
       "En cas de désaccord sur le montant ou la qualité des travaux, commencez par une réclamation écrite (lettre recommandée). Si le dialogue échoue, saisissez le médiateur de la consommation (gratuit). En dernier recours, le tribunal judiciaire est compétent. L'assurance protection juridique de votre habitation peut couvrir les frais de procédure."
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
+    image: "🏗️",
+    author: "L'équipe ServicesArtisans",
     date: "2026-03-12",
     readTime: "8 min",
     category: "Conseils",

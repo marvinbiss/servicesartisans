@@ -2,7 +2,9 @@ import type { BlogArticle } from './articles'
 import { villesLight } from '../france-light'
 
 // ---------------------------------------------------------------------------
-// 10 metiers les plus recherches avec donnees tarifaires
+// 5 metiers les plus recherches (reduit de 10 a 5 — Helpful Content cleanup)
+// Les 5 metiers retires (menuisier, macon, couvreur, carreleur, plaquiste)
+// sont rediriges vers leur article prix national dans next.config.js
 // ---------------------------------------------------------------------------
 
 interface Prestation {
@@ -105,93 +107,16 @@ const METIERS: Metier[] = [
     ],
     specialites: ['peinture d\u00E9corative', 'ravalement', 'enduits'],
   },
-  {
-    slug: 'menuisier',
-    name: 'Menuisier',
-    article: 'un menuisier',
-    plural: 'menuisiers',
-    tarifMin: 35,
-    tarifMax: 60,
-    unit: '\u20AC/h',
-    prestations: [
-      { nom: 'Porte int\u00E9rieure (fourni-pos\u00E9)', min: 200, max: 600 },
-      { nom: 'Placard sur mesure', min: 800, max: 3000 },
-      { nom: 'Fen\u00EAtre bois (fourni-pos\u00E9)', min: 400, max: 1200 },
-      { nom: 'Escalier sur mesure', min: 2000, max: 8000 },
-    ],
-    specialites: ['sur-mesure', 'fen\u00EAtres', 'agencement'],
-  },
-  {
-    slug: 'macon',
-    name: 'Ma\u00E7on',
-    article: 'un ma\u00E7on',
-    plural: 'ma\u00E7ons',
-    tarifMin: 40,
-    tarifMax: 70,
-    unit: '\u20AC/h',
-    prestations: [
-      { nom: 'Mur en parpaings', min: 80, max: 150, unite: '\u20AC/m\u00B2' },
-      { nom: 'Fondations', min: 100, max: 200, unite: '\u20AC/ml' },
-      { nom: 'Terrasse b\u00E9ton', min: 50, max: 120, unite: '\u20AC/m\u00B2' },
-      { nom: 'Ouverture dans mur porteur', min: 1500, max: 5000 },
-    ],
-    specialites: ['gros \u0153uvre', 'extension', 'ma\u00E7onnerie g\u00E9n\u00E9rale'],
-  },
-  {
-    slug: 'couvreur',
-    name: 'Couvreur',
-    article: 'un couvreur',
-    plural: 'couvreurs',
-    tarifMin: 40,
-    tarifMax: 65,
-    unit: '\u20AC/h',
-    prestations: [
-      { nom: 'R\u00E9fection toiture', min: 80, max: 200, unite: '\u20AC/m\u00B2' },
-      { nom: 'Nettoyage toiture', min: 15, max: 30, unite: '\u20AC/m\u00B2' },
-      { nom: 'R\u00E9paration fuite toiture', min: 300, max: 900 },
-      { nom: 'Installation velux', min: 500, max: 1500 },
-    ],
-    specialites: ['toiture ardoise', 'toiture tuile', 'zinguerie'],
-  },
-  {
-    slug: 'carreleur',
-    name: 'Carreleur',
-    article: 'un carreleur',
-    plural: 'carreleurs',
-    tarifMin: 30,
-    tarifMax: 55,
-    unit: '\u20AC/h',
-    prestations: [
-      { nom: 'Pose carrelage sol', min: 30, max: 80, unite: '\u20AC/m\u00B2' },
-      { nom: 'Fa\u00EFence murale', min: 35, max: 90, unite: '\u20AC/m\u00B2' },
-      { nom: 'Salle de bain compl\u00E8te', min: 50, max: 120, unite: '\u20AC/m\u00B2' },
-      { nom: 'Mosa\u00EFque', min: 70, max: 150, unite: '\u20AC/m\u00B2' },
-    ],
-    specialites: ['carrelage grand format', 'mosa\u00EFque', 'fa\u00EFence'],
-  },
-  {
-    slug: 'plaquiste',
-    name: 'Plaquiste',
-    article: 'un plaquiste',
-    plural: 'plaquistes',
-    tarifMin: 30,
-    tarifMax: 50,
-    unit: '\u20AC/h',
-    prestations: [
-      { nom: 'Cloison placo', min: 35, max: 65, unite: '\u20AC/m\u00B2' },
-      { nom: 'Faux-plafond', min: 40, max: 80, unite: '\u20AC/m\u00B2' },
-      { nom: 'Doublage isolation', min: 30, max: 60, unite: '\u20AC/m\u00B2' },
-      { nom: 'Bandes et joints', min: 8, max: 15, unite: '\u20AC/ml' },
-    ],
-    specialites: ['cloison', 'isolation', 'faux-plafond'],
-  },
+
 ]
 
 // ---------------------------------------------------------------------------
-// 20 premieres villes (les plus peuplees de villesLight)
+// 10 premieres villes (reduit de 20 a 10 — Helpful Content cleanup)
+// Les 10 villes retirees (rennes, reims, le-havre, saint-etienne, toulon,
+// grenoble, dijon, angers, nimes, villeurbanne) sont redirigees dans next.config.js
 // ---------------------------------------------------------------------------
 
-const TOP_VILLES = villesLight.slice(0, 20)
+const TOP_VILLES = villesLight.slice(0, 10)
 
 // ---------------------------------------------------------------------------
 // Donnees locales enrichies par ville
@@ -397,186 +322,6 @@ const CITY_DATA: Record<string, CityLocalData> = {
     zonesCheres: ['Vieux-Lille', 'R\u00E9publique', 'Solférino'],
     zonesAccessibles: ['Fives', 'Moulins', 'Bois-Blancs'],
     coeffPeripherie: 0.82,
-    delaiMoyen: '2 \u00E0 5 jours',
-  },
-  rennes: {
-    population: 231000,
-    densite: 'moyenne',
-    niveauVie: 105,
-    type: 'grande-metropole',
-    particularites: [
-      'Centre historique \u00E0 pans de bois (colombages) fragiles et prot\u00E9g\u00E9s',
-      'Pluie fr\u00E9quente \u2014 l\u2019\u00E9tanch\u00E9it\u00E9 des toitures et fa\u00E7ades est une priorit\u00E9 absolue',
-      'Ville \u00E9tudiante dynamique avec forte rotation locative',
-      'M\u00E9tro r\u00E9cent ayant revaloris\u00E9 certains quartiers p\u00E9riph\u00E9riques',
-    ],
-    architecture: 'Pans de bois, granite gris breton, ardoise naturelle, enduits color\u00E9s',
-    climat: 'Climat oc\u00E9anique tr\u00E8s pluvieux \u2014 \u00E9tanch\u00E9it\u00E9 critique, lichen sur les toitures ardoise',
-    zonesCheres: ['Centre', 'Thabor', 'Sainte-Anne'],
-    zonesAccessibles: ['Villejean', 'Maurepas', 'Le Blosne'],
-    coeffPeripherie: 0.85,
-    delaiMoyen: '3 \u00E0 5 jours',
-  },
-  reims: {
-    population: 178000,
-    densite: 'moyenne',
-    niveauVie: 95,
-    type: 'ville-moyenne',
-    particularites: [
-      'Patrimoine Art D\u00E9co unique issu de la reconstruction apr\u00E8s 1918',
-      'Caves de champagne class\u00E9es UNESCO \u2014 probl\u00E9matiques d\u2019humidit\u00E9 dans les sous-sols crayeux',
-      'Pierre calcaire champenoise tendre et g\u00E9live n\u00E9cessitant un entretien r\u00E9gulier',
-      'Prix immobiliers mod\u00E9r\u00E9s attirant des investisseurs locatifs \u2014 march\u00E9 r\u00E9novation actif',
-    ],
-    architecture: 'Pierre calcaire champenoise, b\u00E9ton Art D\u00E9co, briques dans les faubourgs',
-    climat: 'Climat oc\u00E9anique d\u00E9grad\u00E9 \u00E0 influence continentale \u2014 hivers froids, gel fr\u00E9quent',
-    zonesCheres: ['Centre-ville', 'Clairmarais', 'Courlancy'],
-    zonesAccessibles: ['Croix-Rouge', 'Orgeval', 'Ch\u00E2tillon'],
-    coeffPeripherie: 0.88,
-    delaiMoyen: '3 \u00E0 7 jours',
-  },
-  'le-havre': {
-    population: 167000,
-    densite: 'moyenne',
-    niveauVie: 88,
-    type: 'ville-cotiere',
-    particularites: [
-      'Centre reconstruit par Auguste Perret class\u00E9 UNESCO \u2014 b\u00E9ton arm\u00E9 des ann\u00E9es 50 avec pathologies sp\u00E9cifiques',
-      'Exposition au vent marin et aux embruns de la Manche \u2014 corrosion rapide',
-      'Appartements Perret aux grandes baies vitr\u00E9es \u2014 probl\u00E8mes de d\u00E9perdition thermique',
-      'Port industriel impactant la qualit\u00E9 de l\u2019air et l\u2019encrassement des fa\u00E7ades',
-    ],
-    architecture: 'B\u00E9ton arm\u00E9 Perret, huisseries m\u00E9talliques d\u2019origine, bardage bois en p\u00E9riph\u00E9rie',
-    climat: 'Climat oc\u00E9anique vent\u00E9 \u2014 vents de Manche violents, pluie fr\u00E9quente, air salin',
-    zonesCheres: ['Centre reconstruit', 'Sainte-Adresse', 'C\u00F4te'],
-    zonesAccessibles: ['Caucriauville', 'Mare Rouge', 'Bois de Bl\u00E9ville'],
-    coeffPeripherie: 0.88,
-    delaiMoyen: '3 \u00E0 7 jours',
-  },
-  'saint-etienne': {
-    population: 173000,
-    densite: 'moyenne',
-    niveauVie: 82,
-    type: 'ville-moyenne',
-    particularites: [
-      'Ancien bassin minier avec habitat ouvrier \u00E0 r\u00E9nover (passoires thermiques)',
-      'Label UNESCO Ville de Design \u2014 r\u00E9habilitations architecturales innovantes',
-      'Prix immobiliers parmi les plus bas de France \u2014 investisseurs locatifs actifs',
-      'Quartiers en pente (collines) compliquant les acc\u00E8s chantier',
-    ],
-    architecture: 'Briques industrielles, enduit ciment, toitures tuile m\u00E9canique, habitat minier',
-    climat: 'Climat semi-continental d\u2019altitude (500m) \u2014 hivers froids et longs, isolation primordiale',
-    zonesCheres: ['Centre-ville', 'Fauriel', 'La M\u00E9tare'],
-    zonesAccessibles: ['Montreynaud', 'Terrenoire', 'La Cotonne'],
-    coeffPeripherie: 0.90,
-    delaiMoyen: '3 \u00E0 7 jours',
-  },
-  toulon: {
-    population: 179000,
-    densite: 'moyenne',
-    niveauVie: 95,
-    type: 'ville-cotiere',
-    particularites: [
-      'Port militaire avec zones d\u2019acc\u00E8s restreint impactant les d\u00E9placements',
-      'Vieille ville m\u00E9di\u00E9vale aux ruelles \u00E9troites \u2014 acc\u00E8s chantier tr\u00E8s complexe',
-      'Corrosion marine intense sur les menuiseries et serrureries',
-      'Forte pression locative estivale li\u00E9e au tourisme',
-    ],
-    architecture: 'Enduits provençaux, tuiles canal, pierre du Var, volets persiennés',
-    climat: 'Climat m\u00E9diterran\u00E9en chaud \u2014 ensoleillement maximal, mistral, embruns marins',
-    zonesCheres: ['Mourillon', 'Cap Brun', 'Faron'],
-    zonesAccessibles: ['La Beaucaire', 'Sainte-Musse', 'Le Jonquet'],
-    coeffPeripherie: 0.82,
-    delaiMoyen: '3 \u00E0 6 jours',
-  },
-  grenoble: {
-    population: 156000,
-    densite: 'moyenne',
-    niveauVie: 105,
-    type: 'ville-montagne',
-    particularites: [
-      'Cuvette alpine entre Vercors, Chartreuse et Belledonne \u2014 pollution hivernale et inondations',
-      'Nombreux immeubles ann\u00E9es 60-70 \u00E0 r\u00E9nover thermiquement (passoires \u00E9nerg\u00E9tiques)',
-      'Village Olympique (1968) \u2014 patrimoine architectural sp\u00E9cifique en r\u00E9habilitation',
-      'Forte sensibilit\u00E9 sismique (zone 4) \u2014 normes parasismiques pour les travaux structurels',
-    ],
-    architecture: 'B\u00E9ton ann\u00E9es 60-70, pierre calcaire dans le vieux centre, bois dans les lotissements',
-    climat: 'Climat montagnard de cuvette \u2014 hivers tr\u00E8s froids, \u00E9t\u00E9s chauds, pluies intenses \u2014 isolation et chauffage critiques',
-    zonesCheres: ['\u00CEle Verte', 'Europole', 'Bajati\u00E8re'],
-    zonesAccessibles: ['Villeneuve', 'Mistral', 'Teisseire'],
-    coeffPeripherie: 0.85,
-    delaiMoyen: '3 \u00E0 6 jours',
-  },
-  dijon: {
-    population: 162000,
-    densite: 'moyenne',
-    niveauVie: 100,
-    type: 'ville-moyenne',
-    particularites: [
-      'H\u00F4tels particuliers Renaissance avec toitures en tuiles verniss\u00E9es bourguignonnes',
-      'Secteur sauvegard\u00E9 avec contraintes ABF sur les ravalements et menuiseries',
-      'Prix immobiliers mod\u00E9r\u00E9s \u2014 march\u00E9 r\u00E9novation dynamique pour investisseurs',
-      'Tram r\u00E9cent ayant revaloris\u00E9 des quartiers p\u00E9riph\u00E9riques',
-    ],
-    architecture: 'Pierre de Bourgogne, tuiles verniss\u00E9es polychromes, colombages dans le centre',
-    climat: 'Climat semi-continental \u2014 hivers froids avec gel r\u00E9gulier, \u00E9t\u00E9s chauds et orageux',
-    zonesCheres: ['Centre historique', 'Toison d\u2019Or', 'Victor Hugo'],
-    zonesAccessibles: ['Fontaine d\u2019Ouche', 'Gr\u00E9silles', 'Chenôve'],
-    coeffPeripherie: 0.87,
-    delaiMoyen: '3 \u00E0 7 jours',
-  },
-  angers: {
-    population: 159000,
-    densite: 'moyenne',
-    niveauVie: 98,
-    type: 'ville-moyenne',
-    particularites: [
-      'Schiste ardoisier local (ardoise d\u2019Angers) \u2014 mat\u00E9riau noble pour toitures et fa\u00E7ades',
-      'Ch\u00E2teau m\u00E9di\u00E9val et remparts \u2014 zone prot\u00E9g\u00E9e avec contraintes ABF',
-      'Proximit\u00E9 de la Loire \u2014 risques de crue dans les quartiers bas',
-      'Qualit\u00E9 de vie \u00E9lev\u00E9e attirant de nouveaux habitants \u2014 march\u00E9 porteur',
-    ],
-    architecture: 'Schiste ardoisier bleu, tuffeau blanc, ardoise naturelle d\u2019Angers',
-    climat: 'Climat oc\u00E9anique doux et humide \u2014 humidit\u00E9 constante, lichen sur les fa\u00E7ades nord',
-    zonesCheres: ['Centre-ville', 'Doutre', 'Lac de Maine'],
-    zonesAccessibles: ['Belle-Beille', 'Monplaisir', 'Roseraie'],
-    coeffPeripherie: 0.88,
-    delaiMoyen: '3 \u00E0 7 jours',
-  },
-  nimes: {
-    population: 152000,
-    densite: 'moyenne',
-    niveauVie: 88,
-    type: 'ville-moyenne',
-    particularites: [
-      'Patrimoine antique romain (Ar\u00E8nes, Maison Carr\u00E9e) \u2014 zone ABF \u00E9tendue',
-      'Risque d\u2019inondation majeur (c\u00E9venoles de 1988 et 2005) \u2014 drainage et \u00E9tanch\u00E9it\u00E9 critiques',
-      '\u00C9cusson m\u00E9di\u00E9val aux rues \u00E9troites \u2014 acc\u00E8s chantier difficile',
-      'Prix immobiliers bas \u2014 forte attractivit\u00E9 pour les investisseurs en r\u00E9novation',
-    ],
-    architecture: 'Pierre calcaire blanche, enduit \u00E0 la chaux, tuiles canal romaines, fer forg\u00E9',
-    climat: 'Climat m\u00E9diterran\u00E9en avec \u00E9pisodes c\u00E9venols violents \u2014 \u00E9tanch\u00E9it\u00E9 et r\u00E9sistance au vent essentielles',
-    zonesCheres: ['\u00C9cusson', 'Route d\u2019Uz\u00E8s', 'Castanet'],
-    zonesAccessibles: ['Pissevin', 'Valdegour', 'Mas de Mingue'],
-    coeffPeripherie: 0.87,
-    delaiMoyen: '3 \u00E0 7 jours',
-  },
-  villeurbanne: {
-    population: 164000,
-    densite: 'forte',
-    niveauVie: 100,
-    type: 'banlieue-parisienne', // actually banlieue lyonnaise, same profile
-    particularites: [
-      'Gratte-Ciel Art D\u00E9co des ann\u00E9es 1930 \u2014 patrimoine architectural unique \u00E0 entretenir',
-      'Ville attenante \u00E0 Lyon sans coupure urbaine \u2014 mêmes artisans, tarifs l\u00E9g\u00E8rement inf\u00E9rieurs',
-      'Forte densit\u00E9 de logements HLM des ann\u00E9es 60-70 \u2014 r\u00E9novation thermique massive en cours',
-      'P\u00F4le universitaire de La Doua \u2014 forte demande locative \u00E9tudiante',
-    ],
-    architecture: 'B\u00E9ton Art D\u00E9co (Gratte-Ciel), HLM ann\u00E9es 60-70, r\u00E9sidences r\u00E9centes',
-    climat: 'Climat semi-continental identique \u00E0 Lyon \u2014 hivers froids, \u00E9t\u00E9s chauds',
-    zonesCheres: ['Gratte-Ciel', 'Charpennes', 'R\u00E9publique'],
-    zonesAccessibles: ['Tonkin', 'Saint-Jean', 'Les Buers'],
-    coeffPeripherie: 0.90,
     delaiMoyen: '2 \u00E0 5 jours',
   },
 }
@@ -817,7 +562,7 @@ function whyPricesVary(m: Metier, v: VilleLight, coeff: number, cd: CityLocalDat
 // ---------------------------------------------------------------------------
 
 function aidesSection(m: Metier, v: VilleLight): string | null {
-  const eligible = ['chauffagiste', 'plombier', 'electricien', 'couvreur', 'plaquiste']
+  const eligible = ['chauffagiste', 'plombier', 'electricien']
   if (!eligible.includes(m.slug)) return null
 
   return [
@@ -846,7 +591,7 @@ function generateFaq(m: Metier, v: VilleLight, coeff: number, cd: CityLocalData)
     },
     {
       question: `O\u00F9 trouver ${m.article} pas cher \u00E0 ${v.name} ?`,
-      answer: `Pour trouver ${m.article} au meilleur prix \u00E0 ${v.name}, privil\u00E9giez les artisans bas\u00E9s en p\u00E9riph\u00E9rie (${cd.zonesAccessibles.join(', ')}) plut\u00F4t qu\u2019en centre-ville (${cd.zonesCheres[0]}). ${cd.densite === 'forte' ? 'La forte concurrence locale vous permet de n\u00E9gocier.' : 'Comparez au moins 3 devis pour trouver le meilleur rapport qualit\u00E9-prix.'} Planifiez vos travaux en basse saison (janvier-mars) et consultez notre [annuaire local](/services/${m.slug}/${v.slug}).`,
+      answer: `Pour trouver ${m.article} au meilleur prix \u00E0 ${v.name}, privil\u00E9giez les artisans bas\u00E9s en p\u00E9riph\u00E9rie (${cd.zonesAccessibles.join(', ')}) plut\u00F4t qu\u2019en centre-ville (${cd.zonesCheres[0]}). ${cd.densite === 'forte' ? 'La forte concurrence locale vous permet de n\u00E9gocier.' : 'Faites jouer la concurrence pour obtenir le meilleur rapport qualit\u00E9-prix.'} Planifiez vos travaux en basse saison (janvier-mars) et consultez notre [annuaire local](/services/${m.slug}/${v.slug}).`,
     },
     {
       question: `Quelles sont les particularit\u00E9s des travaux \u00E0 ${v.name} ?`,
@@ -1019,7 +764,7 @@ function generateArticle(metier: Metier, ville: VilleLight): BlogArticle {
     content,
     image: `/images/blog/prix-${metier.slug}-${ville.slug}.webp`,
     author: "L'\u00E9quipe ServicesArtisans",
-    date: '2026-04-03',
+    date: '2026-03-22',
     readTime: '8 min',
     category: 'Tarifs',
     tags: [metier.name, ville.name, 'Tarifs', `Prix ${metier.name.toLowerCase()}`, ville.departement, ville.region],
@@ -1031,7 +776,7 @@ function generateArticle(metier: Metier, ville: VilleLight): BlogArticle {
 }
 
 // ---------------------------------------------------------------------------
-// Export : 200 articles (10 metiers x 20 villes)
+// Export : 50 articles (5 metiers x 10 villes) — reduced from 200 for Helpful Content
 // ---------------------------------------------------------------------------
 
 export const prixVillesArticles: Record<string, BlogArticle> = {}

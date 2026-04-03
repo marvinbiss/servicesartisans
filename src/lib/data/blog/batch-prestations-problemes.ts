@@ -46,16 +46,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       "## Aides financières disponibles en 2026",
       "Le remplacement d'un chauffe-eau peut bénéficier de plusieurs aides cumulables :\n- **MaPrimeRénov'** : jusqu'à 1 200 € pour un CET, jusqu'à 4 000 € pour un CESI\n- **Certificats d'économies d'énergie (CEE)** : 200 à 400 € selon le modèle\n- **TVA réduite à 5,5 %** pour les logements de plus de 2 ans\n- **Éco-prêt à taux zéro** : financement sans intérêts jusqu'à 15 000 €\n\nPour en bénéficier, l'installation doit être réalisée par un artisan **RGE** (Reconnu Garant de l'Environnement). Consultez notre guide des [aides à la rénovation énergétique](/blog/renovation-energetique-aides-2026).",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **ADEME** — guide des équipements de production d'eau chaude (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 : CET jusqu'à 1 200 €, CESI jusqu'à 4 000 €\n- **Quelleenergie.fr / Thermocom.fr** — baromètre prix chauffe-eau thermodynamique 2026 : 2 500-5 000 € posé\n- **Thermor / Atlantic** — catalogues tarifs fabricants 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Cumulus électrique : **800 – 1 500 €** pose comprise\n- Chauffe-eau thermodynamique : **2 500 – 4 500 €** (éligible aides)\n- Chauffe-eau solaire : **4 000 – 7 000 €** (aides maximales)\n- Toujours faire appel à un professionnel RGE pour bénéficier des aides\n- Comparer **3 devis minimum** avant de s'engager\n:::"
     ],
     image: "/images/blog/prix-remplacement-chauffe-eau-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-10",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Chauffe-eau", "Plomberie", "Tarifs 2026", "Rénovation énergétique"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-15",
     faq: [
       { question: "Combien coûte le remplacement d'un cumulus électrique en 2026 ?", answer: "Le remplacement d'un cumulus électrique coûte entre 800 et 1 500 € pose comprise en 2026, selon la capacité (100 à 300 litres) et la marque choisie. Ce prix inclut la dépose de l'ancien appareil, la fourniture et l'installation du nouveau." },
       { question: "Chauffe-eau thermodynamique ou électrique : lequel choisir ?", answer: "Le thermodynamique coûte plus cher à l'achat (2 500-4 500 € vs 800-1 500 €) mais consomme 3 fois moins d'électricité. Avec les aides (MaPrimeRénov' + CEE), le surcoût est amorti en 4-6 ans. C'est le meilleur choix pour un logement de plus de 2 ans." },
@@ -110,16 +112,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       "## Durée des travaux",
       "Le remplacement d'une baignoire par une douche prend en moyenne :\n- **Douche classique** : 2 à 3 jours\n- **Douche italienne** : 4 à 6 jours (temps de séchage étanchéité)\n- **Douche PMR** : 3 à 5 jours\n\nPrévoyez une salle de bain indisponible pendant toute la durée du chantier. Si c'est votre seule salle d'eau, organisez une solution temporaire.",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Travaux.com / Habitatpresto** — baromètre prix rénovation salle de bain 2026\n- **ANAH / Ma Prime Adapt'** — barèmes officiels 2026 pour l'adaptation du logement\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Douche classique : **2 500 – 4 500 €** tout compris\n- Douche italienne : **4 000 – 8 000 €** (étanchéité critique)\n- Douche PMR : **3 500 – 6 000 €** (aides Ma Prime Adapt' possibles)\n- L'étanchéité est le poste le plus important — ne jamais rogner dessus\n- Comparer **3 devis** de professionnels spécialisés\n:::"
     ],
     image: "/images/blog/prix-remplacement-baignoire-douche-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-11",
     readTime: "11 min",
     category: "Tarifs",
     tags: ["Salle de bain", "Plomberie", "Tarifs 2026", "Douche italienne"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-16",
     faq: [
       { question: "Combien coûte le remplacement d'une baignoire par une douche italienne ?", answer: "En 2026, le remplacement d'une baignoire par une douche italienne coûte entre 4 000 et 8 000 € TTC tout compris. Ce prix inclut la dépose de la baignoire, l'étanchéité, le receveur extra-plat, le carrelage, la robinetterie et la paroi vitrée." },
       { question: "Peut-on installer une douche italienne dans un appartement ?", answer: "Oui, mais c'est plus complexe qu'en maison. Il faut vérifier l'épaisseur de la dalle (minimum 12 cm pour encastrer le receveur) et l'accord de la copropriété si des travaux touchent les parties communes. Un receveur extra-plat (3-5 cm) évite de creuser la dalle." },
@@ -182,16 +186,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nPour un excellent rapport qualité/prix, choisissez un contrecollé chêne avec couche d'usure de 4 mm minimum en pose collée. Vous obtenez l'aspect du massif pour 40-60 % du prix, avec une meilleure stabilité dimensionnelle et une compatibilité plancher chauffant.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Habitatpresto / Travaux.com** — baromètre prix pose parquet 2026 : 20-120 €/m² selon type\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Stratifié : **20 – 45 €/m²** (économique, rapide)\n- Contrecollé : **40 – 80 €/m²** (meilleur rapport qualité/prix)\n- Massif : **60 – 120 €/m²** (premium, très durable)\n- Ajouter **15 – 30 €/m²** si ragréage nécessaire\n- Comparer **3 devis** incluant fourniture et pose\n:::"
     ],
     image: "/images/blog/prix-pose-parquet-m2-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-12",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Parquet", "Revêtement sol", "Tarifs 2026", "Pose"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-17",
     faq: [
       { question: "Quel est le prix moyen de la pose de parquet au m² en 2026 ?", answer: "Le prix moyen tout compris varie de 20-45 €/m² pour du stratifié, 40-80 €/m² pour du contrecollé et 60-120 €/m² pour du massif. La technique de pose influence aussi : flottante (10-20 €/m²), collée (15-30 €/m²), clouée (25-40 €/m²)." },
       { question: "Quel parquet choisir pour un plancher chauffant ?", answer: "Seul le parquet contrecollé ou massif mince (≤ 15 mm) en pose collée est compatible avec un plancher chauffant. Le stratifié est aussi compatible en pose flottante si sa résistance thermique est ≤ 0,15 m².K/W. Évitez les essences exotiques qui conduisent mal la chaleur." },
@@ -249,16 +255,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       "## Contraintes techniques à connaître",
       "Avant de vous lancer, vérifiez ces points avec votre artisan :\n- **Épaisseur de dalle** : minimum 10-12 cm pour encastrer l'évacuation\n- **Pente d'évacuation** : 1 à 2 % minimum vers le siphon\n- **Ventilation** : une VMC performante est indispensable pour éviter la condensation\n- **Copropriété** : en appartement, l'accord du syndic peut être nécessaire si la structure est touchée",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Travaux.com / Habitatpresto** — baromètre prix douche italienne 2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Kit préfabriqué : **2 500 – 4 500 €** (meilleur rapport qualité/prix)\n- Receveur extra-plat : **3 000 – 5 000 €** (solution intermédiaire)\n- Douche maçonnée : **5 000 – 9 000 €** (haut de gamme)\n- L'étanchéité représente 10-15 % du budget mais 90 % du risque\n- Exiger un artisan expérimenté en SPEC\n:::"
     ],
     image: "/images/blog/prix-douche-italienne-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-13",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Douche italienne", "Salle de bain", "Tarifs 2026", "Carrelage"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-18",
     faq: [
       { question: "Quel est le prix d'une douche italienne tout compris en 2026 ?", answer: "Le prix d'une douche italienne varie de 2 500 € (kit préfabriqué) à 9 000 € (maçonnée haut de gamme). La solution la plus courante — receveur extra-plat carrelé avec paroi vitrée — coûte entre 3 000 et 5 000 € tout compris." },
       { question: "Peut-on installer une douche italienne en appartement ?", answer: "Oui, avec certaines contraintes. L'épaisseur de dalle doit être suffisante (≥ 10 cm), et l'accord de la copropriété est requis si la structure est touchée. Les kits préfabriqués et receveurs extra-plats sont les solutions les plus adaptées car ils ne nécessitent pas de creuser la dalle." },
@@ -313,16 +321,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nLors du remplacement du tableau, profitez-en pour installer un **délesteur** (150-300 €) si votre abonnement EDF est limité, et un **contacteur jour/nuit** (30-50 €) pour votre chauffe-eau. Ces petits investissements réduisent votre facture d'électricité de 10 à 15 %.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **IZI by EDF / Ootravaux** — baromètre prix électricien 2026 : 60-80 €/h en moyenne\n- **Norme NF C 15-100** — exigences minimales par type de logement\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Tableau T2-T3 : **800 – 1 500 €** (mise aux normes complète)\n- Tableau T4-T5 : **1 200 – 2 000 €**\n- Grande maison : **2 000 – 3 500 €**\n- La mise aux normes NF C 15-100 est **obligatoire** en cas de rénovation\n- Toujours faire appel à un électricien qualifié et obtenir un **Consuel**\n:::"
     ],
     image: "/images/blog/prix-remplacement-tableau-electrique-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-14",
     readTime: "11 min",
     category: "Tarifs",
     tags: ["Électricité", "Tableau électrique", "Tarifs 2026", "Normes"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-19",
     faq: [
       { question: "Combien coûte le remplacement d'un tableau électrique en 2026 ?", answer: "Le remplacement complet d'un tableau électrique aux normes coûte entre 800 et 1 500 € pour un appartement T2-T3, 1 200 à 2 000 € pour une maison T4-T5, et 2 000 à 3 500 € pour une grande maison. Ce prix inclut le tableau, tous les composants et la main-d'œuvre." },
       { question: "Est-il obligatoire de mettre aux normes son tableau électrique ?", answer: "La mise aux normes NF C 15-100 est obligatoire lors d'une rénovation importante ou d'une vente. Pour un logement occupé sans travaux, il n'y a pas d'obligation légale, mais le diagnostic électrique (obligatoire à la vente pour les logements > 15 ans) peut révéler des anomalies dangereuses." },
@@ -344,7 +354,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
     metaTitle: "Prix ITE 2026 : 100-250€/m² Posé + Aides",
     metaDescription: "Isolation extérieure 2026 : sous enduit 100-180€/m², sous bardage 150-250€/m². PSE, laine de roche, fibre de bois. Aides MaPrimeRénov'.",
     content: [
-      "L'isolation thermique par l'extérieur (ITE) est la solution la plus performante pour supprimer les ponts thermiques et réduire drastiquement les déperditions énergétiques d'un bâtiment. En France, les murs représentent **20 à 25 % des pertes de chaleur** d'une maison mal isolée. L'ITE enveloppe le bâtiment d'un manteau isolant continu, sans réduire la surface habitable. En 2026, c'est aussi l'un des travaux les plus subventionnés grâce à MaPrimeRénov' et aux CEE. Ce guide détaille les prix au m² selon la technique et le matériau choisis. Consultez un [façadier qualifié](/services/facadier) pour un devis adapté.",
+      "L'isolation thermique par l'extérieur (ITE) est la solution la plus performante pour supprimer les ponts thermiques et réduire drastiquement les déperditions énergétiques d'un bâtiment. En France, les murs représentent **20 à 25 % des pertes de chaleur** d'une maison mal isolée (source : ADEME, guide « Isoler sa maison », 2025). L'ITE enveloppe le bâtiment d'un manteau isolant continu, sans réduire la surface habitable. En 2026, c'est aussi l'un des travaux les plus subventionnés grâce à MaPrimeRénov' (jusqu'à 75 €/m² pour les ménages modestes, barèmes ANAH 2026) et aux CEE. Ce guide détaille les prix au m² selon la technique et le matériau choisis. Consultez un [façadier qualifié](/services/facadier) pour un devis adapté.",
 
       "## Prix par technique d'ITE",
 
@@ -388,16 +398,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nAvec MaPrimeRénov' 2026, l'ITE est l'un des travaux les plus subventionnés : jusqu'à **75 €/m²** pour les ménages très modestes (cumul MaPrimeRénov' + CEE). Sur une maison de 100 m² de façade, cela peut représenter **7 500 €** d'aides, ramenant le reste à charge à 5 000-10 000 € au lieu de 12 000-18 000 €.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **ADEME** — guide isolation thermique par l'extérieur (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour l'ITE : jusqu'à 75 €/m² d'aide\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- ITE sous enduit (PSE) : **100 – 160 €/m²** (meilleur rapport qualité/prix)\n- ITE sous bardage : **150 – 250 €/m²** (plus durable, design varié)\n- Fibre de bois : +50-80 % vs PSE mais confort d'été supérieur\n- Aides cumulées jusqu'à **75 €/m²** pour les ménages modestes\n- Déclaration préalable de travaux obligatoire\n:::"
     ],
     image: "/images/blog/prix-isolation-exterieure-ite-m2-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-15",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Isolation", "ITE", "Tarifs 2026", "Rénovation énergétique"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-20",
     faq: [
       { question: "Quel est le prix de l'isolation extérieure au m² en 2026 ?", answer: "L'ITE coûte entre 100 et 180 €/m² sous enduit et 150 à 250 €/m² sous bardage, pose comprise. Pour une maison de 100 m² de façade, le budget total se situe entre 10 000 et 25 000 € avant aides." },
       { question: "Quelles aides pour l'isolation extérieure en 2026 ?", answer: "MaPrimeRénov' accorde 15 à 75 €/m² selon les revenus. Les CEE ajoutent 5 à 12 €/m². La TVA réduite à 5,5 % s'applique automatiquement. Au total, les aides peuvent couvrir 30 à 60 % du coût des travaux pour les ménages modestes." },
@@ -457,16 +469,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nEn copropriété parisienne, le budget réel d'une ouverture de mur porteur (étude BET + accord AG + huissier + assurance DO + travaux) dépasse souvent **10 000 à 15 000 €** au total. Anticipez 6 à 12 mois de démarches avant le début des travaux (convocation AG, délais d'étude, autorisations).\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Ouverture porte : **2 500 – 5 000 €** (étude + IPN + travaux)\n- Ouverture baie : **4 000 – 8 000 €**\n- Suppression complète : **6 000 – 15 000 €**\n- Étude BET **obligatoire** dans tous les cas\n- En copropriété : accord AG + assurance DO + huissier obligatoires\n:::"
     ],
     image: "/images/blog/prix-ouverture-mur-porteur-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-16",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Maçonnerie", "Mur porteur", "Tarifs 2026", "Rénovation"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-21",
     faq: [
       { question: "Combien coûte l'ouverture d'un mur porteur en 2026 ?", answer: "Le prix varie de 2 500 € (ouverture simple pour une porte) à 15 000 € (suppression complète d'un mur long). En copropriété, ajoutez 4 000 à 6 000 € pour les frais annexes obligatoires (BET, huissier, assurance dommages-ouvrage, accord AG)." },
       { question: "Faut-il une autorisation pour ouvrir un mur porteur ?", answer: "En copropriété, oui : l'accord de l'assemblée générale est obligatoire (majorité absolue). En maison individuelle, une déclaration préalable de travaux suffit si la façade est modifiée. L'étude structurelle par un BET est obligatoire dans tous les cas." },
@@ -488,7 +502,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
     metaTitle: "Prix Maison Neuve 2026 : 1 200-2 800€/m²",
     metaDescription: "Construction maison neuve 2026 : traditionnelle 1 400-2 200€/m², ossature bois 1 500-2 500€/m², container 1 200-1 800€/m².",
     content: [
-      "Faire construire sa maison est le projet d'une vie pour de nombreux Français. Mais en 2026, l'évolution des prix des matériaux, les exigences de la RE 2020 et la diversification des techniques constructives rendent l'estimation budgétaire complexe. Faut-il opter pour une maison traditionnelle en parpaing, une ossature bois tendance ou un concept container plus économique ? Ce guide compare les prix au m² pour chaque type de construction et détaille les postes de dépense à ne pas oublier. Pour votre projet, consultez un [constructeur](/services/constructeur) ou un [architecte](/services/architecte) qualifié.",
+      "Faire construire sa maison est le projet d'une vie pour de nombreux Français. Mais en 2026, l'évolution des prix des matériaux, les exigences de la RE 2020 et la diversification des techniques constructives rendent l'estimation budgétaire complexe. Faut-il opter pour une maison traditionnelle en parpaing, une ossature bois tendance ou un concept container plus économique ? Ce guide compare les prix au m² pour chaque type de construction et détaille les postes de dépense à ne pas oublier. Pour votre projet, consultez un [constructeur](/services/macon) ou un [architecte](/services/architecte-interieur) qualifié.",
 
       "## Prix au m² par type de construction",
 
@@ -524,16 +538,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nLe **Prêt à Taux Zéro (PTZ)** 2026 finance jusqu'à 40 % de la construction dans les zones B2 et C pour les primo-accédants. Combiné à un prêt classique, il peut réduire significativement vos mensualités. Vérifiez votre éligibilité sur le site de l'ANIL.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **INSEE** — indice BT01 du coût de la construction\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Maison traditionnelle : **1 400 – 2 200 €/m²** (la plus répandue)\n- Ossature bois : **1 500 – 2 500 €/m²** (meilleure performance thermique)\n- Container : **1 200 – 1 800 €/m²** (la plus économique)\n- Ajouter **20-30 %** au prix de construction pour les frais annexes\n- PTZ 2026 disponible pour les primo-accédants\n:::"
     ],
     image: "/images/blog/prix-construction-maison-neuve-m2-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-17",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Construction", "Maison neuve", "Tarifs 2026", "Ossature bois"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-22",
     faq: [
       { question: "Quel est le prix moyen d'une maison neuve de 120 m² en 2026 ?", answer: "En 2026, une maison de 120 m² coûte entre 168 000 et 300 000 € hors terrain selon le type de construction et le niveau de finition. En ajoutant le terrain et les frais annexes, le budget total se situe entre 250 000 et 450 000 € selon la région." },
       { question: "Maison traditionnelle ou ossature bois : laquelle est la moins chère ?", answer: "La maison traditionnelle est légèrement moins chère à la construction (1 400-2 200 €/m² vs 1 500-2 500 €/m²). Mais l'ossature bois compense par une meilleure isolation naturelle qui réduit les coûts de chauffage de 20-30 %. Sur 20 ans, le coût global est comparable." },
@@ -595,13 +611,13 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- **Purge** (gratuit, 5 min) : résout 50 % des cas de radiateur froid\n- **Vanne thermostatique bloquée** : déblocage facile, remplacement 15-40 €\n- **Désembouage** (300-800 €) : nécessaire si eau noire à la purge\n- **Pression < 1 bar** : remplir via le robinet de remplissage de la chaudière\n- En cas de doute ou d'odeur de gaz → appeler un professionnel\n:::"
     ],
     image: "/images/blog/radiateur-ne-chauffe-pas-causes-solutions.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-18",
     readTime: "10 min",
     category: "Conseils",
     tags: ["Chauffage", "Radiateur", "Dépannage", "DIY"],
     authorBio: "L'équipe ServicesArtisans aide les particuliers à diagnostiquer et résoudre leurs problèmes de maison.",
-    updatedDate: "2026-04-03",
+    updatedDate: "2026-03-23",
     faq: [
       { question: "Pourquoi mon radiateur est froid en haut et chaud en bas ?", answer: "C'est de l'air emprisonné dans la partie haute du radiateur. La solution est une purge : ouvrez la vis de purge en haut du radiateur, laissez l'air s'échapper jusqu'à ce que de l'eau coule, puis refermez. Opération gratuite en 5 minutes." },
       { question: "Comment purger un radiateur sans clé de purge ?", answer: "Si la vis de purge a une encoche plate, utilisez un tournevis plat. Pour les vis hexagonales, une pince suffit. Vous pouvez aussi acheter une clé de purge universelle en quincaillerie pour moins de 3 €." },
@@ -665,13 +681,13 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Microfissure (< 0,2 mm) : généralement bénigne, réparation esthétique suffisante\n- Fissure fine (0,2-2 mm) : surveiller avec témoins pendant 6-12 mois\n- Fissure > 2 mm ou en escalier : **diagnostic BET obligatoire**\n- Tassement différentiel = cause n°1, reprise en sous-œuvre 10 000-30 000 €\n- Toujours documenter (photos datées) pour l'assurance\n:::"
     ],
     image: "/images/blog/fissure-mur-porteur-danger-que-faire.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-19",
     readTime: "11 min",
     category: "Conseils",
     tags: ["Maçonnerie", "Fissures", "Structure", "Diagnostic"],
     authorBio: "L'équipe ServicesArtisans aide les particuliers à diagnostiquer et résoudre leurs problèmes de maison.",
-    updatedDate: "2026-04-03",
+    updatedDate: "2026-03-24",
     faq: [
       { question: "Comment savoir si une fissure dans un mur est dangereuse ?", answer: "Les critères de danger sont : largeur > 2 mm, traversée du mur de part en part, orientation en escalier (suivant les joints), évolution rapide, accompagnée de portes/fenêtres qui coincent. Une fissure fine (< 0,2 mm) superficielle est rarement dangereuse." },
       { question: "Combien coûte la réparation d'une fissure sur un mur porteur ?", answer: "De 20-50 €/m² pour un rebouchage de microfissure à 300-800 € pour une injection de résine, et jusqu'à 10 000-30 000 € pour une reprise en sous-œuvre en cas de tassement différentiel. Le diagnostic BET coûte 500 à 2 000 €." },
@@ -730,13 +746,13 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- **Coup de bélier** : anti-bélier à 30-80 € ou réducteur de pression\n- **Sifflement** : détartrage du mousseur (gratuit) ou des canalisations (150-400 €)\n- **Claquements** : colliers isophoniques à 2-5 € par point de fixation\n- **Gargouillement** : purge des radiateurs (gratuit)\n- Bruit d'eau sans robinet ouvert = fuite → couper l'eau immédiatement\n:::"
     ],
     image: "/images/blog/bruit-tuyauterie-causes-solutions.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-20",
     readTime: "10 min",
     category: "Conseils",
     tags: ["Plomberie", "Tuyauterie", "Dépannage", "DIY"],
     authorBio: "L'équipe ServicesArtisans aide les particuliers à diagnostiquer et résoudre leurs problèmes de maison.",
-    updatedDate: "2026-04-03",
+    updatedDate: "2026-03-25",
     faq: [
       { question: "Pourquoi mes tuyaux claquent quand je ferme le robinet ?", answer: "C'est un coup de bélier : l'eau en mouvement s'arrête brutalement et crée une onde de choc. La solution est d'installer un anti-bélier (30-80 €) ou un réducteur de pression si celle-ci dépasse 3,5 bars. En attendant, fermez les robinets plus lentement." },
       { question: "Les bruits de tuyauterie sont-ils dangereux ?", answer: "La plupart sont bénins (dilatation, air dans le circuit). Mais un coup de bélier violent répété peut provoquer une fuite, et un bruit de bouillonnement dans le chauffe-eau signale une surchauffe dangereuse. Un bruit d'eau sans robinet ouvert indique une fuite invisible." },
@@ -797,13 +813,13 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- **Siphon sec** (cause n°1) : faire couler l'eau 30 secondes → gratuit\n- **Évent bouché** : déboucher ou installer une valve Durgo (30-80 €)\n- **Joint WC** : remplacement 20-150 €\n- **Bouchon** : prévention bicarbonate + vinaigre mensuel\n- Odeur forte et persistante → aérer et appeler un professionnel\n:::"
     ],
     image: "/images/blog/odeur-egout-maison-causes-solutions.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-21",
     readTime: "10 min",
     category: "Conseils",
     tags: ["Plomberie", "Assainissement", "Dépannage", "DIY"],
     authorBio: "L'équipe ServicesArtisans aide les particuliers à diagnostiquer et résoudre leurs problèmes de maison.",
-    updatedDate: "2026-04-03",
+    updatedDate: "2026-03-26",
     faq: [
       { question: "Pourquoi ça sent les égouts dans ma maison ?", answer: "La cause la plus fréquente est un siphon sec : l'eau du siphon s'est évaporée et ne bloque plus les remontées d'odeurs. Faites couler de l'eau dans tous les points d'eau inutilisés. Si l'odeur persiste, vérifiez la ventilation de la colonne de chute et les joints des toilettes." },
       { question: "Comment empêcher les odeurs d'égout dans une résidence secondaire ?", answer: "Avant chaque départ prolongé, versez une cuillère d'huile alimentaire dans chaque siphon pour ralentir l'évaporation. Solution définitive : installez des siphons à membrane (10-20 € pièce) qui maintiennent la garde d'eau pendant plusieurs mois sans écoulement." },
@@ -864,13 +880,13 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- **Condensation** (60 % des cas) : VMC + isolation, 500-3 000 €\n- **Infiltration** : ravalement + hydrofuge, 30-120 €/m²\n- **Remontées capillaires** : injection résine 80-150 €/ml\n- Le test du papier alu identifie la cause en 48h\n- Ne **jamais** masquer l'humidité avec une peinture étanche\n:::"
     ],
     image: "/images/blog/humidite-mur-interieur-traitement-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-22",
     readTime: "12 min",
     category: "Conseils",
     tags: ["Humidité", "Mur", "Traitement", "Diagnostic"],
     authorBio: "L'équipe ServicesArtisans aide les particuliers à diagnostiquer et résoudre leurs problèmes de maison.",
-    updatedDate: "2026-04-03",
+    updatedDate: "2026-03-27",
     faq: [
       { question: "Comment savoir d'où vient l'humidité dans un mur ?", answer: "Le test du papier aluminium est le plus simple : collez une feuille d'alu sur le mur humide pendant 48h. Si l'humidité est entre le mur et l'alu, c'est une infiltration ou une remontée capillaire. Si elle est côté pièce, c'est de la condensation. Pour un diagnostic précis, faites appel à un professionnel avec un hygromètre de profondeur (100-300 €)." },
       { question: "Combien coûte le traitement d'un mur humide ?", answer: "De 500 € (VMC simple pour condensation) à 8 000 € et plus (drainage + injection + ravalement pour un problème complexe). Le diagnostic professionnel (100-300 €) est le meilleur investissement pour cibler le bon traitement et éviter de gaspiller de l'argent." },
@@ -934,13 +950,13 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Prise qui fond = **urgence** → couper le disjoncteur immédiatement\n- Ne JAMAIS réutiliser une prise qui a fondu — remplacement obligatoire\n- Surcharge et mauvais contact sont les 2 causes principales\n- Remplacement par un électricien : **80 – 250 €** selon la complexité\n- Installer un AFDD pour détecter les arcs avant l'incendie\n:::"
     ],
     image: "/images/blog/prise-electrique-qui-fond-danger.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-23",
     readTime: "10 min",
     category: "Sécurité",
     tags: ["Électricité", "Sécurité", "Urgence", "Incendie"],
     authorBio: "L'équipe ServicesArtisans aide les particuliers à diagnostiquer et résoudre leurs problèmes de maison.",
-    updatedDate: "2026-04-03",
+    updatedDate: "2026-03-28",
     faq: [
       { question: "Que faire quand une prise électrique fond ?", answer: "Coupez immédiatement le disjoncteur du circuit concerné (ou le général), ne touchez pas la prise à mains nues, débranchez l'appareil si possible sans danger, aérez la pièce et appelez un électricien. Ne remettez jamais le courant avant le diagnostic d'un professionnel." },
       { question: "Pourquoi ma prise a fondu ?", answer: "Les causes principales sont : surcharge (appareil trop puissant), mauvais contact (vis desserrée, contacts usés), fil sous-dimensionné (1,5 mm² au lieu de 2,5 mm²), ou multiprise en cascade. L'électricien identifiera la cause exacte lors du diagnostic." },
@@ -1001,16 +1017,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nL'injection de résine est le meilleur rapport efficacité/prix pour les remontées capillaires. Choisissez un prestataire qui offre une **garantie décennale** sur le traitement (pas juste 5 ans). Et n'appliquez **jamais** un enduit ciment sur un mur traité pour capillarité — utilisez un enduit à la **chaux** qui laisse le mur respirer et sécher.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- **Injection de résine** : 80-150 €/ml — traitement de référence, 90 % d'efficacité\n- **Drainage périphérique** : 100-200 €/ml — complémentaire si terrain humide\n- **Cuvelage** : 150-300 €/m² — idéal pour caves et sous-sols\n- Diagnostic préalable **indispensable** (200-500 €)\n- Séchage de 6-18 mois après traitement avant finitions\n:::"
     ],
     image: "/images/blog/remontees-capillaires-traitement-prix-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-24",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Humidité", "Remontées capillaires", "Traitement", "Tarifs 2026"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-29",
     faq: [
       { question: "Combien coûte le traitement des remontées capillaires ?", answer: "Le traitement par injection de résine coûte 80-150 €/ml de mur traité, soit 3 200 à 6 000 € pour une maison de 40 ml de périmètre. Le drainage périphérique ajoute 4 000-8 000 €. Le diagnostic préalable coûte 200-500 €." },
       { question: "L'injection de résine est-elle efficace contre les remontées capillaires ?", answer: "Oui, c'est le traitement de référence avec un taux de réussite de 90 %. La résine crée une barrière étanche horizontale dans le mur qui stoppe la remontée d'eau. Les meilleures entreprises offrent une garantie de 10 à 30 ans." },
@@ -1071,16 +1089,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nLa **mini-piscine** (moins de 10 m² de bassin) est la tendance 2026 : pas de déclaration préalable, pas de taxe d'aménagement, entretien réduit, et budget maîtrisé (8 000-18 000 €). Idéale pour les petits jardins urbains et les budgets serrés.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FPP** (Fédération des Professionnels de la Piscine) — observatoire des prix 2025\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Piscine coque : **15 000 – 30 000 €** (rapide, économique)\n- Piscine béton : **25 000 – 60 000 €** (sur mesure, durable)\n- Piscine kit : **10 000 – 20 000 €** (bon compromis)\n- Sécurité **obligatoire** : alarme 200 € à abri 30 000 €\n- Mini-piscine < 10 m² : pas de déclaration ni de taxe\n:::"
     ],
     image: "/images/blog/prix-piscine-enterree-2026-guide.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-25",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Piscine", "Construction", "Tarifs 2026", "Jardin"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-30",
     faq: [
       { question: "Quel est le prix d'une piscine enterrée en 2026 ?", answer: "De 10 000 € (kit panneaux) à 60 000 € (béton projeté haut de gamme). La piscine coque polyester (15 000-30 000 €) offre le meilleur rapport qualité/prix pour une installation rapide. Le béton est plus cher mais entièrement sur mesure." },
       { question: "Faut-il un permis de construire pour une piscine ?", answer: "Une déclaration préalable suffit pour les piscines de 10 à 100 m². Un permis de construire est requis au-delà de 100 m² ou si un abri de plus de 1,80 m de hauteur est prévu. Les mini-piscines de moins de 10 m² sont dispensées de toute formalité." },
@@ -1138,16 +1158,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nProfitez de la réfection de toiture pour isoler par l'extérieur (sarking). Certes, c'est 100-200 €/m² au lieu de 40-80 €/m² pour une isolation sous rampant, mais vous ne touchez pas à l'intérieur (pas de perte de surface habitable sous combles) et l'efficacité thermique est supérieure de 20-30 %. Et avec MaPrimeRénov', les aides peuvent couvrir 30 à 50 % du surcoût.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Travaux.com / Helloartisan** — baromètre prix toiture 2026 : 120-300 €/m² selon matériau\n- **ADEME** — guide isolation toiture (2025)\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Réfection couverture seule : **10 000 – 18 000 €** (maison 100 m²)\n- Réfection + isolation : **16 000 – 28 000 €**\n- Réfection complète : **25 000 – 45 000 €**\n- Tuiles mécaniques : meilleur rapport qualité/prix (40-70 €/m²)\n- Profiter de la réfection pour isoler (aides MaPrimeRénov')\n:::"
     ],
     image: "/images/blog/prix-toiture-complete-refection-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-26",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Toiture", "Couverture", "Tarifs 2026", "Isolation"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-31",
     faq: [
       { question: "Combien coûte la réfection complète d'une toiture en 2026 ?", answer: "Pour une maison de 100 m² au sol (130 m² de toiture), comptez 10 000-18 000 € pour la couverture seule, 16 000-28 000 € avec isolation, et 25 000-45 000 € pour une réfection complète incluant la charpente. Les prix varient selon le matériau et la région." },
       { question: "Quelle est la durée de vie d'une toiture ?", answer: "Tuiles terre cuite : 50-100 ans. Ardoises naturelles : 80-100 ans. Zinc : 50-80 ans. Ardoises fibrociment : 30-40 ans. Bac acier : 30-50 ans. La charpente en bois traité dure 50-100 ans. L'isolation doit être remplacée tous les 30-40 ans." },
@@ -1173,7 +1195,9 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       "## Tableau comparatif des tarifs horaires 2026",
 
-      ":::budget\n| Métier | Province (€ HT/h) | Île-de-France (€ HT/h) | Urgence/WE |\n| Plombier | 40 – 65 € | 55 – 80 € | +50 à 100 % |\n| Électricien | 35 – 60 € | 50 – 75 € | +50 à 100 % |\n| Chauffagiste | 45 – 75 € | 60 – 95 € | +50 à 100 % |\n| Serrurier | 40 – 70 € | 55 – 90 € | +50 à 100 % |\n| Maçon | 35 – 55 € | 45 – 70 € | Rare |\n| Peintre | 25 – 45 € | 35 – 60 € | Rare |\n| Carreleur | 35 – 55 € | 45 – 70 € | Rare |\n| Menuisier | 35 – 55 € | 45 – 70 € | Rare |\n| Couvreur | 40 – 60 € | 50 – 75 € | +30 à 50 % |\n| Charpentier | 40 – 60 € | 50 – 75 € | Rare |\n| Façadier | 35 – 55 € | 45 – 70 € | Rare |\n| Plâtrier | 30 – 50 € | 40 – 65 € | Rare |\n| Terrassier | 40 – 60 € | 50 – 70 € | Rare |\n| Poseur de parquet | 35 – 55 € | 45 – 70 € | Rare |\n| Vitrier | 35 – 55 € | 45 – 70 € | +50 à 100 % |\n| Paysagiste | 30 – 50 € | 40 – 65 € | Rare |\n| Architecte d'intérieur | 60 – 90 € | 80 – 120 € | N/A |\n| Diagnostiqueur | 40 – 60 € | 50 – 70 € | N/A |\n| Climaticien | 45 – 70 € | 55 – 85 € | +50 % |\n| Storiste | 35 – 55 € | 45 – 65 € | Rare |\n:::",
+      "Les tarifs ci-dessous sont issus des enquêtes CAPEB 2025, des baromètres Ootravaux et Obat.fr (2026), et de l'analyse de devis collectés via ServicesArtisans.",
+
+      ":::budget\n| Métier | Province (€ HT/h) | Île-de-France (€ HT/h) | Urgence/WE |\n| Plombier | 40 – 70 € | 55 – 90 € | +50 à 100 % |\n| Électricien | 40 – 65 € | 55 – 80 € | +50 à 100 % |\n| Chauffagiste | 45 – 75 € | 60 – 95 € | +50 à 100 % |\n| Serrurier | 40 – 70 € | 55 – 90 € | +50 à 100 % |\n| Maçon | 40 – 60 € | 50 – 75 € | Rare |\n| Peintre | 25 – 50 € | 35 – 60 € | Rare |\n| Carreleur | 40 – 60 € | 50 – 70 € | Rare |\n| Menuisier | 40 – 60 € | 50 – 70 € | Rare |\n| Couvreur | 40 – 60 € | 50 – 75 € | +30 à 50 % |\n| Charpentier | 40 – 60 € | 50 – 75 € | Rare |\n| Façadier | 35 – 55 € | 45 – 70 € | Rare |\n| Plâtrier | 30 – 50 € | 40 – 65 € | Rare |\n| Terrassier | 40 – 60 € | 50 – 70 € | Rare |\n| Poseur de parquet | 35 – 55 € | 45 – 70 € | Rare |\n| Vitrier | 35 – 55 € | 45 – 70 € | +50 à 100 % |\n| Paysagiste | 30 – 50 € | 40 – 65 € | Rare |\n| Architecte d'intérieur | 60 – 90 € | 80 – 120 € | N/A |\n| Diagnostiqueur | 40 – 60 € | 50 – 70 € | N/A |\n| Climaticien | 45 – 70 € | 55 – 85 € | +50 % |\n| Storiste | 35 – 55 € | 45 – 65 € | Rare |\n:::",
 
       "## Ce qui explique les écarts de tarif",
 
@@ -1199,16 +1223,18 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nDemandez systématiquement un **devis détaillé** séparant main-d'œuvre, fournitures, déplacement et TVA. Cela vous permet de comparer objectivement les offres et d'identifier les postes négociables. Les fournitures sont souvent le poste le plus variable d'un artisan à l'autre.\n:::",
 
+      "## Sources et méthodologie\n\nLes tarifs indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025) : minima de 1 808 € (Niveau I) à 2 750 € (Niveau IV)\n- **Ootravaux / Obat.fr** — baromètre des tarifs artisans par métier (2026)\n- **Tactidevis.fr** — grille des salaires BTP 2025-2026 : hausses de +2,5 % à +4 % prévues\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- **Plombier/électricien** : 35-80 €/h selon la région et l'urgence\n- **Maçon/carreleur/peintre** : 25-70 €/h — rarement facturés à l'heure\n- **Île-de-France** : +25 à 40 % vs province\n- **Urgence soir/WE** : +50 à 100 % sur les métiers d'urgence\n- Toujours préférer un devis forfaitaire pour les travaux planifiés\n:::"
     ],
     image: "/images/blog/tarif-horaire-artisan-comparatif-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-27",
     readTime: "11 min",
     category: "Tarifs",
     tags: ["Tarifs 2026", "Artisan", "Comparatif", "Prix horaire"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-04-01",
     faq: [
       { question: "Quel est le tarif horaire moyen d'un artisan en 2026 ?", answer: "Le tarif horaire moyen se situe entre 35 et 65 € HT en province et 45-85 € HT en Île-de-France. Les métiers les moins chers sont le peintre (25-45 €/h) et le plâtrier (30-50 €/h). Les plus chers sont le chauffagiste (45-95 €/h) et l'architecte d'intérieur (60-120 €/h)." },
       { question: "Pourquoi les artisans en Île-de-France sont plus chers ?", answer: "Les charges en IDF sont 25-40 % plus élevées : loyer de l'atelier/entrepôt, coût du stationnement, assurances, salaires des employés, temps de transport entre chantiers. Ces surcoûts se répercutent sur le tarif horaire." },
@@ -1280,13 +1306,13 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- **DPE F/G → C/D** : ROI 150-300 % — le travail le plus rentable en 2026\n- **Cuisine** : ROI 80-150 % — la pièce qui fait vendre\n- **Salle de bain** : ROI 70-130 % — douche italienne très valorisée\n- **Peinture** : ROI 80-150 % — petit budget, grand impact\n- Éviter la sur-personnalisation et la piscine hors sud\n:::"
     ],
     image: "/images/blog/travaux-augmentent-valeur-maison-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-28",
     readTime: "12 min",
     category: "Conseils",
     tags: ["Rénovation", "Investissement", "Valeur immobilière", "DPE"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-04-02",
     faq: [
       { question: "Quels travaux augmentent le plus la valeur d'une maison ?", answer: "En 2026, la rénovation énergétique (DPE) offre le meilleur ROI (150-300 %), suivie de la cuisine (80-150 %), la salle de bain (70-130 %) et la peinture intérieure (80-150 %). L'extension de surface habitable est aussi très rentable si le prix au m² local est élevé." },
       { question: "Combien une cuisine neuve ajoute-t-elle à la valeur d'une maison ?", answer: "Une cuisine moderne et fonctionnelle augmente la valeur de 8 à 15 % selon l'état initial et la qualité de la rénovation. Sur un bien à 300 000 €, cela représente 24 000 à 45 000 € de plus-value pour un investissement de 5 000 à 20 000 €." },
@@ -1308,7 +1334,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
     metaTitle: "Ordre Travaux Rénovation : 10 Étapes Clés",
     metaDescription: "Ordre des travaux rénovation maison ancienne : démolition → gros œuvre → toiture → isolation → plomberie → électricité → finitions.",
     content: [
-      "Rénover une maison ancienne est un projet passionnant mais complexe qui implique de coordonner une dizaine de corps de métier dans un ordre précis. Inverser deux étapes peut avoir des conséquences coûteuses : refaire une peinture fraîche après un passage de câbles électriques, ou isoler avant d'avoir réparé la toiture qui fuit. Ce guide vous donne la chronologie optimale, éprouvée par des décennies de pratique dans le bâtiment. Pour un suivi professionnel, consultez un [architecte](/services/architecte) ou un [maître d'œuvre](/services/maitre-d-oeuvre).",
+      "Rénover une maison ancienne est un projet passionnant mais complexe qui implique de coordonner une dizaine de corps de métier dans un ordre précis. Inverser deux étapes peut avoir des conséquences coûteuses : refaire une peinture fraîche après un passage de câbles électriques, ou isoler avant d'avoir réparé la toiture qui fuit. Ce guide vous donne la chronologie optimale, éprouvée par des décennies de pratique dans le bâtiment. Pour un suivi professionnel, consultez un [architecte](/services/architecte-interieur) ou un [maître d'œuvre](/services/macon).",
 
       "## Les 10 étapes dans l'ordre",
 
@@ -1365,8 +1391,8 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- **Toujours** : gros œuvre → toiture → menuiseries → isolation → réseaux → finitions\n- **Jamais** : peindre avant la fin de l'électricité/plomberie\n- Plomberie et électricité peuvent se faire **en parallèle**\n- Peinture plafond → carrelage → parquet → peinture murs → appareillage\n- Un architecte ou maître d'œuvre évite les erreurs de séquencement\n:::"
     ],
     image: "/images/blog/ordre-travaux-renovation-maison-ancienne.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-29",
     readTime: "13 min",
     category: "Guides",
     tags: ["Rénovation", "Maison ancienne", "Ordre travaux", "Chronologie"],
@@ -1420,15 +1446,17 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nL'**éco-prêt à taux zéro** (éco-PTZ) finance les travaux d'assainissement non collectif jusqu'à **10 000 €** sans intérêts. De plus, certaines agences de l'eau accordent des subventions de **30 à 50 %** du coût d'installation. Renseignez-vous auprès de votre SPANC et de votre agence de l'eau avant de lancer le projet.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **Agences de l'eau** — barèmes d'aide à l'assainissement non collectif 2025-2026\n- **SPANC** (Services Publics d'Assainissement Non Collectif) — grilles tarifaires indicatives\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux. Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Micro-station 4-5 EH : **8 000 – 12 000 €** installée\n- Plus compacte que la fosse septique (5-10 m² vs 50-150 m²)\n- Entretien : **150-300 €/an** (vidange + électricité)\n- Vérifier l'agrément ministériel avant l'achat\n- Éco-PTZ jusqu'à 10 000 € + aides agences de l'eau\n:::"
     ],
     image: "/images/blog/prix-micro-station-epuration-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-30",
     readTime: "11 min",
     category: "Tarifs",
     tags: ["Assainissement", "Micro-station", "Tarifs 2026", "Normes"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-04-03",
     faq: [
       { question: "Combien coûte une micro-station d'épuration en 2026 ?", answer: "Pour une maison standard (4-5 EH), comptez 8 000 à 12 000 € tout compris (appareil + installation). Ce prix inclut le terrassement, la pose de la cuve, les raccordements et la mise en service. Les modèles plus grands (6-20 EH) coûtent 10 000 à 28 000 €." },
@@ -1487,15 +1515,17 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nEn rénovation, si le passage de gaines est trop complexe ou coûteux, considérez les **VMC double flux décentralisées** (une unité par pièce, installée dans le mur extérieur). Prix : **800 à 1 500 € par unité**, pas besoin de gaines. Idéal pour les appartements et les maisons où les combles ne sont pas accessibles.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **ADEME** — guide ventilation et qualité de l'air intérieur (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour la VMC double flux\n- **Fabricants** (Aldes, Atlantic, Zehnder) — catalogues tarifs 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- VMC double flux : **4 000 – 10 000 €** installée (neuf vs rénovation)\n- Récupère **70-92 %** de la chaleur de l'air extrait\n- Économie de chauffage : **15-25 %** (300-600 €/an)\n- Amortissement : 6-15 ans (4-10 ans avec aides)\n- Alternative rénovation : double flux décentralisée (800-1 500 €/unité)\n:::"
     ],
     image: "/images/blog/prix-vmc-double-flux-2026.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-03-30",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["VMC", "Ventilation", "Tarifs 2026", "Rénovation énergétique"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-04-03",
     faq: [
       { question: "Combien coûte une VMC double flux en 2026 ?", answer: "L'installation complète coûte 4 000 à 7 000 € en construction neuve et 5 000 à 10 000 € en rénovation. Le surcoût en rénovation vient du passage des gaines dans les espaces existants. Le caisson seul représente 1 500 à 3 500 € du budget." },

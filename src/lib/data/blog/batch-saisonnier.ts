@@ -8,7 +8,7 @@ export const saisonnierArticles: Record<string, BlogArticle> = {
     metaTitle: 'Préparer sa Maison pour l\'Hiver : Checklist 2026',
     metaDescription: 'Découvrez la checklist en 8 étapes pour hiverner votre maison : chauffage, isolation, toiture et plomberie. Obtenez un devis gratuit.',
     image: '/images/blog/preparer-maison-hiver-checklist.webp',
-    author: 'ServicesArtisans',
+    author: "L'équipe ServicesArtisans",
     date: '2026-03-06',
     readTime: '12 min',
     category: 'Saisonnier',
@@ -225,7 +225,7 @@ Une bonne préparation hivernale s'organise et se budgétise. Voici un planning 
 En anticipant vos interventions dès octobre, vous bénéficiez d'une meilleure disponibilité des artisans et de tarifs souvent plus avantageux qu'en pleine période de rush (novembre-décembre). Regroupez les interventions pour réduire les frais de déplacement.
 :::
 
-En suivant cette check-list méthodiquement, vous aborderez l'hiver l'esprit tranquille, avec un logement sûr, confortable et économe en énergie. N'hésitez pas à faire appel aux artisans de confiance référencés sur ServicesArtisans pour chaque étape de votre préparation hivernale.`,
+En suivant cette check-list méthodiquement, vous aborderez l'hiver avec un logement sûr, confortable et économe en énergie.`,
     ],
   },
 }

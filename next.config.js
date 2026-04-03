@@ -465,6 +465,65 @@ const nextConfig = {
       // --- batch-energie-2026 (1 article → pillar) ---
       // G23: Extension Maison
       { source: '/blog/extension-maison-prix-m2-2026', destination: '/blog/prix-extension-maison-2026', permanent: true },
+
+      // ====== Helpful Content cleanup — 150 prix×ville redirects (2026-04-03) ======
+      // Reduced from 200 to 50 articles (5 metiers × 10 villes).
+      // 150 removed slugs redirect to their national price article.
+      // Generated programmatically: 5 removed metiers × 20 villes + 5 kept metiers × 10 removed villes
+      ...(() => {
+        const redirects = []
+
+        // Mapping: metier slug → national article slug
+        const nationalArticles = {
+          'plombier': 'prix-plombier-2026-tarifs-horaires',
+          'electricien': 'prix-electricien-2026-tarifs-travaux',
+          'serrurier': 'prix-serrurier-2026-tarifs-interventions',
+          'chauffagiste': 'prix-chauffagiste-2026-installation-entretien',
+          'peintre-en-batiment': 'prix-peintre-batiment-2026-guide-complet',
+          'menuisier': 'prix-menuisier-2026-tarifs-travaux',
+          'macon': 'prix-macon-2026-gros-oeuvre-renovation',
+          'couvreur': 'prix-toiture-2026-refection-reparation-materiaux',
+          'carreleur': 'prix-carreleur-2026-pose-fourniture',
+          'plaquiste': 'prix-platrier-2026-tarifs-platerie',
+        }
+
+        // All 20 original villes
+        const allVilles = [
+          'paris', 'marseille', 'lyon', 'toulouse', 'nice',
+          'nantes', 'strasbourg', 'montpellier', 'bordeaux', 'lille',
+          'rennes', 'reims', 'le-havre', 'saint-etienne', 'toulon',
+          'grenoble', 'dijon', 'angers', 'nimes', 'villeurbanne',
+        ]
+
+        // Kept: 5 metiers × 10 villes (first 10 villes)
+        const keptMetiers = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment']
+        const removedMetiers = ['menuisier', 'macon', 'couvreur', 'carreleur', 'plaquiste']
+        const removedVilles = allVilles.slice(10) // last 10
+
+        // 1) Removed metiers × ALL 20 villes = 100 redirects
+        for (const metier of removedMetiers) {
+          for (const ville of allVilles) {
+            redirects.push({
+              source: `/blog/prix-${metier}-${ville}-2026`,
+              destination: `/blog/${nationalArticles[metier]}`,
+              permanent: true,
+            })
+          }
+        }
+
+        // 2) Kept metiers × removed villes = 50 redirects
+        for (const metier of keptMetiers) {
+          for (const ville of removedVilles) {
+            redirects.push({
+              source: `/blog/prix-${metier}-${ville}-2026`,
+              destination: `/blog/${nationalArticles[metier]}`,
+              permanent: true,
+            })
+          }
+        }
+
+        return redirects // 150 total
+      })(),
     ]
   },
 

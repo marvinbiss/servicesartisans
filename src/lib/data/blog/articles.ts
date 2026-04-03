@@ -139,7 +139,7 @@ const _rawArticles: Record<string, BlogArticle> = {
   ...prixDesignArticles,
   ...prixTechArticles,
   ...prixServicesArticles,
-  ...prixVillesArticles, // 200 articles prix x ville generés programmatiquement
+  ...prixVillesArticles, // 50 articles prix x ville (5 metiers x 10 villes, reduced from 200 for Helpful Content)
   ...aides2026Articles,
   ...urgencesGuidesArticles,
   ...saisonniers2026Articles,

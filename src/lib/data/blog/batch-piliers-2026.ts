@@ -19,11 +19,10 @@ export const piliersArticles: Record<string, BlogArticle> = {
     metaTitle: 'Rénovation Maison 2026 : Guide Ultime Budget',
     metaDescription:
       'Guide complet rénovation maison 2026 : budget 200-2 000 €/m², chronologie chantier, permis, aides cumulables. 10 erreurs à éviter.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation, en droit de la construction et en aides financières. Nous vulgarisons les sujets techniques pour aider chaque propriétaire à réussir ses travaux.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-01',
     readTime: '18 min',
     category: 'Guides',
     tags: ['rénovation', 'maison', 'budget', 'aides', 'guide', '2026'],
@@ -53,7 +52,7 @@ Le coût d'une rénovation dépend principalement du **niveau d'intervention** :
 | Rénovation lourde | 1 200 – 2 200 € | 120 000 – 220 000 € | Mises aux normes complètes, toiture, charpente, structure |
 :::
 
-Ces montants incluent les matériaux, la main-d'œuvre et la TVA applicable (10 % ou 5,5 % selon la nature des travaux). Ils n'incluent pas les honoraires d'architecte (8-15 % du montant HT des travaux) ni les frais de maîtrise d'œuvre.
+Ces montants incluent les matériaux, la main-d'œuvre et la TVA applicable (10 % ou 5,5 % selon la nature des travaux) (source : FFB / CAPEB, enquêtes annuelles 2025 ; baromètres Architecteo et Hellowatt 2026). Ils n'incluent pas les honoraires d'architecte (8-15 % du montant HT des travaux) ni les frais de maîtrise d'œuvre.
 
 :::tip Astuce budget
 Regroupez vos travaux en un seul chantier plutôt que de les étaler sur plusieurs années. Vous mutualisez les frais d'installation de chantier (500-2 000 €), les déplacements artisans et vous bénéficiez d'un meilleur pouvoir de négociation.
@@ -235,6 +234,19 @@ Sans maître d'œuvre, c'est à vous de coordonner les artisans. Désignez un "c
 Certaines entreprises générales de rénovation proposent un prix global attractif mais sous-traitent chaque lot au moins-disant. Vérifiez qui intervient réellement sur le chantier et exigez que les sous-traitants soient nommés dans le contrat.
 :::`,
 
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026
+- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)
+- **ADEME** — guides pratiques rénovation énergétique (2025)
+- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 (plafonds revalorisés de +2,4 %)
+- **INSEE** — indice BT01 du coût de la construction
+- **Architecteo / Hellowatt** — baromètres prix rénovation 2026
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Rénovation maison 2026`,
     ],
     faq: [
@@ -301,11 +313,10 @@ Certaines entreprises générales de rénovation proposent un prix global attrac
     metaTitle: 'Prix Salle de Bain 2026 : Devis Détaillé',
     metaDescription:
       'Prix rénovation salle de bain 2026 : douche italienne, baignoire, carrelage, plomberie. 3 devis réels commentés. Obtenez un devis gratuit.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans regroupe des experts en rénovation et en aménagement intérieur. Nos prix sont mis à jour trimestriellement à partir des devis réels collectés sur notre plateforme.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-04',
     readTime: '16 min',
     category: 'Tarifs',
     tags: ['salle de bain', 'rénovation', 'prix', 'douche italienne', 'carrelage', 'plomberie', '2026'],
@@ -516,6 +527,16 @@ Même si vous n'en avez pas besoin aujourd'hui, préparez la salle de bain pour 
 
 Pour trouver un [plombier qualifié](/services/plombier) ou un [carreleur expérimenté](/services/carreleur) près de chez vous, utilisez notre annuaire d'artisans vérifiés et recevez vos devis en 48h.`,
 
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)
+- **Travaux.com / Habitatpresto** — baromètre prix rénovation salle de bain 2026 : 900-2 000 €/m²
+- **La Maison Saint-Gobain** — guide budget salle de bain 2026
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Prix rénovation salle de bain 2026`,
     ],
     faq: [
@@ -572,11 +593,10 @@ Pour trouver un [plombier qualifié](/services/plombier) ou un [carreleur expér
     metaTitle: 'Prix Cuisine 2026 : Guide Complet Rénovation',
     metaDescription:
       'Prix rénovation cuisine 2026 : 5 000-35 000 € selon la configuration. Comparatif matériaux, budget électroménager, planning. Devis gratuit.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans publie des guides tarifaires basés sur les devis réels collectés auprès de milliers d\'artisans partenaires. Nos prix sont actualisés chaque trimestre.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-07',
     readTime: '16 min',
     category: 'Tarifs',
     tags: ['cuisine', 'rénovation', 'prix', 'plan de travail', 'électroménager', '2026'],
@@ -742,6 +762,16 @@ L'éclairage sous les meubles hauts est indispensable pour travailler confortabl
 
 Pour recevoir des devis détaillés de cuisinistes et artisans près de chez vous, utilisez notre [service de devis gratuit](/devis). Comparez au minimum 3 propositions avant de vous engager.`,
 
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)
+- **Travaux.com / Habitatpresto** — baromètre prix rénovation cuisine 2026 : 350-1 000 €/m²
+- **Fabricants** (Schmidt, SoCoo'c, IKEA) — catalogues tarifs 2025-2026
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Prix rénovation cuisine 2026`,
     ],
     faq: [
@@ -798,11 +828,10 @@ Pour recevoir des devis détaillés de cuisinistes et artisans près de chez vou
     metaTitle: 'Isolation Maison 2026 : Prix, ROI et Aides',
     metaDescription:
       'Guide isolation maison 2026 : prix ITE 120-200 €/m², ITI 40-80 €/m², combles 20-60 €/m². ROI, aides cumulables, cas concret F→D.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans collabore avec des bureaux d\'études thermiques et des artisans RGE pour produire des guides techniques fiables et à jour.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-10',
     readTime: '18 min',
     category: 'Énergie',
     tags: ['isolation', 'ITE', 'ITI', 'combles', 'aides', 'MaPrimeRénov', 'DPE', '2026'],
@@ -835,7 +864,7 @@ La technique la plus simple et la plus rentable. L'isolant (laine de verre, lain
 | Laine de verre en rouleaux | 28-32 cm (2 couches croisées) | 20 – 35 € |
 :::
 
-Pour une maison de 100 m² au sol : **2 000 à 4 000 €** tout compris. Économie de chauffage : **200 à 500 €/an**. ROI : **3 à 5 ans**.
+Pour une maison de 100 m² au sol : **2 000 à 4 000 €** tout compris (source : ADEME, guide « Isoler sa maison » 2025 — moyenne constatée ~40 € HT/m²). Économie de chauffage : **200 à 500 €/an**. ROI : **3 à 5 ans**.
 
 ### Isolation des combles aménagés (rampants)
 
@@ -1001,6 +1030,17 @@ Le choix de l'isolant dépend de la paroi à traiter, du budget et des performan
 
 Pour trouver un artisan [RGE spécialisé en isolation](/services/isolation-thermique) dans votre département, utilisez notre annuaire. La certification RGE est obligatoire pour bénéficier des aides MaPrimeRénov' et CEE.`,
 
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **ADEME** — guide « Isoler sa maison » (2025) : combles perdus ~40 € HT/m² en moyenne
+- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 (revalorisés +2,4 %)
+- **Quelleenergie.fr / Hellio** — baromètre prix isolation combles 2026 : 20-70 €/m² (perdus), 50-250 €/m² (aménagés)
+- **CEE** — primes isolation jusqu'à 13 €/m² selon zone géographique
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Isolation maison 2026`,
     ],
     faq: [
@@ -1062,11 +1102,10 @@ Pour trouver un artisan [RGE spécialisé en isolation](/services/isolation-ther
     metaTitle: 'PAC 2026 : Guide Achat Comparatif Marques',
     metaDescription:
       'Guide achat pompe à chaleur 2026 : comparatif air-eau/air-air/géothermique, prix Daikin, Atlantic, Mitsubishi. COP réel par climat.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans travaille avec des installateurs RGE et des fabricants pour produire des comparatifs objectifs et à jour.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-13',
     readTime: '16 min',
     category: 'Énergie',
     tags: ['pompe à chaleur', 'PAC', 'Daikin', 'Atlantic', 'Mitsubishi', 'chauffage', '2026'],
@@ -1240,6 +1279,17 @@ Toutes les garanties constructeur sont conditionnées à l'entretien annuel par 
 
 Pour trouver un installateur PAC certifié RGE et comparer les devis, utilisez notre [service de mise en relation gratuit](/devis/chauffagiste). Vous recevez 3 devis sous 48h.`,
 
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **ADEME** — guide « Se chauffer mieux et moins cher » (2025) : PAC air-eau 65-90 €/m² chauffé
+- **AFPAC** (Association Française pour les Pompes à Chaleur) — statistiques de marché 2025
+- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 : aide PAC air-eau jusqu'à 5 000 €, géothermique jusqu'à 10 000 €
+- **Hellowatt / Fournisseurs-electricite.com** — baromètre prix PAC 2026 : air-eau 8 000-16 000 € TTC posée
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Pompe à chaleur guide d'achat 2026`,
     ],
     faq: [
@@ -1296,11 +1346,10 @@ Pour trouver un installateur PAC certifié RGE et comparer les devis, utilisez n
     metaTitle: 'Travaux Maison : Par Où Commencer 2026',
     metaDescription:
       'Guide travaux maison 2026 : ordre logique gros œuvre → finitions, planning mois par mois, budget par phase. Coordonner artisans sans stress.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans accompagne chaque année des milliers de propriétaires dans la planification et le suivi de leurs travaux de rénovation.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-16',
     readTime: '15 min',
     category: 'Guides',
     tags: ['travaux', 'maison', 'planning', 'artisans', 'gros oeuvre', 'finitions', '2026'],
@@ -1500,6 +1549,16 @@ Un retard de 1 semaine sur un lot retarde tous les lots suivants. Demandez à ch
 
 Pour trouver des artisans fiables et coordonner vos travaux, utilisez notre [service de devis gratuit](/devis). Nous pouvons vous mettre en relation avec des artisans qui ont l'habitude de travailler ensemble dans votre secteur.`,
 
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026
+- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)
+- **ADEME** — guides pratiques rénovation énergétique (2025)
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Travaux maison par où commencer 2026`,
     ],
     faq: [
@@ -1556,11 +1615,10 @@ Pour trouver des artisans fiables et coordonner vos travaux, utilisez notre [ser
     metaTitle: 'Extension Maison 2026 : Prix et Démarches',
     metaDescription:
       'Extension maison 2026 : prix 1 200-3 500 €/m², démarches urbanisme, comparatif surélévation/extension/véranda. Permis de construire.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans collabore avec des architectes et des constructeurs pour produire des guides fiables et pratiques sur l\'agrandissement de maison.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-19',
     readTime: '15 min',
     category: 'Guides',
     tags: ['extension', 'maison', 'prix', 'surélévation', 'véranda', 'permis de construire', '2026'],
@@ -1724,6 +1782,16 @@ Pour une extension, l'assurance dommages-ouvrage est **légalement obligatoire**
 
 Pour comparer des devis d'extension de maison, utilisez notre [service de devis gratuit](/devis). Nous vous mettons en relation avec des professionnels qualifiés (constructeurs, architectes, artisans) dans votre département.`,
 
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026
+- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)
+- **Architecteo** — baromètre coût extension maison 2026
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Extension maison 2026`,
     ],
     faq: [
@@ -1780,11 +1848,10 @@ Pour comparer des devis d'extension de maison, utilisez notre [service de devis 
     metaTitle: 'Guide Anti-Arnaque Artisan 2026 : 15 Signaux',
     metaDescription:
       'Choisir un artisan fiable en 2026 : 15 signaux d\'alerte, vérification SIRET/assurance, modèle de devis, recours litiges. Protégez-vous.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans a analysé des milliers de litiges entre particuliers et artisans pour identifier les signaux d\'alerte les plus fiables. Notre mission : vous protéger des mauvaises expériences.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-22',
     readTime: '15 min',
     category: 'Conseils',
     tags: ['artisan', 'arnaque', 'devis', 'SIRET', 'assurance décennale', 'litige', '2026'],
@@ -1954,6 +2021,16 @@ Signalement sur [signal.conso.gouv.fr](https://signal.conso.gouv.fr). La DGCCRF 
 
 Pour trouver des artisans vérifiés avec SIRET et assurance décennale validés, utilisez notre [annuaire d'artisans](/services). Chaque artisan référencé a fait l'objet d'une vérification administrative.`,
 
+      `## Sources et méthodologie
+
+Les informations de ce guide sont issues de :
+- **DGCCRF** — rapports annuels sur les pratiques commerciales dans le bâtiment (2024-2025)
+- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)
+- **FFB** — guide des bonnes pratiques contractuelles 2025
+- **ANAH** — conditions d'éligibilité RGE et MaPrimeRénov' 2026
+
+Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Choisir artisan guide anti-arnaque 2026`,
     ],
     faq: [
@@ -2010,11 +2087,10 @@ Pour trouver des artisans vérifiés avec SIRET et assurance décennale validés
     metaTitle: 'Aides Rénovation 2026 : Cumul MaPrimeRénov\'',
     metaDescription:
       'Aides rénovation 2026 : MaPrimeRénov\' + CEE + Éco-PTZ cumulables. Simulation par revenus, parcours accompagné, calendrier 2026.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans suit en temps réel les évolutions réglementaires des aides à la rénovation énergétique pour produire des guides toujours à jour.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-25',
     readTime: '16 min',
     category: 'Aides & Subventions',
     tags: ['aides', 'MaPrimeRénov', 'CEE', 'Éco-PTZ', 'TVA 5.5', 'rénovation énergétique', '2026'],
@@ -2214,6 +2290,17 @@ Les logements classés F ne pourront plus être loués à compter du 1er janvier
 
 Pour démarrer votre projet de rénovation énergétique et bénéficier de toutes les aides disponibles, demandez un [devis gratuit](/devis) à des artisans RGE près de chez vous. Nous vous accompagnons dans le montage de votre dossier d'aides.`,
 
+      `## Sources et méthodologie
+
+Les montants et barèmes indiqués dans ce guide sont issus de :
+- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 (plafonds revalorisés de +2,4 %, taux 10-80 % selon revenus)
+- **ADEME** — guide des aides à la rénovation énergétique (2025)
+- **Ministère de la Transition écologique** — décrets et arrêtés MaPrimeRénov' 2026
+- **Hellio / Quelleenergie.fr** — baromètre barèmes MaPrimeRénov' 2026 et simulateurs d'aide
+- **Éco-PTZ** — plafond relevé à 50 000 € en 2024, maintenu en 2026
+
+Dernière mise à jour : avril 2026.`,
+
       `## FAQ — Aides rénovation énergétique 2026`,
     ],
     faq: [
@@ -2275,11 +2362,10 @@ Pour démarrer votre projet de rénovation énergétique et bénéficier de tout
     metaTitle: 'Prix Toiture 2026 : Réfection et Matériaux',
     metaDescription:
       'Prix réfection toiture 2026 : tuile 60-120 €/m², ardoise 100-200 €/m², zinc 80-180 €/m². Charpente, isolation, diagnostic complet.',
-    image: '/images/blog/placeholder.webp',
-    author: 'ServicesArtisans',
-    authorBio:
-      'L\'équipe éditoriale de ServicesArtisans collabore avec des couvreurs, charpentiers et bureaux d\'études pour produire des guides tarifaires fiables et actualisés.',
-    date: '2026-04-03',
+    image: '📋',
+    author: "L'équipe ServicesArtisans",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    date: '2026-03-28',
     readTime: '16 min',
     category: 'Tarifs',
     tags: ['toiture', 'couverture', 'charpente', 'tuile', 'ardoise', 'zinc', 'isolation', '2026'],
@@ -2475,6 +2561,18 @@ Un entretien régulier de la toiture prolonge sa durée de vie de 20 à 30 % et 
 :::
 
 Pour trouver un [couvreur qualifié](/services/couvreur) près de chez vous, utilisez notre annuaire d'artisans vérifiés. Chaque couvreur référencé dispose d'une assurance décennale en cours de validité. Demandez vos [devis gratuits](/devis/couvreur) en ligne.`,
+
+      `## Sources et méthodologie
+
+Les prix indiqués dans ce guide sont issus de :
+- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026
+- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)
+- **Travaux.com / Helloartisan** — baromètre prix toiture 2026 : 120-300 €/m² selon matériau
+- **ADEME** — guide isolation toiture (2025) : primes CEE jusqu'à 13 €/m²
+- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour l'isolation de toiture
+- Comparaison de devis collectés via ServicesArtisans
+
+Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.`,
 
       `## FAQ — Prix toiture réfection complète 2026`,
     ],

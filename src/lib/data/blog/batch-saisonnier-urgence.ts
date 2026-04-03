@@ -7,7 +7,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
     metaTitle: "Plombier Urgence Nuit 2026 : Tarifs Réels",
     metaDescription: "Découvrez les vrais tarifs d'un plombier d'urgence la nuit en 2026. Majorations légales et conseils anti-arnaques. Devis gratuit.",
     content: [
-      "Il est 2 heures du matin, une fuite d'eau inonde votre cuisine, et la panique s'installe. Chaque année en France, plus de **500 000 dégâts des eaux** sont déclarés aux assurances, et une part significative survient la nuit ou le week-end. Dans ces moments de stress, il est tentant d'appeler le premier numéro trouvé sur Google — mais c'est aussi le meilleur moyen de se faire facturer trois fois le prix normal. Ce guide vous donne les **vrais tarifs 2026** d'un [plombier d'urgence](/services/plombier) intervenant la nuit, et les réflexes à adopter pour limiter la facture.",
+      "Chaque année en France, plus de **500 000 dégâts des eaux** sont déclarés aux assurances, et une part significative survient la nuit ou le week-end. Appeler le premier numéro trouvé sur Google en urgence, c'est risquer une facture trois fois supérieure au tarif normal. Ce guide détaille les **vrais tarifs 2026** d'un [plombier d'urgence](/services/plombier) intervenant la nuit, et les réflexes pour limiter la facture.",
 
       "## Les tarifs d'un plombier d'urgence la nuit en 2026",
 
@@ -119,7 +119,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
     metaTitle: "Panne Clim Canicule 2026 : Urgence et Tarifs",
     metaDescription: "Climatisation en panne pendant la canicule ? Gestes d'urgence et tarifs dépannage 2026. Obtenez un devis gratuit rapidement.",
     content: [
-      "Quand le thermomètre dépasse les 40 °C — ce qui est devenu courant chaque été en France depuis 2022 — une climatisation en panne peut transformer votre logement en fournaise. Selon Météo-France, la France a connu **8 épisodes caniculaires** entre 2022 et 2025, et les projections 2026 ne sont pas plus optimistes. Le problème : les techniciens frigoristes sont débordés en période de canicule, avec des délais d'intervention de **5 à 10 jours**. Voici comment réagir et trouver un [spécialiste climatisation](/services/climatisation) rapidement.",
+      "Quand le thermomètre dépasse les 40 °C — ce qui est devenu courant chaque été en France depuis 2022 — une climatisation en panne peut transformer votre logement en fournaise. Selon Météo-France, la France a connu **8 épisodes caniculaires** entre 2022 et 2025, et les projections 2026 ne sont pas plus optimistes. Le problème : les techniciens frigoristes sont débordés en période de canicule, avec des délais d'intervention de **5 à 10 jours**. Voici comment réagir et trouver un [spécialiste climatisation](/services/climaticien) rapidement.",
 
       "## Les pannes de clim les plus fréquentes en été",
 
@@ -138,7 +138,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       "En attendant le technicien : **fermez volets et rideaux** côté soleil dès le matin, **créez des courants d'air** la nuit (ventilation traversante), placez un **linge humide devant un ventilateur** (principe du rafraîchissement adiabatique), et **hydratez-vous** régulièrement. Si la température intérieure dépasse 35 °C et que vous avez des personnes vulnérables, contactez le **numéro vert canicule (0 800 06 66 66)**.",
 
       "## Trouver un technicien climatisation en urgence",
-      "Les frigoristes qualifiés possèdent obligatoirement une **attestation de capacité** pour manipuler les fluides frigorigènes (règlement européen F-Gas). Vérifiez cette certification avant de confier votre clim à un « dépanneur multiservices ». En période caniculaire, les professionnels référencés sur notre [annuaire climatisation](/services/climatisation) affichent leurs disponibilités et délais réels.",
+      "Les frigoristes qualifiés possèdent obligatoirement une **attestation de capacité** pour manipuler les fluides frigorigènes (règlement européen F-Gas). Vérifiez cette certification avant de confier votre clim à un « dépanneur multiservices ». En période caniculaire, les professionnels référencés sur notre [annuaire climatisation](/services/climaticien) affichent leurs disponibilités et délais réels.",
 
       "## Prévenir les pannes : l'entretien au printemps",
       "L'entretien annuel d'un climatiseur split coûte entre **100 et 180 €** et comprend : nettoyage des filtres, vérification de la charge de gaz, contrôle électrique, et nettoyage de l'unité extérieure. Idéalement, planifiez cet entretien en **avril-mai**, avant la saison chaude. Les appareils de plus de 2 kg de fluide frigorigène doivent faire l'objet d'un **contrôle d'étanchéité obligatoire** annuel (règlement F-Gas).",
@@ -428,7 +428,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
     metaTitle: "Entretien Clim Printemps 2026 : Guide",
     metaDescription: "Découvrez les étapes d'entretien climatisation au printemps : contrôle, nettoyage et tarifs 2026. Obtenez un devis gratuit.",
     content: [
-      "Votre climatisation a passé l'hiver au repos et accumule poussière, moisissures et bactéries dans ses filtres et échangeurs. La remettre en route sans entretien préalable, c'est s'exposer à des **problèmes de santé** (allergies, syndrome des bâtiments malsains), une **surconsommation d'énergie** de 15 à 25 %, et un risque élevé de **panne en pleine canicule**. Le printemps est le moment idéal pour un entretien complet. Trouvez un [technicien climatisation](/services/climatisation) qualifié près de chez vous.",
+      "Votre climatisation a passé l'hiver au repos et accumule poussière, moisissures et bactéries dans ses filtres et échangeurs. La remettre en route sans entretien préalable, c'est s'exposer à des **problèmes de santé** (allergies, syndrome des bâtiments malsains), une **surconsommation d'énergie** de 15 à 25 %, et un risque élevé de **panne en pleine canicule**. Le printemps est le moment idéal pour un entretien complet. Trouvez un [technicien climatisation](/services/climaticien) qualifié près de chez vous.",
 
       "## Les étapes d'entretien à réaliser soi-même",
 

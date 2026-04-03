@@ -38,12 +38,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Vérifier le **SIRET** et la certification **Qualifelec**\n- Exiger l'**attestation d'assurance décennale** à jour\n- Comparer **trois devis détaillés** (marques, modèles, prix unitaires)\n- Exiger le certificat **Consuel** après installation neuve\n- Ne jamais verser plus de **30 % d'acompte**\n:::"
     ],
     image: "/images/blog/choisir-electricien.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-20",
     readTime: "14 min",
     category: "Conseils",
     tags: ["Électricité", "Conseils", "Artisans"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelles certifications doit avoir un bon électricien ?", answer: "Un bon électricien doit détenir au minimum une habilitation électrique à jour. La certification Qualifelec est le label de référence attestant de la maîtrise des normes. Le label RGE est indispensable pour les travaux liés aux énergies renouvelables (panneaux solaires, bornes de recharge) et pour bénéficier des aides de l'État. Pour les bornes de recharge, la certification IRVE est obligatoire depuis 2017." },
@@ -99,12 +99,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Trouver un serrurier **avant** l'urgence via ServicesArtisans\n- Connaître les prix normaux : ouverture simple **80 – 150 €** en journée\n- Exiger un **devis écrit** avant toute intervention (obligatoire au-delà de 150 €)\n- Se méfier des tarifs excessifs et des diagnostics alarmistes\n- Vérifier le **SIRET** et demander une **facture détaillée**\n:::"
     ],
     image: "/images/blog/choisir-serrurier.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-22",
     readTime: "13 min",
     category: "Conseils",
     tags: ["Serrurerie", "Conseils", "Urgence"],
-    authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Comment trouver un serrurier honnête en urgence ?", answer: "Le meilleur moyen est de repérer un serrurier de confiance avant d'en avoir besoin. Consultez les avis vérifiés sur ServicesArtisans, demandez des recommandations à votre entourage, et enregistrez les coordonnées dans votre téléphone. En urgence, appelez directement ce contact plutôt que de chercher sur internet." },
@@ -161,12 +161,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Exiger le label **RGE** et les certifications spécifiques (QualiPAC, QualiBois)\n- Vérifier l'**assurance décennale** avant signature\n- Exiger un **bilan thermique** avant tout dimensionnement\n- Comparer **trois devis** incluant marque, modèle et COP\n- Privilégier un professionnel proposant l'**entretien** sur le long terme\n:::"
     ],
     image: "/images/blog/choisir-chauffagiste.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-25",
     readTime: "14 min",
     category: "Conseils",
     tags: ["Chauffage", "Conseils", "Énergie"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Pourquoi le label RGE est-il si important pour un chauffagiste ?", answer: "Le label RGE est obligatoire pour que vos travaux soient éligibles aux aides financières (MaPrimeRénov', CEE, éco-PTZ). Sans artisan RGE, vous perdez des milliers d'euros d'aides. Le label atteste aussi d'une formation spécifique et de la maîtrise des équipements modernes (PAC, solaire thermique). Vérifiez la validité sur france-renov.gouv.fr." },
@@ -213,12 +213,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Identifier votre besoin : menuisier **intérieur**, **extérieur** ou **ébéniste**\n- Vérifier **Qualibat** et **RGE** (pour les fenêtres éligibles aux aides)\n- Exiger une **prise de cotes sur site** (jamais à distance)\n- Comparer trois devis avec **coefficients thermiques** (Uw)\n- Choisir un menuisier proposant un **SAV** sérieux\n:::"
     ],
     image: "/images/blog/choisir-menuisier.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-28",
     readTime: "13 min",
     category: "Conseils",
     tags: ["Menuiserie", "Conseils", "Rénovation"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Comment choisir entre un menuisier bois, alu ou PVC ?", answer: "Le bois offre esthétique noble et excellentes performances thermiques mais demande un entretien. L'aluminium est robuste et contemporain, idéal pour les grandes baies. Le PVC est le choix économique avec un bon rapport qualité-prix et zéro entretien. Un bon menuisier vous conseille le matériau adapté à votre projet, budget et style." },
@@ -262,12 +262,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Vérifier **CAP Carreleur-mosaïste** et certification **Qualibat**\n- Demander des **photos** de réalisations récentes\n- Exiger un devis incluant la **préparation du support**\n- Pour la douche italienne : exiger l'expérience en **étanchéité SPEC**\n- Contrôler les **assurances** (décennale + parfait achèvement)\n:::"
     ],
     image: "/images/blog/choisir-carreleur.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-30",
     readTime: "13 min",
     category: "Conseils",
     tags: ["Carrelage", "Conseils", "Rénovation"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelles qualifications doit avoir un bon carreleur ?", answer: "Un carreleur qualifié détient un CAP Carreleur-mosaïste ou un BP dans la même spécialité. La certification Qualibat en carrelage est un gage supplémentaire. Pour les travaux en pièces humides, vérifiez qu'il maîtrise les systèmes d'étanchéité sous carrelage (SPEC) conformes au DTU 52.2." },
@@ -307,12 +307,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Vérifier **CAP Maçon** et certification **Qualibat** gros œuvre\n- Exiger l'attestation de **garantie décennale** avant toute signature\n- Demander un devis détaillant **fondations et matériaux**\n- Faire réaliser une **étude de sol** si nécessaire\n- Suivre le chantier de près et formaliser la **réception des travaux**\n:::"
     ],
     image: "/images/blog/choisir-macon.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-01",
     readTime: "14 min",
     category: "Conseils",
     tags: ["Maçonnerie", "Conseils", "Construction"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "L'étude de sol est-elle obligatoire avant de construire ?", answer: "Depuis la loi Élan de 2018, l'étude géotechnique est obligatoire pour les maisons individuelles dans les zones exposées au retrait-gonflement des argiles (environ 50 % du territoire). Même hors zone à risque, elle est fortement recommandée. Son coût (800 – 2 000 €) est modeste comparé aux conséquences d'un mauvais dimensionnement des fondations." },
@@ -354,12 +354,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Vérifier **CAP Couvreur**, **Qualibat** et **RGE** (si isolation)\n- Exiger la **montée sur toit** pour le diagnostic (pas de devis depuis le sol)\n- Contrôler la **garantie décennale** couvrant les travaux de couverture\n- **Méfiez-vous du démarchage** abusif au porte-à-porte\n- Choisir un couvreur respectant les **règles de sécurité** (harnais, échafaudage)\n:::"
     ],
     image: "/images/blog/choisir-couvreur.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-03",
     readTime: "14 min",
     category: "Conseils",
     tags: ["Couverture", "Conseils", "Toiture"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Comment reconnaître un couvreur sérieux ?", answer: "Un couvreur sérieux détient un CAP Couvreur, est certifié Qualibat, dispose d'une garantie décennale valide, monte sur le toit pour le diagnostic (jamais de devis depuis le sol), respecte les règles de sécurité (harnais, échafaudage), et ne fait jamais de démarchage au porte-à-porte." },
@@ -401,12 +401,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Distinguer **entretien** (jardinier) et **création** (paysagiste)\n- Vérifier **BTSA**, **Qualipaysage** ou **CS élagage** selon le besoin\n- Exiger un **plan et un devis détaillé** pour les aménagements\n- Privilégier les professionnels qui **visitent le terrain** avant de chiffrer\n- Profiter du **crédit d'impôt de 50 %** pour l'entretien courant\n:::"
     ],
     image: "/images/blog/choisir-jardinier.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-04",
     readTime: "13 min",
     category: "Conseils",
     tags: ["Jardin", "Conseils", "Paysagisme"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle est la différence entre un jardinier et un paysagiste ?", answer: "Le jardinier réalise les travaux d'entretien (tonte, taille, désherbage). Le paysagiste conçoit et réalise des aménagements élaborés (création de jardins, terrasses, allées, systèmes d'arrosage). Certains professionnels cumulent les deux compétences. Identifiez clairement votre besoin avant de chercher." },
@@ -448,12 +448,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Identifier un vitrier de confiance **avant l'urgence**\n- Connaître les prix normaux : double vitrage **100 – 250 €/m²**\n- Exiger un devis avec le coefficient **Ug** du vitrage\n- Déclarer le bris de glace à l'assurance dans les **5 jours**\n- Privilégier le **double vitrage VIR** pour la rénovation\n:::"
     ],
     image: "/images/blog/choisir-vitrier.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-05",
     readTime: "13 min",
     category: "Conseils",
     tags: ["Vitrerie", "Conseils", "Urgence"],
-    authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Comment choisir un vitrier en urgence ?", answer: "Idéalement, identifiez un vitrier avant l'urgence via ServicesArtisans. En cas de bris, sécurisez d'abord la zone et protégez l'ouverture. Appelez votre contact de confiance plutôt que le premier résultat Google. Exigez un devis avec le type de vitrage, les dimensions et le coefficient Ug." },
@@ -493,12 +493,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Vérifier l'**attestation de capacité** (fluides frigorigènes) et **QualiPAC**\n- Exiger un **bilan thermique** avant le dimensionnement\n- Comparer trois devis avec **SEER, SCOP** et niveau sonore\n- Tenir compte des contraintes **acoustiques** et de copropriété\n- Prévoir un **contrat d'entretien** annuel (100 – 200 €)\n:::"
     ],
     image: "/images/blog/choisir-climaticien.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-06",
     readTime: "13 min",
     category: "Conseils",
     tags: ["Climatisation", "Conseils", "Énergie"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Qu'est-ce que l'attestation de capacité pour les fluides frigorigènes ?", answer: "C'est un document obligatoire prouvant que le professionnel est habilité à manipuler les fluides frigorigènes (gaz utilisés dans les climatiseurs et PAC). Elle est délivrée par un organisme agréé après vérification des compétences et de l'équipement. Sans cette attestation, l'installation est illégale." },
@@ -540,12 +540,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Comparer les approches : **enseigne**, **indépendant** ou **artisan menuisier**\n- Exiger une **prise de cotes sur site** et un **plan 3D**\n- Décortiquer les devis **poste par poste** (mobilier, électroménager, pose, travaux)\n- Vérifier **qui réalise la pose** et les garanties associées\n- Inspecter minutieusement à la **réception** et noter les réserves\n:::"
     ],
     image: "/images/blog/choisir-cuisiniste.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-07",
     readTime: "14 min",
     category: "Conseils",
     tags: ["Cuisine", "Conseils", "Aménagement"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Cuisiniste indépendant ou grande enseigne : que choisir ?", answer: "Les grandes enseignes offrent un large choix et des outils 3D performants, mais la pose est souvent sous-traitée. Le cuisiniste indépendant propose un accompagnement personnalisé et maîtrise mieux la pose. L'artisan menuisier réalise du sur-mesure intégral. Le choix dépend de votre budget et de vos exigences de personnalisation." },
@@ -587,12 +587,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       ":::takeaway\n- Rédiger un **cahier des charges précis** avant de demander des devis\n- Vérifier la certification **Qualipropre** et l'**attestation URSSAF**\n- Comparer les devis sur des **bases identiques**\n- Poser les questions sur le **personnel** et le **contrôle qualité**\n- Privilégier les entreprises avec une **démarche qualité** structurée\n:::"
     ],
     image: "/images/blog/choisir-nettoyage.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-08",
     readTime: "13 min",
     category: "Conseils",
     tags: ["Nettoyage", "Conseils", "Professionnel"],
-    authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Comment vérifier qu'une entreprise de nettoyage est sérieuse ?", answer: "Vérifiez la certification Qualipropre, l'attestation de vigilance URSSAF (prouvant le respect des obligations sociales), l'assurance RC professionnelle, et les avis clients. Demandez le taux de rotation du personnel (un taux élevé est synonyme de qualité instable) et les procédures de contrôle qualité." },
@@ -633,12 +633,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       "ServicesArtisans met en relation les particuliers avec des [plombiers vérifiés dans toute la France](/services/plombier) (SIRET, assurances, qualifications). Si vous êtes plombier et souhaitez développer votre activité, créez votre profil sur la plateforme pour accéder à une clientèle qualifiée dans votre zone d'intervention. Consultez aussi notre [guide pour choisir un plombier](/blog/comment-choisir-son-plombier) et nos [tarifs de plomberie](/blog/prix-plombier-2026-tarifs-horaires)."
     ],
     image: "/images/blog/metier-plombier.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-18",
     readTime: "14 min",
     category: "Fiches métier",
     tags: ["Plomberie", "Formation", "Métier"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir plombier ?", answer: "Le parcours classique débute par un CAP Monteur en installations sanitaires (2 ans après la 3e). Le BP Monteur en installations du génie climatique et sanitaire approfondit la formation. Le Bac Pro TISEC offre un cursus de 3 ans plus large. Des formations accélérées (6-12 mois) existent aussi pour la reconversion professionnelle." },
@@ -681,12 +681,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       "ServicesArtisans vérifie les qualifications et les assurances de chaque électricien référencé. Si vous êtes électricien, rejoignez la plateforme pour développer votre clientèle et valoriser vos certifications (Qualifelec, RGE, IRVE) auprès de particuliers en recherche active. Découvrez aussi notre [guide pour choisir un électricien](/blog/comment-choisir-electricien-guide) et nos [tarifs d'électricité](/blog/prix-electricien-2026-tarifs-travaux)."
     ],
     image: "/images/blog/metier-electricien.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-22",
     readTime: "14 min",
     category: "Fiches métier",
     tags: ["Électricité", "Formation", "Métier"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir électricien ?", answer: "Le CAP Électricien (2 ans après la 3e) est la base. Le BP Électricien approfondit en 2 ans. Le Bac Pro MELEC inclut la domotique en 3 ans. Le BTS Électrotechnique ouvre l'accès à des postes de technicien supérieur. Des formations accélérées (6-10 mois) existent pour la reconversion." },
@@ -729,12 +729,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       "Les maçons référencés sur ServicesArtisans sont vérifiés : SIRET actif, assurance décennale valide, qualifications contrôlées. Trouvez un maçon compétent pour votre projet ou inscrivez-vous en tant que professionnel pour accéder à de nouveaux chantiers. Consultez aussi notre [guide pour choisir un maçon](/blog/comment-choisir-macon-guide) et nos [tarifs de maçonnerie](/blog/prix-macon-2026-gros-oeuvre-renovation)."
     ],
     image: "/images/blog/metier-macon.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-26",
     readTime: "14 min",
     category: "Fiches métier",
     tags: ["Maçonnerie", "Formation", "Métier"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir maçon ?", answer: "Le CAP Maçon (2 ans) enseigne les techniques de base. Le BP Maçon approfondit l'organisation de chantier. Le Bac Pro TB ORGO offre une vision plus large en 3 ans. Des spécialisations existent : tailleur de pierre, coffreur-bancheur, éco-construction. La reconversion est possible via des formations accélérées (6-10 mois)." },
@@ -777,12 +777,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       "Tous les couvreurs référencés sur ServicesArtisans sont vérifiés : SIRET, garantie décennale, qualifications. Trouvez un couvreur qualifié et bien assuré pour vos travaux de toiture, ou rejoignez la plateforme si vous êtes professionnel. Découvrez aussi notre [guide pour choisir un couvreur](/blog/comment-choisir-couvreur-guide)."
     ],
     image: "/images/blog/metier-couvreur.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-30",
     readTime: "14 min",
     category: "Fiches métier",
     tags: ["Couverture", "Formation", "Sécurité"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Le métier de couvreur est-il dangereux ?", answer: "Oui, c'est l'un des métiers les plus dangereux du bâtiment. Les chutes de hauteur sont la première cause d'accidents graves et mortels dans le BTP. Le décret n° 2004-924 impose des protections collectives (garde-corps, filets, échafaudages) et individuelles (harnais). Un couvreur qui monte sans protection n'est pas un professionnel." },
@@ -825,12 +825,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       "Trouvez des menuisiers vérifiés sur ServicesArtisans : profils détaillés, qualifications contrôlées, avis clients authentiques. Que vous cherchiez un menuisier bois pour un escalier sur mesure ou un poseur de fenêtres RGE, la plateforme vous met en relation avec le bon professionnel. Consultez aussi notre [guide pour choisir un menuisier](/blog/comment-choisir-menuisier-guide)."
     ],
     image: "/images/blog/metier-menuisier.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-02",
     readTime: "14 min",
     category: "Fiches métier",
     tags: ["Menuiserie", "Formation", "Métier"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir menuisier ?", answer: "Le CAP Menuisier-fabricant (atelier) ou Menuisier-installateur (pose) sont les bases. Le BP Menuisier approfondit les compétences. Le Bac Pro Technicien menuisier-agenceur inclut la CAO. Le BMA Ébénisterie est la voie royale pour le bois massif. Les Compagnons du Devoir proposent une formation d'excellence (6 ans avec Tour de France)." },
@@ -873,12 +873,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       "ServicesArtisans vérifie les certifications de chaque chauffagiste : RGE, QualiPAC, attestation fluides frigorigènes, garantie décennale. Trouvez un chauffagiste qualifié pour votre projet ou inscrivez-vous en tant que professionnel pour développer votre activité. Découvrez aussi notre [guide pour choisir un chauffagiste](/blog/comment-choisir-chauffagiste-guide) et nos [tarifs de chauffage](/blog/prix-chauffagiste-2026-installation-entretien)."
     ],
     image: "/images/blog/metier-chauffagiste.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-09",
     readTime: "14 min",
     category: "Fiches métier",
     tags: ["Chauffage", "Formation", "Pompe à chaleur"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Comment devenir chauffagiste spécialisé PAC ?", answer: "La base est le CAP Monteur en installations thermiques, complété par le BP ou le Bac Pro TISEC. Pour se spécialiser en PAC, la certification QualiPAC est indispensable, ainsi que l'attestation de capacité pour les fluides frigorigènes. Des formations continues sont proposées par les fabricants (Daikin, Atlantic, Mitsubishi)." },
@@ -921,12 +921,12 @@ export const metiersArticles: Record<string, BlogArticle> = {
       "Trouvez des peintres en bâtiment vérifiés sur ServicesArtisans : qualifications contrôlées, assurances validées, avis clients authentiques. Que vous cherchiez un peintre pour un rafraîchissement ou un spécialiste en décoration murale, la plateforme vous connecte avec le bon professionnel."
     ],
     image: "/images/blog/metier-peintre.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-11",
     readTime: "14 min",
     category: "Fiches métier",
     tags: ["Peinture", "Formation", "Métier"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quelle formation pour devenir peintre en bâtiment ?", answer: "Le CAP Peintre applicateur de revêtements (2 ans) est la base. Le BP approfondit les techniques décoratives. Le Bac Pro Aménagement et finition offre une vision large des métiers de la finition. La mention complémentaire Peinture décoration permet de se spécialiser rapidement après le CAP." },

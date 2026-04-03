@@ -50,13 +50,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- L'entretien chaudière est **obligatoire** chaque année (décret 2009-649) — prix : 90 à 200 €\n- Purgez vos radiateurs avant la mise en route pour gagner 10 à 15 % d'efficacité\n- Faites ramoner vos conduits bois/granulés 2 fois/an (50 à 120 €/passage)\n- Protégez vos canalisations du gel dès octobre (manchons à 2-8 €/m)\n:::"
     ],
     image: '/images/blog/preparer-chauffage-hiver-2026-check-list.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-01',
     readTime: '12 min',
     category: 'Saisonnier',
     tags: ['chauffage', 'hiver 2026', 'check-list', 'chaudière', 'radiateurs', 'entretien'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-15',
     faq: [
       { question: 'Quand faut-il faire réviser sa chaudière avant l\'hiver ?', answer: 'L\'idéal est de planifier la révision en septembre ou début octobre, avant la période de chauffe. Les chauffagistes sont très sollicités à partir de mi-octobre et les délais peuvent atteindre 3 à 4 semaines en novembre.' },
       { question: 'Peut-on purger ses radiateurs soi-même ?', answer: 'Oui, la purge des radiateurs est une opération simple qui ne nécessite qu\'une clé de purge (2-3 €) et un récipient. Comptez 5 minutes par radiateur. Si un radiateur reste froid malgré la purge, faites appel à un chauffagiste pour un diagnostic.' },
@@ -77,7 +77,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
     metaTitle: 'Entretien clim été 2026 : prix et obligations',
     metaDescription: 'Entretien climatisation été 2026 : nettoyage filtres, recharge fluide, contrôle étanchéité. Prix 80-250€, obligations légales et conseils d\'économie.',
     content: [
-      "Avec des étés de plus en plus chauds en France — 2025 a battu le record de jours au-dessus de 35 °C dans 12 départements — la climatisation n'est plus un luxe mais une nécessité pour de nombreux foyers. Pourtant, **70 % des pannes de climatisation** surviennent lors de la première mise en route estivale, faute d'entretien préalable. Un entretien régulier prolonge la durée de vie de votre appareil, maintient ses performances et divise la consommation énergétique. Pour un entretien professionnel, trouvez un [climaticien qualifié](/services/climatisation) près de chez vous.",
+      "Avec des étés de plus en plus chauds en France — 2025 a battu le record de jours au-dessus de 35 °C dans 12 départements — la climatisation n'est plus un luxe mais une nécessité pour de nombreux foyers. Pourtant, **70 % des pannes de climatisation** surviennent lors de la première mise en route estivale, faute d'entretien préalable. Un entretien régulier prolonge la durée de vie de votre appareil, maintient ses performances et divise la consommation énergétique. Pour un entretien professionnel, trouvez un [climaticien qualifié](/services/climaticien) près de chez vous.",
 
       "## Pourquoi entretenir sa climatisation avant l'été",
 
@@ -116,13 +116,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Faites entretenir votre clim en **avril-mai**, avant la première vague de chaleur\n- Entretien annuel pro : **80 à 250 €** selon le nombre d'unités\n- Nettoyez les filtres vous-même toutes les 2 semaines d'utilisation\n- L'obligation de contrôle d'étanchéité concerne les systèmes de plus de 2 kg de fluide\n:::"
     ],
     image: '/images/blog/entretien-climatisation-ete-2026.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-02',
     readTime: '11 min',
     category: 'Saisonnier',
     tags: ['climatisation', 'été 2026', 'entretien', 'fluide frigorigène', 'économie énergie'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-16',
     faq: [
       { question: 'À quelle fréquence faut-il nettoyer les filtres de climatisation ?', answer: 'Pendant la période d\'utilisation intensive (été), nettoyez les filtres tous les 15 jours. Retirez-les délicatement, aspirez la poussière puis lavez-les à l\'eau tiède savonneuse. Laissez sécher complètement avant de les remettre en place. En dehors de la saison, un nettoyage mensuel suffit.' },
       { question: 'L\'entretien de la climatisation est-il obligatoire ?', answer: 'Le contrôle d\'étanchéité est obligatoire tous les 2 ans pour les systèmes contenant plus de 2 kg de fluide frigorigène (décret du 28 juillet 2020). L\'entretien courant n\'est pas légalement obligatoire mais est fortement recommandé et souvent exigé par les fabricants pour maintenir la garantie.' },
@@ -180,13 +180,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Inspectez toiture et gouttières en priorité : les dégâts d'hiver non traités s'aggravent vite\n- Traitez la mousse de toiture au printemps, avant qu'elle ne soulève les tuiles\n- Profitez d'avril-juin pour les peintures extérieures (conditions de séchage idéales)\n- Réservez vos artisans dès mars pour éviter les délais de mai-juin\n:::"
     ],
     image: '/images/blog/travaux-printemps-check-list-2026.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-03',
     readTime: '11 min',
     category: 'Saisonnier',
     tags: ['printemps 2026', 'check-list', 'travaux maison', 'toiture', 'jardin', 'terrasse'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-17',
     faq: [
       { question: 'Par quoi commencer les travaux de printemps ?', answer: 'Commencez toujours par la toiture et les gouttières. C\'est la zone la plus exposée aux intempéries hivernales et les dégâts non traités (tuile cassée, gouttière bouchée) peuvent entraîner des infiltrations coûteuses. Ensuite, passez à la façade, aux menuiseries et enfin au jardin.' },
       { question: 'Quel budget prévoir pour les travaux de printemps ?', answer: 'En DIY, comptez 300 à 800 € pour les fournitures (produits, peinture, petites réparations). Si vous faites appel à des professionnels pour l\'ensemble, le budget se situe entre 2 000 et 5 000 € pour une maison individuelle standard. Priorisez la toiture et les réparations structurelles.' },
@@ -240,13 +240,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Coupez l'arrivée d'eau : c'est la **première** chose à faire, elle évite les dégâts les plus coûteux\n- Simulez une présence avec des lampes programmées et des volets ouverts\n- Débranchez les appareils sensibles pour les protéger des surtensions\n- Prévenez un voisin et vérifiez votre assurance habitation\n:::"
     ],
     image: '/images/blog/preparer-maison-avant-vacances-ete.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-04',
     readTime: '10 min',
     category: 'Saisonnier',
     tags: ['vacances', 'été', 'sécurité maison', 'plomberie', 'check-list', 'cambriolage'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-18',
     faq: [
       { question: 'Faut-il couper l\'eau avant de partir en vacances ?', answer: 'Oui, c\'est la précaution la plus importante. Un tuyau qui fuit pendant une absence de 2 semaines peut causer des dizaines de milliers d\'euros de dégâts. Fermez la vanne d\'arrêt générale et ouvrez brièvement les robinets pour vidanger les tuyaux. Si vous avez un arrosage automatique, conservez uniquement le circuit extérieur.' },
       { question: 'Comment simuler une présence dans la maison ?', answer: 'Utilisez des prises programmables (5-15 €) pour allumer et éteindre des lampes à des heures variables. Ne fermez pas tous les volets. Demandez à un voisin de relever le courrier et de garer ponctuellement sa voiture devant chez vous. N\'annoncez jamais votre absence sur les réseaux sociaux.' },
@@ -312,13 +312,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Le ramonage est obligatoire : **2 fois/an** pour le bois, **1 fois/an** pour le gaz et le fioul\n- Prix standard : **50 à 120 €** par passage (certificat inclus)\n- Le certificat de ramonage est indispensable pour l'assurance habitation\n- Planifiez en **septembre-octobre** pour éviter les délais d'automne\n:::"
     ],
     image: '/images/blog/ramonage-obligatoire-2026-reglementation.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-05',
     readTime: '11 min',
     category: 'Saisonnier',
     tags: ['ramonage', 'réglementation 2026', 'cheminée', 'obligation légale', 'certificat', 'ramoneur'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-19',
     faq: [
       { question: 'Combien de fois par an faut-il faire ramoner sa cheminée ?', answer: 'Pour les appareils à combustible solide (bois, charbon, granulés), 2 ramonages par an sont obligatoires dont 1 pendant la période de chauffe. Pour le gaz et le fioul, 1 ramonage par an suffit. Vérifiez le Règlement Sanitaire Départemental de votre commune pour les éventuelles spécificités locales.' },
       { question: 'Que risque-t-on sans ramonage ?', answer: 'Sans ramonage, vous risquez une amende de 450 € (contravention de 3e classe). En cas d\'incendie de cheminée, votre assurance peut refuser l\'indemnisation ou appliquer une franchise majorée si vous ne pouvez pas présenter un certificat de ramonage valide. Sans compter le risque vital d\'intoxication au monoxyde de carbone.' },
@@ -381,13 +381,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- La purge des radiateurs est **gratuite et prend 30 minutes** — faites-la chaque automne\n- Commencez par le radiateur le plus proche de la chaudière, chaudière éteinte\n- Vérifiez la pression du circuit après purge : **1 à 1,5 bar**\n- Si l'eau est noire ou un radiateur reste froid en bas, appelez un chauffagiste\n:::"
     ],
     image: '/images/blog/purger-radiateurs-avant-hiver-guide.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-06',
     readTime: '9 min',
     category: 'Saisonnier',
     tags: ['radiateurs', 'purge', 'chauffage', 'tuto DIY', 'hiver', 'entretien'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-20',
     faq: [
       { question: 'À quelle fréquence faut-il purger ses radiateurs ?', answer: 'Une purge annuelle avant la saison de chauffe (septembre-octobre) suffit dans la plupart des cas. Si vous constatez des bruits ou des zones froides en cours de saison, purgez à nouveau. Des purges très fréquentes (mensuelles) signalent un problème sur le circuit qui nécessite un diagnostic professionnel.' },
       { question: 'Peut-on purger un radiateur sans clé de purge ?', answer: 'La plupart des vis de purge modernes s\'ouvrent avec un tournevis plat. Les modèles plus anciens nécessitent une clé de purge spécifique (carrée ou hexagonale), disponible pour 2 à 3 € en magasin de bricolage. Ne forcez jamais avec une pince, vous risqueriez d\'endommager la vis.' },
@@ -441,13 +441,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Nettoyez les gouttières en **octobre-novembre**, avant les pluies d'hiver (80-200 € par un pro)\n- Traitez la mousse en automne quand les conditions sont idéales (10-20 °C, temps humide)\n- Inspectez tuiles, faîtage et solins depuis le sol ou les combles\n- Ne montez jamais sur un toit mouillé — confiez les travaux en hauteur à un couvreur\n:::"
     ],
     image: '/images/blog/entretien-toiture-automne-guide.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-07',
     readTime: '11 min',
     category: 'Saisonnier',
     tags: ['toiture', 'automne', 'gouttières', 'démoussage', 'couvreur', 'entretien'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-21',
     faq: [
       { question: 'À quelle fréquence faut-il nettoyer les gouttières ?', answer: 'Au minimum 2 fois par an : au printemps après la saison des pollens et en automne après la chute des feuilles. Si vous avez des arbres à proximité immédiate, un troisième nettoyage en été peut être nécessaire. L\'installation de crapaudines (grilles de protection) réduit la fréquence d\'entretien.' },
       { question: 'Le nettoyeur haute pression est-il bon pour la toiture ?', answer: 'Non, il est déconseillé sur les tuiles et ardoises. La pression peut casser l\'émail protecteur des tuiles, fissurer les ardoises et pousser l\'eau sous la couverture. Préférez un brossage mécanique doux suivi d\'un traitement anti-mousse chimique à diffusion lente.' },
@@ -501,13 +501,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Isolez les canalisations exposées au gel avec des manchons (2 à 8 €/m) dès octobre\n- Vidangez et fermez les robinets extérieurs avant les premières gelées\n- En cas de grand froid, laissez couler un filet d'eau au robinet le plus éloigné\n- Ne dégelez jamais un tuyau avec une flamme nue — utilisez un sèche-cheveux\n:::"
     ],
     image: '/images/blog/proteger-canalisations-gel-hiver.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-08',
     readTime: '10 min',
     category: 'Saisonnier',
     tags: ['canalisations', 'gel', 'hiver', 'plomberie', 'isolation', 'prévention'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-22',
     faq: [
       { question: 'À partir de quelle température les canalisations risquent-elles de geler ?', answer: 'Les canalisations non isolées en zone non chauffée commencent à geler dès -5 °C extérieur. Avec un manchon isolant de 13 mm, la protection est efficace jusqu\'à -10 °C environ. En dessous, un câble chauffant est recommandé. Les canalisations à l\'intérieur de la maison chauffée ne gèlent quasiment jamais, sauf en cas de coupure de chauffage prolongée.' },
       { question: 'L\'assurance couvre-t-elle les dégâts du gel sur les canalisations ?', answer: 'La plupart des contrats multirisques habitation couvrent les dégâts des eaux consécutifs au gel. Toutefois, certains assureurs exigent que des mesures de prévention élémentaires aient été prises (chauffage en mode hors-gel en cas d\'absence). Vérifiez les exclusions de votre contrat.' },
@@ -528,7 +528,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
     metaTitle: 'Ouverture piscine printemps : guide étapes',
     metaDescription: 'Ouverture piscine printemps : 12 étapes pour remettre votre bassin en service. Nettoyage, filtration, traitement eau, produits. Budget 100-300€.',
     content: [
-      "Le printemps arrive, les beaux jours aussi, et votre piscine attend patiemment sous sa couverture d'hivernage. La remise en service (ou « déshivernage ») est une étape cruciale : mal réalisée, elle peut entraîner une eau verte persistante, des équipements endommagés et des semaines de galère chimique. Bien faite, votre piscine sera prête à la baignade en 3 à 5 jours. Voici le guide complet, étape par étape. Pour un déshivernage professionnel, contactez un [pisciniste](/services/piscine) qualifié.",
+      "Le printemps arrive, les beaux jours aussi, et votre piscine attend patiemment sous sa couverture d'hivernage. La remise en service (ou « déshivernage ») est une étape cruciale : mal réalisée, elle peut entraîner une eau verte persistante, des équipements endommagés et des semaines de galère chimique. Bien faite, votre piscine sera prête à la baignade en 3 à 5 jours. Voici le guide complet, étape par étape. Pour un déshivernage professionnel, contactez un [pisciniste](/services/pisciniste) qualifié.",
 
       "## Quand ouvrir sa piscine",
 
@@ -557,13 +557,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Ouvrez votre piscine quand l'eau atteint **12-15 °C** (avril-mai)\n- Ajustez le pH **avant** le traitement choc pour maximiser son efficacité\n- Budget produits : **80 à 145 €** pour un bassin standard de 8x4 m\n- Déshivernage par un pisciniste : **150 à 350 €** tout compris\n:::"
     ],
     image: '/images/blog/entretien-piscine-ouverture-printemps.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-09',
     readTime: '12 min',
     category: 'Saisonnier',
     tags: ['piscine', 'printemps', 'ouverture', 'déshivernage', 'traitement eau', 'entretien'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-23',
     faq: [
       { question: 'Quand ouvrir sa piscine au printemps ?', answer: 'Ouvrez votre piscine quand la température de l\'eau atteint régulièrement 12 à 15 °C, généralement entre mi-avril et mi-mai selon les régions. N\'attendez pas que l\'eau dépasse 15 °C car les algues se développent rapidement au-delà de cette température.' },
       { question: 'Combien de temps avant de pouvoir se baigner après l\'ouverture ?', answer: 'Après le traitement choc, attendez que le taux de chlore redescende sous 3 mg/L avant de vous baigner (24 à 48 heures en général). Au total, comptez 3 à 5 jours entre l\'ouverture et la première baignade si tout se passe bien.' },
@@ -584,7 +584,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
     metaTitle: 'Hivernage piscine : guide actif vs passif',
     metaDescription: 'Hivernage piscine actif ou passif : étapes, produits (50-100€), protection gel. Guide complet pour préserver votre bassin pendant l\'hiver.',
     content: [
-      "L'hivernage de la piscine est une étape incontournable pour préserver votre bassin, vos équipements et faciliter la remise en service au printemps. Mal réalisé, il peut entraîner des dégâts coûteux : liner taché ou déformé, pompe gelée (remplacement : 300 à 800 €), canalisation éclatée, eau irrécupérable au printemps. Deux méthodes existent : l'hivernage **actif** et l'hivernage **passif**. Le choix dépend de votre climat et de votre disponibilité. Voici le guide complet pour choisir et réaliser votre hivernage. Pour une mise en hivernage professionnelle, consultez un [pisciniste](/services/piscine).",
+      "L'hivernage de la piscine est une étape incontournable pour préserver votre bassin, vos équipements et faciliter la remise en service au printemps. Mal réalisé, il peut entraîner des dégâts coûteux : liner taché ou déformé, pompe gelée (remplacement : 300 à 800 €), canalisation éclatée, eau irrécupérable au printemps. Deux méthodes existent : l'hivernage **actif** et l'hivernage **passif**. Le choix dépend de votre climat et de votre disponibilité. Voici le guide complet pour choisir et réaliser votre hivernage. Pour une mise en hivernage professionnelle, consultez un [pisciniste](/services/pisciniste).",
 
       "## Quand hiverner sa piscine",
 
@@ -615,13 +615,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Hivernez quand l'eau passe **durablement sous 12 °C** (octobre-novembre)\n- **Actif** : filtration réduite + coffret hors-gel — idéal en climat doux\n- **Passif** : circuit vidangé + flotteurs — obligatoire en zone de gel fréquent\n- Budget produits : **50 à 100 €** (hors couverture et coffret hors-gel)\n:::"
     ],
     image: '/images/blog/hivernage-piscine-guide-complet.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-10',
     readTime: '12 min',
     category: 'Saisonnier',
     tags: ['piscine', 'hivernage', 'hiver', 'gel', 'entretien piscine', 'saisonnier'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-24',
     faq: [
       { question: 'Quelle est la différence entre hivernage actif et passif ?', answer: 'L\'hivernage actif maintient la filtration en fonctionnement réduit (2-4 h/jour) avec un coffret hors-gel. L\'hivernage passif arrête complètement la filtration et vidange tout le circuit hydraulique. L\'actif est recommandé en climat doux, le passif en zone de gel fréquent.' },
       { question: 'Faut-il vider sa piscine pour l\'hiver ?', answer: 'Non, ne vidangez jamais complètement le bassin (risque de soulèvement par la nappe phréatique et de déformation du liner). Baissez simplement le niveau de 10 cm sous les buses et les skimmers. En revanche, le circuit hydraulique (pompe, filtre, canalisations) doit être complètement vidangé en hivernage passif.' },
@@ -681,13 +681,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- **Février-mars** et **septembre-octobre** sont les meilleures périodes de taille\n- Respectez la distance de plantation : **2 m** pour les végétaux > 2 m, **0,50 m** pour les autres\n- Ne taillez jamais une haie contenant un **nid actif** (amende jusqu'à 150 000 €)\n- La taille de haie pro coûte **5 à 15 €/ml** — l'élagage d'arbre **100 à 1 000 €**\n:::"
     ],
     image: '/images/blog/taille-haies-arbres-reglementation-2026.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-11',
     readTime: '11 min',
     category: 'Saisonnier',
     tags: ['taille haies', 'élagage', 'réglementation 2026', 'jardin', 'voisinage', 'arbres'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-25',
     faq: [
       { question: 'Peut-on tailler sa haie toute l\'année ?', answer: 'Il n\'y a pas d\'interdiction formelle pour les particuliers, mais la destruction de nids d\'oiseaux protégés est interdite toute l\'année (amende jusqu\'à 150 000 €). En pratique, évitez de tailler de mi-mars à fin août (période de nidification). Les agriculteurs sont soumis à une interdiction stricte du 1er avril au 31 juillet.' },
       { question: 'Mon voisin peut-il m\'obliger à tailler ma haie ?', answer: 'Oui, si votre haie dépasse 2 m de hauteur et est plantée à moins de 2 m de la limite de propriété, votre voisin peut exiger le rabattage à 2 m. Si des branches dépassent chez lui, il peut exiger leur coupe. En cas de refus, il peut saisir le tribunal judiciaire.' },
@@ -746,13 +746,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Démoussez en **automne** (sept-nov) ou au **printemps** (mars-mai) — jamais en plein été ni en hiver\n- Prix pro : **15 à 25 €/m²** sans hydrofuge, **25 à 40 €/m²** avec hydrofuge\n- L'hydrofuge prolonge la protection de **8 à 15 ans** — investissement très rentable\n- Façade nord : démoussage tous les 3-5 ans ; façade sud : tous les 8-12 ans\n:::"
     ],
     image: '/images/blog/demoussage-facade-meilleure-periode.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-12',
     readTime: '10 min',
     category: 'Saisonnier',
     tags: ['démoussage', 'façade', 'entretien extérieur', 'hydrofuge', 'nettoyage', 'saisonnier'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-26',
     faq: [
       { question: 'Quelle est la meilleure période pour démousser une façade ?', answer: 'L\'automne (septembre-novembre) est la période idéale : la mousse est active, les températures sont douces et le produit agit pendant l\'hiver. Le printemps (mars-mai) est la deuxième meilleure période. Évitez l\'été (le produit sèche trop vite) et l\'hiver (gel).' },
       { question: 'Le nettoyeur haute pression abîme-t-il la façade ?', answer: 'Oui, sur la plupart des façades enduites, une pression supérieure à 100 bars arrache l\'enduit et pousse l\'eau dans les murs. Utilisez uniquement la basse pression (< 100 bars) ou la méthode chimique à diffusion lente. Le karcher classique à 150+ bars est réservé aux sols en béton brut ou pierre dure.' },
@@ -773,7 +773,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
     metaTitle: 'Isolation combles en été : préparer l\'hiver',
     metaDescription: 'Isoler ses combles en été : soufflage 20-35€/m², panneaux 40-80€/m², aides MaPrimeRénov\'. Économie 25-30% sur le chauffage dès l\'hiver.',
     content: [
-      "Les combles sont responsables de **25 à 30 % des pertes de chaleur** d'une maison mal isolée, selon l'ADEME. C'est le poste n° 1 des déperditions thermiques, devant les murs (20-25 %) et les fenêtres (10-15 %). Isoler ses combles est donc l'investissement le plus rentable en rénovation énergétique. Et l'été est la saison idéale pour le faire : les artisans sont plus disponibles, les conditions de pose sont optimales et vous serez prêt pour l'hiver. Pour un devis, consultez un [spécialiste en isolation](/services/isolation) ou en [rénovation énergétique](/services/renovation-energetique).",
+      "Les combles sont responsables de **25 à 30 % des pertes de chaleur** d'une maison mal isolée, selon l'ADEME. C'est le poste n° 1 des déperditions thermiques, devant les murs (20-25 %) et les fenêtres (10-15 %). Isoler ses combles est donc l'investissement le plus rentable en rénovation énergétique. Et l'été est la saison idéale pour le faire : les artisans sont plus disponibles, les conditions de pose sont optimales et vous serez prêt pour l'hiver. Pour un devis, consultez un [spécialiste en isolation](/services/isolation-thermique) ou en [rénovation énergétique](/services/renovation-energetique).",
 
       "## Pourquoi isoler en été",
 
@@ -804,13 +804,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Les combles représentent **25 à 30 %** des pertes de chaleur — c'est la priorité n° 1\n- L'été est la saison idéale : artisans disponibles, conditions de pose optimales\n- Soufflage en combles perdus : **20 à 35 €/m²** posé, le meilleur rapport coût/efficacité\n- Retour sur investissement en **1,5 à 4 ans** grâce aux aides + économies de chauffage\n:::"
     ],
     image: '/images/blog/isolation-combles-ete-preparation-hiver.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-13',
     readTime: '12 min',
     category: 'Saisonnier',
     tags: ['isolation', 'combles', 'été', 'préparation hiver', 'rénovation énergétique', 'MaPrimeRénov'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-27',
     faq: [
       { question: 'Quelle épaisseur d\'isolation pour les combles ?', answer: 'Pour les combles perdus, l\'épaisseur recommandée est de 30 à 40 cm (R ≥ 7 m².K/W) en soufflage ou en double couche de rouleaux. Pour les combles aménagés sous rampants, visez 20 à 30 cm (R ≥ 6 m².K/W). Ces épaisseurs permettent de bénéficier des aides MaPrimeRénov\' et des CEE.' },
       { question: 'Combien coûte l\'isolation des combles après aides ?', answer: 'Pour 100 m² de combles perdus par soufflage (2 000-3 500 € avant aides), le reste à charge après MaPrimeRénov\' + CEE + TVA 5,5 % se situe entre 500 et 2 000 € selon vos revenus. Pour les ménages très modestes, le reste à charge peut être quasi nul.' },
@@ -868,13 +868,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- Détartrez votre chauffe-eau tous les **2-3 ans** (1-2 ans en eau très dure)\n- Prix du détartrage : **150 à 300 €** selon la capacité\n- Actionnez le groupe de sécurité **1 fois par mois** pour évacuer le calcaire\n- Réglez la température à **55-60 °C** : anti-légionelle et économe\n:::"
     ],
     image: '/images/blog/entretien-chauffe-eau-detartrage-annuel.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-14',
     readTime: '11 min',
     category: 'Saisonnier',
     tags: ['chauffe-eau', 'détartrage', 'entretien', 'plomberie', 'calcaire', 'économie énergie'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-28',
     faq: [
       { question: 'À quelle fréquence faut-il détartrer un chauffe-eau ?', answer: 'Tous les 2 à 3 ans en eau moyennement dure (15-30 °f), tous les 1 à 2 ans en eau dure (> 30 °f), et tous les 4 à 5 ans en eau douce (< 15 °f). Vérifiez la dureté de votre eau auprès de votre fournisseur ou en mairie pour adapter la fréquence.' },
       { question: 'Combien coûte le remplacement d\'un chauffe-eau ?', answer: 'Le remplacement complet (ballon + pose + raccordements) coûte entre 600 et 2 000 € pour un chauffe-eau électrique classique (100 à 300 litres). Un chauffe-eau thermodynamique revient à 2 500 à 4 500 € posé mais consomme 3 fois moins d\'électricité et est éligible aux aides.' },
@@ -931,13 +931,13 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
       ":::takeaway\n- **Isolation** : mai à septembre (combles) ou avril à octobre (ITE)\n- **Chauffage** : mars à juin — jamais en urgence à l'automne\n- **Fenêtres** : printemps et automne — commandez 6-8 semaines avant\n- Isolez **avant** de changer le chauffage : l'ordre des travaux impacte le coût et l'efficacité\n:::"
     ],
     image: '/images/blog/renovation-energetique-meilleure-saison.webp',
-    author: 'ServicesArtisans',
-    date: '2026-04-03',
+    author: "L'équipe ServicesArtisans",
+    date: '2026-03-15',
     readTime: '12 min',
     category: 'Saisonnier',
     tags: ['rénovation énergétique', 'calendrier travaux', 'isolation', 'chauffage', 'saison', 'planification'],
-    authorBio: 'L\'équipe éditoriale de ServicesArtisans, spécialisée dans les conseils pratiques pour l\'entretien de la maison et les travaux saisonniers.',
-    updatedDate: '2026-04-03',
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-29',
     faq: [
       { question: 'Quelle est la meilleure saison pour isoler sa maison ?', answer: 'L\'été (mai-septembre) pour les combles et le printemps-été (avril-octobre) pour l\'isolation par l\'extérieur (ITE). Les artisans sont plus disponibles, les prix plus bas et les conditions de pose optimales. Évitez l\'automne tardif et l\'hiver pour les travaux extérieurs.' },
       { question: 'Faut-il isoler avant de changer le chauffage ?', answer: 'Oui, toujours. Une maison isolée nécessite un système de chauffage moins puissant (donc moins cher). Si vous changez le chauffage avant d\'isoler, il sera surdimensionné pour la maison une fois isolée, ce qui gaspille de l\'énergie et de l\'argent. L\'ordre optimal est : isolation → fenêtres → VMC → chauffage.' },

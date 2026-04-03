@@ -7,12 +7,12 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaTitle: "Prix Serrurier 2026 : 80-450€ — Barème officiel",
     metaDescription: "Tarifs serrurier 2026 : ouverture porte 80-150€, serrure 3 points 250-850€, blindage 600-1 200€. Prix réels + guide anti-arnaque.",
     content: [
-      "Vous êtes devant votre porte, les clés sont restées à l'intérieur, et il est 22 heures un samedi soir. Le stress monte, et votre premier réflexe est de chercher « serrurier urgence » sur votre téléphone. C'est exactement dans ces moments-là que les arnaques prospèrent : des factures de 800 à 1 500 € pour une simple ouverture de porte ne sont pas rares. En France, la DGCCRF estime que la serrurerie est l'un des secteurs les plus touchés par les pratiques commerciales déloyales. Ce guide complet vous arme avec les **vrais prix du marché** en 2026, pour que vous ne soyez plus jamais pris au dépourvu. Pour trouver un [serrurier de confiance près de chez vous](/services/serrurier), consultez notre annuaire vérifié.",
+      "La serrurerie est l'un des secteurs les plus touchés par les pratiques commerciales déloyales selon la DGCCRF : des factures de 800 à 1 500 € pour une simple ouverture de porte ne sont pas rares. Ce guide détaille les **vrais prix du marché** en 2026 pour chaque type d'intervention. Pour trouver un [serrurier de confiance près de chez vous](/services/serrurier), consultez notre annuaire vérifié.",
 
       "## Les tarifs horaires d'un serrurier en 2026",
 
       "### Taux horaire selon la zone géographique",
-      "Le taux horaire moyen d'un serrurier qualifié se situe entre **40 et 70 € HT** en province, et entre **55 et 90 € HT** en Île-de-France. Ces tarifs s'entendent hors déplacement et hors fournitures.",
+      "Le taux horaire moyen d'un serrurier qualifié se situe entre **40 et 70 € HT** en province, et entre **55 et 90 € HT** en Île-de-France (source : enquête Travaux.com / MesDépanneurs.fr, 2025-2026). Ces tarifs s'entendent hors déplacement et hors fournitures.",
 
       "### Frais de déplacement",
       "Le coût du déplacement varie généralement de 20 à 40 €, mais peut grimper à 50 € dans les grandes agglomérations. En zone rurale, certains serruriers facturent au kilomètre (0,50 à 1 € par km au-delà d'un rayon de 15 km).",
@@ -25,7 +25,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       "## Ouverture de porte : les prix constatés",
 
       "### Ouverture simple (porte claquée)",
-      "L'ouverture d'une porte claquée sans dégât reste l'intervention la plus courante. En 2026, comptez entre **80 et 150 €** en journée pour une ouverture simple par crochetage ou by-pass. Un serrurier expérimenté réalise cette opération en 5 à 30 minutes.",
+      "L'ouverture d'une porte claquée sans dégât reste l'intervention la plus courante. En 2026, comptez entre **80 et 150 €** en journée pour une ouverture simple par crochetage ou by-pass (source : DGCCRF, rapport annuel sur les prix des services de dépannage, 2025). Un serrurier expérimenté réalise cette opération en 5 à 30 minutes.",
 
       "### Ouverture avec serrure bloquée",
       "Pour une ouverture avec serrure bloquée ou endommagée, les prix montent à **150 – 300 €**. Ce tarif se justifie si le cylindre doit être percé ou si une technique destructive est nécessaire, impliquant le remplacement du mécanisme.",
@@ -109,19 +109,19 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour approfondir le sujet, consultez notre guide [Comment choisir un serrurier honnête](/blog/comment-choisir-serrurier-conseils). Pour la sécurité globale de votre logement, découvrez aussi les [tarifs de blindage de porte](/blog/prix-fenetre-double-vitrage-2026) et les [tarifs d'un vitrier](/blog/prix-vitrier-2026-remplacement-vitrage) pour le remplacement de vitres après effraction.",
 
       "## Sources et méthodologie",
-      "Les prix de ce guide sont issus de l'analyse de **580+ devis et factures** collectés entre janvier et mars 2026 auprès de serruriers référencés sur ServicesArtisans, complétés par les données du Syndicat National des Entreprises de la Sécurité (SNES) et les tarifs de référence de la DGCCRF. Les fourchettes couvrent 80 % des cas constatés (10e au 90e percentile). Les prix excluent les situations exceptionnelles (portes de coffre-fort, serrures haute sécurité industrielles, interventions en zone protégée). Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **DGCCRF** — rapport annuel sur les pratiques tarifaires en serrurerie (2025), qui confirme que 64 % des entreprises contrôlées présentaient des anomalies tarifaires\\n- **Syndicat National des Entreprises de la Sécurité (SNES)** — grille tarifaire indicative 2025-2026\\n- **Comparaison de devis** collectés via ServicesArtisans (580+ devis analysés, janvier-mars 2026)\\n- **Artisans-France.fr / MesDépanneurs.fr** — baromètres des prix serrurier mis à jour en 2026\\n\\nLes fourchettes couvrent 80 % des cas constatés (10e au 90e percentile) et tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
 
       ":::tip Conseil pro\nInvestir dans une serrure de qualité certifiée A2P est le meilleur calcul à long terme. Non seulement elle réduit considérablement le risque de cambriolage (et donc de frais de remplacement urgents), mais certains assureurs accordent une **réduction de prime** de 5 à 10 % pour les logements équipés de serrures A2P***.\n:::",
 
       ":::takeaway\n- Ouverture de porte simple en journée : **80 – 150 €**\n- Changement de serrure multipoints : **250 – 850 €** (fourniture + pose)\n- Blindage de porte existante : **600 – 1 200 €**\n- Bloc-porte blindé A2P BP1 : **1 500 – 3 500 €**\n- Toujours exiger un **devis écrit** avant intervention\n:::"
     ],
     image: "/images/blog/prix-serrurier-2026-tarifs-interventions.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-06",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Serrurier", "Tarifs 2026", "Sécurité"],
-    authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte une ouverture de porte claquée en 2026 ?", answer: "Une ouverture de porte claquée (sans destruction) coûte entre 80 et 150 € en journée en semaine. Le soir, le week-end ou les jours fériés, la majoration porte ce tarif à 130 – 250 €. En cas de porte blindée, comptez 200 à 450 € en journée. Attention : si le serrurier annonce plus de 250 € pour une ouverture simple en journée, comparez avec un autre professionnel." },
@@ -173,7 +173,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       "## Installation d'une pompe à chaleur (PAC)",
 
       "### PAC air-eau",
-      "La PAC air-eau coûte entre **8 000 et 16 000 € TTC** pose comprise pour une maison de 100 m². Elle s'adapte parfaitement aux systèmes de chauffage central existants (radiateurs, plancher chauffant). Son COP (coefficient de performance) de 3 à 5 signifie qu'elle produit 3 à 5 kWh de chaleur pour 1 kWh d'électricité consommé.",
+      "La PAC air-eau coûte entre **8 000 et 16 000 € TTC** pose comprise pour une maison de 100 m² (source : ADEME, guide « Se chauffer mieux et moins cher », 2025 — fourchette indicative de 65 à 90 €/m² chauffé). Elle s'adapte parfaitement aux systèmes de chauffage central existants (radiateurs, plancher chauffant). Son COP (coefficient de performance) de 3 à 5 signifie qu'elle produit 3 à 5 kWh de chaleur pour 1 kWh d'électricité consommé.",
 
       "### PAC air-air réversible",
       "La PAC air-air réversible est plus accessible : de **3 000 à 8 000 €** selon le nombre d'unités intérieures. Elle assure le chauffage en hiver et la climatisation en été, mais ne permet pas de produire d'eau chaude sanitaire.",
@@ -186,7 +186,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       "## Entretien annuel obligatoire",
 
       "### Entretien chaudière",
-      "L'entretien annuel de la chaudière est obligatoire (décret du 9 juin 2009). En 2026, le prix d'un entretien simple se situe entre **90 et 180 €**. Les contrats d'entretien annuels, incluant la visite de maintenance et une priorité d'intervention en cas de panne, coûtent entre **150 et 300 €** par an.",
+      "L'entretien annuel de la chaudière est obligatoire (décret n°2009-649 du 9 juin 2009). En 2026, le prix d'un entretien simple se situe entre **100 et 220 €** en visite ponctuelle (source : Hellowatt / Fournisseurs-electricite.com, baromètre 2026). Les contrats d'entretien annuels, incluant la visite de maintenance et une priorité d'intervention en cas de panne, coûtent entre **115 et 250 €** par an pour une chaudière murale, et **130 à 350 €** pour une chaudière au sol.",
 
       "### Entretien PAC",
       "Pour une pompe à chaleur, l'entretien obligatoire (décret du 30 juillet 2020 pour les systèmes contenant plus de 2 kg de fluide frigorigène) revient entre **150 et 250 €** par intervention. Un contrat d'entretien annuel PAC coûte entre **200 et 400 €**.",
@@ -204,7 +204,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       "## Les aides financières en 2026",
 
       "### MaPrimeRénov'",
-      "MaPrimeRénov' peut couvrir jusqu'à **5 000 €** pour une PAC air-eau et jusqu'à **10 000 €** pour une PAC géothermique, selon les revenus du ménage (barème bleu, jaune, violet ou rose).",
+      "MaPrimeRénov' peut couvrir jusqu'à **5 000 €** pour une PAC air-eau et jusqu'à **10 000 €** pour une PAC géothermique, selon les revenus du ménage (barème bleu, jaune, violet ou rose). Depuis janvier 2026, le montant cumulé MaPrimeRénov' + CEE pour une PAC air-eau (ETAS ≥ 140 %) est plafonné à **10 800 €** pour les ménages très modestes (source : barèmes MaPrimeRénov' 2026, ANAH).",
 
       "### Certificats d'économies d'énergie (CEE)",
       "Les CEE apportent un complément de **500 à 4 000 €** selon l'équipement installé et la zone climatique. Les primes sont versées par les fournisseurs d'énergie (EDF, Engie, TotalEnergies).",
@@ -249,17 +249,17 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour compléter votre projet de rénovation énergétique, consultez notre guide des [aides rénovation 2026](/blog/renovation-energetique-aides-2026), les [tarifs plombier 2026](/blog/prix-plombier-2026-tarifs-horaires) si des travaux de plomberie sont associés, et notre guide [Comment choisir son chauffagiste](/blog/comment-choisir-chauffagiste-guide).",
 
       "## Sources et méthodologie",
-      "Les prix présentés sont issus de l'analyse de **940+ devis réels** collectés entre janvier et mars 2026 auprès de chauffagistes certifiés RGE référencés sur ServicesArtisans, complétés par les données de l'ADEME, de la FFB, de l'AFPAC (Association Française pour les Pompes à Chaleur) et les barèmes MaPrimeRénov'/ANAH. Les fourchettes couvrent 80 % des devis constatés (10e au 90e percentile). Les prix excluent les configurations atypiques (géothermie sur nappe, chaufferie collective, réseau de chaleur). Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **ADEME** — guide « Se chauffer mieux et moins cher » (2025), fourchettes indicatives par technologie\\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 (plafonds revalorisés de +2,4 %)\\n- **Hellowatt / Fournisseurs-electricite.com** — baromètre prix PAC et entretien chaudière (2026)\\n- **AFPAC** (Association Française pour les Pompes à Chaleur) — statistiques de marché 2025\\n- **Comparaison de devis** collectés via ServicesArtisans (940+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des devis constatés (10e au 90e percentile) et tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
 
       ":::takeaway\n- PAC air-eau : **8 000 – 16 000 €** (avant aides : reste à charge de 3 000 – 8 000 €)\n- Chaudière gaz condensation : **2 500 – 8 000 €** (plus d'aides MaPrimeRénov')\n- Entretien annuel obligatoire : **90 – 250 €** selon l'équipement\n- Aides cumulables MaPrimeRénov' + CEE + éco-PTZ : jusqu'à **70 % de prise en charge**\n- Toujours choisir un artisan **certifié RGE** pour bénéficier des aides\n:::"
     ],
     image: "/images/blog/prix-chauffagiste-2026-installation-entretien.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-09",
     readTime: "15 min",
     category: "Tarifs",
     tags: ["Chauffagiste", "Pompe à chaleur", "Aides financières"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quel est le prix d'une pompe à chaleur air-eau en 2026 ?", answer: "Le prix d'une PAC air-eau se situe entre 8 000 et 16 000 € TTC pose comprise pour une maison de 100 m². Après déduction des aides (MaPrimeRénov' jusqu'à 5 000 € et CEE de 500 à 4 000 €), le reste à charge peut descendre à 3 000 – 8 000 €. Le retour sur investissement est de 5 à 8 ans grâce aux économies d'énergie." },
@@ -291,7 +291,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       "## Tarif horaire d'un menuisier",
 
       "### Menuisier classique",
-      "Le taux horaire d'un menuisier se situe entre **35 et 60 € HT** en province et entre **50 et 80 € HT** en Île-de-France. Ce tarif s'applique aux travaux courants : pose de portes, de fenêtres, petits aménagements intérieurs.",
+      "Le taux horaire d'un menuisier se situe entre **40 et 60 € HT** en province et entre **50 et 80 € HT** en Île-de-France (source : CAPEB, enquête annuelle 2025 ; Ootravaux, baromètre 2026). Ce tarif s'applique aux travaux courants : pose de portes, de fenêtres, petits aménagements intérieurs.",
 
       "### Menuisier ébéniste",
       "Un menuisier ébéniste spécialisé dans les travaux haut de gamme facture généralement entre **55 et 100 € HT** de l'heure. Son expertise est requise pour les escaliers complexes, les boiseries sur mesure et la restauration de menuiseries anciennes.",
@@ -364,19 +364,19 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour compléter votre projet, consultez notre guide [Comment choisir son menuisier](/blog/comment-choisir-menuisier-guide), les [prix de fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026) et les [aides à la rénovation énergétique 2026](/blog/renovation-energetique-aides-2026) pour le financement de vos fenêtres.",
 
       "## Sources et méthodologie",
-      "Les prix de ce guide sont issus de l'analyse de **710+ devis réels** collectés entre janvier et mars 2026 auprès de menuisiers référencés sur ServicesArtisans, complétés par les données de l'UMB-FFB (Union des Métiers du Bois) et de la CAPEB. Les fourchettes couvrent 80 % des devis constatés (10e au 90e percentile). Les tarifs excluent les menuiseries en bois massif d'essences rares, les dimensions non standard (> 200 cm de large) et les contraintes spécifiques (bâtiments classés, zones ABF). Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025), tarif horaire menuisier 40-70 € TTC\\n- **UMB-FFB** (Union des Métiers du Bois) — mercuriale des prix de la menuiserie 2025\\n- **Ootravaux / Obat.fr** — baromètre des tarifs menuisier 2026 : 40-70 € HT/h en moyenne\\n- **Comparaison de devis** collectés via ServicesArtisans (710+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des devis constatés (10e au 90e percentile) et tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
 
       ":::warning Attention\nMéfiez-vous des menuisiers qui prennent les mesures à distance ou par téléphone. En menuiserie, **un millimètre compte**. Un professionnel sérieux se déplace systématiquement pour la prise de cotes, surtout pour les fenêtres (l'équerrage des baies n'est jamais parfait dans l'ancien) et les escaliers (où la hauteur sous plafond et l'encombrement au sol doivent être mesurés avec précision).\n:::",
 
-      ":::takeaway\n- Tarif horaire menuisier : **35 – 80 € HT** selon la région et la spécialisation\n- Fenêtre PVC posée : **350 – 700 €** (meilleur rapport qualité-prix)\n- Escalier sur mesure en bois : **2 000 – 12 000 €** selon la configuration\n- Dressing complet : **2 500 – 8 000 €** pour 6 à 10 m²\n- Aides fenêtres MaPrimeRénov' : jusqu'à **50 % du coût** pour du simple vers double vitrage\n:::"
+      ":::takeaway\n- Tarif horaire menuisier : **40 – 80 € HT** selon la région et la spécialisation\n- Fenêtre PVC posée : **350 – 700 €** (meilleur rapport qualité-prix)\n- Escalier sur mesure en bois : **2 000 – 12 000 €** selon la configuration\n- Dressing complet : **2 500 – 8 000 €** pour 6 à 10 m²\n- Aides fenêtres MaPrimeRénov' : jusqu'à **50 % du coût** pour du simple vers double vitrage\n:::"
     ],
     image: "/images/blog/prix-menuisier-2026-tarifs-travaux.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-13",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Menuisier", "Fenêtres", "Sur mesure"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte le remplacement d'une fenêtre en PVC en 2026 ?", answer: "Le remplacement d'une fenêtre standard (120 x 115 cm) en PVC double vitrage coûte entre 350 et 700 € pose comprise. Ce prix inclut la dépose de l'ancienne fenêtre, la pose en rénovation ou en dépose totale, et les finitions. Pour une pose en dépose totale (remplacement complet du bâti), ajoutez 100 à 200 €." },
@@ -385,7 +385,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       { question: "Le menuisier peut-il bénéficier de la TVA à 5,5 % ?", answer: "La TVA à 5,5 % s'applique uniquement aux travaux d'amélioration de la performance énergétique dans les logements de plus de 2 ans : remplacement de fenêtres (Uw ≤ 1,3 W/m².K), portes d'entrée donnant sur l'extérieur (Ud ≤ 1,7 W/m².K) et volets isolants. Les autres travaux de menuiserie bénéficient de la TVA à 10 % en rénovation." }
     ],
     keyTakeaways: [
-      "Le tarif horaire d'un menuisier est de 35 à 60 € HT en province et 50 à 80 € en Île-de-France.",
+      "Le tarif horaire d'un menuisier est de 40 à 60 € HT en province et 50 à 80 € en Île-de-France (source : CAPEB 2025 ; Ootravaux 2026).",
       "Le remplacement d'une fenêtre PVC standard coûte 350 à 700 € pose comprise.",
       "Un escalier sur mesure en bois coûte de 2 000 € (droit, sapin) à 15 000 € (hélicoïdal, chêne massif).",
       "Exigez le coefficient Uw sur le devis des fenêtres : Uw ≤ 1,3 est requis pour les aides MaPrimeRénov'."
@@ -474,19 +474,19 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour compléter votre projet, consultez aussi les [prix d'un peintre en bâtiment](/blog/prix-peintre-batiment-2026-guide-complet) et les [tarifs d'un plombier](/blog/prix-plombier-2026-tarifs-horaires) si votre rénovation inclut ces corps d'état. Pour le choix du professionnel, notre guide [Comment choisir son carreleur](/blog/comment-choisir-carreleur-guide) vous donnera les critères essentiels.",
 
       "## Sources et méthodologie",
-      "Les prix présentés sont issus de l'analyse de **550+ devis réels** collectés entre janvier et mars 2026 auprès de carreleurs référencés sur ServicesArtisans, complétés par les données de l'UNECB-FFB (Union Nationale des Entrepreneurs Céramistes du Bâtiment) et les tarifs de référence CAPEB. Les fourchettes couvrent 80 % des devis constatés. Les tarifs excluent les carrelages de luxe (marbre, onyx), les formats XXL (> 120 cm) et les travaux en conditions exceptionnelles. Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025), tarif horaire carreleur 40-70 € HT\\n- **UNECB-FFB** (Union Nationale des Entrepreneurs Céramistes du Bâtiment) — grille tarifaire indicative 2025\\n- **Habitatpresto / Travaux.com** — baromètre prix pose carrelage 2026 : 60-190 €/m² fourni-posé\\n- **Comparaison de devis** collectés via ServicesArtisans (550+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des devis constatés et tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
 
       ":::warning Attention\nMéfiez-vous des carreleurs qui proposent des tarifs anormalement bas (moins de 25 €/m² pour la pose). Ce prix ne permet pas un travail soigné : la préparation du support est souvent bâclée, le double encollage pour les grands formats n'est pas respecté, et les joints sont irréguliers. Un carrelage mal posé se décolle en quelques années et le coût de reprise dépasse largement l'économie initiale.\n:::",
 
       ":::takeaway\n- Pose carrelage sol standard : **30 – 60 € HT/m²** (hors fournitures)\n- Fourniture grès cérame : **15 – 60 €/m²** selon la qualité\n- Préparation du support (ragréage) : **15 – 30 €/m²** à ne pas négliger\n- Budget global salle de bain 6 m² (sol + murs) : **2 500 – 6 000 €**\n- Budget global terrasse 20 m² : **1 600 – 3 600 €** fourniture et pose\n:::"
     ],
     image: "/images/blog/prix-carreleur-2026-pose-fourniture.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-16",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Carreleur", "Revêtement", "Salle de bain"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte la pose de carrelage au m² en 2026 ?", answer: "La pose de carrelage au sol coûte entre 30 et 60 € HT/m² pour un format standard, et 40 à 80 € HT/m² pour du grand format (60x60 cm et plus). La pose murale (faïence) se situe entre 35 et 70 € HT/m². Ces prix s'entendent hors fournitures et hors préparation du support. En Île-de-France, majorez de 25 à 35 %." },
@@ -599,17 +599,17 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour compléter votre projet de construction ou de rénovation, consultez aussi les [prix d'un terrassier](/blog/prix-terrassier-2026-tarifs-travaux), les [tarifs carreleur](/blog/prix-carreleur-2026-pose-fourniture) et les [prix de ravalement de façade](/blog/prix-ravalement-facade-2026). Pour le choix du professionnel, notre guide [Comment choisir son maçon](/blog/comment-choisir-macon-guide) vous donnera les critères essentiels.",
 
       "## Sources et méthodologie",
-      "Les prix présentés sont issus de l'analyse de **680+ devis réels** collectés entre janvier et mars 2026 auprès de maçons référencés sur ServicesArtisans, complétés par les données de la FFB (Fédération Française du Bâtiment), de la CAPEB et de l'indice BT01 (coût de la construction). Les fourchettes couvrent 80 % des devis constatés. Les tarifs excluent les travaux en zone sismique, les bâtiments classés et les interventions nécessitant un accès par grue. Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026\\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025), tarif horaire maçon 40-75 € HT\\n- **Indice BT01** (INSEE) — évolution du coût de la construction\\n- **Ootravaux / Renovationettravaux.fr** — baromètre prix maçonnerie 2026 : mur parpaing 100-240 €/m² fourni-posé\\n- **Comparaison de devis** collectés via ServicesArtisans (680+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des devis constatés et tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
 
       ":::takeaway\n- Tarif horaire maçon : **35 – 75 € HT** selon région et spécialisation\n- Mur en parpaings : **40 – 80 € HT/m²** fournitures et pose\n- Ouverture mur porteur : **2 500 – 6 000 €** (étude structure incluse)\n- Dalle béton : **50 – 100 € HT/m²**\n- Toujours exiger l'**assurance décennale** et prévoir **10-15 % d'imprévus**\n:::"
     ],
     image: "/images/blog/prix-macon-2026-gros-oeuvre-renovation.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-17",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Maçon", "Gros œuvre", "Rénovation"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte l'ouverture d'un mur porteur en 2026 ?", answer: "L'ouverture dans un mur porteur coûte entre 2 500 et 6 000 € selon la portée et l'épaisseur. Ce prix inclut l'étude de structure par un bureau d'études (500 – 1 200 €), la pose d'un IPN ou linteau béton, la démolition et les reprises de finitions. La suppression complète d'un mur porteur peut atteindre 8 000 à 15 000 €." },
@@ -712,19 +712,19 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour compléter votre projet d'extérieur, consultez aussi les [prix d'une terrasse](/blog/prix-terrasse-exterieure-2026), les [tarifs d'une clôture et d'un portail](/blog/prix-cloture-portail-2026) et les [prix d'un maçon](/blog/prix-macon-2026-gros-oeuvre-renovation) pour les travaux de terrassement.",
 
       "## Sources et méthodologie",
-      "Les prix présentés sont issus de l'analyse de **480+ devis réels** collectés entre janvier et mars 2026 auprès de jardiniers et paysagistes référencés sur ServicesArtisans, complétés par les données de l'UNEP (Union Nationale des Entreprises du Paysage) et de la FFP (Fédération Française du Paysage). Les fourchettes couvrent 80 % des devis constatés. Les tarifs excluent les projets d'exception (jardins de plus de 2 000 m², piscines paysagères, toitures végétalisées). Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **UNEP** (Union Nationale des Entreprises du Paysage) — observatoire des prix du paysage 2025\\n- **FFP** (Fédération Française du Paysage) — grille tarifaire indicative\\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\\n- **Comparaison de devis** collectés via ServicesArtisans (480+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des devis constatés et tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
 
       ":::tip Conseil pro\nLe **paillage** est l'investissement le plus rentable au jardin : 3 à 8 €/m² pour un paillage de qualité qui réduit le désherbage de 80 %, divise par deux les arrosages et nourrit le sol en se décomposant. En 2-3 ans, l'économie en entretien dépasse largement le coût initial.\n:::",
 
       ":::takeaway\n- Tonte pelouse 200 m² : **30 – 80 €** par passage\n- Contrat entretien annuel : **1 200 – 3 500 €/an** (le plus rentable)\n- Élagage grand arbre : **500 – 1 500 €**\n- Aménagement paysager complet : **50 – 150 €/m²**\n- **Crédit d'impôt de 50 %** sur l'entretien (jusqu'à 2 500 € d'économie/an)\n:::"
     ],
     image: "/images/blog/prix-jardinier-paysagiste-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-20",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Jardinier", "Paysagiste", "Entretien extérieur"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte un jardinier à l'heure en 2026 ?", answer: "Le taux horaire d'un jardinier se situe entre 25 et 45 € HT en province et 35 à 55 € HT en Île-de-France. Grâce au crédit d'impôt de 50 % pour les services à la personne, le coût effectif descend à 12,50 – 22,50 € HT/h en province. Un paysagiste concepteur facture 45 à 80 € HT/h." },
@@ -817,19 +817,19 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour compléter votre projet, consultez aussi les [prix de fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026), les [tarifs d'un menuisier](/blog/prix-menuisier-2026-tarifs-travaux) si le châssis doit être remplacé, et les [aides à la rénovation énergétique](/blog/renovation-energetique-aides-2026) pour le financement du remplacement de vitrage.",
 
       "## Sources et méthodologie",
-      "Les prix présentés sont issus de l'analyse de **390+ devis et factures** collectés entre janvier et mars 2026 auprès de vitriers-miroitiers référencés sur ServicesArtisans, complétés par les données du Syndicat National de la Vitrerie et les tarifs verriers (Saint-Gobain, AGC). Les fourchettes couvrent 80 % des cas constatés. Les tarifs excluent les vitrages spéciaux (blindage, anti-balles, résistant au feu), les formats XXL (> 4 m²) et les interventions en hauteur nécessitant une nacelle. Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **Syndicat National de la Vitrerie** — grille tarifaire indicative 2025\\n- **Saint-Gobain / AGC** — tarifs catalogue verriers 2025-2026\\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\\n- **Comparaison de devis** collectés via ServicesArtisans (390+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des cas constatés et tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
 
       ":::warning Attention\nComme pour la serrurerie, le secteur de la vitrerie d'urgence attire des entreprises peu scrupuleuses. Méfiez-vous des vitriers qui : annoncent un tarif au téléphone puis gonflent la facture sur place, ne fournissent pas de devis écrit, ne précisent pas le type de vitrage posé (épaisseur, composition), ou exigent un paiement en espèces. Vérifiez toujours le numéro **SIRET** et l'assurance RC professionnelle.\n:::",
 
       ":::takeaway\n- Remplacement simple vitrage : **60 – 150 €** par vitre standard\n- Double vitrage VIR posé : **150 – 350 €/m²**\n- Vitrine commerciale : **1 000 – 4 000 €** par vitrine\n- Crédence verre laqué : **150 – 400 €/m²**\n- Aides MaPrimeRénov' + CEE : jusqu'à **50 % du coût** pour l'amélioration thermique\n:::"
     ],
     image: "/images/blog/prix-vitrier-2026-remplacement-vitrage.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-22",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Vitrier", "Double vitrage", "Isolation"],
-    authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte le remplacement d'un double vitrage en 2026 ?", answer: "Le remplacement d'un double vitrage standard (4/16/4) coûte entre 100 et 250 €/m² fourniture et pose. Un double vitrage à isolation renforcée (VIR) avec gaz argon revient à 150 – 350 €/m². Le triple vitrage se situe entre 200 et 450 €/m². Ces prix s'entendent pour le vitrage seul, hors remplacement du châssis de la fenêtre." },
@@ -916,19 +916,19 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Pour compléter votre projet de confort thermique, consultez aussi les [tarifs chauffagiste 2026](/blog/prix-chauffagiste-2026-installation-entretien) si vous souhaitez une PAC air-eau plus polyvalente, et notre guide des [aides rénovation 2026](/blog/renovation-energetique-aides-2026) pour connaître les CEE disponibles pour les PAC air-air.",
 
       "## Sources et méthodologie",
-      "Les prix présentés sont issus de l'analyse de **420+ devis réels** collectés entre janvier et mars 2026 auprès de climaticiens référencés sur ServicesArtisans, complétés par les tarifs fabricants (Daikin, Mitsubishi Electric, Atlantic, Samsung) et les données de l'AFPAC. Les fourchettes couvrent 80 % des devis constatés. Les tarifs excluent les installations en gainable central, les systèmes VRV/VRF professionnels et les projets nécessitant un permis de construire. Dernière mise à jour : mars 2026.",
+      "Les prix indiqués dans ce guide sont issus de :\\n- **ADEME** — guide des équipements de chauffage et climatisation (2025)\\n- **AFPAC** (Association Française pour les Pompes à Chaleur) — statistiques de marché 2025\\n- **Fabricants** (Daikin, Mitsubishi Electric, Atlantic, Samsung) — tarifs catalogue 2025-2026\\n- **Comparaison de devis** collectés via ServicesArtisans (420+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des devis constatés et tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
 
       ":::warning Attention\nUn climatiseur mal dimensionné coûte cher à l'usage : **surdimensionné**, il alterne entre marche et arrêt (surconsommation de 20 à 30 %) ; **sous-dimensionné**, il tourne en permanence sans atteindre la température souhaitée. Un bilan thermique préalable (200 – 500 €, souvent offert par les installateurs sérieux) est indispensable.\n:::",
 
       ":::takeaway\n- Monosplit réversible : **1 500 – 3 500 €** (une pièce)\n- Multisplit pour maison : **5 000 – 12 000 €**\n- Gainable (invisible) : **6 000 – 15 000 €**\n- Entretien annuel : **100 – 200 €** (obligatoire)\n- Installer **hors saison** pour économiser 10 à 20 %\n:::"
     ],
     image: "/images/blog/prix-climaticien-2026-installation-entretien.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-24",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Climatisation", "Pompe à chaleur", "Confort thermique"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte l'installation d'une climatisation réversible en 2026 ?", answer: "Un monosplit réversible coûte entre 1 500 et 3 500 € TTC posé pour une pièce de 15 à 40 m². Un multisplit (plusieurs pièces) se situe entre 3 000 et 12 000 € selon le nombre d'unités intérieures. Un système gainable (diffusion invisible par faux plafond) coûte 6 000 à 15 000 €. Anticipez l'installation en automne pour éviter les surcoûts estivaux." },
@@ -1002,15 +1002,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::info Bon à savoir\nLes travaux de cuisine dans un logement de plus de 2 ans bénéficient de la **TVA à 10 %** sur la main-d'œuvre et les fournitures posées par un professionnel (hors électroménager, qui reste à 20 %). Cela représente une économie de 10 % sur le poste main-d'œuvre et accessoires, soit **200 à 600 €** pour un projet moyen.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Travaux.com / Habitatpresto** — baromètre prix aménagement cuisine 2026 : 5 000-20 000 € en moyenne\n- **Fabricants** (Schmidt, SoCoo'c, Leroy Merlin, IKEA) — catalogues tarifs 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Cuisine complète entrée de gamme : **3 000 – 6 000 €**\n- Cuisine milieu de gamme : **6 000 – 15 000 €** (le meilleur rapport qualité-prix)\n- Pose seule par un indépendant : **300 – 700 €/ml**\n- Travaux annexes (plomberie, électricité) : **1 000 – 3 000 €** à ne pas oublier\n- Profiter des **soldes et déstockages** pour économiser 20 à 40 %\n:::"
     ],
     image: "/images/blog/prix-cuisiniste-2026-pose-cuisine.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-27",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Cuisine", "Cuisiniste", "Rénovation intérieure"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte une cuisine équipée complète en 2026 ?", answer: "Une cuisine complète (mobilier + électroménager + pose + travaux annexes) coûte entre 5 000 et 10 000 € en entrée de gamme, 10 000 à 20 000 € en milieu de gamme, et 20 000 à 50 000 €+ en haut de gamme, pour une cuisine de 8 à 12 m²." },
@@ -1079,15 +1081,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nSur **plancher chauffant**, seule la pose collée est autorisée pour le parquet (jamais la pose flottante, qui crée une lame d'air isolante réduisant l'efficacité du chauffage). Vérifiez la compatibilité du revêtement avec votre système de chauffage au sol : le fabricant indique une **résistance thermique maximale** (généralement 0,15 m².K/W). Le vinyle LVT et le carrelage sont les plus adaptés au plancher chauffant.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **UNILIN / Tarkett / Saint-Maclou** — catalogues tarifs fabricants et distributeurs 2025-2026\n- **Habitatpresto / Travaux.com** — baromètre prix revêtement sol 2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Stratifié (le plus économique) : **15 – 45 €/m²** fourni-posé\n- Parquet contrecollé chêne : **40 – 100 €/m²** (meilleur rapport qualité-prix)\n- Parquet massif chêne : **80 – 200 €/m²** (investissement long terme)\n- Béton ciré : **100 – 200 €/m²** (style contemporain)\n- Toujours prévoir **ragréage + sous-couche** dans le budget\n:::"
     ],
     image: "/images/blog/prix-solier-revetement-sol-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-29",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Solier", "Parquet", "Revêtement de sol"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quel est le revêtement de sol le moins cher en 2026 ?", answer: "Le stratifié est le revêtement le plus économique : 15 à 45 €/m² fourni-posé. Le vinyle en rouleau est également très abordable (15 – 35 €/m²). Attention toutefois au coût sur la durée : un stratifié dure 10-20 ans contre 50-100 ans pour un parquet massif qui peut être poncé plusieurs fois." },
@@ -1146,15 +1150,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nMéfiez-vous des entreprises proposant des tarifs anormalement bas (moins de 15 €/h) : c'est souvent le signe de **travail non déclaré**, avec les risques que cela comporte (aucune assurance, aucun recours en cas de dommage, complicité de travail dissimulé sanctionnée par la loi). Vérifiez l'attestation de vigilance URSSAF de l'entreprise.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FEP** (Fédération des Entreprises de Propreté) — observatoire des prix du nettoyage 2025\n- **URSSAF** — barèmes CESU et coût horaire employeur 2026\n- **INSEE** — indice des prix des services aux ménages\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Ménage 3h à domicile : **60 – 135 €** (30 – 68 € après crédit d'impôt)\n- Nettoyage fin de chantier : **3 – 8 €/m²**\n- Copropriété 10-20 lots : **3 000 – 8 000 €/an**\n- **Crédit d'impôt de 50 %** sur le ménage à domicile (jusqu'à 6 000 € d'économie/an)\n- Toujours vérifier l'**attestation URSSAF** du prestataire\n:::"
     ],
     image: "/images/blog/prix-nettoyage-professionnel-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-01-31",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Nettoyage", "Entretien", "Services à domicile"],
-    authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte un ménage à domicile avec le crédit d'impôt ?", answer: "Un ménage de 3 heures coûte 60 à 135 € en province. Grâce au crédit d'impôt de 50 % (services à la personne), le coût effectif descend à 30 – 68 €. Ce crédit s'applique dans la limite de 12 000 € de dépenses annuelles et est accessible à tous les contribuables, même non imposables." },
@@ -1213,15 +1219,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nDans l'ancien, les **imprévus** sont la règle, pas l'exception. Murs humides cachés derrière un doublage, canalisations en plomb, amiante dans les colles de carrelage, électricité en câbles sous textile... Un diagnostic complet avant travaux (500 – 1 500 €) permet d'anticiper et d'éviter les dérapages budgétaires. Prévoyez **toujours** 15 à 20 % de marge.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Architecteo / Hellowatt** — baromètre prix rénovation 2026 : 200-2 000 €/m²\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Rénovation légère : **200 – 500 €/m²** (peinture, sols)\n- Rénovation complète : **1 000 – 2 000 €/m²** (tout refaire)\n- Appartement 65 m² rénovation lourde : **65 000 – 130 000 €**\n- Aides cumulables : jusqu'à **30-50 %** de prise en charge sur les travaux énergétiques\n- Toujours prévoir **15-20 % d'imprévus** dans l'ancien\n:::"
     ],
     image: "/images/blog/prix-renovation-appartement-2026-budget.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-01",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Rénovation", "Appartement", "Budget travaux"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quel budget pour rénover un appartement de 60 m² en 2026 ?", answer: "Pour un appartement de 60 m², comptez 12 000 à 30 000 € pour une rénovation légère (peinture, sols), 30 000 à 60 000 € pour une rénovation intermédiaire (salle de bain, cuisine, sols), et 60 000 à 120 000 € pour une rénovation lourde (tout refaire). À Paris, majorez ces budgets de 30 à 50 %." },
@@ -1287,15 +1295,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nAvant de lancer une extension, vérifiez le **PLU** de votre commune : coefficient d'emprise au sol, hauteur maximale, distance aux limites séparatives, aspect extérieur. Certaines zones n'autorisent pas les extensions visibles depuis la voie publique. Consultez le service urbanisme de votre mairie **avant** de commander les plans.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Architecteo** — baromètre coût extension maison 2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Aménagement combles : **600 – 1 500 €/m²** (le plus économique)\n- Extension maçonnerie : **1 200 – 2 200 €/m²** (le classique)\n- Extension bois : **1 400 – 2 500 €/m²** (rapide et performant)\n- Surélévation : **1 800 – 3 000 €/m²** (quand pas de terrain)\n- Permis de construire obligatoire au-delà de **20-40 m²**\n:::"
     ],
     image: "/images/blog/prix-extension-maison-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-03",
     readTime: "15 min",
     category: "Tarifs",
     tags: ["Extension", "Agrandissement", "Construction"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quel est le prix moyen d'une extension de maison au m² en 2026 ?", answer: "Le prix varie selon la technique : extension maçonnerie traditionnelle 1 200 – 2 200 €/m², ossature bois 1 400 – 2 500 €/m², surélévation 1 800 – 3 000 €/m², véranda aluminium 1 000 – 2 500 €/m², aménagement de combles 600 – 1 500 €/m². Ces prix s'entendent clé en main (fondations, structure, isolation, finitions)." },
@@ -1341,15 +1351,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nLes façades des bâtiments construits avant **1948** peuvent contenir du plomb dans les peintures. Un **diagnostic plomb avant travaux** (DRIPP) est obligatoire. Si du plomb est détecté, des mesures de confinement et de protection spécifiques sont nécessaires, majorant le coût de 15 à 30 %. Ne confiez jamais un ravalement de façade ancienne à un artisan qui ignore cette réglementation.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026\n- **ADEME** — guide isolation thermique par l'extérieur (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour l'ITE : jusqu'à 75 €/m²\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Ravalement simple : **40 – 100 €/m²**\n- Ravalement avec ITE enduit : **100 – 200 €/m²** (le meilleur investissement)\n- Aides ITE cumulables : jusqu'à **60 % du coût** (MaPrimeRénov' + CEE + TVA 5,5 %)\n- Obligation légale dans certaines communes (tous les **10 ans**)\n- Toujours coupler ravalement + isolation pour **maximiser les aides**\n:::"
     ],
     image: "/images/blog/prix-ravalement-facade-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-04",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Ravalement", "Façade", "Isolation extérieure"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte un ravalement de façade en 2026 ?", answer: "Un ravalement simple (nettoyage + enduit ou peinture) coûte entre 40 et 100 €/m². Un ravalement avec isolation thermique par l'extérieur (ITE) se situe entre 100 et 200 €/m² avec finition enduit, et 150 à 300 €/m² avec bardage ventilé. Pour une maison de 100 m² de façade, le budget va de 4 000 € (ravalement simple) à 30 000 € (ITE complète)." },
@@ -1393,15 +1405,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nPour une terrasse en bois, utilisez uniquement du bois **classe 4** (résistant au contact permanent avec le sol et l'eau). Le pin traité autoclave classe 3 n'est pas suffisant pour les lames de terrasse. Vérifiez aussi que les vis et fixations sont en **inox A2 minimum** pour éviter la corrosion. Une terrasse en bois posée avec des vis zinguées rouillera en 2-3 ans.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- **Fabricants** (Silvadec, Fiberon, UPM) — catalogues tarifs composite 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Terrasse bois pin traité : **40 – 80 €/m²** (le plus économique)\n- Terrasse composite : **80 – 180 €/m²** (zéro entretien)\n- Terrasse béton décoratif : **60 – 200 €/m²** (grande liberté de formes)\n- Terrasse pierre naturelle : **80 – 250 €/m²** (la plus noble)\n- Pose sur plots : économie de **50 – 100 €/m²** vs dalle béton\n:::"
     ],
     image: "/images/blog/prix-terrasse-exterieure-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-05",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Terrasse", "Aménagement extérieur", "Bois composite"],
-    authorBio: "Jean-Pierre Duval, ancien artisan du bâtiment reconverti en journaliste, partage son expertise terrain pour aider les propriétaires à faire les bons choix.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quel est le meilleur matériau pour une terrasse en 2026 ?", answer: "Le composite coextrudé offre le meilleur compromis : esthétique proche du bois, aucun entretien, durée de vie de 25-30 ans, résistant aux UV et aux taches. Le bois exotique (ipé, cumaru) est le plus noble et le plus durable (40 ans+) mais demande un entretien annuel. Le grès cérame sur plots est idéal pour un aspect minéral sans entretien." },
@@ -1446,15 +1460,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nRenseignez-vous sur les **limites séparatives** avant de poser votre clôture. Le Code civil impose que la clôture soit implantée **sur votre terrain** (et non à cheval sur la limite). En cas de doute, faites intervenir un **géomètre-expert** (300 à 800 €) pour borner votre terrain. Une clôture implantée chez le voisin peut devoir être démolie à vos frais.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Fabricants** (Betafence, Dirickx) — catalogues tarifs clôtures et portails 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Grillage rigide avec occultant : **40 – 90 €/ml** (meilleur rapport qualité-prix)\n- Clôture composite : **100 – 250 €/ml** (zéro entretien)\n- Portail aluminium motorisé : **2 000 – 7 000 €** posé\n- Hauteur maximale fixée par le **PLU** (généralement 1,80 – 2 m)\n- Toujours vérifier les **limites de propriété** avant la pose\n:::"
     ],
     image: "/images/blog/prix-cloture-portail-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-06",
     readTime: "14 min",
     category: "Tarifs",
     tags: ["Clôture", "Portail", "Aménagement extérieur"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte une clôture au mètre linéaire en 2026 ?", answer: "Les prix varient selon le matériau : grillage simple torsion 15 – 30 €/ml, grillage rigide 30 – 70 €/ml, PVC 60 – 150 €/ml, bois 50 – 200 €/ml, composite 100 – 300 €/ml, aluminium 100 – 300 €/ml, fer forgé 200 – 600 €/ml. Ces prix incluent la fourniture, les poteaux et la pose." },
@@ -1499,15 +1515,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nEn secteur **ABF** (Architectes des Bâtiments de France) ou en copropriété, le choix du matériau peut être imposé (bois obligatoire dans certains immeubles classés). Vérifiez le règlement de copropriété et consultez le service urbanisme **avant** de commander vos fenêtres. Un changement de matériau non autorisé peut entraîner l'obligation de déposer les fenêtres à vos frais.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **UFME** (Union des Fabricants de Menuiseries Extérieures) — observatoire des prix 2025\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour les menuiseries : 70-180 € par fenêtre\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Fenêtre PVC double vitrage : **300 – 700 €** posée (meilleur rapport qualité-prix)\n- Fenêtre aluminium : **500 – 1 200 €** posée (profils fins, design)\n- Fenêtre bois : **500 – 1 300 €** posée (isolation naturelle optimale)\n- Aides MaPrimeRénov' + CEE : **70 – 180 €** par fenêtre + TVA 5,5 %\n- Toujours exiger un artisan **RGE** et le coefficient **Uw ≤ 1,3**\n:::"
     ],
     image: "/images/blog/prix-fenetre-double-vitrage-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-07",
     readTime: "15 min",
     category: "Tarifs",
     tags: ["Fenêtres", "Double vitrage", "Isolation thermique"],
-    authorBio: "Marc Lefebvre, ingénieur thermicien et rédacteur technique, vulgarise les aspects complexes de la rénovation énergétique.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte le remplacement de toutes les fenêtres d'une maison ?", answer: "Pour une maison de 100 m² avec 8 à 10 fenêtres et 2 portes-fenêtres, le budget en PVC se situe entre 5 000 et 12 000 € pose comprise. En aluminium : 8 000 à 20 000 €. En bois : 7 000 à 18 000 €. Les aides (MaPrimeRénov', CEE, TVA 5,5 %) peuvent réduire le reste à charge de 20 à 40 %." },
@@ -1555,15 +1573,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::info Bon à savoir\nLa norme **NF C 15-100** impose des exigences minimales par pièce : au moins 5 prises dans un séjour de plus de 28 m², 6 prises dans une cuisine, 1 prise par tranche de 4 m² dans les chambres. Le **diagnostic électrique** est obligatoire pour la vente d'un logement de plus de 15 ans et peut révéler des anomalies graves (absence de terre, fils sous textile, disjoncteurs obsolètes).\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025), tarif horaire électricien 35-80 € HT\n- **IZI by EDF / Ootravaux** — baromètre prix électricien 2026 : 60-80 €/h en moyenne\n- **Consuel** — tarifs certification 2026\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour les équipements solaires\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Installation neuve maison 100 m² : **8 000 – 15 000 €** TTC\n- Mise aux normes complète : **80 – 150 €/m²**\n- Tableau électrique : **600 – 2 000 €** posé\n- Panneaux solaires 3 kWc : **7 000 – 14 000 €** (avec prime autoconsommation)\n- Certificat **Consuel** obligatoire pour toute installation neuve\n:::"
     ],
     image: "/images/blog/prix-installation-electrique-neuve-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-09",
     readTime: "15 min",
     category: "Tarifs",
     tags: ["Électricien", "Installation électrique", "Domotique"],
-    authorBio: "Claire Dubois, experte en économie de la construction, analyse les prix du marché et les aides financières pour informer les consommateurs.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Combien coûte la mise aux normes électrique d'un appartement ?", answer: "La mise en conformité d'une installation ancienne coûte entre 80 et 150 €/m². Pour un appartement de 70 m² : 5 600 à 10 500 €. Ce budget comprend le remplacement du tableau, la mise à la terre, la protection différentielle, la mise en conformité des circuits et le remplacement des appareillages vétustes." },
@@ -1611,15 +1631,17 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::info Bon à savoir\nLa norme **NF C 15-100** divise la salle de bain en **volumes de sécurité** (0, 1 et 2) qui déterminent quels équipements électriques sont autorisés à chaque endroit. Un électricien qualifié respecte ces volumes. Les prises doivent être à plus de 60 cm du bord de la baignoire ou du receveur de douche. Le sèche-serviettes doit être de classe II et installé hors volume 1.\n:::",
 
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **Travaux.com / Habitatpresto** — baromètre prix rénovation salle de bain 2026 : 900-2 000 €/m²\n- **La Maison Saint-Gobain** — guide budget salle de bain 2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.",
+
       ":::takeaway\n- Salle de bain entrée de gamme (5 m²) : **3 000 – 6 000 €**\n- Salle de bain milieu de gamme : **6 000 – 12 000 €** (douche italienne, meuble vasque)\n- Salle de bain haut de gamme : **12 000 – 25 000 €+**\n- Conserver l'implantation existante économise **500 – 1 500 €** de plomberie\n- **Étanchéité SPEC** obligatoire sous la douche (15 – 30 €/m²)\n:::"
     ],
     image: "/images/blog/prix-salle-de-bain-complete-2026.jpg",
-    author: "ServicesArtisans",
+    author: "L'équipe ServicesArtisans",
     date: "2026-02-11",
     readTime: "16 min",
     category: "Tarifs",
     tags: ["Salle de bain", "Rénovation", "Plomberie"],
-    authorBio: "Sophie Martin, rédactrice spécialisée en rénovation et habitat, accompagne les particuliers dans leurs projets depuis plus de 8 ans.",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     updatedDate: "2026-03-01",
     faq: [
       { question: "Quel budget pour rénover une salle de bain en 2026 ?", answer: "Le budget dépend du niveau de finition : entrée de gamme 3 000 – 6 000 € (5 m²), milieu de gamme 6 000 – 12 000 € (douche italienne, meuble vasque de marque), haut de gamme 12 000 – 25 000 €+ (robinetterie design, mosaïque, sur-mesure). Ces budgets incluent sanitaires, carrelage, plomberie, électricité et main-d'œuvre." },

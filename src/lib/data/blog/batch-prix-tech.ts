@@ -78,14 +78,14 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       ":::takeaway\n- Alarme sans fil maison : **400 – 1 800 €** selon le nombre de zones\n- Vidéosurveillance 2-4 caméras : **800 – 3 500 €** fourni-posé\n- Interphone/visiophone connecté : **300 – 2 000 €**\n- Télésurveillance : **20 – 60 €/mois** (1 200 – 5 400 € sur 5 ans)\n- Exigez un installateur certifié **APSAD** ou **NF Service** pour la reconnaissance assureur\n:::"
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    image: "💰",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-01-15",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Alarme", "Sécurité", "Vidéosurveillance", "Tarifs 2026"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les réglementations pour vous aider à budgéter vos projets.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-15",
     faq: [
       { question: "Combien coûte une alarme maison sans fil en 2026 ?", answer: "Un kit alarme sans fil basique (centrale + 3-5 détecteurs + sirène) coûte entre 400 et 800 € posé. Un système premium avec anti-brouillage et connexion 4G se situe entre 1 200 et 1 800 €. À cela peut s'ajouter un abonnement de télésurveillance de 20 à 60 €/mois." },
       { question: "La vidéosurveillance est-elle légale chez un particulier ?", answer: "Oui, à condition que les caméras ne filment que votre propriété privée. Il est interdit de filmer la voie publique ou les propriétés voisines (article 226-1 du Code pénal). Les images ne peuvent être conservées plus de 30 jours et un panneau signalant la vidéosurveillance est recommandé." },
@@ -178,14 +178,14 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       ":::takeaway\n- Antenne TNT standard installée : **100 – 300 €**\n- Parabole satellite : **200 – 600 €** selon la configuration\n- Tirage fibre intérieur : **150 – 500 €** selon le nombre de prises\n- Dépannage/réglage : **60 – 150 €** déplacement inclus\n- Vérifiez le droit à l'antenne et la mise à la terre obligatoire\n:::"
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    image: "💰",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-01-23",
     readTime: "11 min",
     category: "Tarifs",
     tags: ["Antenniste", "TNT", "Fibre optique", "Tarifs 2026"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les réglementations pour vous aider à budgéter vos projets.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-19",
     faq: [
       { question: "Combien coûte l'installation d'une antenne TNT en 2026 ?", answer: "L'installation d'une antenne TNT râteau sur mât de toit coûte entre 100 et 300 € fourniture et pose comprises. Le prix varie selon la hauteur du mât, la nécessité d'un amplificateur et l'accessibilité du toit. En zone de réception faible, une antenne directive à gain élevé est nécessaire, ce qui augmente le budget." },
       { question: "L'antenniste peut-il installer la fibre optique ?", answer: "L'antenniste ne raccorde pas la fibre depuis le réseau (c'est le travail de l'opérateur), mais il peut réaliser le câblage intérieur de fibre ou Ethernet dans votre logement. Le tirage de fibre intérieur coûte 150 à 500 € selon le nombre de prises et la complexité du passage de câble." },
@@ -284,14 +284,14 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       ":::takeaway\n- Monte-escalier droit : **3 000 – 6 000 €**, tournant : **7 000 – 12 000 €**\n- Ascenseur privatif (maison) : **15 000 – 40 000 €** selon la technologie\n- Entretien annuel obligatoire : **1 500 – 3 500 €/an** (collectif)\n- Mise aux normes : **15 000 – 60 000 €** selon l'état de l'équipement\n- Contrôle technique quinquennal obligatoire : **500 – 1 500 €**\n:::"
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    image: "💰",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-01-31",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Ascensoriste", "Monte-escalier", "Ascenseur", "Tarifs 2026"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les réglementations pour vous aider à budgéter vos projets.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-22",
     faq: [
       { question: "Combien coûte un monte-escalier en 2026 ?", answer: "Un monte-escalier pour escalier droit coûte entre 3 000 et 6 000 € fourni-posé. Pour un escalier tournant ou en colimaçon, comptez 7 000 à 12 000 € en raison du rail sur mesure. Des aides financières existent : crédit d'impôt, APA, ANAH, caisse de retraite." },
       { question: "L'entretien d'un ascenseur est-il obligatoire ?", answer: "Oui, le décret du 9 septembre 2004 impose un contrat d'entretien avec un professionnel qualifié, comprenant une visite mensuelle minimum, une visite semestrielle approfondie et un dépannage sous 24 heures. Le coût annuel se situe entre 1 500 et 3 500 € pour un ascenseur collectif." },
@@ -354,7 +354,7 @@ export const prixTechArticles: Record<string, BlogArticle> = {
       "### Pack diagnostics complets",
       "La plupart des diagnostiqueurs proposent des packs regroupant tous les diagnostics obligatoires pour la vente ou la location. Un pack vente complet (DPE + amiante + plomb + termites + électricité + gaz + Carrez + ERP) revient à **300 – 700 €**, soit une économie de 20 à 35 % par rapport aux diagnostics commandés séparément.",
 
-      ":::tip Conseil pro\nCommandez toujours un pack complet plutôt que des diagnostics à l'unité. Non seulement c'est moins cher, mais le diagnostiqueur réalise tous les contrôles en une seule visite, ce qui vous fait gagner du temps. Comparez au moins 3 devis et vérifiez que le diagnostiqueur est certifié pour chaque diagnostic sur le site du ministère.\n:::",
+      ":::tip Conseil pro\nCommandez toujours un pack complet plutôt que des diagnostics à l'unité. Non seulement c'est moins cher, mais le diagnostiqueur réalise tous les contrôles en une seule visite, ce qui vous fait gagner du temps. Vérifiez que le diagnostiqueur est certifié pour chaque diagnostic sur le site du ministère.\n:::",
 
       "## Facteurs qui influencent le prix",
 
@@ -396,14 +396,14 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       ":::takeaway\n- DPE : **120 – 250 €** selon la surface (valable 10 ans)\n- Pack complet vente (5-8 diagnostics) : **300 – 700 €**\n- Audit énergétique réglementaire (F/G) : **500 – 1 200 €**\n- Vérifiez les certifications COFRAC du diagnostiqueur\n- Commandez un pack complet pour économiser 20 à 35 %\n:::"
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    image: "💰",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-02-08",
     readTime: "13 min",
     category: "Tarifs",
     tags: ["Diagnostiqueur", "DPE", "Immobilier", "Tarifs 2026"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les réglementations pour vous aider à budgéter vos projets.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-26",
     faq: [
       { question: "Combien coûte un DPE en 2026 ?", answer: "Le DPE coûte entre 120 et 250 € selon la surface du logement. Pour un appartement de 50 m², comptez 120 à 150 €. Pour une maison de 100 m², comptez 150 à 200 €. Le DPE est valable 10 ans et doit être réalisé par un diagnostiqueur certifié." },
       { question: "Quels diagnostics sont obligatoires pour vendre un logement ?", answer: "Les diagnostics obligatoires en vente sont : DPE, ERP (risques), Loi Carrez (copropriété). S'ajoutent selon le bien : amiante (permis avant 1997), plomb (avant 1949), termites (zone à risque), électricité et gaz (installations > 15 ans), audit énergétique (classes F et G). Le pack complet coûte 300 à 700 €." },
@@ -504,14 +504,14 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       ":::takeaway\n- Bornage amiable : **800 – 2 500 €** selon la taille du terrain\n- Division parcellaire : **1 500 – 4 000 €** selon le nombre de lots\n- Relevé topographique : **500 – 2 000 €** selon la surface\n- Plan d'implantation : **800 – 1 500 €**\n- Vérifiez que le géomètre est inscrit à l'Ordre (OGE) pour tout bornage\n:::"
     ],
-    image: "/images/blog/placeholder.webp",
-    author: "ServicesArtisans",
-    date: "2026-04-03",
+    image: "💰",
+    author: "L'équipe ServicesArtisans",
+    date: "2026-02-15",
     readTime: "12 min",
     category: "Tarifs",
     tags: ["Géomètre", "Bornage", "Foncier", "Tarifs 2026"],
-    authorBio: "L'équipe ServicesArtisans analyse les prix du marché et les réglementations pour vous aider à budgéter vos projets.",
-    updatedDate: "2026-04-03",
+    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: "2026-03-30",
     faq: [
       { question: "Combien coûte un bornage de terrain en 2026 ?", answer: "Un bornage amiable coûte entre 800 et 2 500 € selon la surface du terrain et le nombre de bornes. Un terrain urbain de moins de 1 000 m² revient à 800 – 1 200 €, un terrain rural de plus de 1 000 m² à 1 200 – 2 500 €. Le bornage judiciaire (en cas de conflit) coûte 1 500 à 3 500 € hors frais d'avocat." },
       { question: "Le bornage est-il obligatoire pour vendre un terrain ?", answer: "Le bornage est obligatoire uniquement pour les terrains issus d'un lotissement ou d'une division foncière (article L. 115-4 du Code de l'urbanisme). Pour les autres ventes, il n'est pas obligatoire mais fortement recommandé. L'acquéreur peut exiger le bornage dans le mois précédant la signature." },
