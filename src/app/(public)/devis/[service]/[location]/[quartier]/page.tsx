@@ -233,7 +233,7 @@ export default async function DevisQuartierPage({
               })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Comparez jusqu'à 3 devis de {tradeLower}s à {quartierName} ({ville.departement}).
+              Devis gratuit de {tradeLower}s à {quartierName} ({ville.departement}).
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">

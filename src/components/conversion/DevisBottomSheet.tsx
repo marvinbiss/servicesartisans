@@ -44,7 +44,7 @@ const urgencyOptions = [
   { value: 'flexible', label: 'Pas urgent' },
   { value: 'mois', label: 'Ce mois-ci' },
   { value: 'semaine', label: 'Cette semaine' },
-  { value: 'urgent', label: 'Urgent (sous 24h)' },
+  { value: 'urgent', label: 'Urgent' },
 ]
 
 /* ─── Component ────────────────────────────────────────────────────── */
@@ -737,7 +737,7 @@ export default function DevisBottomSheet({
                         {submitting ? (
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
-                          <>Obtenir mes 3 devis gratuits</>
+                          <>Obtenir mon devis gratuit</>
                         )}
                       </button>
                     </div>

@@ -233,7 +233,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Votre demande de revendication a été soumise. Un administrateur la validera sous 24 à 48 heures.',
+      message: 'Votre demande de revendication a été soumise. Un administrateur la validera rapidement.',
     })
   } catch (err) {
     logger.error('Claim API unexpected error', { error: err })

@@ -285,7 +285,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
                 <ArrowRight className="w-5 h-5 text-emerald-600" />
                 <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Devis {metier.label.toLowerCase()}</h3>
               </div>
-              <p className="text-sm text-gray-500">Recevez jusqu'à 3 devis gratuits de professionnels vérifiés.</p>
+              <p className="text-sm text-gray-500">Devis gratuit et sans engagement de professionnels vérifiés.</p>
             </Link>
           </div>
         </section>

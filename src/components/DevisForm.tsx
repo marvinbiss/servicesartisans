@@ -44,7 +44,7 @@ const urgencyOptions = [
   { value: 'flexible', label: 'Pas urgent' },
   { value: 'mois', label: 'Ce mois-ci' },
   { value: 'semaine', label: 'Cette semaine' },
-  { value: 'urgent', label: 'Urgent (sous 24h)' },
+  { value: 'urgent', label: 'Urgent' },
 ]
 
 const budgetOptions = [
@@ -636,7 +636,7 @@ export default function DevisForm({
         </span>
         <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
           <Clock className="w-3.5 h-3.5" />
-          Réponse sous 24h
+          Réponse rapide
         </span>
         <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
           <Check className="w-3.5 h-3.5" />
@@ -1165,7 +1165,7 @@ export default function DevisForm({
                   <Check className="w-3.5 h-3.5" /> Gratuit
                 </span>
                 <span className="flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> 3 devis max
+                  <Check className="w-3.5 h-3.5" /> Sans engagement
                 </span>
                 <span className="flex items-center gap-1">
                   <Check className="w-3.5 h-3.5" /> Artisans vérifiés SIREN
@@ -1199,7 +1199,7 @@ export default function DevisForm({
                       Envoi en cours&hellip;
                     </>
                   ) : (
-                    <>Obtenir mes 3 devis gratuits <ArrowRight className="w-5 h-5" /></>
+                    <>Obtenir mon devis gratuit <ArrowRight className="w-5 h-5" /></>
                   )}
                 </button>
               </div>

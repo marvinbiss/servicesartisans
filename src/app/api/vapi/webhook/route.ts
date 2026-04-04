@@ -147,7 +147,7 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
           score === 'A'
             ? 'Excellent prospect, proposez un transfert immédiat.'
             : score === 'B'
-            ? 'Bon prospect, proposez un rappel sous 24h.'
+            ? 'Bon prospect, proposez un rappel rapide.'
             : 'Prospect à suivre, proposez un rappel.'
         }`,
       })

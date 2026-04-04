@@ -12,7 +12,7 @@ const faqItems: FAQItem[] = [
   {
     question: 'Est-ce vraiment gratuit ?',
     answer:
-      'Oui, le service est 100% gratuit pour les particuliers. Vous recevez jusqu\'a 3 devis sans aucun frais. Ce sont les artisans qui financent le service en s\'inscrivant sur la plateforme.',
+      'Oui, le service est 100% gratuit pour les particuliers. Vous recevez des devis sans aucun frais. Ce sont les artisans qui financent le service en s\'inscrivant sur la plateforme.',
   },
   {
     question: 'Comment sont sélectionnés les artisans ?',

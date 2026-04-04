@@ -53,7 +53,7 @@ const staticPages: CmsSeed[] = [
   { slug: 'regions', page_type: 'static', title: 'Artisans par région', meta_description: 'Trouvez un artisan dans votre région.' },
   { slug: 'villes', page_type: 'static', title: 'Artisans par ville', meta_description: 'Trouvez un artisan dans votre ville.' },
   { slug: 'plan-du-site', page_type: 'static', title: 'Plan du site', meta_description: 'Plan du site ServicesArtisans — toutes les pages.' },
-  { slug: 'devis', page_type: 'static', title: 'Demander un devis gratuit', meta_description: 'Recevez jusqu\'à 3 devis gratuits d\'artisans qualifiés.' },
+  { slug: 'devis', page_type: 'static', title: 'Demander un devis gratuit', meta_description: 'Devis gratuit et sans engagement d\'artisans qualifiés.' },
 ]
 
 // ─── Homepage ──────────────────────────────────────────────────

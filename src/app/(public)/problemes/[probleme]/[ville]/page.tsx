@@ -889,7 +889,7 @@ export default async function ProblemeVillePage({
             Besoin d'un {tradeName.toLowerCase()} {'à'} {villeData.name} ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Recevez 3 devis gratuits d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} sans engagement.
+            Devis gratuit d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} sans engagement.
           </p>
           <TarifsDevisCTA
             service={problem.primaryService}

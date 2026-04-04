@@ -39,7 +39,7 @@ const guarantees = [
   },
   {
     icon: Clock,
-    title: 'Réponse rapide sous 24h',
+    title: 'Réponse rapide',
     description: 'Votre demande est transmise en temps réel aux artisans disponibles dans votre zone. En moyenne, vous recevez une première réponse en quelques heures.',
     color: 'bg-amber-100 text-amber-600',
   },
@@ -174,7 +174,7 @@ export default function GarantiePage() {
             Prêt à trouver votre artisan ?
           </h2>
           <p className="text-blue-100 mb-6 max-w-lg mx-auto">
-            Recevez jusqu'à 3 devis gratuits d'artisans vérifiés, en moins de 60 secondes.
+            Devis gratuit et sans engagement d'artisans vérifiés.
           </p>
           <Link
             href="/devis"

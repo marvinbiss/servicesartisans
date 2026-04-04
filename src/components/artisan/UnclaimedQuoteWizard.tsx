@@ -48,7 +48,7 @@ const SERVICE_OPTIONS: Record<string, string[]> = {
 const DEFAULT_SERVICES = ['Réparation', 'Installation', 'Entretien', 'Rénovation', 'Diagnostic', 'Autre']
 
 const URGENCY_OPTIONS = [
-  { value: 'urgent', label: 'Urgent (sous 24h)', icon: '🔴' },
+  { value: 'urgent', label: 'Urgent', icon: '🔴' },
   { value: 'semaine', label: 'Cette semaine', icon: '🟠' },
   { value: 'mois', label: 'Ce mois-ci', icon: '🟡' },
   { value: 'flexible', label: 'Flexible', icon: '🟢' },
@@ -268,7 +268,7 @@ export default function UnclaimedQuoteWizard({
             Demande envoyée !
           </h2>
           <p className="text-charcoal-600 mb-2">
-            Un conseiller vous rappelle en moins de 24h pour vous mettre en relation
+            Un conseiller vous rappelle rapidement pour vous mettre en relation
             avec un {specialty.toLowerCase()} qualifié à {city}.
           </p>
           <p className="text-sm text-charcoal-400">
@@ -297,7 +297,7 @@ export default function UnclaimedQuoteWizard({
             <span>Sans engagement</span>
             <span>·</span>
             <span className="inline-flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" aria-hidden="true" /> Réponse en moins de 24h
+              <Clock className="w-3.5 h-3.5" aria-hidden="true" /> Réponse rapide
             </span>
           </p>
         </div>

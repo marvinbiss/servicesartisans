@@ -21,11 +21,11 @@ const defaultFaq = [
   },
   {
     question: 'Combien de devis vais-je recevoir ?',
-    answer: "Vous pouvez recevoir jusqu'à 3 devis personnalisés d'artisans différents, selon la disponibilité dans votre zone.",
+    answer: "Vous recevez des devis personnalisés d'artisans disponibles dans votre zone. Le nombre dépend de la disponibilité locale.",
   },
   {
     question: 'En combien de temps suis-je contacté ?',
-    answer: "Les artisans disponibles vous contactent généralement sous 24 à 48 h. En cas d'urgence, précisez-le dans le formulaire.",
+    answer: "Un conseiller vous rappelle rapidement. En cas d'urgence, précisez-le dans le formulaire.",
   },
 ]
 
@@ -35,7 +35,7 @@ const testimonials = [
     name: 'Marie L.',
     city: 'Lyon',
     rating: 5,
-    text: "J'ai reçu 3 devis en moins de 24 h. L'artisan choisi était très professionnel. Je recommande !",
+    text: "J'ai reçu des devis rapidement. L'artisan choisi était très professionnel. Je recommande !",
     service: null,
   },
   {
@@ -63,7 +63,7 @@ const testimonials = [
     name: 'Isabelle C.',
     city: 'Toulouse',
     rating: 5,
-    text: "Gratuit et sans pression. J'ai comparé 3 devis et économisé plus de 400 € sur mes travaux.",
+    text: "Gratuit et sans pression. J'ai comparé les devis et économisé plus de 400 € sur mes travaux.",
     service: null,
   },
 ]
@@ -150,7 +150,7 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
           {[
             { icon: Shield, text: 'Artisans vérifiés SIREN' },
             { icon: Clock, text: '100 % gratuit et sans engagement' },
-            { icon: CheckCircle, text: 'Réponse sous 24 h' },
+            { icon: CheckCircle, text: 'Réponse rapide' },
           ].map((badge) => {
             const Icon = badge.icon
             return (

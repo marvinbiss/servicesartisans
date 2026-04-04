@@ -69,7 +69,7 @@ export default function VilleHeroCTA({ villeName, quartierName, variant = 'hero'
               Besoin d&apos;un artisan à {locationLabel} ?
             </p>
             <p className="text-charcoal-600 text-sm mt-1">
-              Recevez 3 devis gratuits d&apos;artisans vérifiés près de chez vous
+              Devis gratuit d&apos;artisans vérifiés près de chez vous
             </p>
           </div>
           <button

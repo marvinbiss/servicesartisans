@@ -145,7 +145,7 @@ export default function FAQPageClient() {
             >
               <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Obtenez jusqu'à 3 devis gratuits d'artisans qualifiés.
+                Devis gratuit et sans engagement d'artisans qualifiés.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 Demander <ArrowRight className="w-4 h-4" />

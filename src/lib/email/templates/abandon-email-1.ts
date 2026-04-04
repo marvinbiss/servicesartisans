@@ -35,7 +35,7 @@ export function getAbandonEmail1(data: { service: string; city: string; unsubscr
     <ul style="margin: 0; padding-left: 20px; color: #555; line-height: 2;">
       <li>✅ <strong>100% gratuit</strong> et sans engagement</li>
       <li>✅ Artisans <strong>vérifiés et assurés</strong></li>
-      <li>✅ Réponse <strong>sous 24 heures</strong></li>
+      <li>✅ Réponse <strong>rapide</strong></li>
     </ul>
   </div>
 

@@ -189,7 +189,7 @@ export const CallbackPanel = memo(function CallbackPanel({
               transition={{ delay: 0.4 }}
               className="mt-1 text-sm text-charcoal-600"
             >
-              Votre demande a été envoyée ! Un artisan vous contactera sous 24h.
+              Votre demande a été envoyée ! Un conseiller vous rappelle rapidement.
             </motion.p>
           </div>
 

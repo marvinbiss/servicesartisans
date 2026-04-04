@@ -283,7 +283,7 @@ export default async function ServicesPage() {
 
           {/* GeoPageCTA above the fold */}
           <div className="max-w-2xl mx-auto mb-10">
-            <GeoPageCTA title="Trouvez votre artisan en 2 minutes" subtitle="Comparez jusqu'à 3 devis gratuits d'artisans vérifiés" />
+            <GeoPageCTA title="Trouvez votre artisan en 2 minutes" subtitle="Devis gratuit et sans engagement d'artisans vérifiés" />
           </div>
 
           {/* Stats */}

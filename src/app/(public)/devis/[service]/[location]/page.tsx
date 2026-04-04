@@ -121,10 +121,10 @@ export async function generateMetadata({
   const descHash = Math.abs(hashCode(`devis-loc-desc-${service}-${location}`))
   const descTemplates = [
     `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu'à 3 artisans référencés. 100 % gratuit, sans engagement.`,
-    `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Réponse sous 24h.`,
+    `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Réponse rapide.`,
     `${trade.name} à ${villeData.name} : obtenez un devis gratuit et comparez les artisans vérifiés. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}–${maxPrice} ${trade.priceRange.unit}) et choisissez le meilleur artisan. Gratuit.`,
-    `Besoin d'un ${tradeLower} à ${villeData.name} ? Recevez jusqu'à 3 devis gratuits d'artisans vérifiés dans le ${dept}.`,
+    `Besoin d'un ${tradeLower} à ${villeData.name} ? Devis gratuit d'artisans vérifiés dans le ${dept}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -351,7 +351,7 @@ export default async function DevisServiceLocationPage({
       text: `Le budget moyen pour un ${tradeLower} à ${villeData.name} oscille entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit}, fournitures et main-d'œuvre incluses selon la prestation. Ces chiffres sont ajustés au marché local du ${villeData.departement}. Les interventions d'urgence (nuit, week-end, jours fériés) entraînent généralement une majoration de 30 à 80 %. Conseil : demandez toujours un devis détaillé avant le début des travaux. Un devis gratuit ne vous engage à rien et vous permet de comparer sereinement les offres des ${tradeLower}s à ${villeData.name}.`,
     },
     {
-      text: `Fourchette de prix constatée à ${villeData.name} pour un ${tradeLower} : de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Cette estimation intègre les spécificités tarifaires de la région ${villeData.region} et du département ${villeData.departement}. Les facteurs qui influencent le prix final sont la nature des travaux, la difficulté d'accès, le choix des matériaux et la période d'intervention. Pour un chiffrage précis et adapté à votre situation, remplissez le formulaire ci-dessus : vous recevrez jusqu'à 3 devis gratuits et personnalisés de ${tradeLower}s référencés à ${villeData.name}.`,
+      text: `Fourchette de prix constatée à ${villeData.name} pour un ${tradeLower} : de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Cette estimation intègre les spécificités tarifaires de la région ${villeData.region} et du département ${villeData.departement}. Les facteurs qui influencent le prix final sont la nature des travaux, la difficulté d'accès, le choix des matériaux et la période d'intervention. Pour un chiffrage précis et adapté à votre situation, remplissez le formulaire ci-dessus : vous recevrez un devis gratuit et personnalisé de ${tradeLower}s référencés à ${villeData.name}.`,
     },
   ]
 
@@ -378,7 +378,7 @@ export default async function DevisServiceLocationPage({
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Comparez jusqu'à 3 devis de {tradeLower}s à {villeData.name} ({villeData.departement}).
+            Devis gratuit de {tradeLower}s à {villeData.name} ({villeData.departement}).
             Prix local : {minPrice} à {maxPrice} {trade.priceRange.unit}.
           </p>
           {/* Inline trust signals */}

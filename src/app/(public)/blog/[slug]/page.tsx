@@ -821,7 +821,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                       <div className="flex-1">
                         <p className="font-semibold text-gray-900 mb-1">Besoin d'un professionnel ?</p>
-                        <p className="text-sm text-gray-600">Recevez jusqu'à 3 devis gratuits d'artisans vérifiés près de chez vous.</p>
+                        <p className="text-sm text-gray-600">Devis gratuit et sans engagement d'artisans vérifiés près de chez vous.</p>
                       </div>
                       <Link
                         href={devisHref}

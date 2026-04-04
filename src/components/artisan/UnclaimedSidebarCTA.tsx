@@ -48,15 +48,16 @@ export function UnclaimedSidebarCTA({
 
         {/* Title */}
         <p className="text-charcoal-700 font-medium mb-1">
-          Besoin d&apos;un {specialty.toLowerCase()} a {city} ?
+          Besoin d&apos;un {specialty.toLowerCase()} à {city} ?
         </p>
         <p className="text-sm text-charcoal-500 mb-5">
-          Recevez jusqu&apos;a 3 devis gratuits sous 24h.
+          Devis gratuit et sans engagement.
         </p>
 
         {/* CTA principal */}
         <button
           onClick={() => {
+            trackEvent('unclaimed_sidebar_devis_click', { specialty, city })
             trackEvent('artisan_devis_click', { source: 'unclaimed_sidebar', specialty, city })
             onDevisClick()
           }}
@@ -70,7 +71,10 @@ export function UnclaimedSidebarCTA({
         {/* Click-to-call */}
         <a
           href={PHONE_TEL}
-          onClick={() => trackEvent('phone_click', { source: 'unclaimed_sidebar', specialty, city })}
+          onClick={() => {
+            trackEvent('unclaimed_sidebar_phone_click', { specialty, city })
+            trackEvent('phone_click', { source: 'unclaimed_sidebar', specialty, city })
+          }}
           className="w-full py-3 px-4 rounded-xl border-2 border-sand-200 bg-sand-50 text-charcoal-700 font-medium flex items-center justify-center gap-2 hover:border-sand-300 hover:bg-sand-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 mb-1"
           aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
         >
@@ -85,7 +89,7 @@ export function UnclaimedSidebarCTA({
         <div className="space-y-2 mb-5 pb-5 border-b border-sand-200">
           <div className="flex items-center gap-2 text-sm text-charcoal-600">
             <CheckCircle className="w-4 h-4 text-accent-500 flex-shrink-0" aria-hidden="true" />
-            Artisans verifies
+            Artisans vérifiés
           </div>
           <div className="flex items-center gap-2 text-sm text-charcoal-600">
             <CheckCircle className="w-4 h-4 text-accent-500 flex-shrink-0" aria-hidden="true" />
@@ -96,7 +100,7 @@ export function UnclaimedSidebarCTA({
         {/* Section artisan - Claim */}
         <div className="space-y-3">
           <h4 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
-            Vous etes ce professionnel ?
+            Vous êtes ce professionnel ?
           </h4>
           <ClaimButton
             providerId={providerId}

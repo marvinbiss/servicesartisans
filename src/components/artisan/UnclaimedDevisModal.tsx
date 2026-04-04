@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Wrench, Check, ArrowRight, Loader2, Phone } from 'lucide-react'
 import Link from 'next/link'
@@ -93,6 +93,17 @@ export function UnclaimedDevisModal({
 
   const canContinue = serviceType !== '' && urgency !== ''
 
+  // Réf pour suivre si le devis a été soumis (évite de tracker un close après un submit)
+  const hasSubmittedRef = useRef(false)
+
+  // Tracking ouverture du modal
+  useEffect(() => {
+    if (isOpen) {
+      hasSubmittedRef.current = false
+      trackEvent('unclaimed_devis_modal_open', { specialty, city, source: 'modal' })
+    }
+  }, [isOpen, specialty, city])
+
   const resetState = useCallback(() => {
     setStep(1)
     setServiceType('')
@@ -106,12 +117,23 @@ export function UnclaimedDevisModal({
   }, [])
 
   const handleClose = useCallback(() => {
+    // Tracker la fermeture uniquement si l'utilisateur n'a pas soumis
+    if (!hasSubmittedRef.current) {
+      trackEvent('unclaimed_devis_modal_close', { specialty, city, step })
+    }
     onClose()
     // Reset after animation
     setTimeout(resetState, 300)
-  }, [onClose, resetState])
+  }, [onClose, resetState, specialty, city, step])
 
   const handleContinue = useCallback(() => {
+    trackEvent('unclaimed_devis_modal_step1', {
+      specialty,
+      city,
+      service: serviceType,
+      urgency,
+    })
+    // Garder l'ancien event pour rétrocompatibilité
     trackEvent('unclaimed_modal_step2', {
       specialty: specialtySlug,
       city: citySlug,
@@ -119,14 +141,14 @@ export function UnclaimedDevisModal({
       urgency,
     })
     setStep(2)
-  }, [specialtySlug, citySlug, serviceType, urgency])
+  }, [specialty, city, specialtySlug, citySlug, serviceType, urgency])
 
   const handleSubmit = useCallback(async () => {
     setPhoneError('')
     setSubmitError('')
 
     if (!isValidFrenchPhone(telephone)) {
-      setPhoneError('Numero de telephone francais invalide')
+      setPhoneError('Numéro de téléphone français invalide')
       return
     }
 
@@ -166,10 +188,12 @@ export function UnclaimedDevisModal({
 
       if (!res.ok) {
         const body = await res.json().catch(() => null)
-        setSubmitError(body?.error || 'Une erreur est survenue. Veuillez reessayer.')
+        setSubmitError(body?.error || 'Une erreur est survenue. Veuillez réessayer.')
         return
       }
 
+      trackEvent('unclaimed_devis_modal_submit', { specialty, city })
+      // Garder l'ancien event pour rétrocompatibilité
       trackEvent('unclaimed_modal_submitted', {
         specialty: specialtySlug,
         city: citySlug,
@@ -177,12 +201,13 @@ export function UnclaimedDevisModal({
         urgency,
       })
 
+      hasSubmittedRef.current = true
       setSubmitted(true)
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') {
-        setSubmitError('La requete a pris trop de temps. Veuillez reessayer.')
+        setSubmitError('La requête a pris trop de temps. Veuillez réessayer.')
       } else {
-        setSubmitError('Erreur de connexion. Verifiez votre reseau et reessayez.')
+        setSubmitError('Erreur de connexion. Vérifiez votre réseau et réessayez.')
       }
     } finally {
       setSubmitting(false)
@@ -227,7 +252,7 @@ export function UnclaimedDevisModal({
                 <div>
                   <p className="font-heading font-bold text-sm text-charcoal-900">ServicesArtisans</p>
                   <p className="text-xs text-charcoal-500">
-                    On vous met en relation avec un {specialty.toLowerCase()} a {city}
+                    Trouvez un {specialty.toLowerCase()} disponible à {city}
                   </p>
                 </div>
               </div>
@@ -252,10 +277,10 @@ export function UnclaimedDevisModal({
                     <Check className="w-7 h-7 text-green-600" aria-hidden="true" />
                   </div>
                   <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-2">
-                    Demande envoyee !
+                    Demande envoyée !
                   </h3>
                   <p className="text-charcoal-600 text-sm mb-4">
-                    Un conseiller vous rappelle sous 2h.
+                    Un conseiller vous rappelle rapidement.
                   </p>
                   <a
                     href={PHONE_TEL}
@@ -271,7 +296,7 @@ export function UnclaimedDevisModal({
                   <div className="mb-6">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-semibold text-charcoal-500">
-                        Etape {step}/2
+                        Étape {step}/2
                       </span>
                       <span className="text-xs font-semibold text-primary-500">
                         {step === 1 ? 'Votre besoin' : 'On vous rappelle'}
@@ -370,7 +395,7 @@ export function UnclaimedDevisModal({
                       >
                         {/* Phone input */}
                         <h3 className="font-heading text-base font-semibold text-charcoal-800 mb-3">
-                          Votre telephone <span className="text-red-500">*</span>
+                          Votre téléphone <span className="text-red-500">*</span>
                         </h3>
                         <input
                           type="tel"
@@ -403,9 +428,9 @@ export function UnclaimedDevisModal({
                             className="mt-1 h-4 w-4 rounded border-sand-300 text-primary-500 focus:ring-primary-400"
                           />
                           <label htmlFor="modal-consent" className="text-xs text-charcoal-500 leading-relaxed">
-                            J&apos;accepte d&apos;etre mis en relation avec des artisans partenaires.{' '}
+                            J&apos;accepte d&apos;être mis en relation avec des artisans partenaires.{' '}
                             <Link href="/confidentialite" className="text-primary-500 underline hover:text-primary-600">
-                              Politique de confidentialite
+                              Politique de confidentialité
                             </Link>
                           </label>
                         </div>
@@ -448,7 +473,7 @@ export function UnclaimedDevisModal({
 
                         {/* Trust line */}
                         <p className="text-xs text-charcoal-400 text-center mt-4">
-                          Rappel sous 2h · Gratuit · Sans engagement
+                          Rappel rapide · Gratuit · Sans engagement
                         </p>
                       </motion.div>
                     )}

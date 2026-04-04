@@ -45,10 +45,10 @@ export default function TarifsDevisCTA({
           onClick={handleClick}
           className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-base"
         >
-          Recevoir 3 devis gratuits
+          Devis gratuit sans engagement
           <ArrowRight className="w-4 h-4" />
         </button>
-        <p className="text-xs text-gray-400 mt-2">Gratuit, sans engagement, r{'é'}ponse sous 24h</p>
+        <p className="text-xs text-gray-400 mt-2">Gratuit, sans engagement, r{'é'}ponse rapide</p>
         <DevisBottomSheet
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
@@ -82,7 +82,7 @@ export default function TarifsDevisCTA({
         </span>
         <span className="flex items-center gap-1.5">
           <Clock className="w-4 h-4" />
-          R{'é'}ponse sous 24h
+          R{'é'}ponse rapide
         </span>
       </div>
       <DevisBottomSheet

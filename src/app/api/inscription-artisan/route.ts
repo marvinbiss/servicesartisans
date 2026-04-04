@@ -75,7 +75,7 @@ export async function POST(request: Request) {
             <li><strong>Métier :</strong> ${escapeHtml(metierFinal ?? '')}</li>
             <li><strong>Zone d'intervention :</strong> ${escapeHtml(data.ville ?? '')} (${escapeHtml(data.rayonIntervention ?? '')} km)</li>
           </ul>
-          <p>Notre équipe va vérifier vos informations et vous recevrez une réponse sous 24-48 heures.</p>
+          <p>Notre équipe va vérifier vos informations et vous recevrez une réponse rapidement.</p>
           <p>À bientôt sur ServicesArtisans !</p>
           <hr />
           <p style="color: #666; font-size: 12px;">

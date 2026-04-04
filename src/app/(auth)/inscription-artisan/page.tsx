@@ -122,7 +122,7 @@ export default function InscriptionArtisanPage() {
           </h1>
           <p className="text-gray-600 mb-8">
             Merci pour votre inscription. Notre équipe va vérifier vos informations et
-            vous recevrez un email de confirmation sous 24-48h.
+            vous recevrez un email de confirmation rapidement.
           </p>
           <div className="space-y-4">
             <Link

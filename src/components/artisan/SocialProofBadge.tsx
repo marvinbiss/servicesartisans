@@ -2,16 +2,30 @@
 
 import { motion } from 'framer-motion'
 import { Users } from 'lucide-react'
+import useSWR from 'swr'
 
 // ---------------------------------------------------------------------------
 // Hook — useWeeklyDevisCount
-// Retourne 0 tant qu'il n'y a pas d'endpoint réel pour compter les demandes.
-// Conservé pour compatibilité des imports existants.
+// Fetch réel du nombre de demandes de devis sur les 7 derniers jours.
+// Retourne 0 si aucune donnée ou en cas d'erreur (Art. L121-2 Code conso).
 // ---------------------------------------------------------------------------
 
-export function useWeeklyDevisCount(_specialtySlug: string, _citySlug: string): number {
-  // Retourne 0 — pas de faux chiffres (Art. L121-2 Code de la consommation)
-  return 0
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
+export function useWeeklyDevisCount(specialtySlug: string, citySlug: string): number {
+  const params = new URLSearchParams()
+  if (specialtySlug) params.set('specialty', specialtySlug)
+  if (citySlug) params.set('city', citySlug)
+  const qs = params.toString()
+  const url = `/api/devis/weekly-count${qs ? `?${qs}` : ''}`
+
+  const { data } = useSWR<{ count: number }>(url, fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60_000,
+    fallbackData: { count: 0 },
+  })
+
+  return data?.count ?? 0
 }
 
 // ---------------------------------------------------------------------------

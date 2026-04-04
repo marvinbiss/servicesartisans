@@ -25,7 +25,7 @@ interface ExitIntentPopupProps {
 export default function ExitIntentPopup({
   sessionKey = 'sa:exit-intent-shown',
   title = 'Avant de partir...',
-  description = 'Recevez jusqu\'à 3 devis gratuits d\'artisans qualifiés en moins de 60 secondes.',
+  description = 'Devis gratuit et sans engagement d\'artisans qualifiés près de chez vous.',
   ctaText = 'Recevoir mes devis gratuits',
   ctaHref = '/devis',
   onCtaClick,
@@ -135,7 +135,7 @@ export default function ExitIntentPopup({
         )}
 
         <p className="text-[10px] text-charcoal-400 text-center mt-2">
-          Gratuit · Sans engagement · Réponse sous 24h
+          Gratuit · Sans engagement · Réponse rapide
         </p>
       </div>
     </div>

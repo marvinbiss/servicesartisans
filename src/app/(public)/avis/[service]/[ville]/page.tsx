@@ -1088,7 +1088,7 @@ export default async function AvisServiceVillePage({
             Trouver un {tradeLower} de confiance {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Recevez 3 devis gratuits d'artisans bien not{'é'}s pr{'è'}s de chez vous {'—'} sans engagement.
+            Devis gratuit d'artisans bien not{'é'}s pr{'è'}s de chez vous {'—'} sans engagement.
           </p>
           <TarifsDevisCTA
             service={service}
@@ -1250,7 +1250,7 @@ export default async function AvisServiceVillePage({
       <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Devis gratuit" />
       <ExitIntentPopup
         sessionKey="sa:exit-avis"
-        description="Contactez un artisan bien noté — recevez jusqu'à 3 devis gratuits."
+        description="Contactez un artisan bien noté — devis gratuit et sans engagement."
         ctaHref={`/devis/${service}/${villeSlug}`}
       />
     </div>

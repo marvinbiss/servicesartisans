@@ -266,7 +266,7 @@ export default async function DeptServicePage({ params }: PageProps) {
         {/* ─── HERO CTA ───────────────────────────────────────── */}
         <GeoPageCTA
           title={`Besoin d'un ${trade.name.toLowerCase()} dans le ${dept.name} ?`}
-          subtitle="Recevez 3 devis gratuits d'artisans vérifiés près de chez vous"
+          subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
           ville={dept.chefLieu}
           service={serviceSlug}
         />
@@ -537,7 +537,7 @@ export default async function DeptServicePage({ params }: PageProps) {
             Besoin d'un {trade.name.toLowerCase()} dans le {dept.name} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Recevez jusqu'à 3 devis gratuits de professionnels qualifiés.
+            Devis gratuit et sans engagement de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href={`/devis/${serviceSlug}`} className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">

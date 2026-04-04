@@ -68,7 +68,7 @@ function resolveServiceName(service: string): string {
 }
 
 const urgencyLabels: Record<string, string> = {
-  urgent: 'Urgent (sous 24h)',
+  urgent: 'Urgent',
   semaine: 'Cette semaine',
   mois: 'Ce mois-ci',
   flexible: 'Pas urgent',
@@ -248,7 +248,7 @@ export async function POST(request: Request) {
               ${data.description ? `<li><strong>Description :</strong> ${htmlEscape(data.description)}</li>` : ''}
             </ul>
             <p><strong>Que se passe-t-il maintenant ?</strong></p>
-            <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu'à 3 devis gratuits dans les meilleurs délais.</p>
+            <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Un conseiller vous rappelle rapidement.</p>
             <p>Cordialement,<br />L'équipe ServicesArtisans</p>
             <p style="color: #666; font-size: 12px;">
               <a href="https://servicesartisans.fr">servicesartisans.fr</a>

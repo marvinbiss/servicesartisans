@@ -29,7 +29,7 @@ export const faqCategories = [
       },
       {
         q: 'Combien de devis vais-je recevoir ?',
-        a: 'Vous recevrez jusqu\'à 3 devis d\'artisans différents, généralement sous 24 à 48 heures.',
+        a: 'Un conseiller vous rappelle rapidement pour vous mettre en relation avec des artisans disponibles dans votre zone.',
       },
       {
         q: 'Suis-je obligé d\'accepter un devis ?',

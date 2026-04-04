@@ -256,7 +256,7 @@ export default async function RegionServicePage({ params }: PageProps) {
         {/* ─── CTA CONVERSION — above the fold ─────────────── */}
         <GeoPageCTA
           title={`Besoin d'un ${trade.name.toLowerCase()} en ${region.name} ?`}
-          subtitle="Comparez jusqu'à 3 devis gratuits d'artisans vérifiés"
+          subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
           service={serviceSlug}
         />
 
@@ -506,7 +506,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             Besoin d'un {trade.name.toLowerCase()} en {region.name} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Recevez jusqu'à 3 devis gratuits de professionnels qualifiés.
+            Devis gratuit et sans engagement de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href={`/devis/${serviceSlug}`} className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">

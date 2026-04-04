@@ -497,7 +497,7 @@ export default async function TarifsServiceTravailVillePage({
             Obtenez un prix exact pour {currentTask.name.toLowerCase()} {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Ces tarifs sont indicatifs. Recevez 3 devis personnalis{'é'}s d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
+            Ces tarifs sont indicatifs. Obtenez un devis personnalis{'é'} d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
           </p>
           <TarifsDevisCTA
             service={service}

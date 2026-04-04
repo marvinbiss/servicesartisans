@@ -673,7 +673,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <GeoPageCTA
           title={`Besoin d'un ${service.name.toLowerCase()} à ${location.name} ?`}
-          subtitle={`Recevez 3 devis gratuits d'artisans vérifiés sous 24-48h`}
+          subtitle={`Devis gratuit et sans engagement d'artisans vérifiés`}
           service={serviceSlug}
           ville={location.name}
           variant="hero"

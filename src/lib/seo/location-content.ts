@@ -1258,7 +1258,7 @@ const SVC_LOCATION_FAQ_POOL: { q: (p: SvcLocFaqParams) => string; a: (p: SvcLocF
   },
   {
     q: (p) => `Comment trouver un bon ${p.svc} à ${p.name} ?`,
-    a: (p) => `Sur ServicesArtisans, les ${p.svc}s référencés à ${p.name} sont vérifiés via leur numéro SIREN. Comparez les profils, vérifiez les qualifications et demandez jusqu'à 3 devis gratuits.`,
+    a: (p) => `Sur ServicesArtisans, les ${p.svc}s référencés à ${p.name} sont vérifiés via leur numéro SIREN. Comparez les profils, vérifiez les qualifications et demandez un devis gratuit.`,
   },
   {
     q: (p) => `Un ${p.svc} à ${p.name} intervient-il en urgence ?`,
@@ -3181,7 +3181,7 @@ interface VilleFaqParams { name: string; pop: string; dept: string; region: stri
 const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => string }[] = [
   {
     q: (name) => `Comment trouver un artisan de confiance à ${name} ?`,
-    a: (p) => `Sur ServicesArtisans, tous les artisans référencés à ${p.name} disposent d'un numéro SIREN vérifié. Sélectionnez le corps de métier souhaité, consultez les profils et demandez jusqu'à 3 devis gratuits pour comparer les offres.`,
+    a: (p) => `Sur ServicesArtisans, tous les artisans référencés à ${p.name} disposent d'un numéro SIREN vérifié. Sélectionnez le corps de métier souhaité, consultez les profils et demandez un devis gratuit pour comparer les offres.`,
   },
   {
     q: (name) => `Quels types de travaux peut-on réaliser à ${name} ?`,
@@ -3189,7 +3189,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   },
   {
     q: (name) => `Comment obtenir un devis gratuit à ${name} ?`,
-    a: (p) => `Cliquez sur "Obtenir mon devis gratuit", décrivez votre projet en quelques clics, et recevez jusqu'à 3 devis personnalisés d'artisans qualifiés intervenant à ${p.name}. Le service est 100% gratuit et sans engagement.`,
+    a: (p) => `Cliquez sur "Obtenir mon devis gratuit", décrivez votre projet en quelques clics, et recevez un devis personnalisé d'artisans qualifiés intervenant à ${p.name}. Le service est 100% gratuit et sans engagement.`,
   },
   {
     q: (name) => `Les artisans à ${name} interviennent-ils en urgence ?`,

@@ -239,7 +239,7 @@ export default function StructuredPricingTable({
           Obtenir un devis pr{'é'}cis {'à'} {villeName}
         </Link>
         <p className="text-xs text-charcoal-400">
-          Gratuit et sans engagement {'—'} r{'é'}ponse sous 24-48h
+          Gratuit et sans engagement {'—'} r{'é'}ponse rapide
         </p>
       </div>
     </div>

@@ -370,7 +370,7 @@ export default function LeadDetailPage() {
                       </div>
                       <p className="font-medium text-gray-600">En attente de devis des artisans</p>
                       <p className="text-sm text-gray-400 mt-1">
-                        Les artisans intéressés vous enverront leur proposition sous 24–48h.
+                        Les artisans intéressés vous enverront leur proposition rapidement.
                       </p>
                     </div>
                   ) : (
@@ -562,7 +562,7 @@ export default function LeadDetailPage() {
                     <Clock className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-gray-500 leading-relaxed">
                       Le suivi est mis à jour automatiquement. Les artisans répondent
-                      généralement sous 24–48h.
+                      généralement rapidement.
                     </p>
                   </div>
                 </div>

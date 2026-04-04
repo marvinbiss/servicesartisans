@@ -609,7 +609,7 @@ export default function ChecklistTravauxPage() {
                 Demander un devis
               </h3>
               <p className="text-sm text-gray-600">
-                Recevez jusqu'à 3 devis gratuits d'artisans qualifiés près de
+                Devis gratuit et sans engagement d'artisans qualifiés près de
                 chez vous.
               </p>
             </Link>

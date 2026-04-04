@@ -19,7 +19,7 @@ export default function ScrollNudge({
   threshold = 50,
   dismissAfter = 5000,
   sessionKey = 'sa:scroll-nudge-shown',
-  message = 'Comparez gratuitement jusqu\u2019à 3 devis',
+  message = 'Devis gratuit et sans engagement',
   onAction,
 }: ScrollNudgeProps) {
   const [visible, setVisible] = useState(false)

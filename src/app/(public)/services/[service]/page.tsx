@@ -133,7 +133,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
     `Trouvez un ${svcLower} qualifié parmi ${countLabel} artisans vérifiés SIREN en France. Comparez les tarifs, consultez les avis clients et obtenez un devis gratuit dans ${departements.length} départements.`,
-    `Comparez ${countLabel} ${svcLower}s certifiés partout en France : tarifs détaillés, avis clients vérifiés et certifications. Devis gratuit en ligne, sans engagement, réponse sous 24h.`,
+    `Comparez ${countLabel} ${svcLower}s certifiés partout en France : tarifs détaillés, avis clients vérifiés et certifications. Devis gratuit en ligne, sans engagement, réponse rapide.`,
     `Annuaire de ${svcLower}s vérifiés par SIREN dans toute la France. Consultez les prix, les avis clients et les certifications. Demandez un devis gratuit en ligne sans engagement.`,
     `Besoin d'un ${svcLower} ? Parcourez ${countLabel} artisans référencés dans ${departements.length} départements : tarifs indicatifs, avis vérifiés et devis gratuit en ligne sans engagement.`,
     `${serviceName} en France 2026 : comparez ${countLabel} artisans qualifiés. Prix indicatifs, certifications vérifiées et devis gratuit en ligne. Couverture nationale, réponse rapide.`,
@@ -450,7 +450,7 @@ export default async function ServicePage({ params }: PageProps) {
               Besoin d'un {service.name.toLowerCase()} ?
             </h2>
             <p className="text-primary-100 mb-6">
-              Recevez jusqu'à 3 devis gratuits en 2 minutes
+              Devis gratuit et sans engagement
             </p>
             <Link
               href={`/devis/${serviceSlug}`}

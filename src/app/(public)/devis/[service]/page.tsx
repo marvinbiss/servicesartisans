@@ -183,7 +183,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Recevez jusqu'à 3 devis gratuits de {tradeLower}s référencés.
+            Devis gratuit de {tradeLower}s référencés et vérifiés.
             Prix indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
           </p>
         </div>

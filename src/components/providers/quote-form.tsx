@@ -148,7 +148,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
         <option value="flexible">Pas urgent</option>
         <option value="mois">Ce mois-ci</option>
         <option value="semaine">Cette semaine</option>
-        <option value="urgent">Urgent (sous 24h)</option>
+        <option value="urgent">Urgent</option>
       </select>
 
       <div className="grid grid-cols-2 gap-2">

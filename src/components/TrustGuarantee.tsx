@@ -24,7 +24,7 @@ const guarantees = [
   },
   {
     icon: Clock,
-    title: 'Réponse sous 24h',
+    title: 'Réponse rapide',
     description: "Jusqu'à 3 artisans vous contactent",
   },
 ]

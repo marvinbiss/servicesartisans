@@ -182,7 +182,7 @@ export default function DevisConfirmation({
             : 'Nous recherchons les meilleurs artisans pour vous'}
         </p>
         <p className={`font-medium text-accent-600 ${compact ? 'text-xs mb-4' : 'text-sm mb-6'}`}>
-          Vous recevrez jusqu&apos;à 3 devis sous 24-48h
+          Un conseiller vous rappelle rapidement
         </p>
       </motion.div>
 
@@ -319,7 +319,7 @@ export default function DevisConfirmation({
           <p className="font-semibold text-charcoal-800 mb-2">Prochaines étapes :</p>
           <ol className="list-decimal list-inside space-y-1.5 text-charcoal-600">
             <li>Les artisans analysent votre demande</li>
-            <li>Vous recevez jusqu&apos;à 3 devis détaillés sous 24-48h</li>
+            <li>Vous recevez des devis détaillés d&apos;artisans disponibles</li>
             <li>Vous comparez et choisissez librement, sans engagement</li>
           </ol>
         </div>
@@ -335,7 +335,7 @@ export default function DevisConfirmation({
         {[
           { icon: CheckCircle, label: 'Gratuit', color: 'text-accent-500' },
           { icon: Shield, label: 'Vérifiés et assurés', color: 'text-primary-500' },
-          { icon: Clock, label: 'Réponse sous 24h', color: 'text-amber-500' },
+          { icon: Clock, label: 'Réponse rapide', color: 'text-amber-500' },
         ].map(({ icon: Icon, label, color }) => (
           <div
             key={label}

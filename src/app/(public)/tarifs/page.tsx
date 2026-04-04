@@ -61,7 +61,7 @@ const tradeFaqs = [
   },
   {
     question: 'Comment obtenir un devis gratuit pour mes travaux ?',
-    answer: 'Remplissez notre formulaire en ligne pour recevoir jusqu\'à 3 devis gratuits d\'artisans vérifiés. Vous pouvez aussi contacter directement les artisans référencés. Comparez toujours au moins 3 devis avant de vous engager.',
+    answer: 'Remplissez notre formulaire en ligne pour obtenir un devis gratuit d\'artisans vérifiés. Vous pouvez aussi contacter directement les artisans référencés. Comparez toujours plusieurs devis avant de vous engager.',
   },
   {
     question: 'Les prix incluent-ils la TVA ?',

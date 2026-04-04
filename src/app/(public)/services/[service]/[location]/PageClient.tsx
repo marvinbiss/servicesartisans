@@ -370,7 +370,7 @@ export default function ServiceLocationPageClient({
             </div>
             <div className="text-center sm:text-left">
               <p className="font-heading font-bold text-base sm:text-lg">
-                Recevez jusqu'à 3 devis gratuits de {service.name.toLowerCase()} à {location.name}
+                Devis gratuit de {service.name.toLowerCase()} à {location.name}
               </p>
               <p className="text-primary-100 text-sm hidden sm:block">
                 Comparez les prix et choisissez le meilleur artisan

@@ -17,7 +17,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Devis Artisan Gratuit — Comparez les Offres',
   description:
-    "Demandez un devis artisan gratuit : plombier, électricien, serrurier et 50 métiers. Jusqu'à 3 devis en 24h. 100% gratuit, sans engagement.",
+    "Demandez un devis artisan gratuit : plombier, électricien, serrurier et 50 métiers. 100% gratuit, sans engagement.",
   alternates: {
     canonical: `${SITE_URL}/devis`,
   },
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Devis Artisan Gratuit — Comparez les Offres',
-    description: "Demandez un devis artisan gratuit. Jusqu'à 3 devis d'artisans vérifiés en 24h. 100% gratuit, sans engagement.",
+    description: "Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.",
     url: `${SITE_URL}/devis`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Devis gratuit' }],
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Devis Artisan Gratuit — Comparez les Offres',
-    description: "Demandez un devis artisan gratuit. Jusqu'à 3 devis d'artisans vérifiés en 24h.",
+    description: "Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -52,12 +52,12 @@ const faqItems = [
   {
     question: 'Combien de devis vais-je recevoir ?',
     answer:
-      'Vous pouvez recevoir jusqu\'à 3 devis d\'artisans différents, selon la disponibilité dans votre zone géographique. Chaque devis est personnalisé en fonction de votre projet.',
+      'Vous recevez des devis personnalisés d\'artisans disponibles dans votre zone géographique. Le nombre dépend de la disponibilité locale.',
   },
   {
     question: 'En combien de temps suis-je contacté ?',
     answer:
-      'Les artisans disponibles vous contactent généralement sous 24 à 48 h après l\'envoi de votre demande. En cas d\'urgence, précisez-le dans le formulaire pour accélérer le traitement.',
+      'Un conseiller vous rappelle rapidement après l\'envoi de votre demande. En cas d\'urgence, précisez-le dans le formulaire pour accélérer le traitement.',
   },
   {
     question: 'Comment les artisans sont-ils référencés ?',
@@ -123,7 +123,7 @@ export default async function DevisPage() {
             Recevez vos devis gratuits
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Comparez 3 devis d'artisans vérifiés SIREN — gratuit, sans engagement, réponse sous 24h
+            Devis gratuit d'artisans vérifiés SIREN — sans engagement
           </p>
           <p className="text-charcoal-500 mt-2 text-sm font-medium">
             ★ 4.8/5 — Plus de 23 000 demandes traitées

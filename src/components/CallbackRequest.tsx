@@ -81,7 +81,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
       <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
         <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
         <p className="text-sm font-semibold text-green-900">Demande envoyée !</p>
-        <p className="text-xs text-green-700 mt-1">Un artisan vous rappellera sous 24h.</p>
+        <p className="text-xs text-green-700 mt-1">Un conseiller vous rappelle rapidement.</p>
       </div>
     )
   }

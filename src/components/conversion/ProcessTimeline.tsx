@@ -23,7 +23,7 @@ const steps: Step[] = [
   },
   {
     icon: <FileText className="h-5 w-5" aria-hidden="true" />,
-    title: 'Recevez jusqu\'a 3 devis',
+    title: 'Recevez votre devis',
     description: 'Les artisans intéressés vous envoient leur proposition détaillée.',
     duration: 'Sous 24h',
   },

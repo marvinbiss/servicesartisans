@@ -169,7 +169,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           </h2>
 
           <p className="text-center text-charcoal-500 text-base md:text-lg max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed">
-            Comparez les profils et recevez jusqu'à 3 devis gratuits — sans engagement
+            Comparez les profils et obtenez un devis gratuit — sans engagement
           </p>
 
           {/* Primary CTA — high contrast, impossible to miss */}
@@ -179,7 +179,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-1 animate-pulse-subtle"
             >
               <ClipboardList className="w-6 h-6" />
-              Recevoir mes 3 devis gratuits
+              Obtenir mon devis gratuit
             </Link>
             {/* Trust micro-copy directly under CTA */}
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-charcoal-500">
@@ -192,7 +192,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               <span className="text-charcoal-200">·</span>
               <span className="inline-flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-primary-400" />
-                Réponse sous 24h
+                Réponse rapide
               </span>
             </div>
             <Link
@@ -301,7 +301,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
 
               {[
                 { n: '1', title: 'Décrivez votre besoin', desc: 'Type de travaux, localisation, urgence --- 2 minutes suffisent.', icon: ClipboardList },
-                { n: '2', title: 'Recevez des devis', desc: "Jusqu'à 3 artisans vérifiés vous contactent sous 24h. Gratuit.", icon: Clock },
+                { n: '2', title: 'Recevez des devis', desc: "Jusqu'à 3 artisans vérifiés vous contactent rapidement. Gratuit.", icon: Clock },
                 { n: '3', title: 'Choisissez votre artisan', desc: "Comparez profils, avis et tarifs. Choisissez librement.", icon: CheckCircle },
               ].map((step, i) => {
                 const StepIcon = step.icon
