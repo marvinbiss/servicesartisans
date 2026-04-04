@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Shield, Loader2, X, CheckCircle, AlertCircle } from 'lucide-react'
+import { trackEvent, type BookingEvent } from '@/lib/analytics/tracking'
 
 interface ClaimButtonProps {
   providerId: string
@@ -127,6 +128,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
         return
       }
 
+      trackEvent('claim_submitted' as BookingEvent, { providerId, providerName })
       setSuccess(true)
     } catch {
       setError('Erreur de connexion au serveur')
@@ -159,7 +161,10 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
   return (
     <>
       <button
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          trackEvent('claim_started' as BookingEvent, { providerId, providerName })
+          setShowModal(true)
+        }}
         className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20"
       >
         <Shield className="w-5 h-5" />
@@ -197,7 +202,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 </h3>
                 <p className="text-gray-600 mb-6">
                   Votre demande de revendication pour <strong>{providerName}</strong> a été soumise.
-                  Un administrateur la validera sous 24 à 48 heures.
+                  Un administrateur la validera rapidement.
                 </p>
                 <button
                   onClick={() => setShowModal(false)}
@@ -346,7 +351,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 </div>
 
                 <p className="mt-4 text-xs text-gray-400 text-center">
-                  Un administrateur vérifiera et validera votre demande sous 24 à 48h.
+                  Un administrateur vérifiera et validera votre demande rapidement.
                 </p>
               </>
             )}

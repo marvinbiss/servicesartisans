@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), { ssr: false })
 
@@ -33,12 +34,13 @@ export default function BlogInlineCTA({ service, ville }: BlogInlineCTAProps) {
               Besoin d&apos;un professionnel ?
             </p>
             <p className="text-sm text-gray-600">
-              Comparez jusqu&apos;à 3 devis gratuits d&apos;artisans vérifiés en 2 minutes{ville ? ` à ${ville}` : ''}.
+              Devis gratuit et sans engagement d&apos;artisans vérifiés{ville ? ` à ${ville}` : ''}.
             </p>
           </div>
           <div className="flex items-center gap-3">
             <Link
               href={devisHref}
+              onClick={() => { trackEvent('blog_cta_click', { service, ville }) }}
               className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors whitespace-nowrap text-sm shadow-sm"
             >
               Demander mes devis
@@ -46,7 +48,7 @@ export default function BlogInlineCTA({ service, ville }: BlogInlineCTAProps) {
             </Link>
             <button
               type="button"
-              onClick={() => setSheetOpen(true)}
+              onClick={() => { trackEvent('blog_cta_click', { service, ville }); setSheetOpen(true) }}
               className="hidden sm:inline-flex items-center text-amber-700 hover:text-amber-900 text-sm font-medium underline underline-offset-2 transition-colors whitespace-nowrap"
             >
               Devis rapide

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { getArtisanUrl } from '@/lib/utils'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface ArtisanProfileCardProps {
   id: string
@@ -179,7 +180,7 @@ export function ArtisanProfileCard({
         </div>
 
         {/* Content */}
-        <Link href={href} className="block p-6 pt-16">
+        <Link href={href} className="block p-6 pt-16" onClick={() => trackEvent('artisan_listing_click', { artisanId: stableId || id, artisanName: name, source: 'card_featured' })}>
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div>
@@ -289,7 +290,7 @@ export function ArtisanProfileCard({
         viewport={{ once: true }}
         className="group bg-white rounded-2xl border border-sand-200 overflow-hidden hover:shadow-card-hover hover:border-primary-200 transition-all duration-300"
       >
-        <Link href={href} className="flex flex-col sm:flex-row">
+        <Link href={href} className="flex flex-col sm:flex-row" onClick={() => trackEvent('artisan_listing_click', { artisanId: stableId || id, artisanName: name, source: 'card_list' })}>
           {/* Image */}
           <div className="relative w-full sm:w-56 h-48 sm:h-auto flex-shrink-0">
             {imageUrl && !imageError ? (
@@ -467,7 +468,7 @@ export function ArtisanProfileCard({
       viewport={{ once: true }}
       className="group"
     >
-      <Link href={href} className="block">
+      <Link href={href} className="block" onClick={() => trackEvent('artisan_listing_click', { artisanId: stableId || id, artisanName: name, source: 'card' })}>
         {/* Image */}
         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-3">
           {imageUrl && !imageError ? (

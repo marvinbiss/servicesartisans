@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import { Phone } from 'lucide-react'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
 const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
@@ -54,6 +55,7 @@ export default function GeoPageCTA({ title, subtitle, ville, service, variant = 
               </button>
               <a
                 href={PHONE_TEL}
+                onClick={() => { trackEvent('phone_click', { source: 'geo_page_cta' }) }}
                 className="inline-flex items-center justify-center gap-2 border-2 border-accent-200 bg-white text-accent-700 font-semibold px-6 py-4 rounded-xl hover:bg-accent-50 hover:border-accent-300 transition-all text-lg whitespace-nowrap"
                 aria-label="Appeler ServicesArtisans"
               >

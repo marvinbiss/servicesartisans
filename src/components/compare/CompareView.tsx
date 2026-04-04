@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { trackEvent } from '@/lib/analytics/tracking'
 import { useCompare } from '@/components/compare/CompareProvider'
 import type { CompareProvider } from '@/components/compare/CompareProvider'
 
@@ -246,6 +247,7 @@ export function CompareView({ onClose }: CompareViewProps) {
                   <span className="text-gray-700">
                     <a
                       href={PHONE_TEL}
+                      onClick={() => { trackEvent('phone_click', { source: 'compare_view' }) }}
                       className="text-blue-600 hover:text-blue-700"
                     >
                       {PHONE_NUMBER}

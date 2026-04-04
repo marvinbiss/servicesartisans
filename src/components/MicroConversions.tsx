@@ -33,8 +33,7 @@ export default function MicroConversions({ pageType, serviceSlug, cityName }: Mi
       for (const milestone of milestones) {
         if (scrollPercent >= milestone && !scrollMilestones.current.has(milestone)) {
           scrollMilestones.current.add(milestone)
-          trackEvent('page_view', {
-            action: 'scroll_depth',
+          trackEvent('scroll_depth', {
             depth: milestone,
             pageType,
             serviceSlug,
@@ -57,8 +56,7 @@ export default function MicroConversions({ pageType, serviceSlug, cityName }: Mi
       const timeout = setTimeout(() => {
         if (!timeMilestones.current.has(seconds)) {
           timeMilestones.current.add(seconds)
-          trackEvent('page_view', {
-            action: 'time_on_page',
+          trackEvent('time_on_page', {
             seconds,
             pageType,
             serviceSlug,

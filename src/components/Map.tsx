@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import type { LegacyProvider } from '@/types/legacy'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 // Custom marker icon using divIcon (CSS-based, no external images needed)
 const createDivIcon = (isVerified: boolean) => {
@@ -103,6 +104,7 @@ export default function Map({
               )}
               <a
                 href={PHONE_TEL}
+                onClick={() => { trackEvent('phone_click', { source: 'map_cta' }) }}
                 className="text-sm text-blue-600 hover:underline mt-1 block"
               >
                 {PHONE_NUMBER}

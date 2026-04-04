@@ -21,8 +21,7 @@ export default function FAQTracker({ pageType, serviceSlug }: FAQTrackerProps) {
 
       if (summary || details) {
         const questionText = summary?.textContent?.trim().slice(0, 80) || 'unknown'
-        trackEvent('page_view', {
-          action: 'faq_click',
+        trackEvent('faq_click', {
           question: questionText,
           pageType,
           serviceSlug,

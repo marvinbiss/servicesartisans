@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface ArtisanCardProps {
   id: string
@@ -62,7 +63,7 @@ export function ArtisanCard({
         viewport={{ once: true }}
         className="group bg-white rounded-2xl border border-sand-200 overflow-hidden hover:shadow-card-hover transition-all duration-300"
       >
-        <Link href={href} className="flex flex-col md:flex-row">
+        <Link href={href} className="flex flex-col md:flex-row" onClick={() => trackEvent('artisan_listing_click', { artisanId: id, artisanName: name, source: 'card_horizontal' })}>
           {/* Image */}
           <div className="relative w-full md:w-48 h-48 md:h-auto flex-shrink-0">
             {imageUrl ? (
@@ -168,6 +169,7 @@ export function ArtisanCard({
       <Link
         href={href}
         className="flex items-center gap-3 p-3 bg-white rounded-xl border border-sand-200 hover:shadow-soft transition-shadow"
+        onClick={() => trackEvent('artisan_listing_click', { artisanId: id, artisanName: name, source: 'card_compact' })}
       >
         <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
           {imageUrl ? (
@@ -203,7 +205,7 @@ export function ArtisanCard({
       onMouseLeave={() => setIsHovered(false)}
       className="group"
     >
-      <Link href={href} className="block">
+      <Link href={href} className="block" onClick={() => trackEvent('artisan_listing_click', { artisanId: id, artisanName: name, source: 'card_default' })}>
         {/* Image container */}
         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-3">
           {imageUrl ? (

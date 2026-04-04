@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useDebounce } from '@/hooks/useDebounce'
 import { logger } from '@/lib/logger'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface SearchSuggestion {
   text: string
@@ -147,6 +148,27 @@ export default function AdvancedSearch({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, filters }),
       }).catch(() => {})
+    }
+
+    // Track search query
+    trackEvent('search_query', {
+      query,
+      service: filters.service || '',
+      location: filters.location || '',
+      source: onSearch ? 'inline' : 'navigation',
+    })
+
+    // Track active filters
+    const activeFilters = Object.entries(filters).filter(([, v]) => v).map(([k]) => k)
+    if (activeFilters.length > 0) {
+      trackEvent('filter_used', {
+        filters: activeFilters.join(','),
+        service: filters.service || '',
+        location: filters.location || '',
+        minRating: filters.minRating || '',
+        availability: filters.availability || '',
+        sortBy: filters.sortBy || '',
+      })
     }
 
     if (onSearch) {

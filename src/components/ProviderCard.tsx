@@ -1,8 +1,11 @@
+'use client'
+
 import Link from 'next/link'
 import { MapPin, Star, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
 
@@ -39,6 +42,11 @@ export default function ProviderCard({
         href={providerUrl}
         className="absolute inset-0 z-10 md:hidden"
         aria-label={`Voir le profil de ${provider.name}`}
+        onClick={() => trackEvent('artisan_listing_click', {
+          artisanId: provider.stable_id || provider.id,
+          artisanName: provider.name,
+          source: 'card_mobile',
+        })}
       />
       {/* Mobile: right arrow indicator */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden z-0">
@@ -48,7 +56,15 @@ export default function ProviderCard({
       {/* Avatar, Nom et verification */}
       <div className="flex items-start gap-4 mb-3">
         {/* Avatar / Initials */}
-        <Link href={providerUrl} className="flex-shrink-0">
+        <Link
+          href={providerUrl}
+          className="flex-shrink-0"
+          onClick={() => trackEvent('artisan_listing_click', {
+            artisanId: provider.stable_id || provider.id,
+            artisanName: provider.name,
+            source: 'card_avatar',
+          })}
+        >
           <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-lg font-bold shadow-soft`}>
             {provider.name.charAt(0).toUpperCase()}
           </div>
@@ -59,6 +75,11 @@ export default function ProviderCard({
             <Link
               href={providerUrl}
               className="font-heading text-lg font-bold text-charcoal-900 hover:text-primary-500 transition-colors duration-200 truncate"
+              onClick={() => trackEvent('artisan_listing_click', {
+                artisanId: provider.stable_id || provider.id,
+                artisanName: provider.name,
+                source: 'card_name',
+              })}
             >
               {provider.name}
             </Link>

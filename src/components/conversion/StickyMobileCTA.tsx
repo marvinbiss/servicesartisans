@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { FileText, Phone } from 'lucide-react'
 import { PHONE_TEL } from '@/lib/seo/config'
@@ -107,6 +107,20 @@ export default function StickyMobileCTA({
     setSheetOpen(false)
     document.body.removeAttribute('data-estimation-open')
   }, [])
+
+  // Track phone_reveal once when CTA becomes visible with an artisan phone
+  const phoneRevealTracked = useRef(false)
+  useEffect(() => {
+    if (visible && artisanPhone && !phoneRevealTracked.current) {
+      phoneRevealTracked.current = true
+      trackEvent('phone_reveal', {
+        artisanName: artisanName || '',
+        source: 'sticky_cta',
+        value: 5,
+        currency: 'EUR',
+      })
+    }
+  }, [visible, artisanPhone, artisanName])
 
   if (shouldHide) return null
 

@@ -52,6 +52,15 @@ const ALLOWED_EVENTS = [
   'unclaimed_quote_service_selected',
   'unclaimed_quote_submitted',
   'artisan_listing_click',
+  'scroll_depth',
+  'time_on_page',
+  'faq_click',
+  'page_not_found',
+  'search_query',
+  'filter_used',
+  'claim_started',
+  'claim_submitted',
+  'share_profile',
 ] as const
 
 const analyticsSchema = z.object({

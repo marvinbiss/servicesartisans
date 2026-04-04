@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { X, FileText, Shield, Clock, Phone } from 'lucide-react'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 const SESSION_KEY = 'sa:exit-intent-shown'
 const STORAGE_KEY = 'sa:devis-draft'
@@ -203,7 +204,7 @@ export default function ExitIntentModal() {
             Avant de partir...
           </h2>
           <p className="text-charcoal-600 mb-6">
-            Recevez 3 devis gratuits d&apos;artisans vérifiés près de chez vous — en 30 secondes, sans engagement
+            Devis gratuit d&apos;artisans vérifiés près de chez vous — sans engagement
           </p>
 
           {/* What they lose */}
@@ -215,7 +216,7 @@ export default function ExitIntentModal() {
               <li className="flex items-center gap-2.5">
                 <FileText className="w-4 h-4 text-accent-500 flex-shrink-0" />
                 <span className="text-sm text-charcoal-700">
-                  <strong>3 devis gratuits</strong> de {serviceName} à {villeName}
+                  <strong>Devis gratuit</strong> de {serviceName} à {villeName}
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
@@ -227,7 +228,7 @@ export default function ExitIntentModal() {
               <li className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-accent-500 flex-shrink-0" />
                 <span className="text-sm text-charcoal-700">
-                  Réponse <strong>sous 24 heures</strong>
+                  Réponse <strong>rapide</strong>
                 </span>
               </li>
             </ul>
@@ -245,6 +246,7 @@ export default function ExitIntentModal() {
           {/* Phone alternative */}
           <a
             href={PHONE_TEL}
+            onClick={() => { trackEvent('phone_click', { source: 'exit_intent_modal' }) }}
             className="mt-2 w-full inline-flex items-center justify-center gap-2 border-2 border-accent-200 bg-accent-50 text-accent-700 font-semibold px-6 py-3 rounded-xl hover:bg-accent-100 hover:border-accent-300 transition-all duration-200"
             aria-label="Appeler ServicesArtisans"
           >

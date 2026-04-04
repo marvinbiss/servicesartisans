@@ -54,6 +54,15 @@ export type BookingEvent =
   | 'inline_form_step1'
   | 'inline_form_submitted'
   | 'inline_form_abandoned'
+  | 'scroll_depth'
+  | 'time_on_page'
+  | 'faq_click'
+  | 'page_not_found'
+  | 'search_query'
+  | 'filter_used'
+  | 'claim_started'
+  | 'claim_submitted'
+  | 'share_profile'
 
 export interface TrackingData {
   event: BookingEvent
