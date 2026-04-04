@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
@@ -25,9 +25,10 @@ import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
-import { SocialProofBadge, useWeeklyDevisCount } from '@/components/artisan/SocialProofBadge'
+import { useWeeklyDevisCount } from '@/components/artisan/SocialProofBadge'
 import { UnclaimedSidebarCTA } from '@/components/artisan/UnclaimedSidebarCTA'
-import { UnclaimedMobileCTA } from '@/components/artisan/UnclaimedMobileCTA'
+import { UnclaimedStickyBar } from '@/components/artisan/UnclaimedStickyBar'
+import { UnclaimedDevisModal } from '@/components/artisan/UnclaimedDevisModal'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
@@ -35,12 +36,6 @@ import { BookingFunnel } from '@/lib/analytics/tracking'
 const ArtisanExitIntent = dynamic(
   () => import('@/components/artisan/ArtisanExitIntent').then(mod => ({ default: mod.ArtisanExitIntent })),
   { ssr: false }
-)
-
-// Dynamic import for unclaimed quote wizard (heavy, not needed on first paint for claimed)
-const UnclaimedQuoteWizard = dynamic(
-  () => import('@/components/artisan/UnclaimedQuoteWizard'),
-  { loading: () => <SectionSkeleton height="h-96" /> }
 )
 
 // Loading skeleton for lazy-loaded sections
@@ -147,6 +142,7 @@ export default function ArtisanPageClient({
   const city = artisan?.city || ''
   const citySlug = artisan?.city_slug || ''
   const weeklyDevisCount = useWeeklyDevisCount(specialtySlug, citySlug)
+  const [showDevisModal, setShowDevisModal] = useState(false)
 
   // Track profile view
   useEffect(() => {
@@ -201,8 +197,8 @@ export default function ArtisanPageClient({
         </a>
       </nav>
 
-      {/* pb-44 on mobile = CTA bar (~72px at bottom-16) + bottom nav (64px) + margin */}
-      <div className="min-h-screen bg-sand-50 pb-44 md:pb-8">
+      {/* pb-44 = space for sticky bar + bottom nav on mobile; pb-24 on desktop for sticky bar */}
+      <div className={`min-h-screen bg-sand-50 ${isClaimed ? 'pb-44 md:pb-8' : 'pb-44 md:pb-24'}`}>
         {/* Header - sticky navigation */}
         <header className="bg-white/95 backdrop-blur-lg border-b border-sand-200 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3.5">
@@ -303,22 +299,7 @@ export default function ArtisanPageClient({
                 <section id="devis" aria-label="Demande de devis">
                   <ArtisanQuoteForm artisan={artisan} />
                 </section>
-              ) : (
-                <>
-                  {/* Social proof badge */}
-                  <SocialProofBadge
-                    specialty={specialty}
-                    city={city}
-                  />
-                  {/* Inline multi-step quote wizard */}
-                  <UnclaimedQuoteWizard
-                    specialty={specialty}
-                    specialtySlug={specialtySlug}
-                    city={city}
-                    citySlug={citySlug}
-                  />
-                </>
-              )}
+              ) : null}
 
               {/* 4. Stats — social proof reinforces after form view */}
               <section aria-label="Statistiques">
@@ -328,10 +309,12 @@ export default function ArtisanPageClient({
               <section id="reviews" aria-label="Avis clients">
                 <ArtisanReviews artisan={artisan} reviews={reviews} />
               </section>
-              {/* 6. About — details for those doing due diligence */}
-              <section aria-label="À propos">
-                <ArtisanAbout artisan={artisan} />
-              </section>
+              {/* 6. About — details for those doing due diligence (hidden for unclaimed: auto-generated descriptions) */}
+              {isClaimed && (
+                <section aria-label="À propos">
+                  <ArtisanAbout artisan={artisan} />
+                </section>
+              )}
 
               {/* 6b. Similar artisans — boosted for unclaimed (moved up from position 10) */}
               {!isClaimed && (
@@ -399,6 +382,7 @@ export default function ArtisanPageClient({
                       providerId={artisanId}
                       providerName={artisan.business_name || displayName}
                       hasSiret={hasSiret}
+                      onDevisClick={() => setShowDevisModal(true)}
                     />
                     <ArtisanProfileStrength artisan={artisan} />
                   </>
@@ -408,19 +392,29 @@ export default function ArtisanPageClient({
           </div>
         </main>
 
-        {/* Mobile CTA - claimed: direct / unclaimed: generic */}
+        {/* Mobile CTA - claimed: direct / unclaimed: sticky bar (mobile + desktop) */}
         {isClaimed ? (
           <ArtisanMobileCTA artisan={artisan} />
         ) : (
-          <UnclaimedMobileCTA
+          <UnclaimedStickyBar
             specialty={specialty}
-            specialtySlug={specialtySlug}
             city={city}
-            citySlug={citySlug}
-            weeklyDevisCount={weeklyDevisCount}
+            onDevisClick={() => setShowDevisModal(true)}
           />
         )}
       </div>
+
+      {/* Devis modal for unclaimed artisan pages */}
+      {!isClaimed && (
+        <UnclaimedDevisModal
+          isOpen={showDevisModal}
+          onClose={() => setShowDevisModal(false)}
+          specialty={specialty}
+          specialtySlug={specialtySlug}
+          city={city}
+          citySlug={citySlug}
+        />
+      )}
 
       {/* Exit intent — now works for both claimed and unclaimed */}
       <ArtisanExitIntent

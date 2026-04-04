@@ -35,6 +35,8 @@ export type BookingEvent =
   | 'unclaimed_exit_intent_click'
   | 'unclaimed_quote_service_selected'
   | 'unclaimed_quote_submitted'
+  | 'unclaimed_modal_step2'
+  | 'unclaimed_modal_submitted'
   | 'artisan_listing_click'
 
 export interface TrackingData {
