@@ -8,8 +8,8 @@ import type { LegacyArtisan } from '@/types/legacy'
 const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
   ssr: false,
   loading: () => (
-    <div className="bg-gray-100 rounded-xl flex items-center justify-center" style={{ height: '280px' }}>
-      <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+    <div className="bg-sand-100 rounded-xl flex items-center justify-center" style={{ height: '280px' }}>
+      <Loader2 className="w-6 h-6 animate-spin text-charcoal-400" />
     </div>
   ),
 })
@@ -53,11 +53,13 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.5 }}
-      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6 relative z-0"
+      className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6 relative z-0"
       style={{ isolation: 'isolate' }}
     >
-      <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-        <MapPin className="w-5 h-5 text-clay-400" aria-hidden="true" />
+      <h2 className="text-xl font-semibold text-charcoal-900 font-heading mb-4 flex items-center gap-2.5">
+        <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
+          <MapPin className="w-4.5 h-4.5 text-primary-400" aria-hidden="true" />
+        </div>
         Zone d'intervention
       </h2>
 
@@ -79,31 +81,31 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
           href={mapsLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between gap-3 p-4 rounded-xl bg-clay-50 border border-clay-100 mb-4 hover:bg-clay-100 transition-colors group"
+          className="flex items-center justify-between gap-3 p-4 rounded-xl bg-primary-50 border border-primary-100 mb-4 hover:bg-primary-100 transition-colors group"
           aria-label={`Voir ${artisan.city} sur Google Maps`}
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-clay-400 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-primary-400 flex items-center justify-center flex-shrink-0">
               <MapPin className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">Voir sur Google Maps</p>
-              <p className="text-xs text-slate-500">
+              <p className="font-semibold text-charcoal-900 text-sm">Voir sur Google Maps</p>
+              <p className="text-xs text-charcoal-500">
                 {artisan.city}{artisan.postal_code ? ` (${artisan.postal_code})` : ''}
               </p>
             </div>
           </div>
-          <ExternalLink className="w-4 h-4 text-clay-400 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+          <ExternalLink className="w-4 h-4 text-primary-400 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
         </a>
       ) : null}
 
       {/* Structured address */}
       {artisan.address && (
-        <address className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 mb-4 not-italic">
-          <Navigation className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
+        <address className="flex items-start gap-3 p-4 rounded-xl bg-sand-50 mb-4 not-italic">
+          <Navigation className="w-5 h-5 text-charcoal-400 mt-0.5" aria-hidden="true" />
           <div>
-            <p className="text-gray-900">{artisan.address}</p>
-            <p className="text-gray-500">{artisan.postal_code} {artisan.city}</p>
+            <p className="text-charcoal-900">{artisan.address}</p>
+            <p className="text-charcoal-500">{artisan.postal_code} {artisan.city}</p>
           </div>
         </address>
       )}
@@ -111,13 +113,13 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
       {/* Intervention zones */}
       {artisan.intervention_zones && artisan.intervention_zones.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Communes desservies</h3>
+          <h3 className="text-sm font-medium text-charcoal-700 mb-3">Communes desservies</h3>
           <div className="flex flex-wrap gap-2" role="list" aria-label="Communes desservies">
             {artisan.intervention_zones.map((zone, i) => (
               <span
                 key={i}
                 role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sand-200 text-stone-700 text-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sand-100 text-charcoal-700 text-sm"
               >
                 <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
                 {zone}
@@ -129,8 +131,8 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
 
       {/* Intervention radius */}
       {artisan.intervention_zone && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-2 text-gray-600">
+        <div className="mt-4 pt-4 border-t border-sand-200">
+          <div className="flex items-center gap-2 text-charcoal-600">
             <Navigation className="w-4 h-4" aria-hidden="true" />
             <span>Rayon d'intervention : <strong>{artisan.intervention_zone}</strong></span>
           </div>

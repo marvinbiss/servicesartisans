@@ -9,8 +9,8 @@ import { getDisplayName } from '@/components/artisan/types'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 const SESSION_KEY = 'sa:exit-intent-shown'
-const AUTO_DISMISS_MS = 10_000
-const MOBILE_IDLE_MS = 45_000
+const AUTO_DISMISS_MS = 15_000
+const MOBILE_IDLE_MS = 60_000
 
 interface ArtisanExitIntentProps {
   artisan: LegacyArtisan
@@ -18,8 +18,6 @@ interface ArtisanExitIntentProps {
   isClaimed?: boolean
   specialty?: string
   city?: string
-  specialtySlug?: string
-  citySlug?: string
 }
 
 export function ArtisanExitIntent({
@@ -64,7 +62,7 @@ export function ArtisanExitIntent({
     }
   }, [close, isClaimed, onOpenEstimation, specialty, city])
 
-  // Auto-dismiss after 10s
+  // Auto-dismiss after 15s
   useEffect(() => {
     if (!visible) return
     dismissTimer.current = setTimeout(() => setVisible(false), AUTO_DISMISS_MS)
@@ -85,7 +83,7 @@ export function ArtisanExitIntent({
     return () => document.removeEventListener('mouseleave', handler)
   }, [show])
 
-  // Mobile: 45s idle timer, reset on scroll/touch
+  // Mobile: 60s idle timer, reset on scroll/touch
   useEffect(() => {
     const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
     if (!isMobile) return
@@ -120,11 +118,11 @@ export function ArtisanExitIntent({
           role="complementary"
           aria-label="Estimation gratuite"
         >
-          <div className="bg-white rounded-2xl shadow-2xl border border-stone-200/60 p-5 relative">
+          <div className="bg-white rounded-2xl shadow-2xl border border-sand-200 p-5 relative">
             {/* Close button — min 44x44 touch target */}
             <button
               onClick={close}
-              className="absolute top-3 right-3 p-3 min-w-[44px] min-h-[44px] rounded-full text-slate-400 hover:text-slate-600 hover:bg-sand-100 transition-colors flex items-center justify-center"
+              className="absolute top-3 right-3 p-3 min-w-[44px] min-h-[44px] rounded-full text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 transition-colors flex items-center justify-center"
               aria-label="Fermer"
             >
               <X className="w-4 h-4" />
@@ -133,16 +131,16 @@ export function ArtisanExitIntent({
             {isClaimed ? (
               <>
                 {/* Claimed: existing content */}
-                <p className="text-sm font-medium text-slate-500 mb-1">Avant de partir...</p>
-                <p className="text-base font-semibold text-gray-900 font-heading mb-2 pr-6">
+                <p className="text-sm font-medium text-charcoal-500 mb-1">Avant de partir...</p>
+                <p className="text-base font-semibold text-charcoal-900 font-heading mb-2 pr-6">
                   {displayName}
                 </p>
-                <p className="text-sm text-slate-600 mb-4">
-                  Obtenez votre estimation gratuite en 30 secondes
+                <p className="text-sm text-charcoal-600 mb-4">
+                  Obtenez votre estimation gratuite
                 </p>
                 <button
                   onClick={handleCTA}
-                  className="w-full py-2.5 px-4 bg-gradient-to-r from-clay-400 to-clay-500 text-white text-sm font-semibold rounded-xl hover:from-clay-500 hover:to-clay-600 transition-all shadow-md shadow-glow-clay"
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-primary-400 to-primary-500 text-white text-sm font-semibold rounded-xl hover:from-primary-500 hover:to-primary-600 transition-all shadow-md shadow-cta"
                 >
                   Estimer mon projet
                 </button>
@@ -158,13 +156,13 @@ export function ArtisanExitIntent({
             ) : (
               <>
                 {/* Unclaimed: generic content métier+ville */}
-                <p className="text-sm font-medium text-slate-500 mb-1">Vous partez ?</p>
-                <p className="text-base font-semibold text-gray-900 font-heading mb-2 pr-6">
+                <p className="text-sm font-medium text-charcoal-500 mb-1">Vous partez ?</p>
+                <p className="text-base font-semibold text-charcoal-900 font-heading mb-2 pr-6">
                   Un {specialty} à {city} peut vous rappeler gratuitement
                 </p>
                 <button
                   onClick={handleCTA}
-                  className="w-full py-2.5 px-4 bg-gradient-to-r from-clay-400 to-clay-500 text-white text-sm font-semibold rounded-xl hover:from-clay-500 hover:to-clay-600 transition-all shadow-md shadow-glow-clay"
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-primary-400 to-primary-500 text-white text-sm font-semibold rounded-xl hover:from-primary-500 hover:to-primary-600 transition-all shadow-md shadow-cta"
                 >
                   Être rappelé gratuitement
                 </button>

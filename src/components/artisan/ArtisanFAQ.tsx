@@ -21,10 +21,12 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.4 }}
-      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
+      className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6"
     >
-      <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <HelpCircle className="w-5 h-5 text-clay-400" />
+      <h2 className="text-xl font-semibold text-charcoal-900 font-heading mb-6 flex items-center gap-2.5">
+        <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
+          <HelpCircle className="w-4.5 h-4.5 text-primary-400" aria-hidden="true" />
+        </div>
         Questions fréquentes
       </h2>
 
@@ -40,7 +42,7 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: index * 0.05 }}
-              className="border border-stone-200/60 rounded-xl overflow-hidden"
+              className="border border-sand-200 rounded-xl overflow-hidden"
             >
               <h3>
                 <button
@@ -48,11 +50,11 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
                   aria-controls={panelId}
-                  className="w-full px-5 py-4 flex items-center justify-between text-left bg-sand-50 hover:bg-sand-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-inset"
+                  className="w-full px-5 py-4 flex items-center justify-between text-left bg-sand-50 hover:bg-sand-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-inset"
                 >
-                  <span className="font-medium text-gray-900 pr-4">{item.question}</span>
+                  <span className="font-medium text-charcoal-900 pr-4">{item.question}</span>
                   <div
-                    className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-clay-400 text-white' : 'bg-sand-300 text-stone-600'}`}
+                    className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-primary-400 text-white' : 'bg-sand-200 text-charcoal-500'}`}
                     aria-hidden="true"
                   >
                     {isOpen ? (
@@ -76,7 +78,7 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 py-4 bg-white text-gray-600 leading-relaxed">
+                    <div className="px-5 py-4 bg-white text-charcoal-600 leading-relaxed">
                       {item.answer}
                     </div>
                   </motion.div>

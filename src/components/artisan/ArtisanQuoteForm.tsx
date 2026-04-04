@@ -93,6 +93,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
           email: formData.email.trim(),
           telephone: cleanPhone(formData.telephone),
           ville: artisan.city || '',
+          artisan_id: artisan.id || undefined,
         }),
       })
 
@@ -131,7 +132,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
           Obtenir mon devis gratuit
         </h2>
         <p className="text-primary-100 text-sm mt-1">
-          Recevez jusqu'à 3 devis de professionnels qualifiés
+          Devis gratuit de professionnels qualifiés
         </p>
       </div>
 
@@ -158,7 +159,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 Votre demande a été envoyée !
               </h3>
               <p className="text-charcoal-600 text-sm">
-                Vous recevrez jusqu'à 3 devis sous 24h
+                Un conseiller vous rappelle rapidement
               </p>
             </motion.div>
           ) : (
@@ -205,7 +206,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                   <option value="flexible">Pas urgent</option>
                   <option value="mois">Ce mois-ci</option>
                   <option value="semaine">Cette semaine</option>
-                  <option value="urgent">Urgent (sous 24h)</option>
+                  <option value="urgent">Urgent</option>
                 </select>
               </div>
 
@@ -327,7 +328,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
               <div className="flex items-center justify-center gap-2 pt-2">
                 <Shield className="w-3.5 h-3.5 text-accent-500 flex-shrink-0" aria-hidden="true" />
                 <p className="text-xs text-charcoal-500">
-                  Gratuit · Sans engagement · Réponse sous 24h
+                  Gratuit · Sans engagement · Réponse rapide
                 </p>
               </div>
             </motion.form>

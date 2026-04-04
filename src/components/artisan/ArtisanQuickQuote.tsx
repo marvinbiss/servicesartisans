@@ -1,43 +1,28 @@
 'use client'
 
-import { useState } from 'react'
-import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FileText, ShieldCheck, Clock, Star } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 
-const DevisBottomSheet = dynamic(
-  () => import('@/components/conversion/DevisBottomSheet'),
-  { ssr: false }
-)
-
 interface ArtisanQuickQuoteProps {
   artisan: LegacyArtisan
 }
 
 export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
-  const [isSheetOpen, setIsSheetOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
   const displayName = getDisplayName(artisan)
 
-  const handleOpenSheet = () => {
+  const handleClick = () => {
     trackEvent('artisan_devis_click', {
       artisanId: artisan.id,
       artisanName: artisan.business_name || displayName,
       source: 'quick_quote_block',
     })
-    const isDesktop = window.matchMedia('(min-width: 768px)').matches
-    if (isDesktop) {
-      const devisSection = document.getElementById('devis')
-      if (devisSection) {
-        devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      } else {
-        window.location.href = '/devis'
-      }
-    } else {
-      setIsSheetOpen(true)
+    const devisSection = document.getElementById('devis')
+    if (devisSection) {
+      devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
@@ -59,7 +44,7 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
               Demander un devis à {displayName}
             </h2>
             <p className="text-sm text-charcoal-500 mt-1">
-              Gratuit, sans engagement — réponse sous 24-48h
+              Gratuit, sans engagement — réponse rapide
             </p>
           </div>
 
@@ -67,7 +52,7 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
           <motion.button
             whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
             whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-            onClick={handleOpenSheet}
+            onClick={handleClick}
             className="w-full py-3.5 px-6 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta transition-colors flex items-center justify-center gap-2.5 touch-manipulation"
             aria-label={`Demander un devis gratuit à ${displayName}`}
           >
@@ -96,14 +81,6 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
           </div>
         </div>
       </motion.div>
-
-      {/* DevisBottomSheet — pre-filled with artisan data */}
-      <DevisBottomSheet
-        isOpen={isSheetOpen}
-        onClose={() => setIsSheetOpen(false)}
-        prefilledService={artisan.specialty_slug || ''}
-        prefilledCity={artisan.city || ''}
-      />
     </>
   )
 }

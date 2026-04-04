@@ -124,17 +124,16 @@ interface ArtisanReviewsProps {
 }
 
 export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
+  const [showAll, setShowAll] = useState(false)
   const rating = artisan.average_rating
   const count = artisan.review_count
 
-  // Nothing to show if no aggregate rating
-  if (!rating || rating === 0) return null
+  const hasRating = rating && rating > 0
+  const fullStars = hasRating ? Math.floor(rating) : 0
+  const hasHalf = hasRating ? rating - fullStars >= 0.5 : false
 
-  const fullStars = Math.floor(rating)
-  const hasHalf = rating - fullStars >= 0.5
-
-  const visibleReviews = reviews.slice(0, MAX_VISIBLE_REVIEWS)
-  const hasMoreReviews = reviews.length > MAX_VISIBLE_REVIEWS
+  const visibleReviews = showAll ? reviews : reviews.slice(0, MAX_VISIBLE_REVIEWS)
+  const hasMoreReviews = !showAll && reviews.length > MAX_VISIBLE_REVIEWS
 
   return (
     <motion.div
@@ -148,93 +147,109 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
           <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
           Réputation
         </h2>
-        {/* Source attribution badge */}
-        <span
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sand-100 border border-sand-200 text-xs font-medium text-charcoal-500"
-          title="Note observée sur Google"
-        >
+        {hasRating && (
           <span
-            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-charcoal-700 text-white font-bold leading-none"
-            style={{ fontSize: '9px' }}
-            aria-hidden="true"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sand-100 border border-sand-200 text-xs font-medium text-charcoal-500"
+            title="Note observée sur Google"
           >
-            G
+            <span
+              className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-charcoal-700 text-white font-bold leading-none"
+              style={{ fontSize: '9px' }}
+              aria-hidden="true"
+            >
+              G
+            </span>
+            Observé sur Google
           </span>
-          Observé sur Google
-        </span>
+        )}
       </div>
 
-      {/* Aggregate rating block */}
-      <div className="flex items-center gap-5">
-        <div className="text-center flex-shrink-0">
-          <div
-            className="text-5xl font-bold text-charcoal-900 leading-none"
-            aria-label={`Note de ${rating.toFixed(1)} sur 5`}
-          >
-            {rating.toFixed(1)}
+      {hasRating ? (
+        <>
+          {/* Aggregate rating block */}
+          <div className="flex items-center gap-5">
+            <div className="text-center flex-shrink-0">
+              <div
+                className="text-5xl font-bold text-charcoal-900 leading-none"
+                aria-label={`Note de ${rating.toFixed(1)} sur 5`}
+              >
+                {rating.toFixed(1)}
+              </div>
+              <div className="flex items-center justify-center gap-0.5 mt-2" aria-hidden="true">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const filled = star <= fullStars
+                  const half = !filled && star === fullStars + 1 && hasHalf
+                  return (
+                    <Star
+                      key={star}
+                      className={`w-5 h-5 ${
+                        filled
+                          ? 'text-amber-500 fill-amber-500'
+                          : half
+                          ? 'text-amber-400 fill-amber-200'
+                          : 'text-sand-300 fill-sand-300'
+                      }`}
+                    />
+                  )
+                })}
+              </div>
+              {count > 0 && (
+                <div className="text-sm text-charcoal-500 mt-1.5">
+                  {count.toLocaleString('fr-FR')} avis
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 pl-5 border-l border-sand-200">
+              <p className="text-sm text-charcoal-600 leading-relaxed">
+                Note consolidée basée sur les avis clients collectés en ligne.
+              </p>
+              {count > 0 && (
+                <p className="text-xs text-charcoal-400 mt-1.5">
+                  Source : Google Business Profile
+                </p>
+              )}
+            </div>
           </div>
-          {/* Stars - gold */}
-          <div className="flex items-center justify-center gap-0.5 mt-2" aria-hidden="true">
-            {[1, 2, 3, 4, 5].map((star) => {
-              const filled = star <= fullStars
-              const half = !filled && star === fullStars + 1 && hasHalf
-              return (
-                <Star
-                  key={star}
-                  className={`w-5 h-5 ${
-                    filled
-                      ? 'text-amber-500 fill-amber-500'
-                      : half
-                      ? 'text-amber-400 fill-amber-200'
-                      : 'text-sand-300 fill-sand-300'
-                  }`}
-                />
-              )
-            })}
-          </div>
-          {count > 0 && (
-            <div className="text-sm text-charcoal-500 mt-1.5">
-              {count.toLocaleString('fr-FR')} avis
+
+          {/* Individual reviews */}
+          {visibleReviews.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-sand-200">
+              <h3 className="text-base font-semibold text-charcoal-800 mb-4">
+                Derniers avis clients
+              </h3>
+              <div className="space-y-3">
+                {visibleReviews.map((review, i) => (
+                  <ReviewCard key={review.id} review={review} index={i} />
+                ))}
+              </div>
+
+              {hasMoreReviews && (
+                <div className="mt-4 text-center">
+                  <button
+                    onClick={() => setShowAll(true)}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-400 hover:text-primary-600 transition-colors"
+                  >
+                    Voir tous les avis ({reviews.length})
+                    <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                  </button>
+                </div>
+              )}
             </div>
           )}
-        </div>
-
-        {/* Contextual note */}
-        <div className="flex-1 pl-5 border-l border-sand-200">
-          <p className="text-sm text-charcoal-600 leading-relaxed">
-            Note consolidée basée sur les avis clients collectés en ligne.
-          </p>
-          {count > 0 && (
-            <p className="text-xs text-charcoal-400 mt-1.5">
-              Source : Google Business Profile
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Individual reviews */}
-      {visibleReviews.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-sand-200">
-          <h3 className="text-base font-semibold text-charcoal-800 mb-4">
-            Derniers avis clients
-          </h3>
-          <div className="space-y-3">
-            {visibleReviews.map((review, i) => (
-              <ReviewCard key={review.id} review={review} index={i} />
+        </>
+      ) : (
+        /* Empty state — no rating yet */
+        <div className="text-center py-6">
+          <div className="flex items-center justify-center gap-0.5 mb-3" aria-hidden="true">
+            {[1, 2, 3, 4, 5].map((s) => (
+              <Star key={s} className="w-6 h-6 text-sand-300 fill-sand-300" />
             ))}
           </div>
-
-          {hasMoreReviews && (
-            <div className="mt-4 text-center">
-              <a
-                href="#reviews"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-400 hover:text-primary-600 transition-colors"
-              >
-                Voir tous les avis ({reviews.length})
-                <ChevronDown className="w-4 h-4" aria-hidden="true" />
-              </a>
-            </div>
-          )}
+          <p className="text-charcoal-600 font-medium">Pas encore d&apos;avis</p>
+          <p className="text-sm text-charcoal-400 mt-1">
+            Aucun avis n&apos;a été collecté pour cet artisan.
+          </p>
         </div>
       )}
     </motion.div>

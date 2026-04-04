@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
@@ -21,14 +21,14 @@ import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
 
 import { ArtisanProfileStrength } from '@/components/artisan/ArtisanProfileStrength'
 import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
+import { ArtisanOpeningHours } from '@/components/artisan/ArtisanOpeningHours'
+import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
-import { useWeeklyDevisCount } from '@/components/artisan/SocialProofBadge'
-import { UnclaimedSidebarCTA } from '@/components/artisan/UnclaimedSidebarCTA'
-import { UnclaimedStickyBar } from '@/components/artisan/UnclaimedStickyBar'
-import { UnclaimedDevisModal } from '@/components/artisan/UnclaimedDevisModal'
+import { PlatformSidebarCTA } from '@/components/artisan/PlatformSidebarCTA'
+import { PlatformStickyBar } from '@/components/artisan/PlatformStickyBar'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
@@ -136,13 +136,6 @@ export default function ArtisanPageClient({
   const reviews = initialReviews
   const { isFavorite, toggleFavorite } = useFavorites()
 
-  // Derive specialty/city info for unclaimed CTAs
-  const specialty = artisan?.specialty || 'Artisan'
-  const specialtySlug = artisan?.specialty_slug || 'artisan'
-  const city = artisan?.city || ''
-  const citySlug = artisan?.city_slug || ''
-  const weeklyDevisCount = useWeeklyDevisCount(specialtySlug, citySlug)
-  const [showDevisModal, setShowDevisModal] = useState(false)
 
   // Track profile view
   useEffect(() => {
@@ -223,7 +216,7 @@ export default function ArtisanPageClient({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => toggleFavorite(artisanId)}
-                  className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 ${
+                  className={`p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 ${
                     isFavorite(artisanId)
                       ? 'bg-red-50 text-red-500 border-red-200 hover:bg-red-100'
                       : 'bg-sand-50 text-charcoal-600 border-sand-200 hover:bg-sand-100'
@@ -276,12 +269,13 @@ export default function ArtisanPageClient({
                 <ArtisanHero
                   artisan={artisan}
                   isClaimed={isClaimed}
-                  specialty={specialty}
-                  specialtySlug={specialtySlug}
-                  city={city}
                 />
               </section>
-              {/* 1b. Quick Quote CTA — only if claimed */}
+              {/* 1b. Why choose — trust cards (claimed + unclaimed) */}
+              <section aria-label="Pourquoi choisir cet artisan">
+                <ArtisanWhyChoose artisan={artisan} />
+              </section>
+              {/* 1c. Quick Quote CTA — only if claimed */}
               {isClaimed && (
                 <section aria-label="Demande de devis rapide">
                   <ArtisanQuickQuote artisan={artisan} />
@@ -294,16 +288,20 @@ export default function ArtisanPageClient({
                 </section>
               )}
 
-              {/* 3. DEVIS — claimed: direct form / unclaimed: social proof + wizard */}
-              {isClaimed ? (
+              {/* 3. DEVIS — claimed only: direct form */}
+              {isClaimed && (
                 <section id="devis" aria-label="Demande de devis">
                   <ArtisanQuoteForm artisan={artisan} />
                 </section>
-              ) : null}
+              )}
 
               {/* 4. Stats — social proof reinforces after form view */}
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
+              </section>
+              {/* 4b. Opening hours */}
+              <section aria-label="Horaires d'ouverture">
+                <ArtisanOpeningHours artisan={artisan} />
               </section>
               {/* 5. Reviews — strongest trust signal */}
               <section id="reviews" aria-label="Avis clients">
@@ -316,12 +314,6 @@ export default function ArtisanPageClient({
                 </section>
               )}
 
-              {/* 6b. Similar artisans — boosted for unclaimed (moved up from position 10) */}
-              {!isClaimed && (
-                <section aria-label="Professionnels disponibles">
-                  <ArtisanSimilar artisan={artisan} similarArtisans={similarArtisans} isClaimed={false} />
-                </section>
-              )}
 
               {/* 7. Services & pricing — transactional detail (hidden for unclaimed) */}
               {isClaimed && (
@@ -373,16 +365,10 @@ export default function ArtisanPageClient({
                   </>
                 ) : (
                   <>
-                    <UnclaimedSidebarCTA
-                      specialty={specialty}
-                      specialtySlug={specialtySlug}
-                      city={city}
-                      citySlug={citySlug}
-                      weeklyDevisCount={weeklyDevisCount}
+                    <PlatformSidebarCTA
                       providerId={artisanId}
                       providerName={artisan.business_name || displayName}
                       hasSiret={hasSiret}
-                      onDevisClick={() => setShowDevisModal(true)}
                     />
                     <ArtisanProfileStrength artisan={artisan} />
                   </>
@@ -392,40 +378,22 @@ export default function ArtisanPageClient({
           </div>
         </main>
 
-        {/* Mobile CTA - claimed: direct / unclaimed: sticky bar (mobile + desktop) */}
+        {/* Mobile CTA - claimed: direct / unclaimed: platform phone bar */}
         {isClaimed ? (
           <ArtisanMobileCTA artisan={artisan} />
         ) : (
-          <UnclaimedStickyBar
-            specialty={specialty}
-            city={city}
-            onDevisClick={() => setShowDevisModal(true)}
-          />
+          <PlatformStickyBar />
         )}
       </div>
 
-      {/* Devis modal for unclaimed artisan pages */}
-      {!isClaimed && (
-        <UnclaimedDevisModal
-          isOpen={showDevisModal}
-          onClose={() => setShowDevisModal(false)}
-          specialty={specialty}
-          specialtySlug={specialtySlug}
-          city={city}
-          citySlug={citySlug}
+      {/* Exit intent — claimed only (unclaimed: no lead capture) */}
+      {isClaimed && (
+        <ArtisanExitIntent
+          artisan={artisan}
+          onOpenEstimation={() => {}}
+          isClaimed={true}
         />
       )}
-
-      {/* Exit intent — now works for both claimed and unclaimed */}
-      <ArtisanExitIntent
-        artisan={artisan}
-        onOpenEstimation={() => {}}
-        isClaimed={isClaimed}
-        specialty={specialty}
-        city={city}
-        specialtySlug={specialtySlug}
-        citySlug={citySlug}
-      />
     </>
   )
 }
