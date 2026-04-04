@@ -13,7 +13,8 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Fetch top-rated recent reviews with artisan info (only published reviews)
+    // Fetch top-rated recent reviews with artisan profile info (only published reviews)
+    // reviews.artisan_id → profiles(id), NOT providers
     const { data: reviews, error } = await supabase
       .from('reviews')
       .select(`
@@ -22,9 +23,9 @@ export async function GET() {
         comment,
         client_name,
         created_at,
-        artisan:providers!artisan_id (
+        artisan:profiles!artisan_id (
           id,
-          name
+          full_name
         )
       `)
       .eq('status', 'published')
@@ -49,7 +50,7 @@ export async function GET() {
           author_name: review.client_name || 'Client',
           rating: review.rating,
           comment: review.comment,
-          artisan_name: artisan?.name || null,
+          artisan_name: (artisan as { full_name?: string } | null)?.full_name || null,
           created_at: review.created_at
         }
       })

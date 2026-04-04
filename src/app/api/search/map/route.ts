@@ -4,6 +4,8 @@ import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const mapQuerySchema = z.object({
   north: z.coerce.number().min(-90).max(90),
   south: z.coerce.number().min(-90).max(90),
