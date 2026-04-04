@@ -82,7 +82,7 @@ export function UnclaimedMobileCTA({
           {weeklyDevisCount > 0 && (
             <p className="text-[11px] text-charcoal-500 text-center mb-2">
               <span className="inline-block w-1.5 h-1.5 bg-accent-500 rounded-full mr-1 animate-pulse align-middle" />
-              {weeklyDevisCount} devis demandé{weeklyDevisCount > 1 ? 's' : ''} cette semaine
+              {weeklyDevisCount} demande{weeklyDevisCount > 1 ? 's' : ''} cette semaine à proximité
             </p>
           )}
 
@@ -97,15 +97,15 @@ export function UnclaimedMobileCTA({
                   aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
                   onClick={handlePhoneClick}
                 >
-                  <Phone className="w-5 h-5 flex-shrink-0" />
+                  <Phone className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
                   Appeler
                 </a>
                 <button
                   onClick={handleClick}
                   className="flex-1 h-12 px-4 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base active:scale-[0.96] transition-all touch-manipulation flex items-center justify-center gap-2"
                 >
-                  <MessageCircle className="w-5 h-5 flex-shrink-0" />
-                  Devis gratuit
+                  <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+                  Être rappelé
                 </button>
               </>
             ) : (
@@ -117,14 +117,14 @@ export function UnclaimedMobileCTA({
                   aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
                   onClick={handlePhoneClick}
                 >
-                  <Phone className="w-5 h-5" />
+                  <Phone className="w-5 h-5" aria-hidden="true" />
                 </a>
                 <button
                   onClick={handleClick}
                   className="flex-1 h-12 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base active:scale-[0.98] transition-all touch-manipulation flex items-center justify-center gap-2"
                 >
-                  <MessageCircle className="w-5 h-5 flex-shrink-0" />
-                  Devis gratuit {specialty} {city}
+                  <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+                  Être rappelé gratuitement
                 </button>
               </>
             )}
@@ -132,7 +132,7 @@ export function UnclaimedMobileCTA({
 
           {/* Trust line */}
           <p className="text-[11px] text-charcoal-500 text-center mt-2 flex items-center justify-center gap-1">
-            <CheckCircle className="w-3 h-3 text-accent-500 flex-shrink-0" />
+            <CheckCircle className="w-3 h-3 text-accent-500 flex-shrink-0" aria-hidden="true" />
             Gratuit - Sans engagement - Réponse rapide
           </p>
         </motion.div>

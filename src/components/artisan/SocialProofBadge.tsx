@@ -59,8 +59,7 @@ export function SocialProofBadge({
       <Icon className="h-4 w-4 flex-shrink-0 text-accent-600" />
 
       <p className="text-sm font-medium text-accent-800 leading-snug">
-        <span className="font-semibold">{count} demandes</span> de devis{' '}
-        {specialty} à {city} cette semaine
+        <span className="font-semibold">{count} demandes</span> de {specialty.toLowerCase()} à {city} cette semaine
       </p>
 
       {isHot && (

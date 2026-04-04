@@ -151,29 +151,29 @@ export function ArtisanExitIntent({
                   className="mt-2 w-full py-2 px-4 border border-accent-200 bg-accent-50 text-accent-700 text-sm font-medium rounded-xl flex items-center justify-center gap-1.5 hover:bg-accent-100 transition-all"
                   aria-label="Appeler"
                 >
-                  <Phone className="w-3.5 h-3.5" />
+                  <Phone className="w-3.5 h-3.5" aria-hidden="true" />
                   {PHONE_NUMBER}
                 </a>
               </>
             ) : (
               <>
                 {/* Unclaimed: generic content métier+ville */}
-                <p className="text-sm font-medium text-slate-500 mb-1">Vous partez sans devis ?</p>
+                <p className="text-sm font-medium text-slate-500 mb-1">Vous partez ?</p>
                 <p className="text-base font-semibold text-gray-900 font-heading mb-2 pr-6">
-                  Recevez jusqu&apos;à 3 devis gratuits de {specialty}s à {city}
+                  Un {specialty} à {city} peut vous rappeler gratuitement
                 </p>
                 <button
                   onClick={handleCTA}
                   className="w-full py-2.5 px-4 bg-gradient-to-r from-clay-400 to-clay-500 text-white text-sm font-semibold rounded-xl hover:from-clay-500 hover:to-clay-600 transition-all shadow-md shadow-glow-clay"
                 >
-                  Comparer les {specialty}s disponibles
+                  Être rappelé gratuitement
                 </button>
                 <a
                   href={PHONE_TEL}
                   className="mt-2 w-full py-2 px-4 border border-accent-200 bg-accent-50 text-accent-700 text-sm font-medium rounded-xl flex items-center justify-center gap-1.5 hover:bg-accent-100 transition-all"
                   aria-label="Appeler"
                 >
-                  <Phone className="w-3.5 h-3.5" />
+                  <Phone className="w-3.5 h-3.5" aria-hidden="true" />
                   {PHONE_NUMBER}
                 </a>
               </>

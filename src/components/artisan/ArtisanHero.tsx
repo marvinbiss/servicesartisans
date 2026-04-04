@@ -249,7 +249,7 @@ export function ArtisanHero({ artisan, isClaimed = false, specialty, specialtySl
                     className="inline-flex items-center justify-center gap-2 py-3 px-6 border-2 border-sand-300 text-charcoal-700 font-medium rounded-xl hover:bg-sand-50 transition-all"
                   >
                     <FileText className="w-5 h-5" aria-hidden="true" />
-                    Devis écrit
+                    Être rappelé
                   </button>
                 </div>
                 <p className="text-xs text-charcoal-500 mt-2">

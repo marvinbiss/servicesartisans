@@ -604,7 +604,7 @@ export default async function ProviderPage({ params }: PageProps) {
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
       {/* JSON-LD structured data — rendered SERVER-SIDE for immediate bot visibility */}
-      <ArtisanSchema artisan={artisan} reviews={reviews} />
+      <ArtisanSchema artisan={artisan} reviews={reviews} isClaimed={isClaimed} />
 
       <ArtisanPageClient
         initialArtisan={artisan}

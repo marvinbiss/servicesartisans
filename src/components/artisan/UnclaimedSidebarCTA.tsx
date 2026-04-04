@@ -68,13 +68,13 @@ export function UnclaimedSidebarCTA({
           <div className="flex items-center gap-2 text-charcoal-700 mb-4 pb-4 border-b border-sand-200">
             <Users className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
             <span className="text-sm font-semibold">
-              {weeklyDevisCount} demande{weeklyDevisCount > 1 ? 's' : ''} de devis cette semaine à {city}
+              {weeklyDevisCount} demande{weeklyDevisCount > 1 ? 's' : ''} cette semaine à {city}
             </span>
           </div>
         )}
 
         {/* CTA principal */}
-        <div className="space-y-3 mb-5" role="group" aria-label="Demander des devis">
+        <div className="space-y-3 mb-5" role="group" aria-label="Être rappelé gratuitement">
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -89,10 +89,10 @@ export function UnclaimedSidebarCTA({
             transition={shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
             onClick={handleDevisClick}
             className="w-full py-4 px-5 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
-            aria-label="Recevoir 3 devis gratuits"
+            aria-label="Être rappelé gratuitement"
           >
             <MessageCircle className="w-5 h-5" aria-hidden="true" />
-            Recevoir 3 devis gratuits
+            Être rappelé gratuitement
           </motion.button>
 
           {/* Click-to-call */}

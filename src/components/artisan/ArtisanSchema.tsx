@@ -7,9 +7,10 @@ import { companyIdentity, getSocialLinks } from '@/lib/config/company-identity'
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
   reviews: Review[]
+  isClaimed?: boolean
 }
 
-export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
+export function ArtisanSchema({ artisan, reviews, isClaimed = true }: ArtisanSchemaProps) {
   const displayName = getDisplayName(artisan)
   const baseUrl = companyIdentity.url
 
@@ -87,10 +88,10 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
     // Add knowsAbout for E-E-A-T signals
     knowsAbout: artisan.specialty,
-    ...(artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
+    ...(isClaimed && artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
       telephone: artisan.phone,
     }),
-    ...(artisan.email && { email: artisan.email }),
+    ...(isClaimed && artisan.email && { email: artisan.email }),
     url: artisanUrl,
     parentOrganization: {
       '@type': 'Organization',

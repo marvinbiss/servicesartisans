@@ -186,14 +186,13 @@ export default function UnclaimedQuoteWizard({
 
     try {
       const payload = {
-        serviceType: formData.serviceType,
+        service: formData.serviceType,
         urgency: formData.urgency,
         description: formData.description,
         nom: formData.nom,
         telephone: cleanPhone(formData.telephone),
         email: formData.email,
-        specialty: specialtySlug,
-        city: citySlug,
+        ville: city,
         source: 'unclaimed_artisan_page',
       }
 
@@ -232,14 +231,14 @@ export default function UnclaimedQuoteWizard({
           className="bg-white rounded-2xl shadow-soft border border-sand-200 p-8 md:p-12 text-center max-w-2xl mx-auto"
         >
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Check className="w-8 h-8 text-green-600" />
+            <Check className="w-8 h-8 text-green-600" aria-hidden="true" />
           </div>
-          <h3 className="font-heading text-2xl font-bold text-charcoal-900 mb-3">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-3">
             Demande envoyée !
-          </h3>
+          </h2>
           <p className="text-charcoal-600 mb-2">
-            Vous recevrez jusqu&apos;à 3 devis de {specialty.toLowerCase()}s
-            qualifiés à {city} sous 48h.
+            Un conseiller vous rappelle en moins de 24h pour vous mettre en relation
+            avec un {specialty.toLowerCase()} qualifié à {city}.
           </p>
           <p className="text-sm text-charcoal-400">
             Vérifiez votre boîte email ({formData.email}) et votre téléphone.
@@ -257,17 +256,17 @@ export default function UnclaimedQuoteWizard({
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
-            Recevez 3 devis de {specialty.toLowerCase()}s à {city}
+            Décrivez votre projet — un {specialty.toLowerCase()} à {city} vous rappelle
           </h2>
           <p className="text-charcoal-500 text-sm flex items-center justify-center gap-3">
             <span className="inline-flex items-center gap-1">
-              <Shield className="w-3.5 h-3.5" /> Gratuit
+              <Shield className="w-3.5 h-3.5" aria-hidden="true" /> Gratuit
             </span>
             <span>·</span>
             <span>Sans engagement</span>
             <span>·</span>
             <span className="inline-flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" /> Réponse sous 48h
+              <Clock className="w-3.5 h-3.5" aria-hidden="true" /> Réponse en moins de 24h
             </span>
           </p>
         </div>
@@ -510,7 +509,7 @@ export default function UnclaimedQuoteWizard({
                     className="mt-1 h-4 w-4 rounded border-sand-300 text-primary-500 focus:ring-primary-400"
                   />
                   <label htmlFor="unclaimed-consent" className="text-xs text-charcoal-500 leading-relaxed">
-                    J&apos;accepte que mes données soient transmises à des artisans qualifiés pour recevoir des devis, conformément à la{' '}
+                    J&apos;accepte d&apos;être recontacté par un professionnel qualifié, conformément à la{' '}
                     <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="text-primary-500 underline hover:text-primary-600">
                       politique de confidentialité
                     </a>.
@@ -550,7 +549,7 @@ export default function UnclaimedQuoteWizard({
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      Recevoir mes devis gratuits
+                      Être rappelé gratuitement
                     </>
                   )}
                 </button>
