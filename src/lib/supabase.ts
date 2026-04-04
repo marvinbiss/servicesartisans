@@ -252,10 +252,14 @@ export async function getLocationBySlug(slug: string) {
   )
 }
 
-// Provider detail SELECT — uses EXACTLY the same columns as the listing pages.
-// PROVIDER_LIST_SELECT is proven to work in production (listing pages render).
-// Any extra columns can be added back ONE AT A TIME after verifying they exist.
-const PROVIDER_DETAIL_SELECT = PROVIDER_LIST_SELECT
+// Provider detail SELECT — listing columns + extra fields for the artisan detail page.
+// Only add columns that exist in the providers table (verified in types/database.ts).
+const PROVIDER_DETAIL_SELECT = [
+  PROVIDER_LIST_SELECT,
+  'creation_date', 'employee_count',
+  'legal_form', 'legal_form_code',
+  'description', 'website', 'email',
+].join(',')
 
 /**
  * Query a single provider by field.

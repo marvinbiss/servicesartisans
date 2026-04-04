@@ -146,6 +146,7 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     intervention_radius_km: provider.intervention_radius_km || undefined,
     member_since: (memberYear && memberYear < currentYear) ? memberYear.toString() : undefined,
     siret: provider.siret || undefined,
+    creation_date: provider.creation_date || undefined,
     legal_form: provider.legal_form_code || provider.legal_form || undefined,
     phone: provider.phone || undefined,
     email: provider.email || undefined,
