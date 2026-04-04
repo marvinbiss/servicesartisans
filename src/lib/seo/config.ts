@@ -113,6 +113,21 @@ export function getLocationSEO(locationType: 'ville' | 'region' | 'departement',
   }
 }
 
+/**
+ * Generate alternates metadata with canonical + hreflang for any page.
+ * Centralizes hreflang to ensure all pages declare fr-FR + x-default.
+ */
+export function getAlternates(path: string) {
+  const url = `${SITE_URL}${path}`
+  return {
+    canonical: url,
+    languages: {
+      'fr-FR': url,
+      'x-default': url,
+    },
+  }
+}
+
 // SEO pour les artisans
 export function getArtisanSEO(artisanName: string, service: string, location: string, rating?: number) {
   const title = `${artisanName} — ${service} à ${location}`

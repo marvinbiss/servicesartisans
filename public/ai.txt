@@ -1,0 +1,38 @@
+# ai.txt — ServicesArtisans
+# https://servicesartisans.fr
+
+User-Agent: *
+Allow: /
+
+# About
+Name: ServicesArtisans
+Description: Premier annuaire d'artisans vérifiés en France. 940 000+ professionnels du bâtiment référencés via les données SIREN/SIRET officielles de l'INSEE.
+URL: https://servicesartisans.fr
+Contact: contact@servicesartisans.fr
+Phone: 07 56 87 27 87
+
+# Data
+Source: Répertoire SIREN/SIRET de l'INSEE
+Update-Frequency: Daily
+Coverage: France métropolitaine + DOM-TOM (101 départements)
+Services: 46 métiers du bâtiment
+Providers: 940 000+
+Cities: 2 267+
+
+# License
+Content-License: CC-BY-4.0 (données Baromètre uniquement)
+Attribution: ServicesArtisans (servicesartisans.fr)
+
+# Machine-readable resources
+LLM-Info: https://servicesartisans.fr/llms.txt
+LLM-Full: https://servicesartisans.fr/llms-full.txt
+Sitemap: https://servicesartisans.fr/sitemap.xml
+OpenAPI: https://servicesartisans.fr/api/v1/openapi.json
+RSS-Blog: https://servicesartisans.fr/feed/blog.xml
+RSS-Artisans: https://servicesartisans.fr/feed/nouveaux-artisans.xml
+AI-Plugin: https://servicesartisans.fr/.well-known/ai-plugin.json
+
+# Policy
+Training: Disallowed (see robots.txt for bot-specific rules)
+Search: Allowed
+Citation: Required — mention "ServicesArtisans (servicesartisans.fr)" with link

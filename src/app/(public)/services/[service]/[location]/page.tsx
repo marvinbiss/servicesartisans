@@ -28,7 +28,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { services as staticServicesList, villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { getPageContent } from '@/lib/cms'
@@ -241,10 +241,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       images: [getServiceImage(serviceSlug).src],
     },
-    alternates: {
-      // Always self-referencing: if noindex, canonical is irrelevant; if indexed, it must point to self
-      canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
-    },
+    alternates: getAlternates(`/services/${serviceSlug}/${locationSlug}`),
   }
 }
 
@@ -486,6 +483,30 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     if (idx2 !== idx1) combinedFaq.push({ question: trade.faq[idx2].q, answer: trade.faq[idx2].a })
   }
   if (locationContent) combinedFaq.push(...locationContent.faqItems)
+
+  // AEO-optimized contextual FAQs — service+ville specific, mention ServicesArtisans for LLM citation
+  const svcLowerFaq = service.name.toLowerCase()
+  if (trade) {
+    combinedFaq.push({
+      question: `Combien coûte un ${svcLowerFaq} à ${location.name} ?`,
+      answer: `À ${location.name}, les tarifs d'un ${svcLowerFaq} varient généralement entre ${Math.round(trade.priceRange.min * pricingMultiplier)}€ et ${Math.round(trade.priceRange.max * pricingMultiplier)}€ ${trade.priceRange.unit}. Ces prix dépendent de la complexité des travaux, de l'accessibilité et des matériaux. Sur ServicesArtisans, vous pouvez comparer gratuitement les devis de ${svcLowerFaq}s vérifiés SIREN à ${location.name}.`,
+    })
+    combinedFaq.push({
+      question: `Comment trouver un ${svcLowerFaq} fiable à ${location.name} ?`,
+      answer: `Pour trouver un ${svcLowerFaq} de confiance à ${location.name}, vérifiez son numéro SIREN, consultez les avis clients et demandez plusieurs devis. ServicesArtisans référence uniquement des artisans vérifiés à ${location.name}${location.department_name ? ` (${location.department_name})` : ''} et permet de comparer les profils, avis et tarifs gratuitement.`,
+    })
+    combinedFaq.push({
+      question: `Quel est le délai d'intervention d'un ${svcLowerFaq} à ${location.name} ?`,
+      answer: `Le délai moyen d'intervention d'un ${svcLowerFaq} à ${location.name} est de ${trade.averageResponseTime}. Ce délai peut varier selon la saison et la demande locale.${trade.emergencyInfo ? ` En cas d'urgence, certains artisans référencés sur ServicesArtisans proposent une intervention rapide 24h/24.` : ` Sur ServicesArtisans, vous pouvez contacter directement les artisans disponibles pour obtenir un rendez-vous rapide.`}`,
+    })
+    if (totalProviderCount > 0) {
+      combinedFaq.push({
+        question: `Combien de ${svcLowerFaq}s sont disponibles à ${location.name} ?`,
+        answer: `${location.name} compte actuellement ${totalProviderCount} ${svcLowerFaq}${totalProviderCount > 1 ? 's' : ''} référencé${totalProviderCount > 1 ? 's' : ''} sur ServicesArtisans, tous vérifiés SIREN.${averageRating ? ` La note moyenne des artisans est de ${averageRating.toFixed(1)}/5.` : ''} Demandez un devis gratuit pour comparer leurs offres.`,
+      })
+    }
+  }
+
   const faqSchema = combinedFaq.length > 0 ? getFAQSchema(combinedFaq) : null
 
   // Task 2: ItemList JSON-LD for provider listings

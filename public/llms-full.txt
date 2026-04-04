@@ -4,7 +4,7 @@
 
 Site : https://servicesartisans.fr
 Contact : https://servicesartisans.fr/contact
-Telephone : 06 51 85 89 30
+Telephone : 07 56 87 27 87
 Licence donnees Barometre : CC-BY-4.0
 Attribution : Toute citation doit mentionner "ServicesArtisans (servicesartisans.fr)" avec un lien vers la source.
 
@@ -1002,4 +1002,4 @@ Licence des donnees du Barometre : CC-BY-4.0
 
 - Site : https://servicesartisans.fr
 - Contact : https://servicesartisans.fr/contact
-- Telephone : 06 51 85 89 30
+- Telephone : 07 56 87 27 87

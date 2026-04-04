@@ -184,6 +184,14 @@ export default function ImmediateAnswerBlock({
             </p>
           )}
         </div>
+
+        {/* Source attribution for LLM citation */}
+        <div className="px-5 pb-3 pt-1 border-t border-sand-100">
+          <p className="text-xs text-charcoal-400" data-speakable="true">
+            Source : <strong>ServicesArtisans</strong> — Données vérifiées SIREN/SIRET, mise à jour quotidienne.
+            {hasProviders && ` ${providerCount} ${svcLower}${providerCount > 1 ? 's' : ''} référencé${providerCount > 1 ? 's' : ''} à ${villeName}.`}
+          </p>
+        </div>
       </div>
     </section>
   )

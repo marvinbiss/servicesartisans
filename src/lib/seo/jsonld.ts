@@ -20,7 +20,19 @@ export function getOrganizationSchema() {
       height: 512,
     },
     description: 'Annuaire d\'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements.',
-    ...(socialLinks.length > 0 && { sameAs: socialLinks }),
+    knowsAbout: [
+      'Artisanat du bâtiment',
+      'Plomberie', 'Électricité', 'Chauffage', 'Menuiserie', 'Maçonnerie',
+      'Couverture', 'Carrelage', 'Peinture', 'Serrurerie', 'Climatisation',
+      'Rénovation énergétique', 'Dépannage à domicile',
+    ],
+    ...(socialLinks.length > 0 && {
+      sameAs: [
+        ...socialLinks,
+        'https://annuaire-entreprises.data.gouv.fr/',
+        'https://www.insee.fr/fr/information/2406147',
+      ],
+    }),
     areaServed: {
       '@type': 'Country',
       name: 'France',
@@ -952,5 +964,50 @@ export function getArticleSpeakableSchema(params: {
         '.speakable-summary',
       ],
     },
+  }
+}
+
+// Schema.org Person — for blog authors and team members (E-E-A-T signal)
+export function getPersonSchema(author: {
+  name: string
+  slug: string
+  role: string
+  bio: string
+  expertise: string[]
+  certifications: string[]
+  yearsExperience: number
+  image?: string
+  social?: { linkedin?: string }
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${SITE_URL}/equipe/${author.slug}#person`,
+    name: author.name,
+    jobTitle: author.role,
+    description: author.bio,
+    knowsAbout: author.expertise,
+    ...(author.image && { image: `${SITE_URL}${author.image}` }),
+    worksFor: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
+    ...(author.certifications.length > 0 && {
+      hasCredential: author.certifications.map(cert => ({
+        '@type': 'EducationalOccupationalCredential',
+        name: cert,
+      })),
+    }),
+    ...(author.yearsExperience > 0 && {
+      hasOccupation: {
+        '@type': 'Occupation',
+        name: author.role,
+        experienceRequirements: `${author.yearsExperience}+ ans d'expérience`,
+      },
+    }),
+    ...(author.social?.linkedin && {
+      sameAs: [author.social.linkedin],
+    }),
   }
 }

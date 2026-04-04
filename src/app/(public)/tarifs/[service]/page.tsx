@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getHowToSchema, getServicePricingSchema, getDetailedPricingSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
 import { getDefaultAuthor } from '@/lib/data/team'
@@ -48,10 +48,12 @@ export function generateStaticParams() {
 export const dynamicParams = true
 export const revalidate = 86400
 
-/** Truncate title to maxLen chars on a word boundary */
+/** Truncate title to maxLen chars on a word boundary, preserving trailing '?' */
 function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  const endsWithQuestion = title.trimEnd().endsWith('?')
+  const truncated = title.slice(0, maxLen - (endsWithQuestion ? 2 : 1)).replace(/\s+\S*$/, '')
+  return endsWithQuestion ? truncated + ' ?' : truncated + '\u2026'
 }
 
 
@@ -63,11 +65,11 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   // SEO overrides for high-impression pages (GSC CTR optimization)
   const metaOverrides: Record<string, { title: string; description: string }> = {
     electricien: {
-      title: 'Tarif Électricien 2026 : Grille Complète + Devis Gratuit Immédiat',
+      title: 'Combien coûte un électricien en 2026 ? Grille + Devis Gratuit',
       description: 'Grille tarifaire complète électricien 2026 : prix installation, rénovation, dépannage. Estimez votre budget et obtenez un devis gratuit.',
     },
     plombier: {
-      title: 'Tarif Plombier 2026 : Prix Intervention, Installation — Devis Gratuit',
+      title: 'Combien coûte un plombier en 2026 ? Prix + Devis Gratuit',
       description: 'Tous les tarifs plombier 2026 : intervention urgente, installation sanitaire, chauffe-eau. Comparez et recevez un devis gratuit sans engagement.',
     },
   }
@@ -78,7 +80,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
     return {
       title: override.title,
       description: override.description,
-      alternates: { canonical: `${SITE_URL}/tarifs/${service}` },
+      alternates: getAlternates(`/tarifs/${service}`),
       openGraph: {
         locale: 'fr_FR',
         title: override.title,
@@ -104,11 +106,11 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const titleHash = Math.abs(hashCode(`tarif-title-${service}`))
   const titleTemplates = [
-    `Tarifs ${trade.name} 2026 : de ${priceMin}€ à ${priceMax}€/h`,
-    `Prix ${trade.name} 2026 : ${priceMin}–${priceMax} ${unit}`,
-    `Coût ${trade.name} 2026 : Tarifs de ${priceMin}€ à ${priceMax}€`,
-    `Prix ${trade.name} 2026 | ${priceMin}–${priceMax} ${unit} + Devis`,
-    `Tarifs ${trade.name} 2026 : Grille des Prix Détaillée`,
+    `Combien coûte un ${tradeLower} en 2026 ? ${priceMin}–${priceMax}${unit}`,
+    `Prix ${trade.name} 2026 : combien prévoir ? ${priceMin}–${priceMax}${unit}`,
+    `Quel est le tarif d'un ${tradeLower} en 2026 ? Grille complète`,
+    `${trade.name} : quel budget en 2026 ? ${priceMin}–${priceMax}${unit}`,
+    `Tarif ${tradeLower} 2026 : combien ça coûte vraiment ?`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
@@ -127,7 +129,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/tarifs/${service}` },
+    alternates: getAlternates(`/tarifs/${service}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -331,11 +333,11 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                 const h1Hash = Math.abs(hashCode(`tarif-h1-${service}`))
                 const tradeLower = trade.name.toLowerCase()
                 const h1Templates = [
-                  `Tarifs ${tradeLower} 2026`,
-                  `Prix ${tradeLower} : guide complet 2026`,
-                  `Combien coûte un ${tradeLower} ?`,
-                  `Guide des tarifs ${tradeLower} en 2026`,
-                  `Tarifs et prix d'un ${tradeLower}`,
+                  `Combien coûte un ${tradeLower} en 2026 ?`,
+                  `Quel est le prix d'un ${tradeLower} en 2026 ?`,
+                  `Quel budget prévoir pour un ${tradeLower} en 2026 ?`,
+                  `Combien coûte un ${tradeLower} ? Guide tarifs 2026`,
+                  `${trade.name} : combien ça coûte en 2026 ?`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}

@@ -58,7 +58,7 @@ interface ProviderRecord {
   updated_at?: string | null
   user_id?: string | null
 }
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
 import ServiceQuartierPage from './ServiceQuartierPage'
@@ -405,7 +405,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       // All service×quartier pages indexed — rich content exists even with few providers
       openGraph: { title, description, type: 'website', locale: 'fr_FR', url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`, images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }] },
       twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(serviceSlug).src] },
-      alternates: { canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}` },
+      alternates: getAlternates(`/services/${serviceSlug}/${locationSlug}/${publicId}`),
     }
   }
 
@@ -521,9 +521,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description,
         images: [ogImage],
       },
-      alternates: {
-        canonical: `${SITE_URL}${canonicalPath}`,
-      },
+      alternates: getAlternates(canonicalPath),
     }
   } catch {
     // Don't noindex on transient DB errors — ISR will retry and Google will recrawl.

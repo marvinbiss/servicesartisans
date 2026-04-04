@@ -38,15 +38,32 @@ export function getBlogArticleSchema(article: {
       if (authorProfile) {
         return {
           '@type': 'Person' as const,
+          '@id': `${SITE_URL}/equipe/${authorProfile.slug}#person`,
           name: authorProfile.name,
           jobTitle: authorProfile.role,
           description: authorProfile.bio,
+          image: `${SITE_URL}${authorProfile.image}`,
           knowsAbout: authorProfile.expertise,
+          worksFor: {
+            '@type': 'Organization' as const,
+            '@id': `${SITE_URL}#organization`,
+            name: 'ServicesArtisans',
+          },
           hasCredential: authorProfile.certifications.map(cert => ({
             '@type': 'EducationalOccupationalCredential' as const,
             credentialCategory: 'certification',
             name: cert,
           })),
+          ...(authorProfile.yearsExperience > 0 && {
+            hasOccupation: {
+              '@type': 'Occupation' as const,
+              name: authorProfile.role,
+              experienceRequirements: `${authorProfile.yearsExperience}+ ans d'expérience`,
+            },
+          }),
+          ...(authorProfile.social?.linkedin && {
+            sameAs: [authorProfile.social.linkedin],
+          }),
         }
       }
       return {
