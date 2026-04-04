@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { FileText, ShieldCheck, Clock, Star } from 'lucide-react'
+import { FileText, ShieldCheck, Clock, Star, Users } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -41,7 +41,7 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
           {/* Title */}
           <div className="mb-4">
             <h2 className="text-lg md:text-xl font-bold text-charcoal-900 font-heading">
-              Demander un devis à {displayName}
+              Devis gratuit en 2 min
             </h2>
             <p className="text-sm text-charcoal-500 mt-1">
               Gratuit, sans engagement — réponse rapide
@@ -53,15 +53,19 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
             whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
             whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
             onClick={handleClick}
-            className="w-full py-3.5 px-6 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta transition-colors flex items-center justify-center gap-2.5 touch-manipulation"
-            aria-label={`Demander un devis gratuit à ${displayName}`}
+            className="w-full py-3.5 px-6 bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2.5 touch-manipulation"
+            aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
-            Obtenir mon devis gratuit
+            Devis gratuit en 2 min
           </motion.button>
 
           {/* Trust signals */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-accent-700">
+              <Users className="w-4 h-4 text-accent-500" aria-hidden="true" />
+              2 conseillers dispo
+            </div>
             {artisan.is_verified && (
               <div className="flex items-center gap-1.5 text-xs font-medium text-accent-700">
                 <ShieldCheck className="w-4 h-4 text-accent-500" aria-hidden="true" />

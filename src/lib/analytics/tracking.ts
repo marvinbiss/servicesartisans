@@ -50,6 +50,10 @@ export type BookingEvent =
   | 'exit_intent_shown'
   | 'exit_intent_devis_click'
   | 'exit_intent_phone_click'
+  | 'inline_form_started'
+  | 'inline_form_step1'
+  | 'inline_form_submitted'
+  | 'inline_form_abandoned'
 
 export interface TrackingData {
   event: BookingEvent

@@ -5,11 +5,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Users, Clock, CalendarCheck, ShieldCheck, FileText, Phone } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Users, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 
 const DevisBottomSheet = dynamic(
   () => import('@/components/conversion/DevisBottomSheet'),
@@ -19,19 +18,14 @@ const DevisBottomSheet = dynamic(
 interface ArtisanHeroProps {
   artisan: LegacyArtisan
   isClaimed?: boolean
-  specialty?: string
-  specialtySlug?: string
-  city?: string
 }
 
-export function ArtisanHero({ artisan, isClaimed = false, specialty, specialtySlug, city }: ArtisanHeroProps) {
+export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
   const [isDevisOpen, setIsDevisOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
   const hasPortfolioImage = artisan.portfolio && artisan.portfolio.length > 0 && artisan.portfolio[0].imageUrl
-
-  const responseTimeMin = artisan.accepts_new_clients ? Math.floor(Math.abs(artisan.id.charCodeAt(2) % 45) + 15) : null
 
   return (
     <>
@@ -137,13 +131,6 @@ export function ArtisanHero({ artisan, isClaimed = false, specialty, specialtySl
                 </div>
               )}
 
-              {/* Response time - social urgency */}
-              {responseTimeMin && (
-                <div className="flex items-center gap-1.5 text-sm text-charcoal-600 bg-sand-100 px-3 py-1.5 rounded-lg border border-sand-200">
-                  <Clock className="w-4 h-4 text-primary-400" aria-hidden="true" />
-                  <span>Répond en moyenne en <strong>{responseTimeMin}min</strong></span>
-                </div>
-              )}
             </div>
 
             {/* Location */}
@@ -203,60 +190,23 @@ export function ArtisanHero({ artisan, isClaimed = false, specialty, specialtySl
                       setIsDevisOpen(true)
                     }
                   }}
-                  className="w-full sm:w-auto py-3.5 px-8 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta hover:shadow-lg transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
-                  aria-label={`Demander un devis gratuit à ${displayName}`}
+                  className="w-full sm:w-auto py-3.5 px-8 bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
+                  aria-label="Devis gratuit en 2 min"
                 >
                   <FileText className="w-5 h-5" aria-hidden="true" />
-                  Demander un devis gratuit
+                  Devis gratuit en 2 min
                 </motion.button>
                 <p className="text-xs text-charcoal-500 mt-2 flex items-center gap-1.5">
+                  <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
+                  <span>2 conseillers dispo</span>
+                  <span className="text-charcoal-300" aria-hidden="true">·</span>
                   <span>Gratuit</span>
                   <span className="text-charcoal-300" aria-hidden="true">·</span>
                   <span>Sans engagement</span>
-                  <span className="text-charcoal-300" aria-hidden="true">·</span>
-                  <span>Réponse sous 24h</span>
                 </p>
               </div>
             )}
 
-            {/* Urgent CTA — for unclaimed profiles */}
-            {!isClaimed && specialty && city && (
-              <div className="mt-5 p-4 rounded-xl bg-gradient-to-r from-accent-50 to-orange-50 border border-accent-200">
-                <p className="text-sm font-semibold text-charcoal-800 mb-2">
-                  Besoin d&apos;un {specialty.toLowerCase()} à {city} ?
-                </p>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <a
-                    href={PHONE_TEL}
-                    onClick={() => {
-                      trackEvent('phone_click', {
-                        source: 'hero_unclaimed',
-                        specialty: specialtySlug || '',
-                        city: city || '',
-                      })
-                    }}
-                    className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-accent-500 hover:bg-accent-600 text-white font-semibold rounded-xl shadow-sm active:scale-[0.98] transition-all touch-manipulation"
-                    aria-label="Appeler ServicesArtisans"
-                  >
-                    <Phone className="w-5 h-5" aria-hidden="true" />
-                    Appeler · {PHONE_NUMBER}
-                  </a>
-                  <button
-                    onClick={() => {
-                      const devisSection = document.getElementById('devis')
-                      if (devisSection) devisSection.scrollIntoView({ behavior: 'smooth' })
-                    }}
-                    className="inline-flex items-center justify-center gap-2 py-3 px-6 border-2 border-sand-300 text-charcoal-700 font-medium rounded-xl hover:bg-sand-50 transition-all"
-                  >
-                    <FileText className="w-5 h-5" aria-hidden="true" />
-                    Être rappelé
-                  </button>
-                </div>
-                <p className="text-xs text-charcoal-500 mt-2">
-                  Un conseiller vous trouve un artisan disponible · Gratuit
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>

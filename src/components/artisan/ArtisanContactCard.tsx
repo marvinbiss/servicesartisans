@@ -1,6 +1,6 @@
 'use client'
 
-import { Mail, MessageCircle, ShieldCheck, Star, CheckCircle } from 'lucide-react'
+import { Mail, FileText, ShieldCheck, Star, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -51,22 +51,22 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
                 devisSection.scrollIntoView({ behavior: 'smooth' })
               }
             }}
-            className="w-full py-4 px-4 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 group"
+            className="w-full py-4 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-bold text-base flex items-center justify-center gap-2.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 group"
           >
-            <MessageCircle className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
-            Obtenir mon devis gratuit
+            <FileText className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
+            Devis gratuit en 2 min
           </button>
 
           {/* Trust reassurance */}
           <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
             <span className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-accent-500" aria-hidden="true" />
-              Gratuit
+              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
+              2 conseillers dispo
             </span>
-            <span className="text-charcoal-300">-</span>
+            <span className="text-charcoal-300" aria-hidden="true">·</span>
+            <span>Gratuit</span>
+            <span className="text-charcoal-300" aria-hidden="true">·</span>
             <span>Sans engagement</span>
-            <span className="text-charcoal-300">-</span>
-            <span>Réponse rapide</span>
           </div>
 
           {/* 2. Email — only for claimed artisans (RGPD: no PII without consent) */}
