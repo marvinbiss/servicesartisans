@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, MessageCircle, ShieldCheck, CheckCircle } from 'lucide-react'
+import { Mail, MessageCircle, ShieldCheck, CheckCircle, Phone } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 
 function slugify(text: string): string {
   return text
@@ -122,6 +123,22 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               Envoyer un email
             </motion.button>
           )}
+
+          {/* Platform phone — always available */}
+          <a
+            href={PHONE_TEL}
+            onClick={() => {
+              trackEvent('phone_click', {
+                artisanId: artisan.id,
+                source: 'sidebar_platform_phone',
+              })
+            }}
+            className="w-full py-3 px-4 rounded-xl border-2 border-accent-200 bg-accent-50 text-accent-700 font-medium flex items-center justify-center gap-2 hover:border-accent-300 hover:bg-accent-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+            aria-label="Appeler ServicesArtisans"
+          >
+            <Phone className="w-5 h-5 text-accent-500" />
+            Appeler · {PHONE_NUMBER}
+          </a>
         </div>
 
         {/* Trust badges */}
@@ -176,26 +193,44 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
       aria-label="Actions rapides"
     >
       <div className="flex flex-col items-center gap-2">
-        {/* Primary: Full-width CTA - MASSIF */}
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          variants={pulseVariants}
-          initial="initial"
-          animate="pulse"
-          onClick={() => {
-            trackEvent('artisan_devis_click', {
-              artisanId: artisan.id,
-              artisanName: artisan.business_name || '',
-              source: 'mobile_cta',
-            })
-            window.location.href = getDevisUrl(artisan)
-          }}
-          className="w-full py-4 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
-          aria-label="Obtenir mon devis gratuit"
-        >
-          <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-          Obtenir mon devis gratuit
-        </motion.button>
+        {/* Primary row: Phone + Devis CTA */}
+        <div className="flex gap-2 w-full">
+          {/* Tap-to-call platform */}
+          <a
+            href={PHONE_TEL}
+            onClick={() => {
+              trackEvent('phone_click', {
+                artisanId: artisan.id,
+                source: 'mobile_cta_platform_phone',
+              })
+            }}
+            className="flex items-center justify-center w-12 h-12 bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
+            aria-label="Appeler ServicesArtisans"
+          >
+            <Phone className="w-5 h-5" />
+          </a>
+
+          {/* Primary: Devis CTA - MASSIF */}
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            variants={pulseVariants}
+            initial="initial"
+            animate="pulse"
+            onClick={() => {
+              trackEvent('artisan_devis_click', {
+                artisanId: artisan.id,
+                artisanName: artisan.business_name || '',
+                source: 'mobile_cta',
+              })
+              window.location.href = getDevisUrl(artisan)
+            }}
+            className="flex-1 py-4 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
+            aria-label="Obtenir mon devis gratuit"
+          >
+            <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+            Obtenir mon devis gratuit
+          </motion.button>
+        </div>
 
         {/* Trust line under CTA */}
         <div className="flex items-center gap-2 text-[11px] text-charcoal-500">

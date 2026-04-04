@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { X, FileText, Shield, Clock } from 'lucide-react'
+import { X, FileText, Shield, Clock, Phone } from 'lucide-react'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 
 const SESSION_KEY = 'sa:exit-intent-shown'
 const STORAGE_KEY = 'sa:devis-draft'
@@ -240,6 +241,16 @@ export default function ExitIntentModal() {
           >
             Obtenir mes devis gratuits
           </button>
+
+          {/* Phone alternative */}
+          <a
+            href={PHONE_TEL}
+            className="mt-2 w-full inline-flex items-center justify-center gap-2 border-2 border-accent-200 bg-accent-50 text-accent-700 font-semibold px-6 py-3 rounded-xl hover:bg-accent-100 hover:border-accent-300 transition-all duration-200"
+            aria-label="Appeler ServicesArtisans"
+          >
+            <Phone className="w-5 h-5" />
+            Préférez appeler ? {PHONE_NUMBER}
+          </a>
 
           <button
             type="button"

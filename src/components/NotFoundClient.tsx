@@ -2,7 +2,8 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Home, Search, FileText } from 'lucide-react'
+import { Home, Search, FileText, Phone } from 'lucide-react'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { useMemo } from 'react'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import ExitIntentPopup from '@/components/ExitIntentPopup'
@@ -237,6 +238,15 @@ export default function NotFoundClient() {
               Demander un devis gratuit
               <span aria-hidden="true">&rarr;</span>
             </Link>
+            <p className="text-blue-200 text-sm mt-3 mb-2">Ou appelez-nous</p>
+            <a
+              href={PHONE_TEL}
+              className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg font-bold transition-colors"
+              aria-label="Appeler ServicesArtisans"
+            >
+              <Phone className="w-5 h-5" />
+              {PHONE_NUMBER}
+            </a>
           </div>
         </div>
       </div>

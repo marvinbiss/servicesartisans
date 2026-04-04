@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import { FileText, Phone } from 'lucide-react'
+import { PHONE_TEL } from '@/lib/seo/config'
 import { trackEvent } from '@/lib/analytics/tracking'
 import DevisBottomSheet from './DevisBottomSheet'
 import ScrollNudge from './ScrollNudge'
@@ -112,7 +113,7 @@ export default function StickyMobileCTA({
   // Format phone for tel: link
   const telHref = artisanPhone
     ? `tel:${artisanPhone.replace(/[\s.\-()]/g, '')}`
-    : null
+    : PHONE_TEL
 
   return (
     <>
@@ -150,7 +151,7 @@ export default function StickyMobileCTA({
                 <a
                   href={telHref}
                   className="flex items-center justify-center w-12 h-12 bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
-                  aria-label={`Appeler ${artisanName || 'l\'artisan'}`}
+                  aria-label={artisanPhone ? `Appeler ${artisanName || 'l\'artisan'}` : 'Appeler ServicesArtisans'}
                   onClick={() => {
                     trackEvent('phone_click', {
                       service: serviceSlug || '',

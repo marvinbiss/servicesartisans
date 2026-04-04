@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { Phone } from 'lucide-react'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
@@ -43,12 +45,22 @@ export default function GeoPageCTA({ title, subtitle, ville, service, variant = 
               <p className="font-heading font-bold text-lg md:text-xl text-charcoal-900">{title}</p>
               {subtitle && <p className="text-charcoal-600 text-sm mt-1">{subtitle}</p>}
             </div>
-            <button
-              onClick={handleClick}
-              className="inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all text-lg whitespace-nowrap"
-            >
-              {service && ville ? `Besoin d'un ${service} à ${ville} ?` : 'Obtenir mon devis gratuit'}
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <button
+                onClick={handleClick}
+                className="inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all text-lg whitespace-nowrap"
+              >
+                {service && ville ? `Besoin d'un ${service} à ${ville} ?` : 'Obtenir mon devis gratuit'}
+              </button>
+              <a
+                href={PHONE_TEL}
+                className="inline-flex items-center justify-center gap-2 border-2 border-accent-200 bg-white text-accent-700 font-semibold px-6 py-4 rounded-xl hover:bg-accent-50 hover:border-accent-300 transition-all text-lg whitespace-nowrap"
+                aria-label="Appeler ServicesArtisans"
+              >
+                <Phone className="w-5 h-5" />
+                {PHONE_NUMBER}
+              </a>
+            </div>
           </div>
           {(ville || service) && (
             <div className="mt-4">

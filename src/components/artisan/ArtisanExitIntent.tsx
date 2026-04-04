@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
+import { X, Phone } from 'lucide-react'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getDisplayName } from '@/components/artisan/types'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -145,6 +146,14 @@ export function ArtisanExitIntent({
                 >
                   Estimer mon projet
                 </button>
+                <a
+                  href={PHONE_TEL}
+                  className="mt-2 w-full py-2 px-4 border border-accent-200 bg-accent-50 text-accent-700 text-sm font-medium rounded-xl flex items-center justify-center gap-1.5 hover:bg-accent-100 transition-all"
+                  aria-label="Appeler"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  {PHONE_NUMBER}
+                </a>
               </>
             ) : (
               <>
@@ -159,6 +168,14 @@ export function ArtisanExitIntent({
                 >
                   Comparer les {specialty}s disponibles
                 </button>
+                <a
+                  href={PHONE_TEL}
+                  className="mt-2 w-full py-2 px-4 border border-accent-200 bg-accent-50 text-accent-700 text-sm font-medium rounded-xl flex items-center justify-center gap-1.5 hover:bg-accent-100 transition-all"
+                  aria-label="Appeler"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  {PHONE_NUMBER}
+                </a>
               </>
             )}
           </div>

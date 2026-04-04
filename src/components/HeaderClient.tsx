@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
-import { Menu, X, ChevronDown, Heart } from 'lucide-react'
+import { Menu, X, ChevronDown, Heart, Phone } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { PHONE_TEL } from '@/lib/seo/config'
 import { cn } from '@/lib/utils'
 import {
   getLocationFromCoords,
@@ -338,6 +339,13 @@ export default function HeaderClient({
 
           {/* Mobile: CTA compact + hamburger */}
           <div className="flex lg:hidden items-center gap-2">
+            <a
+              href={PHONE_TEL}
+              className="md:hidden p-2 rounded-full text-charcoal-600 hover:bg-sand-100 transition-colors"
+              aria-label="Appeler ServicesArtisans"
+            >
+              <Phone className="w-5 h-5" />
+            </a>
             <Link
               href="/devis"
               className="px-3.5 py-2 bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold text-xs rounded-lg shadow-cta transition-all duration-200"
