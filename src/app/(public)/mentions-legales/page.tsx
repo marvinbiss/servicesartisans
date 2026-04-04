@@ -160,8 +160,19 @@ export default async function MentionsLegalesPage() {
               Le traitement des données personnelles collectées sur ce site est décrit
               dans notre <Link href="/confidentialite">politique de confidentialité</Link>.
             </p>
+
+            <h2>Délégué à la Protection des Données (DPO)</h2>
             <p>
-              Délégué à la protection des données (DPO) : <a href={`mailto:${companyIdentity.dpoEmail}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.dpoEmail}</strong></a>
+              Pour toute question relative à la protection de vos données personnelles :
+            </p>
+            <p>
+              Email : <a href={`mailto:${companyIdentity.dpoEmail}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.dpoEmail}</strong></a>
+            </p>
+            <p>
+              Vous pouvez exercer vos droits d&apos;accès, de rectification, de suppression et de portabilité
+              de vos données, ainsi que votre droit de limitation ou d&apos;opposition au traitement,
+              en contactant le DPO à l&apos;adresse ci-dessus. Pour en savoir plus, consultez notre{' '}
+              <Link href="/confidentialite">politique de confidentialité</Link>.
             </p>
 
             <h2>Contact</h2>

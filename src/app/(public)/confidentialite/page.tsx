@@ -198,12 +198,19 @@ export default async function ConfidentialitePage() {
             </div>
 
             <h2>5. Durée de conservation</h2>
-            <p>Vos données sont conservées :</p>
+            <p>Vos données sont conservées pour les durées suivantes, conformément aux recommandations de la CNIL :</p>
             <ul>
+              <li><strong>Demandes de devis :</strong> 3 ans à compter de la demande</li>
+              <li><strong>Avis et témoignages :</strong> 3 ans à compter de leur publication</li>
               <li><strong>Données de compte :</strong> 3 ans après votre dernière activité</li>
-              <li><strong>Données de navigation :</strong> 13 mois maximum</li>
+              <li><strong>Comptes inactifs :</strong> supprimés après 3 ans d&apos;inactivité</li>
+              <li><strong>Données analytiques anonymisées :</strong> 13 mois maximum (standard CNIL)</li>
+              <li><strong>Logs d&apos;audit :</strong> 1 an</li>
               <li><strong>Données de transaction :</strong> 5 ans (obligations comptables)</li>
             </ul>
+            <p>
+              À l&apos;expiration de ces durées, vos données sont supprimées ou anonymisées de manière irréversible.
+            </p>
 
             <h2>6. Vos droits</h2>
             <p>Conformément au RGPD, vous disposez des droits suivants :</p>

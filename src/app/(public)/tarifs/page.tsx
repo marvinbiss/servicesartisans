@@ -252,7 +252,7 @@ export default async function TarifsPage() {
                           {trade.priceRange.min} - {trade.priceRange.max}
                         </span>
                         <span className="text-charcoal-600 text-sm">
-                          {trade.priceRange.unit}
+                          {trade.priceRange.unit} TTC
                         </span>
                       </div>
                       <span className="inline-block mt-2 text-xs font-medium px-2.5 py-1 rounded-full bg-secondary-50 text-secondary-700">

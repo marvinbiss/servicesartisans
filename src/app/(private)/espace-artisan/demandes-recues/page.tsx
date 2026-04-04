@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { getArtisanUrl } from '@/lib/utils'
 import { Pagination } from '@/components/dashboard/Pagination'
+import { logger } from '@/lib/logger'
 
 interface LeadRequest {
   id: string
@@ -87,7 +88,7 @@ export default function DemandesRecuesPage() {
         setToast({ message: 'Impossible de charger les demandes.', type: 'error' })
       }
     } catch (error) {
-      console.error('Error fetching leads:', error)
+      logger.error('Error fetching leads', error)
       setToast({ message: 'Erreur de connexion. Veuillez réessayer.', type: 'error' })
     } finally {
       setLoading(false)
@@ -200,7 +201,7 @@ export default function DemandesRecuesPage() {
         setToast({ message: data.error || 'Erreur lors de l\'envoi du devis', type: 'error' })
       }
     } catch (error) {
-      console.error('Error sending devis:', error)
+      logger.error('Error sending devis', error)
       setToast({ message: 'Erreur lors de l\'envoi du devis', type: 'error' })
     } finally {
       setSubmitting(false)

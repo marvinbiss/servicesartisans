@@ -403,7 +403,7 @@ export default function Calendar({
                       <div className="flex items-center gap-1.5 mt-1">
                         <Phone className="w-3.5 h-3.5 text-charcoal-400" />
                         <a
-                          href={`tel:${booking.client_phone}`}
+                          href={`tel:${booking.client_phone.replace(/[\s.\-()]/g, '')}`}
                           className="text-sm text-primary-600 hover:underline"
                         >
                           {booking.client_phone}

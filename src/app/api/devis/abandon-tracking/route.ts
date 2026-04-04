@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { logger } from '@/lib/logger'
 
 // Basic email format validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -75,13 +76,13 @@ export async function POST(request: NextRequest) {
     })
 
     if (error) {
-      console.error('[abandon-tracking] Insert error:', error)
+      logger.error('[abandon-tracking] Insert error', error)
       return NextResponse.json({ error: 'db error' }, { status: 500 })
     }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('[abandon-tracking] Error:', err)
+    logger.error('[abandon-tracking] Error', err)
     return NextResponse.json({ error: 'server error' }, { status: 500 })
   }
 }

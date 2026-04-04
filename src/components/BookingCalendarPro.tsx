@@ -31,6 +31,7 @@ import {
   getRecommendedSlots,
   type SuggestedSlot,
 } from '@/lib/booking/smart-suggestions'
+import { logger } from '@/lib/logger'
 
 interface BookingCalendarProProps {
   artisanId: string
@@ -238,7 +239,7 @@ export default function BookingCalendarPro({
         setStep('confirmation')
       }
     } catch (err) {
-      console.error('Booking error:', err)
+      logger.error('Booking error', err)
       cancelOptimisticReservation(selectedSlot.id)
       setError(err instanceof Error ? err.message : 'Erreur lors de la réservation')
     } finally {
@@ -704,10 +705,10 @@ export default function BookingCalendarPro({
               className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
             />
             <span className="text-sm text-gray-600 leading-relaxed">
-              J&apos;accepte que mes données soient traitées conformément à la{' '}
+              J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
               <Link href="/confidentialite" className="text-blue-600 underline hover:text-blue-800">
                 politique de confidentialité
-              </Link>
+              </Link>.
             </span>
           </label>
 

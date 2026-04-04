@@ -11,6 +11,7 @@ import usePushNotifications from '@/hooks/usePushNotifications'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import { logger } from '@/lib/logger'
 
 interface NotificationPreferences {
   email_booking_confirmation: boolean
@@ -139,7 +140,7 @@ export default function ParametresClientPage() {
         }
       }
     } catch (error) {
-      console.error('Failed to load user data:', error)
+      logger.error('Failed to load user data', error)
       setErrorMessage('Impossible de charger vos données. Veuillez rafraîchir la page.')
     } finally {
       setIsLoading(false)
@@ -154,7 +155,7 @@ export default function ParametresClientPage() {
         setDeletionStatus(data.deletionRequest)
       }
     } catch (error) {
-      console.error('Failed to load deletion status:', error)
+      logger.error('Failed to load deletion status', error)
     }
   }
 
@@ -178,7 +179,7 @@ export default function ParametresClientPage() {
         setErrorMessage('Impossible d\'enregistrer les préférences. Veuillez réessayer.')
       }
     } catch (error) {
-      console.error('Failed to save preferences:', error)
+      logger.error('Failed to save preferences', error)
       setErrorMessage('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setIsSaving(false)
@@ -208,7 +209,7 @@ export default function ParametresClientPage() {
         setErrorMessage('Impossible de mettre à jour le profil. Veuillez réessayer.')
       }
     } catch (error) {
-      console.error('Failed to update profile:', error)
+      logger.error('Failed to update profile', error)
       setErrorMessage('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setIsSaving(false)
@@ -264,7 +265,7 @@ export default function ParametresClientPage() {
         passwordSuccessTimerRef.current = setTimeout(() => setPasswordSuccess(false), 3000)
       }
     } catch (error) {
-      console.error('Failed to update password:', error)
+      logger.error('Failed to update password', error)
       setPasswordError('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setPasswordSaving(false)
@@ -305,7 +306,7 @@ export default function ParametresClientPage() {
         URL.revokeObjectURL(url)
       }
     } catch (error) {
-      console.error('Failed to export data:', error)
+      logger.error('Failed to export data', error)
       setErrorMessage('Impossible d\'exporter vos données. Veuillez réessayer.')
     } finally {
       setIsExporting(false)
@@ -336,7 +337,7 @@ export default function ParametresClientPage() {
         alert(error.error)
       }
     } catch (error) {
-      console.error('Failed to request deletion:', error)
+      logger.error('Failed to request deletion', error)
       setErrorMessage('Impossible de soumettre la demande de suppression. Veuillez réessayer.')
     }
   }
@@ -348,7 +349,7 @@ export default function ParametresClientPage() {
         setDeletionStatus(null)
       }
     } catch (error) {
-      console.error('Failed to cancel deletion:', error)
+      logger.error('Failed to cancel deletion', error)
       setErrorMessage('Impossible d\'annuler la demande de suppression. Veuillez réessayer.')
     }
   }

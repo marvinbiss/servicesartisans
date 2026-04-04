@@ -17,6 +17,7 @@ import {
   Edit2,
 } from 'lucide-react'
 import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
+import { logger } from '@/lib/logger'
 
 interface TeamMember {
   id: string
@@ -88,7 +89,7 @@ export default function EquipePage() {
         const data = await res.json()
         setMembers(data.members ?? [])
       } catch (err) {
-        console.error('Error fetching team:', err)
+        logger.error('Error fetching team', err)
         setError('Impossible de charger l\'équipe')
       } finally {
         setIsLoading(false)
@@ -169,7 +170,7 @@ export default function EquipePage() {
         color: COLORS[0].value,
       })
     } catch (err) {
-      console.error('Error saving member:', err)
+      logger.error('Error saving member', err)
       setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde')
     } finally {
       setIsSaving(false)
@@ -192,7 +193,7 @@ export default function EquipePage() {
 
       setMembers(members.filter(m => m.id !== memberId))
     } catch (err) {
-      console.error('Error deleting member:', err)
+      logger.error('Error deleting member', err)
       setError(err instanceof Error ? err.message : 'Erreur lors de la suppression')
     }
   }
@@ -224,7 +225,7 @@ export default function EquipePage() {
           : m
       ))
     } catch (err) {
-      console.error('Error toggling member:', err)
+      logger.error('Error toggling member', err)
       setError('Impossible de modifier le statut du membre. Veuillez réessayer.')
     }
   }

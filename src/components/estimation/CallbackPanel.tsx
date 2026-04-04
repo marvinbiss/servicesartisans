@@ -119,14 +119,14 @@ export const CallbackPanel = memo(function CallbackPanel({
                 className="mt-0.5"
               />
               <span>
-                J'accepte que mes données soient traitées pour recevoir un rappel.{' '}
+                J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
                 <a
                   href="/confidentialite"
                   target="_blank"
                   className="underline"
                 >
-                  Politique de confidentialité
-                </a>
+                  politique de confidentialité
+                </a>.
               </span>
             </label>
             {lead.callbackError && (

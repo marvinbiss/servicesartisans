@@ -173,7 +173,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
           className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
         />
         <span className="text-xs text-gray-500">
-          J&apos;accepte que mes données soient utilisées pour traiter ma demande de devis. Consultez notre{' '}
+          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
           <Link href="/confidentialite" className="underline hover:text-blue-600">
             politique de confidentialité
           </Link>.

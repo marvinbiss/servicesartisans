@@ -24,6 +24,9 @@ const INDEXATION_RATIO_THRESHOLD = 0.6
  * sinon loggés en structured logging (visibles dans Vercel Logs).
  */
 export async function GET(request: Request) {
+  if (!process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+  }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

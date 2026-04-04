@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 interface TimeSlot {
   id: string
@@ -98,7 +99,7 @@ export default function BookingCalendar({
       const data = await response.json()
       setAvailableSlots(data.data?.slots || {})
     } catch (err) {
-      console.error('Error fetching slots:', err)
+      logger.error('Error fetching slots', err)
       setError('Impossible de charger les disponibilités. Veuillez réessayer.')
     } finally {
       setIsLoadingSlots(false)
@@ -173,7 +174,7 @@ export default function BookingCalendar({
       onBookingComplete?.(bookingData)
       setStep('confirmation')
     } catch (err) {
-      console.error('Booking error:', err)
+      logger.error('Booking error', err)
       setError(err instanceof Error ? err.message : 'Erreur lors de la réservation')
     } finally {
       setIsSubmitting(false)
@@ -480,10 +481,10 @@ export default function BookingCalendar({
               className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
             />
             <span className="text-sm text-gray-600 leading-relaxed">
-              J&apos;accepte que mes données soient traitées conformément à la{' '}
+              J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
               <Link href="/confidentialite" className="text-blue-600 underline hover:text-blue-800">
                 politique de confidentialité
-              </Link>
+              </Link>.
             </span>
           </label>
 

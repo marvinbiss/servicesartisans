@@ -411,10 +411,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               <span className="font-heading text-5xl font-bold text-primary-500">
                 {trade.priceRange.min} — {trade.priceRange.max}
               </span>
-              <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
+              <span className="text-charcoal-600 text-lg">{trade.priceRange.unit} TTC</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;oeuvre incluse
+              Prix moyen constaté en France métropolitaine, main-d&apos;oeuvre incluse, TTC
             </p>
           </div>
 
@@ -529,7 +529,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                   </div>
                   <p className="text-xs text-charcoal-500 mb-3">{r.label}</p>
                   <div className="text-lg font-bold text-charcoal-900">
-                    {adjustedMin} — {adjustedMax} <span className="text-sm font-normal text-charcoal-500">{trade.priceRange.unit}</span>
+                    {adjustedMin} — {adjustedMax} <span className="text-sm font-normal text-charcoal-500">{trade.priceRange.unit} TTC</span>
                   </div>
                   <span className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${badgeColor}`}>
                     {pct === 0 ? 'Moyenne nationale' : `${sign}${pct} % vs moyenne`}

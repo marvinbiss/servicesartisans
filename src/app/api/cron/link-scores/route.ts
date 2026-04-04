@@ -212,6 +212,9 @@ const UPSERT_BATCH_SIZE = 500
  * Schedule: Daily at ~03:00 UTC (see vercel.json).
  */
 export async function GET(request: Request) {
+  if (!process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+  }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

@@ -568,7 +568,7 @@ export default function UnclaimedQuoteWizard({
                     className="mt-1 h-4 w-4 rounded border-sand-300 text-primary-500 focus:ring-primary-400"
                   />
                   <label htmlFor="unclaimed-consent" className="text-xs text-charcoal-500 leading-relaxed">
-                    J&apos;accepte d&apos;être recontacté par un professionnel qualifié, conformément à la{' '}
+                    J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
                     <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="text-primary-500 underline hover:text-primary-600">
                       politique de confidentialité
                     </a>.

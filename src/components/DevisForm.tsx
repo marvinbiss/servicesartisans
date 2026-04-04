@@ -1136,8 +1136,8 @@ export default function DevisForm({
                     className="sr-only"
                   />
                   <span className="text-sm text-charcoal-600 leading-relaxed">
-                    J&apos;accepte d&apos;être contacté par des artisans vérifiés pour cette demande.{' '}
-                    <Link href="/confidentialite" className="text-primary-500 hover:text-primary-700 underline underline-offset-2">Politique de confidentialité</Link>
+                    J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
+                    <Link href="/confidentialite" className="text-primary-500 hover:text-primary-700 underline underline-offset-2">politique de confidentialité</Link>.
                   </span>
                 </label>
                 {errors.consentement && (

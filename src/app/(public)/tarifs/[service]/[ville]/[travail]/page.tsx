@@ -396,7 +396,7 @@ export default async function TarifsServiceTravailVillePage({
                 Tarifs {tradeLower} {villeData.name} {'—'} 2026
                 {trade.priceRange.unit && (
                   <span className="ml-2 text-sm font-normal text-gray-500">
-                    ({trade.priceRange.unit})
+                    ({trade.priceRange.unit} TTC)
                   </span>
                 )}
               </caption>

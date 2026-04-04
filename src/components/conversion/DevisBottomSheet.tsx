@@ -170,7 +170,7 @@ export default function DevisBottomSheet({
     dragStartY.current = null
     if (sheetRef.current) {
       sheetRef.current.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)'
-      if (currentTranslateY.current > 120) {
+      if (currentTranslateY.current > 180) {
         sheetRef.current.style.transform = 'translateY(100%)'
         setTimeout(onClose, 300)
       } else {
@@ -705,7 +705,7 @@ export default function DevisBottomSheet({
                         className="mt-0.5 w-5 h-5 rounded border-sand-400 text-primary-400 focus:ring-primary-400/40 flex-shrink-0"
                       />
                       <span className="text-xs text-charcoal-500 leading-relaxed">
-                        J&apos;accepte d&apos;être contacté par des artisans pour recevoir mes devis gratuits conformément à la{' '}
+                        J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
                         <Link href="/confidentialite" className="underline text-primary-500 hover:text-primary-600">
                           politique de confidentialité
                         </Link>.

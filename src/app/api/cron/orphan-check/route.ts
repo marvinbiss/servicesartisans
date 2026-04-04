@@ -17,6 +17,9 @@ export const maxDuration = 300
  * Auth: Bearer CRON_SECRET
  */
 export async function GET(request: Request) {
+  if (!process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+  }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

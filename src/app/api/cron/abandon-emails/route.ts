@@ -14,6 +14,9 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisa
  */
 export async function POST(request: NextRequest) {
   // Verify cron secret
+  if (!process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+  }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })

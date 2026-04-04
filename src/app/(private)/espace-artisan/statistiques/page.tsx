@@ -16,6 +16,7 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 interface Stats {
   totalBookings: number
@@ -84,7 +85,7 @@ export default function StatistiquesPage() {
         })
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') return
-        console.error('Error fetching stats:', err)
+        logger.error('Error fetching stats', err)
         setError('Erreur de connexion. Veuillez réessayer.')
       } finally {
         setIsLoading(false)

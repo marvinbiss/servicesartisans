@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { logger } from '@/lib/logger'
 
 // Basic email format validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -44,12 +45,12 @@ export async function POST(request: NextRequest) {
       .limit(1)
 
     if (error) {
-      console.error('[abandon-complete] Update error:', error)
+      logger.error('[abandon-complete] Update error', error)
     }
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error('[abandon-complete] Error:', err)
+    logger.error('[abandon-complete] Error', err)
     return NextResponse.json({ error: 'server error' }, { status: 500 })
   }
 }

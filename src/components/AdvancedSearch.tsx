@@ -8,6 +8,7 @@ import {
   History, TrendingUp, Sliders
 } from 'lucide-react'
 import { useDebounce } from '@/hooks/useDebounce'
+import { logger } from '@/lib/logger'
 
 interface SearchSuggestion {
   text: string
@@ -103,7 +104,7 @@ export default function AdvancedSearch({
           setRecentSearches(data.recentSearches || [])
         }
       } catch (error) {
-        console.error('Failed to fetch suggestions:', error)
+        logger.error('Failed to fetch suggestions', error)
       }
     }
 

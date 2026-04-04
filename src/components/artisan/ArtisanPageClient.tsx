@@ -353,7 +353,7 @@ export default function ArtisanPageClient({
               {/* Mobile-only contact section — only if claimed */}
               {isClaimed && (
                 <section className="lg:hidden" aria-label="Contacter cet artisan">
-                  <ArtisanContactCard artisan={artisan} />
+                  <ArtisanContactCard artisan={artisan} isClaimed={isClaimed} />
                 </section>
               )}
               {/* Claim button on mobile — only if NOT claimed */}

@@ -6,6 +6,7 @@ import { MessageSquare, Send, Search, ArrowLeft, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ClientSidebar from '@/components/client/ClientSidebar'
 import { useRealtimeMessages } from '@/lib/hooks/use-realtime-messages'
+import { logger } from '@/lib/logger'
 
 interface Partner {
   id: string
@@ -85,7 +86,7 @@ export default function MessagesClientPage() {
         }
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') return
-        console.error('Error fetching messages:', err)
+        logger.error('Error fetching messages', err)
         setError('Impossible de charger les messages.')
       }
     }
@@ -114,7 +115,7 @@ export default function MessagesClientPage() {
         setError('Impossible de charger les conversations.')
       }
     } catch (err) {
-      console.error('Error fetching conversations:', err)
+      logger.error('Error fetching conversations', err)
       setError('Erreur de connexion. Veuillez vérifier votre connexion internet.')
     } finally {
       setLoading(false)
@@ -133,7 +134,7 @@ export default function MessagesClientPage() {
         }
       }
     } catch (err) {
-      console.error('Error fetching messages:', err)
+      logger.error('Error fetching messages', err)
       setError('Impossible de charger les messages.')
     }
   }
@@ -161,7 +162,7 @@ export default function MessagesClientPage() {
         setSendError('Impossible d\'envoyer le message. Veuillez réessayer.')
       }
     } catch (err) {
-      console.error('Error sending message:', err)
+      logger.error('Error sending message', err)
       setSendError('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setSendingMessage(false)

@@ -6,10 +6,11 @@ import { trackEvent } from '@/lib/analytics/tracking'
 
 interface ArtisanContactCardProps {
   artisan: LegacyArtisan
+  isClaimed?: boolean
 }
 
-export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
-  const hasEmail = !!artisan.email
+export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContactCardProps) {
+  const hasEmail = isClaimed && !!artisan.email
 
   return (
     <div className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden">
@@ -68,7 +69,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <span>Réponse rapide</span>
           </div>
 
-          {/* 2. Email */}
+          {/* 2. Email — only for claimed artisans (RGPD: no PII without consent) */}
           {hasEmail && (
             <a
               href={`mailto:${artisan.email}`}
@@ -81,6 +82,13 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
               <Mail className="w-5 h-5 text-charcoal-400 transition-colors group-hover:text-charcoal-600" aria-hidden="true" />
               Envoyer un email
             </a>
+          )}
+
+          {/* Unclaimed artisan: generic CTA instead of PII */}
+          {!isClaimed && (
+            <p className="text-sm text-charcoal-500 text-center">
+              Contactez cet artisan via notre formulaire de devis ci-dessus.
+            </p>
           )}
 
         </div>

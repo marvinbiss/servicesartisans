@@ -18,6 +18,7 @@ import {
   RefreshCw,
 } from 'lucide-react'
 import CancellationModal from '@/components/CancellationModal'
+import { logger } from '@/lib/logger'
 
 interface BookingDetails {
   id: string
@@ -80,7 +81,7 @@ export default function BookingPage() {
       const data = await response.json()
       setBooking(data.booking)
     } catch (err) {
-      console.error('Error fetching booking:', err)
+      logger.error('Error fetching booking', err)
       setError(err instanceof Error ? err.message : 'Erreur lors du chargement')
     } finally {
       setIsLoading(false)
@@ -128,7 +129,7 @@ export default function BookingPage() {
         new Date(`${b.date}T${b.start_time}`).getTime()
       ))
     } catch (err) {
-      console.error('Error fetching slots:', err)
+      logger.error('Error fetching slots', err)
     } finally {
       setIsLoadingSlots(false)
     }
@@ -156,7 +157,7 @@ export default function BookingPage() {
       setShowRescheduleModal(false)
       setSelectedNewSlot(null)
     } catch (err) {
-      console.error('Reschedule error:', err)
+      logger.error('Reschedule error', err)
       setError(err instanceof Error ? err.message : 'Erreur lors du report')
     } finally {
       setIsRescheduling(false)

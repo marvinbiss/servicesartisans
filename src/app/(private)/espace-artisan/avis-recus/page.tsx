@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Star, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X, ArrowUpDown } from 'lucide-react'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { Pagination } from '@/components/dashboard/Pagination'
+import { logger } from '@/lib/logger'
 
 interface Avis {
   id: string
@@ -52,7 +53,7 @@ export default function AvisRecusPage() {
         setFetchError('Impossible de charger les avis.')
       }
     } catch (error) {
-      console.error('Error fetching avis:', error)
+      logger.error('Error fetching avis', error)
       setFetchError('Erreur de connexion. Veuillez réessayer.')
     } finally {
       setLoading(false)

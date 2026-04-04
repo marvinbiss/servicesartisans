@@ -18,6 +18,7 @@ import Button from '@/components/ui/Button'
 import type { PortfolioItem, MediaType } from '@/types/portfolio'
 import dynamic from 'next/dynamic'
 import AddPortfolioModal from './AddPortfolioModal'
+import { logger } from '@/lib/logger'
 
 const PortfolioLightbox = dynamic(() => import('./PortfolioLightbox'), {
   ssr: false,
@@ -49,7 +50,7 @@ export default function PortfolioPage() {
         setError(data.error || 'Erreur lors du chargement')
       }
     } catch (err) {
-      console.error('Error fetching portfolio:', err)
+      logger.error('Error fetching portfolio', err)
       setError('Erreur de connexion')
     } finally {
       setLoading(false)
@@ -85,7 +86,7 @@ export default function PortfolioPage() {
         setTimeout(() => setActionError(null), 5000)
       }
     } catch (err) {
-      console.error('Error deleting item:', err)
+      logger.error('Error deleting item', err)
       // Rollback on network error
       setItems(previousItems)
       setActionError('Erreur lors de la suppression')
@@ -119,7 +120,7 @@ export default function PortfolioPage() {
         setTimeout(() => setActionError(null), 5000)
       }
     } catch (err) {
-      console.error('Error toggling visibility:', err)
+      logger.error('Error toggling visibility', err)
       // Rollback on network error
       setItems(previousItems)
       setActionError('Erreur de connexion. Veuillez réessayer.')
@@ -153,7 +154,7 @@ export default function PortfolioPage() {
         setTimeout(() => setActionError(null), 5000)
       }
     } catch (err) {
-      console.error('Error toggling featured:', err)
+      logger.error('Error toggling featured', err)
       // Rollback on network error
       setItems(previousItems)
       setActionError('Erreur de connexion. Veuillez réessayer.')

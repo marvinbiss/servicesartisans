@@ -120,8 +120,8 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
           className="mt-0.5 accent-amber-600"
         />
         <span className="text-[11px] text-amber-900/70">
-          J'accepte que mes données soient traitées conformément à la{' '}
-          <Link href="/confidentialite" className="underline text-blue-600">politique de confidentialité</Link>
+          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
+          <Link href="/confidentialite" className="underline text-blue-600">politique de confidentialité</Link>.
         </span>
       </label>
     </div>

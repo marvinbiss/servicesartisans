@@ -430,11 +430,11 @@ export default async function TarifsServiceVillePage({
               <span className="font-heading text-5xl font-bold text-primary-500">
                 {minPrice} {'—'} {maxPrice}
               </span>
-              <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
+              <span className="text-charcoal-600 text-lg">{trade.priceRange.unit} TTC</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
               Prix moyen constat{'é'} {'à'} {villeData.name} et ses alentours,
-              main-d'oeuvre incluse
+              main-d&apos;oeuvre incluse, TTC
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">

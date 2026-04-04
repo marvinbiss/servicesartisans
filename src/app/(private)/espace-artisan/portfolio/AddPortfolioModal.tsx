@@ -14,6 +14,7 @@ import { FileDropzone } from '@/components/upload'
 import Button from '@/components/ui/Button'
 import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
 import type { PortfolioItem, MediaType, UploadedFile } from '@/types/portfolio'
+import { logger } from '@/lib/logger'
 import { PORTFOLIO_CATEGORIES } from '@/types/portfolio'
 
 interface AddPortfolioModalProps {
@@ -98,7 +99,7 @@ export default function AddPortfolioModal({
         setAfterFile(uploaded)
       }
     } catch (err) {
-      console.error('Upload error:', err)
+      logger.error('Upload error', err)
       setError(err instanceof Error ? err.message : 'Erreur lors de l\'upload')
     } finally {
       setUploading(false)
@@ -154,7 +155,7 @@ export default function AddPortfolioModal({
       const data = await response.json()
       onCreated(data.item)
     } catch (err) {
-      console.error('Save error:', err)
+      logger.error('Save error', err)
       setError(err instanceof Error ? err.message : 'Erreur lors de la sauvegarde')
     } finally {
       setSaving(false)

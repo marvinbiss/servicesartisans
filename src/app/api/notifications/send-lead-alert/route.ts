@@ -4,6 +4,7 @@ import { sendEmail } from '@/lib/email/resend'
 import { getNewLeadAlertEmail } from '@/lib/email/templates/new-lead-alert'
 import { sendSMS } from '@/lib/sms/twilio'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { logger } from '@/lib/logger'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisans.fr'
 
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest) {
       .in('id', provider_ids)
 
     if (error || !providers) {
-      console.error('[lead-alert] Provider fetch error:', error)
+      logger.error('[lead-alert] Provider fetch error', error)
       return NextResponse.json({ error: 'provider fetch failed' }, { status: 500 })
     }
 
@@ -109,10 +110,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(`[lead-alert] Sent to ${providers.length} providers:`, results.filter(r => r.success).length, 'success')
+    logger.info(`[lead-alert] Sent to ${providers.length} providers: ${results.filter(r => r.success).length} success`)
     return NextResponse.json({ ok: true, results })
   } catch (err) {
-    console.error('[lead-alert] Error:', err)
+    logger.error('[lead-alert] Error', err)
     return NextResponse.json({ error: 'server error' }, { status: 500 })
   }
 }

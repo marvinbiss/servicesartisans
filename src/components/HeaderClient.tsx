@@ -341,7 +341,7 @@ export default function HeaderClient({
           <div className="flex lg:hidden items-center gap-2">
             <a
               href={PHONE_TEL}
-              className="md:hidden p-2 rounded-full text-charcoal-600 hover:bg-sand-100 transition-colors"
+              className="md:hidden p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-charcoal-600 hover:bg-sand-100 transition-colors"
               aria-label="Appeler ServicesArtisans"
             >
               <Phone className="w-5 h-5" />

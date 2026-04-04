@@ -172,7 +172,7 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
           <p className="text-2xl font-bold text-primary-500">
             {priceRange.min} – {priceRange.max}
           </p>
-          <p className="text-xs text-charcoal-500 mt-0.5">{priceRange.unit}</p>
+          <p className="text-xs text-charcoal-500 mt-0.5">{priceRange.unit} TTC</p>
         </div>
       )}
 

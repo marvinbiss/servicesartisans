@@ -283,7 +283,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                   className="mt-1 rounded border-sand-200 text-primary-400 focus:ring-primary-400"
                 />
                 <span className="text-xs text-charcoal-500">
-                  J&apos;accepte que mes données soient utilisées pour traiter ma demande de devis. Consultez notre{' '}
+                  J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
                   <Link href="/confidentialite" className="underline hover:text-primary-500">
                     politique de confidentialité
                   </Link>.

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 /**
  * GET /api/stats/demand — Real demand stats from Supabase.
@@ -67,7 +68,7 @@ export async function GET(request: NextRequest) {
       }
     )
   } catch (err) {
-    console.error('[stats/demand] Error:', err)
+    logger.error('[stats/demand] Error', err)
     return NextResponse.json(
       { requests_this_week: 0, requests_this_month: 0, active_providers: 0 },
       { status: 200 }

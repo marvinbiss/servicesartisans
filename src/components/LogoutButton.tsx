@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
 import { LogOut, Loader2 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 interface LogoutButtonProps {
   className?: string
@@ -32,7 +33,7 @@ export default function LogoutButton({ className = '' }: LogoutButtonProps) {
       router.push('/connexion')
       router.refresh()
     } catch (error) {
-      console.error('Logout error:', error)
+      logger.error('Logout error', error)
       // Still redirect even on error
       router.push('/connexion')
     }

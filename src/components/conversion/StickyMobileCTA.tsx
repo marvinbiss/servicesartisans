@@ -120,7 +120,7 @@ export default function StickyMobileCTA({
       {/* ── Sticky CTA Bar ── */}
       <div
         className={`
-          fixed left-0 right-0 z-[45] md:hidden
+          fixed left-0 right-0 z-[51] md:hidden
           transition-all duration-300 ease-out
           ${visible && hasAnimated && !formInView
             ? 'translate-y-0 opacity-100'

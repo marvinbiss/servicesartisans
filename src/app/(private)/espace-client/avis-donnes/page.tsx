@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Star, ArrowLeft, Edit2, Trash2, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ClientSidebar from '@/components/client/ClientSidebar'
+import { logger } from '@/lib/logger'
 
 interface AvisPublie {
   id: string
@@ -51,7 +52,7 @@ export default function AvisDonnesPage() {
         setAvisEnAttente(data.avisEnAttente || [])
       }
     } catch (err) {
-      console.error('Error fetching avis:', err)
+      logger.error('Error fetching avis', err)
       setError('Impossible de charger vos avis. Veuillez réessayer.')
     } finally {
       setLoading(false)
@@ -101,7 +102,7 @@ export default function AvisDonnesPage() {
         }
       }
     } catch (err) {
-      console.error('Error submitting avis:', err)
+      logger.error('Error submitting avis', err)
       setError('Erreur lors de l\'envoi de votre avis. Veuillez réessayer.')
     } finally {
       setSubmitting(false)
@@ -122,7 +123,7 @@ export default function AvisDonnesPage() {
         await fetchAvis()
       }
     } catch (err) {
-      console.error('Error deleting avis:', err)
+      logger.error('Error deleting avis', err)
       setError('Erreur lors de la suppression de l\'avis. Veuillez réessayer.')
     }
   }
