@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, MessageCircle, ShieldCheck, CheckCircle, Phone } from 'lucide-react'
+import { Mail, FileText, ShieldCheck, Phone, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
@@ -92,23 +92,23 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               })
               window.location.href = getDevisUrl(artisan)
             }}
-            className="w-full py-4 px-5 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
-            aria-label="Obtenir mon devis gratuit"
+            className="w-full py-4 px-5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            aria-label="Devis gratuit en 2 min"
           >
-            <MessageCircle className="w-5 h-5" aria-hidden="true" />
-            Obtenir mon devis gratuit
+            <FileText className="w-5 h-5" aria-hidden="true" />
+            Devis gratuit en 2 min
           </motion.button>
 
           {/* Trust reassurance under CTA */}
           <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
             <span className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-accent-500" aria-hidden="true" />
-              Gratuit
+              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
+              2 conseillers dispo
             </span>
-            <span className="text-charcoal-300" aria-hidden="true">-</span>
+            <span className="text-charcoal-300" aria-hidden="true">·</span>
+            <span>Gratuit</span>
+            <span className="text-charcoal-300" aria-hidden="true">·</span>
             <span>Sans engagement</span>
-            <span className="text-charcoal-300" aria-hidden="true">-</span>
-            <span>Réponse rapide</span>
           </div>
 
           {artisan.email && (
@@ -188,7 +188,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.3 }}
-      className="fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+      className="fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 lg:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
       role="group"
       aria-label="Actions rapides"
     >
@@ -224,18 +224,24 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
               })
               window.location.href = getDevisUrl(artisan)
             }}
-            className="flex-1 py-4 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
-            aria-label="Obtenir mon devis gratuit"
+            className="flex-1 py-4 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            aria-label="Devis gratuit en 2 min"
           >
-            <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-            Obtenir mon devis gratuit
+            <FileText className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+            Devis gratuit en 2 min
           </motion.button>
         </div>
 
         {/* Trust line under CTA */}
-        <div className="flex items-center gap-2 text-[11px] text-charcoal-500">
-          <CheckCircle className="w-3 h-3 text-accent-500" aria-hidden="true" />
-          <span>Gratuit - Sans engagement - Réponse rapide</span>
+        <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
+          <span className="flex items-center gap-1">
+            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
+            2 conseillers dispo
+          </span>
+          <span className="text-charcoal-300" aria-hidden="true">·</span>
+          <span>Gratuit</span>
+          <span className="text-charcoal-300" aria-hidden="true">·</span>
+          <span>Sans engagement</span>
         </div>
 
       </div>

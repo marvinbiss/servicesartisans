@@ -28,7 +28,7 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
 import { PlatformSidebarCTA } from '@/components/artisan/PlatformSidebarCTA'
-import { PlatformStickyBar } from '@/components/artisan/PlatformStickyBar'
+import { UnclaimedStickyBar } from '@/components/artisan/UnclaimedStickyBar'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
@@ -102,6 +102,15 @@ const ArtisanContactCard = dynamic(
   () => import('@/components/artisan/ArtisanContactCard').then(mod => ({ default: mod.ArtisanContactCard })),
   { loading: () => <SectionSkeleton height="h-72" /> }
 )
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
 
 interface SimilarArtisan {
   id: string
@@ -190,8 +199,8 @@ export default function ArtisanPageClient({
         </a>
       </nav>
 
-      {/* pb-44 = space for sticky bar + bottom nav on mobile; pb-24 on desktop for sticky bar */}
-      <div className={`min-h-screen bg-sand-50 ${isClaimed ? 'pb-44 md:pb-8' : 'pb-44 md:pb-24'}`}>
+      {/* pb-44 = space for sticky bar + bottom nav on mobile; lg:pb-8 for desktop where sidebar takes over */}
+      <div className={`min-h-screen bg-sand-50 ${isClaimed ? 'pb-44 lg:pb-8' : 'pb-44 lg:pb-8'}`}>
         {/* Header - sticky navigation */}
         <header className="bg-white/95 backdrop-blur-lg border-b border-sand-200 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3.5">
@@ -378,11 +387,19 @@ export default function ArtisanPageClient({
           </div>
         </main>
 
-        {/* Mobile CTA - claimed: direct / unclaimed: platform phone bar */}
+        {/* Mobile/tablet CTA - claimed: devis direct / unclaimed: generic devis métier+ville */}
         {isClaimed ? (
           <ArtisanMobileCTA artisan={artisan} />
         ) : (
-          <PlatformStickyBar />
+          <UnclaimedStickyBar
+            specialty={artisan.specialty || 'artisan'}
+            city={artisan.city || ''}
+            onDevisClick={() => {
+              const specialtySlug = slugify(artisan.specialty || 'artisan')
+              const citySlug = artisan.city ? slugify(artisan.city) : ''
+              window.location.href = `/devis/${specialtySlug}/${citySlug}`
+            }}
+          />
         )}
       </div>
 
