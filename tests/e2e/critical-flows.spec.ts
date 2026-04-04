@@ -19,7 +19,7 @@ import { test, expect } from '@playwright/test'
 test.describe('@critical Auth lifecycle', () => {
   test('unauthenticated user is redirected from private pages to /connexion', async ({ page }) => {
     // Try accessing artisan dashboard without auth
-    const response = await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan/dashboard')
 
     // Should redirect to connexion (not 500, not blank page)
     await expect(page).toHaveURL(/\/connexion/)
@@ -29,7 +29,7 @@ test.describe('@critical Auth lifecycle', () => {
   })
 
   test('unauthenticated user is redirected from client pages to /connexion', async ({ page }) => {
-    const response = await page.goto('/espace-client/dashboard')
+    await page.goto('/espace-client/dashboard')
     await expect(page).toHaveURL(/\/connexion/)
     await expect(page.locator('form')).toBeVisible()
   })

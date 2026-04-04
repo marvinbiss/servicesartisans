@@ -14,7 +14,7 @@
  * Run with: npx vitest run __tests__/pbt/
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import fc from 'fast-check'
 import { NextRequest } from 'next/server'
 
@@ -95,7 +95,7 @@ function makeRequest(path: string, method: string, body?: unknown): NextRequest 
     init.body = typeof body === 'string' ? body : JSON.stringify(body)
     init.headers = { 'Content-Type': 'application/json' }
   }
-  return new NextRequest(url, init)
+  return new NextRequest(url, init as RequestInit & { signal?: AbortSignal })
 }
 
 // ─── Arbitraries ────────────────────────────────────────────────────────────
@@ -143,10 +143,8 @@ describe('PBT: Auth invariant', () => {
     '/api/admin/claims',
   ]
 
-  const protectedClientRoutes = [
-    '/api/client/profile',
-    '/api/client/leads',
-  ]
+  // protectedClientRoutes — reserved for future client route auth tests
+  // const protectedClientRoutes = ['/api/client/profile', '/api/client/leads']
 
   it('artisan routes reject any unauthenticated request regardless of payload', async () => {
     for (const route of protectedArtisanRoutes) {

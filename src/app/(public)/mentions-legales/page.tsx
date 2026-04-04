@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
+import { formatPhoneForTel } from '@/lib/validation/phone'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -130,7 +131,7 @@ export default async function MentionsLegalesPage() {
                 <li><strong>Siège social :</strong> {companyIdentity.address}</li>
               )}
               {companyIdentity.phone && (
-                <li><strong>Téléphone :</strong> <a href={`tel:${companyIdentity.phone.replace(/[\s.\-()]/g, '')}`} className="text-blue-600 hover:underline">{companyIdentity.phone}</a> (n° plateforme)</li>
+                <li><strong>Téléphone :</strong> <a href={`tel:${formatPhoneForTel(companyIdentity.phone)}`} className="text-blue-600 hover:underline">{companyIdentity.phone}</a> (n° plateforme)</li>
               )}
               {companyIdentity.directeurPublication && (
                 <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
