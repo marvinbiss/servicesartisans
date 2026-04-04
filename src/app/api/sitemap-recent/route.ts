@@ -162,7 +162,7 @@ export async function GET() {
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...urls.map(u =>
-      `  <url><loc>${escapeXml(u.loc)}</loc><lastmod>${u.lastmod}</lastmod><changefreq>${u.changefreq}</changefreq><priority>${u.priority}</priority></url>`
+      `  <url><loc>${escapeXml(u.loc)}</loc><lastmod>${escapeXml(u.lastmod)}</lastmod><changefreq>${escapeXml(u.changefreq)}</changefreq><priority>${escapeXml(u.priority)}</priority></url>`
     ),
     '</urlset>',
   ].join('\n')

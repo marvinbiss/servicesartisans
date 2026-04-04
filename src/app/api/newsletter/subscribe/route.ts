@@ -6,6 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import crypto from 'crypto'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -20,9 +21,9 @@ const subscribeSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    // Rate limiting (public endpoint — 3 requests per 5 min per IP)
+    // Rate limiting (public endpoint — 1 request per 10 min per IP)
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`newsletter:${ip}`, { window: 300_000, max: 3 })
+    const rl = await checkRateLimit(`newsletter:${ip}`, { window: 600_000, max: 1 })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },
@@ -41,6 +42,15 @@ export async function POST(request: Request) {
 
     const { email, source } = validation.data
     const normalizedEmail = email.toLowerCase().trim()
+
+    // Rate limit per email (max 3 per day)
+    const emailRl = await checkRateLimit(`newsletter:email:${normalizedEmail}`, { window: 86_400_000, max: 3 })
+    if (!emailRl.allowed) {
+      return NextResponse.json(
+        { error: 'Cette adresse a déjà été inscrite récemment' },
+        { status: 429 }
+      )
+    }
 
     // Store in Supabase (upsert — re-subscribe if previously unsubscribed)
     const supabase = createAdminClient()
@@ -65,7 +75,8 @@ export async function POST(request: Request) {
     }
 
     // Send welcome email (non-blocking)
-    const unsubscribeToken = Buffer.from(normalizedEmail).toString('base64url')
+    const unsubscribeSecret = process.env.UNSUBSCRIBE_SECRET || 'sa-newsletter-default-key'
+    const unsubscribeToken = crypto.createHmac('sha256', unsubscribeSecret).update(normalizedEmail).digest('hex')
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
     const unsubscribeLink = `${siteUrl}/api/newsletter/unsubscribe?email=${encodeURIComponent(normalizedEmail)}&token=${unsubscribeToken}`
 

@@ -121,10 +121,10 @@ export function ArtisanExitIntent({
           aria-label="Estimation gratuite"
         >
           <div className="bg-white rounded-2xl shadow-2xl border border-stone-200/60 p-5 relative">
-            {/* Close button */}
+            {/* Close button — min 44x44 touch target */}
             <button
               onClick={close}
-              className="absolute top-3 right-3 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-sand-100 transition-colors"
+              className="absolute top-3 right-3 p-3 min-w-[44px] min-h-[44px] rounded-full text-slate-400 hover:text-slate-600 hover:bg-sand-100 transition-colors flex items-center justify-center"
               aria-label="Fermer"
             >
               <X className="w-4 h-4" />

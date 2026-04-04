@@ -10,7 +10,7 @@ interface ArtisanSchemaProps {
   isClaimed?: boolean
 }
 
-export function ArtisanSchema({ artisan, reviews, isClaimed = true }: ArtisanSchemaProps) {
+export function ArtisanSchema({ artisan, reviews, isClaimed = false }: ArtisanSchemaProps) {
   const displayName = getDisplayName(artisan)
   const baseUrl = companyIdentity.url
 
@@ -116,15 +116,18 @@ export function ArtisanSchema({ artisan, reviews, isClaimed = true }: ArtisanSch
       },
     }),
 
-    ...(reviews.length > 0 ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
-        reviewCount: reviews.length,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    } : {}),
+    ...(() => {
+      const validRatings = reviews.map(r => r.rating).filter(r => r != null && r >= 1 && r <= 5)
+      return validRatings.length > 0 ? {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: Math.min(5, Math.max(1, Number((validRatings.reduce((a, b) => a + b, 0) / validRatings.length).toFixed(1)))),
+          reviewCount: validRatings.length,
+          bestRating: 5,
+          worstRating: 1,
+        },
+      } : {}
+    })(),
 
     ...((() => {
       const validReviews = reviews.filter(r => r.comment && r.comment.trim().length > 0).slice(0, 5)
@@ -188,11 +191,11 @@ export function ArtisanSchema({ artisan, reviews, isClaimed = true }: ArtisanSch
       },
     }),
 
-    ...(artisan.siret && {
+    ...(artisan.siret && /^\d{14}$/.test(artisan.siret.trim()) && {
       identifier: {
         '@type': 'PropertyValue',
         name: 'SIRET',
-        value: artisan.siret,
+        value: artisan.siret.trim(),
       },
     }),
 

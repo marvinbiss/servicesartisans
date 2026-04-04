@@ -154,8 +154,9 @@ async function fetchAllGSCData(
     if (batch.length < GSC_ROW_LIMIT) break
     startRow += GSC_ROW_LIMIT
 
-    if (startRow > 500000) {
-      logger.warn('GSC sync: safety limit reached (500K rows)', { action: 'gsc-sync-limit' })
+    // Safety limit: 250K rows = 10 requêtes max ≈ 25-30s (Vercel maxDuration=60s)
+    if (startRow > 250000) {
+      logger.warn('GSC sync: safety limit reached (250K rows)', { action: 'gsc-sync-limit' })
       break
     }
   }

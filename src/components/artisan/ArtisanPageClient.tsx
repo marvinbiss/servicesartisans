@@ -308,9 +308,7 @@ export default function ArtisanPageClient({
                   {/* Social proof badge */}
                   <SocialProofBadge
                     specialty={specialty}
-                    specialtySlug={specialtySlug}
                     city={city}
-                    citySlug={citySlug}
                   />
                   {/* Inline multi-step quote wizard */}
                   <UnclaimedQuoteWizard

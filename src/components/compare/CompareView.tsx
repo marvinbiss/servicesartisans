@@ -13,6 +13,7 @@ import {
   MapPinned,
 } from 'lucide-react'
 import { clsx } from 'clsx'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { useCompare } from '@/components/compare/CompareProvider'
 import type { CompareProvider } from '@/components/compare/CompareProvider'
 
@@ -241,18 +242,14 @@ export function CompareView({ onClose }: CompareViewProps) {
               providers={compareList}
             >
               <ProviderGrid providers={compareList}>
-                {(provider) => (
+                {() => (
                   <span className="text-gray-700">
-                    {provider.phone ? (
-                      <a
-                        href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
-                        className="text-blue-600 hover:text-blue-700"
-                      >
-                        {provider.phone}
-                      </a>
-                    ) : (
-                      '-'
-                    )}
+                    <a
+                      href={PHONE_TEL}
+                      className="text-blue-600 hover:text-blue-700"
+                    >
+                      {PHONE_NUMBER}
+                    </a>
                   </span>
                 )}
               </ProviderGrid>

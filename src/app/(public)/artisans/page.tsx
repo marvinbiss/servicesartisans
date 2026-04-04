@@ -5,7 +5,7 @@ import { MapPin, Star, Phone, Search, Users, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
 import { resolveProviderCities } from '@/lib/insee-resolver'
@@ -278,15 +278,14 @@ export default async function ArtisansPage() {
                     >
                       Demander un devis
                     </Link>
-                    {provider.phone && (
-                      <a
-                        href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
-                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-sm"
-                      >
-                        <Phone className="w-4 h-4" />
-                        Appeler
-                      </a>
-                    )}
+                    <a
+                      href={PHONE_TEL}
+                      className="flex items-center justify-center gap-1.5 px-4 py-2.5 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-sm"
+                      aria-label="Appeler ServicesArtisans"
+                    >
+                      <Phone className="w-4 h-4" aria-hidden="true" />
+                      Appeler
+                    </a>
                   </div>
                 </div>
               )

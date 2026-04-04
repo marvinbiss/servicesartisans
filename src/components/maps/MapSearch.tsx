@@ -9,6 +9,7 @@ import {
 import Link from 'next/link'
 import NextImage from 'next/image'
 import { getArtisanUrl } from '@/lib/utils'
+import { PHONE_TEL } from '@/lib/seo/config'
 import { useGeolocation } from '@/hooks/useGeolocation'
 import { useMapSearchCache } from '@/hooks/useMapSearchCache'
 import MapFilters from './MapFilters'
@@ -441,16 +442,15 @@ export default function MapSearch() {
                           >
                             Voir le profil
                           </Link>
-                          {provider.phone && (
-                            <a
-                              href={`tel:${provider.phone.replace(/[\s.\-()]/g, '')}`}
+                          <a
+                              href={PHONE_TEL}
                               className="px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-semibold rounded-lg hover:from-green-700 hover:to-green-800 flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
-                              title="Appeler maintenant"
+                              title="Appeler ServicesArtisans"
+                              aria-label="Appeler ServicesArtisans"
                             >
-                              <Phone className="w-4 h-4" />
+                              <Phone className="w-4 h-4" aria-hidden="true" />
                               Appeler
                             </a>
-                          )}
                         </div>
                       </div>
                     </Popup>

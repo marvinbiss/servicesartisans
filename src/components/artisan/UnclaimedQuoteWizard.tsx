@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ArrowRight, ArrowLeft, Clock, Shield, Send, Loader2 } from 'lucide-react'
 import { z } from 'zod'
@@ -104,6 +104,7 @@ export default function UnclaimedQuoteWizard({
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const stepRef = useRef<HTMLDivElement>(null)
 
   const [formData, setFormData] = useState<FormData>({
     serviceType: '',
@@ -118,19 +119,29 @@ export default function UnclaimedQuoteWizard({
   const services = SERVICE_OPTIONS[specialtySlug] || DEFAULT_SERVICES
   const progress = (step / 3) * 100
 
+  // ---- Focus management ----
+
+  const focusStep = useCallback(() => {
+    setTimeout(() => {
+      stepRef.current?.focus()
+    }, 350)
+  }, [])
+
   // ---- Navigation ----
 
   const goNext = useCallback(() => {
     setDirection(1)
     setStep((s) => Math.min(s + 1, 3))
     setErrors({})
-  }, [])
+    focusStep()
+  }, [focusStep])
 
   const goBack = useCallback(() => {
     setDirection(-1)
     setStep((s) => Math.max(s - 1, 1))
     setErrors({})
-  }, [])
+    focusStep()
+  }, [focusStep])
 
   // ---- Handlers ----
 
@@ -146,8 +157,9 @@ export default function UnclaimedQuoteWizard({
       setDirection(1)
       setStep(2)
       setErrors({})
+      focusStep()
     }, 200)
-  }, [specialtySlug, citySlug])
+  }, [specialtySlug, citySlug, focusStep])
 
   const selectUrgency = useCallback((urgency: string) => {
     setFormData((prev) => ({ ...prev, urgency }))
@@ -182,6 +194,8 @@ export default function UnclaimedQuoteWizard({
       return
     }
 
+    // Guard against double-click
+    if (submitting) return
     setSubmitting(true)
 
     try {
@@ -193,16 +207,29 @@ export default function UnclaimedQuoteWizard({
         telephone: cleanPhone(formData.telephone),
         email: formData.email,
         ville: city,
+        consentement: formData.consentement,
+        consent_given_at: new Date().toISOString(),
         source: 'unclaimed_artisan_page',
       }
+
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 15000)
 
       const res = await fetch('/api/devis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       })
 
-      if (!res.ok) throw new Error('Erreur serveur')
+      clearTimeout(timeout)
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        const msg = body?.error || 'Une erreur est survenue. Veuillez réessayer.'
+        setErrors({ submit: msg })
+        return
+      }
 
       trackEvent('unclaimed_quote_submitted', {
         specialty: specialtySlug,
@@ -212,8 +239,12 @@ export default function UnclaimedQuoteWizard({
       })
 
       setSubmitted(true)
-    } catch {
-      setErrors({ submit: 'Une erreur est survenue. Veuillez réessayer.' })
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setErrors({ submit: 'La requête a pris trop de temps. Veuillez réessayer.' })
+      } else {
+        setErrors({ submit: 'Erreur de connexion. Vérifiez votre réseau et réessayez.' })
+      }
     } finally {
       setSubmitting(false)
     }
@@ -317,6 +348,8 @@ export default function UnclaimedQuoteWizard({
               </div>
             ))}
           </div>
+          {/* P1-3: aria-live for step changes */}
+          <span className="sr-only" aria-live="polite">Étape {step} sur 3</span>
         </div>
 
         {/* Steps */}
@@ -324,6 +357,8 @@ export default function UnclaimedQuoteWizard({
           {step === 1 && (
             <motion.div
               key="step-1"
+              ref={stepRef}
+              tabIndex={-1}
               custom={direction}
               variants={stepVariants}
               initial="enter"
@@ -361,6 +396,8 @@ export default function UnclaimedQuoteWizard({
           {step === 2 && (
             <motion.div
               key="step-2"
+              ref={stepRef}
+              tabIndex={-1}
               custom={direction}
               variants={stepVariants}
               initial="enter"
@@ -433,6 +470,8 @@ export default function UnclaimedQuoteWizard({
           {step === 3 && (
             <motion.div
               key="step-3"
+              ref={stepRef}
+              tabIndex={-1}
               custom={direction}
               variants={stepVariants}
               initial="enter"
@@ -456,11 +495,18 @@ export default function UnclaimedQuoteWizard({
                     value={formData.nom}
                     onChange={(e) => handleInputChange('nom', e.target.value)}
                     placeholder="Jean Dupont"
+                    aria-required="true"
+                    aria-invalid={!!errors.nom}
+                    aria-describedby={errors.nom ? 'error-unclaimed-nom' : undefined}
                     className={`w-full rounded-xl border bg-sand-50 px-4 py-3 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all duration-200 ${
                       errors.nom ? 'border-red-400' : 'border-sand-300'
                     }`}
                   />
-                  {errors.nom && <p className="text-red-500 text-xs mt-1">{errors.nom}</p>}
+                  {errors.nom && (
+                    <p id="error-unclaimed-nom" className="text-red-500 text-xs mt-1" role="alert">
+                      {errors.nom}
+                    </p>
+                  )}
                 </div>
 
                 {/* Telephone */}
@@ -474,11 +520,18 @@ export default function UnclaimedQuoteWizard({
                     value={formData.telephone}
                     onChange={(e) => handleInputChange('telephone', e.target.value)}
                     placeholder="06 12 34 56 78"
+                    aria-required="true"
+                    aria-invalid={!!errors.telephone}
+                    aria-describedby={errors.telephone ? 'error-unclaimed-telephone' : undefined}
                     className={`w-full rounded-xl border bg-sand-50 px-4 py-3 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all duration-200 ${
                       errors.telephone ? 'border-red-400' : 'border-sand-300'
                     }`}
                   />
-                  {errors.telephone && <p className="text-red-500 text-xs mt-1">{errors.telephone}</p>}
+                  {errors.telephone && (
+                    <p id="error-unclaimed-telephone" className="text-red-500 text-xs mt-1" role="alert">
+                      {errors.telephone}
+                    </p>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -492,11 +545,17 @@ export default function UnclaimedQuoteWizard({
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder="jean@exemple.fr"
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? 'error-unclaimed-email' : undefined}
                     className={`w-full rounded-xl border bg-sand-50 px-4 py-3 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all duration-200 ${
                       errors.email ? 'border-red-400' : 'border-sand-300'
                     }`}
                   />
-                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                  {errors.email && (
+                    <p id="error-unclaimed-email" className="text-red-500 text-xs mt-1" role="alert">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* RGPD */}

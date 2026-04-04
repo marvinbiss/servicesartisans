@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, CheckCircle, Phone } from 'lucide-react'
+import { MessageCircle, CheckCircle, Phone, X } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 
 const URGENCY_TRADES = ['plombier', 'serrurier', 'electricien', 'chauffagiste', 'vitrier', 'depanneur']
+const DISMISS_KEY = 'unclaimed-cta-dismissed'
 
 interface UnclaimedMobileCTAProps {
   specialty: string
@@ -26,8 +27,16 @@ export function UnclaimedMobileCTA({
   isUrgencyTrade = false,
 }: UnclaimedMobileCTAProps) {
   const [visible, setVisible] = useState(false)
+  const [dismissed, setDismissed] = useState(false)
 
   const isUrgent = isUrgencyTrade || URGENCY_TRADES.includes(specialtySlug)
+
+  // Check sessionStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem(DISMISS_KEY) === 'true') {
+      setDismissed(true)
+    }
+  }, [])
 
   // Show after scrolling past 45% of the page
   useEffect(() => {
@@ -43,6 +52,13 @@ export function UnclaimedMobileCTA({
     handleScroll()
 
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const handleDismiss = useCallback(() => {
+    setDismissed(true)
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(DISMISS_KEY, 'true')
+    }
   }, [])
 
   const handleClick = useCallback(() => {
@@ -70,7 +86,7 @@ export function UnclaimedMobileCTA({
 
   return (
     <AnimatePresence>
-      {visible && (
+      {visible && !dismissed && (
         <motion.div
           initial={{ y: '100%', opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -78,9 +94,18 @@ export function UnclaimedMobileCTA({
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
         >
+          {/* Close button */}
+          <button
+            onClick={handleDismiss}
+            className="absolute top-2 right-2 p-1.5 min-w-[44px] min-h-[44px] rounded-full text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 transition-colors flex items-center justify-center"
+            aria-label="Fermer le bandeau"
+          >
+            <X className="w-4 h-4" />
+          </button>
+
           {/* Social proof */}
           {weeklyDevisCount > 0 && (
-            <p className="text-[11px] text-charcoal-500 text-center mb-2">
+            <p className="text-[11px] text-charcoal-500 text-center mb-2 pr-8">
               <span className="inline-block w-1.5 h-1.5 bg-accent-500 rounded-full mr-1 animate-pulse align-middle" />
               {weeklyDevisCount} demande{weeklyDevisCount > 1 ? 's' : ''} cette semaine à proximité
             </p>

@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -23,8 +24,9 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Verify token (base64url of email)
-    const expectedToken = Buffer.from(email.toLowerCase().trim()).toString('base64url')
+    // Verify token (HMAC-SHA256 of email)
+    const unsubscribeSecret = process.env.UNSUBSCRIBE_SECRET || 'sa-newsletter-default-key'
+    const expectedToken = crypto.createHmac('sha256', unsubscribeSecret).update(email.toLowerCase().trim()).digest('hex')
     if (token !== expectedToken) {
       return new NextResponse(htmlPage('Lien invalide', 'Le lien de désinscription est invalide.'), {
         status: 400,

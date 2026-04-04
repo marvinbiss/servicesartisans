@@ -81,14 +81,14 @@ export async function GET(
       // No provider or table doesn't exist
     }
 
-    // Get bookings count
+    // Get bookings count (two safe queries instead of string interpolation in .or())
     let bookingsCount = 0
     try {
-      const { count } = await supabase
-        .from('bookings')
-        .select('id', { count: 'exact', head: true })
-        .or(`provider_id.eq.${userId},client_id.eq.${userId}`)
-      bookingsCount = count || 0
+      const [{ count: providerCount }, { count: clientCount }] = await Promise.all([
+        supabase.from('bookings').select('id', { count: 'exact', head: true }).eq('provider_id', userId),
+        supabase.from('bookings').select('id', { count: 'exact', head: true }).eq('client_id', userId),
+      ])
+      bookingsCount = (providerCount || 0) + (clientCount || 0)
     } catch {
       // bookings table doesn't exist
     }

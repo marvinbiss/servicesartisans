@@ -187,7 +187,9 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       const { data: { user }, error: authError } = await supabase.auth.getUser()
 
       if (authError || !user) {
-        const redirectUrl = encodeURIComponent(pathname)
+        // Validate redirect URL (prevent open redirect)
+        const isValidRedirect = pathname.startsWith('/') && !pathname.includes('//') && !/^\/\w+:/.test(pathname)
+        const redirectUrl = isValidRedirect ? encodeURIComponent(pathname) : encodeURIComponent('/espace-client')
         return NextResponse.redirect(new URL(`/connexion?redirect=${redirectUrl}`, request.url))
       }
 

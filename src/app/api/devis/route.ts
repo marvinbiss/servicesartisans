@@ -210,6 +210,13 @@ export async function POST(request: Request) {
       })
       if (assignedProviders.length > 0) {
         logLeadEvent(lead.id, 'dispatched', { metadata: { count: assignedProviders.length } }).catch((err) => logger.error('Failed to log lead dispatched event', err))
+        // Log devis_completed analytics event (server-side)
+        supabase.from('analytics_events').insert({
+          event_type: 'devis_completed',
+          metadata: { devisId: lead.id, serviceSlug: data.service, city: data.ville, artisanCount: assignedProviders.length },
+        }).then(({ error: analyticsErr }) => {
+          if (analyticsErr) logger.error('Failed to log devis_completed event', analyticsErr)
+        })
       }
     }
 
