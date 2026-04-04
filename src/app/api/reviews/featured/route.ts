@@ -13,21 +13,12 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Fetch top-rated recent reviews with artisan profile info (only published reviews)
-    // reviews.artisan_id → profiles(id), NOT providers
+    // Fetch top-rated recent reviews (only published reviews)
+    // Note: reviews.artisan_id FK target is ambiguous in schema cache,
+    // so we fetch reviews without join and resolve provider name separately.
     const { data: reviews, error } = await supabase
       .from('reviews')
-      .select(`
-        id,
-        rating,
-        comment,
-        client_name,
-        created_at,
-        artisan:profiles!artisan_id (
-          id,
-          full_name
-        )
-      `)
+      .select('id, rating, comment, client_name, artisan_id, created_at')
       .eq('status', 'published')
       .gte('rating', 4)
       .not('comment', 'is', null)
@@ -39,21 +30,32 @@ export async function GET() {
       return NextResponse.json({ reviews: [] })
     }
 
+    // Resolve artisan names from providers table in a single batch query
+    const artisanIds = Array.from(new Set((reviews || []).map(r => r.artisan_id).filter(Boolean)))
+    let providerNames: Record<string, string> = {}
+
+    if (artisanIds.length > 0) {
+      const { data: providers } = await supabase
+        .from('providers')
+        .select('id, name')
+        .in('id', artisanIds)
+
+      if (providers) {
+        providerNames = Object.fromEntries(providers.map(p => [p.id, p.name]))
+      }
+    }
+
     // Transform reviews to include artisan info
     const transformedReviews = (reviews || [])
-      .filter(r => r.comment && r.comment.length > 20) // Only reviews with actual content
-      .map(review => {
-        // Artisan can be null, single object, or array depending on the relation
-        const artisan = Array.isArray(review.artisan) ? review.artisan[0] : review.artisan
-        return {
-          id: review.id,
-          author_name: review.client_name || 'Client',
-          rating: review.rating,
-          comment: review.comment,
-          artisan_name: (artisan as { full_name?: string } | null)?.full_name || null,
-          created_at: review.created_at
-        }
-      })
+      .filter(r => r.comment && r.comment.length > 20)
+      .map(review => ({
+        id: review.id,
+        author_name: review.client_name || 'Client',
+        rating: review.rating,
+        comment: review.comment,
+        artisan_name: (review.artisan_id && providerNames[review.artisan_id]) || null,
+        created_at: review.created_at,
+      }))
 
     return NextResponse.json({
       reviews: transformedReviews
