@@ -168,9 +168,24 @@ export default async function RootLayout({
           }}
         />
 
-        {/* Preconnect for Google Tag Manager */}
+        {/* Preconnect for Google Tag Manager + Google Analytics */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+        {/* GA4 Consent Mode v2 defaults + gtag() definition — MUST load before GTM (RGPD) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{'analytics_storage':'denied','ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','functionality_storage':'denied','personalization_storage':'denied','security_storage':'granted','wait_for_update':500});
+gtag('set','url_passthrough',true);
+gtag('set','ads_data_redaction',true);
+gtag('js',new Date());
+gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}');
+(function(){try{var p=localStorage.getItem('cookie_preferences');if(p){var prefs=JSON.parse(p);if(prefs.analytics)gtag('consent','update',{'analytics_storage':'granted'});if(prefs.marketing)gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted'});}}catch(e){}})();`,
+          }}
+        />
 
         {/* Preconnect for Meta Pixel */}
         <link rel="preconnect" href="https://connect.facebook.net" />
@@ -185,8 +200,8 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
-        {/* Google Tag Manager */}
-        <Script id="gtm" strategy="lazyOnload">
+        {/* Google Tag Manager — afterInteractive: loads after hydration, before idle (captures early interactions) */}
+        <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -221,7 +236,11 @@ fbq('track', 'PageView');`}
         <Script id="contentsquare-deferred" strategy="lazyOnload">
           {`(function(){function l(){if(l.d)return;l.d=1;var s=document.createElement('script');s.src='https://t.contentsquare.net/uxa/8da7eeef2dab8.js';s.async=true;document.head.appendChild(s)}if(typeof requestIdleCallback==='function'){requestIdleCallback(l,{timeout:5000})}else{setTimeout(l,5000)}})();`}
         </Script>
-        {/* GA4 removed — GTM (GTM-THV3KZ8N) already includes GA4 tracking, standalone gtag.js was duplicate */}
+        {/* GA4 gtag.js — loaded after GTM for event forwarding to GA4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}`}
+          strategy="afterInteractive"
+        />
         <WebVitals />
         <PageViewTracker />
         <MobileMenuProvider>

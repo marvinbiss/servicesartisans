@@ -71,16 +71,9 @@ function getCanonicalRedirect(request: NextRequest): string | null {
     needsRedirect = true
   }
 
-  // 3. Strip UTM and tracking parameters to avoid duplicate content
-  const trackingParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid']
-  const hasTracking = trackingParams.some(p => url.searchParams.has(p))
-  let search = url.search
-  if (hasTracking) {
-    trackingParams.forEach(p => url.searchParams.delete(p))
-    const cleanSearch = url.searchParams.toString()
-    search = cleanSearch ? `?${cleanSearch}` : ''
-    needsRedirect = true
-  }
+  // 3. UTM/tracking parameters preserved — GA4/GTM need them in the URL at page load time.
+  //    Stripping via 301 before JS executes destroys all attribution data in Google Analytics.
+  const search = url.search
 
   // 4. Lowercase normalization — prevent duplicate content from mixed-case URLs
   //    Exclude artisan publicId paths: /services/{service}/{location}/{publicId}

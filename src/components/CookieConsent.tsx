@@ -56,9 +56,12 @@ export default function CookieConsent() {
       if (savedPrefs) {
         const parsed: CookiePreferences = JSON.parse(savedPrefs)
         setPreferences(parsed)
-        // Re-initialize Clarity if analytics was previously consented
+        // Re-apply consent to GA4 (gtag is now defined in layout <head>)
         if (parsed.analytics) {
-          enableClarity()
+          enableAnalytics()
+        }
+        if (parsed.marketing) {
+          enableMarketing()
         }
       }
     }

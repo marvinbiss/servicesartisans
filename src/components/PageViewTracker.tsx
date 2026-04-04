@@ -43,6 +43,17 @@ export default function PageViewTracker() {
         visitorId: getVisitorId(),
       }
 
+      // Push to GTM dataLayer for SPA soft navigations (App Router)
+      // GTM needs this to fire GA4 page_view on client-side navigation
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'page_view',
+          page_path: pathname,
+          page_title: document.title,
+          page_location: window.location.href,
+        })
+      }
+
       try {
         if (navigator.sendBeacon) {
           navigator.sendBeacon('/api/analytics', JSON.stringify(data))

@@ -8,7 +8,7 @@ import { useReportWebVitals } from 'next/web-vitals'
  */
 export function WebVitals() {
   useReportWebVitals((metric) => {
-    // Send to GA4 (already configured via GoogleAnalytics component)
+    // Send to GA4 (gtag defined in layout.tsx <head> inline script)
     if (typeof window !== 'undefined' && 'gtag' in window) {
       const w = window as typeof window & { gtag: (...args: unknown[]) => void }
       w.gtag('event', metric.name, {
