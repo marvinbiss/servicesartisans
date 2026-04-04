@@ -403,14 +403,11 @@ export default function ArtisanPageClient({
         )}
       </div>
 
-      {/* Exit intent — claimed only (unclaimed: no lead capture) */}
-      {isClaimed && (
-        <ArtisanExitIntent
-          artisan={artisan}
-          onOpenEstimation={() => {}}
-          isClaimed={true}
-        />
-      )}
+      {/* Exit intent — claimed ET unclaimed (filet de rattrapage universel) */}
+      <ArtisanExitIntent
+        artisan={artisan}
+        isClaimed={isClaimed}
+      />
     </>
   )
 }

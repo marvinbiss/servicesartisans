@@ -37,7 +37,19 @@ export type BookingEvent =
   | 'unclaimed_quote_submitted'
   | 'unclaimed_modal_step2'
   | 'unclaimed_modal_submitted'
+  | 'unclaimed_devis_modal_open'
+  | 'unclaimed_devis_modal_step1'
+  | 'unclaimed_devis_modal_submit'
+  | 'unclaimed_devis_modal_close'
+  | 'unclaimed_sticky_devis_click'
+  | 'unclaimed_sticky_phone_click'
+  | 'unclaimed_sidebar_devis_click'
+  | 'unclaimed_sidebar_phone_click'
+  | 'unclaimed_inline_devis_submit'
   | 'artisan_listing_click'
+  | 'exit_intent_shown'
+  | 'exit_intent_devis_click'
+  | 'exit_intent_phone_click'
 
 export interface TrackingData {
   event: BookingEvent
