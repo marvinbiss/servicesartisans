@@ -2,11 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { Clock } from 'lucide-react'
-import type { LegacyArtisan } from '@/types/legacy'
-
-interface ArtisanOpeningHoursProps {
-  artisan: LegacyArtisan
-}
 
 const DAYS_ORDER = [
   { key: 'lundi', label: 'Lundi' },
@@ -18,38 +13,16 @@ const DAYS_ORDER = [
   { key: 'dimanche', label: 'Dimanche' },
 ] as const
 
-function isOpenNow(hours: NonNullable<LegacyArtisan['opening_hours']>): boolean {
-  const now = new Date()
-  // JS getDay: 0=Sunday, 1=Monday, ...
-  const jsDay = now.getDay()
-  const dayIndex = jsDay === 0 ? 6 : jsDay - 1
-  const dayKey = DAYS_ORDER[dayIndex].key
-
-  const slot = hours[dayKey]
-  if (!slot || !slot.ouvert) return false
-
-  const currentMinutes = now.getHours() * 60 + now.getMinutes()
-  const [startH, startM] = slot.debut.split(':').map(Number)
-  const [endH, endM] = slot.fin.split(':').map(Number)
-  const start = startH * 60 + (startM || 0)
-  const end = endH * 60 + (endM || 0)
-
-  return currentMinutes >= start && currentMinutes <= end
-}
-
 function getCurrentDayKey(): string {
   const jsDay = new Date().getDay()
   const dayIndex = jsDay === 0 ? 6 : jsDay - 1
   return DAYS_ORDER[dayIndex].key
 }
 
-export function ArtisanOpeningHours({ artisan }: ArtisanOpeningHoursProps) {
-  if (!artisan.opening_hours || Object.keys(artisan.opening_hours).length === 0) {
-    return null
-  }
-
-  const hours = artisan.opening_hours
-  const openNow = isOpenNow(hours)
+export function ArtisanOpeningHours() {
+  const now = new Date()
+  const currentHour = now.getHours()
+  const openNow = currentHour >= 8 && currentHour < 20
   const todayKey = getCurrentDayKey()
 
   return (
@@ -65,9 +38,8 @@ export function ArtisanOpeningHours({ artisan }: ArtisanOpeningHoursProps) {
             <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
               <Clock className="w-4.5 h-4.5 text-primary-400" aria-hidden="true" />
             </div>
-            Horaires
+            Horaires ServicesArtisans
           </h2>
-          {/* Badge ouvert/fermé */}
           <span
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border ${
               openNow
@@ -86,11 +58,12 @@ export function ArtisanOpeningHours({ artisan }: ArtisanOpeningHoursProps) {
         </div>
       </div>
 
-      <div className="px-6 pb-6 pt-3">
-        <div className="space-y-1" role="list" aria-label="Horaires d'ouverture">
+      <div className="px-6 pb-2 pt-1">
+        <p className="text-xs text-charcoal-500">Disponibilité de notre service de mise en relation</p>
+      </div>
+      <div className="px-6 pb-6 pt-1">
+        <div className="space-y-1" role="list" aria-label="Horaires ServicesArtisans">
           {DAYS_ORDER.map(({ key, label }) => {
-            const slot = hours[key]
-            const isOpen = slot?.ouvert
             const isToday = key === todayKey
 
             return (
@@ -105,8 +78,8 @@ export function ArtisanOpeningHours({ artisan }: ArtisanOpeningHoursProps) {
                   {label}
                   {isToday && <span className="text-xs text-primary-500 ml-1.5">aujourd&apos;hui</span>}
                 </span>
-                <span className={`text-sm ${isOpen ? 'text-charcoal-900 font-medium' : 'text-charcoal-400'}`}>
-                  {isOpen ? `${slot.debut} – ${slot.fin}` : 'Fermé'}
+                <span className="text-sm text-charcoal-900 font-medium">
+                  08:00 – 20:00
                 </span>
               </div>
             )

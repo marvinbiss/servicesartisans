@@ -310,11 +310,11 @@ export default function ArtisanPageClient({
               </section>
               {/* 4b. Opening hours */}
               <section aria-label="Horaires d'ouverture">
-                <ArtisanOpeningHours artisan={artisan} />
+                <ArtisanOpeningHours />
               </section>
               {/* 5. Reviews — strongest trust signal */}
               <section id="reviews" aria-label="Avis clients">
-                <ArtisanReviews artisan={artisan} reviews={reviews} />
+                <ArtisanReviews reviews={reviews} />
               </section>
               {/* 6. About — details for those doing due diligence (hidden for unclaimed: auto-generated descriptions) */}
               {isClaimed && (
