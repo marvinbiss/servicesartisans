@@ -14,6 +14,101 @@ import {
 } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
+const LEGAL_FORM_LABELS: Record<string, string> = {
+  '1000': 'Entrepreneur individuel',
+  '1100': 'Entrepreneur individuel',
+  '1200': 'Commerçant',
+  '1300': 'Artisan',
+  '1400': 'Officier public ou ministériel',
+  '1500': 'Profession libérale',
+  '1600': 'Exploitant agricole',
+  '1700': 'Agent commercial',
+  '1800': 'Auto-entrepreneur',
+  '1900': 'Micro-entrepreneur',
+  '5410': 'SARL',
+  '5422': 'SARL à associé unique (EURL)',
+  '5426': 'SARL à associé unique (EURL)',
+  '5430': 'SARL',
+  '5431': 'SARL',
+  '5432': 'SARL',
+  '5442': 'SARL',
+  '5443': 'SARL',
+  '5451': 'SARL',
+  '5453': 'SARL',
+  '5454': 'SARL',
+  '5455': 'SARL',
+  '5460': 'EURL',
+  '5470': 'SARL',
+  '5498': 'SARL unipersonnelle',
+  '5499': 'SARL',
+  '5505': 'SA',
+  '5510': 'SA à conseil d\'administration',
+  '5515': 'SA à directoire',
+  '5520': 'SA à conseil d\'administration',
+  '5522': 'SA à directoire',
+  '5525': 'SA',
+  '5530': 'SA',
+  '5531': 'SA',
+  '5532': 'SA',
+  '5535': 'SA',
+  '5538': 'SA',
+  '5539': 'SA',
+  '5540': 'SA',
+  '5545': 'SA à directoire',
+  '5547': 'SA',
+  '5548': 'SA',
+  '5551': 'SA',
+  '5553': 'SA',
+  '5554': 'SA',
+  '5555': 'SA',
+  '5560': 'SA',
+  '5570': 'SA',
+  '5585': 'SA',
+  '5599': 'SA',
+  '5610': 'SAS',
+  '5615': 'SAS',
+  '5620': 'SAS',
+  '5699': 'SAS',
+  '5710': 'SAS à associé unique (SASU)',
+  '5720': 'SASU',
+  '6100': 'SNC',
+  '6210': 'SCS',
+  '6220': 'SCA',
+  '6316': 'SCOP',
+  '6317': 'SCOP',
+  '6318': 'SCOP',
+  '6411': 'Société d\'exercice libéral (SELARL)',
+  '6521': 'SCI',
+  '6532': 'SCI',
+  '6533': 'SCI',
+  '6534': 'SCI',
+  '6535': 'SCI',
+  '6540': 'SCI',
+  '6541': 'SCI',
+  '6542': 'SCI',
+  '6543': 'SCI',
+  '6544': 'SCI',
+  '6551': 'SCI',
+  '6554': 'SCI',
+  '6558': 'SCI',
+  '6560': 'SCI',
+  '6589': 'SCI',
+  '6599': 'Société civile',
+  '9220': 'Association déclarée',
+  '9221': 'Association déclarée',
+  '9222': 'Association déclarée',
+  '9223': 'Association d\'utilité publique',
+  '9224': 'Association déclarée',
+  '9230': 'Association déclarée',
+  '9240': 'Association déclarée',
+  '9260': 'Association déclarée',
+  '9300': 'Fondation',
+}
+
+function formatLegalForm(code: string): string {
+  return LEGAL_FORM_LABELS[code] || code
+}
+
 interface ArtisanBusinessCardProps {
   artisan: LegacyArtisan
 }
@@ -166,7 +261,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                   Forme juridique
                 </dt>
                 <dd className="mt-0.5 text-sm font-bold text-charcoal-900">
-                  {artisan.legal_form}
+                  {formatLegalForm(artisan.legal_form)}
                 </dd>
               </div>
             </div>
