@@ -1,6 +1,6 @@
 'use client'
 
-import { Mail, FileText, ShieldCheck, Star, Users } from 'lucide-react'
+import { Mail, FileText, ShieldCheck, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -29,12 +29,6 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
               </span>
               <span className="text-xs font-semibold text-accent-700">Disponible</span>
-            </div>
-          )}
-          {artisan.average_rating > 0 && (
-            <div className="flex items-center gap-1 text-xs text-charcoal-500">
-              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" aria-hidden="true" />
-              <span className="font-semibold text-charcoal-900">{artisan.average_rating.toFixed(1)}</span>
             </div>
           )}
         </div>

@@ -1,16 +1,15 @@
 import React from 'react'
-import { Review, getDisplayName } from './types'
+import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { slugify, getArtisanUrl } from '@/lib/utils'
 import { companyIdentity, getSocialLinks } from '@/lib/config/company-identity'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
-  reviews: Review[]
   isClaimed?: boolean
 }
 
-export function ArtisanSchema({ artisan, reviews, isClaimed = false }: ArtisanSchemaProps) {
+export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps) {
   const displayName = getDisplayName(artisan)
   const baseUrl = companyIdentity.url
 
@@ -116,41 +115,6 @@ export function ArtisanSchema({ artisan, reviews, isClaimed = false }: ArtisanSc
       },
     }),
 
-    ...(() => {
-      const validRatings = reviews.map(r => r.rating).filter(r => r != null && r >= 1 && r <= 5)
-      return validRatings.length > 0 ? {
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: Math.min(5, Math.max(1, Number((validRatings.reduce((a, b) => a + b, 0) / validRatings.length).toFixed(1)))),
-          reviewCount: validRatings.length,
-          bestRating: 5,
-          worstRating: 1,
-        },
-      } : {}
-    })(),
-
-    ...((() => {
-      const validReviews = reviews.filter(r => r.comment && r.comment.trim().length > 0).slice(0, 5)
-      return validReviews.length > 0 ? {
-        review: validReviews.map(r => ({
-          '@type': 'Review',
-          author: { '@type': 'Person', name: r.author },
-          ...(r.dateISO || r.date ? { datePublished: r.dateISO || r.date } : {}),
-          reviewRating: {
-            '@type': 'Rating',
-            ratingValue: r.rating,
-            bestRating: 5,
-            worstRating: 1,
-          },
-          reviewBody: r.comment,
-          itemReviewed: {
-            '@type': 'LocalBusiness',
-            '@id': `${artisanUrl}#business`,
-            name: displayName,
-          },
-        })),
-      } : {}
-    })()),
 
     ...(artisan.service_prices.length > 0 && {
       hasOfferCatalog: {

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Trophy, Calendar, Shield, Star, Users, MapPin, CheckCircle } from 'lucide-react'
+import { Trophy, Calendar, Shield, Users, MapPin, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface WhyCard {
@@ -34,13 +34,6 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     })
   }
 
-  if (artisan.average_rating > 0) {
-    cards.push({
-      icon: Star,
-      title: 'Satisfaction',
-      description: `Note de ${artisan.average_rating.toFixed(1)}/5 (${artisan.review_count} avis)`,
-    })
-  }
 
   if (artisan.team_size && artisan.team_size > 1) {
     cards.push({

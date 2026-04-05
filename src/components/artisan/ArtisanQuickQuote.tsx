@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { FileText, ShieldCheck, Clock, Star, Users } from 'lucide-react'
+import { FileText, ShieldCheck, Clock, Users } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -76,12 +76,6 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
               <Clock className="w-4 h-4 text-primary-400" aria-hidden="true" />
               Réponse rapide
             </div>
-            {artisan.average_rating > 0 && artisan.review_count > 0 && (
-              <div className="flex items-center gap-1.5 text-xs font-medium text-charcoal-600">
-                <Star className="w-4 h-4 text-amber-500 fill-amber-500" aria-hidden="true" />
-                {artisan.average_rating.toFixed(1)}/5 ({artisan.review_count} avis)
-              </div>
-            )}
           </div>
         </div>
       </motion.div>

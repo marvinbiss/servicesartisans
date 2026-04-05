@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Users, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
+import { MapPin, CheckCircle, Users, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -115,23 +115,6 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
               </div>
             )}
 
-            {/* Rating with review count */}
-            <div className="flex items-center gap-3 flex-wrap mb-3">
-              {artisan.average_rating !== null && artisan.average_rating > 0 && (
-                <div className="flex items-center gap-1.5 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
-                  <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
-                  <span className="font-bold text-charcoal-900" aria-label={`Note de ${artisan.average_rating.toFixed(1)} sur 5`}>
-                    {artisan.average_rating.toFixed(1)}
-                  </span>
-                  {artisan.review_count > 0 && (
-                    <a href="#reviews" className="text-charcoal-500 hover:text-primary-600 transition-colors text-sm">
-                      ({artisan.review_count} avis)
-                    </a>
-                  )}
-                </div>
-              )}
-
-            </div>
 
             {/* Location */}
             <div className="flex items-center gap-2 text-charcoal-600 mb-3">

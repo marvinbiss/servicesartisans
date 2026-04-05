@@ -3,9 +3,7 @@
 import { motion } from 'framer-motion'
 import {
   Calendar,
-  MessageCircle,
   Award,
-  Star,
   Shield,
   Users,
   Clock,
@@ -31,28 +29,6 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   const stats: StatConfig[] = []
   const currentYear = new Date().getFullYear()
 
-  // Average rating
-  if (artisan.average_rating > 0) {
-    stats.push({
-      icon: Star,
-      label: 'Note moyenne',
-      value: artisan.average_rating.toFixed(1),
-      subValue: '/ 5',
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-50 border-amber-100',
-    })
-  }
-
-  // Review count
-  if (artisan.review_count > 0) {
-    stats.push({
-      icon: MessageCircle,
-      label: 'Avis clients',
-      value: artisan.review_count.toString(),
-      color: 'text-primary-600',
-      bgColor: 'bg-primary-50 border-primary-100',
-    })
-  }
 
   // Company creation year
   if (artisan.creation_date) {
