@@ -82,7 +82,7 @@ export function PlatformSidebarCTA({
           {/* Horaires */}
           <div className="flex items-center justify-center gap-1.5 text-xs text-charcoal-500 mb-4">
             <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-            Lun–Ven · 9h–18h · Appel gratuit
+            Lun–Dim · 8h–20h · Appel gratuit
           </div>
 
           {/* Separator */}

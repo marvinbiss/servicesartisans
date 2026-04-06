@@ -20,7 +20,6 @@ import {
 import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
 
 import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
-import { ArtisanOpeningHours } from '@/components/artisan/ArtisanOpeningHours'
 import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -306,10 +305,6 @@ export default function ArtisanPageClient({
               {/* 4. Stats — social proof reinforces after form view */}
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
-              </section>
-              {/* 4b. Opening hours */}
-              <section aria-label="Horaires d'ouverture">
-                <ArtisanOpeningHours />
               </section>
               {/* 5. Reviews — strongest trust signal */}
               <section id="reviews" aria-label="Avis clients">
