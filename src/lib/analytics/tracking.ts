@@ -113,7 +113,8 @@ export function trackEvent(event: BookingEvent, properties?: Record<string, unkn
   sendToAnalytics(data)
 
   // Also send to Google Analytics if available
-  if (typeof window.gtag === 'function') {
+  // Skip page_view — handled exclusively by PageViewTracker to avoid double-counting
+  if (event !== 'page_view' && typeof window.gtag === 'function') {
     const gtagParams: Record<string, unknown> = { ...data.properties }
     // Forward conversion value to GA4
     if (properties?.value) {
@@ -364,11 +365,13 @@ export function getVariant(experimentId: string, variants: string[]): string {
     localStorage.setItem(storageKey, variant)
   }
 
-  // Track variant assignment
-  trackEvent('page_view', {
-    experimentId,
-    variant,
-  })
+  // Track variant assignment (dedicated event, not page_view)
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'experiment_impression', {
+      experiment_id: experimentId,
+      variant_id: variant,
+    })
+  }
 
   return variant
 }

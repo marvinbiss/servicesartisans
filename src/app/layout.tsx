@@ -182,7 +182,7 @@ gtag('consent','default',{'analytics_storage':'denied','ad_storage':'denied','ad
 gtag('set','url_passthrough',true);
 gtag('set','ads_data_redaction',true);
 gtag('js',new Date());
-gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}');
+gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}',{'send_page_view':false});
 (function(){try{var p=localStorage.getItem('cookie_preferences');if(p){var prefs=JSON.parse(p);if(prefs.analytics)gtag('consent','update',{'analytics_storage':'granted'});if(prefs.marketing)gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted'});}}catch(e){}})();`,
           }}
         />

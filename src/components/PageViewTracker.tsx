@@ -31,7 +31,7 @@ export default function PageViewTracker() {
     // Defer to let Next.js update document.title before capturing it
     const timer = setTimeout(() => {
       const data = {
-        event: 'page_view',
+        event: 'page_view' as const,
         properties: {
           page_path: pathname,
           url: window.location.href,
@@ -43,17 +43,17 @@ export default function PageViewTracker() {
         visitorId: getVisitorId(),
       }
 
-      // Push to GTM dataLayer for SPA soft navigations (App Router)
-      // GTM needs this to fire GA4 page_view on client-side navigation
-      if (typeof window !== 'undefined' && window.dataLayer) {
-        window.dataLayer.push({
-          event: 'page_view',
+      // Send page_view to GA4 via gtag (single source of truth — no dataLayer push
+      // to avoid double-counting if GTM also has a GA4 tag)
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'page_view', {
           page_path: pathname,
           page_title: document.title,
           page_location: window.location.href,
         })
       }
 
+      // Send to custom analytics backend
       try {
         if (navigator.sendBeacon) {
           navigator.sendBeacon('/api/analytics', JSON.stringify(data))
