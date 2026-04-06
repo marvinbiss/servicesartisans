@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { services, villes, type Ville } from '@/lib/data/france'
-import { relatedServices } from '@/lib/constants/navigation'
+import { relatedServices, getServiceWeight } from '@/lib/constants/navigation'
 import { tradeContent } from '@/lib/data/trade-content'
 
 interface OrphanRescueLinksProps {
@@ -41,6 +41,7 @@ function getRareServices(excludeSlug?: string): { slug: string; name: string }[]
 
   return services
     .filter(s => !popularSlugs.has(s.slug) && s.slug !== excludeSlug)
+    .sort((a, b) => getServiceWeight(b.slug) - getServiceWeight(a.slug))
     .slice(0, 15)
 }
 
@@ -114,12 +115,12 @@ function getServiceHubRescueLinks(serviceSlug: string): RescueLink[] {
     })
   }
 
-  // Also add related services that are rare
+  // Also add related services that are rare — sorted by weight
   const related = relatedServices[serviceSlug]
   if (related) {
-    const rareRelated = related.filter(slug =>
-      !['plombier', 'electricien', 'serrurier', 'chauffagiste'].includes(slug)
-    )
+    const rareRelated = related
+      .filter(slug => !['plombier', 'electricien', 'serrurier', 'chauffagiste'].includes(slug))
+      .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
     for (const relSlug of rareRelated.slice(0, 2)) {
       const relService = services.find(s => s.slug === relSlug)
       if (relService) {
@@ -143,7 +144,7 @@ function getCityRescueLinks(villeSlug: string): RescueLink[] {
   const ville = villes.find(v => v.slug === villeSlug)
   if (!ville) return links
 
-  const rareServices = getRareServices()
+  const rareServices = getRareServices()  // already sorted by weight
   for (const svc of rareServices.slice(0, 6)) {
     // Only link if the service exists in tradeContent (has real content)
     if (tradeContent[svc.slug]) {
@@ -176,10 +177,11 @@ function getServiceCityRescueLinks(serviceSlug: string, villeSlug: string): Resc
     })
   }
 
-  // Rare related services in same city
+  // Rare related services in same city — sorted by weight
   const related = relatedServices[serviceSlug]
   if (related) {
-    for (const relSlug of related.slice(0, 3)) {
+    const sortedRelated = [...related].sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
+    for (const relSlug of sortedRelated.slice(0, 3)) {
       const relService = services.find(s => s.slug === relSlug)
       if (relService) {
         links.push({

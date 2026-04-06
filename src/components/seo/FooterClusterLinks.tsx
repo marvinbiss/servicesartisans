@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getServiceWeight } from '@/lib/constants/navigation'
 
 // ---------------------------------------------------------------------------
 // FooterClusterLinks — liens strategiques par cluster dans le footer
@@ -7,13 +8,11 @@ import Link from 'next/link'
 // devis et guides. Distribue le PageRank vers les pages les plus
 // importantes de chaque cluster thematique.
 //
-// Inclut une grille service×ville (100 liens) pour le maillage interne SEO.
-// Section collapsible sur mobile via <details> natif (zéro JS client).
-//
+// ~35 liens totaux : 6 services + 6 villes + 4 pages utiles + 20 top combos.
 // Liens statiques, pas de DB — safe pour le footer global.
 // ---------------------------------------------------------------------------
 
-/** Top 6 services par volume de recherche (reduced for link equity concentration) */
+/** Top 6 services par volume de recherche — sorted by SERVICE_WEIGHT */
 const TOP_SERVICES: { slug: string; name: string }[] = [
   { slug: 'plombier', name: 'Plombier' },
   { slug: 'electricien', name: 'Électricien' },
@@ -21,9 +20,9 @@ const TOP_SERVICES: { slug: string; name: string }[] = [
   { slug: 'chauffagiste', name: 'Chauffagiste' },
   { slug: 'couvreur', name: 'Couvreur' },
   { slug: 'macon', name: 'Maçon' },
-]
+].sort((a, b) => getServiceWeight(b.slug) - getServiceWeight(a.slug))
 
-/** Top 6 villes par population (reduced for link equity concentration) */
+/** Top 6 villes par population */
 const TOP_CITIES: { slug: string; name: string }[] = [
   { slug: 'paris', name: 'Paris' },
   { slug: 'lyon', name: 'Lyon' },
@@ -33,31 +32,20 @@ const TOP_CITIES: { slug: string; name: string }[] = [
   { slug: 'lille', name: 'Lille' },
 ]
 
-/** Top 10 services × top 10 villes pour maillage interne SEO (100 liens) */
-const GRID_SERVICES: { slug: string; name: string }[] = [
+/** Top 5 services × top 4 villes = 20 liens stratégiques — sorted by weight */
+const COMBO_SERVICES: { slug: string; name: string }[] = [
   { slug: 'plombier', name: 'Plombier' },
   { slug: 'electricien', name: 'Électricien' },
   { slug: 'serrurier', name: 'Serrurier' },
   { slug: 'chauffagiste', name: 'Chauffagiste' },
-  { slug: 'peintre-en-batiment', name: 'Peintre' },
-  { slug: 'menuisier', name: 'Menuisier' },
-  { slug: 'macon', name: 'Maçon' },
   { slug: 'couvreur', name: 'Couvreur' },
-  { slug: 'carreleur', name: 'Carreleur' },
-  { slug: 'plaquiste', name: 'Plaquiste' },
-]
+].sort((a, b) => getServiceWeight(b.slug) - getServiceWeight(a.slug))
 
-const GRID_CITIES: { slug: string; name: string }[] = [
+const COMBO_CITIES: { slug: string; name: string }[] = [
   { slug: 'paris', name: 'Paris' },
-  { slug: 'marseille', name: 'Marseille' },
   { slug: 'lyon', name: 'Lyon' },
+  { slug: 'marseille', name: 'Marseille' },
   { slug: 'toulouse', name: 'Toulouse' },
-  { slug: 'nice', name: 'Nice' },
-  { slug: 'nantes', name: 'Nantes' },
-  { slug: 'montpellier', name: 'Montpellier' },
-  { slug: 'strasbourg', name: 'Strasbourg' },
-  { slug: 'bordeaux', name: 'Bordeaux' },
-  { slug: 'lille', name: 'Lille' },
 ]
 
 interface FooterLink {
@@ -66,19 +54,19 @@ interface FooterLink {
 }
 
 export default function FooterClusterLinks() {
-  // Services populaires — 1 lien par service (no tarifs duplicates, link equity focused)
+  // Services populaires — 6 liens
   const serviceLinks: FooterLink[] = TOP_SERVICES.map(s => ({
     href: `/services/${s.slug}`,
     label: s.name,
   }))
 
-  // Villes populaires
+  // Villes populaires — 6 liens
   const cityLinks: FooterLink[] = TOP_CITIES.map(c => ({
     href: `/villes/${c.slug}`,
     label: `Artisans ${c.name}`,
   }))
 
-  // Pages utiles — only high-value hubs (link equity concentrated)
+  // Pages utiles — 4 liens
   const utilityLinks: FooterLink[] = [
     { href: '/guides', label: 'Guides travaux' },
     { href: '/barometre', label: 'Baromètre prix' },
@@ -86,79 +74,21 @@ export default function FooterClusterLinks() {
     { href: '/urgence', label: 'Artisan urgence' },
   ]
 
+  // Top combinaisons service×ville — 20 liens
+  const comboLinks: FooterLink[] = COMBO_SERVICES.flatMap(s =>
+    COMBO_CITIES.map(c => ({
+      href: `/services/${s.slug}/${c.slug}`,
+      label: `${s.name} ${c.name}`,
+    }))
+  )
+
   return (
     <>
-      {/* ─── Grille service × ville — maillage interne SEO (100 liens) ─── */}
-      <div className="border-b border-charcoal-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Desktop : toujours visible */}
-          <div className="hidden md:block">
-            <h4 className="text-white font-heading font-semibold mb-5 text-sm tracking-tight">
-              Trouvez un artisan près de chez vous
-            </h4>
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-6">
-              {GRID_SERVICES.map(service => (
-                <div key={service.slug}>
-                  <p className="text-sand-300 font-medium text-xs mb-2">{service.name}</p>
-                  <ul className="space-y-1">
-                    {GRID_CITIES.map(city => (
-                      <li key={`${service.slug}-${city.slug}`}>
-                        <Link
-                          href={`/services/${service.slug}/${city.slug}`}
-                          className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200"
-                        >
-                          {service.name} {city.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Mobile : collapsible via <details> natif (zéro JS) */}
-          <details className="md:hidden group">
-            <summary className="flex items-center justify-between cursor-pointer list-none text-white font-heading font-semibold text-sm tracking-tight py-1 [&::-webkit-details-marker]:hidden">
-              <span>Trouvez un artisan près de chez vous</span>
-              <svg
-                className="w-4 h-4 text-sand-500 transition-transform duration-200 group-open:rotate-180"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </summary>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-5 pt-4">
-              {GRID_SERVICES.map(service => (
-                <div key={service.slug}>
-                  <p className="text-sand-300 font-medium text-xs mb-1.5">{service.name}</p>
-                  <ul className="space-y-0.5">
-                    {GRID_CITIES.map(city => (
-                      <li key={`${service.slug}-${city.slug}`}>
-                        <Link
-                          href={`/services/${service.slug}/${city.slug}`}
-                          className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200"
-                        >
-                          {service.name} {city.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </details>
-        </div>
-      </div>
-
-      {/* ─── Cluster links existants (services, villes, ressources) ─── */}
+      {/* ─── Cluster links (services, villes, ressources) ─── */}
       <div className="border-b border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Services et tarifs */}
+            {/* Services populaires */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
                 Services les plus recherchés
@@ -176,7 +106,7 @@ export default function FooterClusterLinks() {
               </div>
             </div>
 
-            {/* Villes */}
+            {/* Villes populaires */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
                 Grandes villes
@@ -211,6 +141,26 @@ export default function FooterClusterLinks() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Top combinaisons service × ville (20 liens pill) ─── */}
+      <div className="border-b border-charcoal-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h4 className="text-white font-heading font-semibold mb-4 text-xs uppercase tracking-[0.15em]">
+            Top combinaisons
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {comboLinks.map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="inline-block text-xs text-sand-400 hover:text-primary-400 bg-charcoal-700/50 hover:bg-charcoal-700 rounded-full px-3 py-1.5 transition-colors duration-200"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

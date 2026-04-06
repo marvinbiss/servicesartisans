@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { BookOpen, Euro, FileText, Star, AlertTriangle, Wrench, BarChart3, AlertCircle } from 'lucide-react'
 import { getClusterLinksForPage, type ClusterLink } from '@/lib/seo/topical-clusters'
+import { getServiceWeight } from '@/lib/constants/navigation'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -59,7 +60,14 @@ export default function TopicalClusterLinks({
   const contentLinks = links.filter(l =>
     ['blog', 'guide', 'probleme'].includes(l.type)
   )
-  const serviceLinks = links.filter(l => l.type === 'service')
+  const serviceLinks = links
+    .filter(l => l.type === 'service')
+    .sort((a, b) => {
+      // Extract slug from path like /services/{slug}
+      const aSlug = a.path.split('/').pop() || ''
+      const bSlug = b.path.split('/').pop() || ''
+      return getServiceWeight(bSlug) - getServiceWeight(aSlug)
+    })
 
   const modules: { title: string; links: ClusterLink[] }[] = []
 

@@ -10,7 +10,7 @@ import {
   departements,
   getCityScore,
 } from '@/lib/data/france'
-import { relatedServices } from '@/lib/constants/navigation'
+import { relatedServices, getServiceWeight } from '@/lib/constants/navigation'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getNearbyVilleSlugs, getCommuneScore } from '@/lib/data/commune-data'
 import { isMoneyPage, TOP_CITIES } from '@/lib/seo/top-pages'
@@ -284,29 +284,37 @@ export default async function DeepPageLinks({
 
   let otherServiceSlugs: string[]
   if (related.length > 0) {
-    // Use semantically related services — prioritize money pages among them
+    // Use semantically related services — prioritize by weight then money pages
     if (!isHubMode && currentVille) {
       otherServiceSlugs = [...related]
         .sort((a, b) => {
+          const wDiff = getServiceWeight(b) - getServiceWeight(a)
+          if (wDiff !== 0) return wDiff
           const aIsMP = isMoneyPage(a, currentVille) ? 1 : 0
           const bIsMP = isMoneyPage(b, currentVille) ? 1 : 0
           return bIsMP - aIsMP
         })
         .slice(0, maxOtherServices)
     } else {
-      otherServiceSlugs = related.slice(0, maxOtherServices)
+      otherServiceSlugs = [...related]
+        .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
+        .slice(0, maxOtherServices)
     }
   } else {
     // Fallback: pick from all services if no related mapping exists
     const otherServicesAll = services.filter(s => s.slug !== currentService)
-    otherServiceSlugs = (!isHubMode && currentVille
-      ? [...otherServicesAll].sort((a, b) => {
+    otherServiceSlugs = [...otherServicesAll]
+      .sort((a, b) => {
+        const wDiff = getServiceWeight(b.slug) - getServiceWeight(a.slug)
+        if (wDiff !== 0) return wDiff
+        if (!isHubMode && currentVille) {
           const aIsMP = isMoneyPage(a.slug, currentVille) ? 1 : 0
           const bIsMP = isMoneyPage(b.slug, currentVille) ? 1 : 0
           return bIsMP - aIsMP
-        })
-      : otherServicesAll
-    ).slice(0, maxOtherServices).map(s => s.slug)
+        }
+        return 0
+      })
+      .slice(0, maxOtherServices).map(s => s.slug)
   }
 
   const module2Links = dedup(

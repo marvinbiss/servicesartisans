@@ -11,7 +11,7 @@
  * le link equity de maniere structuree au sein de chaque cluster.
  */
 
-import { relatedServices } from '@/lib/constants/navigation'
+import { relatedServices, getServiceWeight } from '@/lib/constants/navigation'
 import { allArticles } from '@/lib/data/blog/articles'
 import { tradeContent } from '@/lib/data/trade-content'
 import { getProblemsByService } from '@/lib/data/problems'
@@ -156,7 +156,9 @@ export function getTopicalCluster(serviceSlug: string): TopicalCluster | null {
   }
 
   // 6. Related services (priority 5 — cross-silo, lower priority)
-  const related = relatedServices[serviceSlug] || []
+  // Sort by weight so gravity hubs appear first
+  const related = [...(relatedServices[serviceSlug] || [])]
+    .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
   for (const relSlug of related.slice(0, 3)) {
     const relTrade = tradeContent[relSlug]
     if (relTrade) {

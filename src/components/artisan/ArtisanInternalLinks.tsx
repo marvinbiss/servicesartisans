@@ -7,6 +7,7 @@ import {
   getRegionSlugByName,
 } from '@/lib/data/france'
 import { slugify } from '@/lib/utils'
+import { getServiceWeight } from '@/lib/constants/navigation'
 
 interface ArtisanInternalLinksProps {
   serviceSlug: string
@@ -41,9 +42,10 @@ export default function ArtisanInternalLinks({
     .slice(0, 8 - sameDeptCities.length)
   const nearbyCities = [...sameDeptCities, ...sameRegionCities].slice(0, 8)
 
-  // Column 2: Other services in same city
+  // Column 2: Other services in same city — sorted by weight (gravity hubs first)
   const otherServices = staticServicesList
     .filter(s => s.slug !== serviceSlug)
+    .sort((a, b) => getServiceWeight(b.slug) - getServiceWeight(a.slug))
     .slice(0, 8)
 
   // Column 3: Geographic navigation

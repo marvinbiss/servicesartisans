@@ -1,5 +1,31 @@
 // Navigation data - shared between server and client components
 
+// ---------------------------------------------------------------------------
+// SERVICE_WEIGHT — gravity hubs receive more internal links sitewide
+// Higher weight = more prominent placement in internal link lists.
+// Default weight for unlisted services: 1
+// ---------------------------------------------------------------------------
+
+export const SERVICE_WEIGHT: Record<string, number> = {
+  'plombier': 10,
+  'electricien': 9,
+  'serrurier': 8,
+  'chauffagiste': 8,
+  'peintre-en-batiment': 6,
+  'couvreur': 5,
+  'macon': 5,
+  'menuisier': 4,
+  'carreleur': 3,
+  'climaticien': 3,
+  'cuisiniste': 2,
+  'jardinier': 2,
+  'vitrier': 2,
+}
+
+export function getServiceWeight(slug: string): number {
+  return SERVICE_WEIGHT[slug] ?? 1
+}
+
 export const popularServices = [
   { name: 'Plombier', slug: 'plombier', icon: 'Wrench' },
   { name: 'Électricien', slug: 'electricien', icon: 'Zap' },

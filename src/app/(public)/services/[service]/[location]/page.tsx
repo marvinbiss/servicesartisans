@@ -14,7 +14,6 @@ import CrossLinks from './_components/CrossLinks'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
-import InBodyLinks from '@/components/seo/InBodyLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
@@ -796,8 +795,6 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         villeName={location.name}
         currentIntent="services"
       />
-
-      <InBodyLinks serviceSlug={serviceSlug} villeSlug={locationSlug} villeName={location.name} serviceName={service.name} />
 
       <DeepPageLinks
         currentService={serviceSlug}

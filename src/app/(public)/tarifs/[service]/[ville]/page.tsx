@@ -22,7 +22,6 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
-import InBodyLinks from '@/components/seo/InBodyLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
@@ -896,8 +895,6 @@ export default async function TarifsServiceVillePage({
         villeName={villeData.name}
         currentIntent="tarifs"
       />
-
-      <InBodyLinks serviceSlug={service} villeSlug={villeSlug} villeName={villeData.name} serviceName={trade.name} />
 
       <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="tarifs" skipCrossIntent />
 

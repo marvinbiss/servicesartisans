@@ -7,6 +7,7 @@ import {
   type Ville,
 } from '@/lib/data/france'
 import { getAnchorText } from '@/lib/seo/anchor-variants'
+import { getServiceWeight } from '@/lib/constants/navigation'
 
 // ---------------------------------------------------------------------------
 // Services d'urgence et services populaires (slugs)
@@ -42,7 +43,9 @@ export default function CityHubLinks({
   const dept = getDepartementByCode(ville.departementCode)
 
   // ── Module 1 : Services populaires dans cette ville (8-10 liens) ──
-  const topServices = topServiceSlugs
+  // Sort by SERVICE_WEIGHT so gravity hubs (plombier, electricien...) appear first
+  const topServices = [...topServiceSlugs]
+    .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
     .slice(0, 6)
     .map(slug => services.find(s => s.slug === slug))
     .filter((s): s is (typeof services)[number] => s != null)

@@ -1,18 +1,23 @@
 /**
  * InContentLinks — Contextual internal links embedded within natural French paragraphs.
  *
- * Generates 2-3 short paragraphs with inline <Link> tags that vary deterministically
- * per page (via hashCode). This addresses the biggest SEO gap: zero in-content links.
+ * Generates 5 contextual links (3 for hub pages) distributed across 2-3 short paragraphs
+ * with inline <Link> tags that vary deterministically per page (via hashCode).
+ * Replaces both the former InBodyLinks and InContentLinks components.
+ *
+ * 12 snippet types: tarifs, avis, devis, urgence, nearby city, departement,
+ * related service, hub tarifs, hub service, service×ville, money page, nearby money page.
  *
  * Server component — no 'use client'.
  */
 
 import Link from 'next/link'
 import { hashCode } from '@/lib/seo/location-content'
-import { getNearbyCities, getDepartementByCode } from '@/lib/data/france'
+import { getNearbyCities, getDepartementByCode, getVilleBySlug } from '@/lib/data/france'
 import { relatedServices } from '@/lib/constants/navigation'
 import { tradeContent } from '@/lib/data/trade-content'
 import { services as staticServicesList } from '@/lib/data/france'
+import { isMoneyPage, TOP_CITIES } from '@/lib/seo/top-pages'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -77,6 +82,7 @@ interface SnippetContext {
   region?: string
   trade: (typeof tradeContent)[string] | undefined
   nearbyCity?: { slug: string; name: string }
+  nearbyCities?: { slug: string; name: string }[]
   relatedServiceSlug?: string
   relatedServiceName?: string
   variantSeed: number
@@ -199,6 +205,34 @@ const snippetServiceVille: SnippetFn = (ctx) => {
   return variants[ctx.variantSeed % variants.length]
 }
 
+/** Money page link — targets a top city for the same service (PageRank boost) */
+const snippetMoneyPage: SnippetFn = (ctx) => {
+  if (!ctx.villeSlug) return null
+  const topCitySlugs = TOP_CITIES.map(c => c.slug).filter(s => s !== ctx.villeSlug)
+  if (topCitySlugs.length === 0) return null
+  const citySlug = topCitySlugs[ctx.variantSeed % topCitySlugs.length]
+  const cityData = getVilleBySlug(citySlug)
+  if (!cityData) return null
+  const variants = [
+    <>Nos clients recherchent également un <Link href={`/services/${ctx.serviceSlug}/${citySlug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">{ctx.serviceLower} à {cityData.name}</Link>, l&#39;une des villes les plus demandées.</>,
+    <>Vous pouvez aussi consulter les <Link href={`/services/${ctx.serviceSlug}/${citySlug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">{ctx.serviceLower}s à {cityData.name}</Link>, où de nombreux professionnels sont référencés.</>,
+    <>Parmi les villes les plus recherchées, découvrez les <Link href={`/services/${ctx.serviceSlug}/${citySlug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">{ctx.serviceLower}s à {cityData.name}</Link> sur notre annuaire.</>,
+  ]
+  return variants[ctx.variantSeed % variants.length]
+}
+
+/** Nearby money page — boosts a nearby city that is a money page */
+const snippetNearbyMoneyPage: SnippetFn = (ctx) => {
+  if (!ctx.villeSlug || !ctx.nearbyCities) return null
+  const moneyNearby = ctx.nearbyCities.find(v => isMoneyPage(ctx.serviceSlug, v.slug))
+  if (!moneyNearby || moneyNearby.slug === ctx.nearbyCity?.slug) return null
+  const variants = [
+    <>Les habitants des communes voisines font aussi appel à un <Link href={`/services/${ctx.serviceSlug}/${moneyNearby.slug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">{ctx.serviceLower} à {moneyNearby.name}</Link>.</>,
+    <>À côté, {moneyNearby.name} est aussi très demandée. Consultez les <Link href={`/services/${ctx.serviceSlug}/${moneyNearby.slug}`} className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700">{ctx.serviceLower}s à {moneyNearby.name}</Link> disponibles.</>,
+  ]
+  return variants[ctx.variantSeed % variants.length]
+}
+
 // ---------------------------------------------------------------------------
 // Snippet pool
 // ---------------------------------------------------------------------------
@@ -214,6 +248,8 @@ const ALL_SNIPPETS: SnippetFn[] = [
   snippetHubTarifs,
   snippetHubService,
   snippetServiceVille,
+  snippetMoneyPage,
+  snippetNearbyMoneyPage,
 ]
 
 // ---------------------------------------------------------------------------
@@ -235,7 +271,7 @@ export default function InContentLinks({
   const trade = tradeContent[serviceSlug]
 
   // Resolve nearby city
-  const nearbyCities = villeSlug ? getNearbyCities(villeSlug, 3) : []
+  const nearbyCities = villeSlug ? getNearbyCities(villeSlug, 5) : []
   const nearbyCity = nearbyCities.length > 0
     ? nearbyCities[seed % nearbyCities.length]
     : undefined
@@ -267,6 +303,7 @@ export default function InContentLinks({
     region,
     trade,
     nearbyCity,
+    nearbyCities,
     relatedServiceSlug,
     relatedServiceName,
   }
@@ -281,8 +318,8 @@ export default function InContentLinks({
     }
   }
 
-  // Pick 3-4 snippets deterministically
-  const targetCount = villeSlug ? 4 : 3
+  // Pick 5 snippets (or 3 for hub pages without a city)
+  const targetCount = villeSlug ? 5 : 3
   const selected = pickIndices(seed, evaluated.length, targetCount).map(i => evaluated[i])
 
   if (selected.length === 0) return null

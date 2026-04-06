@@ -18,7 +18,6 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
-import InBodyLinks from '@/components/seo/InBodyLinks'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 
@@ -1072,8 +1071,6 @@ export default async function DevisServiceLocationPage({
         villeName={villeData.name}
         currentIntent="devis"
       />
-
-      <InBodyLinks serviceSlug={service} villeSlug={location} villeName={villeData.name} serviceName={trade.name} />
 
       <DeepPageLinks currentService={service} currentVille={location} currentIntent="devis" skipCrossIntent />
 
