@@ -30,8 +30,8 @@ const CityMap = dynamic(
   { ssr: false }
 )
 
-// Pre-render top 20 cities, rest generated on-demand via ISR
-const TOP_CITIES_COUNT = 5
+// Pre-render top 10 cities, rest generated on-demand via ISR
+const TOP_CITIES_COUNT = 10
 export function generateStaticParams() {
   return villes.slice(0, TOP_CITIES_COUNT).map((ville) => ({ ville: ville.slug }))
 }

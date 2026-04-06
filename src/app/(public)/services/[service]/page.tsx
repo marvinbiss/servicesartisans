@@ -14,6 +14,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes, departements, getVillesByDepartement, parsePopulation } from '@/lib/data/france'
+import { getProblemsByService } from '@/lib/data/problems'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
@@ -1007,6 +1008,52 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Problèmes courants liés à ce service — internal linking vers /problemes/ */}
+      {(() => {
+        const serviceProblems = getProblemsByService(serviceSlug)
+        if (serviceProblems.length === 0) return null
+        // Prioritize: primaryService first, then by urgency
+        const sorted = [...serviceProblems].sort((a, b) => {
+          const aP = a.primaryService === serviceSlug ? 1 : 0
+          const bP = b.primaryService === serviceSlug ? 1 : 0
+          if (aP !== bP) return bP - aP
+          const urg = { haute: 3, moyenne: 2, basse: 1 }
+          return (urg[b.urgencyLevel] || 0) - (urg[a.urgencyLevel] || 0)
+        })
+        const displayed = sorted.slice(0, 6)
+        const urgencyColors = {
+          haute: 'bg-red-50 border-red-200 hover:border-red-300',
+          moyenne: 'bg-amber-50 border-amber-200 hover:border-amber-300',
+          basse: 'bg-green-50 border-green-200 hover:border-green-300',
+        }
+        const urgencyDots = {
+          haute: 'bg-red-400',
+          moyenne: 'bg-amber-400',
+          basse: 'bg-green-400',
+        }
+        return (
+          <section className="py-10 bg-white border-t border-sand-100">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">
+                Problèmes courants — {service.name}
+              </h2>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {displayed.map((problem) => (
+                  <Link
+                    key={problem.slug}
+                    href={`/problemes/${problem.slug}`}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors ${urgencyColors[problem.urgencyLevel]}`}
+                  >
+                    <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${urgencyDots[problem.urgencyLevel]}`} />
+                    <span className="text-sm font-medium text-charcoal-800">{problem.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       <InContentLinks
         serviceSlug={serviceSlug}

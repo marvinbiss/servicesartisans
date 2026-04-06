@@ -14,6 +14,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getNearbyVilleSlugs, getCommuneScore } from '@/lib/data/commune-data'
 import { isMoneyPage, TOP_CITIES } from '@/lib/seo/top-pages'
+import { getProblemsByService } from '@/lib/data/problems'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -412,6 +413,37 @@ export default async function DeepPageLinks({
   const module6Links = dedup(module6Candidates)
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 9: Problèmes courants — TOPICAL (same service problems)
+  // Links to /problemes/[problem-slug]/[city] (city mode) or /problemes/[problem-slug] (hub mode)
+  // Picks 2-3 most relevant problems for the current service
+  // ═══════════════════════════════════════════════════════════════════════════
+  const serviceProblems = getProblemsByService(currentService)
+  const maxProblems = 3
+  const module9Candidates: { href: string; label: string }[] = []
+
+  // Prioritize problems where this service is the primaryService, then relatedServices
+  const sortedProblems = [...serviceProblems].sort((a, b) => {
+    const aIsPrimary = a.primaryService === currentService ? 1 : 0
+    const bIsPrimary = b.primaryService === currentService ? 1 : 0
+    if (aIsPrimary !== bIsPrimary) return bIsPrimary - aIsPrimary
+    // Secondary sort: haute urgency first (more likely searched)
+    const urgencyOrder = { haute: 3, moyenne: 2, basse: 1 }
+    return (urgencyOrder[b.urgencyLevel] || 0) - (urgencyOrder[a.urgencyLevel] || 0)
+  })
+
+  for (const problem of sortedProblems) {
+    if (module9Candidates.length >= maxProblems) break
+    const href = isHubMode
+      ? `/problemes/${problem.slug}`
+      : `/problemes/${problem.slug}/${currentVille}`
+    const label = isHubMode
+      ? problem.name
+      : `${problem.name} à ${villeName}`
+    module9Candidates.push({ href, label })
+  }
+  const module9Links = dedup(module9Candidates)
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // Build modules array — ordered for topical silo priority
   // ═══════════════════════════════════════════════════════════════════════════
   // 1. Nearby cities (same service) — SILO
@@ -450,6 +482,12 @@ export default async function DeepPageLinks({
   }
   if (module6Links.length > 0) {
     modules.push({ title: 'Guides et articles', links: module6Links })
+  }
+  if (module9Links.length > 0) {
+    modules.push({
+      title: isHubMode ? 'Problèmes courants' : `Problèmes courants à ${villeName}`,
+      links: module9Links,
+    })
   }
 
   if (modules.length === 0) return null

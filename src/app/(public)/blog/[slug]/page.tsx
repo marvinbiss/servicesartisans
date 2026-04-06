@@ -19,6 +19,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import BlogClusterLinks from '@/components/seo/BlogClusterLinks'
+import BlogServiceCityLinks from '@/components/seo/BlogServiceCityLinks'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import dynamic from 'next/dynamic'
 import BlogInlineCTA from '@/components/blog/BlogInlineCTA'
@@ -1175,6 +1176,9 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
       {/* BlogClusterLinks — Articles lies + dossier thematique */}
       <BlogClusterLinks articleSlug={slug} />
+
+      {/* BlogServiceCityLinks — Liens blog → service×ville (link equity bidirectionnel) */}
+      <BlogServiceCityLinks articleSlug={slug} />
 
       {/* DeepPageLinks — Maillage interne blog → services/villes */}
       {primaryServiceSlug && (
