@@ -19,7 +19,6 @@ import {
 } from '@/components/artisan'
 import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
 
-import { ArtisanProfileStrength } from '@/components/artisan/ArtisanProfileStrength'
 import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
 import { ArtisanOpeningHours } from '@/components/artisan/ArtisanOpeningHours'
 import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
@@ -368,19 +367,13 @@ export default function ArtisanPageClient({
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
               <div className="space-y-6 sticky top-20">
                 {isClaimed ? (
-                  <>
-                    <ArtisanSidebar artisan={artisan} />
-                    <ArtisanProfileStrength artisan={artisan} />
-                  </>
+                  <ArtisanSidebar artisan={artisan} />
                 ) : (
-                  <>
-                    <PlatformSidebarCTA
-                      providerId={artisanId}
-                      providerName={artisan.business_name || displayName}
-                      hasSiret={hasSiret}
-                    />
-                    <ArtisanProfileStrength artisan={artisan} />
-                  </>
+                  <PlatformSidebarCTA
+                    providerId={artisanId}
+                    providerName={artisan.business_name || displayName}
+                    hasSiret={hasSiret}
+                  />
                 )}
               </div>
             </aside>
