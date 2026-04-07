@@ -102,6 +102,7 @@ export async function GET(request: Request) {
     `${SITE_URL}/services`,
     `${SITE_URL}/blog`,
     `${SITE_URL}/tarifs`,
+    `${SITE_URL}/faq`,
   ]
   counts.strategic = urls.length
 
