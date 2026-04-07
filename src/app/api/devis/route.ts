@@ -188,9 +188,18 @@ export async function POST(request: Request) {
     // Log 'created' event - triggers "Demande bien reçue" notification to client
     if (lead) {
       logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) => logger.error('Failed to log lead created event', err))
-      // Fire-and-forget Pipedrive CRM sync. The cron /api/cron/pipedrive-retry
-      // will replay any failures. Never blocks the user response.
-      void syncDevisRequestToPipedrive(lead.id).catch((err) => logger.error('Pipedrive sync error', err))
+      // Pipedrive CRM sync — awaited inside a 4s timeout race so a slow Pipedrive
+      // call can't block the user response indefinitely. On Vercel serverless, a bare
+      // `void` promise is killed when the response returns, so we can't fire-and-forget.
+      // Failures (incl. timeout) are caught and replayed by /api/cron/pipedrive-retry.
+      try {
+        await Promise.race([
+          syncDevisRequestToPipedrive(lead.id),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Pipedrive sync timeout (4s)')), 4000)),
+        ])
+      } catch (err) {
+        logger.error('Pipedrive sync error', err)
+      }
     }
 
     // Dispatch to eligible artisans
