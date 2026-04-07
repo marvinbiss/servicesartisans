@@ -122,7 +122,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const staticPages: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/a-propos`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
       { url: `${SITE_URL}/contact`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/faq`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      // FAQ lastmod = date the FAQPage schema was reactivated (commit 64b0a627)
+      { url: `${SITE_URL}/faq`, lastModified: '2026-04-03', changeFrequency: 'monthly', priority: 0.4 },
       { url: `${SITE_URL}/comment-ca-marche`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
       { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
       { url: `${SITE_URL}/politique-avis`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
