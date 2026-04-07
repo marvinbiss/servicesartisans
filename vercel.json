@@ -99,6 +99,10 @@
     {
       "path": "/api/cron/orphan-check",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/pipedrive-retry",
+      "schedule": "30 */6 * * *"
     }
   ]
 }

@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { cleanPhone } from '@/lib/validation/phone'
 import { dispatchLead } from '@/app/actions/dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
+import { syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
 
 export const dynamic = 'force-dynamic'
 
@@ -187,6 +188,9 @@ export async function POST(request: Request) {
     // Log 'created' event - triggers "Demande bien reçue" notification to client
     if (lead) {
       logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) => logger.error('Failed to log lead created event', err))
+      // Fire-and-forget Pipedrive CRM sync. The cron /api/cron/pipedrive-retry
+      // will replay any failures. Never blocks the user response.
+      void syncDevisRequestToPipedrive(lead.id).catch((err) => logger.error('Pipedrive sync error', err))
     }
 
     // Dispatch to eligible artisans
