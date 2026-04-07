@@ -557,6 +557,22 @@ export default async function ProviderPage({ params }: PageProps) {
     provider = (stableIdResult || slugResult) as ProviderRecord | null
     service = svcResult as Service | null
     location = locResult as Location | null
+
+    // Fallback: if no match, try a deduped variant of the publicId.
+    // Migration 378 rewrote slugs to dedupe consecutive identical tokens
+    // (e.g. "brandon-marx-marx-marx-plomberie-..." → "brandon-marx-plomberie-...").
+    // Google may still serve the old URL; this retry keeps it alive and the
+    // canonical redirect below will then 307 the visitor to the clean URL.
+    if (!provider && !isUuid) {
+      const dedupedPublicId = publicId
+        .split('-')
+        .filter((w, i, arr) => w !== arr[i - 1])
+        .join('-')
+      if (dedupedPublicId !== publicId && dedupedPublicId.length > 0) {
+        const retryResult = await getProviderBySlug(dedupedPublicId).catch(() => null)
+        if (retryResult) provider = retryResult as ProviderRecord
+      }
+    }
   } catch {
     // Graceful degradation
   }
