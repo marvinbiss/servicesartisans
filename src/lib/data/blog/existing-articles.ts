@@ -612,8 +612,8 @@ export const existingArticles: Record<string, BlogArticle> = {
   'prix-electricien-2026-tarifs-travaux': {
     title: 'Prix Électricien 2026 : Tarifs Travaux',
     excerpt: 'Mise aux normes, installation, dépannage... Tous les prix des travaux d\'électricité en 2026 pour estimer votre budget et comparer les devis.',
-    metaTitle: 'Prix Électricien 2026 : Tarifs au m², Intervention et Devis Gratuit',
-    metaDescription: 'Découvrez les tarifs d\'un électricien en 2026 : prix au m², coût intervention, dépannage. Comparez et obtenez un devis gratuit en 2 minutes.',
+    metaTitle: 'Prix Électricien 2026 : Tarif Horaire 40-85€/h + Mise aux Normes',
+    metaDescription: 'Prix électricien 2026 : tarif horaire 40-85€, mise aux normes 80-150€/m², dépannage 90-200€. Tarifs détaillés par région et devis gratuit en 2 min.',
     content: [
       "Les travaux d'électricité sont parmi les plus techniques et les plus réglementés du bâtiment. Ils doivent obligatoirement être réalisés dans le respect de la [norme NF C 15-100](/blog/electricite-normes-securite) et, pour les installations neuves ou entièrement rénovées, validés par un contrôle Consuel. Voici le guide complet des prix d'un électricien en 2026. Trouvez un [électricien qualifié](/services/electricien) près de chez vous pour un devis gratuit.",
       "## Tarif horaire moyen\n\n### Les fourchettes par région\n\nLe tarif horaire moyen d'un électricien est de 40 à 65 euros HT en province et de 55 à 85 euros HT en Île-de-France. Ces tarifs couvrent la main-d'œuvre uniquement.\n\n:::budget\n| Zone | Tarif horaire HT |\n| Province | 40 - 65 € |\n| Grande métropole | 50 - 75 € |\n| Île-de-France | 55 - 85 € |\n:::",

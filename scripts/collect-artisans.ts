@@ -77,13 +77,19 @@ async function rateLimitWait(): Promise<void> {
 }
 
 function slugify(text: string): string {
-  return text
+  const slug = text
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .substring(0, 80)
+  // Dedupe consecutive identical tokens — source names from official
+  // registries sometimes contain accidental repetitions (e.g. "Marx Marx Marx")
+  return slug
+    .split('-')
+    .filter((word, i, arr) => word !== arr[i - 1])
+    .join('-')
 }
 
 function formatDuration(ms: number): string {

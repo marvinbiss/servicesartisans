@@ -42,15 +42,22 @@ export function formatRelativeTime(date: string | Date): string {
   return formatDate(date, { day: 'numeric', month: 'short' })
 }
 
-// Slugify string
+// Slugify string — also deduplicates consecutive identical tokens
+// (e.g. "Brandon Marx Marx Marx Plomberie" → "brandon-marx-plomberie", not
+// "brandon-marx-marx-marx-plomberie"). Source names from official registries
+// sometimes contain accidental repetitions.
 export function slugify(text: string): string {
-  return text
+  const slug = text
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .trim()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
+  return slug
+    .split('-')
+    .filter((word, i, arr) => word !== arr[i - 1])
+    .join('-')
 }
 
 // Static slug lookup maps — prefer canonical slugs from france.ts over dynamic slugification
