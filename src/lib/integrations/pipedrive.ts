@@ -230,7 +230,16 @@ export async function syncLeadToPipedrive(
  * Fire-and-forget safe: catches and logs its own errors.
  */
 export async function syncDevisRequestToPipedrive(devisId: string): Promise<void> {
-  if (!isPipedriveConfigured()) return
+  if (!isPipedriveConfigured()) {
+    logger.warn('pipedrive: skipped — not configured', {
+      hasToken: !!process.env.PIPEDRIVE_API_TOKEN,
+      hasDomain: !!process.env.PIPEDRIVE_COMPANY_DOMAIN,
+      devisId,
+    })
+    return
+  }
+
+  logger.info('pipedrive: starting sync', { devisId })
 
   const supabase = createAdminClient()
 
