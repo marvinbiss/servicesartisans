@@ -149,15 +149,13 @@ export default async function Image({
               <svg
                 width="26"
                 height="26"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                viewBox="0 0 48 48"
+                fill="white"
               >
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
+                <path
+                  fillRule="evenodd"
+                  d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24 Z M21 37 V29 A3 3 0 0 1 27 29 V37 Z"
+                />
               </svg>
             </div>
             <span
