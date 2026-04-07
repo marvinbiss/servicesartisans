@@ -145,6 +145,7 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     opening_hours: provider.opening_hours && Object.keys(provider.opening_hours).length > 0 ? provider.opening_hours : undefined,
     intervention_radius_km: provider.intervention_radius_km || undefined,
     member_since: (memberYear && memberYear < currentYear) ? memberYear.toString() : undefined,
+    created_at: provider.created_at || undefined,
     siret: provider.siret || undefined,
     creation_date: provider.creation_date || undefined,
     legal_form: provider.legal_form_code || provider.legal_form || undefined,

@@ -244,9 +244,11 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     '@type': 'ProfilePage',
     '@id': `${artisanUrl}#profile`,
     mainEntity: { '@id': `${artisanUrl}#business` },
-    ...(artisan.member_since && {
+    ...(artisan.created_at ? {
+      dateCreated: new Date(artisan.created_at).toISOString(),
+    } : artisan.member_since ? {
       dateCreated: `${artisan.member_since}-01-01`,
-    }),
+    } : {}),
     ...(artisan.updated_at ? {
       dateModified: new Date(artisan.updated_at).toISOString(),
     } : {}),

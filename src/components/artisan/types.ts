@@ -66,6 +66,7 @@ export interface Artisan {
   free_quote?: boolean
   intervention_radius_km?: number
   bio?: string
+  created_at?: string
   updated_at?: string
   // GUARD: Do NOT add is_premium, hourly_rate, response_time, avatar_url,
   // certifications, insurance, payment_methods, languages, emergency_available,
