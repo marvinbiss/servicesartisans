@@ -73,19 +73,21 @@ END $$;
 -- Index
 -- -----------------------------------------------------------------------------
 
--- Index partiel : seulement les artisans RGE actuellement valides.
--- Sert les filtres "RGE uniquement" et les agrégats communes.nb_artisans_rge.
--- Taille minimale (≈ subset des ~60-75k entreprises RGE qui sont ALSO matched
--- avec notre base — probablement <30k lignes au total).
+-- Index partiel : uniquement les providers avec un RGE stocké.
+-- Note : on n'inclut PAS `rge_valid_until > CURRENT_DATE` dans la WHERE clause
+-- car Postgres exige des fonctions IMMUTABLE dans les index predicates, et
+-- CURRENT_DATE est STABLE. Le filtre sur la date d'expiration est appliqué au
+-- runtime — l'index reste très compact car la grande majorité des providers
+-- n'ont pas de RGE (colonne NULL).
 CREATE INDEX IF NOT EXISTS idx_providers_rge_active
   ON providers (rge_valid_until)
-  WHERE rge_valid_until IS NOT NULL AND rge_valid_until > CURRENT_DATE;
+  WHERE rge_valid_until IS NOT NULL;
 
 -- Index composite pour le backfill communes.nb_artisans_rge
--- (GROUP BY address_city WHERE rge actif)
+-- (GROUP BY address_city WHERE rge_valid_until > now())
 CREATE INDEX IF NOT EXISTS idx_providers_rge_by_city
   ON providers (address_city, rge_valid_until)
-  WHERE rge_valid_until IS NOT NULL AND rge_valid_until > CURRENT_DATE;
+  WHERE rge_valid_until IS NOT NULL;
 
 -- Index GIN sur le JSONB pour requêtes ciblées "artisans RGE domaine X"
 -- (ex: recherche par code qualification ou organisme)
@@ -113,6 +115,6 @@ COMMENT ON COLUMN providers.rge_source_url IS
   'URL de la fiche officielle sur france-renov.gouv.fr/annuaire-rge (transparence + E-E-A-T).';
 
 COMMENT ON INDEX idx_providers_rge_active IS
-  'Index partiel sur les RGE actifs. Sert les filtres publics et le backfill communes.nb_artisans_rge.';
+  'Index partiel sur les providers avec RGE stocké. Filtre date au runtime (CURRENT_DATE pas IMMUTABLE).';
 
 COMMIT;
