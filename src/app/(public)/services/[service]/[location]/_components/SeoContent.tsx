@@ -215,7 +215,7 @@ export default function SeoContent({
                         <div className="text-xs text-charcoal-500 mt-1">Entreprises BTP</div>
                       </div>
                     )}
-                    {communeData.nb_artisans_rge && (
+                    {communeData.nb_artisans_rge != null && communeData.nb_artisans_rge > 0 && (
                       <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
                         <div className="text-lg font-bold text-emerald-700">{formatNumber(communeData.nb_artisans_rge)}</div>
                         <div className="text-xs text-charcoal-500 mt-1">Certifiés RGE</div>

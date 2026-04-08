@@ -343,7 +343,7 @@ export function generateDataDrivenContent(
       )
     }
 
-    if (commune.nb_artisans_rge) {
+    if (commune.nb_artisans_rge != null && commune.nb_artisans_rge > 0) {
       parts.push(
         `${formatNumber(commune.nb_artisans_rge)} artisan${commune.nb_artisans_rge > 1 ? 's sont certifiés' : ' est certifié'} RGE (Reconnu Garant de l'Environnement) à ${commune.name}, condition indispensable pour bénéficier des aides à la rénovation énergétique comme MaPrimeRénov'.`
       )

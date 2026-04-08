@@ -541,7 +541,7 @@ export default async function TarifsServiceVillePage({
                   <div className="text-sm text-charcoal-500 mt-1">Prix immobilier moyen</div>
                 </div>
               )}
-              {commune.nb_artisans_rge && (
+              {commune.nb_artisans_rge != null && commune.nb_artisans_rge > 0 && (
                 <div className="bg-white rounded-xl border border-sand-300 p-4 text-center">
                   <div className="font-heading text-2xl font-bold text-charcoal-900">{formatNumber(commune.nb_artisans_rge)}</div>
                   <div className="text-sm text-charcoal-500 mt-1">Artisans RGE certifi{'é'}s</div>
