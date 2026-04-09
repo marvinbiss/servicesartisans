@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp, ShieldCheck, ArrowRight } from 'lucide-react'
+import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france-light'
 import { getArtisanUrl } from '@/lib/utils'
@@ -39,6 +39,10 @@ interface DevisConfirmationProps {
   budget?: string
   /** Compact mode for bottom sheet (mobile) */
   compact?: boolean
+  /** TRUE si au moins une opération CEE matche le service (qualifié côté API) */
+  ceeEligible?: boolean
+  /** Codes FOS applicables (ex: ['BAR-EN-101','BAR-TH-129']) */
+  ceeOperationCodes?: string[]
 }
 
 /* ─── Helpers ──────────────────────────────────────────────────────── */
@@ -65,6 +69,8 @@ export default function DevisConfirmation({
   phone,
   budget,
   compact = false,
+  ceeEligible = false,
+  ceeOperationCodes = [],
 }: DevisConfirmationProps) {
   const [providers, setProviders] = useState<MatchedProvider[]>([])
   const [loading, setLoading] = useState(true)
@@ -199,6 +205,27 @@ export default function DevisConfirmation({
             <span className="font-medium">Budget indicatif :</span>{' '}
             {budgetLabels[budget]}
           </span>
+        </motion.div>
+      )}
+
+      {/* ── CEE eligibility badge ── */}
+      {ceeEligible && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.27 }}
+          className={`flex items-start gap-3 px-4 py-3 bg-gradient-to-br from-accent-50 to-primary-50 border border-accent-200 rounded-xl ${compact ? 'mb-3' : 'mb-5'}`}
+        >
+          <Sparkles className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className={`font-semibold text-charcoal-900 ${compact ? 'text-xs' : 'text-sm'}`}>
+              Vos travaux sont potentiellement éligibles à une prime CEE
+            </p>
+            <p className={`text-charcoal-600 mt-0.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+              Certificats d&apos;Économies d&apos;Énergie — estimation et éligibilité
+              confirmées par votre artisan{ceeOperationCodes.length > 0 ? ` (${ceeOperationCodes.slice(0, 3).join(', ')}${ceeOperationCodes.length > 3 ? '…' : ''})` : ''}.
+            </p>
+          </div>
         </motion.div>
       )}
 

@@ -14,6 +14,7 @@ import { cleanPhone } from '@/lib/validation/phone'
 import { dispatchLead } from '@/app/actions/dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
+import { qualifyDevisForCee } from '@/lib/cee/qualify'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,7 +33,9 @@ const getResend = () => getResendClient()
 
 const devisSchema = z.object({
   service: z.string().min(1, 'Veuillez sélectionner un service'),
-  urgency: z.string().min(1, 'Veuillez sélectionner l\'urgence'),
+  urgency: z.enum(['flexible', 'mois', 'semaine', 'urgent'], {
+    message: 'Veuillez sélectionner l\'urgence',
+  }),
   budget: z.string().max(20).optional(),
   description: z.string().optional(),
   codePostal: z.string().optional(),
@@ -185,6 +188,29 @@ export async function POST(request: Request) {
       )
     }
 
+    // CEE qualification — flag devis potentiellement éligible à une prime CEE
+    // en fonction du slug de service demandé. Écriture best-effort : toute
+    // erreur ici ne doit pas bloquer le parcours devis (voir Brique 1 roadmap
+    // mandataire CEE).
+    let ceeResult: { eligible: boolean; codes: string[] } = { eligible: false, codes: [] }
+    if (lead) {
+      try {
+        ceeResult = await qualifyDevisForCee(supabase, data.service)
+        if (ceeResult.eligible) {
+          await supabase
+            .from('devis_requests')
+            .update({
+              cee_eligible: true,
+              cee_operation_codes: ceeResult.codes,
+              cee_qualified_at: new Date().toISOString(),
+            })
+            .eq('id', lead.id)
+        }
+      } catch (err) {
+        logger.error('CEE qualification failed', err)
+      }
+    }
+
     // Log 'created' event - triggers "Demande bien reçue" notification to client
     if (lead) {
       logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) => logger.error('Failed to log lead created event', err))
@@ -314,6 +340,8 @@ export async function POST(request: Request) {
       id: lead?.id,
       artisans_notified: assignedProviders.length,
       ...(assignedProviders.length === 0 && { artisans_found: false }),
+      cee_eligible: ceeResult.eligible,
+      ...(ceeResult.eligible && { cee_operation_codes: ceeResult.codes }),
     })
   } catch (error) {
     logger.error('Devis API error', error)

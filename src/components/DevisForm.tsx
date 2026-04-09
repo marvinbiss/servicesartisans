@@ -186,6 +186,8 @@ export default function DevisForm({
   )
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [submitted, setSubmitted] = useState(false)
+  const [ceeEligible, setCeeEligible] = useState(false)
+  const [ceeOperationCodes, setCeeOperationCodes] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [villeQuery, setVilleQuery] = useState(prefilledCity || (hasSavedProgress ? '' : (savedState?.villeQuery || '')))
@@ -487,6 +489,7 @@ export default function DevisForm({
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
+    if (submitting) return // Guard against double-submit / Retry re-entry
     if (!validateStep3()) return
 
     setSubmitting(true)
@@ -512,6 +515,13 @@ export default function DevisForm({
       if (!res.ok) {
         const body = await res.json().catch(() => null)
         throw new Error(body?.error || "Erreur lors de l'envoi")
+      }
+
+      // Extract CEE eligibility flags from response for confirmation UI
+      const responseBody = await res.json().catch(() => null) as { cee_eligible?: boolean; cee_operation_codes?: string[] } | null
+      if (responseBody?.cee_eligible) {
+        setCeeEligible(true)
+        setCeeOperationCodes(responseBody.cee_operation_codes || [])
       }
 
       // Mark abandon as completed
@@ -606,6 +616,8 @@ export default function DevisForm({
           city={formData.ville}
           phone={formData.telephone}
           budget={formData.budget || undefined}
+          ceeEligible={ceeEligible}
+          ceeOperationCodes={ceeOperationCodes}
         />
 
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
