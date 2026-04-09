@@ -27,51 +27,56 @@ CREATE INDEX IF NOT EXISTS idx_providers_rge_by_city_lower
 -- Fonction RPC
 -- -----------------------------------------------------------------------------
 
+-- Note : pattern "OUT params + RETURN NEXT" (pas RETURN QUERY + CTE) pour éviter
+-- l'erreur PL/pgSQL "query has no destination for result data" observée avec
+-- le couple "WITH ... UPDATE" + "RETURN QUERY SELECT" (bug reproductible en P16).
 CREATE OR REPLACE FUNCTION public.rge_backfill_communes()
 RETURNS TABLE(communes_updated INTEGER, total_rge INTEGER)
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
-AS $func$
+AS $$
 DECLARE
-  v_updated INTEGER;
-  v_total   INTEGER;
+  v_updated INTEGER := 0;
+  v_total   INTEGER := 0;
 BEGIN
-  -- Reset d'abord toutes les communes à 0 pour éviter les valeurs stales
-  UPDATE communes
+  -- Reset : toutes les communes actives sont remises à 0 pour éviter les valeurs stales
+  UPDATE public.communes
      SET nb_artisans_rge = 0
    WHERE nb_artisans_rge IS DISTINCT FROM 0
      AND is_active = TRUE;
 
-  -- Puis mise à jour depuis l'agrégat providers
-  WITH rge_counts AS (
-    SELECT
-      lower(address_city) AS city_key,
-      COUNT(*)::INTEGER   AS cnt
-    FROM providers
-    WHERE rge_valid_until IS NOT NULL
-      AND rge_valid_until > CURRENT_DATE
-      AND address_city IS NOT NULL
-      AND is_active = TRUE
-    GROUP BY lower(address_city)
-  )
-  UPDATE communes c
-     SET nb_artisans_rge = rc.cnt
-    FROM rge_counts rc
-   WHERE lower(c.name) = rc.city_key
+  -- Backfill via sous-requête (pas de CTE — déclenche le bug ci-dessus)
+  UPDATE public.communes c
+     SET nb_artisans_rge = sub.cnt
+    FROM (
+      SELECT
+        lower(p.address_city) AS city_key,
+        COUNT(*)::INTEGER     AS cnt
+      FROM public.providers p
+      WHERE p.rge_valid_until IS NOT NULL
+        AND p.rge_valid_until > CURRENT_DATE
+        AND p.address_city IS NOT NULL
+        AND p.is_active = TRUE
+      GROUP BY lower(p.address_city)
+    ) AS sub
+   WHERE lower(c.name) = sub.city_key
      AND c.is_active = TRUE;
 
   GET DIAGNOSTICS v_updated = ROW_COUNT;
 
-  SELECT COUNT(*)::INTEGER INTO v_total
-    FROM providers
+  SELECT COUNT(*)::INTEGER
+    INTO v_total
+    FROM public.providers
    WHERE rge_valid_until IS NOT NULL
      AND rge_valid_until > CURRENT_DATE
      AND is_active = TRUE;
 
-  RETURN QUERY SELECT v_updated, v_total;
+  communes_updated := v_updated;
+  total_rge := v_total;
+  RETURN NEXT;
 END;
-$func$;
+$$;
 
 COMMENT ON FUNCTION public.rge_backfill_communes() IS
   'Backfill communes.nb_artisans_rge depuis providers.rge_valid_until en une seule requête. Retourne (communes_updated, total_rge_actifs). Appelé par scripts/enrich-rge-ademe.ts et /api/cron/rge-sync.';
