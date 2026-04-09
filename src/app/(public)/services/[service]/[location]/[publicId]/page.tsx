@@ -1,7 +1,14 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getProviderByStableId, getProviderBySlug, getProviderById, getServiceBySlug, getLocationBySlug, getProviderCountByServiceAndLocation } from '@/lib/supabase'
+import {
+  getProviderByStableId,
+  getProviderBySlug,
+  getProviderById,
+  getServiceBySlug,
+  getLocationBySlug,
+  getProviderCountByServiceAndLocation,
+} from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
 import { resolveProviderCity } from '@/lib/insee-resolver'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
@@ -52,11 +59,30 @@ interface ProviderRecord {
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }> | null
   intervention_radius_km?: number | null
   services_offered?: string[] | null
-  service_prices?: Array<{ name: string; description?: string; price: string; duration?: string }> | null
+  service_prices?: Array<{
+    name: string
+    description?: string
+    price: string
+    duration?: string
+  }> | null
   faq?: Array<{ question: string; answer: string }> | null
   created_at?: string | null
   updated_at?: string | null
   user_id?: string | null
+  // RGE ADEME (migration 380)
+  rge_qualifications?: Array<{
+    code: string
+    nom: string
+    organisme: string
+    domaine: string | null
+    meta_domaine: string | null
+    date_debut: string
+    date_fin: string
+    url: string | null
+  }> | null
+  rge_valid_until?: string | null
+  rge_organismes?: string[] | null
+  rge_source_url?: string | null
 }
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
@@ -71,13 +97,19 @@ export function generateStaticParams() {
   const topCities = villes.slice(0, TOP_CITIES_QUARTIER)
   // Pre-render top 10 services × 30 cities × quartiers for better ISR coverage
   const topServices = staticServicesList.slice(0, 5)
-  return topServices.flatMap(s =>
-    topCities.flatMap(v => {
+  return topServices.flatMap((s) =>
+    topCities.flatMap((v) => {
       const quartiers = v.quartiers || []
-      return quartiers.map(q => ({
+      return quartiers.map((q) => ({
         service: s.slug,
         location: v.slug,
-        publicId: q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+        publicId: q
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .trim()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, ''),
       }))
     })
   )
@@ -93,16 +125,22 @@ interface PageProps {
 }
 
 // Convert provider data to LegacyArtisan format (sub-components still read legacy fields)
-function convertToArtisan(provider: ProviderRecord, service: Service | null, location: Location | null, serviceSlug: string): LegacyArtisan {
+function convertToArtisan(
+  provider: ProviderRecord,
+  service: Service | null,
+  location: Location | null,
+  serviceSlug: string
+): LegacyArtisan {
   const specialty = service?.name || provider.specialty || 'Artisan'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Artisan'
 
   // Generate description if missing or too short (WITHOUT fake ratings)
   const existingDesc = provider.description || provider.bio
-  const description = (existingDesc && existingDesc.length > 50)
-    ? existingDesc
-    : generateDescription(name, specialty, city || 'votre région', provider, serviceSlug)
+  const description =
+    existingDesc && existingDesc.length > 50
+      ? existingDesc
+      : generateDescription(name, specialty, city || 'votre région', provider, serviceSlug)
 
   // Only show member_since if it's a meaningful past year.
   // Providers imported in the current year (e.g. 2026 bulk import) would show
@@ -118,7 +156,10 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     first_name: provider.first_name || null,
     last_name: provider.last_name || null,
     city: city,
-    postal_code: String(location?.postal_code || provider.address_postal_code || '').replace(/\.0$/, ''),
+    postal_code: String(location?.postal_code || provider.address_postal_code || '').replace(
+      /\.0$/,
+      ''
+    ),
     address: provider.address_street || '',
     department: location?.department_name || undefined,
     department_code: location?.department_code || undefined,
@@ -134,17 +175,26 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     is_center: provider.is_center || false,
     team_size: provider.team_size || undefined,
     services: provider.services_offered || [],
-    service_prices: (provider.service_prices && provider.service_prices.length > 0)
-      ? provider.service_prices.map(sp => ({ name: sp.name, description: sp.description || '', price: sp.price, duration: sp.duration }))
-      : [],
+    service_prices:
+      provider.service_prices && provider.service_prices.length > 0
+        ? provider.service_prices.map((sp) => ({
+            name: sp.name,
+            description: sp.description || '',
+            price: sp.price,
+            duration: sp.duration,
+          }))
+        : [],
     prices_are_estimated: false,
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     free_quote: provider.free_quote === true ? true : undefined,
     available_24h: provider.available_24h || false,
     phone_secondary: provider.phone_secondary || undefined,
-    opening_hours: provider.opening_hours && Object.keys(provider.opening_hours).length > 0 ? provider.opening_hours : undefined,
+    opening_hours:
+      provider.opening_hours && Object.keys(provider.opening_hours).length > 0
+        ? provider.opening_hours
+        : undefined,
     intervention_radius_km: provider.intervention_radius_km || undefined,
-    member_since: (memberYear && memberYear < currentYear) ? memberYear.toString() : undefined,
+    member_since: memberYear && memberYear < currentYear ? memberYear.toString() : undefined,
     created_at: provider.created_at || undefined,
     siret: provider.siret || undefined,
     creation_date: provider.creation_date || undefined,
@@ -154,15 +204,28 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     website: provider.website || undefined,
     latitude: provider.latitude || undefined,
     longitude: provider.longitude || undefined,
-    faq: (provider.faq && provider.faq.length > 0) ? provider.faq : undefined,
+    faq: provider.faq && provider.faq.length > 0 ? provider.faq : undefined,
     updated_at: provider.updated_at || undefined,
+    // RGE ADEME — certifications officielles issues du dataset data.gouv.fr
+    // liste-des-entreprises-rge-2 (migration 380, sync cron hebdo).
+    // Indispensable pour que <ArtisanHero> → <RgeBadge> affiche le badge.
+    rge_qualifications: provider.rge_qualifications ?? null,
+    rge_valid_until: provider.rge_valid_until ?? null,
+    rge_organismes: provider.rge_organismes ?? null,
+    rge_source_url: provider.rge_source_url ?? null,
     // Legacy fields — undefined at runtime (columns dropped), kept for sub-component compat
     // Will be removed when each sub-component migrates to v2 Artisan type
   }
 }
 
 // Generate a rich, unique description based on all available provider data
-function generateDescription(name: string, specialty: string, city: string, provider?: ProviderRecord | null, serviceSlug?: string): string {
+function generateDescription(
+  name: string,
+  specialty: string,
+  city: string,
+  provider?: ProviderRecord | null,
+  serviceSlug?: string
+): string {
   const spe = specialty.toLowerCase()
   const parts: string[] = []
 
@@ -183,13 +246,17 @@ function generateDescription(name: string, specialty: string, city: string, prov
     const year = new Date(provider.creation_date).getFullYear()
     const age = new Date().getFullYear() - year
     if (age > 1) {
-      parts.push(`Fondée en ${year}, l'entreprise bénéficie de plus de ${age} ans de présence dans la région.`)
+      parts.push(
+        `Fondée en ${year}, l'entreprise bénéficie de plus de ${age} ans de présence dans la région.`
+      )
     }
   }
 
   // Verification
   if (provider?.siret) {
-    parts.push(`Entreprise immatriculée et référencée (SIRET ${provider.siret.substring(0, 9)}...).`)
+    parts.push(
+      `Entreprise immatriculée et référencée (SIRET ${provider.siret.substring(0, 9)}...).`
+    )
   }
 
   // Legal form
@@ -205,16 +272,16 @@ function generateDescription(name: string, specialty: string, city: string, prov
 
   // Service-specific expertise (programmatic based on specialty slug)
   const serviceDescriptions: Record<string, string> = {
-    'plombier': `Les prestations couvrent l'installation, la réparation et l'entretien de plomberie : robinetterie, canalisations, sanitaires, chauffe-eau et dépannage de fuites.`,
-    'electricien': `Les interventions incluent la mise aux normes électriques, l'installation de tableaux, le câblage, le dépannage et la pose d'éclairage intérieur et extérieur.`,
-    'chauffagiste': `Spécialiste en systèmes de chauffage : installation, entretien et dépannage de chaudières, radiateurs, planchers chauffants et pompes à chaleur.`,
-    'serrurier': `Interventions en serrurerie : ouverture de portes, changement de serrures, blindage, installation de systèmes de sécurité et reproduction de clés.`,
-    'menuisier': `Travaux de menuiserie intérieure et extérieure : fabrication et pose de portes, fenêtres, placards, escaliers et aménagements sur mesure.`,
-    'couvreur': `Travaux de couverture : réfection de toiture, pose de tuiles et ardoises, zinguerie, étanchéité et isolation de combles.`,
-    'macon': `Travaux de maçonnerie : construction, rénovation, extension, dalles, murs porteurs, fondations et ravalement de façade.`,
-    'carreleur': `Pose de carrelage et faïence : sols, murs, douches à l'italienne, terrasses et mosaïques pour tous types de projets.`,
+    plombier: `Les prestations couvrent l'installation, la réparation et l'entretien de plomberie : robinetterie, canalisations, sanitaires, chauffe-eau et dépannage de fuites.`,
+    electricien: `Les interventions incluent la mise aux normes électriques, l'installation de tableaux, le câblage, le dépannage et la pose d'éclairage intérieur et extérieur.`,
+    chauffagiste: `Spécialiste en systèmes de chauffage : installation, entretien et dépannage de chaudières, radiateurs, planchers chauffants et pompes à chaleur.`,
+    serrurier: `Interventions en serrurerie : ouverture de portes, changement de serrures, blindage, installation de systèmes de sécurité et reproduction de clés.`,
+    menuisier: `Travaux de menuiserie intérieure et extérieure : fabrication et pose de portes, fenêtres, placards, escaliers et aménagements sur mesure.`,
+    couvreur: `Travaux de couverture : réfection de toiture, pose de tuiles et ardoises, zinguerie, étanchéité et isolation de combles.`,
+    macon: `Travaux de maçonnerie : construction, rénovation, extension, dalles, murs porteurs, fondations et ravalement de façade.`,
+    carreleur: `Pose de carrelage et faïence : sols, murs, douches à l'italienne, terrasses et mosaïques pour tous types de projets.`,
     'peintre-en-batiment': `Travaux de peinture intérieure et extérieure : préparation des surfaces, enduits, peinture décorative et ravalement.`,
-    'climaticien': `Installation et maintenance de climatisation : pose de splits, gainable, réversible et contrats d'entretien annuel.`,
+    climaticien: `Installation et maintenance de climatisation : pose de splits, gainable, réversible et contrats d'entretien annuel.`,
   }
   const svcDesc = serviceDescriptions[serviceSlug || '']
   if (svcDesc) {
@@ -266,7 +333,9 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 
     let query = supabase
       .from('providers')
-      .select('id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified, phone')
+      .select(
+        'id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified, phone'
+      )
       .eq('is_active', true)
       .neq('id', providerId)
       .order('phone', { ascending: false, nullsFirst: false })
@@ -310,7 +379,8 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
     const { supabase } = await import('@/lib/supabase')
     const { data: reviews } = await supabase
       .from('reviews')
-      .select(`
+      .select(
+        `
         id,
         rating,
         comment,
@@ -319,7 +389,8 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
         has_media,
         artisan_response,
         artisan_responded_at
-      `)
+      `
+      )
       .eq('artisan_id', providerId)
       .eq('status', 'published')
       .order('created_at', { ascending: false })
@@ -365,12 +436,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const quartierMatch = getQuartierBySlug(locationSlug, publicId)
   if (quartierMatch) {
     const { ville, quartierName } = quartierMatch
-    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
     if (!staticSvc) return { title: 'Non trouvé', robots: { index: false, follow: false } }
 
     const svcLower = staticSvc.name.toLowerCase()
     let providerCount = 0
-    try { providerCount = await getProviderCountByServiceAndLocation(serviceSlug, locationSlug) } catch { /* best-effort */ }
+    try {
+      providerCount = await getProviderCountByServiceAndLocation(serviceSlug, locationSlug)
+    } catch {
+      /* best-effort */
+    }
     const hasProviders = providerCount > 0
 
     const tHash = Math.abs(hashCode(`sq-title-${serviceSlug}-${locationSlug}-${publicId}`))
@@ -404,8 +479,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       // All service×quartier pages indexed — rich content exists even with few providers
-      openGraph: { title, description, type: 'website', locale: 'fr_FR', url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`, images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }] },
-      twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(serviceSlug).src] },
+      openGraph: {
+        title,
+        description,
+        type: 'website',
+        locale: 'fr_FR',
+        url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [getServiceImage(serviceSlug).src],
+      },
       alternates: getAlternates(`/services/${serviceSlug}/${locationSlug}/${publicId}`),
     }
   }
@@ -440,9 +527,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       specialty: provider.specialty,
       city: realCity,
     })
-    const ratingStr = provider.rating_average && Number(provider.rating_average) >= 1
-      ? ` ${Number(provider.rating_average).toFixed(1)}★`
-      : ''
+    const ratingStr =
+      provider.rating_average && Number(provider.rating_average) >= 1
+        ? ` ${Number(provider.rating_average).toFixed(1)}★`
+        : ''
     const title = truncateTitle(`${displayName} - ${serviceName} à ${realCity}${ratingStr}`)
 
     // Build rich meta description (~150-160 chars) for optimal Google SERP display
@@ -507,7 +595,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       robots: shouldNoindex
         ? { index: false, follow: true }
-        : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+        : {
+            index: true,
+            follow: true,
+            'max-snippet': -1 as const,
+            'max-image-preview': 'large' as const,
+            'max-video-preview': -1 as const,
+          },
       openGraph: {
         title,
         description,
@@ -537,7 +631,13 @@ export default async function ProviderPage({ params }: PageProps) {
   // ─── QUARTIER DETECTION ──────────────────────────────────
   const quartierMatch = getQuartierBySlug(locationSlug, publicId)
   if (quartierMatch) {
-    return <ServiceQuartierPage serviceSlug={serviceSlug} locationSlug={locationSlug} quartierSlug={publicId} />
+    return (
+      <ServiceQuartierPage
+        serviceSlug={serviceSlug}
+        locationSlug={locationSlug}
+        quartierSlug={publicId}
+      />
+    )
   }
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
@@ -632,29 +732,37 @@ export default async function ProviderPage({ params }: PageProps) {
       />
 
       {/* ─── DEVIS CTA BANNER — only for claimed profiles ───── */}
-      {isClaimed && <section className="py-8 bg-gradient-to-r from-primary-50 to-sand-100 border-t border-b border-primary-200/40">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <h2 className="text-lg font-bold text-charcoal-900 font-heading">
-                Besoin de ce professionnel ?
-              </h2>
-              <p className="text-sm text-charcoal-600 mt-1">
-                Demandez un devis gratuit et sans engagement.
-              </p>
+      {isClaimed && (
+        <section className="py-8 bg-gradient-to-r from-primary-50 to-sand-100 border-t border-b border-primary-200/40">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-bold text-charcoal-900 font-heading">
+                  Besoin de ce professionnel ?
+                </h2>
+                <p className="text-sm text-charcoal-600 mt-1">
+                  Demandez un devis gratuit et sans engagement.
+                </p>
+              </div>
+              <Link
+                href={`/devis/${serviceSlug}/${locationSlug}`}
+                className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
+              >
+                Obtenir mon devis gratuit
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
             </div>
-            <Link
-              href={`/devis/${serviceSlug}/${locationSlug}`}
-              className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
-            >
-              Obtenir mon devis gratuit
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
           </div>
-        </div>
-      </section>}
+        </section>
+      )}
 
       {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}
       <section className="py-6 bg-white border-t border-sand-200">
@@ -663,7 +771,13 @@ export default async function ProviderPage({ params }: PageProps) {
             href={`/services/${serviceSlug}/${locationSlug}`}
             className="inline-flex items-center gap-2 px-5 py-3 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 rounded-xl text-sm font-medium text-charcoal-700 hover:text-primary-600 transition-all"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
             Voir tous les {(service?.name || artisan.specialty).toLowerCase()}s à {artisan.city}
@@ -686,9 +800,15 @@ export default async function ProviderPage({ params }: PageProps) {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-sand-50 rounded-2xl border border-sand-200 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Informations sur ce profil</h3>
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Informations sur ce profil
+            </h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les informations de ce profil sont fournies par l'artisan et vérifiées via l'API SIRENE (INSEE). Les tarifs affichés, lorsqu'ils sont renseignés, sont indicatifs et propres à cet artisan. Les avis sont collectés auprès de clients ayant fait appel à ses services. ServicesArtisans est un annuaire indépendant — nous facilitons la mise en relation mais ne garantissons pas les prestations.
+              Les informations de ce profil sont fournies par l'artisan et vérifiées via l'API
+              SIRENE (INSEE). Les tarifs affichés, lorsqu'ils sont renseignés, sont indicatifs et
+              propres à cet artisan. Les avis sont collectés auprès de clients ayant fait appel à
+              ses services. ServicesArtisans est un annuaire indépendant — nous facilitons la mise
+              en relation mais ne garantissons pas les prestations.
             </p>
           </div>
         </div>
@@ -701,7 +821,10 @@ export default async function ProviderPage({ params }: PageProps) {
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-primary-400 hover:text-primary-600">
+            <Link
+              href="/notre-processus-de-verification"
+              className="text-primary-400 hover:text-primary-600"
+            >
               Comment nous référençons les artisans
             </Link>
             <Link href="/politique-avis" className="text-primary-400 hover:text-primary-600">
@@ -713,7 +836,6 @@ export default async function ProviderPage({ params }: PageProps) {
           </nav>
         </div>
       </section>
-
     </>
   )
 }

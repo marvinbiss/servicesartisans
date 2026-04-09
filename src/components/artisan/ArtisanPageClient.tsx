@@ -21,6 +21,7 @@ import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
 
 import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
 import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
+import { ArtisanRgeEnrichedSection } from '@/components/artisan/ArtisanRgeEnrichedSection'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
@@ -32,14 +33,19 @@ import { BookingFunnel } from '@/lib/analytics/tracking'
 
 // Dynamic import for exit intent (not needed on first paint)
 const ArtisanExitIntent = dynamic(
-  () => import('@/components/artisan/ArtisanExitIntent').then(mod => ({ default: mod.ArtisanExitIntent })),
+  () =>
+    import('@/components/artisan/ArtisanExitIntent').then((mod) => ({
+      default: mod.ArtisanExitIntent,
+    })),
   { ssr: false }
 )
 
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
   return (
-    <div className={`bg-white rounded-2xl shadow-soft border border-sand-200 p-6 ${height} animate-pulse`}>
+    <div
+      className={`bg-white rounded-2xl shadow-soft border border-sand-200 p-6 ${height} animate-pulse`}
+    >
       <div className="h-6 w-40 bg-sand-200 rounded-lg mb-4" />
       <div className="space-y-3">
         <div className="h-4 bg-sand-200 rounded-lg w-full" />
@@ -55,49 +61,63 @@ function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
 
 // Photo grid with lightbox (heavy - includes next/image + lightbox)
 const ArtisanPhotoGrid = dynamic(
-  () => import('@/components/artisan/ArtisanPhotoGrid').then(mod => ({ default: mod.ArtisanPhotoGrid })),
+  () =>
+    import('@/components/artisan/ArtisanPhotoGrid').then((mod) => ({
+      default: mod.ArtisanPhotoGrid,
+    })),
   { loading: () => <ArtisanPhotoGridSkeleton /> }
 )
 
 // Reviews section with animations
 const ArtisanReviews = dynamic(
-  () => import('@/components/artisan/ArtisanReviews').then(mod => ({ default: mod.ArtisanReviews })),
+  () =>
+    import('@/components/artisan/ArtisanReviews').then((mod) => ({ default: mod.ArtisanReviews })),
   { loading: () => <SectionSkeleton height="h-96" /> }
 )
 
 // Map component with iframe
 const ArtisanMap = dynamic(
-  () => import('@/components/artisan/ArtisanMap').then(mod => ({ default: mod.ArtisanMap })),
+  () => import('@/components/artisan/ArtisanMap').then((mod) => ({ default: mod.ArtisanMap })),
   { loading: () => <SectionSkeleton height="h-80" /> }
 )
 
 // Similar artisans carousel
 const ArtisanSimilar = dynamic(
-  () => import('@/components/artisan/ArtisanSimilar').then(mod => ({ default: mod.ArtisanSimilar })),
+  () =>
+    import('@/components/artisan/ArtisanSimilar').then((mod) => ({ default: mod.ArtisanSimilar })),
   { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
 // Inline quote request form
 const ArtisanQuoteForm = dynamic(
-  () => import('@/components/artisan/ArtisanQuoteForm').then(mod => ({ default: mod.ArtisanQuoteForm })),
+  () =>
+    import('@/components/artisan/ArtisanQuoteForm').then((mod) => ({
+      default: mod.ArtisanQuoteForm,
+    })),
   { loading: () => <SectionSkeleton height="h-80" /> }
 )
 
 // FAQ accordion
 const ArtisanFAQ = dynamic(
-  () => import('@/components/artisan/ArtisanFAQ').then(mod => ({ default: mod.ArtisanFAQ })),
+  () => import('@/components/artisan/ArtisanFAQ').then((mod) => ({ default: mod.ArtisanFAQ })),
   { loading: () => <SectionSkeleton height="h-64" /> }
 )
 
 // Business verification card
 const ArtisanBusinessCard = dynamic(
-  () => import('@/components/artisan/ArtisanBusinessCard').then(mod => ({ default: mod.ArtisanBusinessCard })),
+  () =>
+    import('@/components/artisan/ArtisanBusinessCard').then((mod) => ({
+      default: mod.ArtisanBusinessCard,
+    })),
   { loading: () => <SectionSkeleton height="h-64" /> }
 )
 
 // Contact card (sticky sidebar on desktop, section on mobile)
 const ArtisanContactCard = dynamic(
-  () => import('@/components/artisan/ArtisanContactCard').then(mod => ({ default: mod.ArtisanContactCard })),
+  () =>
+    import('@/components/artisan/ArtisanContactCard').then((mod) => ({
+      default: mod.ArtisanContactCard,
+    })),
   { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
@@ -143,7 +163,6 @@ export default function ArtisanPageClient({
   const reviews = initialReviews
   const { isFavorite, toggleFavorite } = useFavorites()
 
-
   // Track profile view
   useEffect(() => {
     if (artisan) {
@@ -161,8 +180,12 @@ export default function ArtisanPageClient({
           className="text-center p-8"
         >
           <AlertCircle className="w-16 h-16 text-charcoal-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-charcoal-900 font-heading mb-2">Artisan non trouvé</h1>
-          <p className="text-charcoal-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
+          <h1 className="text-2xl font-bold text-charcoal-900 font-heading mb-2">
+            Artisan non trouvé
+          </h1>
+          <p className="text-charcoal-600 mb-6">
+            Cet artisan n&apos;existe pas ou n&apos;est plus disponible.
+          </p>
           <Link
             href="/recherche"
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary-400 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors shadow-cta"
@@ -231,7 +254,10 @@ export default function ArtisanPageClient({
                   aria-label={isFavorite(artisanId) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
                   aria-pressed={isFavorite(artisanId)}
                 >
-                  <Heart className={`w-4.5 h-4.5 ${isFavorite(artisanId) ? 'fill-current' : ''}`} aria-hidden="true" />
+                  <Heart
+                    className={`w-4.5 h-4.5 ${isFavorite(artisanId) ? 'fill-current' : ''}`}
+                    aria-hidden="true"
+                  />
                 </motion.button>
               </div>
             </div>
@@ -239,17 +265,26 @@ export default function ArtisanPageClient({
         </header>
 
         {/* Main content */}
-        <main id="main-content" className="max-w-7xl mx-auto px-4 py-6" aria-label={`Profil de ${displayName}`}>
+        <main
+          id="main-content"
+          className="max-w-7xl mx-auto px-4 py-6"
+          aria-label={`Profil de ${displayName}`}
+        >
           {/* Bandeau fiche non-revendiquee */}
           {!isClaimed && (
-            <div className="mb-6 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3.5" role="status">
+            <div
+              className="mb-6 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3.5"
+              role="status"
+            >
               <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div>
                 <p className="text-sm font-semibold text-blue-800">
                   Cet artisan n&apos;a pas encore rejoint ServicesArtisans
                 </p>
                 <p className="text-sm text-blue-700 mt-0.5">
-                  Les informations affichées proviennent de sources publiques. Le contact direct n&apos;est pas disponible tant que l&apos;artisan n&apos;a pas revendiqué sa fiche.
+                  Les informations affichées proviennent de sources publiques. Le contact direct
+                  n&apos;est pas disponible tant que l&apos;artisan n&apos;a pas revendiqué sa
+                  fiche.
                 </p>
               </div>
             </div>
@@ -273,16 +308,33 @@ export default function ArtisanPageClient({
             <div className="lg:col-span-2 space-y-6">
               {/* 1. Hero — first impression, identity, trust signals */}
               <section aria-label="Informations principales">
-                <ArtisanHero
-                  artisan={artisan}
-                  isClaimed={isClaimed}
-                />
+                <ArtisanHero artisan={artisan} isClaimed={isClaimed} />
               </section>
               {/* 1b. Why choose — trust cards (claimed + unclaimed) */}
               <section aria-label="Pourquoi choisir cet artisan">
                 <ArtisanWhyChoose artisan={artisan} />
               </section>
-              {/* 1c. Quick Quote CTA — only if claimed */}
+              {/* 1c. RGE enrichi — cross-links vers guides qualifications + CEE
+                     débloquées. No-op pour les fiches non-RGE. */}
+              <ArtisanRgeEnrichedSection
+                qualifications={artisan.rge_qualifications}
+                organismes={artisan.rge_organismes}
+                validUntil={artisan.rge_valid_until}
+                rgeServiceSlug={artisan.specialty_slug}
+                artisanId={artisanId}
+                citySlug={artisan.city_slug || (artisan.city ? slugify(artisan.city) : undefined)}
+                departementSlug={
+                  artisan.department
+                    ? artisan.department
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+                    : undefined
+                }
+              />
+              {/* 1d. Quick Quote CTA — only if claimed */}
               {isClaimed && (
                 <section aria-label="Demande de devis rapide">
                   <ArtisanQuickQuote artisan={artisan} />
@@ -317,7 +369,6 @@ export default function ArtisanPageClient({
                 </section>
               )}
 
-
               {/* 7. Services & pricing — transactional detail (hidden for unclaimed) */}
               {isClaimed && (
                 <section id="services" aria-label="Services et tarifs">
@@ -337,9 +388,17 @@ export default function ArtisanPageClient({
               {/* Claim button on mobile — only if NOT claimed */}
               {!isClaimed && (
                 <section className="lg:hidden" aria-label="Revendiquer cette fiche">
-                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                  <ClaimButton
+                    providerId={artisanId}
+                    providerName={artisan.business_name || displayName}
+                    hasSiret={hasSiret}
+                  />
                   <div className="text-center mt-2">
-                    <RemovalRequestButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
+                    <RemovalRequestButton
+                      providerId={artisanId}
+                      providerName={artisan.business_name || displayName}
+                      hasSiret={hasSiret}
+                    />
                   </div>
                 </section>
               )}
@@ -359,7 +418,11 @@ export default function ArtisanPageClient({
             </div>
 
             {/* Right column - Sticky sidebar */}
-            <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
+            <aside
+              id="contact-sidebar"
+              className="hidden lg:block"
+              aria-label="Informations de contact"
+            >
               <div className="space-y-6 sticky top-20">
                 {isClaimed ? (
                   <ArtisanSidebar artisan={artisan} />
@@ -392,10 +455,7 @@ export default function ArtisanPageClient({
       </div>
 
       {/* Exit intent — claimed ET unclaimed (filet de rattrapage universel) */}
-      <ArtisanExitIntent
-        artisan={artisan}
-        isClaimed={isClaimed}
-      />
+      <ArtisanExitIntent artisan={artisan} isClaimed={isClaimed} />
     </>
   )
 }
