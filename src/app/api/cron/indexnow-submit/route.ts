@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
-import { services } from '@/lib/data/france'
+import { services, villes } from '@/lib/data/france'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { submitToIndexNow } from '@/lib/seo/indexnow'
+import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { logger } from '@/lib/logger'
 
 const TOP_CITIES = ['paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes', 'strasbourg', 'montpellier', 'bordeaux', 'lille']
@@ -82,6 +83,7 @@ function rotateSlice<T>(items: T[], bucket: number): T[] {
  * - Devis pages: /devis/{slug}/{city} with extended cities (rotated)
  * - Blog articles: prix articles + recent articles (rotated + fresh)
  * - New providers: created in last 24h (hub pages impacted)
+ * - RGE pSEO: /artisans-rge/{city} top 30 + /rge/{service}/{city} 14×10 (rotated)
  * - Guides: all guide pages, once per week (Sundays)
  */
 export async function GET(request: Request) {
@@ -94,7 +96,7 @@ export async function GET(request: Request) {
   }
 
   const bucket = getDayBucket()
-  const counts = { strategic: 0, serviceHubs: 0, devis: 0, blog: 0, blogPrix: 0, providers: 0, guides: 0 }
+  const counts = { strategic: 0, serviceHubs: 0, devis: 0, blog: 0, blogPrix: 0, providers: 0, guides: 0, rgeCity: 0, rgeServiceCity: 0 }
 
   // ── 1. Always-submit priority pages ─────────────────────────────────
   const urls: string[] = [
@@ -217,6 +219,26 @@ export async function GET(request: Request) {
     })
   }
 
+  // ── 6b. RGE pSEO routes — city listing + service×city (rotated) ─────
+  // /artisans-rge/{city} — top 30 villes, rotation 1/3 par jour (~10/jour)
+  const rgeTopCitySlugs = villes.slice(0, 30).map(v => v.slug)
+  const rgeCityUrls = rgeTopCitySlugs.map(slug => `${SITE_URL}/artisans-rge/${slug}`)
+  const rgeCityBatch = rotateSlice(rgeCityUrls, bucket)
+  urls.push(...rgeCityBatch)
+  counts.rgeCity = rgeCityBatch.length
+
+  // /rge/{service}/{city} — 14 services × top 10 villes, rotation 1/3 par jour (~47/jour)
+  const rgeServiceTopCitySlugs = villes.slice(0, 10).map(v => v.slug)
+  const allRgeServiceCityUrls: string[] = []
+  for (const serviceSlug of RGE_ALLOWED_SERVICES) {
+    for (const citySlug of rgeServiceTopCitySlugs) {
+      allRgeServiceCityUrls.push(`${SITE_URL}/rge/${serviceSlug}/${citySlug}`)
+    }
+  }
+  const rgeServiceCityBatch = rotateSlice(allRgeServiceCityUrls, bucket)
+  urls.push(...rgeServiceCityBatch)
+  counts.rgeServiceCity = rgeServiceCityBatch.length
+
   // ── 7. Guides — once per week (Sundays) ─────────────────────────────
   const isSunday = new Date().getUTCDay() === 0
   if (isSunday) {
@@ -240,6 +262,8 @@ export async function GET(request: Request) {
     blogPrix: counts.blogPrix,
     providers: counts.providers,
     guides: counts.guides,
+    rgeCity: counts.rgeCity,
+    rgeServiceCity: counts.rgeServiceCity,
     totalBeforeCap: urls.length,
     totalUnique: uniqueUrls.length,
     capped: urls.length > MAX_URLS_PER_DAY,
