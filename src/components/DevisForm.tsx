@@ -9,9 +9,21 @@ import type { Ville } from '@/lib/data/france-light'
 let _allVilles: Ville[] | null = null
 function getAllVilles(): Promise<Ville[]> {
   if (_allVilles) return Promise.resolve(_allVilles)
-  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+  return import('@/lib/data/france').then((m) => {
+    _allVilles = m.villes
+    return m.villes
+  })
 }
-import { ArrowRight, ArrowLeft, ChevronDown, Check, MapPin, Users, Shield, Clock } from 'lucide-react'
+import {
+  ArrowRight,
+  ArrowLeft,
+  ChevronDown,
+  Check,
+  MapPin,
+  Users,
+  Shield,
+  Clock,
+} from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
@@ -57,11 +69,43 @@ const budgetOptions = [
 
 /** Common project types per service for quick selection */
 const serviceSubcategories: Record<string, string[]> = {
-  plombier: ['Fuite d\'eau', 'Débouchage', 'Chauffe-eau', 'Robinetterie', 'WC / Sanitaires', 'Tuyauterie'],
-  electricien: ['Panne électrique', 'Installation prise/interrupteur', 'Tableau électrique', 'Éclairage', 'Mise aux normes', 'Domotique'],
-  serrurier: ['Porte claquée', 'Serrure cassée', 'Changement de serrure', 'Double de clé', 'Blindage de porte'],
-  chauffagiste: ['Panne chaudière', 'Entretien chaudière', 'Radiateur', 'Plancher chauffant', 'Pompe à chaleur'],
-  peintre: ['Peinture intérieure', 'Peinture extérieure', 'Ravalement façade', 'Papier peint', 'Plafond'],
+  plombier: [
+    "Fuite d'eau",
+    'Débouchage',
+    'Chauffe-eau',
+    'Robinetterie',
+    'WC / Sanitaires',
+    'Tuyauterie',
+  ],
+  electricien: [
+    'Panne électrique',
+    'Installation prise/interrupteur',
+    'Tableau électrique',
+    'Éclairage',
+    'Mise aux normes',
+    'Domotique',
+  ],
+  serrurier: [
+    'Porte claquée',
+    'Serrure cassée',
+    'Changement de serrure',
+    'Double de clé',
+    'Blindage de porte',
+  ],
+  chauffagiste: [
+    'Panne chaudière',
+    'Entretien chaudière',
+    'Radiateur',
+    'Plancher chauffant',
+    'Pompe à chaleur',
+  ],
+  peintre: [
+    'Peinture intérieure',
+    'Peinture extérieure',
+    'Ravalement façade',
+    'Papier peint',
+    'Plafond',
+  ],
   menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet'],
   carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure'],
   couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage'],
@@ -72,9 +116,18 @@ const serviceSubcategories: Record<string, string[]> = {
 const STORAGE_KEY = 'sa:devis-draft'
 
 const stepTitles = [
-  { title: 'De quel artisan avez-vous besoin ?', subtitle: 'Choisissez le métier et indiquez votre ville.' },
-  { title: 'Parlez-nous de votre projet', subtitle: 'Plus on en sait, meilleurs seront les devis.' },
-  { title: 'Dernière étape \u2014 comment vous joindre ?', subtitle: 'Les artisans vous contacteront avec leurs devis.' },
+  {
+    title: 'De quel artisan avez-vous besoin ?',
+    subtitle: 'Choisissez le métier et indiquez votre ville.',
+  },
+  {
+    title: 'Parlez-nous de votre projet',
+    subtitle: 'Plus on en sait, meilleurs seront les devis.',
+  },
+  {
+    title: 'Dernière étape \u2014 comment vous joindre ?',
+    subtitle: 'Les artisans vous contacteront avec leurs devis.',
+  },
 ]
 
 const stepLabels = ['Projet', 'Détails', 'Contact']
@@ -90,9 +143,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
         <span className="text-sm font-heading font-semibold text-charcoal-600">
           Étape {currentStep} sur 3
         </span>
-        <span className="text-sm font-semibold text-primary-500">
-          {Math.round(progress)}%
-        </span>
+        <span className="text-sm font-semibold text-primary-500">{Math.round(progress)}%</span>
       </div>
       {/* Bar */}
       <div
@@ -117,14 +168,16 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
                 currentStep > i + 1
                   ? 'bg-accent-500'
                   : currentStep === i + 1
-                  ? 'bg-primary-500 shadow-cta scale-110'
-                  : 'bg-sand-300'
+                    ? 'bg-primary-500 shadow-cta scale-110'
+                    : 'bg-sand-300'
               }`}
             >
               {currentStep > i + 1 ? (
                 <Check className="w-3.5 h-3.5 text-white" />
               ) : (
-                <span className={`text-2xs font-bold ${currentStep === i + 1 ? 'text-white' : 'text-charcoal-500'}`}>
+                <span
+                  className={`text-2xs font-bold ${currentStep === i + 1 ? 'text-white' : 'text-charcoal-500'}`}
+                >
                   {i + 1}
                 </span>
               )}
@@ -134,8 +187,8 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
                 currentStep === i + 1
                   ? 'font-heading font-semibold text-primary-500'
                   : currentStep > i + 1
-                  ? 'font-medium text-accent-600'
-                  : 'font-medium text-charcoal-400'
+                    ? 'font-medium text-accent-600'
+                    : 'font-medium text-charcoal-400'
               }`}
             >
               {label}
@@ -151,38 +204,58 @@ interface DevisFormProps {
   prefilledService?: string
   prefilledCity?: string
   prefilledCityPostal?: string
+  /** Code opération CEE source (ex: "BAR-TH-171") — metadata lead, non visible */
+  prefilledOperation?: string
 }
 
 export default function DevisForm({
   prefilledService,
   prefilledCity,
   prefilledCityPostal,
+  prefilledOperation,
 }: DevisFormProps = {}) {
+  // Service-only prefill is valid (no city required) — triggers just the
+  // service preselect without skipping to step 2.
   const isPrefilled = !!(prefilledService && prefilledCity)
+  // Validate prefilled service against the known services list; if unknown
+  // (typo, outdated query param), ignore it silently.
+  const validPrefilledService =
+    prefilledService && services.some((s) => s.slug === prefilledService)
+      ? prefilledService
+      : undefined
 
   // Restore saved form progress from localStorage
-  const savedState = typeof window !== 'undefined' ? (() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY)
-      if (!saved) return null
-      const parsed = JSON.parse(saved)
-      // Migrate old 4-step saves to 3-step
-      if (parsed.step === 4) parsed.step = 3
-      if (parsed.step > 3) parsed.step = 1
-      return parsed
-    } catch { return null }
-  })() : null
+  const savedState =
+    typeof window !== 'undefined'
+      ? (() => {
+          try {
+            const saved = localStorage.getItem(STORAGE_KEY)
+            if (!saved) return null
+            const parsed = JSON.parse(saved)
+            // Migrate old 4-step saves to 3-step
+            if (parsed.step === 4) parsed.step = 3
+            if (parsed.step > 3) parsed.step = 1
+            return parsed
+          } catch {
+            return null
+          }
+        })()
+      : null
 
   // If there's a saved state beyond step 1, start at step 1 and show resume banner
   // The user can click "Reprendre" to restore or "Recommencer" to clear
   const hasSavedProgress = !isPrefilled && savedState?.step && savedState.step > 1
   const [step, setStep] = useState<1 | 2 | 3>(
-    isPrefilled ? 2 : hasSavedProgress ? 1 : (savedState?.step || 1) as 1 | 2 | 3
+    isPrefilled ? 2 : hasSavedProgress ? 1 : ((savedState?.step || 1) as 1 | 2 | 3)
   )
   const [formData, setFormData] = useState<FormData>(
     isPrefilled
-      ? { ...initialFormData, service: prefilledService || '', ville: prefilledCity || '' }
-      : hasSavedProgress ? initialFormData : (savedState?.formData || initialFormData)
+      ? { ...initialFormData, service: validPrefilledService || '', ville: prefilledCity || '' }
+      : hasSavedProgress
+        ? initialFormData
+        : validPrefilledService
+          ? { ...(savedState?.formData || initialFormData), service: validPrefilledService }
+          : savedState?.formData || initialFormData
   )
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [submitted, setSubmitted] = useState(false)
@@ -190,9 +263,13 @@ export default function DevisForm({
   const [ceeOperationCodes, setCeeOperationCodes] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [villeQuery, setVilleQuery] = useState(prefilledCity || (hasSavedProgress ? '' : (savedState?.villeQuery || '')))
+  const [villeQuery, setVilleQuery] = useState(
+    prefilledCity || (hasSavedProgress ? '' : savedState?.villeQuery || '')
+  )
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
-  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || (hasSavedProgress ? '' : (savedState?.selectedVillePostal || '')))
+  const [selectedVillePostal, setSelectedVillePostal] = useState(
+    prefilledCityPostal || (hasSavedProgress ? '' : savedState?.selectedVillePostal || '')
+  )
   const [geoLoading, setGeoLoading] = useState(false)
   const [debouncedVilleQuery, setDebouncedVilleQuery] = useState(villeQuery)
   const [abandonTracked, setAbandonTracked] = useState(false)
@@ -214,7 +291,9 @@ export default function DevisForm({
         setSavedVille(parsed.formData.ville || '')
         setShowResumeBanner(true)
       }
-    } catch {}
+    } catch {
+      // ignore : localStorage peut lever si quota/SSR/privacy mode
+    }
   }, [isPrefilled])
 
   const handleResume = useCallback(() => {
@@ -229,7 +308,9 @@ export default function DevisForm({
         if (parsed.villeQuery) setVilleQuery(parsed.villeQuery)
         if (parsed.selectedVillePostal) setSelectedVillePostal(parsed.selectedVillePostal)
       }
-    } catch {}
+    } catch {
+      // ignore : localStorage peut lever si quota/SSR/privacy mode
+    }
     setShowResumeBanner(false)
   }, [])
 
@@ -248,19 +329,33 @@ export default function DevisForm({
       const cached = sessionStorage.getItem('sa:devis-monthly-count')
       if (cached) {
         const { count, ts } = JSON.parse(cached)
-        if (Date.now() - ts < 300_000) { setMonthlyCount(count.toLocaleString('fr-FR')); return }
+        if (Date.now() - ts < 300_000) {
+          setMonthlyCount(count.toLocaleString('fr-FR'))
+          return
+        }
       }
-    } catch {}
+    } catch {
+      // ignore : localStorage peut lever si quota/SSR/privacy mode
+    }
     fetch('/api/stats/demand')
-      .then(r => r.json())
-      .then(d => {
+      .then((r) => r.json())
+      .then((d) => {
         const count = d.requests_this_month || 0
         if (count > 0) {
           setMonthlyCount(count.toLocaleString('fr-FR'))
-          try { sessionStorage.setItem('sa:devis-monthly-count', JSON.stringify({ count, ts: Date.now() })) } catch {}
+          try {
+            sessionStorage.setItem(
+              'sa:devis-monthly-count',
+              JSON.stringify({ count, ts: Date.now() })
+            )
+          } catch {
+            // ignore : sessionStorage quota/privacy mode
+          }
         }
       })
-      .catch(() => {})
+      .catch(() => {
+        // ignore : fail-open sur stat démo (non bloquant)
+      })
   }, [])
 
   // Debounce ville search input (300ms)
@@ -270,7 +365,9 @@ export default function DevisForm({
   }, [villeQuery])
 
   // Transition state
-  const [transition, setTransition] = useState<'idle' | 'slide-out-left' | 'slide-out-right' | 'slide-in-left' | 'slide-in-right'>('idle')
+  const [transition, setTransition] = useState<
+    'idle' | 'slide-out-left' | 'slide-out-right' | 'slide-in-left' | 'slide-in-right'
+  >('idle')
 
   // Ref for auto-focus
   const stepContainerRef = useRef<HTMLDivElement>(null)
@@ -290,54 +387,68 @@ export default function DevisForm({
     return () => clearTimeout(timer)
   }, [step, transition])
 
-  const updateField = useCallback(
-    <K extends keyof FormData>(field: K, value: FormData[K]) => {
-      setFormData((prev) => ({ ...prev, [field]: value }))
+  const updateField = useCallback(<K extends keyof FormData>(field: K, value: FormData[K]) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+    setErrors((prev) => {
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
+  }, [])
+
+  const validateField = useCallback(
+    (field: keyof FormData) => {
       setErrors((prev) => {
         const next = { ...prev }
-        delete next[field]
+        switch (field) {
+          case 'nom':
+            if (!formData.nom.trim()) next.nom = 'Veuillez entrer votre nom'
+            else delete next.nom
+            break
+          case 'telephone':
+            if (!formData.telephone.trim())
+              next.telephone = 'Veuillez entrer votre numéro de téléphone'
+            else if (!isValidFrenchPhone(formData.telephone.trim()))
+              next.telephone =
+                'Le numéro de téléphone doit contenir 10 chiffres (ex : 06 12 34 56 78)'
+            else delete next.telephone
+            break
+          case 'email':
+            if (!formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
+            else if (
+              !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())
+            )
+              next.email = 'Veuillez entrer une adresse e-mail valide (ex : nom@exemple.fr)'
+            else delete next.email
+            break
+          default:
+            break
+        }
         return next
       })
     },
-    []
+    [formData]
   )
-
-  const validateField = useCallback((field: keyof FormData) => {
-    setErrors((prev) => {
-      const next = { ...prev }
-      switch (field) {
-        case 'nom':
-          if (!formData.nom.trim()) next.nom = 'Veuillez entrer votre nom'
-          else delete next.nom
-          break
-        case 'telephone':
-          if (!formData.telephone.trim()) next.telephone = 'Veuillez entrer votre numéro de téléphone'
-          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Le numéro de téléphone doit contenir 10 chiffres (ex : 06 12 34 56 78)'
-          else delete next.telephone
-          break
-        case 'email':
-          if (!formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
-          else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) next.email = 'Veuillez entrer une adresse e-mail valide (ex : nom@exemple.fr)'
-          else delete next.email
-          break
-        default:
-          break
-      }
-      return next
-    })
-  }, [formData])
 
   // Persist form progress to localStorage (skip while resume banner is shown to avoid overwriting saved data)
   useEffect(() => {
     if (submitted || showResumeBanner) return
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ formData, step, villeQuery, selectedVillePostal }))
-    } catch {}
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ formData, step, villeQuery, selectedVillePostal })
+      )
+    } catch {
+      // ignore : localStorage peut lever si quota/SSR/privacy mode
+    }
   }, [formData, step, villeQuery, selectedVillePostal, submitted, showResumeBanner])
 
   const [filteredVilles, setFilteredVilles] = useState<Ville[]>([])
   useEffect(() => {
-    if (debouncedVilleQuery.length < 2) { setFilteredVilles([]); return }
+    if (debouncedVilleQuery.length < 2) {
+      setFilteredVilles([])
+      return
+    }
     const q = debouncedVilleQuery.toLowerCase()
     const filterList = (list: Ville[]) => {
       const results: Ville[] = []
@@ -350,7 +461,7 @@ export default function DevisForm({
       return results
     }
     setFilteredVilles(filterList(villesLight))
-    getAllVilles().then(full => setFilteredVilles(filterList(full)))
+    getAllVilles().then((full) => setFilteredVilles(filterList(full)))
   }, [debouncedVilleQuery])
 
   const handleGeolocation = useCallback(async () => {
@@ -383,24 +494,32 @@ export default function DevisForm({
   }, [updateField])
 
   // --- Abandon tracking: fire when email is filled at step 2 ---
-  const trackAbandon = useCallback(async (email: string) => {
-    if (abandonTracked || !email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) return
-    setAbandonTracked(true)
-    try {
-      await fetch('/api/devis/abandon-tracking', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          service: formData.service || null,
-          city: formData.ville || null,
-          step: 2,
-        }),
-      })
-    } catch {
-      // Non-blocking
-    }
-  }, [abandonTracked, formData.service, formData.ville])
+  const trackAbandon = useCallback(
+    async (email: string) => {
+      if (
+        abandonTracked ||
+        !email ||
+        !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+      )
+        return
+      setAbandonTracked(true)
+      try {
+        await fetch('/api/devis/abandon-tracking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            service: formData.service || null,
+            city: formData.ville || null,
+            step: 2,
+          }),
+        })
+      } catch {
+        // Non-blocking
+      }
+    },
+    [abandonTracked, formData.service, formData.ville]
+  )
 
   // --- Validation per step ---
   const validateStep1 = (): boolean => {
@@ -420,7 +539,8 @@ export default function DevisForm({
     }
     if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     if (formData.description.trim().length > 0 && formData.description.trim().length < 5) {
-      newErrors.description = 'Veuillez détailler davantage votre projet (5 caractères minimum) ou laisser le champ vide'
+      newErrors.description =
+        'Veuillez détailler davantage votre projet (5 caractères minimum) ou laisser le champ vide'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -509,6 +629,10 @@ export default function DevisForm({
           nom: formData.nom,
           email: formData.email,
           telephone: cleanPhone(formData.telephone),
+          // Metadata : code CEE source (ex: depuis un CTA fiche artisan RGE).
+          // Le schéma Zod côté API ignore les champs inconnus, donc ce champ
+          // est safe à envoyer même si l'API ne le lit pas encore.
+          ...(prefilledOperation ? { sourceOperation: prefilledOperation } : {}),
         }),
       })
 
@@ -518,7 +642,10 @@ export default function DevisForm({
       }
 
       // Extract CEE eligibility flags from response for confirmation UI
-      const responseBody = await res.json().catch(() => null) as { cee_eligible?: boolean; cee_operation_codes?: string[] } | null
+      const responseBody = (await res.json().catch(() => null)) as {
+        cee_eligible?: boolean
+        cee_operation_codes?: string[]
+      } | null
       if (responseBody?.cee_eligible) {
         setCeeEligible(true)
         setCeeOperationCodes(responseBody.cee_operation_codes || [])
@@ -559,24 +686,39 @@ export default function DevisForm({
 
   // --- Step validation checks for smart button ---
   const isStep1Valid = !!formData.service && !!formData.ville
-  const isStep2Valid = !!formData.email.trim() && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) && !!formData.urgence && (formData.description.trim().length === 0 || formData.description.trim().length >= 5)
-  const isStep3Valid = !!formData.nom.trim() && !!formData.telephone.trim() && isValidFrenchPhone(formData.telephone.trim()) && formData.consentement
+  const isStep2Valid =
+    !!formData.email.trim() &&
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) &&
+    !!formData.urgence &&
+    (formData.description.trim().length === 0 || formData.description.trim().length >= 5)
+  const isStep3Valid =
+    !!formData.nom.trim() &&
+    !!formData.telephone.trim() &&
+    isValidFrenchPhone(formData.telephone.trim()) &&
+    formData.consentement
 
   // --- Validation state for inline feedback ---
   const getFieldState = (field: keyof FormData): 'idle' | 'valid' | 'error' => {
     if (errors[field]) return 'error'
     switch (field) {
-      case 'service': return formData.service ? 'valid' : 'idle'
-      case 'ville': return formData.ville ? 'valid' : 'idle'
-      case 'urgence': return formData.urgence ? 'valid' : 'idle'
-      case 'nom': return formData.nom.trim() ? 'valid' : 'idle'
+      case 'service':
+        return formData.service ? 'valid' : 'idle'
+      case 'ville':
+        return formData.ville ? 'valid' : 'idle'
+      case 'urgence':
+        return formData.urgence ? 'valid' : 'idle'
+      case 'nom':
+        return formData.nom.trim() ? 'valid' : 'idle'
       case 'telephone':
         if (!formData.telephone.trim()) return 'idle'
         return isValidFrenchPhone(formData.telephone.trim()) ? 'valid' : 'idle'
       case 'email':
         if (!formData.email.trim()) return 'idle'
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) ? 'valid' : 'idle'
-      default: return 'idle'
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())
+          ? 'valid'
+          : 'idle'
+      default:
+        return 'idle'
     }
   }
 
@@ -589,7 +731,8 @@ export default function DevisForm({
 
   // --- Premium label + input classes ---
   const labelClass = 'block font-heading text-sm font-semibold text-charcoal-800 mb-2'
-  const inputBase = 'w-full rounded-xl border bg-sand-50 px-4 py-3 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all duration-200'
+  const inputBase =
+    'w-full rounded-xl border bg-sand-50 px-4 py-3 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all duration-200'
 
   // Transition CSS classes
   const getTransitionClass = () => {
@@ -661,16 +804,26 @@ export default function DevisForm({
           <div>
             <p className="text-sm font-medium text-primary-800">Vous aviez commencé une demande</p>
             <p className="text-xs text-primary-600">
-              {savedService && <>Service : {services.find(s => s.slug === savedService)?.name || savedService}</>}
+              {savedService && (
+                <>Service : {services.find((s) => s.slug === savedService)?.name || savedService}</>
+              )}
               {savedService && savedVille && <> — </>}
               {savedVille && <>Ville : {savedVille}</>}
             </p>
           </div>
           <div className="flex gap-2">
-            <button type="button" onClick={handleResume} className="text-sm font-medium text-primary-600 hover:text-primary-800">
+            <button
+              type="button"
+              onClick={handleResume}
+              className="text-sm font-medium text-primary-600 hover:text-primary-800"
+            >
               Reprendre
             </button>
-            <button type="button" onClick={handleDismiss} className="text-sm text-charcoal-400 hover:text-charcoal-600">
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="text-sm text-charcoal-400 hover:text-charcoal-600"
+            >
               Recommencer
             </button>
           </div>
@@ -682,11 +835,16 @@ export default function DevisForm({
         noValidate
         className="bg-white rounded-3xl shadow-premium border border-sand-200 p-6 md:p-10 overflow-hidden"
       >
+        {/* Hidden : code opération CEE source (transmis en metadata du lead) */}
+        {prefilledOperation && (
+          <input type="hidden" name="sourceOperation" value={prefilledOperation} />
+        )}
         <ProgressBar currentStep={step} />
 
         {/* SR-only step announcer */}
         <div className="sr-only" aria-live="assertive" aria-atomic="true">
-          Étape {step} sur 3{step === 1 ? ' : Votre besoin' : step === 2 ? ' : Vos coordonnées' : ' : Confirmation'}
+          Étape {step} sur 3
+          {step === 1 ? ' : Votre besoin' : step === 2 ? ' : Vos coordonnées' : ' : Confirmation'}
         </div>
 
         {/* Step container with transitions */}
@@ -703,13 +861,13 @@ export default function DevisForm({
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
                   {stepTitles[0].title}
                 </h3>
-                <p className="text-charcoal-500 text-sm">
-                  {stepTitles[0].subtitle}
-                </p>
+                <p className="text-charcoal-500 text-sm">{stepTitles[0].subtitle}</p>
               </div>
               <div className="flex items-center justify-center gap-2 text-sm text-charcoal-500">
                 <span className="text-amber-500">&#9733;</span>
-                <span>4.8/5 basé sur <strong>23 000+</strong> demandes traitées</span>
+                <span>
+                  4.8/5 basé sur <strong>23 000+</strong> demandes traitées
+                </span>
               </div>
 
               {/* Service */}
@@ -742,7 +900,13 @@ export default function DevisForm({
                   )}
                 </div>
                 {errors.service && (
-                  <p id="service-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.service}</p>
+                  <p
+                    id="service-error"
+                    role="alert"
+                    className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
+                  >
+                    {errors.service}
+                  </p>
                 )}
               </div>
 
@@ -816,7 +980,13 @@ export default function DevisForm({
                   {geoLoading ? 'Localisation en cours\u2026' : 'Utiliser ma position'}
                 </button>
                 {errors.ville && (
-                  <p id="ville-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.ville}</p>
+                  <p
+                    id="ville-error"
+                    role="alert"
+                    className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
+                  >
+                    {errors.ville}
+                  </p>
                 )}
               </div>
 
@@ -848,15 +1018,15 @@ export default function DevisForm({
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
                   {stepTitles[1].title}
                 </h3>
-                <p className="text-charcoal-500 text-sm">
-                  {stepTitles[1].subtitle}
-                </p>
+                <p className="text-charcoal-500 text-sm">{stepTitles[1].subtitle}</p>
               </div>
 
               {/* Email — early capture */}
               <div>
                 <label htmlFor="email" className={labelClass}>
-                  Votre e-mail <span className="text-charcoal-400 font-normal">— pour recevoir vos devis</span> <span className="text-red-500">*</span>
+                  Votre e-mail{' '}
+                  <span className="text-charcoal-400 font-normal">— pour recevoir vos devis</span>{' '}
+                  <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -870,7 +1040,11 @@ export default function DevisForm({
                     onBlur={() => {
                       validateField('email')
                       // Track abandon on email blur if valid
-                      if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
+                      if (
+                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                          formData.email.trim()
+                        )
+                      ) {
                         trackAbandon(formData.email.trim())
                       }
                     }}
@@ -886,7 +1060,13 @@ export default function DevisForm({
                   )}
                 </div>
                 {errors.email && (
-                  <p id="email-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.email}</p>
+                  <p
+                    id="email-error"
+                    role="alert"
+                    className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
+                  >
+                    {errors.email}
+                  </p>
                 )}
                 {!errors.email && (
                   <p className="text-xs text-charcoal-400 mt-1">
@@ -926,7 +1106,9 @@ export default function DevisForm({
                   ))}
                 </div>
                 {errors.urgence && (
-                  <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.urgence}</p>
+                  <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">
+                    {errors.urgence}
+                  </p>
                 )}
               </div>
 
@@ -934,7 +1116,10 @@ export default function DevisForm({
               {formData.service && serviceSubcategories[formData.service] && (
                 <div>
                   <label className={labelClass}>
-                    Type de projet <span className="text-charcoal-400 font-normal">(cliquez pour sélectionner)</span>
+                    Type de projet{' '}
+                    <span className="text-charcoal-400 font-normal">
+                      (cliquez pour sélectionner)
+                    </span>
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {serviceSubcategories[formData.service].map((cat) => {
@@ -945,9 +1130,19 @@ export default function DevisForm({
                           type="button"
                           onClick={() => {
                             if (isSelected) {
-                              updateField('description', formData.description.replace(cat, '').replace(/,\s*,/g, ',').replace(/^,\s*|,\s*$/g, '').trim())
+                              updateField(
+                                'description',
+                                formData.description
+                                  .replace(cat, '')
+                                  .replace(/,\s*,/g, ',')
+                                  .replace(/^,\s*|,\s*$/g, '')
+                                  .trim()
+                              )
                             } else {
-                              updateField('description', formData.description ? `${formData.description}, ${cat}` : cat)
+                              updateField(
+                                'description',
+                                formData.description ? `${formData.description}, ${cat}` : cat
+                              )
                             }
                           }}
                           className={`px-3.5 py-2 rounded-xl text-sm font-medium border-2 transition-all duration-200 ${
@@ -968,33 +1163,48 @@ export default function DevisForm({
               {/* Description */}
               <div>
                 <label htmlFor="description" className={labelClass}>
-                  Décrivez votre projet <span className="text-charcoal-400 font-normal">(optionnel)</span>
+                  Décrivez votre projet{' '}
+                  <span className="text-charcoal-400 font-normal">(optionnel)</span>
                 </label>
                 <textarea
                   id="description"
                   rows={3}
-                  placeholder={formData.service && serviceSubcategories[formData.service]
-                    ? "Précisions supplémentaires (optionnel)..."
-                    : "Ex: fuite d'eau dans la cuisine, remplacement chauffe-eau..."}
+                  placeholder={
+                    formData.service && serviceSubcategories[formData.service]
+                      ? 'Précisions supplémentaires (optionnel)...'
+                      : "Ex: fuite d'eau dans la cuisine, remplacement chauffe-eau..."
+                  }
                   value={formData.description}
                   onChange={(e) => updateField('description', e.target.value)}
                   aria-describedby={errors.description ? 'description-error' : undefined}
                   aria-invalid={!!errors.description}
                   style={{ fontSize: '16px' }}
                   className={`${inputBase} resize-none ${
-                    errors.description ? 'border-red-400 ring-2 ring-red-50' : formData.description.trim().length >= 5 ? 'border-accent-400 ring-1 ring-accent-100' : 'border-sand-300'
+                    errors.description
+                      ? 'border-red-400 ring-2 ring-red-50'
+                      : formData.description.trim().length >= 5
+                        ? 'border-accent-400 ring-1 ring-accent-100'
+                        : 'border-sand-300'
                   }`}
                 />
                 <div className="flex justify-between mt-1">
                   {errors.description ? (
-                    <p id="description-error" role="alert" className="text-sm text-red-600 animate-fade-in-down">{errors.description}</p>
+                    <p
+                      id="description-error"
+                      role="alert"
+                      className="text-sm text-red-600 animate-fade-in-down"
+                    >
+                      {errors.description}
+                    </p>
                   ) : (
                     <span />
                   )}
                   {formData.description.length > 0 && (
                     <span
                       className={`text-xs ${
-                        formData.description.trim().length >= 5 ? 'text-accent-600' : 'text-charcoal-400'
+                        formData.description.trim().length >= 5
+                          ? 'text-accent-600'
+                          : 'text-charcoal-400'
                       }`}
                     >
                       {formData.description.length}/5 caract.
@@ -1065,9 +1275,7 @@ export default function DevisForm({
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
                   {stepTitles[2].title}
                 </h3>
-                <p className="text-charcoal-500 text-sm">
-                  {stepTitles[2].subtitle}
-                </p>
+                <p className="text-charcoal-500 text-sm">{stepTitles[2].subtitle}</p>
               </div>
 
               {/* Nom */}
@@ -1096,7 +1304,13 @@ export default function DevisForm({
                   )}
                 </div>
                 {errors.nom && (
-                  <p id="nom-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.nom}</p>
+                  <p
+                    id="nom-error"
+                    role="alert"
+                    className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
+                  >
+                    {errors.nom}
+                  </p>
                 )}
               </div>
 
@@ -1127,18 +1341,26 @@ export default function DevisForm({
                   )}
                 </div>
                 {errors.telephone && (
-                  <p id="telephone-error" role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.telephone}</p>
+                  <p
+                    id="telephone-error"
+                    role="alert"
+                    className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
+                  >
+                    {errors.telephone}
+                  </p>
                 )}
               </div>
 
               {/* Consent checkbox */}
               <div>
                 <label className="flex items-start gap-3 cursor-pointer group">
-                  <div className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
-                    formData.consentement
-                      ? 'bg-primary-500 border-primary-500'
-                      : 'border-sand-400 group-hover:border-primary-300'
-                  }`}>
+                  <div
+                    className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                      formData.consentement
+                        ? 'bg-primary-500 border-primary-500'
+                        : 'border-sand-400 group-hover:border-primary-300'
+                    }`}
+                  >
                     {formData.consentement && <Check className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <input
@@ -1148,17 +1370,29 @@ export default function DevisForm({
                     className="sr-only"
                   />
                   <span className="text-sm text-charcoal-600 leading-relaxed">
-                    J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-                    <Link href="/confidentialite" className="text-primary-500 hover:text-primary-700 underline underline-offset-2">politique de confidentialité</Link>.
+                    J&apos;accepte que mes données soient utilisées pour traiter ma demande et me
+                    mettre en relation avec des artisans partenaires. Voir notre{' '}
+                    <Link
+                      href="/confidentialite"
+                      className="text-primary-500 hover:text-primary-700 underline underline-offset-2"
+                    >
+                      politique de confidentialité
+                    </Link>
+                    .
                   </span>
                 </label>
                 {errors.consentement && (
-                  <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">{errors.consentement}</p>
+                  <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">
+                    {errors.consentement}
+                  </p>
                 )}
               </div>
 
               {submitError && (
-                <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-4 text-center animate-fade-in-down">
+                <div
+                  role="alert"
+                  className="bg-red-50 border border-red-200 rounded-xl p-4 text-center animate-fade-in-down"
+                >
                   <p className="text-sm text-red-700">{submitError}</p>
                   <p className="text-xs text-red-500 mt-1">Vos données sont conservées.</p>
                   <button
@@ -1205,13 +1439,26 @@ export default function DevisForm({
                   {submitting ? (
                     <>
                       <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
                       </svg>
                       Envoi en cours&hellip;
                     </>
                   ) : (
-                    <>Obtenir mon devis gratuit <ArrowRight className="w-5 h-5" /></>
+                    <>
+                      Obtenir mon devis gratuit <ArrowRight className="w-5 h-5" />
+                    </>
                   )}
                 </button>
               </div>
@@ -1223,7 +1470,8 @@ export default function DevisForm({
         <div className="mt-6 pt-5 border-t border-sand-100 flex items-center justify-center gap-2">
           <Clock className="w-3.5 h-3.5 text-charcoal-300" />
           <p className="text-xs text-charcoal-400">
-            Rejoint les <span className="font-semibold text-charcoal-500">{monthlyCount}</span> demandes ce mois
+            Rejoint les <span className="font-semibold text-charcoal-500">{monthlyCount}</span>{' '}
+            demandes ce mois
           </p>
         </div>
       </form>

@@ -17,7 +17,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Devis Artisan Gratuit — Comparez les Offres',
   description:
-    "Demandez un devis artisan gratuit : plombier, électricien, serrurier et 50 métiers. 100% gratuit, sans engagement.",
+    'Demandez un devis artisan gratuit : plombier, électricien, serrurier et 50 métiers. 100% gratuit, sans engagement.',
   alternates: {
     canonical: `${SITE_URL}/devis`,
   },
@@ -30,15 +30,24 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Devis Artisan Gratuit — Comparez les Offres',
-    description: "Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.",
+    description:
+      'Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.',
     url: `${SITE_URL}/devis`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Devis gratuit' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Devis gratuit',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Devis Artisan Gratuit — Comparez les Offres',
-    description: "Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.",
+    description:
+      'Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -52,22 +61,22 @@ const faqItems = [
   {
     question: 'Combien de devis vais-je recevoir ?',
     answer:
-      'Vous recevez des devis personnalisés d\'artisans disponibles dans votre zone géographique. Le nombre dépend de la disponibilité locale.',
+      "Vous recevez des devis personnalisés d'artisans disponibles dans votre zone géographique. Le nombre dépend de la disponibilité locale.",
   },
   {
     question: 'En combien de temps suis-je contacté ?',
     answer:
-      'Un conseiller vous rappelle rapidement après l\'envoi de votre demande. En cas d\'urgence, précisez-le dans le formulaire pour accélérer le traitement.',
+      "Un conseiller vous rappelle rapidement après l'envoi de votre demande. En cas d'urgence, précisez-le dans le formulaire pour accélérer le traitement.",
   },
   {
     question: 'Comment les artisans sont-ils référencés ?',
     answer:
-      'Tous les artisans référencés sur ServicesArtisans sont immatriculés au registre SIREN. Nous contrôlons leur numéro d\'entreprise et leur activité déclarée auprès des données officielles de l\'INSEE.',
+      "Tous les artisans référencés sur ServicesArtisans sont immatriculés au registre SIREN. Nous contrôlons leur numéro d'entreprise et leur activité déclarée auprès des données officielles de l'INSEE.",
   },
   {
-    question: 'Suis-je obligé d\'accepter un devis ?',
+    question: "Suis-je obligé d'accepter un devis ?",
     answer:
-      'Non, vous êtes entièrement libre. Comparez les devis reçus à votre rythme et choisissez celui qui correspond le mieux à vos attentes et à votre budget. Aucune obligation d\'accepter.',
+      "Non, vous êtes entièrement libre. Comparez les devis reçus à votre rythme et choisissez celui qui correspond le mieux à vos attentes et à votre budget. Aucune obligation d'accepter.",
   },
   {
     question: 'Quelles données personnelles sont partagées ?',
@@ -76,17 +85,30 @@ const faqItems = [
   },
 ]
 
-export default async function DevisPage() {
+interface DevisPageProps {
+  searchParams: { service?: string | string[]; operation?: string | string[] }
+}
+
+export default async function DevisPage({ searchParams }: DevisPageProps) {
   const cmsPage = await getPageContent('devis', 'static')
+
+  // Query params : pré-remplissage depuis un CTA contextualisé (ex: fiche
+  // artisan RGE). Tolérant aux string[] (Next.js peut envoyer un tableau).
+  const rawService = Array.isArray(searchParams?.service)
+    ? searchParams?.service[0]
+    : searchParams?.service
+  const rawOperation = Array.isArray(searchParams?.operation)
+    ? searchParams?.operation[0]
+    : searchParams?.operation
+  const prefilledService = rawService?.trim() || undefined
+  const prefilledOperation = rawOperation?.trim() || undefined
 
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -108,17 +130,14 @@ export default async function DevisPage() {
             { name: 'Accueil', url: '/' },
             { name: 'Demander un devis', url: '/devis' },
           ]),
-          getFAQSchema(faqItems.map(item => ({ question: item.question, answer: item.answer }))),
+          getFAQSchema(faqItems.map((item) => ({ question: item.question, answer: item.answer }))),
         ]}
       />
 
       {/* ─── HERO MINIMAL (Wise/Lemonade pattern) ────────── */}
       <section className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
-          <Breadcrumb
-            items={[{ label: 'Demander un devis' }]}
-            className="mb-4 text-charcoal-400"
-          />
+          <Breadcrumb items={[{ label: 'Demander un devis' }]} className="mb-4 text-charcoal-400" />
           <h1 className="font-heading text-3xl font-bold text-charcoal-900 tracking-tight">
             Recevez vos devis gratuits
           </h1>
@@ -137,7 +156,10 @@ export default async function DevisPage() {
           <div className="grid lg:grid-cols-[1fr_380px] gap-8 items-start">
             {/* LEFT: Formulaire DevisForm */}
             <div id="formulaire">
-              <DevisForm />
+              <DevisForm
+                prefilledService={prefilledService}
+                prefilledOperation={prefilledOperation}
+              />
             </div>
 
             {/* RIGHT: Sidebar de réassurance (desktop sticky, mobile below) */}
@@ -278,7 +300,9 @@ export default async function DevisPage() {
           <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">Avis artisans</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">
+                Avis artisans
+              </h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -293,7 +317,9 @@ export default async function DevisPage() {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">Tarifs artisans</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">
+                Tarifs artisans
+              </h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -308,7 +334,9 @@ export default async function DevisPage() {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">Urgence artisans</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">
+                Urgence artisans
+              </h3>
               <div className="space-y-1.5">
                 {services.slice(0, 8).map((s) => (
                   <Link
@@ -323,41 +351,70 @@ export default async function DevisPage() {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">Navigation</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">
+                Navigation
+              </h3>
               <div className="space-y-1.5">
-                <Link href="/services" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/services"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Tous les services
                 </Link>
-                <Link href="/villes" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/villes"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Toutes les villes
                 </Link>
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/departements"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Tous les départements
                 </Link>
-                <Link href="/regions" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/regions"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Toutes les régions
                 </Link>
-                <Link href="/blog" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/blog"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Blog
                 </Link>
-                <Link href="/tarifs" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/tarifs"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Tarifs artisans
                 </Link>
-                <Link href="/urgence" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/urgence"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Urgence artisans
                 </Link>
-                <Link href="/avis" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/avis"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Avis artisans
                 </Link>
-                <Link href="/checklist-travaux" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                <Link
+                  href="/checklist-travaux"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Checklist avant travaux
                 </Link>
