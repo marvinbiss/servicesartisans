@@ -14,6 +14,13 @@ import {
   isRgeAllowedService,
   RGE_QUALIFICATION_LABELS,
 } from '@/lib/rge/service-city-listings'
+import { getRgeServiceStats } from '@/lib/rge/guide-stats'
+import {
+  buildServiceCityParagraphs,
+  buildServiceCityFaq,
+  buildFaqJsonLd,
+} from '@/lib/rge/pseo-content'
+import { getVilleBySlug } from '@/lib/data/france'
 
 // ISR : revalidation quotidienne (comme les autres routes pSEO géo)
 export const revalidate = 86400
@@ -185,6 +192,26 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
   const hasGuide = ['pompe-a-chaleur', 'panneaux-solaires', 'isolation-thermique', 'renovation-energetique'].includes(serviceSlug)
 
+  // Content enrichi (2-3 paragraphes spécifiques service x ville)
+  const villeData = getVilleBySlug(villeSlug)
+  const enrichedParagraphs = villeData
+    ? buildServiceCityParagraphs(serviceSlug, serviceName, villeData, count)
+    : []
+
+  // FAQ contextualisée service + ville
+  const faqItems = villeData
+    ? buildServiceCityFaq(serviceSlug, serviceName, villeData, count)
+    : []
+  const faqSchema = faqItems.length > 0 ? buildFaqJsonLd(faqItems) : null
+
+  // Cross-linking villes : top cities du service (exclut la ville courante)
+  const serviceStats = isRgeAllowedService(serviceSlug)
+    ? await getRgeServiceStats(serviceSlug)
+    : { total: 0, topCities: [] }
+  const otherCities = serviceStats.topCities
+    .filter((c) => c.slug !== villeSlug)
+    .slice(0, 5)
+
   return (
     <main className="min-h-screen bg-white">
       <script
@@ -199,6 +226,12 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Breadcrumb
@@ -219,8 +252,11 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </p>
         </header>
 
-        <section className="mb-8 text-gray-700 leading-relaxed">
+        <section className="mb-8 text-gray-700 leading-relaxed space-y-4">
           <p>{intro}</p>
+          {enrichedParagraphs.map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
         </section>
 
         <section className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
@@ -310,6 +346,50 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             )}
           </ul>
         </section>
+
+        {otherCities.length > 0 && (
+          <section aria-labelledby="other-cities" className="mb-12">
+            <h2 id="other-cities" className="text-xl font-bold text-gray-900 font-jakarta mb-2">
+              {serviceName} RGE dans d&rsquo;autres villes
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Les villes o&ugrave; les {serviceName.toLowerCase()} RGE sont les plus nombreux.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {otherCities.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/rge/${serviceSlug}/${c.slug}`}
+                  className="inline-flex items-center px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                >
+                  {serviceName} RGE &agrave; {c.name}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {faqItems.length > 0 && (
+          <section aria-labelledby="faq" className="mb-12">
+            <h2 id="faq" className="text-xl md:text-2xl font-bold text-gray-900 font-jakarta mb-6">
+              Questions fr&eacute;quentes : {serviceName.toLowerCase()} RGE &agrave; {villeName}
+            </h2>
+            <div className="space-y-3">
+              {faqItems.map((item, i) => (
+                <details
+                  key={i}
+                  className="group rounded-lg border border-gray-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                >
+                  <summary className="cursor-pointer list-none font-semibold text-gray-900 flex items-start justify-between gap-4">
+                    <span>{item.question}</span>
+                    <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">+</span>
+                  </summary>
+                  <p className="mt-3 text-gray-600 leading-relaxed">{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   )
