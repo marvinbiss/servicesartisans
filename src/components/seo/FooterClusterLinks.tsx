@@ -55,13 +55,13 @@ interface FooterLink {
 
 export default function FooterClusterLinks() {
   // Services populaires — 6 liens
-  const serviceLinks: FooterLink[] = TOP_SERVICES.map(s => ({
+  const serviceLinks: FooterLink[] = TOP_SERVICES.map((s) => ({
     href: `/services/${s.slug}`,
     label: s.name,
   }))
 
   // Villes populaires — 6 liens
-  const cityLinks: FooterLink[] = TOP_CITIES.map(c => ({
+  const cityLinks: FooterLink[] = TOP_CITIES.map((c) => ({
     href: `/villes/${c.slug}`,
     label: `Artisans ${c.name}`,
   }))
@@ -74,9 +74,24 @@ export default function FooterClusterLinks() {
     { href: '/urgence', label: 'Artisan urgence' },
   ]
 
+  // Rénovation énergétique — primes CEE, artisans RGE, attribution ADEME
+  const renovationLinks: FooterLink[] = [
+    { href: '/cee', label: 'Primes CEE' },
+    { href: '/rge', label: 'Artisans RGE' },
+    { href: '/rge/qualifications', label: 'Qualifications RGE' },
+    { href: '/cee/coup-de-pouce-2026', label: 'Coup de pouce 2026' },
+    { href: '/cee/mandataire-vs-direct', label: 'Mandataire vs direct' },
+    { href: '/maprimerenov-cumulaison-cee', label: 'Cumul MaPrimeRénov\u2019 & CEE' },
+    { href: '/rge/comment-devenir-rge', label: 'Devenir artisan RGE' },
+    { href: '/rge/fraude-rge-comment-verifier', label: 'Vérifier un RGE' },
+    { href: '/rge/tarifs-audit-energetique', label: 'Tarifs audit énergétique' },
+    { href: '/rge/sources', label: 'Sources & méthodologie' },
+    { href: '/ademe', label: 'Données ADEME' },
+  ]
+
   // Top combinaisons service×ville — 20 liens
-  const comboLinks: FooterLink[] = COMBO_SERVICES.flatMap(s =>
-    COMBO_CITIES.map(c => ({
+  const comboLinks: FooterLink[] = COMBO_SERVICES.flatMap((s) =>
+    COMBO_CITIES.map((c) => ({
       href: `/services/${s.slug}/${c.slug}`,
       label: `${s.name} ${c.name}`,
     }))
@@ -87,14 +102,14 @@ export default function FooterClusterLinks() {
       {/* ─── Cluster links (services, villes, ressources) ─── */}
       <div className="border-b border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {/* Services populaires */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
                 Services les plus recherchés
               </h4>
               <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                {serviceLinks.map(link => (
+                {serviceLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -112,7 +127,7 @@ export default function FooterClusterLinks() {
                 Grandes villes
               </h4>
               <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                {cityLinks.map(link => (
+                {cityLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -130,7 +145,25 @@ export default function FooterClusterLinks() {
                 Ressources
               </h4>
               <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                {utilityLinks.map(link => (
+                {utilityLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Rénovation énergétique — primes CEE, RGE, ADEME */}
+            <div>
+              <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
+                R&eacute;novation &eacute;nerg&eacute;tique
+              </h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {renovationLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -152,7 +185,7 @@ export default function FooterClusterLinks() {
             Top combinaisons
           </h4>
           <div className="flex flex-wrap gap-2">
-            {comboLinks.map(link => (
+            {comboLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

@@ -1,5 +1,17 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, Instagram, Shield, CreditCard, Award, Building2 } from 'lucide-react'
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+  Shield,
+  CreditCard,
+  Award,
+  Building2,
+} from 'lucide-react'
 import NewsletterForm from './NewsletterForm'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { formatPhoneForTel } from '@/lib/validation/phone'
@@ -19,7 +31,6 @@ const navigationLinks = [
   { name: 'Devenir partenaire', href: '/inscription-artisan' },
 ]
 
-
 export default function Footer() {
   return (
     <footer className="relative bg-charcoal-900 text-sand-400" role="contentinfo">
@@ -28,7 +39,10 @@ export default function Footer() {
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-charcoal-800/80 to-transparent pointer-events-none" />
 
       {/* Subtle noise texture overlay */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" aria-hidden="true" />
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]"
+        aria-hidden="true"
+      />
 
       {/* ─── Cluster Links (SEO — PageRank equity to top clusters + cities + resources) ── */}
       <FooterClusterLinks />
@@ -38,10 +52,18 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl p-8 lg:p-10 overflow-hidden shadow-2xl shadow-primary-900/30">
             {/* Decorative gradient orbs */}
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-primary-300/20 rounded-full blur-3xl" aria-hidden="true" />
-            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-primary-200/15 rounded-full blur-3xl" aria-hidden="true" />
+            <div
+              className="absolute -top-20 -right-20 w-60 h-60 bg-primary-300/20 rounded-full blur-3xl"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute -bottom-16 -left-16 w-48 h-48 bg-primary-200/15 rounded-full blur-3xl"
+              aria-hidden="true"
+            />
             <div className="relative text-center lg:text-left">
-              <h3 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">Restez informé</h3>
+              <h3 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">
+                Restez informé
+              </h3>
               <p className="text-white/80 text-base">Recevez nos conseils et offres exclusives</p>
             </div>
             <div className="relative w-full lg:w-auto">
@@ -111,7 +133,14 @@ export default function Footer() {
                 className="flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
               >
                 <defs>
-                  <linearGradient id="footerBg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                  <linearGradient
+                    id="footerBg"
+                    x1="0"
+                    y1="0"
+                    x2="48"
+                    y2="48"
+                    gradientUnits="userSpaceOnUse"
+                  >
                     <stop stopColor="#E86B4B" />
                     <stop offset="1" stopColor="#C24B2A" />
                   </linearGradient>
@@ -122,27 +151,58 @@ export default function Footer() {
                 </defs>
                 <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#footerBg)" />
                 <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#footerShine)" />
-                <path fillRule="evenodd" fill="#fff" fillOpacity="0.95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z" />
+                <path
+                  fillRule="evenodd"
+                  fill="#fff"
+                  fillOpacity="0.95"
+                  d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z"
+                />
               </svg>
               <span className="text-2xl font-heading font-extrabold tracking-tight text-white group-hover:text-sand-200 transition-colors duration-200">
                 Services<span className="text-primary-400">Artisans</span>
               </span>
             </Link>
-            <p className="text-sm text-sand-300 mb-2 font-medium">La plateforme de confiance pour trouver votre artisan</p>
+            <p className="text-sm text-sand-300 mb-2 font-medium">
+              La plateforme de confiance pour trouver votre artisan
+            </p>
             <p className="text-sm leading-relaxed mb-8 text-sand-400/80">
               {companyIdentity.description}
             </p>
             <div className="flex gap-2.5">
-              <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="Facebook">
+              <a
+                href="https://facebook.com/servicesartisans"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"
+                aria-label="Facebook"
+              >
                 <Facebook className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://x.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="X">
+              <a
+                href="https://x.com/servicesartisans"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"
+                aria-label="X"
+              >
                 <Twitter className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://linkedin.com/company/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="LinkedIn">
+              <a
+                href="https://linkedin.com/company/servicesartisans"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"
+                aria-label="LinkedIn"
+              >
                 <Linkedin className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://instagram.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="Instagram">
+              <a
+                href="https://instagram.com/servicesartisans"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"
+                aria-label="Instagram"
+              >
                 <Instagram className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
             </div>
@@ -150,11 +210,16 @@ export default function Footer() {
 
           {/* Navigation — money pages & essential hubs */}
           <div className="col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2">
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Navigation</h4>
+            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">
+              Navigation
+            </h4>
             <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
               {navigationLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  <Link
+                    href={link.href}
+                    className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -164,40 +229,63 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Juridique</h4>
+            <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">
+              Juridique
+            </h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/mentions-legales" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link
+                  href="/mentions-legales"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                >
                   Mentions légales
                 </Link>
               </li>
               <li>
-                <Link href="/cgv" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link
+                  href="/cgv"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                >
                   CGV
                 </Link>
               </li>
               <li>
-                <Link href="/confidentialite" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link
+                  href="/confidentialite"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                >
                   Confidentialité
                 </Link>
               </li>
               <li>
-                <Link href="/accessibilite" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link
+                  href="/accessibilite"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                >
                   Accessibilité
                 </Link>
               </li>
               <li>
-                <Link href="/droit-acces" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link
+                  href="/droit-acces"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                >
                   Droit d&apos;acc&egrave;s
                 </Link>
               </li>
               <li>
-                <Link href="/droit-opposition" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link
+                  href="/droit-opposition"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                >
                   Droit d&apos;opposition
                 </Link>
               </li>
               <li>
-                <Link href="/violation-donnees" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link
+                  href="/violation-donnees"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                >
                   Violation de données
                 </Link>
               </li>
@@ -226,7 +314,12 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-white font-medium text-sm mb-0.5">Téléphone</p>
-                  <a href={`tel:${formatPhoneForTel(companyIdentity.phone)}`} className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200">{companyIdentity.phone}</a>
+                  <a
+                    href={`tel:${formatPhoneForTel(companyIdentity.phone)}`}
+                    className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200"
+                  >
+                    {companyIdentity.phone}
+                  </a>
                   <PlatformPhoneLabel variant="inline" className="mt-1" />
                 </div>
               </div>
@@ -237,7 +330,10 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-white font-medium text-sm mb-0.5">Email</p>
-                <a href={`mailto:${companyIdentity.email}`} className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200">
+                <a
+                  href={`mailto:${companyIdentity.email}`}
+                  className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200"
+                >
                   {companyIdentity.email}
                 </a>
               </div>
@@ -256,14 +352,33 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <p className="text-sand-500">
-              &copy; {new Date().getFullYear()} <span className="text-sand-300 font-medium">ServicesArtisans</span>. Tous droits réservés.
-              <span className="hidden sm:inline"> — Données mises à jour en {new Date().getFullYear()}</span>
+              &copy; {new Date().getFullYear()}{' '}
+              <span className="text-sand-300 font-medium">ServicesArtisans</span>. Tous droits
+              réservés.
+              <span className="hidden sm:inline">
+                {' '}
+                — Données mises à jour en {new Date().getFullYear()}
+              </span>
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-sand-500">
-              <Link href="/plan-du-site" className="hover:text-primary-400 transition-colors duration-200 py-1.5">
+              <Link
+                href="/plan-du-site"
+                className="hover:text-primary-400 transition-colors duration-200 py-1.5"
+              >
                 Plan du site
               </Link>
             </div>
+          </div>
+          <div className="mt-4 pt-4 border-t border-charcoal-800/60 text-xs text-sand-500/80 text-center">
+            Données RGE&nbsp;: Source ADEME — France Rénov&apos; · Licence{' '}
+            <a
+              href="https://data.ademe.fr/datasets/liste-des-entreprises-rge-2"
+              target="_blank"
+              rel="noopener nofollow"
+              className="underline hover:text-primary-400 transition-colors duration-200"
+            >
+              Etalab 2.0
+            </a>
           </div>
         </div>
       </div>
