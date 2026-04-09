@@ -27,6 +27,11 @@ import {
   buildCeeOperationCityFaq,
   buildCeeFaqJsonLd,
 } from '@/lib/cee/pseo-content'
+import {
+  RGE_ALLOWED_SERVICES,
+  RGE_QUALIFICATION_LABELS,
+  type RgeAllowedService,
+} from '@/lib/rge/service-city-listings'
 
 // ISR quotidien — le catalogue bouge rarement, les providers RGE sont
 // resynchronisés hebdo côté ADEME.
@@ -211,6 +216,11 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
 
   const domaineLabel = CEE_DOMAINE_LABELS[operation.domaine]?.label || operation.domaine
 
+  const rgeServices: RgeAllowedService[] = (operation.services_slugs ?? []).filter(
+    (slug): slug is RgeAllowedService =>
+      (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug),
+  )
+
   return (
     <main className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
@@ -360,6 +370,33 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                   <p className="mt-3 text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: item.answer }} />
                 </details>
               ))}
+            </div>
+          </section>
+        )}
+
+        {/* Cross-linking m\u00e9tiers RGE */}
+        {rgeServices.length > 0 && (
+          <section aria-labelledby="rge-services" className="mb-12">
+            <h2 id="rge-services" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+              M&eacute;tiers RGE qualifi&eacute;s &agrave; {villeName}
+            </h2>
+            <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+              Explorer l&rsquo;annuaire des artisans RGE par m&eacute;tier &agrave; {villeName}&nbsp;:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {rgeServices.map((slug) => {
+                const meta = RGE_QUALIFICATION_LABELS[slug]
+                return (
+                  <Link
+                    key={slug}
+                    href={`/rge/${slug}/${villeSlug}`}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50 text-sm text-emerald-800 hover:border-emerald-400 hover:bg-emerald-100 transition"
+                  >
+                    <span className="font-semibold capitalize">{slug.replace(/-/g, ' ')}</span>
+                    {meta && <span className="text-xs text-emerald-600">&middot; {meta.label}</span>}
+                  </Link>
+                )
+              })}
             </div>
           </section>
         )}

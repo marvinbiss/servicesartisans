@@ -14,6 +14,11 @@ import {
   CEE_DOMAINE_LABELS,
 } from '@/lib/cee/catalogue'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
+import {
+  RGE_ALLOWED_SERVICES,
+  RGE_QUALIFICATION_LABELS,
+  type RgeAllowedService,
+} from '@/lib/rge/service-city-listings'
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -111,6 +116,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   const sameDomain = allOps
     .filter((op) => op.domaine === operation.domaine && op.code !== operation.code)
     .slice(0, 6)
+
+  const rgeServices: RgeAllowedService[] = (operation.services_slugs ?? []).filter(
+    (slug): slug is RgeAllowedService =>
+      (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug),
+  )
 
   const domaineInfo = CEE_DOMAINE_LABELS[operation.domaine]
 
@@ -245,6 +255,44 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           </p>
         )}
       </section>
+
+      {/* M\u00e9tiers RGE qualifi\u00e9s */}
+      {rgeServices.length > 0 && (
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+            M&eacute;tiers RGE qualifi&eacute;s pour cette op&eacute;ration
+          </h2>
+          <p className="text-slate-600 max-w-3xl mb-6 leading-relaxed">
+            Seuls les artisans titulaires d&rsquo;une qualification RGE active peuvent
+            d&eacute;clencher la prime CEE {operation.code}. Voici les m&eacute;tiers
+            concern&eacute;s&nbsp;:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {rgeServices.map((slug) => {
+              const meta = RGE_QUALIFICATION_LABELS[slug]
+              return (
+                <Link
+                  key={slug}
+                  href={`/rge/${slug}`}
+                  className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-400 hover:shadow-sm transition"
+                >
+                  <ShieldCheck className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <div className="font-semibold text-slate-900 group-hover:text-emerald-700 transition capitalize">
+                      {slug.replace(/-/g, ' ')}
+                    </div>
+                    {meta && (
+                      <div className="text-xs text-slate-500 mt-0.5">
+                        {meta.label} &mdash; {meta.organisme}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+      )}
 
       {/* Top villes */}
       {topCities.length > 0 && (
