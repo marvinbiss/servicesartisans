@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react'
+import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp, ShieldCheck, ArrowRight, Sparkles, Leaf } from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france-light'
 import { getArtisanUrl } from '@/lib/utils'
+import { getCeeOperationDetails, type CeeOperationDetail } from '@/lib/cee/qualify'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
 
@@ -76,6 +77,7 @@ export default function DevisConfirmation({
   const [loading, setLoading] = useState(true)
   const [providerCount, setProviderCount] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
+  const [ceeDetails, setCeeDetails] = useState<CeeOperationDetail[]>([])
 
   // Fetch matched providers async — success UI shows immediately
   useEffect(() => {
@@ -143,6 +145,32 @@ export default function DevisConfirmation({
     }
   }, [service, city])
 
+  // Fetch CEE operation details when eligible — affiche exigences RGE + opérations
+  useEffect(() => {
+    if (!ceeEligible || ceeOperationCodes.length === 0) {
+      setCeeDetails([])
+      return
+    }
+    let cancelled = false
+    ;(async () => {
+      try {
+        const supabase = getSupabaseClient()
+        const details = await getCeeOperationDetails(supabase, ceeOperationCodes)
+        if (!cancelled) setCeeDetails(details)
+      } catch {
+        if (!cancelled) setCeeDetails([])
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [ceeEligible, ceeOperationCodes])
+
+  // Agrégat unique des qualifications RGE requises par l'ensemble des opérations
+  const requiredRgeQualifs = Array.from(
+    new Set(ceeDetails.flatMap((d) => d.rge_qualifications_requises || []))
+  ).filter(Boolean)
+
   const serviceLabel = getServiceLabel(service)
   const maskedPhone = maskPhone(phone)
 
@@ -208,24 +236,60 @@ export default function DevisConfirmation({
         </motion.div>
       )}
 
-      {/* ── CEE eligibility badge ── */}
+      {/* ── CEE eligibility badge + détails opérations ── */}
       {ceeEligible && (
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.27 }}
-          className={`flex items-start gap-3 px-4 py-3 bg-gradient-to-br from-accent-50 to-primary-50 border border-accent-200 rounded-xl ${compact ? 'mb-3' : 'mb-5'}`}
+          className={`px-4 py-3 bg-gradient-to-br from-accent-50 to-primary-50 border border-accent-200 rounded-xl ${compact ? 'mb-3' : 'mb-5'}`}
         >
-          <Sparkles className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <p className={`font-semibold text-charcoal-900 ${compact ? 'text-xs' : 'text-sm'}`}>
-              Vos travaux sont potentiellement éligibles à une prime CEE
-            </p>
-            <p className={`text-charcoal-600 mt-0.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
-              Certificats d&apos;Économies d&apos;Énergie — estimation et éligibilité
-              confirmées par votre artisan{ceeOperationCodes.length > 0 ? ` (${ceeOperationCodes.slice(0, 3).join(', ')}${ceeOperationCodes.length > 3 ? '…' : ''})` : ''}.
-            </p>
+          <div className="flex items-start gap-3">
+            <Sparkles className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className={`font-semibold text-charcoal-900 ${compact ? 'text-xs' : 'text-sm'}`}>
+                Vos travaux sont potentiellement éligibles à une prime CEE
+              </p>
+              <p className={`text-charcoal-600 mt-0.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+                Certificats d&apos;Économies d&apos;Énergie — estimation et éligibilité
+                confirmées par votre artisan.
+              </p>
+            </div>
           </div>
+
+          {/* Liste des opérations CEE applicables */}
+          {ceeDetails.length > 0 && (
+            <ul className={`mt-3 space-y-1.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+              {ceeDetails.slice(0, 4).map((op) => (
+                <li key={op.code} className="flex items-start gap-2">
+                  <CheckCircle className="w-3.5 h-3.5 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <div className="flex-1 min-w-0">
+                    <span className="font-medium text-charcoal-800">{op.code}</span>
+                    <span className="text-charcoal-600"> — {op.nom}</span>
+                  </div>
+                </li>
+              ))}
+              {ceeDetails.length > 4 && (
+                <li className="text-charcoal-500 ml-5">
+                  + {ceeDetails.length - 4} autre{ceeDetails.length - 4 > 1 ? 's' : ''} opération{ceeDetails.length - 4 > 1 ? 's' : ''}
+                </li>
+              )}
+            </ul>
+          )}
+
+          {/* Exigences RGE (agrégées de toutes les opérations) */}
+          {requiredRgeQualifs.length > 0 && (
+            <div className={`mt-3 pt-3 border-t border-accent-100 flex items-start gap-2 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+              <Leaf className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <div className="flex-1 min-w-0">
+                <span className="font-semibold text-emerald-700">Artisan RGE requis :</span>{' '}
+                <span className="text-charcoal-600">
+                  {requiredRgeQualifs.slice(0, 4).join(', ')}
+                  {requiredRgeQualifs.length > 4 ? ` +${requiredRgeQualifs.length - 4}` : ''}
+                </span>
+              </div>
+            </div>
+          )}
         </motion.div>
       )}
 
