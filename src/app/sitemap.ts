@@ -8,6 +8,7 @@ import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import { STATIC_BATCH, LARGE_BATCH, SITEMAP_CITY_COUNT, SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
+import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
@@ -99,6 +100,7 @@ export async function generateSitemaps() {
     // CEE pSEO — Tier 2 : 19 op\u00e9rations × 500 villes = 9 500 URLs
     // + hub par op\u00e9ration (19 URLs). Pages noindex fail-open si 0 provider.
     { id: 'cee-operation' },        // /cee/[op] — 19 URLs
+    { id: 'cee-operation-guide' },  // /cee/[op]/guide — 5 URLs (high-intent guides)
     { id: 'cee-operation-city' },   // /cee/[op]/[ville] — 19 × 500 = 9 500 URLs
   ]
 
@@ -664,6 +666,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: STATIC_DATE,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
+    }))
+  }
+
+  // ── CEE operation guides (/cee/[op]/guide) ──────────────────────────
+  // 5 URLs — guides éditoriaux long-format pour les opérations high-intent.
+  // Priority 0.75 (au-dessus du hub car contenu éditorial riche).
+  if (id === 'cee-operation-guide') {
+    return CEE_OPERATIONS_WITH_GUIDE.map((code) => ({
+      url: `${SITE_URL}/cee/${code}/guide`,
+      lastModified: STATIC_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
     }))
   }
 

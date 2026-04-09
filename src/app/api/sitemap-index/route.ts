@@ -49,6 +49,7 @@ export async function GET() {
     // CEE pSEO — Tier 2 (19 op\u00e9rations × top 500 villes = 9 500 URLs)
     // + hub par op\u00e9ration (19 URLs). Keep in sync with sitemap.ts.
     'cee-operation',
+    'cee-operation-guide',
     'cee-operation-city',
   ]
 

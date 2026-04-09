@@ -19,6 +19,7 @@ import {
   RGE_QUALIFICATION_LABELS,
   type RgeAllowedService,
 } from '@/lib/rge/service-city-listings'
+import { hasCeeOperationGuide } from '@/lib/cee/operation-guides-content'
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -121,6 +122,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     (slug): slug is RgeAllowedService =>
       (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug),
   )
+
+  const hasGuide = hasCeeOperationGuide(opCode)
 
   const domaineInfo = CEE_DOMAINE_LABELS[operation.domaine]
 
@@ -240,6 +243,29 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             </div>
           )}
         </dl>
+
+        {hasGuide && (
+          <div className="mt-8 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 to-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex-1">
+              <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">
+                Guide d&eacute;taill&eacute;
+              </div>
+              <div className="font-bold text-slate-900 text-lg">
+                Tout savoir sur la prime CEE {operation.code}
+              </div>
+              <div className="text-sm text-slate-600 mt-1">
+                Conditions techniques, montants 2026, cumul MaPrimeR&eacute;nov&rsquo; et pi&egrave;ges &agrave; &eacute;viter.
+              </div>
+            </div>
+            <Link
+              href={`/cee/${opCode}/guide`}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition whitespace-nowrap"
+            >
+              Lire le guide
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+        )}
 
         {operation.url_fiche_officielle && (
           <p className="mt-6">
