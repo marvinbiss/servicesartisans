@@ -94,6 +94,7 @@ export async function generateSitemaps() {
     // le ratio d'indexation tant que Google évalue la qualité du cluster RGE.
     // Scaler au full SITEMAP_CITY_COUNT une fois le ratio > 40%.
     { id: 'rge-city' },          // /artisans-rge/[ville] — 500 URLs
+    { id: 'rge-service' },       // /rge/[service] — 14 URLs (hub par métier)
     { id: 'rge-service-city' },  // /rge/[service]/[ville] — 14 × 500 = 7 000 URLs
     // CEE pSEO — Tier 2 : 19 op\u00e9rations × 500 villes = 9 500 URLs
     // + hub par op\u00e9ration (19 URLs). Pages noindex fail-open si 0 provider.
@@ -620,6 +621,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: byCity.get(normalizeName(ville.name)),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
+    }))
+  }
+
+  // ── RGE service hub pages (/rge/[service]) ─────────────────────────
+  // 14 URLs — une par métier énergétique couvert par la mention RGE.
+  // Priority 0.7 (hub éditorial, entre la home /rge à 0.8 et les pSEO
+  // ville à 0.6). lastmod statique : contenu éditorial versionné code.
+  if (id === 'rge-service') {
+    return RGE_ALLOWED_SERVICES.map((svc) => ({
+      url: `${SITE_URL}/rge/${svc}`,
+      lastModified: STATIC_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
     }))
   }
 

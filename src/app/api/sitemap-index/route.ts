@@ -44,6 +44,7 @@ export async function GET() {
     'region-services',
     // RGE pSEO — Tier 2 (top 500 villes). Keep in sync with sitemap.ts.
     'rge-city',
+    'rge-service',       // /rge/[service] — 14 URLs (hub par métier)
     'rge-service-city',
     // CEE pSEO — Tier 2 (19 op\u00e9rations × top 500 villes = 9 500 URLs)
     // + hub par op\u00e9ration (19 URLs). Keep in sync with sitemap.ts.
