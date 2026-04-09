@@ -7,6 +7,7 @@ import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import { STATIC_BATCH, LARGE_BATCH, SITEMAP_CITY_COUNT, SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
+import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
@@ -79,6 +80,11 @@ export async function generateSitemaps() {
     ),
     { id: 'barometre' },
     { id: 'region-services' },
+    // RGE pSEO — Tier 2 (top 500 villes) car pages nouvelles, on évite de diluer
+    // le ratio d'indexation tant que Google évalue la qualité du cluster RGE.
+    // Scaler au full SITEMAP_CITY_COUNT une fois le ratio > 40%.
+    { id: 'rge-city' },          // /artisans-rge/[ville] — 500 URLs
+    { id: 'rge-service-city' },  // /rge/[service]/[ville] — 14 × 500 = 7 000 URLs
   ]
 
   // Provider sitemaps are served dynamically via /api/sitemap-providers
@@ -585,6 +591,39 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     )
   }
 
+
+  // ── RGE city listings (/artisans-rge/[ville]) ──────────────────────
+  // Tier 2: top 500 cities only. Pages noindex fail-open if 0 providers,
+  // ISR corrige avec le vrai comptage. lastmod omis (listing dérivé de la DB,
+  // pas de vrai changement template).
+  if (id === 'rge-city') {
+    const { byCity } = await getLastmodData()
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
+    return phase1Cities.map((ville) => ({
+      url: `${SITE_URL}/artisans-rge/${ville.slug}`,
+      lastModified: byCity.get(normalizeName(ville.name)),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }))
+  }
+
+  // ── RGE service × city listings (/rge/[service]/[ville]) ───────────
+  // 14 services énergétiques × 500 villes = 7 000 URLs → tient dans un
+  // single sitemap (< STATIC_BATCH). lastmod omis.
+  if (id === 'rge-service-city') {
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
+    const result: MetadataRoute.Sitemap = []
+    for (const svc of RGE_ALLOWED_SERVICES) {
+      for (const ville of phase1Cities) {
+        result.push({
+          url: `${SITE_URL}/rge/${svc}/${ville.slug}`,
+          changeFrequency: 'weekly',
+          priority: 0.6,
+        })
+      }
+    }
+    return result
+  }
 
   // Provider sitemaps are served via /api/sitemap-providers (dynamic API route).
   // Requests to /sitemap/providers-*.xml are rewritten by next.config.js.

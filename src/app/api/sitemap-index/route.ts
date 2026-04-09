@@ -42,6 +42,9 @@ export async function GET() {
     ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / LARGE_BATCH) }, (_, i) => `dept-services-${i}`),
     'barometre',
     'region-services',
+    // RGE pSEO — Tier 2 (top 500 villes). Keep in sync with sitemap.ts.
+    'rge-city',
+    'rge-service-city',
   ]
 
   // Provider sitemaps (DB-dependent, served via /api/sitemap-providers)
