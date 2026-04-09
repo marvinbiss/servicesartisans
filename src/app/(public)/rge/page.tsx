@@ -22,12 +22,10 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
-import {
-  getBreadcrumbSchema,
-  getCollectionPageSchema,
-  getFAQSchema,
-} from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getRgeNationalStats } from '@/lib/rge/guide-stats'
+import { getRgeLastSyncDate } from '@/lib/rge/last-sync'
+import LastUpdated from '@/components/seo/LastUpdated'
 import {
   RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
@@ -51,53 +49,57 @@ const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: strin
   },
   'isolation-thermique': {
     title: 'Isolation thermique',
-    tagline: 'ITE, ITI, combles perdus et planchers bas — la brique n°1 des économies d\u2019énergie.',
+    tagline:
+      'ITE, ITI, combles perdus et planchers bas — la brique n°1 des économies d\u2019énergie.',
   },
-  'chauffagiste': {
+  chauffagiste: {
     title: 'Chauffage performant',
     tagline: 'Chaudières biomasse, poêles à granulés, systèmes hybrides bas-carbone.',
   },
   'panneaux-solaires': {
     title: 'Panneaux solaires',
-    tagline: 'Photovoltaïque, solaire thermique et autoconsommation — prime à l\u2019investissement.',
+    tagline:
+      'Photovoltaïque, solaire thermique et autoconsommation — prime à l\u2019investissement.',
   },
   'renovation-energetique': {
     title: 'Rénovation énergétique globale',
-    tagline: 'Accompagnement Mon Accompagnateur Rénov\u2019 et parcours MaPrimeRénov\u2019 Parcours Accompagné.',
+    tagline:
+      'Accompagnement Mon Accompagnateur Rénov\u2019 et parcours MaPrimeRénov\u2019 Parcours Accompagné.',
   },
-  'electricien': {
+  electricien: {
     title: 'Électricien RGE',
     tagline: 'Bornes de recharge IRVE, intégration photovoltaïque et pilotage énergétique.',
   },
-  'menuisier': {
+  menuisier: {
     title: 'Menuiserie performante',
-    tagline: 'Remplacement de fenêtres, portes d\u2019entrée et baies à haute performance thermique.',
+    tagline:
+      'Remplacement de fenêtres, portes d\u2019entrée et baies à haute performance thermique.',
   },
-  'couvreur': {
+  couvreur: {
     title: 'Couverture & toiture',
     tagline: 'Isolation de toiture par l\u2019extérieur, sarking et couverture éco-performante.',
   },
-  'plombier': {
+  plombier: {
     title: 'Plomberie performante',
     tagline: 'Chauffe-eau thermodynamique et solutions ECS économes en énergie.',
   },
-  'climaticien': {
+  climaticien: {
     title: 'Climatisation réversible',
     tagline: 'Air/air réversible, multi-splits et PAC air/air éligibles aux primes CEE.',
   },
-  'ramoneur': {
+  ramoneur: {
     title: 'Ramonage certifié',
     tagline: 'Entretien annuel d\u2019appareils bois, condition de maintien des aides.',
   },
-  'zingueur': {
+  zingueur: {
     title: 'Zinguerie & couverture',
     tagline: 'Isolation de toiture, zinguerie et couverture performante.',
   },
-  'facadier': {
+  facadier: {
     title: 'Façade & ITE',
     tagline: 'Isolation thermique par l\u2019extérieur et ravalement performant.',
   },
-  'platrier': {
+  platrier: {
     title: 'Plâtrerie & ITI',
     tagline: 'Isolation thermique par l\u2019intérieur et cloisons à haute performance.',
   },
@@ -108,18 +110,18 @@ const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: strin
 const SERVICE_ICONS: Record<RgeAllowedService, React.ComponentType<{ className?: string }>> = {
   'pompe-a-chaleur': Leaf,
   'isolation-thermique': Home,
-  'chauffagiste': Flame,
+  chauffagiste: Flame,
   'panneaux-solaires': Sun,
   'renovation-energetique': Building2,
-  'electricien': Zap,
-  'menuisier': Hammer,
-  'couvreur': Home,
-  'plombier': Wrench,
-  'climaticien': Wind,
-  'ramoneur': Flame,
-  'zingueur': Home,
-  'facadier': PaintBucket,
-  'platrier': PaintBucket,
+  electricien: Zap,
+  menuisier: Hammer,
+  couvreur: Home,
+  plombier: Wrench,
+  climaticien: Wind,
+  ramoneur: Flame,
+  zingueur: Home,
+  facadier: PaintBucket,
+  platrier: PaintBucket,
 }
 
 // FAQ éditoriale 100% unique, rédigée pour le hub /rge (pas de copier-coller
@@ -178,19 +180,20 @@ export const metadata: Metadata = {
 export default async function RgeHubPage() {
   // Fail-open strict : si la DB est down ou pendant le build, on retombe sur
   // { totalActive: 0, topCities: [] }. Jamais de rendu cassé.
-  const stats = await getRgeNationalStats().catch(() => ({
-    totalActive: 0,
-    topCities: [],
-  }))
+  // Fetch stats + dernière sync ADEME en parallèle. Fail-open sur les deux.
+  const [stats, lastSyncDate] = await Promise.all([
+    getRgeNationalStats().catch(() => ({
+      totalActive: 0,
+      topCities: [],
+    })),
+    getRgeLastSyncDate().catch(() => null),
+  ])
 
   const totalActive = stats.totalActive || 0
   const topCities = stats.topCities.slice(0, 12)
   const hasStats = totalActive > 0
 
-  const breadcrumbItems = [
-    { label: 'Accueil', href: '/' },
-    { label: 'Artisans RGE' },
-  ]
+  const breadcrumbItems = [{ label: 'Accueil', href: '/' }, { label: 'Artisans RGE' }]
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -233,20 +236,26 @@ export default async function RgeHubPage() {
                 <strong className="text-white">
                   {totalActive.toLocaleString('fr-FR')} artisans RGE actifs
                 </strong>{' '}
-                sur tout le territoire, synchronisés chaque semaine depuis le
-                référentiel officiel de l&apos;ADEME. Seule mention qui ouvre droit
-                à MaPrimeRénov&apos;, aux primes CEE et à la TVA réduite à 5,5 %.
+                sur tout le territoire, synchronisés chaque semaine depuis le référentiel officiel
+                de l&apos;ADEME. Seule mention qui ouvre droit à MaPrimeRénov&apos;, aux primes CEE
+                et à la TVA réduite à 5,5 %.
               </>
             ) : (
               <>
-                L&apos;annuaire de référence des artisans titulaires d&apos;une
-                qualification RGE active en France, synchronisé chaque semaine
-                depuis le référentiel officiel de l&apos;ADEME. Seule mention qui
-                ouvre droit à MaPrimeRénov&apos;, aux primes CEE et à la TVA
-                réduite à 5,5 %.
+                L&apos;annuaire de référence des artisans titulaires d&apos;une qualification RGE
+                active en France, synchronisé chaque semaine depuis le référentiel officiel de
+                l&apos;ADEME. Seule mention qui ouvre droit à MaPrimeRénov&apos;, aux primes CEE et
+                à la TVA réduite à 5,5 %.
               </>
             )}
           </p>
+          {/* Freshness signal — MAX(providers.rge_last_synced_at) ; fail-open
+              sur la date de rendu si la DB ne répond pas. */}
+          <LastUpdated
+            label="Données ADEME synchronisées le"
+            date={lastSyncDate}
+            className="mt-5 text-emerald-100/90"
+          />
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/verifier-artisan"
@@ -274,8 +283,8 @@ export default async function RgeHubPage() {
               {hasStats ? totalActive.toLocaleString('fr-FR') : '—'}
             </div>
             <div className="text-sm text-slate-600 mt-2 leading-relaxed">
-              Artisans RGE actifs recensés en France, qualifications en cours de
-              validité au référentiel France Rénov&apos; ADEME.
+              Artisans RGE actifs recensés en France, qualifications en cours de validité au
+              référentiel France Rénov&apos; ADEME.
             </div>
           </div>
           <div>
@@ -283,15 +292,15 @@ export default async function RgeHubPage() {
               {RGE_ALLOWED_SERVICES.length}
             </div>
             <div className="text-sm text-slate-600 mt-2 leading-relaxed">
-              Métiers énergétiques couverts par la mention RGE : enveloppe du
-              bâti, chauffage, énergies renouvelables, menuiserie performante.
+              Métiers énergétiques couverts par la mention RGE : enveloppe du bâti, chauffage,
+              énergies renouvelables, menuiserie performante.
             </div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">4</div>
             <div className="text-sm text-slate-600 mt-2 leading-relaxed">
-              Organismes accrédités COFRAC délivrent la mention : Qualibat,
-              Qualit&apos;EnR, Qualifelec, Certibat.
+              Organismes accrédités COFRAC délivrent la mention : Qualibat, Qualit&apos;EnR,
+              Qualifelec, Certibat.
             </div>
           </div>
         </div>
@@ -301,22 +310,26 @@ export default async function RgeHubPage() {
       <section className="bg-emerald-50/60 border-b border-emerald-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="flex items-start gap-3">
-            <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <FileCheck2
+              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <div>
               <div className="font-semibold text-slate-900">MaPrimeRénov&apos;</div>
               <div className="text-sm text-slate-600">
-                Aide directe de l&apos;Anah, réservée aux travaux réalisés par un
-                artisan RGE actif.
+                Aide directe de l&apos;Anah, réservée aux travaux réalisés par un artisan RGE actif.
               </div>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <FileCheck2
+              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <div>
               <div className="font-semibold text-slate-900">Primes CEE</div>
               <div className="text-sm text-slate-600">
-                Versées par les délégataires obligés (Effy, Sonergia,
-                TotalEnergies, EDF).
+                Versées par les délégataires obligés (Effy, Sonergia, TotalEnergies, EDF).
               </div>
             </div>
           </div>
@@ -325,8 +338,7 @@ export default async function RgeHubPage() {
             <div>
               <div className="font-semibold text-slate-900">TVA à 5,5 %</div>
               <div className="text-sm text-slate-600">
-                Taux réduit sur la main-d&apos;œuvre et les matériaux des travaux
-                énergétiques.
+                Taux réduit sur la main-d&apos;œuvre et les matériaux des travaux énergétiques.
               </div>
             </div>
           </div>
@@ -339,10 +351,9 @@ export default async function RgeHubPage() {
           Métiers énergétiques couverts par la mention RGE
         </h2>
         <p className="text-slate-600 max-w-3xl mb-10 leading-relaxed">
-          Chaque domaine de travaux correspond à une qualification RGE
-          spécifique, délivrée par un organisme accrédité. Cliquez sur un
-          métier pour accéder aux artisans RGE actifs dans ce domaine, ville
-          par ville.
+          Chaque domaine de travaux correspond à une qualification RGE spécifique, délivrée par un
+          organisme accrédité. Cliquez sur un métier pour accéder aux artisans RGE actifs dans ce
+          domaine, ville par ville.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {RGE_ALLOWED_SERVICES.map((slug) => {
@@ -372,12 +383,9 @@ export default async function RgeHubPage() {
                         {label.label} — {label.organisme}
                       </div>
                     )}
-                    <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-                      {display.tagline}
-                    </p>
+                    <p className="text-sm text-slate-600 mt-2 leading-relaxed">{display.tagline}</p>
                     <div className="text-sm font-semibold text-emerald-700 mt-3 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Voir les artisans{' '}
-                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                      Voir les artisans <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </div>
                   </div>
                 </div>
@@ -395,9 +403,9 @@ export default async function RgeHubPage() {
               Les villes où trouver un artisan RGE
             </h2>
             <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
-              Classement des villes françaises en fonction du nombre d&apos;artisans
-              RGE actifs référencés. Chaque page ville affiche l&apos;annuaire
-              complet, toutes spécialités confondues.
+              Classement des villes françaises en fonction du nombre d&apos;artisans RGE actifs
+              référencés. Chaque page ville affiche l&apos;annuaire complet, toutes spécialités
+              confondues.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {topCities.map((city) => (
@@ -407,10 +415,7 @@ export default async function RgeHubPage() {
                   className="group flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-400 hover:shadow-sm transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <MapPin
-                      className="w-4 h-4 text-emerald-600 flex-shrink-0"
-                      aria-hidden="true"
-                    />
+                    <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" aria-hidden="true" />
                     <span className="font-semibold text-slate-900 group-hover:text-emerald-700 transition truncate">
                       {city.name}
                     </span>
@@ -431,8 +436,8 @@ export default async function RgeHubPage() {
           Questions fréquentes sur la mention RGE
         </h2>
         <p className="text-slate-600 mb-10 leading-relaxed">
-          Tout ce qu&apos;il faut savoir avant de signer un devis de rénovation
-          énergétique avec un artisan RGE.
+          Tout ce qu&apos;il faut savoir avant de signer un devis de rénovation énergétique avec un
+          artisan RGE.
         </p>
         <div className="space-y-4">
           {FAQ.map((item, idx) => (
@@ -452,6 +457,166 @@ export default async function RgeHubPage() {
         </div>
       </section>
 
+      {/* Guides RGE pratiques — devenir RGE, v\u00e9rifier un RGE, tarifs audit */}
+      <section className="bg-slate-50 border-y border-slate-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+            Guides RGE pratiques
+          </h2>
+          <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+            Trois ressources op&eacute;rationnelles&nbsp;: comment obtenir la qualification RGE,
+            comment v&eacute;rifier qu&rsquo;un artisan est r&eacute;ellement qualifi&eacute;, et
+            combien co&ucirc;te un audit &eacute;nerg&eacute;tique r&eacute;glementaire.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <Link
+              href="/rge/comment-devenir-rge"
+              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <Wrench className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+                Comment devenir artisan RGE&nbsp;?
+              </div>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                Parcours complet de qualification (formation, audit, chantier t&eacute;moin),
+                co&ucirc;ts et d&eacute;lais pour chaque organisme.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Lire le guide <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
+            <Link
+              href="/rge/fraude-rge-comment-verifier"
+              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <ShieldCheck className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+                D&eacute;tecter la fraude RGE
+              </div>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                Signaux d&rsquo;alerte, v&eacute;rification officielle France R&eacute;nov&rsquo; et
+                recours en cas d&rsquo;abus ou d&rsquo;usurpation.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                V&eacute;rifier un artisan <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
+            <Link
+              href="/rge/tarifs-audit-energetique"
+              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+                Tarifs audit &eacute;nerg&eacute;tique r&eacute;glementaire
+              </div>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                Prix moyen par type de logement, conditions de prise en charge
+                MaPrimeR&eacute;nov&rsquo; et choix de l&rsquo;auditeur.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Voir les tarifs <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Ressources compl\u00e9mentaires — cross-linking CEE / Qualifications / ADEME */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+        <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+          Aller plus loin
+        </h2>
+        <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+          Comprendre les primes CEE mobilisables, les qualifications RGE exig&eacute;es et la source
+          officielle des donn&eacute;es que nous exposons.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <Link
+            href="/cee"
+            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+              <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+            </div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              Les 19 primes CEE r&eacute;sidentielles
+            </div>
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              Catalogue DGEC complet : PAC, isolation, poêle bois, chaudi&egrave;re biomasse, VMC.
+              Montants 2026 d&eacute;taill&eacute;s.
+            </p>
+            <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+              Explorer les primes CEE <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </div>
+          </Link>
+
+          <Link
+            href="/rge/qualifications"
+            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+              <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+            </div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              Qualifications RGE officielles
+            </div>
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec&nbsp;: guides
+              d&eacute;taill&eacute;s de chaque qualification et v&eacute;rification.
+            </p>
+            <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+              Lire les guides <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </div>
+          </Link>
+
+          <Link
+            href="/ademe"
+            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+              <ShieldCheck className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+            </div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              Source officielle ADEME
+            </div>
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              165&nbsp;000 qualifications synchronis&eacute;es chaque semaine avec l&rsquo;annuaire
+              France R&eacute;nov&rsquo;. M&eacute;thodologie et attribution.
+            </p>
+            <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+              Voir la m&eacute;thodologie <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </div>
+          </Link>
+
+          <Link
+            href="/maprimerenov-cumulaison-cee"
+            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+              <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+            </div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              Cumul MaPrimeR&eacute;nov&rsquo; &amp; CEE 2026
+            </div>
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              R&egrave;gles de cumul, plafonds par profil et ordre d&rsquo;imputation des aides pour
+              chaque type de travaux.
+            </p>
+            <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+              Lire les r&egrave;gles <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* CTAs finaux */}
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
@@ -459,9 +624,8 @@ export default async function RgeHubPage() {
             Prêt à lancer vos travaux avec un artisan RGE ?
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Vérifiez la qualification d&apos;un artisan, demandez un devis
-            gratuit et sans engagement, ou approfondissez le sujet avec nos
-            guides éditoriaux.
+            Vérifiez la qualification d&apos;un artisan, demandez un devis gratuit et sans
+            engagement, ou approfondissez le sujet avec nos guides éditoriaux.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

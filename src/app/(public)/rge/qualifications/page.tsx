@@ -10,15 +10,17 @@ import {
   RGE_QUALIFICATION_GUIDES,
   RGE_QUALIFICATIONS_WITH_GUIDE,
 } from '@/lib/rge/qualification-guides-content'
+import { getRgeLastSyncDate } from '@/lib/rge/last-sync'
+import LastUpdated from '@/components/seo/LastUpdated'
 
 export const revalidate = 86400
 
 const path = '/rge/qualifications'
 
 export const metadata: Metadata = {
-  title: 'Qualifications RGE — QualiPAC, QualiSol, QualiBois, Qualifelec',
+  title: 'Qualifications RGE — QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV',
   description:
-    "Comprendre les qualifications RGE officielles : QualiPAC, QualiSol, QualiBois Air/Eau et Qualifelec. Périmètre, primes débloquées et vérification.",
+    'Comprendre les qualifications RGE officielles : QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec et QualiPV. Périmètre, primes débloquées et vérification.',
   robots: {
     index: true,
     follow: true,
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Qualifications RGE — guides officiels',
     description:
-      "Guides officiels des qualifications RGE Qualit'EnR et Qualifelec : QualiPAC, QualiSol, QualiBois, Qualifelec.",
+      "Guides officiels des qualifications RGE Qualit'EnR et Qualifelec : QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV.",
     type: 'website',
     locale: 'fr_FR',
     url: `${SITE_URL}${path}`,
@@ -37,7 +39,11 @@ export const metadata: Metadata = {
   alternates: getAlternates(path),
 }
 
-export default function RgeQualificationsHubPage() {
+export default async function RgeQualificationsHubPage() {
+  // Fail-open strict — si la DB est down, `lastSyncDate` = null et le
+  // composant `LastUpdated` retombera sur la date de rendu ISR.
+  const lastSyncDate = await getRgeLastSyncDate().catch(() => null)
+
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Artisans RGE', url: '/rge' },
@@ -50,7 +56,7 @@ export default function RgeQualificationsHubPage() {
     name: 'Qualifications RGE officielles',
     url: `${SITE_URL}${path}`,
     description:
-      "Index des 4 principales qualifications RGE reconnues par l'État pour MaPrimeRénov' et les primes CEE.",
+      "Index des principales qualifications RGE reconnues par l'État pour MaPrimeRénov' et les primes CEE.",
     hasPart: RGE_QUALIFICATIONS_WITH_GUIDE.map((slug) => {
       const g = RGE_QUALIFICATION_GUIDES[slug]
       return {
@@ -66,12 +72,7 @@ export default function RgeQualificationsHubPage() {
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={collectionSchema} />
 
-      <Breadcrumb
-        items={[
-          { label: 'Artisans RGE', href: '/rge' },
-          { label: 'Qualifications' },
-        ]}
-      />
+      <Breadcrumb items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Qualifications' }]} />
 
       <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -88,6 +89,11 @@ export default function RgeQualificationsHubPage() {
             Comprendre ce que couvre chaque qualification RGE, quelles primes elle d&eacute;bloque
             et comment la v&eacute;rifier avant de signer un devis.
           </p>
+          <LastUpdated
+            label="Référentiel ADEME mis à jour le"
+            date={lastSyncDate}
+            className="mt-5 text-emerald-100/90"
+          />
         </div>
       </section>
 

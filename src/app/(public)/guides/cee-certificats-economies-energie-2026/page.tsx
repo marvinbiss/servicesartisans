@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
-import JsonLd from "@/components/JsonLd"
-import { getFAQSchema } from "@/lib/seo/jsonld"
-import Breadcrumb from "@/components/Breadcrumb"
-import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import JsonLd from '@/components/JsonLd'
+import { getFAQSchema } from '@/lib/seo/jsonld'
+import Breadcrumb from '@/components/Breadcrumb'
+import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import {
   Award,
   ShieldCheck,
@@ -19,7 +19,7 @@ import {
   Euro,
   Users,
   Factory,
-} from "lucide-react"
+} from 'lucide-react'
 
 const PAGE_URL = `${SITE_URL}/guides/cee-certificats-economies-energie-2026`
 
@@ -35,11 +35,11 @@ export const metadata: Metadata = {
     description:
       "Comprendre les CEE en 2026 : obligés, mandataires, barèmes coup de pouce, cumul MaPrimeRénov' et démarche pas à pas.",
     url: PAGE_URL,
-    type: "article",
+    type: 'article',
     siteName: SITE_NAME,
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     title: "CEE 2026 : guide complet Certificats d'Économies d'Énergie",
     description:
       "Comprendre les CEE en 2026 : obligés, mandataires, barèmes coup de pouce, cumul MaPrimeRénov' et démarche pas à pas.",
@@ -48,25 +48,25 @@ export const metadata: Metadata = {
 
 const acteurs = [
   {
-    titre: "Les obligés",
+    titre: 'Les obligés',
     icon: Factory,
     description:
       "Fournisseurs d'énergie (électricité, gaz, fioul, carburants) soumis par la loi à un quota d'économies d'énergie exprimé en kWh cumac. Ils doivent prouver à l'État qu'ils ont financé des travaux chez les consommateurs finaux, sous peine d'amende. TotalEnergies, Engie, EDF, ENI, Leclerc Énergies font partie des principaux obligés.",
   },
   {
-    titre: "Les éligibles",
+    titre: 'Les éligibles',
     icon: Users,
     description:
       "Toute personne qui réalise des travaux permettant de générer des économies d'énergie : particuliers, copropriétés, bailleurs sociaux, collectivités, entreprises. Les particuliers touchent la prime CEE directement via l'obligé ou son délégataire.",
   },
   {
-    titre: "Les délégataires",
+    titre: 'Les délégataires',
     icon: Building2,
     description:
-      "Sociétés mandatées par les obligés pour collecter les dossiers CEE à leur place : Effy, Sonergia, Hellio, GEO PLC, Certinergy, Capital Énergy. Elles industrialisent la collecte et versent la prime au bénéficiaire.",
+      'Sociétés mandatées par les obligés pour collecter les dossiers CEE à leur place : Effy, Sonergia, Hellio, GEO PLC, Certinergy, Capital Énergy. Elles industrialisent la collecte et versent la prime au bénéficiaire.',
   },
   {
-    titre: "Les mandataires",
+    titre: 'Les mandataires',
     icon: ShieldCheck,
     description:
       "Intermédiaires (souvent artisans ou courtiers) qui déposent le dossier CEE au nom du bénéficiaire auprès d'un obligé ou d'un délégataire. Ils doivent être enregistrés au registre national Emmy pour pouvoir agir.",
@@ -74,14 +74,43 @@ const acteurs = [
 ]
 
 const operations = [
-  { nom: "Isolation des combles perdus", code: "BAR-EN-101", kwhCumac: "Volume élevé, dégressif selon zone climatique" },
-  { nom: "Isolation des murs par l'extérieur (ITE)", code: "BAR-EN-102", kwhCumac: "Très forte valorisation, coup de pouce actif" },
-  { nom: "Isolation des rampants de toiture", code: "BAR-EN-103", kwhCumac: "Éligible coup de pouce Isolation" },
-  { nom: "Pompe à chaleur air/eau", code: "BAR-TH-104", kwhCumac: "Volume majoré pour remplacement chaudière fioul/gaz" },
-  { nom: "Pompe à chaleur hybride", code: "BAR-TH-159", kwhCumac: "Volume intermédiaire, éligible coup de pouce" },
-  { nom: "Chaudière biomasse individuelle", code: "BAR-TH-113", kwhCumac: "Volume élevé, coup de pouce chauffage" },
-  { nom: "Système solaire combiné", code: "BAR-TH-143", kwhCumac: "Volume élevé, éligible cumul MPR" },
-  { nom: "VMC double flux autoréglable", code: "BAR-TH-125", kwhCumac: "Valorisation modérée" },
+  {
+    nom: 'Isolation des combles perdus',
+    code: 'BAR-EN-101',
+    kwhCumac: 'Volume élevé, dégressif selon zone climatique',
+  },
+  {
+    nom: "Isolation des murs par l'extérieur (ITE)",
+    code: 'BAR-EN-102',
+    kwhCumac: 'Très forte valorisation, coup de pouce actif',
+  },
+  {
+    nom: 'Isolation des rampants de toiture',
+    code: 'BAR-EN-103',
+    kwhCumac: 'Éligible coup de pouce Isolation',
+  },
+  {
+    nom: 'Pompe à chaleur air/eau haute performance',
+    code: 'BAR-TH-171',
+    kwhCumac:
+      'Remplace la BAR-TH-104 abrogée 01/01/2024 — SCOP ≥ 4 requis, volume majoré pour sortie chaudière fossile',
+  },
+  {
+    nom: 'Pompe à chaleur hybride',
+    code: 'BAR-TH-159',
+    kwhCumac: 'Volume intermédiaire, éligible coup de pouce',
+  },
+  {
+    nom: 'Chaudière biomasse individuelle',
+    code: 'BAR-TH-113',
+    kwhCumac: 'Volume élevé, coup de pouce chauffage',
+  },
+  {
+    nom: 'Système solaire combiné',
+    code: 'BAR-TH-143',
+    kwhCumac: 'Volume élevé, éligible cumul MPR',
+  },
+  { nom: 'VMC double flux autoréglable', code: 'BAR-TH-125', kwhCumac: 'Valorisation modérée' },
 ]
 
 const etapes = [
@@ -99,19 +128,19 @@ const etapes = [
   },
   {
     numero: 3,
-    titre: "Faire réaliser les travaux par un artisan RGE",
+    titre: 'Faire réaliser les travaux par un artisan RGE',
     detail:
       "Comme pour MaPrimeRénov', les CEE imposent un artisan RGE sur le domaine concerné pour les opérations standardisées liées à l'enveloppe et au chauffage du logement.",
   },
   {
     numero: 4,
-    titre: "Transmettre la facture et les pièces justificatives",
+    titre: 'Transmettre la facture et les pièces justificatives',
     detail:
       "Facture détaillée, attestation sur l'honneur signée, attestation de TVA à 5,5 %, copie du certificat RGE : l'obligé contrôle la cohérence du dossier avant dépôt au Pôle National des CEE.",
   },
   {
     numero: 5,
-    titre: "Recevoir la prime",
+    titre: 'Recevoir la prime',
     detail:
       "Une fois le dossier validé, la prime est versée par virement, chèque ou bon d'achat selon l'obligé choisi. Les délais varient de 4 à 12 semaines.",
   },
@@ -124,7 +153,7 @@ const faqItems = [
       "Le kWh cumac (pour « cumulé actualisé ») est l'unité officielle des CEE. Elle représente l'économie d'énergie générée par une action sur toute la durée de vie de l'équipement, actualisée à 4 % par an. Un coup de pouce Isolation peut générer plusieurs centaines de milliers de kWh cumac par chantier.",
   },
   {
-    question: "Qui finance vraiment les primes CEE ?",
+    question: 'Qui finance vraiment les primes CEE ?',
     answer:
       "Les primes CEE sont intégralement financées par les fournisseurs d'énergie (les « obligés »), qui répercutent le coût sur leurs prix de vente. Il ne s'agit pas d'une aide d'État : aucun impôt n'est mobilisé. C'est un dispositif de marché réglementé par le ministère de la Transition écologique.",
   },
@@ -134,53 +163,50 @@ const faqItems = [
       "Oui, le cumul est explicitement prévu et encouragé. Sur une pompe à chaleur air/eau, un ménage modeste peut additionner MaPrimeRénov' et le coup de pouce CEE chauffage pour financer jusqu'à 80 % du chantier. L'artisan ou le délégataire monte les deux dossiers simultanément.",
   },
   {
-    question: "Quelle différence entre fiche standardisée et opération spécifique ?",
+    question: 'Quelle différence entre fiche standardisée et opération spécifique ?',
     answer:
       "Les fiches standardisées (BAR-EN, BAR-TH, BAT-EN…) couvrent 95 % des travaux courants : isolation, PAC, chaudière bois, VMC, éclairage. Pour les projets industriels ou atypiques, l'opération « spécifique » permet de calculer la prime sur mesure à partir d'une étude d'économies d'énergie validée par un bureau d'études qualifié.",
   },
   {
-    question: "Est-ce que les primes CEE « à 1 € » existent encore ?",
+    question: 'Est-ce que les primes CEE « à 1 € » existent encore ?',
     answer:
       "Les offres « isolation à 1 € » ont été supprimées en juillet 2021 à cause d'abus massifs. Il reste toutefois des « coups de pouce » qui financent une part très significative du reste à charge, notamment sur le chauffage bois, les PAC et l'isolation. Méfiez-vous de toute démarche commerciale insistante promettant « gratuit » sans visite technique.",
   },
   {
-    question: "Faut-il passer par un délégataire ou directement par un obligé ?",
+    question: 'Faut-il passer par un délégataire ou directement par un obligé ?',
     answer:
       "Les deux circuits sont légaux. Les délégataires (Effy, Sonergia, Hellio…) offrent en général des démarches en ligne simplifiées et des primes compétitives. Les obligés historiques (TotalEnergies, Engie, EDF) proposent parfois des primes majorées pour leurs clients. Le mieux est de comparer avant de signer l'engagement.",
   },
   {
-    question: "Quel contrôle est fait sur les dossiers CEE ?",
+    question: 'Quel contrôle est fait sur les dossiers CEE ?',
     answer:
       "Le Pôle National des CEE (PNCEE), rattaché au ministère, effectue des contrôles a posteriori par échantillonnage, avec visites sur site. En cas de non-conformité (travaux non réalisés, équipement non conforme, artisan non RGE), la prime est récupérée auprès de l'obligé, qui peut se retourner contre le bénéficiaire.",
   },
 ]
 
-const breadcrumbItems = [
-  { label: "Guides", href: "/guides" },
-  { label: "CEE 2026" },
-]
+const breadcrumbItems = [{ label: 'Guides', href: '/guides' }, { label: 'CEE 2026' }]
 
 export default function CEE2026Page() {
   const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Guides", item: `${SITE_URL}/guides` },
-      { "@type": "ListItem", position: 3, name: "CEE 2026", item: PAGE_URL },
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE_URL}/guides` },
+      { '@type': 'ListItem', position: 3, name: 'CEE 2026', item: PAGE_URL },
     ],
   }
 
   const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
+    '@context': 'https://schema.org',
+    '@type': 'Article',
     headline: "Certificats d'Économies d'Énergie (CEE) 2026 : guide complet",
     description:
       "Mécanisme CEE, obligés et délégataires, opérations coup de pouce 2026, éligibilité RGE, démarche et cumul MaPrimeRénov'.",
-    author: { "@type": "Organization", name: SITE_NAME },
-    publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
-    datePublished: "2026-04-09",
-    dateModified: "2026-04-09",
+    author: { '@type': 'Organization', name: SITE_NAME },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    datePublished: '2026-04-09',
+    dateModified: '2026-04-09',
     mainEntityOfPage: PAGE_URL,
   }
 
@@ -205,7 +231,9 @@ export default function CEE2026Page() {
             Certificats d&apos;Économies d&apos;Énergie (CEE) 2026 : le guide complet
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {"Mécanisme, acteurs, opérations les plus primées, coups de pouce 2026, éligibilité RGE, démarche pas à pas et cumul MaPrimeRénov' : tout pour comprendre et activer les CEE."}
+            {
+              "Mécanisme, acteurs, opérations les plus primées, coups de pouce 2026, éligibilité RGE, démarche pas à pas et cumul MaPrimeRénov' : tout pour comprendre et activer les CEE."
+            }
           </p>
         </section>
 
@@ -217,13 +245,19 @@ export default function CEE2026Page() {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                {"Les Certificats d'Économies d'Énergie (CEE) sont nés en 2005 avec la loi POPE. Le principe est aussi simple qu'efficace : l'État impose aux fournisseurs d'énergie (électricité, gaz, fioul, carburants) un quota d'économies d'énergie à atteindre chaque période triennale. Ces fournisseurs, appelés « obligés », doivent prouver qu'ils ont fait réaliser ces économies chez des consommateurs finaux : particuliers, entreprises, collectivités."}
+                {
+                  "Les Certificats d'Économies d'Énergie (CEE) sont nés en 2005 avec la loi POPE. Le principe est aussi simple qu'efficace : l'État impose aux fournisseurs d'énergie (électricité, gaz, fioul, carburants) un quota d'économies d'énergie à atteindre chaque période triennale. Ces fournisseurs, appelés « obligés », doivent prouver qu'ils ont fait réaliser ces économies chez des consommateurs finaux : particuliers, entreprises, collectivités."
+                }
               </p>
               <p>
-                {"Concrètement, les obligés financent des travaux chez des ménages ou des entreprises (isolation, PAC, chaudière biomasse, éclairage LED…) et reçoivent en contrepartie un « certificat » correspondant aux économies théoriques générées, exprimées en kWh cumac. Chaque certificat obtenu vient abaisser leur obligation. À l'inverse, un obligé qui ne respecte pas son quota paie une pénalité lourde."}
+                {
+                  "Concrètement, les obligés financent des travaux chez des ménages ou des entreprises (isolation, PAC, chaudière biomasse, éclairage LED…) et reçoivent en contrepartie un « certificat » correspondant aux économies théoriques générées, exprimées en kWh cumac. Chaque certificat obtenu vient abaisser leur obligation. À l'inverse, un obligé qui ne respecte pas son quota paie une pénalité lourde."
+                }
               </p>
               <p>
-                {"Pour le particulier, les CEE se traduisent par une prime en euros — appelée aussi « prime énergie » — versée à la fin du chantier. Cette prime est cumulable avec MaPrimeRénov', la TVA à 5,5 % et l'éco-PTZ."}
+                {
+                  "Pour le particulier, les CEE se traduisent par une prime en euros — appelée aussi « prime énergie » — versée à la fin du chantier. Cette prime est cumulable avec MaPrimeRénov', la TVA à 5,5 % et l'éco-PTZ."
+                }
               </p>
             </div>
           </div>
@@ -238,7 +272,10 @@ export default function CEE2026Page() {
             {acteurs.map((a) => {
               const Icon = a.icon
               return (
-                <div key={a.titre} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div
+                  key={a.titre}
+                  className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                       <Icon className="w-5 h-5 text-green-700" />
@@ -258,7 +295,9 @@ export default function CEE2026Page() {
             Les opérations les plus primées en 2026
           </h2>
           <p className="text-gray-700 mb-6 leading-relaxed">
-            {"Les fiches standardisées du catalogue officiel sont identifiées par un code (BAR pour « bâtiment résidentiel », suivi de la catégorie)."}
+            {
+              'Les fiches standardisées du catalogue officiel sont identifiées par un code (BAR pour « bâtiment résidentiel », suivi de la catégorie).'
+            }
           </p>
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <table className="w-full text-sm">
@@ -281,7 +320,9 @@ export default function CEE2026Page() {
             </table>
           </div>
           <p className="text-sm text-gray-500 mt-4">
-            {"Les volumes exacts en kWh cumac dépendent de la zone climatique (H1, H2, H3), de la surface traitée et du type de bâtiment. Les simulateurs officiels et ceux des délégataires fournissent un chiffrage précis avant devis."}
+            {
+              'Les volumes exacts en kWh cumac dépendent de la zone climatique (H1, H2, H3), de la surface traitée et du type de bâtiment. Les simulateurs officiels et ceux des délégataires fournissent un chiffrage précis avant devis.'
+            }
           </p>
         </section>
 
@@ -297,7 +338,9 @@ export default function CEE2026Page() {
                 <h3 className="text-lg font-bold text-gray-900">Coup de pouce Chauffage</h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                {"Bonifie les primes pour le remplacement d'une chaudière fioul, gaz non condensation ou charbon par une PAC air/eau, une PAC hybride, une chaudière biomasse ou un raccordement à un réseau de chaleur. Les ménages très modestes peuvent atteindre plusieurs milliers d'euros de prime."}
+                {
+                  "Bonifie les primes pour le remplacement d'une chaudière fioul, gaz non condensation ou charbon par une PAC air/eau, une PAC hybride, une chaudière biomasse ou un raccordement à un réseau de chaleur. Les ménages très modestes peuvent atteindre plusieurs milliers d'euros de prime."
+                }
               </p>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -306,7 +349,9 @@ export default function CEE2026Page() {
                 <h3 className="text-lg font-bold text-gray-900">Coup de pouce Isolation</h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                {"Majore la prime pour l'isolation des combles perdus, des rampants, des planchers bas et désormais des murs en ITE. Le versement est conditionné à un contrôle sur site et au respect des résistances thermiques R imposées par arrêté."}
+                {
+                  "Majore la prime pour l'isolation des combles perdus, des rampants, des planchers bas et désormais des murs en ITE. Le versement est conditionné à un contrôle sur site et au respect des résistances thermiques R imposées par arrêté."
+                }
               </p>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -315,16 +360,22 @@ export default function CEE2026Page() {
                 <h3 className="text-lg font-bold text-gray-900">Coup de pouce Pilotage</h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                {"Prime pour l'installation d'un système de régulation et de pilotage intelligent du chauffage : programmateur connecté, robinets thermostatiques, GTB dans les petits collectifs. Cumulable avec le remplacement de chauffage."}
+                {
+                  "Prime pour l'installation d'un système de régulation et de pilotage intelligent du chauffage : programmateur connecté, robinets thermostatiques, GTB dans les petits collectifs. Cumulable avec le remplacement de chauffage."
+                }
               </p>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center gap-3 mb-3">
                 <Wind className="w-6 h-6 text-teal-600" />
-                <h3 className="text-lg font-bold text-gray-900">Coup de pouce Rénovation d&apos;ampleur</h3>
+                <h3 className="text-lg font-bold text-gray-900">
+                  Coup de pouce Rénovation d&apos;ampleur
+                </h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                {"Destiné aux rénovations globales qui font sauter au moins deux classes DPE. Il se cumule avec le Parcours Accompagné MaPrimeRénov' et vise les passoires thermiques (F et G)."}
+                {
+                  "Destiné aux rénovations globales qui font sauter au moins deux classes DPE. Il se cumule avec le Parcours Accompagné MaPrimeRénov' et vise les passoires thermiques (F et G)."
+                }
               </p>
             </div>
           </div>
@@ -337,7 +388,10 @@ export default function CEE2026Page() {
           </h2>
           <ol className="space-y-4">
             {etapes.map((e) => (
-              <li key={e.numero} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex gap-4">
+              <li
+                key={e.numero}
+                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex gap-4"
+              >
                 <div className="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center shrink-0">
                   {e.numero}
                 </div>
@@ -358,7 +412,9 @@ export default function CEE2026Page() {
               L&apos;éligibilité RGE : la condition sine qua non
             </h2>
             <p className="text-green-50 leading-relaxed mb-4">
-              {"Comme pour MaPrimeRénov', les fiches standardisées du résidentiel (BAR-EN, BAR-TH) imposent un artisan RGE dans le domaine des travaux. C'est une condition de validité du dossier CEE : sans qualification valide à la date du devis, la prime est refusée."}
+              {
+                "Comme pour MaPrimeRénov', les fiches standardisées du résidentiel (BAR-EN, BAR-TH) imposent un artisan RGE dans le domaine des travaux. C'est une condition de validité du dossier CEE : sans qualification valide à la date du devis, la prime est refusée."
+              }
             </p>
             <ul className="space-y-2 text-green-50">
               <li className="flex items-start gap-3">
@@ -389,16 +445,24 @@ export default function CEE2026Page() {
               Cumul CEE + MaPrimeRénov&apos; : l&apos;exemple chiffré
             </h2>
             <p className="text-gray-700 mb-4 leading-relaxed">
-              {"Un ménage modeste remplace une chaudière fioul par une PAC air/eau de 12 kW, coût TTC 15 000 €."}
+              {
+                'Un ménage modeste remplace une chaudière fioul par une PAC air/eau de 12 kW, coût TTC 15 000 €.'
+              }
             </p>
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-start gap-3">
                 <span className="text-green-600 font-bold">+</span>
-                <span>MaPrimeRénov&apos; (profil modeste, parcours par geste) : plusieurs milliers d&apos;euros selon barème 2026</span>
+                <span>
+                  MaPrimeRénov&apos; (profil modeste, parcours par geste) : plusieurs milliers
+                  d&apos;euros selon barème 2026
+                </span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-green-600 font-bold">+</span>
-                <span>Coup de pouce Chauffage CEE (remplacement fioul) : bonus significatif versé par l&apos;obligé</span>
+                <span>
+                  Coup de pouce Chauffage CEE (remplacement fioul) : bonus significatif versé par
+                  l&apos;obligé
+                </span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-green-600 font-bold">+</span>
@@ -406,11 +470,15 @@ export default function CEE2026Page() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-green-600 font-bold">+</span>
-                <span>Éco-PTZ à taux zéro sur le reste à charge (jusqu&apos;à 50 000 € sur 20 ans)</span>
+                <span>
+                  Éco-PTZ à taux zéro sur le reste à charge (jusqu&apos;à 50 000 € sur 20 ans)
+                </span>
               </li>
             </ul>
             <p className="text-gray-700 mt-4 leading-relaxed">
-              {"Résultat : le reste à charge peut descendre à 10-20 % du coût total pour les profils modestes, contre 60-70 % pour les profils supérieurs. Notre guide dédié « Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables » détaille ce calcul."}
+              {
+                "Résultat : le reste à charge peut descendre à 10-20 % du coût total pour les profils modestes, contre 60-70 % pour les profils supérieurs. Notre guide dédié « Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables » détaille ce calcul."
+              }
             </p>
             <Link
               href="/guides/pompe-a-chaleur-cee-maprimerenov-2026"
@@ -430,10 +498,15 @@ export default function CEE2026Page() {
           </h2>
           <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <details key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 group">
+              <details
+                key={index}
+                className="bg-white rounded-xl shadow-sm border border-gray-100 group"
+              >
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-gray-900 hover:text-green-700 transition-colors">
                   {item.question}
-                  <span className="ml-4 text-gray-400 group-open:rotate-45 transition-transform text-2xl">+</span>
+                  <span className="ml-4 text-gray-400 group-open:rotate-45 transition-transform text-2xl">
+                    +
+                  </span>
                 </summary>
                 <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
                   {item.answer}
@@ -452,7 +525,9 @@ export default function CEE2026Page() {
               Activez vos CEE avec un artisan RGE certifié
             </h2>
             <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
-              {"Demandez un devis gratuit à un professionnel RGE près de chez vous et sécurisez vos primes CEE et MaPrimeRénov'."}
+              {
+                "Demandez un devis gratuit à un professionnel RGE près de chez vous et sécurisez vos primes CEE et MaPrimeRénov'."
+              }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

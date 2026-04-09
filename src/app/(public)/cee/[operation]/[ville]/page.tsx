@@ -48,22 +48,40 @@ const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
  */
 export async function generateStaticParams(): Promise<Array<{ operation: string; ville: string }>> {
   const operations = await getCeeOperations().catch(() => [])
-  // Fallback hardcodé si DB down au build — on pré-rend au moins les 19 codes
-  // du seed migration 383 pour que l'ISR on-demand puisse prendre le relais.
+  // Fallback hardcodé si DB down au build — on pré-rend les codes du seed
+  // migration 383 pour que l'ISR on-demand puisse prendre le relais.
+  // Fiches abrogées retirées : BAR-TH-106 (01/01/2024 → BAR-TH-171),
+  // BAR-TH-160 (01/08/2025), BAR-TH-164 (→ BAR-TH-174). Ajouts : BAR-TH-172,
+  // 174, 175, 177.
   const codes: string[] =
     operations.length > 0
       ? operations.map((op) => op.code)
       : [
-          'BAR-EN-101', 'BAR-EN-102', 'BAR-EN-103', 'BAR-EN-104', 'BAR-EN-108',
-          'BAR-TH-104', 'BAR-TH-112', 'BAR-TH-113', 'BAR-TH-125', 'BAR-TH-127',
-          'BAR-TH-129', 'BAR-TH-143', 'BAR-TH-148', 'BAR-TH-159', 'BAR-TH-160',
-          'BAR-TH-161', 'BAR-TH-164', 'BAR-TH-173', 'BAR-SE-104',
+          'BAR-EN-101',
+          'BAR-EN-102',
+          'BAR-EN-103',
+          'BAR-EN-104',
+          'BAR-EN-108',
+          'BAR-TH-112',
+          'BAR-TH-113',
+          'BAR-TH-125',
+          'BAR-TH-127',
+          'BAR-TH-129',
+          'BAR-TH-143',
+          'BAR-TH-148',
+          'BAR-TH-159',
+          'BAR-TH-161',
+          'BAR-TH-171',
+          'BAR-TH-172',
+          'BAR-TH-173',
+          'BAR-TH-174',
+          'BAR-TH-175',
+          'BAR-TH-177',
+          'BAR-SE-104',
         ]
 
   const topCities = staticVilles.slice(0, SITEMAP_CITY_COUNT_TIER2)
-  return codes.flatMap((operation) =>
-    topCities.map((v) => ({ operation, ville: v.slug })),
-  )
+  return codes.flatMap((operation) => topCities.map((v) => ({ operation, ville: v.slug })))
 }
 
 interface PageProps {
@@ -98,7 +116,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = truncate(`Prime CEE ${opName} \u00e0 ${villeName} \u2014 artisans RGE`, 60)
   const description = truncate(
     `${opName} \u00e0 ${villeName} : artisans RGE qualifi\u00e9s, prime CEE mobilisable, cumul MaPrimeR\u00e9nov\u2019 et TVA 5,5 %. V\u00e9rification ADEME.`,
-    158,
+    158
   )
   const path = `/cee/${opCode}/${villeSlug}`
 
@@ -107,7 +125,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     robots: isNoindex
       ? { index: false, follow: true }
-      : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+      : {
+          index: true,
+          follow: true,
+          'max-snippet': -1 as const,
+          'max-image-preview': 'large' as const,
+          'max-video-preview': -1 as const,
+        },
     openGraph: {
       title,
       description,
@@ -147,9 +171,11 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             Prime CEE {opCode} &agrave; {villeName}
           </h1>
           <p className="text-gray-700">
-            Cette op&eacute;ration CEE n&rsquo;est pas actuellement disponible dans notre
-            catalogue. Consultez le{' '}
-            <Link href="/cee" className="text-emerald-700 underline">hub des primes CEE</Link>{' '}
+            Cette op&eacute;ration CEE n&rsquo;est pas actuellement disponible dans notre catalogue.
+            Consultez le{' '}
+            <Link href="/cee" className="text-emerald-700 underline">
+              hub des primes CEE
+            </Link>{' '}
             pour d&eacute;couvrir les 19 op&eacute;rations r&eacute;sidentielles couvertes.
           </p>
         </div>
@@ -217,8 +243,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const domaineLabel = CEE_DOMAINE_LABELS[operation.domaine]?.label || operation.domaine
 
   const rgeServices: RgeAllowedService[] = (operation.services_slugs ?? []).filter(
-    (slug): slug is RgeAllowedService =>
-      (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug),
+    (slug): slug is RgeAllowedService => (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug)
   )
 
   return (
@@ -254,7 +279,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 cette op&eacute;ration CEE &agrave; {villeName}
               </>
             ) : (
-              <>Catalogue national de l&rsquo;op&eacute;ration CEE {operation.code} &agrave; {villeName}</>
+              <>
+                Catalogue national de l&rsquo;op&eacute;ration CEE {operation.code} &agrave;{' '}
+                {villeName}
+              </>
             )}
           </p>
         </header>
@@ -365,9 +393,14 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 >
                   <summary className="cursor-pointer list-none font-semibold text-gray-900 flex items-start justify-between gap-4">
                     <span>{item.question}</span>
-                    <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">+</span>
+                    <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
+                      +
+                    </span>
                   </summary>
-                  <p className="mt-3 text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: item.answer }} />
+                  <p
+                    className="mt-3 text-gray-700 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: item.answer }}
+                  />
                 </details>
               ))}
             </div>
@@ -381,7 +414,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               M&eacute;tiers RGE qualifi&eacute;s &agrave; {villeName}
             </h2>
             <p className="text-sm text-gray-600 mb-4 max-w-3xl">
-              Explorer l&rsquo;annuaire des artisans RGE par m&eacute;tier &agrave; {villeName}&nbsp;:
+              Explorer l&rsquo;annuaire des artisans RGE par m&eacute;tier &agrave; {villeName}
+              &nbsp;:
             </p>
             <div className="flex flex-wrap gap-2">
               {rgeServices.map((slug) => {
@@ -393,7 +427,9 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50 text-sm text-emerald-800 hover:border-emerald-400 hover:bg-emerald-100 transition"
                   >
                     <span className="font-semibold capitalize">{slug.replace(/-/g, ' ')}</span>
-                    {meta && <span className="text-xs text-emerald-600">&middot; {meta.label}</span>}
+                    {meta && (
+                      <span className="text-xs text-emerald-600">&middot; {meta.label}</span>
+                    )}
                   </Link>
                 )
               })}
@@ -448,9 +484,9 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             Pr&ecirc;t &agrave; lancer votre projet &agrave; {villeName}&nbsp;?
           </h2>
           <p className="text-gray-600 text-sm mb-4 max-w-2xl mx-auto">
-            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute;
-            pour la fiche {operation.code}. Devis sans engagement, primes CEE
-            et MaPrimeR&eacute;nov&rsquo; calcul&eacute;es automatiquement.
+            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute; pour la
+            fiche {operation.code}. Devis sans engagement, primes CEE et MaPrimeR&eacute;nov&rsquo;
+            calcul&eacute;es automatiquement.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

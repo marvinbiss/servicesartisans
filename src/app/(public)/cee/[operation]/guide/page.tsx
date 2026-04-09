@@ -7,15 +7,9 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import {
-  getCeeOperationByCode,
-  isValidCeeOperationCode,
-} from '@/lib/cee/catalogue'
-import {
-  CEE_OPERATIONS_WITH_GUIDE,
-  getCeeOperationGuide,
-  hasCeeOperationGuide,
-} from '@/lib/cee/operation-guides-content'
+import { getCeeOperationByCode, isValidCeeOperationCode } from '@/lib/cee/catalogue'
+import { CEE_OPERATIONS_WITH_GUIDE, getCeeOperationGuide } from '@/lib/cee/operation-guides-content'
+import { getRgeQualificationGuide } from '@/lib/rge/qualification-guides-content'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
 
 export const revalidate = 86400
@@ -39,9 +33,9 @@ function truncate(text: string, maxLen: number): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { operation: opCode } = await params
   if (!VALID_OP.test(opCode) || !isValidCeeOperationCode(opCode)) notFound()
-  if (!hasCeeOperationGuide(opCode)) notFound()
 
-  const guide = getCeeOperationGuide(opCode)!
+  const guide = getCeeOperationGuide(opCode)
+  if (!guide) notFound()
   const path = `/cee/${opCode}/guide`
 
   return {
@@ -73,9 +67,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CeeOperationGuidePage({ params }: PageProps) {
   const { operation: opCode } = await params
   if (!VALID_OP.test(opCode) || !isValidCeeOperationCode(opCode)) notFound()
-  if (!hasCeeOperationGuide(opCode)) notFound()
 
-  const guide = getCeeOperationGuide(opCode)!
+  const guide = getCeeOperationGuide(opCode)
+  if (!guide) notFound()
   const operation = await getCeeOperationByCode(opCode)
   const topCities = await getCeeTopCitiesByOperation(opCode)
   const path = `/cee/${opCode}/guide`
@@ -138,9 +132,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             {guide.h1}
           </h1>
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            {guide.lede}
-          </p>
+          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">{guide.lede}</p>
         </div>
       </section>
 
@@ -188,7 +180,10 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
           <ul className="space-y-2">
             {guide.rgeRequises.map((qualif) => (
               <li key={qualif} className="flex items-start gap-2 text-slate-700">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle2
+                  className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                  aria-hidden="true"
+                />
                 <span className="font-semibold">{qualif}</span>
               </li>
             ))}
@@ -207,6 +202,47 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             </p>
           )}
         </div>
+
+        {/* Maillage RGE — guides qualification requis pour cette opération */}
+        {guide.requiredQualifications.length > 0 && (
+          <div className="mt-6 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-white p-6">
+            <h2 className="font-heading text-xl font-extrabold text-slate-900 mb-2 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+              Qualifications RGE requises &mdash; nos guides
+            </h2>
+            <p className="text-sm text-slate-600 mb-4">
+              L&rsquo;artisan qui r&eacute;alise cette op&eacute;ration doit d&eacute;tenir
+              l&rsquo;une des qualifications RGE ci-dessous&nbsp;:
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {guide.requiredQualifications.map((slug) => {
+                const rgeGuide = getRgeQualificationGuide(slug)
+                if (!rgeGuide) return null
+                return (
+                  <li key={slug}>
+                    <Link
+                      href={`/rge/qualifications/${slug}`}
+                      className="group flex items-start justify-between gap-3 p-4 bg-white rounded-xl border border-emerald-100 hover:border-emerald-400 hover:shadow-sm transition"
+                    >
+                      <span className="flex-1">
+                        <span className="block text-xs font-semibold text-emerald-700 uppercase tracking-wide">
+                          {rgeGuide.organisme}
+                        </span>
+                        <span className="block text-sm font-semibold text-slate-900 group-hover:text-emerald-800 transition">
+                          {rgeGuide.name}
+                        </span>
+                      </span>
+                      <ArrowRight
+                        className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0"
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )}
       </section>
 
       {/* FAQ */}
@@ -266,8 +302,8 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             Obtenez votre prime {guide.code}
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute;
-            et s&eacute;curisez votre prime CEE d&egrave;s la signature.
+            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute; et
+            s&eacute;curisez votre prime CEE d&egrave;s la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

@@ -18,11 +18,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
-import {
-  getBreadcrumbSchema,
-  getCollectionPageSchema,
-  getFAQSchema,
-} from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import {
   getCeeOperationsByDomaine,
   CEE_DOMAINE_ORDER,
@@ -30,6 +26,8 @@ import {
   type CeeDomaine,
   type CeeOperation,
 } from '@/lib/cee/catalogue'
+import { CEE_CATALOG_UPDATED_AT } from '@/lib/cee/operation-guides-content'
+import LastUpdated from '@/components/seo/LastUpdated'
 
 export const revalidate = 86400
 
@@ -60,7 +58,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Quelles sont les op\u00e9rations CEE les plus rentables\u00a0?',
     answer:
-      'Les op\u00e9rations "Coup de pouce" sont historiquement celles qui affichent le meilleur rapport travaux/prime. En 2026, les chartes "Coup de pouce Chauffage" (remplacement de chaudi\u00e8re fioul/gaz par une pompe \u00e0 chaleur ou une chaudi\u00e8re biomasse) et "Coup de pouce Isolation" (combles perdus, planchers bas) sont les plus mobilis\u00e9es. La fiche BAR-TH-164 (r\u00e9novation globale d\u2019une maison individuelle) est \u00e9galement un levier majeur depuis sa r\u00e9vision 2025 car elle cumule les gains de plusieurs postes. En pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique, les cours de prime sont environ deux fois sup\u00e9rieurs \u00e0 ceux du segment classique.',
+      'Les op\u00e9rations "Coup de pouce" sont historiquement celles qui affichent le meilleur rapport travaux/prime. En 2026, les chartes "Coup de pouce Chauffage" (remplacement de chaudi\u00e8re fioul/gaz par une pompe \u00e0 chaleur ou une chaudi\u00e8re biomasse) et "Coup de pouce Isolation" (combles perdus, planchers bas) sont les plus mobilis\u00e9es. La fiche BAR-TH-174 (r\u00e9novation d\u2019ampleur d\u2019une maison individuelle), qui remplace depuis 2024 l\u2019ancienne BAR-TH-164 abrog\u00e9e, est \u00e9galement un levier majeur car elle cumule les gains de plusieurs postes. En pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique, les cours de prime sont environ deux fois sup\u00e9rieurs \u00e0 ceux du segment classique.',
   },
   {
     question: 'Mon artisan doit-il \u00eatre RGE pour obtenir une prime CEE\u00a0?',
@@ -112,7 +110,7 @@ export default async function CeeHubPage() {
         services: [],
         eclairage: [],
         autre: [],
-      }) as Record<CeeDomaine, CeeOperation[]>,
+      }) as Record<CeeDomaine, CeeOperation[]>
   )
 
   const totalOps = Object.values(grouped).reduce((sum, ops) => sum + ops.length, 0)
@@ -153,12 +151,20 @@ export default async function CeeHubPage() {
             Primes CEE 2026 : certificats d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
-            Catalogue complet des op&eacute;rations standardis&eacute;es CEE
-            r&eacute;sidentielles. {totalOps > 0 ? totalOps : 19} fiches DGEC
-            couvertes, cumulables avec MaPrimeR&eacute;nov&rsquo; et la TVA r&eacute;duite
-            &agrave; 5,5 %. Versement par les d&eacute;l&eacute;gataires obligor
-            (Effy, Sonergia, TotalEnergies, EDF, Engie).
+            Catalogue complet des op&eacute;rations standardis&eacute;es CEE r&eacute;sidentielles.{' '}
+            {totalOps > 0 ? totalOps : 19} fiches DGEC couvertes, cumulables avec
+            MaPrimeR&eacute;nov&rsquo; et la TVA r&eacute;duite &agrave; 5,5 %. Versement par les
+            d&eacute;l&eacute;gataires obligor (Effy, Sonergia, TotalEnergies, EDF, Engie).
           </p>
+          {/* Freshness signal — date de révision éditoriale du catalogue CEE
+              (barèmes kWh cumac, bonifications précarité, MPR 2026). TODO :
+              brancher sur cee_operations.updated_at quand la table DGEC
+              automatisée sera en place. */}
+          <LastUpdated
+            label="Barèmes CEE vérifiés le"
+            date={CEE_CATALOG_UPDATED_AT}
+            className="mt-5 text-emerald-100/90"
+          />
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/devis"
@@ -185,24 +191,23 @@ export default async function CeeHubPage() {
               {totalOps > 0 ? totalOps : 19}
             </div>
             <div className="text-sm text-slate-600 mt-2 leading-relaxed">
-              Op&eacute;rations standardis&eacute;es couvertes, secteur
-              r&eacute;sidentiel. Source DGEC &mdash; arr&ecirc;t&eacute;s officiels
-              publi&eacute;s au Journal Officiel.
+              Op&eacute;rations standardis&eacute;es couvertes, secteur r&eacute;sidentiel. Source
+              DGEC &mdash; arr&ecirc;t&eacute;s officiels publi&eacute;s au Journal Officiel.
             </div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">1050</div>
             <div className="text-sm text-slate-600 mt-2 leading-relaxed">
-              TWhc/an d&rsquo;obligation annuelle sur la p&eacute;riode P6 (2026-2030),
-              dont 280 TWhc r&eacute;serv&eacute;s au segment pr&eacute;carit&eacute;
+              TWhc/an d&rsquo;obligation annuelle sur la p&eacute;riode P6 (2026-2030), dont 280
+              TWhc r&eacute;serv&eacute;s au segment pr&eacute;carit&eacute;
               &eacute;nerg&eacute;tique.
             </div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">5</div>
             <div className="text-sm text-slate-600 mt-2 leading-relaxed">
-              D&eacute;l&eacute;gataires obligor majeurs : Effy, Sonergia,
-              TotalEnergies, EDF, Engie.
+              D&eacute;l&eacute;gataires obligor majeurs : Effy, Sonergia, TotalEnergies, EDF,
+              Engie.
             </div>
           </div>
         </div>
@@ -212,7 +217,10 @@ export default async function CeeHubPage() {
       <section className="bg-emerald-50/60 border-b border-emerald-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="flex items-start gap-3">
-            <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <FileCheck2
+              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <div>
               <div className="font-semibold text-slate-900">Cumul MaPrimeR&eacute;nov&rsquo;</div>
               <div className="text-sm text-slate-600">
@@ -225,18 +233,23 @@ export default async function CeeHubPage() {
             <div>
               <div className="font-semibold text-slate-900">TVA &agrave; 5,5 %</div>
               <div className="text-sm text-slate-600">
-                Taux r&eacute;duit automatique sur main-d&rsquo;&oelig;uvre et
-                mat&eacute;riaux &eacute;nerg&eacute;tiques.
+                Taux r&eacute;duit automatique sur main-d&rsquo;&oelig;uvre et mat&eacute;riaux
+                &eacute;nerg&eacute;tiques.
               </div>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <ShieldCheck
+              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <div>
-              <div className="font-semibold text-slate-900">Artisans RGE v&eacute;rifi&eacute;s</div>
+              <div className="font-semibold text-slate-900">
+                Artisans RGE v&eacute;rifi&eacute;s
+              </div>
               <div className="text-sm text-slate-600">
-                Synchronisation hebdomadaire du r&eacute;f&eacute;rentiel ADEME
-                France R&eacute;nov&rsquo;.
+                Synchronisation hebdomadaire du r&eacute;f&eacute;rentiel ADEME France
+                R&eacute;nov&rsquo;.
               </div>
             </div>
           </div>
@@ -249,10 +262,10 @@ export default async function CeeHubPage() {
           Les 19 op&eacute;rations CEE r&eacute;sidentielles 2026
         </h2>
         <p className="text-slate-600 max-w-3xl mb-10 leading-relaxed">
-          Chaque fiche d&rsquo;op&eacute;ration standardis&eacute;e est identifi&eacute;e par
-          un code officiel (ex. BAR-EN-101) qui en d&eacute;finit les crit&egrave;res techniques.
-          Cliquez sur une op&eacute;ration pour acc&eacute;der aux conditions d&eacute;taill&eacute;es
-          et aux artisans RGE qualifi&eacute;s, ville par ville.
+          Chaque fiche d&rsquo;op&eacute;ration standardis&eacute;e est identifi&eacute;e par un
+          code officiel (ex. BAR-EN-101) qui en d&eacute;finit les crit&egrave;res techniques.
+          Cliquez sur une op&eacute;ration pour acc&eacute;der aux conditions
+          d&eacute;taill&eacute;es et aux artisans RGE qualifi&eacute;s, ville par ville.
         </p>
 
         <div className="space-y-10">
@@ -313,26 +326,22 @@ export default async function CeeHubPage() {
               {
                 n: 1,
                 title: 'Qualifier le projet',
-                text:
-                  'Identifiez la fiche d\u2019op\u00e9ration qui correspond \u00e0 vos travaux (isolation, chauffage, ventilation, r\u00e9gulation). Le catalogue ci-dessus liste les 19 fiches r\u00e9sidentielles couvertes.',
+                text: 'Identifiez la fiche d\u2019op\u00e9ration qui correspond \u00e0 vos travaux (isolation, chauffage, ventilation, r\u00e9gulation). Le catalogue ci-dessus liste les 19 fiches r\u00e9sidentielles couvertes.',
               },
               {
                 n: 2,
                 title: 'Choisir un artisan RGE',
-                text:
-                  'La qualification RGE de l\u2019entreprise doit \u00eatre active \u00e0 la signature du devis. Utilisez nos pages ville pour trouver les artisans qualifi\u00e9s et v\u00e9rifi\u00e9s.',
+                text: 'La qualification RGE de l\u2019entreprise doit \u00eatre active \u00e0 la signature du devis. Utilisez nos pages ville pour trouver les artisans qualifi\u00e9s et v\u00e9rifi\u00e9s.',
               },
               {
                 n: 3,
                 title: 'Signer le devis + AH',
-                text:
-                  'Le devis et l\u2019attestation sur l\u2019honneur doivent \u00eatre sign\u00e9s avant le d\u00e9but des travaux. C\u2019est cette date qui fige le cours de la prime.',
+                text: 'Le devis et l\u2019attestation sur l\u2019honneur doivent \u00eatre sign\u00e9s avant le d\u00e9but des travaux. C\u2019est cette date qui fige le cours de la prime.',
               },
               {
                 n: 4,
                 title: 'D\u00e9poser le dossier',
-                text:
-                  'Apr\u00e8s les travaux, r\u00e9unissez factures, photos g\u00e9otagg\u00e9es et justificatifs puis d\u00e9posez le dossier aupr\u00e8s du d\u00e9l\u00e9gataire. Versement 4 \u00e0 12 semaines.',
+                text: 'Apr\u00e8s les travaux, r\u00e9unissez factures, photos g\u00e9otagg\u00e9es et justificatifs puis d\u00e9posez le dossier aupr\u00e8s du d\u00e9l\u00e9gataire. Versement 4 \u00e0 12 semaines.',
               },
             ].map((step) => (
               <li key={step.n} className="bg-white rounded-xl border border-slate-200 p-5">
@@ -370,6 +379,149 @@ export default async function CeeHubPage() {
         </div>
       </section>
 
+      {/* Comprendre le circuit CEE — liens vers pages satellites \u00e9ditoriales */}
+      <section className="bg-slate-50 border-y border-slate-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+            Comprendre le circuit CEE
+          </h2>
+          <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+            Trois d&eacute;cisions structurantes avant de lancer un projet&nbsp;: choisir entre
+            mandataire et d&eacute;p&ocirc;t direct, profiter des bonifications Coup de pouce 2026,
+            et orchestrer le cumul avec MaPrimeR&eacute;nov&rsquo;.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <Link
+              href="/cee/coup-de-pouce-2026"
+              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <Flame className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+                Coup de pouce CEE 2026
+              </div>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                Bonifications CEE en vigueur&nbsp;: chauffage biomasse, r&eacute;novation globale,
+                pr&eacute;carit&eacute; &eacute;nerg&eacute;tique. Montants major&eacute;s.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Voir les bonifications <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
+            <Link
+              href="/cee/mandataire-vs-direct"
+              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+                Mandataire CEE ou d&eacute;p&ocirc;t direct&nbsp;?
+              </div>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                Comparatif des deux circuits de valorisation&nbsp;: d&eacute;lais, garanties, cas
+                d&rsquo;usage. Montant de la prime identique.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Comparer les circuits <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
+            <Link
+              href="/maprimerenov-cumulaison-cee"
+              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+                R&egrave;gles de cumul MaPrimeR&eacute;nov&rsquo; &amp; CEE 2026
+              </div>
+              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                Plafonds par profil de revenus, ordre des aides, pi&egrave;ges &agrave;
+                &eacute;viter et simulateur des aides cumulables.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Lire les r&egrave;gles de cumul{' '}
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Ressources compl\u00e9mentaires — cross-linking RGE / Qualifications / ADEME */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+        <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+          Comprendre l&rsquo;&eacute;cosyst&egrave;me RGE
+        </h2>
+        <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+          Toute prime CEE n&eacute;cessite un artisan RGE qualifi&eacute;. D&eacute;couvrez les
+          m&eacute;tiers concern&eacute;s, les qualifications officielles et la source des
+          donn&eacute;es que nous v&eacute;rifions.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <Link
+            href="/rge"
+            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+              <ShieldCheck className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+            </div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              Annuaire artisans RGE
+            </div>
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              14 m&eacute;tiers &eacute;nerg&eacute;tiques (PAC, ITI, PV, po&ecirc;le bois&hellip;)
+              et 500+ villes couvertes avec qualifications actives.
+            </p>
+            <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+              Explorer l&rsquo;annuaire <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </div>
+          </Link>
+
+          <Link
+            href="/rge/qualifications"
+            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+              <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+            </div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              Qualifications RGE officielles
+            </div>
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec&nbsp;: ce que couvre chaque
+              qualification et comment la v&eacute;rifier.
+            </p>
+            <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+              Lire les guides <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </div>
+          </Link>
+
+          <Link
+            href="/ademe"
+            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+              <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+            </div>
+            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              Source officielle ADEME
+            </div>
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              165&nbsp;000 qualifications synchronis&eacute;es chaque semaine avec France
+              R&eacute;nov&rsquo;. M&eacute;thodologie transparente.
+            </p>
+            <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+              Voir la m&eacute;thodologie <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* CTAs finaux */}
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
@@ -377,8 +529,8 @@ export default async function CeeHubPage() {
             Lancez votre projet avec une prime CEE s&eacute;curis&eacute;e
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Demandez un devis gratuit, v&eacute;rifiez la qualification d&rsquo;un
-            artisan, ou approfondissez le sujet avec nos guides d&eacute;di&eacute;s.
+            Demandez un devis gratuit, v&eacute;rifiez la qualification d&rsquo;un artisan, ou
+            approfondissez le sujet avec nos guides d&eacute;di&eacute;s.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

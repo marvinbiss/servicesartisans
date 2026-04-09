@@ -19,7 +19,8 @@ import {
   RGE_QUALIFICATION_LABELS,
   type RgeAllowedService,
 } from '@/lib/rge/service-city-listings'
-import { hasCeeOperationGuide } from '@/lib/cee/operation-guides-content'
+import { hasCeeOperationGuide, CEE_CATALOG_UPDATED_AT } from '@/lib/cee/operation-guides-content'
+import LastUpdated from '@/components/seo/LastUpdated'
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -29,12 +30,31 @@ const VALID_OP = /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/
 export async function generateStaticParams(): Promise<Array<{ operation: string }>> {
   const operations = await getCeeOperations().catch(() => [])
   if (operations.length > 0) return operations.map((op) => ({ operation: op.code }))
-  // Fallback au seed 383 si DB indisponible au build
+  // Fallback au seed 383 si DB indisponible au build. Fiches abrogées
+  // retirées : BAR-TH-106 (01/01/2024 → BAR-TH-171), BAR-TH-160 (01/08/2025),
+  // BAR-TH-164 (→ BAR-TH-174). Ajouts : BAR-TH-172, 174, 175, 177.
   return [
-    'BAR-EN-101', 'BAR-EN-102', 'BAR-EN-103', 'BAR-EN-104', 'BAR-EN-108',
-    'BAR-TH-104', 'BAR-TH-112', 'BAR-TH-113', 'BAR-TH-125', 'BAR-TH-127',
-    'BAR-TH-129', 'BAR-TH-143', 'BAR-TH-148', 'BAR-TH-159', 'BAR-TH-160',
-    'BAR-TH-161', 'BAR-TH-164', 'BAR-TH-173', 'BAR-SE-104',
+    'BAR-EN-101',
+    'BAR-EN-102',
+    'BAR-EN-103',
+    'BAR-EN-104',
+    'BAR-EN-108',
+    'BAR-TH-112',
+    'BAR-TH-113',
+    'BAR-TH-125',
+    'BAR-TH-127',
+    'BAR-TH-129',
+    'BAR-TH-143',
+    'BAR-TH-148',
+    'BAR-TH-159',
+    'BAR-TH-161',
+    'BAR-TH-171',
+    'BAR-TH-172',
+    'BAR-TH-173',
+    'BAR-TH-174',
+    'BAR-TH-175',
+    'BAR-TH-177',
+    'BAR-SE-104',
   ].map((operation) => ({ operation }))
 }
 
@@ -58,14 +78,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = truncate(`Prime CEE ${opName} (${opCode}) \u2014 artisans RGE`, 60)
   const description = truncate(
     `${opName} : conditions, qualifications RGE requises, villes couvertes. Prime CEE mobilisable avec MaPrimeR\u00e9nov\u2019 et TVA 5,5 %.`,
-    158,
+    158
   )
 
   return {
     title,
     description,
     robots: operation
-      ? { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const }
+      ? {
+          index: true,
+          follow: true,
+          'max-snippet': -1 as const,
+          'max-image-preview': 'large' as const,
+          'max-video-preview': -1 as const,
+        }
       : { index: false, follow: true },
     openGraph: {
       title,
@@ -94,9 +120,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     return (
       <main className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold text-gray-900 font-jakarta mb-4">
-            Prime CEE {opCode}
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 font-jakarta mb-4">Prime CEE {opCode}</h1>
           <p className="text-gray-700">
             Cette op&eacute;ration n&rsquo;est pas actuellement disponible dans notre catalogue.{' '}
             <Link href="/cee" className="text-emerald-700 underline">
@@ -119,8 +143,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     .slice(0, 6)
 
   const rgeServices: RgeAllowedService[] = (operation.services_slugs ?? []).filter(
-    (slug): slug is RgeAllowedService =>
-      (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug),
+    (slug): slug is RgeAllowedService => (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug)
   )
 
   const hasGuide = hasCeeOperationGuide(opCode)
@@ -149,12 +172,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
 
-      <Breadcrumb
-        items={[
-          { label: 'Primes CEE', href: '/cee' },
-          { label: operation.nom },
-        ]}
-      />
+      <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: operation.nom }]} />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16">
@@ -169,11 +187,19 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Prime CEE : {operation.nom}
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            Domaine <strong className="text-white">{domaineInfo?.label || operation.domaine}</strong>
+            Domaine{' '}
+            <strong className="text-white">{domaineInfo?.label || operation.domaine}</strong>
             {operation.sous_domaine ? ` \u2014 ${operation.sous_domaine.replace(/_/g, ' ')}` : ''}.
             Opération standardisée résidentielle éligible aux Certificats d&rsquo;&Eacute;conomies
             d&rsquo;&Eacute;nergie, sous conditions de qualification RGE de l&rsquo;entreprise.
           </p>
+          {/* Freshness signal — révision éditoriale des barèmes. TODO : brancher
+              sur cee_operations.updated_at dès la persistance DGEC automatisée. */}
+          <LastUpdated
+            label="Barèmes CEE vérifiés le"
+            date={CEE_CATALOG_UPDATED_AT}
+            className="mt-5 text-emerald-100/90"
+          />
         </div>
       </section>
 
@@ -185,19 +211,19 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         <div className="prose prose-emerald max-w-none text-slate-700 leading-relaxed space-y-4">
           <p>
             La fiche d&rsquo;opération standardisée <strong>{operation.code}</strong> encadre les
-            travaux de <strong>{operation.nom.toLowerCase()}</strong> dans le secteur
-            résidentiel. Publiée par la Direction Générale de l&rsquo;&Eacute;nergie et du
-            Climat (DGEC) dans le cadre du dispositif des Certificats d&rsquo;&Eacute;conomies
-            d&rsquo;&Eacute;nergie, elle fixe les exigences techniques minimales à respecter
-            pour qu&rsquo;un chantier soit valorisé en prime CEE.
+            travaux de <strong>{operation.nom.toLowerCase()}</strong> dans le secteur résidentiel.
+            Publiée par la Direction Générale de l&rsquo;&Eacute;nergie et du Climat (DGEC) dans le
+            cadre du dispositif des Certificats d&rsquo;&Eacute;conomies d&rsquo;&Eacute;nergie,
+            elle fixe les exigences techniques minimales à respecter pour qu&rsquo;un chantier soit
+            valorisé en prime CEE.
           </p>
           <p>
             La prime est versée par un délégataire obligor (Effy, Sonergia, TotalEnergies, EDF,
             Engie, etc.) qui achète en retour des certificats auprès du Pôle National des
             Certificats d&rsquo;&Eacute;conomies d&rsquo;&Eacute;nergie (PNCEE). Le cours de la
-            prime évolue chaque semaine selon l&rsquo;offre et la demande, c&rsquo;est pourquoi
-            nous recommandons toujours de comparer au moins trois devis d&rsquo;artisans RGE
-            avant de signer.
+            prime évolue chaque semaine selon l&rsquo;offre et la demande, c&rsquo;est pourquoi nous
+            recommandons toujours de comparer au moins trois devis d&rsquo;artisans RGE avant de
+            signer.
           </p>
         </div>
 
@@ -254,7 +280,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                 Tout savoir sur la prime CEE {operation.code}
               </div>
               <div className="text-sm text-slate-600 mt-1">
-                Conditions techniques, montants 2026, cumul MaPrimeR&eacute;nov&rsquo; et pi&egrave;ges &agrave; &eacute;viter.
+                Conditions techniques, montants 2026, cumul MaPrimeR&eacute;nov&rsquo; et
+                pi&egrave;ges &agrave; &eacute;viter.
               </div>
             </div>
             <Link
@@ -302,7 +329,10 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                   href={`/rge/${slug}`}
                   className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-400 hover:shadow-sm transition"
                 >
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <ShieldCheck
+                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
                   <div className="min-w-0">
                     <div className="font-semibold text-slate-900 group-hover:text-emerald-700 transition capitalize">
                       {slug.replace(/-/g, ' ')}
@@ -328,8 +358,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
               Où trouver un artisan RGE qualifié
             </h2>
             <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
-              Classement des villes françaises où notre annuaire recense le plus
-              d&rsquo;artisans RGE qualifiés pour l&rsquo;opération {operation.code}.
+              Classement des villes françaises où notre annuaire recense le plus d&rsquo;artisans
+              RGE qualifiés pour l&rsquo;opération {operation.code}.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {topCities.map((city) => (
@@ -387,8 +417,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Obtenez votre prime CEE {operation.code}
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifié et
-            sécurisez votre prime CEE d&egrave;s la signature.
+            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifié et sécurisez
+            votre prime CEE d&egrave;s la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
