@@ -124,6 +124,12 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
               validUntil={artisan.rge_valid_until}
               organismes={artisan.rge_organismes}
               sourceUrl={artisan.rge_source_url}
+              trackingContext={{
+                provider_id: artisan.stable_id || artisan.id,
+                surface: 'fiche',
+                service: artisan.specialty,
+                city: artisan.city,
+              }}
             />
 
 

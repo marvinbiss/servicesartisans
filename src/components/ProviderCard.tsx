@@ -113,6 +113,12 @@ export default function ProviderCard({
               organismes={provider.rge_organismes}
               sourceUrl={provider.rge_source_url}
               compact
+              trackingContext={{
+                provider_id: provider.stable_id || provider.id,
+                surface: 'card',
+                service: provider.specialty,
+                city: provider.address_city ?? undefined,
+              }}
             />
           </div>
         </div>

@@ -1,4 +1,7 @@
+'use client'
+
 import { Leaf } from 'lucide-react'
+import { RgeTracking, type RgeBadgeClickProps } from '@/lib/analytics/tracking'
 
 /**
  * RgeBadge — affiche le badge "Certifié RGE" pour les artisans revendiqués
@@ -34,6 +37,11 @@ interface RgeBadgeProps {
    * Pas de <details>, pas de dropdown : juste un pill + title natif.
    */
   compact?: boolean
+  /**
+   * Contexte analytics — si fourni, le badge devient cliquable et
+   * dispatche `rge_badge_click` au clic (surface/provider_id/service/city).
+   */
+  trackingContext?: RgeBadgeClickProps
 }
 
 function formatDate(iso: string): string {
@@ -51,7 +59,11 @@ export default function RgeBadge({
   organismes,
   sourceUrl,
   compact = false,
+  trackingContext,
 }: RgeBadgeProps) {
+  const handleTrackedClick = () => {
+    if (trackingContext) RgeTracking.badgeClick(trackingContext)
+  }
   // Guard: pas de RGE actif → rien
   if (!qualifications || qualifications.length === 0 || !validUntil) return null
 
@@ -75,17 +87,44 @@ export default function RgeBadge({
       'Source : ADEME — France Rénov\'',
     ].filter(Boolean).join('\n')
 
-    return (
-      <span
-        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200"
-        title={titleLines}
-        aria-label={`Certifié RGE — ${count} qualification${count > 1 ? 's' : ''} active${count > 1 ? 's' : ''}, valide jusqu'au ${formatDate(validUntil)}`}
-      >
+    const compactClasses =
+      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200'
+    const compactAria = `Certifié RGE — ${count} qualification${count > 1 ? 's' : ''} active${count > 1 ? 's' : ''}, valide jusqu'au ${formatDate(validUntil)}`
+    const compactInner = (
+      <>
         <Leaf className="w-3 h-3 text-emerald-600" aria-hidden="true" />
         RGE
         {count > 1 && (
           <span className="text-[10px] font-normal text-emerald-600">×{count}</span>
         )}
+      </>
+    )
+
+    if (trackingContext) {
+      return (
+        <button
+          type="button"
+          className={`${compactClasses} cursor-pointer hover:bg-emerald-100 transition-colors`}
+          title={titleLines}
+          aria-label={compactAria}
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            handleTrackedClick()
+          }}
+        >
+          {compactInner}
+        </button>
+      )
+    }
+
+    return (
+      <span
+        className={compactClasses}
+        title={titleLines}
+        aria-label={compactAria}
+      >
+        {compactInner}
       </span>
     )
   }
@@ -95,6 +134,7 @@ export default function RgeBadge({
       <summary
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-sm font-semibold border border-emerald-200 cursor-pointer list-none hover:bg-emerald-100 transition-colors"
         aria-label={`Certifié RGE — ${count} qualification${count > 1 ? 's' : ''} active${count > 1 ? 's' : ''}`}
+        onClick={handleTrackedClick}
       >
         <Leaf className="w-4 h-4 text-emerald-600" aria-hidden="true" />
         Certifié RGE
