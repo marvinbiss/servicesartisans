@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2, Hammer, Users, ShowerHead, ChefHat, Leaf, Search, ShieldAlert, Calculator, Home, FileCheck } from "lucide-react"
+import { BookOpen, Euro, BarChart3, HelpCircle, ArrowRight, Newspaper, Scale, Zap, FileText, ShieldCheck, Building2, Hammer, Users, ShowerHead, ChefHat, Leaf, Search, ShieldAlert, Calculator, Home, FileCheck, Wind, Snowflake, Award } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
@@ -227,6 +227,51 @@ const guides = [
       "Signes d'usure, types de couverture (tuile, ardoise, zinc, bac acier), prix (60-200€/m²), isolation et aides MaPrimeRénov.",
     href: "/guides/renovation-toiture",
     icon: Home,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "MaPrimeRénov' 2026 : Critères RGE, Montants et Dossier",
+    description:
+      "Guide complet MaPrimeRénov' 2026 : barèmes par travaux, plafonds de ressources, dossier en 5 étapes, obligation RGE et cumul avec les CEE.",
+    href: "/guides/maprimerenov-2026-criteres-rge",
+    icon: Euro,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Certificats d'Économies d'Énergie (CEE) 2026 : Guide Complet",
+    description:
+      "Mécanisme des CEE, coup de pouce chauffage et isolation, opérations primées, démarche concrète et cumul avec MaPrimeRénov' en 2026.",
+    href: "/guides/cee-certificats-economies-energie-2026",
+    icon: Award,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Qualibat, QualiPAC, Qualifelec, QualiSol : Quelle Qualification RGE ?",
+    description:
+      "Comparatif des qualifications RGE par métier : isolation, pompe à chaleur, électricité, solaire. Comment vérifier et choisir selon vos travaux.",
+    href: "/guides/qualibat-qualipac-qualifelec-qui-choisir",
+    icon: Award,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Pompe à Chaleur 2026 : Aides CEE + MaPrimeRénov' Cumulables",
+    description:
+      "Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE chauffage, cumul total, exemple chiffré et obligation QualiPAC.",
+    href: "/guides/pompe-a-chaleur-cee-maprimerenov-2026",
+    icon: Wind,
+    badge: "Nouveau",
+    badgeColor: "bg-blue-100 text-blue-800",
+  },
+  {
+    title: "Isolation ITE vs ITI 2026 : Comparatif, Artisan RGE et Aides",
+    description:
+      "Différence ITE / ITI, matériaux, coût au m², MaPrimeRénov' Isolation, Coup de pouce CEE et obligation Qualibat RGE en 2026.",
+    href: "/guides/isolation-ite-iti-rge-aides-2026",
+    icon: Snowflake,
     badge: "Nouveau",
     badgeColor: "bg-blue-100 text-blue-800",
   },
