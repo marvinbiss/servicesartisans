@@ -5,6 +5,7 @@ import {
   getLocationBySlug,
   getProvidersByServiceAndLocation,
   getProviderCountByServiceAndLocation,
+  getRgeProviderCountByServiceAndLocation,
 } from '@/lib/supabase'
 import ServiceLocationPageClient from './PageClient'
 import SeoContent from './_components/SeoContent'
@@ -414,9 +415,10 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
   // 3. Fetch providers + total count in parallel
   // (throw on providers failure so ISR keeps stale cache)
-  const [providers, totalProviderCount] = await Promise.all([
+  const [providers, totalProviderCount, rgeProviderCount] = await Promise.all([
     getProvidersByServiceAndLocation(serviceSlug, locationSlug),
     getProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => -1),
+    getRgeProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
   ])
 
   // Hard 404: if DB confirmed 0 providers for this combo → not a real page.
@@ -589,8 +591,11 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         return { name: parts[0].trim(), description: parts.length > 1 ? parts[1].trim() : undefined }
       }),
     } : {}),
-    ...(averageRating ? { ratingValue: averageRating } : {}),
-    ...(totalReviews ? { reviewCount: totalReviews } : {}),
+    // NE PAS injecter ratingValue/reviewCount ici : ces valeurs viennent de
+    // providers.rating_average/review_count (données scrapées Google/PJ, pas
+    // d'avis vérifiés plateforme). Émettre un AggregateRating basé sur des
+    // avis non first-party = déclencheur de pénalité Google "review spam".
+    // Le calcul est gardé pour le rendu front (ImmediateAnswerBlock).
     providerCount: providers.length,
   }))
 
@@ -708,6 +713,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         providers={(providers || []).slice(0, 10) as unknown as Provider[]}
         h1Text={h1Text}
         totalCount={totalProviderCount}
+        rgeCount={rgeProviderCount}
         serviceSlug={serviceSlug}
         locationSlug={locationSlug}
         recentDevisCount={recentDevisCount}

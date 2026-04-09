@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { MapPin, List, Map as MapIcon, Search, ChevronDown, ArrowRight, FileText, SearchX, ShieldCheck, Star } from 'lucide-react'
+import { MapPin, List, Map as MapIcon, Search, ChevronDown, ArrowRight, FileText, SearchX, ShieldCheck, Star, Leaf } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
 
@@ -29,6 +29,7 @@ interface ServiceLocationPageClientProps {
   providers: Provider[]
   h1Text?: string
   totalCount?: number
+  rgeCount?: number
   serviceSlug?: string
   locationSlug?: string
   recentDevisCount?: number
@@ -40,6 +41,7 @@ export default function ServiceLocationPageClient({
   providers: initialProviders,
   h1Text,
   totalCount = 0,
+  rgeCount = 0,
   serviceSlug,
   locationSlug,
   recentDevisCount = 0,
@@ -210,6 +212,12 @@ export default function ServiceLocationPageClient({
                   <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
                     <ShieldCheck className="w-4 h-4 text-accent-500" />
                     <span className="font-semibold text-charcoal-900">{liveCount}</span> artisan{liveCount > 1 ? 's' : ''} vérifié{liveCount > 1 ? 's' : ''}
+                  </span>
+                )}
+                {rgeCount > 0 && (
+                  <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
+                    <Leaf className="w-4 h-4 text-emerald-600" />
+                    <span className="font-semibold text-charcoal-900">{rgeCount}</span> certifié{rgeCount > 1 ? 's' : ''} RGE
                   </span>
                 )}
                 {avgRating && (
@@ -427,6 +435,14 @@ export default function ServiceLocationPageClient({
               </div>
             ) : (
               <>
+                {rgeCount > 0 && (
+                  <div className="mx-4 mt-4 mb-2 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5 text-sm text-emerald-900">
+                    <Leaf className="w-4 h-4 flex-shrink-0 mt-0.5 text-emerald-600" />
+                    <p className="leading-snug">
+                      Pour les aides <span className="font-semibold">MaPrimeRénov&apos;</span>, <span className="font-semibold">CEE</span> et <span className="font-semibold">TVA 5,5&nbsp;%</span> : choisissez un artisan certifié RGE.
+                    </p>
+                  </div>
+                )}
                 <ProviderList
                   providers={allProviders}
                   onProviderHover={setSelectedProvider}

@@ -587,6 +587,55 @@ export async function getProviderCountByServiceAndLocation(
   )
 }
 
+/**
+ * Return the count of RGE-certified providers for a service+location combo.
+ * Counts providers where `rge_qualifications` is not null AND `rge_valid_until`
+ * is still valid (>= today). Uses head:true + count:exact for lightweight query.
+ * Fail-open: returns 0 during build or on error.
+ */
+export async function getRgeProviderCountByServiceAndLocation(
+  serviceSlug: string,
+  locationSlug: string,
+): Promise<number> {
+  if (IS_BUILD) return 0
+
+  return getCachedData(
+    `rge-provider-count:svc-loc:${serviceSlug}:${locationSlug}`,
+    async () => {
+      try {
+        return await retryWithBackoff(
+          async () => {
+            const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+            if (!specialties || specialties.length === 0) return 0
+
+            const ville = getVilleBySlugImport(locationSlug)
+            const cityName = ville?.name
+            if (!cityName) return 0
+
+            const cityValues = getCityValues(cityName, ville?.departementCode)
+            const today = new Date().toISOString().slice(0, 10)
+            const { count, error } = await supabase
+              .from('providers')
+              .select('id', { count: 'exact', head: true })
+              .in('specialty', specialties)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+              .not('rge_qualifications', 'is', null)
+              .gte('rge_valid_until', today)
+
+            if (error) throw error
+            return count ?? 0
+          },
+          `getRgeProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+        )
+      } catch {
+        return 0
+      }
+    },
+    CACHE_TTL.artisans, // 3600s (1h)
+  )
+}
+
 export async function getProvidersByLocation(locationSlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
