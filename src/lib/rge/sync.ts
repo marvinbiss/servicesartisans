@@ -16,7 +16,8 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 // Constants
 // ---------------------------------------------------------------------------
 
-const ADEME_BASE = 'https://data.ademe.fr/data-fair/api/v1/datasets/liste-des-entreprises-rge-2/lines'
+const ADEME_BASE =
+  'https://data.ademe.fr/data-fair/api/v1/datasets/liste-des-entreprises-rge-2/lines'
 const ADEME_PAGE_SIZE = 10_000
 const ADEME_USER_AGENT = 'servicesartisans-rge-sync/1.0 (contact@servicesartisans.fr)'
 
@@ -116,7 +117,7 @@ export interface RgeSyncResult {
 // ---------------------------------------------------------------------------
 
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 function normalizeSiret(raw: string | undefined | null): string | null {
@@ -126,7 +127,7 @@ function normalizeSiret(raw: string | undefined | null): string | null {
   return cleaned
 }
 
-function isValidDate(iso: string | undefined): boolean {
+function isValidDate(iso: string | undefined): iso is string {
   if (!iso) return false
   const d = new Date(iso)
   return !Number.isNaN(d.getTime())
@@ -138,9 +139,9 @@ function isValidDate(iso: string | undefined): boolean {
 
 export async function fetchAllAdemeRows(
   limit: number = Infinity,
-  log: RgeSyncOptions['logger'] = console,
+  log: Pick<Console, 'log' | 'warn' | 'error'> = console
 ): Promise<AdemeRgeRow[]> {
-  log!.log('→ Fetching ADEME RGE dataset...')
+  log.log('→ Fetching ADEME RGE dataset...')
   const rows: AdemeRgeRow[] = []
   let after: string | null = null
   let page = 0
@@ -157,18 +158,20 @@ export async function fetchAllAdemeRows(
     if (!res.ok) {
       if (res.status === 429) {
         const retryAfter = parseInt(res.headers.get('retry-after') || '30', 10)
-        log!.warn(`  429 rate-limited, sleeping ${retryAfter}s...`)
+        log.warn(`  429 rate-limited, sleeping ${retryAfter}s...`)
         await sleep(retryAfter * 1000)
         continue
       }
       throw new Error(`ADEME API failed: ${res.status} ${res.statusText}`)
     }
 
-    const body = await res.json() as { results?: AdemeRgeRow[]; next?: string; total?: number }
+    const body = (await res.json()) as { results?: AdemeRgeRow[]; next?: string; total?: number }
     const batch = body.results || []
     rows.push(...batch)
     page++
-    log!.log(`  Page ${page}: +${batch.length} rows (total: ${rows.length}${body.total ? `/${body.total}` : ''})`)
+    log.log(
+      `  Page ${page}: +${batch.length} rows (total: ${rows.length}${body.total ? `/${body.total}` : ''})`
+    )
 
     if (!body.next || batch.length === 0) break
     try {
@@ -182,7 +185,7 @@ export async function fetchAllAdemeRows(
     await sleep(200)
   }
 
-  log!.log(`✓ Fetched ${rows.length} RGE qualification rows from ADEME`)
+  log.log(`✓ Fetched ${rows.length} RGE qualification rows from ADEME`)
   return rows
 }
 
@@ -192,9 +195,9 @@ export async function fetchAllAdemeRows(
 
 export function aggregateBySiret(
   rows: AdemeRgeRow[],
-  log: RgeSyncOptions['logger'] = console,
+  log: Pick<Console, 'log' | 'warn' | 'error'> = console
 ): { aggregated: Map<string, AggregatedProvider>; expired: number; skipped: number } {
-  log!.log('→ Aggregating rows by SIRET...')
+  log.log('→ Aggregating rows by SIRET...')
   const byS: Map<string, AggregatedProvider> = new Map()
   const today = new Date().toISOString().slice(0, 10)
   let skipped = 0
@@ -202,12 +205,26 @@ export function aggregateBySiret(
 
   for (const row of rows) {
     const siret = normalizeSiret(row.siret)
-    if (!siret) { skipped++; continue }
-    if (!isValidDate(row.lien_date_debut) || !isValidDate(row.lien_date_fin)) { skipped++; continue }
-    if (!row.code_qualification || !row.nom_qualification || !row.organisme) { skipped++; continue }
+    if (!siret) {
+      skipped++
+      continue
+    }
+    const dateDebutRaw = row.lien_date_debut
+    const dateFinRaw = row.lien_date_fin
+    if (!isValidDate(dateDebutRaw) || !isValidDate(dateFinRaw)) {
+      skipped++
+      continue
+    }
+    if (!row.code_qualification || !row.nom_qualification || !row.organisme) {
+      skipped++
+      continue
+    }
 
-    const dateFin = row.lien_date_fin!.slice(0, 10)
-    if (dateFin < today) { expired++; continue }
+    const dateFin = dateFinRaw.slice(0, 10)
+    if (dateFin < today) {
+      expired++
+      continue
+    }
 
     const qual: RgeQualification = {
       code: row.code_qualification,
@@ -215,7 +232,7 @@ export function aggregateBySiret(
       organisme: row.organisme,
       domaine: row.domaine || null,
       meta_domaine: row.meta_domaine || null,
-      date_debut: row.lien_date_debut!.slice(0, 10),
+      date_debut: dateDebutRaw.slice(0, 10),
       date_fin: dateFin,
       url: row.url_qualification || null,
     }
@@ -223,7 +240,9 @@ export function aggregateBySiret(
     const existing = byS.get(siret)
     if (existing) {
       const dupKey = `${qual.code}|${qual.organisme}`
-      const alreadyThere = existing.qualifications.find(q => `${q.code}|${q.organisme}` === dupKey)
+      const alreadyThere = existing.qualifications.find(
+        (q) => `${q.code}|${q.organisme}` === dupKey
+      )
       if (!alreadyThere) {
         existing.qualifications.push(qual)
         if (qual.date_fin > existing.valid_until) existing.valid_until = qual.date_fin
@@ -246,8 +265,9 @@ export function aggregateBySiret(
     if (agg.organismes.length > 5) agg.organismes = agg.organismes.slice(0, 5)
   })
 
-  if (expired > 0) log!.log(`  Filtered ${expired} expired qualifications (lien_date_fin < ${today})`)
-  log!.log(`✓ Aggregated into ${byS.size} unique SIRET (skipped ${skipped} invalid rows)`)
+  if (expired > 0)
+    log.log(`  Filtered ${expired} expired qualifications (lien_date_fin < ${today})`)
+  log.log(`✓ Aggregated into ${byS.size} unique SIRET (skipped ${skipped} invalid rows)`)
   return { aggregated: byS, expired, skipped }
 }
 
@@ -272,9 +292,9 @@ export async function matchAndUpdate(
   aggregated: Map<string, AggregatedProvider>,
   supabase: SupabaseClient,
   dryRun: boolean,
-  log: RgeSyncOptions['logger'] = console,
+  log: Pick<Console, 'log' | 'warn' | 'error'> = console
 ): Promise<{ matched: number; updated: number }> {
-  log!.log('→ Matching against providers.siret...')
+  log.log('→ Matching against providers.siret...')
 
   const sirets = Array.from(aggregated.keys())
   const SELECT_BATCH = 500
@@ -291,21 +311,18 @@ export async function matchAndUpdate(
     let providers: ProviderRow[] | null = null
     let selErr: { code?: string; message?: string } | null = null
     for (let attempt = 0; attempt < 4; attempt++) {
-      const res = await supabase
-        .from('providers')
-        .select('id, siret')
-        .in('siret', chunk)
+      const res = await supabase.from('providers').select('id, siret').in('siret', chunk)
       providers = (res.data ?? null) as ProviderRow[] | null
       selErr = res.error as { code?: string; message?: string } | null
       if (!selErr) break
       if (selErr.code !== '57014') break // seulement retry sur timeout
       const wait = 1000 * Math.pow(2, attempt)
-      log!.warn(`  batch ${i}-${i + SELECT_BATCH}: timeout, retry ${attempt + 1}/4 dans ${wait}ms`)
+      log.warn(`  batch ${i}-${i + SELECT_BATCH}: timeout, retry ${attempt + 1}/4 dans ${wait}ms`)
       await sleep(wait)
     }
 
     if (selErr) {
-      log!.error(`  batch ${i}-${i + SELECT_BATCH}: SELECT failed (abandonné)`, selErr)
+      log.error(`  batch ${i}-${i + SELECT_BATCH}: SELECT failed (abandonné)`, selErr)
       continue
     }
     if (!providers || providers.length === 0) continue
@@ -313,14 +330,15 @@ export async function matchAndUpdate(
     matched += providers.length
 
     if (dryRun) {
-      log!.log(`  [dry-run] would update ${providers.length} providers`)
+      log.log(`  [dry-run] would update ${providers.length} providers`)
       continue
     }
 
     // Construit le payload RPC — uniquement les providers pour lesquels on a des données.
     const payload: RgeBulkUpdateRow[] = []
     for (const p of providers) {
-      const agg = aggregated.get(p.siret!)
+      if (!p.siret) continue
+      const agg = aggregated.get(p.siret)
       if (!agg) continue
       payload.push({
         id: p.id,
@@ -351,24 +369,26 @@ export async function matchAndUpdate(
         rpcErr = error as { code?: string; message?: string }
         if (rpcErr.code !== '57014') break
         const wait = 1000 * Math.pow(2, attempt)
-        log!.warn(`  rpc batch ${i}/${j}: timeout, retry ${attempt + 1}/4 dans ${wait}ms`)
+        log.warn(`  rpc batch ${i}/${j}: timeout, retry ${attempt + 1}/4 dans ${wait}ms`)
         await sleep(wait)
       }
       if (rpcErr) {
         // Atomicité garantie par la RPC : rien n'a été écrit en DB pour ce sous-batch.
         // On skip proprement, surtout pas de `rge_last_synced_at = now` séparé.
-        log!.error(
+        log.error(
           `  batch ${i}/${j}: RPC rge_bulk_update_providers failed — ${slice.length} providers unchanged`,
-          rpcErr.message,
+          rpcErr.message
         )
         continue
       }
       updated += updatedInBatch
-      log!.log(`  ✓ rpc batch ${i}/${j}: updated ${updatedInBatch}/${slice.length} providers atomically`)
+      log.log(
+        `  ✓ rpc batch ${i}/${j}: updated ${updatedInBatch}/${slice.length} providers atomically`
+      )
     }
   }
 
-  log!.log(`✓ Matched ${matched} providers, updated ${updated}`)
+  log.log(`✓ Matched ${matched} providers, updated ${updated}`)
   return { matched, updated }
 }
 
@@ -380,17 +400,19 @@ export async function clearStaleRge(
   currentSirets: Set<string>,
   supabase: SupabaseClient,
   dryRun: boolean,
-  log: RgeSyncOptions['logger'] = console,
-  isPartialSync: boolean = false,
+  log: Pick<Console, 'log' | 'warn' | 'error'> = console,
+  isPartialSync: boolean = false
 ): Promise<number> {
   // Garde-fou P0 : refuser de s'exécuter en mode sync partielle.
   // Sinon, currentSirets ne contient qu'une fraction du dataset et on effacerait
   // tous les providers hors de la fenêtre limitée (documenté dans memory/servicesartisans-rge-integration.md).
   if (isPartialSync) {
-    throw new Error('clearStaleRge() refuses to run in partial sync mode — would erase providers outside the limited window. Use --full-sync explicitly to override.')
+    throw new Error(
+      'clearStaleRge() refuses to run in partial sync mode — would erase providers outside the limited window. Use --full-sync explicitly to override.'
+    )
   }
 
-  log!.log('→ Clearing stale RGE on providers no longer in ADEME dataset...')
+  log.log('→ Clearing stale RGE on providers no longer in ADEME dataset...')
 
   const { data: stale, error } = await supabase
     .from('providers')
@@ -398,18 +420,18 @@ export async function clearStaleRge(
     .not('rge_valid_until', 'is', null)
 
   if (error || !stale) {
-    log!.error('  Failed to fetch stale:', error)
+    log.error('  Failed to fetch stale:', error)
     return 0
   }
 
-  const toClear = stale.filter(p => !p.siret || !currentSirets.has(p.siret))
+  const toClear = stale.filter((p) => !p.siret || !currentSirets.has(p.siret))
   if (toClear.length === 0) {
-    log!.log('  No stale RGE to clear')
+    log.log('  No stale RGE to clear')
     return 0
   }
 
   if (dryRun) {
-    log!.log(`  [dry-run] would clear ${toClear.length} stale RGE`)
+    log.log(`  [dry-run] would clear ${toClear.length} stale RGE`)
     return toClear.length
   }
 
@@ -421,14 +443,17 @@ export async function clearStaleRge(
       rge_organismes: null,
       rge_source_url: null,
     })
-    .in('id', toClear.map(p => p.id))
+    .in(
+      'id',
+      toClear.map((p) => p.id)
+    )
 
   if (updErr) {
-    log!.error('  Clear failed:', updErr)
+    log.error('  Clear failed:', updErr)
     return 0
   }
 
-  log!.log(`✓ Cleared ${toClear.length} stale RGE`)
+  log.log(`✓ Cleared ${toClear.length} stale RGE`)
   return toClear.length
 }
 
@@ -439,22 +464,20 @@ export async function clearStaleRge(
 export async function backfillCommunes(
   supabase: SupabaseClient,
   dryRun: boolean,
-  log: RgeSyncOptions['logger'] = console,
+  log: Pick<Console, 'log' | 'warn' | 'error'> = console
 ): Promise<{ communesUpdated: number; totalRgeActifs: number }> {
-  log!.log('→ Backfilling communes.nb_artisans_rge via RPC...')
+  log.log('→ Backfilling communes.nb_artisans_rge via RPC...')
 
   if (dryRun) {
-    log!.log('  [dry-run] would call RPC rge_backfill_communes()')
+    log.log('  [dry-run] would call RPC rge_backfill_communes()')
     return { communesUpdated: 0, totalRgeActifs: 0 }
   }
 
-  const { data, error } = await supabase
-    .rpc('rge_backfill_communes')
-    .single()
+  const { data, error } = await supabase.rpc('rge_backfill_communes').single()
 
   if (error) {
-    log!.error('  RPC rge_backfill_communes failed:', error.message)
-    log!.error('  → Vérifie que la migration 381 a été appliquée sur la DB.')
+    log.error('  RPC rge_backfill_communes failed:', error.message)
+    log.error('  → Vérifie que la migration 381 a été appliquée sur la DB.')
     return { communesUpdated: 0, totalRgeActifs: 0 }
   }
 
@@ -463,7 +486,9 @@ export async function backfillCommunes(
     communesUpdated: row?.communes_updated ?? 0,
     totalRgeActifs: row?.total_rge ?? 0,
   }
-  log!.log(`✓ Backfilled ${result.communesUpdated} communes (total RGE actifs: ${result.totalRgeActifs})`)
+  log.log(
+    `✓ Backfilled ${result.communesUpdated} communes (total RGE actifs: ${result.totalRgeActifs})`
+  )
   return result
 }
 
@@ -473,7 +498,7 @@ export async function backfillCommunes(
 
 export async function syncRgeFromAdeme(
   supabase: SupabaseClient,
-  options: RgeSyncOptions = {},
+  options: RgeSyncOptions = {}
 ): Promise<RgeSyncResult> {
   const t0 = Date.now()
   const log = options.logger || console
@@ -481,12 +506,14 @@ export async function syncRgeFromAdeme(
   const skipBackfill = options.skipBackfill ?? false
   const limit = options.limit ?? Infinity
   // Une sync est partielle si `limit` est fini OU si le caller l'a explicitement déclaré.
-  const isPartialSync = options.isPartialSync ?? (Number.isFinite(limit))
+  const isPartialSync = options.isPartialSync ?? Number.isFinite(limit)
 
   log.log('═══ syncRgeFromAdeme ═══')
   log.log(`Mode: ${dryRun ? 'DRY-RUN' : 'WRITE'}`)
   log.log(`Limit: ${limit === Infinity ? 'none' : limit}`)
-  log.log(`Partial sync: ${isPartialSync ? 'YES (clearStaleRge will be skipped)' : 'no (full sync)'}`)
+  log.log(
+    `Partial sync: ${isPartialSync ? 'YES (clearStaleRge will be skipped)' : 'no (full sync)'}`
+  )
   log.log('')
 
   const rows = await fetchAllAdemeRows(limit, log)
@@ -495,20 +522,28 @@ export async function syncRgeFromAdeme(
 
   let cleared = 0
   if (isPartialSync) {
-    log.warn('⚠ Partial sync detected — skipping clearStaleRge() to avoid erasing providers outside the limited window.')
-    log.warn('  To run a full sync (with stale cleanup), omit `limit` or pass `isPartialSync: false` explicitly.')
+    log.warn(
+      '⚠ Partial sync detected — skipping clearStaleRge() to avoid erasing providers outside the limited window.'
+    )
+    log.warn(
+      '  To run a full sync (with stale cleanup), omit `limit` or pass `isPartialSync: false` explicitly.'
+    )
   } else if (rows.length < ADEME_MIN_ROWS_FOR_CLEAR) {
     // Garde-fou P0 : dataset ADEME anormalement petit — refuser le clear.
     // Scénario cauchemar : ADEME renvoie 0 ou très peu de lignes (API down, schéma modifié,
     // rate-limit silencieux, coupure réseau à mi-pagination). Si on clearStaleRge ici on efface
     // TOUS les providers RGE actuels. Le sync doit planter proprement, PAS effacer les données.
-    log.error(`✗ ADEME dataset anormalement petit (${rows.length} lignes < seuil ${ADEME_MIN_ROWS_FOR_CLEAR}).`)
+    log.error(
+      `✗ ADEME dataset anormalement petit (${rows.length} lignes < seuil ${ADEME_MIN_ROWS_FOR_CLEAR}).`
+    )
     log.error('  Refus de lancer clearStaleRge() pour protéger les données existantes.')
-    log.error('  Causes probables : ADEME API partiellement down, schéma modifié, rate-limit, coupure réseau.')
-    log.error('  Les UPDATEs déjà appliqués sont conservés ; aucun provider n\'est effacé.')
+    log.error(
+      '  Causes probables : ADEME API partiellement down, schéma modifié, rate-limit, coupure réseau.'
+    )
+    log.error("  Les UPDATEs déjà appliqués sont conservés ; aucun provider n'est effacé.")
     throw new Error(
       `ADEME returned only ${rows.length} rows (< ${ADEME_MIN_ROWS_FOR_CLEAR} threshold) — ` +
-      `refusing to run clearStaleRge to protect existing providers. Check ADEME API health.`
+        `refusing to run clearStaleRge to protect existing providers. Check ADEME API health.`
     )
   } else {
     cleared = await clearStaleRge(new Set(aggregated.keys()), supabase, dryRun, log, false)
