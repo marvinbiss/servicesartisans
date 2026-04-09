@@ -45,6 +45,10 @@ export async function GET() {
     // RGE pSEO — Tier 2 (top 500 villes). Keep in sync with sitemap.ts.
     'rge-city',
     'rge-service-city',
+    // CEE pSEO — Tier 2 (19 op\u00e9rations × top 500 villes = 9 500 URLs)
+    // + hub par op\u00e9ration (19 URLs). Keep in sync with sitemap.ts.
+    'cee-operation',
+    'cee-operation-city',
   ]
 
   // Provider sitemaps (DB-dependent, served via /api/sitemap-providers)

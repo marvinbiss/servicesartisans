@@ -21,6 +21,16 @@ export const dynamicParams = false
 // Google penalizes false freshness signals (Dec 2025 update). Better honest than fake-fresh.
 const STATIC_DATE = '2025-11-01'
 
+// CEE — codes d'opérations seed (migration 383). Source statique, alignée sur
+// `cee_operations`. Utilisée par les sitemaps pour éviter un round-trip DB au
+// build (les codes FOS ne bougent qu'à la publication d'un nouvel arrêté DGEC).
+const CEE_OPERATION_CODES: readonly string[] = [
+  'BAR-EN-101', 'BAR-EN-102', 'BAR-EN-103', 'BAR-EN-104', 'BAR-EN-108',
+  'BAR-TH-104', 'BAR-TH-112', 'BAR-TH-113', 'BAR-TH-125', 'BAR-TH-127',
+  'BAR-TH-129', 'BAR-TH-143', 'BAR-TH-148', 'BAR-TH-159', 'BAR-TH-160',
+  'BAR-TH-161', 'BAR-TH-164', 'BAR-TH-173', 'BAR-SE-104',
+] as const
+
 // Lazily-loaded lastmod data from DB. Fetched once, reused across all sitemap IDs.
 // If DB is unavailable, all maps are empty → lastmod is omitted (honest).
 let _lastmodData: SitemapLastmodData | null = null
@@ -85,6 +95,10 @@ export async function generateSitemaps() {
     // Scaler au full SITEMAP_CITY_COUNT une fois le ratio > 40%.
     { id: 'rge-city' },          // /artisans-rge/[ville] — 500 URLs
     { id: 'rge-service-city' },  // /rge/[service]/[ville] — 14 × 500 = 7 000 URLs
+    // CEE pSEO — Tier 2 : 19 op\u00e9rations × 500 villes = 9 500 URLs
+    // + hub par op\u00e9ration (19 URLs). Pages noindex fail-open si 0 provider.
+    { id: 'cee-operation' },        // /cee/[op] — 19 URLs
+    { id: 'cee-operation-city' },   // /cee/[op]/[ville] — 19 × 500 = 9 500 URLs
   ]
 
   // Provider sitemaps are served dynamically via /api/sitemap-providers
@@ -113,6 +127,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/blog`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/guides`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/rge`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.8 },
+      { url: `${SITE_URL}/cee`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.8 },
       { url: `${SITE_URL}/questions`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/barometre`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/barometre/regions`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
@@ -618,6 +633,35 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       for (const ville of phase1Cities) {
         result.push({
           url: `${SITE_URL}/rge/${svc}/${ville.slug}`,
+          changeFrequency: 'weekly',
+          priority: 0.6,
+        })
+      }
+    }
+    return result
+  }
+
+  // ── CEE operation hub pages (/cee/[op]) ──────────────────────────────
+  // 19 URLs — une par op\u00e9ration CEE active. Priority 0.7, weekly.
+  if (id === 'cee-operation') {
+    return CEE_OPERATION_CODES.map((code) => ({
+      url: `${SITE_URL}/cee/${code}`,
+      lastModified: STATIC_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }))
+  }
+
+  // ── CEE operation × city pSEO (/cee/[op]/[ville]) ───────────────────
+  // 19 op\u00e9rations × top 500 villes = 9 500 URLs. Tier 2. lastmod omis
+  // (pages ISR derived from DB, pas de vrai changement template).
+  if (id === 'cee-operation-city') {
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
+    const result: MetadataRoute.Sitemap = []
+    for (const code of CEE_OPERATION_CODES) {
+      for (const ville of phase1Cities) {
+        result.push({
+          url: `${SITE_URL}/cee/${code}/${ville.slug}`,
           changeFrequency: 'weekly',
           priority: 0.6,
         })
