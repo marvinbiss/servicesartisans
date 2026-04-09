@@ -54,6 +54,20 @@ interface ProviderListRow {
   user_id: string | null
   created_at: string | null
   updated_at: string | null
+  // RGE ADEME (migration 380) — exposés en listing pour afficher le badge sur les cards
+  rge_qualifications: Array<{
+    code: string
+    nom: string
+    organisme: string
+    domaine: string | null
+    meta_domaine: string | null
+    date_debut: string
+    date_fin: string
+    url: string | null
+  }> | null
+  rge_valid_until: string | null
+  rge_organismes: string[] | null
+  rge_source_url: string | null
 }
 
 /**
@@ -130,6 +144,8 @@ const PROVIDER_LIST_SELECT = [
   'latitude', 'longitude',
   'user_id',
   'created_at', 'updated_at',
+  // RGE ADEME (migration 380) — exposés pour badge dans ProviderCard
+  'rge_qualifications', 'rge_valid_until', 'rge_organismes', 'rge_source_url',
 ].join(',')
 
 
@@ -254,6 +270,7 @@ export async function getLocationBySlug(slug: string) {
 
 // Provider detail SELECT — listing columns + extra fields for the artisan detail page.
 // Only add columns that exist in the providers table (verified in types/database.ts).
+// RGE ADEME columns are already included in PROVIDER_LIST_SELECT.
 const PROVIDER_DETAIL_SELECT = [
   PROVIDER_LIST_SELECT,
   'creation_date', 'employee_count',

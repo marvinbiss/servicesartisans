@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
 import { MapPin, CheckCircle, Users, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
 import { getDisplayName } from './types'
+import RgeBadge from './RgeBadge'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -109,11 +110,21 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
 
             {/* Verified SIREN badge */}
             {artisan.is_verified && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 text-sm font-semibold border border-accent-200 mb-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 text-sm font-semibold border border-accent-200 mb-3 mr-2">
                 <ShieldCheck className="w-4 h-4 text-accent-500" aria-hidden="true" />
                 Vérifié SIREN
               </div>
             )}
+
+            {/* Certifié RGE (ADEME) — affiché sur toutes les fiches : les données
+                viennent de data.gouv.fr (source officielle), indépendantes de la
+                revendication de fiche. Le badge se self-guard si RGE absent/expiré. */}
+            <RgeBadge
+              qualifications={artisan.rge_qualifications}
+              validUntil={artisan.rge_valid_until}
+              organismes={artisan.rge_organismes}
+              sourceUrl={artisan.rge_source_url}
+            />
 
 
             {/* Location */}

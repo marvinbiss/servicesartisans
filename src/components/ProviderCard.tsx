@@ -6,6 +6,7 @@ import { Provider } from '@/types'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { trackEvent } from '@/lib/analytics/tracking'
+import RgeBadge from '@/components/artisan/RgeBadge'
 
 type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
 
@@ -100,11 +101,20 @@ export default function ProviderCard({
               </span>
             )}
           </div>
-          {provider.specialty && (
-            <span className="inline-block text-xs font-medium text-charcoal-600 bg-sand-200 px-2.5 py-0.5 rounded-full mt-1">
-              {provider.specialty}
-            </span>
-          )}
+          <div className="flex flex-wrap items-center gap-1.5 mt-1">
+            {provider.specialty && (
+              <span className="inline-block text-xs font-medium text-charcoal-600 bg-sand-200 px-2.5 py-0.5 rounded-full">
+                {provider.specialty}
+              </span>
+            )}
+            <RgeBadge
+              qualifications={provider.rge_qualifications}
+              validUntil={provider.rge_valid_until}
+              organismes={provider.rge_organismes}
+              sourceUrl={provider.rge_source_url}
+              compact
+            />
+          </div>
         </div>
 
         {/* Rating */}

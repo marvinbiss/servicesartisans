@@ -72,6 +72,21 @@ export interface Provider {
   bio?: string
   user_id?: string | null
   claimed_at?: string | null
+  // RGE ADEME (migration 380) — certifications officielles data.gouv.fr
+  // Source : dataset "liste-des-entreprises-rge-2" — Licence Etalab 2.0
+  rge_qualifications?: Array<{
+    code: string
+    nom: string
+    organisme: string
+    domaine: string | null
+    meta_domaine: string | null
+    date_debut: string
+    date_fin: string
+    url: string | null
+  }> | null
+  rge_valid_until?: string | null
+  rge_organismes?: string[] | null
+  rge_source_url?: string | null
   // GUARD: Do NOT add is_premium, trust_badge, trust_score here.
   // Legacy fields live in src/types/legacy/ (LegacyProvider).
   // Relations

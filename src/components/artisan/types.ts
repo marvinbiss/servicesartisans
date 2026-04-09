@@ -68,6 +68,20 @@ export interface Artisan {
   bio?: string
   created_at?: string
   updated_at?: string
+  // RGE ADEME (migration 380) — certifications officielles depuis data.gouv.fr
+  rge_qualifications?: Array<{
+    code: string
+    nom: string
+    organisme: string
+    domaine: string | null
+    meta_domaine: string | null
+    date_debut: string
+    date_fin: string
+    url: string | null
+  }> | null
+  rge_valid_until?: string | null
+  rge_organismes?: string[] | null
+  rge_source_url?: string | null
   // GUARD: Do NOT add is_premium, hourly_rate, response_time, avatar_url,
   // certifications, insurance, payment_methods, languages, emergency_available,
   // experience_years, employee_count, hourly_rate_min/max here.
