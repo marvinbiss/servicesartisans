@@ -129,6 +129,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/guides`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/rge`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.8 },
       { url: `${SITE_URL}/cee`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.8 },
+      { url: `${SITE_URL}/ademe`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.7 },
       { url: `${SITE_URL}/questions`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/barometre`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}/barometre/regions`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
