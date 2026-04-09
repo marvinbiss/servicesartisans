@@ -13,15 +13,21 @@ interface FilterState {
 interface SearchFiltersProps {
   onFilterChange: (filters: FilterState) => void
   totalResults: number
+  /** When provided, the RGE button is controlled externally (URL-driven, server-side filter). */
+  controlledRge?: boolean
+  /** Called when the user toggles the RGE button while in controlled mode. */
+  onControlledRgeChange?: (next: boolean) => void
 }
 
-export default function SearchFilters({ onFilterChange, totalResults }: SearchFiltersProps) {
+export default function SearchFilters({ onFilterChange, totalResults, controlledRge, onControlledRgeChange }: SearchFiltersProps) {
+  const isRgeControlled = controlledRge !== undefined
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
     rge: false,
     minRating: null,
     sortBy: 'name',
   })
+  const rgeActive = isRgeControlled ? controlledRge : filters.rge
   const [isOpen, setIsOpen] = useState(false)
   const sortLabelId = useId()
   const filterPanelId = useId()
@@ -41,11 +47,14 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
     }
     setFilters(defaultFilters)
     onFilterChange(defaultFilters)
+    if (isRgeControlled && rgeActive) {
+      onControlledRgeChange?.(false)
+    }
   }
 
   const activeFiltersCount = [
     filters.verified,
-    filters.rge,
+    rgeActive,
     filters.minRating !== null,
   ].filter(Boolean).length
 
@@ -135,11 +144,17 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
 
             {/* RGE filter (ADEME — indispensable pour aides MaPrimeRénov', CEE, TVA 5,5%) */}
             <button
-              onClick={() => updateFilter('rge', !filters.rge)}
-              aria-pressed={filters.rge}
+              onClick={() => {
+                if (isRgeControlled) {
+                  onControlledRgeChange?.(!rgeActive)
+                } else {
+                  updateFilter('rge', !filters.rge)
+                }
+              }}
+              aria-pressed={rgeActive}
               title="Reconnu Garant de l'Environnement — requis pour MaPrimeRénov', CEE et TVA 5,5%"
               className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
-                filters.rge
+                rgeActive
                   ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
                   : 'bg-white border-sand-300 text-charcoal-700 hover:bg-sand-50'
               }`}

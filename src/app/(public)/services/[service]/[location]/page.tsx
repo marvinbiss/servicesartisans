@@ -107,6 +107,7 @@ interface PageProps {
     service: string
     location: string
   }>
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 // Valid slug: lowercase alphanumeric + hyphens, 2-80 chars, no leading/trailing hyphen
@@ -348,8 +349,10 @@ function generateJsonLd(
   return [localBusinessSchema, serviceSchema, breadcrumbSchema]
 }
 
-export default async function ServiceLocationPage({ params }: PageProps) {
+export default async function ServiceLocationPage({ params, searchParams }: PageProps) {
   const { service: serviceSlug, location: locationSlug } = await params
+  const resolvedSearchParams = searchParams ? await searchParams : {}
+  const rgeOnly = resolvedSearchParams.rge === '1'
 
   // Early reject: invalid slugs (XSS attempts, random strings, special chars)
   if (!VALID_SLUG.test(serviceSlug) || !VALID_SLUG.test(locationSlug)) {
@@ -416,8 +419,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   // 3. Fetch providers + total count in parallel
   // (throw on providers failure so ISR keeps stale cache)
   const [providers, totalProviderCount, rgeProviderCount] = await Promise.all([
-    getProvidersByServiceAndLocation(serviceSlug, locationSlug),
-    getProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => -1),
+    getProvidersByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }),
+    getProviderCountByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(() => -1),
     getRgeProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
   ])
 
@@ -717,6 +720,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         serviceSlug={serviceSlug}
         locationSlug={locationSlug}
         recentDevisCount={recentDevisCount}
+        rgeOnly={rgeOnly}
       />
 
       {trade && (

@@ -412,11 +412,12 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
 export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
-  { limit = 50, offset = 0, postalCode }: { limit?: number; offset?: number; postalCode?: string } = {}
+  { limit = 50, offset = 0, postalCode, rgeOnly = false }: { limit?: number; offset?: number; postalCode?: string; rgeOnly?: boolean } = {}
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
 
-  const cacheKey = `providers:svc-loc:${serviceSlug}:${locationSlug}:${limit}:${offset}:${postalCode || ''}`
+  const cacheKey = `providers:svc-loc:${serviceSlug}:${locationSlug}:${limit}:${offset}:${postalCode || ''}${rgeOnly ? ':rge' : ''}`
+  const todayIso = new Date().toISOString().slice(0, 10)
 
   return getCachedData(
     cacheKey,
@@ -434,12 +435,16 @@ export async function getProvidersByServiceAndLocation(
       if (postalCode) {
         return await retryWithBackoff(
           async () => {
-            const { data, error } = await supabase
+            let query = supabase
               .from('providers')
               .select(PROVIDER_LIST_SELECT)
               .in('specialty', specialties)
               .eq('address_postal_code', postalCode)
               .eq('is_active', true)
+            if (rgeOnly) {
+              query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            }
+            const { data, error } = await query
               .order('phone', { ascending: false, nullsFirst: false })
               .order('is_verified', { ascending: false })
               .order('name')
@@ -457,12 +462,16 @@ export async function getProvidersByServiceAndLocation(
         return await retryWithBackoff(
           async () => {
             // Primary: direct specialty + city (fast — uses index + .in())
-            const { data: direct, error: directError } = await supabase
+            let primary = supabase
               .from('providers')
               .select(PROVIDER_LIST_SELECT)
               .in('specialty', specialties)
               .in('address_city', cityValues)
               .eq('is_active', true)
+            if (rgeOnly) {
+              primary = primary.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            }
+            const { data: direct, error: directError } = await primary
               // STRICT RULE: providers with phone always rank above those without
               .order('phone', { ascending: false, nullsFirst: false })
               .order('is_verified', { ascending: false })
@@ -548,13 +557,14 @@ export async function hasProvidersByServiceAndLocation(
 export async function getProviderCountByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
+  { rgeOnly = false }: { rgeOnly?: boolean } = {},
 ): Promise<number> {
   // Fail open: default to 1 during build so pages are indexed (not noindexed).
   // ISR will correct with the real DB count on first revalidation.
   if (IS_BUILD) return 1
 
   return getCachedData(
-    `provider-count:svc-loc:${serviceSlug}:${locationSlug}`,
+    `provider-count:svc-loc:${serviceSlug}:${locationSlug}${rgeOnly ? ':rge' : ''}`,
     async () => {
       try {
         return await retryWithBackoff(
@@ -567,17 +577,22 @@ export async function getProviderCountByServiceAndLocation(
             if (!cityName) return 0
 
             const cityValues = getCityValues(cityName, ville?.departementCode)
-            const { count, error } = await supabase
+            let query = supabase
               .from('providers')
               .select('id', { count: 'exact', head: true })
               .in('specialty', specialties)
               .in('address_city', cityValues)
               .eq('is_active', true)
+            if (rgeOnly) {
+              const todayIso = new Date().toISOString().slice(0, 10)
+              query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            }
+            const { count, error } = await query
 
             if (error) throw error
             return count ?? 0
           },
-          `getProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+          `getProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug}${rgeOnly ? ', rge' : ''})`,
         )
       } catch {
         return 0

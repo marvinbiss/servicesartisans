@@ -33,6 +33,7 @@ interface ServiceLocationPageClientProps {
   serviceSlug?: string
   locationSlug?: string
   recentDevisCount?: number
+  rgeOnly?: boolean
 }
 
 export default function ServiceLocationPageClient({
@@ -45,12 +46,20 @@ export default function ServiceLocationPageClient({
   serviceSlug,
   locationSlug,
   recentDevisCount = 0,
+  rgeOnly = false,
 }: ServiceLocationPageClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const [allProviders, setAllProviders] = useState<Provider[]>(initialProviders)
   const [liveCount, setLiveCount] = useState(totalCount)
+
+  // When the server re-renders with a different rgeOnly (URL ?rge change),
+  // reset the client state to the fresh server data.
+  useEffect(() => {
+    setAllProviders(initialProviders)
+    setLiveCount(totalCount)
+  }, [initialProviders, totalCount, rgeOnly])
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
@@ -91,6 +100,18 @@ export default function ServiceLocationPageClient({
     updateUrlParams(searchQuery, value)
   }, [searchQuery, updateUrlParams])
 
+  // Toggle RGE filter via URL — triggers a server re-render with filtered data
+  const handleRgeToggle = useCallback((next: boolean) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (next) {
+      params.set('rge', '1')
+    } else {
+      params.delete('rge')
+    }
+    const qs = params.toString()
+    router.replace(`${window.location.pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
+  }, [router, searchParams])
+
   const hasMore = allProviders.length < liveCount
 
   const loadMore = useCallback(async () => {
@@ -98,7 +119,7 @@ export default function ServiceLocationPageClient({
     setIsLoadingMore(true)
     try {
       const res = await fetch(
-        `/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&offset=${allProviders.length}&limit=${PAGE_SIZE}`
+        `/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&offset=${allProviders.length}&limit=${PAGE_SIZE}${rgeOnly ? '&rge=1' : ''}`
       )
       if (!res.ok) throw new Error('fetch error')
       const data = await res.json()
@@ -110,7 +131,7 @@ export default function ServiceLocationPageClient({
     } finally {
       setIsLoadingMore(false)
     }
-  }, [isLoadingMore, hasMore, serviceSlug, locationSlug, allProviders.length])
+  }, [isLoadingMore, hasMore, serviceSlug, locationSlug, allProviders.length, rgeOnly])
 
   // Client-side fallback: if the server pre-rendered with 0 providers
   // (e.g. build with NEXT_BUILD_SKIP_DB=1), fetch them from the API.
@@ -121,7 +142,7 @@ export default function ServiceLocationPageClient({
       return
     }
     let cancelled = false
-    fetch(`/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&limit=${PAGE_SIZE}`)
+    fetch(`/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&limit=${PAGE_SIZE}${rgeOnly ? '&rge=1' : ''}`)
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (cancelled) return
@@ -135,7 +156,7 @@ export default function ServiceLocationPageClient({
       })
       .catch(() => { if (!cancelled) setIsHydrating(false) })
     return () => { cancelled = true }
-  }, [initialProviders.length, serviceSlug, locationSlug])
+  }, [initialProviders.length, serviceSlug, locationSlug, rgeOnly])
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -450,6 +471,8 @@ export default function ServiceLocationPageClient({
                   searchQuery={searchQuery}
                   sortOrder={sortOrder}
                   highlightedProviderId={mapHoveredProviderId}
+                  rgeOnly={rgeOnly}
+                  onRgeToggle={handleRgeToggle}
                 />
                 {hasMore && (
                   <div className="p-4 border-t border-sand-200 bg-white sticky bottom-0">

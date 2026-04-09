@@ -15,6 +15,10 @@ interface ProviderListProps {
   searchQuery?: string
   sortOrder?: 'default' | 'name' | 'rating'
   highlightedProviderId?: string | null
+  /** When true, `providers` is already pre-filtered RGE server-side. Passed down from page URL `?rge=1`. */
+  rgeOnly?: boolean
+  /** Callback for RGE toggle — when provided, the filter is URL-driven (server-side). */
+  onRgeToggle?: (next: boolean) => void
 }
 
 interface FilterState {
@@ -32,6 +36,8 @@ export default function ProviderList({
   searchQuery = '',
   sortOrder,
   highlightedProviderId,
+  rgeOnly = false,
+  onRgeToggle,
 }: ProviderListProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
@@ -58,11 +64,15 @@ export default function ProviderList({
 
   const today = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
+  // When RGE is URL-driven (server-side filter), skip the client-side re-filter
+  // to avoid double work — data is already pre-filtered by the server.
+  const rgeClientFilter = !onRgeToggle && filters.rge
+
   const displayedProviders = useMemo(() => {
     // Apply filters
     const filtered = providers.filter((p) => {
       if (filters.verified && !p.is_verified) return false
-      if (filters.rge) {
+      if (rgeClientFilter) {
         // Certifié RGE actif uniquement (au moins une qualif + rge_valid_until >= aujourd'hui)
         const hasActiveRge =
           !!p.rge_qualifications &&
@@ -94,7 +104,7 @@ export default function ProviderList({
           return a.name.localeCompare(b.name)
       }
     })
-  }, [providers, filters, searchQuery, effectiveSortBy, today])
+  }, [providers, filters, rgeClientFilter, searchQuery, effectiveSortBy, today])
 
   return (
     <div className="flex flex-col h-full">
@@ -102,6 +112,8 @@ export default function ProviderList({
       <SearchFilters
         onFilterChange={setFilters}
         totalResults={isLoading ? 0 : (totalCount ?? displayedProviders.length)}
+        controlledRge={onRgeToggle ? rgeOnly : undefined}
+        onControlledRgeChange={onRgeToggle}
       />
 
       {/* Provider list */}
