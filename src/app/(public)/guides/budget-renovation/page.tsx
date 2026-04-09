@@ -4,6 +4,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
 import { getFAQSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
+import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
 import {
   Calculator,
   CheckCircle2,
@@ -632,6 +633,8 @@ export default function BudgetRenovationPage() {
             ))}
           </div>
         </section>
+
+        <RgeGuideBlock variant="generic" />
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">

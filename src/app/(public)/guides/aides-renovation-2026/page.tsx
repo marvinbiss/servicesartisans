@@ -4,6 +4,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
 import { getFinancialProductSchema, getLoanOrCreditSchema, getFAQSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
+import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
 import {
   Euro,
   CheckCircle2,
@@ -490,6 +491,8 @@ export default function AidesRenovation2026Page() {
             ))}
           </div>
         </section>
+
+        <RgeGuideBlock variant="generic" title="Artisans RGE pour bénéficier des aides 2026" />
 
         {/* CTA */}
         <section className="max-w-6xl mx-auto px-4 py-12">

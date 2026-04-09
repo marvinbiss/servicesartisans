@@ -31,6 +31,7 @@ import {
   HelpCircle,
 } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
+import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema, getFAQSchema, getFinancialProductSchema, getLoanOrCreditSchema } from "@/lib/seo/jsonld"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
@@ -836,7 +837,9 @@ export default function MaPrimeRenov2026Page() {
             </div>
           </section>
 
-          {/* CTA */}
+          <RgeGuideBlock variant="generic" title="Artisans RGE éligibles MaPrimeRénov'" />
+
+        {/* CTA */}
           <section className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-white font-heading mb-4">
               {"Trouvez un artisan RGE certifié"}

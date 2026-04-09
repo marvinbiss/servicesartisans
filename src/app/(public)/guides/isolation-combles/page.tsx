@@ -4,6 +4,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
 import { getFAQSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
+import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
 import {
   Home,
   Clock,
@@ -606,6 +607,8 @@ export default function IsolationComblesPage() {
             ))}
           </div>
         </section>
+
+        <RgeGuideBlock variant="service" serviceSlug="isolation-thermique" title="Artisans RGE isolation près de chez vous" />
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">

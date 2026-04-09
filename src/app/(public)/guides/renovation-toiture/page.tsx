@@ -4,6 +4,7 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
 import { getFAQSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
+import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
 import {
   Home,
   CheckCircle2,
@@ -548,6 +549,8 @@ export default function RenovationToiturePage() {
             ))}
           </div>
         </section>
+
+        <RgeGuideBlock variant="service" serviceSlug="couvreur" title="Couvreurs RGE près de chez vous" />
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">
