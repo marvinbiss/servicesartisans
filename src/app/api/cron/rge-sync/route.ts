@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import * as Sentry from '@sentry/nextjs'
 import { syncRgeFromAdeme } from '@/lib/rge/sync'
 import { logger } from '@/lib/logger'
 
@@ -39,14 +40,31 @@ export async function GET(request: Request) {
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
+  Sentry.addBreadcrumb({
+    category: 'cron',
+    level: 'info',
+    message: 'rge-sync start',
+  })
+
   try {
     const result = await syncRgeFromAdeme(supabase, {
-      // Full sync en WRITE, pas de limite, backfill activé
+      // Full sync en WRITE, pas de limite, backfill activé.
+      // isPartialSync: false explicite → clearStaleRge() tourne et nettoie les providers
+      // dont le SIRET n'est plus dans le dataset ADEME.
+      isPartialSync: false,
     })
 
     logger.info('RGE sync cron completed', {
       action: 'rge-sync-cron',
       ...result,
+    })
+
+    // Monitoring volume/fraîcheur via Sentry breadcrumbs + messages.
+    // Permet d'alerter si ademeRowsFetched chute ou si providersUpdated = 0.
+    Sentry.captureMessage('RGE sync completed', {
+      level: 'info',
+      tags: { cron: 'rge-sync' },
+      extra: { ...result },
     })
 
     return NextResponse.json({
@@ -59,6 +77,12 @@ export async function GET(request: Request) {
     logger.error('RGE sync cron failed', {
       action: 'rge-sync-cron',
       error: message,
+    })
+    // Fail-loud : le cron RGE est critique (garde-fou P0 ADEME_MIN_ROWS_FOR_CLEAR,
+    // atomicité via RPC 385). Toute exception doit remonter à Sentry pour alerting.
+    Sentry.captureException(err, {
+      tags: { cron: 'rge-sync' },
+      extra: { message },
     })
     return NextResponse.json({ success: false, error: message }, { status: 500 })
   }
