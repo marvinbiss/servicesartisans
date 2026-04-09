@@ -19,6 +19,7 @@ interface ProviderListProps {
 
 interface FilterState {
   verified: boolean
+  rge: boolean
   minRating: number | null
   sortBy: 'rating' | 'name'
 }
@@ -34,6 +35,7 @@ export default function ProviderList({
 }: ProviderListProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
+    rge: false,
     minRating: null,
     sortBy: 'name',
   })
@@ -54,10 +56,21 @@ export default function ProviderList({
     : sortOrder === 'rating' ? 'rating'
     : filters.sortBy
 
+  const today = useMemo(() => new Date().toISOString().slice(0, 10), [])
+
   const displayedProviders = useMemo(() => {
     // Apply filters
     const filtered = providers.filter((p) => {
       if (filters.verified && !p.is_verified) return false
+      if (filters.rge) {
+        // Certifié RGE actif uniquement (au moins une qualif + rge_valid_until >= aujourd'hui)
+        const hasActiveRge =
+          !!p.rge_qualifications &&
+          p.rge_qualifications.length > 0 &&
+          !!p.rge_valid_until &&
+          p.rge_valid_until >= today
+        if (!hasActiveRge) return false
+      }
       if (filters.minRating !== null && (p.rating_average ?? 0) < filters.minRating) return false
       // Search query filter
       if (searchQuery) {
@@ -81,7 +94,7 @@ export default function ProviderList({
           return a.name.localeCompare(b.name)
       }
     })
-  }, [providers, filters, searchQuery, effectiveSortBy])
+  }, [providers, filters, searchQuery, effectiveSortBy, today])
 
   return (
     <div className="flex flex-col h-full">

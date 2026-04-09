@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useId } from 'react'
-import { Filter, ChevronDown, X, BadgeCheck, Star } from 'lucide-react'
+import { Filter, ChevronDown, X, BadgeCheck, Star, Leaf } from 'lucide-react'
 
 interface FilterState {
   verified: boolean
+  rge: boolean
   minRating: number | null
   sortBy: 'rating' | 'name'
 }
@@ -17,6 +18,7 @@ interface SearchFiltersProps {
 export default function SearchFilters({ onFilterChange, totalResults }: SearchFiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
+    rge: false,
     minRating: null,
     sortBy: 'name',
   })
@@ -33,6 +35,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
   const clearFilters = () => {
     const defaultFilters: FilterState = {
       verified: false,
+      rge: false,
       minRating: null,
       sortBy: 'name',
     }
@@ -42,6 +45,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
 
   const activeFiltersCount = [
     filters.verified,
+    filters.rge,
     filters.minRating !== null,
   ].filter(Boolean).length
 
@@ -127,6 +131,21 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             >
               <BadgeCheck className="w-4 h-4" aria-hidden="true" />
               <span>Vérifié</span>
+            </button>
+
+            {/* RGE filter (ADEME — indispensable pour aides MaPrimeRénov', CEE, TVA 5,5%) */}
+            <button
+              onClick={() => updateFilter('rge', !filters.rge)}
+              aria-pressed={filters.rge}
+              title="Reconnu Garant de l'Environnement — requis pour MaPrimeRénov', CEE et TVA 5,5%"
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
+                filters.rge
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  : 'bg-white border-sand-300 text-charcoal-700 hover:bg-sand-50'
+              }`}
+            >
+              <Leaf className="w-4 h-4" aria-hidden="true" />
+              <span>Certifié RGE</span>
             </button>
 
             {/* Rating filter */}
