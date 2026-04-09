@@ -36,6 +36,8 @@ import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import RecentProviders from './RecentProviders'
 import LiveProviderCount from './LiveProviderCount'
+import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
+import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import dynamic from 'next/dynamic'
 
 
@@ -571,6 +573,16 @@ export default async function ServicePage({ params }: PageProps) {
         serviceSlug={serviceSlug}
         serviceName={service.name}
       />
+
+      {/* RGE signal — seulement pour les métiers éligibles RGE.
+          Compte national + top villes + CTA vers /rge/[service]/[ville]. */}
+      {isRgeAllowedService(serviceSlug) && (
+        <section className="py-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <RgeGuideBlock variant="service" serviceSlug={serviceSlug} />
+          </div>
+        </section>
+      )}
 
       {/* Price Guide — unique per trade */}
       {trade && (

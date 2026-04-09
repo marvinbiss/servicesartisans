@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { CheckCircle, Euro, ChevronDown, MapPin, Users, Thermometer, Building2 } from 'lucide-react'
+import { CheckCircle, Euro, ChevronDown, MapPin, Users, Thermometer, Building2, Leaf, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
@@ -9,7 +9,8 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
-import { getProvidersByServiceAndLocation } from '@/lib/supabase'
+import { getProvidersByServiceAndLocation, getRgeProviderCountByServiceAndLocation } from '@/lib/supabase'
+import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import { hashCode } from '@/lib/seo/location-content'
 import LocalDataInsights from '@/components/seo/LocalDataInsights'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
@@ -203,10 +204,15 @@ export default async function TarifsServiceVillePage({
   const villeData = getVilleBySlug(villeSlug)
   if (!trade || !villeData) notFound()
 
-  // Fetch commune data + providers in parallel (best-effort for providers)
-  const [commune, providers] = await Promise.all([
+  // Fetch commune data + providers + comptage RGE local en parallèle.
+  // Le comptage RGE n'est fetché que pour les métiers éligibles (allowlist énergie/bâti).
+  const rgeEligible = isRgeAllowedService(service)
+  const [commune, providers, rgeCount] = await Promise.all([
     getCommuneBySlug(villeSlug),
     getProvidersByServiceAndLocation(service, villeSlug, { limit: 6 }).catch(() => []),
+    rgeEligible
+      ? getRgeProviderCountByServiceAndLocation(service, villeSlug).catch(() => 0)
+      : Promise.resolve(0),
   ])
 
   const multiplier = getRegionalMultiplier(villeData.region)
@@ -409,6 +415,38 @@ export default async function TarifsServiceVillePage({
           />
         </div>
       </section>
+
+      {/* RGE local — reassurance strip. Visible uniquement si le métier est
+          éligible RGE et qu'au moins 1 artisan certifié existe dans la ville.
+          Rappel : RGE est obligatoire pour MaPrimeRénov', CEE, TVA 5,5 %. */}
+      {rgeEligible && rgeCount > 0 && (
+        <section className="py-4 bg-emerald-50 border-y border-emerald-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Link
+              href={`/rge/${service}/${villeSlug}`}
+              className="flex items-center justify-between gap-4 group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <Leaf className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-emerald-900">
+                    {rgeCount} {tradeLower}{rgeCount > 1 ? 's' : ''} certifié{rgeCount > 1 ? 's' : ''} RGE à {villeData.name}
+                  </div>
+                  <div className="text-xs text-emerald-700">
+                    Requis pour MaPrimeRénov&apos;, CEE et TVA 5,5 %
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-sm font-medium text-emerald-700 group-hover:text-emerald-900 transition-colors flex-shrink-0">
+                <span className="hidden sm:inline">Voir la liste</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Artisans disponibles — real providers for this service+city */}
       <LocalProviderShowcase
