@@ -9,6 +9,7 @@ import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import { STATIC_BATCH, LARGE_BATCH, SITEMAP_CITY_COUNT, SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
+import { RGE_QUALIFICATIONS_WITH_GUIDE } from '@/lib/rge/qualification-guides-content'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
@@ -96,6 +97,7 @@ export async function generateSitemaps() {
     // Scaler au full SITEMAP_CITY_COUNT une fois le ratio > 40%.
     { id: 'rge-city' },          // /artisans-rge/[ville] — 500 URLs
     { id: 'rge-service' },       // /rge/[service] — 14 URLs (hub par métier)
+    { id: 'rge-qualification' }, // /rge/qualifications + /rge/qualifications/[slug] — 5 URLs
     { id: 'rge-service-city' },  // /rge/[service]/[ville] — 14 × 500 = 7 000 URLs
     // CEE pSEO — Tier 2 : 19 op\u00e9rations × 500 villes = 9 500 URLs
     // + hub par op\u00e9ration (19 URLs). Pages noindex fail-open si 0 provider.
@@ -638,6 +640,25 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
+  }
+
+  // ── RGE qualifications guides (/rge/qualifications + /rge/qualifications/[slug])
+  // Hub + 4 guides éditoriaux (QualiPAC, QualiSol, QualiBois, Qualifelec).
+  if (id === 'rge-qualification') {
+    return [
+      {
+        url: `${SITE_URL}/rge/qualifications`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      },
+      ...RGE_QUALIFICATIONS_WITH_GUIDE.map((slug) => ({
+        url: `${SITE_URL}/rge/qualifications/${slug}`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.75,
+      })),
+    ]
   }
 
   // ── RGE service × city listings (/rge/[service]/[ville]) ───────────
