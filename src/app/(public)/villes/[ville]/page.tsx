@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Clock, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle, Leaf } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getEnrichedPlaceSchema, getCityServicesListSchema } from '@/lib/seo/jsonld'
@@ -12,6 +12,7 @@ import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementBy
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import { getRgeProviderCountByCity } from '@/lib/rge/city-listings'
 import CityHubLinks from '@/components/seo/CityHubLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -111,8 +112,12 @@ export default async function VillePage({ params }: PageProps) {
   const dept = getDepartementByCode(ville.departementCode)
   const deptSlug = dept?.slug
 
-  // Fetch commune enrichment data (cached 24h, null if unavailable)
-  const commune = await getCommuneBySlug(villeSlug)
+  // Fetch commune enrichment data + comptage RGE local en parallèle.
+  // Fail-open : si la DB RGE timeout, on retourne 0 et on n'affiche pas le bandeau.
+  const [commune, rgeCount] = await Promise.all([
+    getCommuneBySlug(villeSlug),
+    getRgeProviderCountByCity(villeSlug).catch(() => 0),
+  ])
 
   // Generate unique SEO content
   const content = generateVilleContent(ville)
@@ -258,6 +263,39 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* ─── RGE LOCAL SIGNAL ───────────────────────────────────
+          Bandeau reassurance visible uniquement si au moins 1 artisan RGE
+          existe dans la ville. Rappel : RGE est requis pour MaPrimeRénov',
+          CEE et TVA 5,5 %. Lien vers le hub /artisans-rge/[ville]. */}
+      {rgeCount > 0 && (
+        <section className="py-4 bg-emerald-50 border-y border-emerald-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Link
+              href={`/artisans-rge/${villeSlug}`}
+              className="flex items-center justify-between gap-4 group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <Leaf className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-emerald-900">
+                    {rgeCount} artisan{rgeCount > 1 ? 's' : ''} certifié{rgeCount > 1 ? 's' : ''} RGE à {ville.name}
+                  </div>
+                  <div className="text-xs text-emerald-700">
+                    Requis pour MaPrimeRénov&apos;, CEE et TVA 5,5 %
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-sm font-medium text-emerald-700 group-hover:text-emerald-900 transition-colors flex-shrink-0">
+                <span className="hidden sm:inline">Voir la liste</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* ─── SERVICES GRID ──────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
