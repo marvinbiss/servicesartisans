@@ -4,11 +4,18 @@
 -- Crée une fonction SQL qui backfille `communes.nb_artisans_rge` en une seule
 -- requête côté DB, au lieu de ~35k round-trips depuis l'application.
 --
--- Jointure : lower(communes.name) = lower(providers.address_city)
--- - `communes.name` vient des sources officielles (INSEE / geo.api.gouv.fr)
--- - `providers.address_city` est du TEXT libre (recherche-entreprises API)
--- - `lower()` rend robuste face à "PARIS" vs "Paris"
--- - On n'utilise PAS `communes.slug` car il est parfois dénormalisé (cf. 367, 376)
+-- Jointure : communes.code_insee = trim(providers.address_city)
+--
+-- IMPORTANT — pourquoi on joint sur code INSEE et PAS sur le nom :
+-- Dans l'API recherche-entreprises, `siege.libelle_commune` (qu'on stocke dans
+-- providers.address_city) contient en réalité le **code INSEE à 5 chiffres** de
+-- la commune (ex: "01004", "10035"), et non le libellé. Validé 2026-04-09 sur
+-- un échantillon de 1000 providers RGE : 99.1% ont un code INSEE en
+-- address_city, 0.9% sont vides, 0% sont des noms de ville.
+--
+-- La première version jointait sur `lower(communes.name) = lower(address_city)`
+-- et ne matchait que 1033 communes (les rares fallbacks texte). Avec le bon
+-- join INSEE on passe à ~14 274 communes (x14).
 --
 -- Nom `rge_backfill_communes` (pas `refresh_*`) car le parser SQL editor de
 -- Supabase tronque les identifiants commençant par "refresh" (bug observé
@@ -18,10 +25,15 @@
 -- Sécurité   : SECURITY DEFINER (contourne RLS) + GRANT service_role only.
 -- =============================================================================
 
--- Index fonctionnel pour accélérer la jointure case-insensitive.
-CREATE INDEX IF NOT EXISTS idx_providers_rge_by_city_lower
-  ON providers (lower(address_city))
-  WHERE rge_valid_until IS NOT NULL;
+-- Nettoyage de l'ancien index fonctionnel (version lower(address_city)).
+DROP INDEX IF EXISTS idx_providers_rge_by_city_lower;
+
+-- Index pour accélérer la jointure par code INSEE.
+-- Le filtre regex garantit qu'on n'indexe que les lignes utilisables.
+CREATE INDEX IF NOT EXISTS idx_providers_rge_by_insee
+  ON providers (address_city)
+  WHERE rge_valid_until IS NOT NULL
+    AND address_city ~ '^\d{5}$';
 
 -- -----------------------------------------------------------------------------
 -- Fonction RPC
@@ -46,21 +58,23 @@ BEGIN
    WHERE nb_artisans_rge IS DISTINCT FROM 0
      AND is_active = TRUE;
 
-  -- Backfill via sous-requête (pas de CTE — déclenche le bug ci-dessus)
+  -- Backfill via sous-requête (pas de CTE — déclenche le bug ci-dessus).
+  -- Join via code INSEE (providers.address_city contient le code, pas le nom).
   UPDATE public.communes c
      SET nb_artisans_rge = sub.cnt
     FROM (
       SELECT
-        lower(p.address_city) AS city_key,
-        COUNT(*)::INTEGER     AS cnt
+        trim(p.address_city) AS insee_code,
+        COUNT(*)::INTEGER    AS cnt
       FROM public.providers p
       WHERE p.rge_valid_until IS NOT NULL
         AND p.rge_valid_until > CURRENT_DATE
         AND p.address_city IS NOT NULL
+        AND p.address_city ~ '^\d{5}$'
         AND p.is_active = TRUE
-      GROUP BY lower(p.address_city)
+      GROUP BY trim(p.address_city)
     ) AS sub
-   WHERE lower(c.name) = sub.city_key
+   WHERE c.code_insee = sub.insee_code
      AND c.is_active = TRUE;
 
   GET DIAGNOSTICS v_updated = ROW_COUNT;
@@ -79,7 +93,7 @@ END;
 $$;
 
 COMMENT ON FUNCTION public.rge_backfill_communes() IS
-  'Backfill communes.nb_artisans_rge depuis providers.rge_valid_until en une seule requête. Retourne (communes_updated, total_rge_actifs). Appelé par scripts/enrich-rge-ademe.ts et /api/cron/rge-sync.';
+  'Backfill communes.nb_artisans_rge depuis providers.rge_valid_until en une seule requête. Join via code INSEE (providers.address_city contient le code INSEE, pas le libellé). Retourne (communes_updated, total_rge_actifs). Appelé par scripts/enrich-rge-ademe.ts et /api/cron/rge-sync.';
 
 REVOKE ALL ON FUNCTION public.rge_backfill_communes() FROM PUBLIC;
 REVOKE ALL ON FUNCTION public.rge_backfill_communes() FROM anon;
