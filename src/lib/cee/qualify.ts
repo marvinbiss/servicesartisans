@@ -23,6 +23,16 @@ export interface CeeQualificationResult {
   codes: string[]
 }
 
+export interface CeeOperationDetail {
+  code: string
+  nom: string
+  domaine: string
+  sous_domaine: string | null
+  rge_qualifications_requises: string[]
+  non_cumulable_avec: string[]
+  public_cible: string
+}
+
 /**
  * Retourne les codes FOS CEE applicables à un service SA donné.
  *
@@ -48,4 +58,25 @@ export async function qualifyDevisForCee(
 
   const codes = data.map((row) => row.code as string)
   return { eligible: codes.length > 0, codes }
+}
+
+/**
+ * Récupère les détails complets d'une liste d'opérations CEE.
+ * Utilisé par la Brique 2 (tunnel dossier) pour afficher les exigences
+ * et vérifier les incompatibilités de cumul avant dépose.
+ */
+export async function getCeeOperationDetails(
+  supabase: SupabaseClient,
+  codes: string[]
+): Promise<CeeOperationDetail[]> {
+  if (codes.length === 0) return []
+
+  const { data, error } = await supabase
+    .from('cee_operations')
+    .select('code, nom, domaine, sous_domaine, rge_qualifications_requises, non_cumulable_avec, public_cible')
+    .eq('is_active', true)
+    .in('code', codes)
+
+  if (error || !data) return []
+  return data as CeeOperationDetail[]
 }
