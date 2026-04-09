@@ -10,13 +10,28 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import {
   RGE_QUALIFICATIONS_WITH_GUIDE,
   getRgeQualificationGuide,
-  hasRgeQualificationGuide,
 } from '@/lib/rge/qualification-guides-content'
 
 export const revalidate = 86400
 export const dynamicParams = false
 
 const VALID_SLUG = /^[a-z][a-z0-9-]{0,39}$/
+
+/** Libellés courts pour les opérations CEE linkées depuis une fiche qualification. */
+const CEE_SHORT_LABELS: Record<string, string> = {
+  'BAR-TH-171': 'Pompe à chaleur air/eau haute performance',
+  'BAR-TH-172': 'PAC eau/eau haute performance',
+  'BAR-TH-112': 'Poêle à bois ou granulés',
+  'BAR-TH-113': 'Chaudière biomasse',
+  'BAR-TH-125': 'VMC double flux',
+  'BAR-TH-129': 'Pompe à chaleur air/air',
+  'BAR-TH-148': 'Chauffe-eau thermodynamique',
+  'BAR-TH-174': 'Rénovation d’ampleur maison individuelle',
+  'BAR-EN-101': 'Isolation des combles',
+  'BAR-EN-102': 'Isolation des murs',
+  'BAR-EN-103': 'Isolation d’un plancher bas',
+  'BAR-EN-104': 'Remplacement de fenêtres',
+}
 
 export function generateStaticParams(): Array<{ slug: string }> {
   return RGE_QUALIFICATIONS_WITH_GUIDE.map((slug) => ({ slug }))
@@ -33,9 +48,10 @@ function truncate(text: string, maxLen: number): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  if (!VALID_SLUG.test(slug) || !hasRgeQualificationGuide(slug)) notFound()
+  if (!VALID_SLUG.test(slug)) notFound()
 
-  const guide = getRgeQualificationGuide(slug)!
+  const guide = getRgeQualificationGuide(slug)
+  if (!guide) notFound()
   const path = `/rge/qualifications/${slug}`
 
   return {
@@ -66,9 +82,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function RgeQualificationGuidePage({ params }: PageProps) {
   const { slug } = await params
-  if (!VALID_SLUG.test(slug) || !hasRgeQualificationGuide(slug)) notFound()
+  if (!VALID_SLUG.test(slug)) notFound()
 
-  const guide = getRgeQualificationGuide(slug)!
+  const guide = getRgeQualificationGuide(slug)
+  if (!guide) notFound()
   const path = `/rge/qualifications/${slug}`
 
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -146,7 +163,10 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
             <ul className="space-y-2">
               {guide.travauxCouverts.map((travail) => (
                 <li key={travail} className="flex items-start gap-2 text-sm text-slate-700">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <CheckCircle2
+                    className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
                   <span>{travail}</span>
                 </li>
               ))}
@@ -160,7 +180,10 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
             <ul className="space-y-2">
               {guide.ceeDebloquees.map((cee) => (
                 <li key={cee} className="flex items-start gap-2 text-sm text-slate-700">
-                  <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <CheckCircle2
+                    className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
                   <span>{cee}</span>
                 </li>
               ))}
@@ -179,6 +202,43 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
             </section>
           ))}
         </article>
+
+        {/* Maillage CEE — primes débloquées par cette qualification */}
+        {guide.linkedCeeOperations.length > 0 && (
+          <div className="mt-10 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/60 to-white p-6">
+            <h2 className="font-heading text-xl font-extrabold text-slate-900 mb-2 flex items-center gap-2">
+              <Award className="w-5 h-5 text-blue-700" aria-hidden="true" />
+              Primes CEE d&eacute;bloqu&eacute;es par {guide.name}
+            </h2>
+            <p className="text-sm text-slate-600 mb-4">
+              Consultez le guide de chaque op&eacute;ration CEE standardis&eacute;e accessible
+              gr&acirc;ce &agrave; cette qualification.
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {guide.linkedCeeOperations.map((code) => (
+                <li key={code}>
+                  <Link
+                    href={`/cee/${code}/guide`}
+                    className="group flex items-start justify-between gap-3 p-4 bg-white rounded-xl border border-blue-100 hover:border-blue-400 hover:shadow-sm transition"
+                  >
+                    <span className="flex-1">
+                      <span className="block text-xs font-semibold text-blue-700 uppercase tracking-wide">
+                        {code}
+                      </span>
+                      <span className="block text-sm font-semibold text-slate-900 group-hover:text-blue-800 transition">
+                        {CEE_SHORT_LABELS[code] ?? code}
+                      </span>
+                    </span>
+                    <ArrowRight
+                      className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
 
       {/* FAQ */}
