@@ -257,14 +257,15 @@ export async function matchAndUpdate(
     const chunk = sirets.slice(i, i + BATCH)
 
     // Retry avec backoff sur timeout (57014) — charge Supabase variable
-    let providers: Array<{ id: string; siret: string | null }> | null = null
+    type ProviderRow = { id: string; siret: string | null }
+    let providers: ProviderRow[] | null = null
     let selErr: { code?: string; message?: string } | null = null
     for (let attempt = 0; attempt < 4; attempt++) {
       const res = await supabase
         .from('providers')
         .select('id, siret')
         .in('siret', chunk)
-      providers = res.data as typeof providers
+      providers = (res.data ?? null) as ProviderRow[] | null
       selErr = res.error
       if (!selErr) break
       if (selErr.code !== '57014') break // seulement retry sur timeout
