@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { MapPin, List, Map as MapIcon, Search, ChevronDown, ArrowRight, FileText, SearchX, ShieldCheck, Star, Leaf } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
+import { RgeTracking } from '@/lib/analytics/tracking'
 
 const PAGE_SIZE = 50
 
@@ -110,7 +111,12 @@ export default function ServiceLocationPageClient({
     }
     const qs = params.toString()
     router.replace(`${window.location.pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
-  }, [router, searchParams])
+    RgeTracking.filterApply({
+      service: serviceSlug || service.slug,
+      city: locationSlug || location.slug,
+      active: next,
+    })
+  }, [router, searchParams, serviceSlug, locationSlug, service.slug, location.slug])
 
   const hasMore = allProviders.length < liveCount
 

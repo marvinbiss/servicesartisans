@@ -17,6 +17,7 @@
 
 import Link from 'next/link'
 import { Leaf, ShieldCheck, ArrowRight, MapPin } from 'lucide-react'
+import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
 import {
@@ -145,9 +146,10 @@ export default async function RgeGuideBlock({
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {displayCities.map((city) => (
-                  <Link
+                  <RgePseoCtaLink
                     key={city.slug}
                     href={buildCityHref(effectiveServiceSlug, city.slug)}
+                    surface="guide"
                     className="group flex items-center justify-between rounded-lg border border-emerald-200 bg-white px-3 py-2.5 hover:border-emerald-400 hover:bg-emerald-50 transition-colors"
                   >
                     <span className="text-sm font-medium text-gray-900 truncate">
@@ -156,7 +158,7 @@ export default async function RgeGuideBlock({
                     <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full px-2 py-0.5 ml-2">
                       {formatCount(city.count)}
                     </span>
-                  </Link>
+                  </RgePseoCtaLink>
                 ))}
               </div>
             </div>

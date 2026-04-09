@@ -13,6 +13,7 @@ import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { getRgeProviderCountByCity } from '@/lib/rge/city-listings'
+import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import CityHubLinks from '@/components/seo/CityHubLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -271,8 +272,9 @@ export default async function VillePage({ params }: PageProps) {
       {rgeCount > 0 && (
         <section className="py-4 bg-emerald-50 border-y border-emerald-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Link
+            <RgePseoCtaLink
               href={`/artisans-rge/${villeSlug}`}
+              surface="villes"
               className="flex items-center justify-between gap-4 group"
             >
               <div className="flex items-center gap-3">
@@ -292,7 +294,7 @@ export default async function VillePage({ params }: PageProps) {
                 <span className="hidden sm:inline">Voir la liste</span>
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </div>
-            </Link>
+            </RgePseoCtaLink>
           </div>
         </section>
       )}

@@ -8,6 +8,7 @@ import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france-light'
 import { getArtisanUrl } from '@/lib/utils'
 import { getCeeOperationDetails, type CeeOperationDetail } from '@/lib/cee/qualify'
+import { CeeTracking } from '@/lib/analytics/tracking'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
 
@@ -144,6 +145,15 @@ export default function DevisConfirmation({
       cancelled = true
     }
   }, [service, city])
+
+  // Dispatch analytics event au mount quand l'éligibilité CEE est détectée
+  useEffect(() => {
+    if (!ceeEligible) return
+    CeeTracking.qualificationShown({
+      service,
+      operation_code: ceeOperationCodes[0],
+    })
+  }, [ceeEligible, service, ceeOperationCodes])
 
   // Fetch CEE operation details when eligible — affiche exigences RGE + opérations
   useEffect(() => {

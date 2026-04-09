@@ -50,6 +50,7 @@ export type BookingEvent =
   | 'exit_intent_shown'
   | 'exit_intent_devis_click'
   | 'exit_intent_phone_click'
+  | 'exit_intent_resume'
   | 'inline_form_started'
   | 'inline_form_step1'
   | 'inline_form_submitted'
@@ -63,6 +64,13 @@ export type BookingEvent =
   | 'claim_started'
   | 'claim_submitted'
   | 'share_profile'
+  // RGE / CEE tracking (full funnel)
+  | 'rge_badge_click'
+  | 'rge_filter_apply'
+  | 'rge_pseo_cta_click'
+  | 'rge_provider_selected'
+  | 'cee_qualification_shown'
+  | 'cee_cta_click'
 
 export interface TrackingData {
   event: BookingEvent
@@ -374,6 +382,75 @@ export function getVariant(experimentId: string, variants: string[]): string {
   }
 
   return variant
+}
+
+/* ─── RGE / CEE tracking ─────────────────────────────────────────────
+ * Events dédiés au funnel RGE (badge → filtre → pSEO → sélection artisan)
+ * et à l'éligibilité CEE (affichage éligibilité → CTA).
+ * Typage strict : chaque helper expose les props attendues, zéro `any`.
+ */
+
+export type RgeBadgeSurface = 'card' | 'fiche' | 'listing' | 'guide'
+export type RgePseoSurface = 'guide' | 'hub' | 'tarifs' | 'villes'
+
+export interface RgeBadgeClickProps {
+  provider_id?: string
+  surface: RgeBadgeSurface
+  service?: string
+  city?: string
+}
+
+export interface RgeFilterApplyProps {
+  service: string
+  city: string
+  active: boolean
+}
+
+export interface RgePseoCtaClickProps {
+  surface: RgePseoSurface
+  target: string
+}
+
+export interface RgeProviderSelectedProps {
+  provider_id: string
+  service?: string
+  city?: string
+  from_rge_listing: boolean
+}
+
+export interface CeeQualificationShownProps {
+  service: string
+  operation_code?: string
+  estimated_amount?: number
+}
+
+export interface CeeCtaClickProps {
+  operation_code?: string
+  surface: string
+}
+
+export const RgeTracking = {
+  badgeClick: (props: RgeBadgeClickProps) => {
+    trackEvent('rge_badge_click', props as unknown as Record<string, unknown>)
+  },
+  filterApply: (props: RgeFilterApplyProps) => {
+    trackEvent('rge_filter_apply', props as unknown as Record<string, unknown>)
+  },
+  pseoCtaClick: (props: RgePseoCtaClickProps) => {
+    trackEvent('rge_pseo_cta_click', props as unknown as Record<string, unknown>)
+  },
+  providerSelected: (props: RgeProviderSelectedProps) => {
+    trackEvent('rge_provider_selected', props as unknown as Record<string, unknown>)
+  },
+}
+
+export const CeeTracking = {
+  qualificationShown: (props: CeeQualificationShownProps) => {
+    trackEvent('cee_qualification_shown', props as unknown as Record<string, unknown>)
+  },
+  ctaClick: (props: CeeCtaClickProps) => {
+    trackEvent('cee_cta_click', props as unknown as Record<string, unknown>)
+  },
 }
 
 // Type declaration for gtag (defined in @/types/index.ts)

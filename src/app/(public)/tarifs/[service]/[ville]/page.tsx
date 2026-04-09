@@ -11,6 +11,7 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { getProvidersByServiceAndLocation, getRgeProviderCountByServiceAndLocation } from '@/lib/supabase'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
+import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import { hashCode } from '@/lib/seo/location-content'
 import LocalDataInsights from '@/components/seo/LocalDataInsights'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
@@ -422,8 +423,9 @@ export default async function TarifsServiceVillePage({
       {rgeEligible && rgeCount > 0 && (
         <section className="py-4 bg-emerald-50 border-y border-emerald-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Link
+            <RgePseoCtaLink
               href={`/rge/${service}/${villeSlug}`}
+              surface="tarifs"
               className="flex items-center justify-between gap-4 group"
             >
               <div className="flex items-center gap-3">
@@ -443,7 +445,7 @@ export default async function TarifsServiceVillePage({
                 <span className="hidden sm:inline">Voir la liste</span>
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </div>
-            </Link>
+            </RgePseoCtaLink>
           </div>
         </section>
       )}
