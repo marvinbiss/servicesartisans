@@ -371,6 +371,28 @@ const nextConfig = {
     return [
       { source: '/home', destination: '/', permanent: true },
       { source: '/accueil', destination: '/', permanent: true },
+      // BAR-TH-104 abrogée 01/01/2024 par la DGEC — remplacée par BAR-TH-171 (PAC air/eau haute performance, SCOP ≥ 4).
+      // Redirect permanent de toutes les URLs legacy vers la fiche en vigueur.
+      { source: '/cee/BAR-TH-104', destination: '/cee/BAR-TH-171', permanent: true },
+      { source: '/cee/BAR-TH-104/guide', destination: '/cee/BAR-TH-171/guide', permanent: true },
+      { source: '/cee/BAR-TH-104/:ville', destination: '/cee/BAR-TH-171/:ville', permanent: true },
+      // BAR-TH-106 (chaudière individuelle gaz/fioul à condensation) abrogée 01/01/2024 — arrêté du 4 octobre 2023 (JORFTEXT000048158900).
+      // Remplacée par BAR-TH-171 (PAC air/eau haute performance, SCOP ≥ 4) et BAR-TH-172 (PAC eau/eau).
+      { source: '/cee/BAR-TH-106', destination: '/cee/BAR-TH-171', permanent: true },
+      { source: '/cee/BAR-TH-106/guide', destination: '/cee/BAR-TH-171/guide', permanent: true },
+      { source: '/cee/BAR-TH-106/:ville', destination: '/cee/BAR-TH-171/:ville', permanent: true },
+      // BAR-TH-160 (isolation d'un réseau hydraulique) supprimée au 01/08/2025 — arrêté du 27 juin 2025 (JORFTEXT000051857168).
+      // Pas de remplacement direct : redirect vers la liste des fiches CEE en vigueur.
+      { source: '/cee/BAR-TH-160', destination: '/cee', permanent: true },
+      { source: '/cee/BAR-TH-160/guide', destination: '/cee', permanent: true },
+      { source: '/cee/BAR-TH-160/:ville', destination: '/cee', permanent: true },
+      // BAR-TH-164 (rénovation globale d'une maison individuelle) abrogée — arrêté du 19 décembre 2023 (JORFTEXT000048680133).
+      // Remplacée par BAR-TH-174 (rénovation d'ampleur maison individuelle). Le guide éditorial BAR-TH-174 n'étant pas encore
+      // publié, on redirige vers la liste des fiches CEE plutôt que vers une 404. À rebasculer sur /cee/BAR-TH-174/... dès
+      // que le guide existe dans operation-guides-content.ts.
+      { source: '/cee/BAR-TH-164', destination: '/cee', permanent: true },
+      { source: '/cee/BAR-TH-164/guide', destination: '/cee', permanent: true },
+      { source: '/cee/BAR-TH-164/:ville', destination: '/cee', permanent: true },
       // Legacy routes
       { source: '/france', destination: '/services', permanent: true },
       { source: '/carte', destination: '/services', permanent: true },

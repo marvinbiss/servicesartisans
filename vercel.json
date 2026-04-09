@@ -8,6 +8,9 @@
     "src/app/api/cron/**/*.ts": {
       "maxDuration": 60
     },
+    "src/app/api/cron/rge-sync/route.ts": {
+      "maxDuration": 300
+    },
     "src/app/api/sitemap-providers/route.ts": {
       "maxDuration": 60
     },
@@ -103,6 +106,10 @@
     {
       "path": "/api/cron/pipedrive-retry",
       "schedule": "30 */6 * * *"
+    },
+    {
+      "path": "/api/cron/rge-sync",
+      "schedule": "0 2 * * 0"
     }
   ]
 }

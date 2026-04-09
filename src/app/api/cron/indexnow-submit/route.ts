@@ -6,15 +6,42 @@ import { submitToIndexNow } from '@/lib/seo/indexnow'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { logger } from '@/lib/logger'
 
-const TOP_CITIES = ['paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes', 'strasbourg', 'montpellier', 'bordeaux', 'lille']
+const TOP_CITIES = [
+  'paris',
+  'marseille',
+  'lyon',
+  'toulouse',
+  'nice',
+  'nantes',
+  'strasbourg',
+  'montpellier',
+  'bordeaux',
+  'lille',
+]
 
 /** Extended city list for /devis/ rotation (top 30 French cities by population) */
 const EXTENDED_CITIES = [
   ...TOP_CITIES,
-  'rennes', 'reims', 'saint-etienne', 'toulon', 'le-havre',
-  'grenoble', 'dijon', 'angers', 'nimes', 'villeurbanne',
-  'clermont-ferrand', 'le-mans', 'aix-en-provence', 'brest', 'tours',
-  'amiens', 'limoges', 'perpignan', 'metz', 'besancon',
+  'rennes',
+  'reims',
+  'saint-etienne',
+  'toulon',
+  'le-havre',
+  'grenoble',
+  'dijon',
+  'angers',
+  'nimes',
+  'villeurbanne',
+  'clermont-ferrand',
+  'le-mans',
+  'aix-en-provence',
+  'brest',
+  'tours',
+  'amiens',
+  'limoges',
+  'perpignan',
+  'metz',
+  'besancon',
 ]
 
 /** All guide slugs — submitted once a week (Sundays) */
@@ -96,15 +123,38 @@ export async function GET(request: Request) {
   }
 
   const bucket = getDayBucket()
-  const counts = { strategic: 0, serviceHubs: 0, devis: 0, blog: 0, blogPrix: 0, providers: 0, guides: 0, rgeCity: 0, rgeServiceCity: 0 }
+  const counts = {
+    strategic: 0,
+    serviceHubs: 0,
+    devis: 0,
+    blog: 0,
+    blogPrix: 0,
+    providers: 0,
+    guides: 0,
+    rgeCity: 0,
+    rgeServiceCity: 0,
+  }
 
   // ── 1. Always-submit priority pages ─────────────────────────────────
+  // Note : les slugs satellites (mandataire-vs-direct, maprimerenov-cumulaison-cee,
+  // BAR-TH-143/159/174, qualibat-5911-thermique) sont des pages satellites et guides
+  // nouvellement ajoutés (Sprint 4). On les force dans la submission quotidienne
+  // pour garantir une découverte rapide par Bing, puis elles entreront dans la
+  // rotation naturelle via Object.keys() des dicts content.
+  // Note historique : BAR-TH-164 (rénovation globale MI) a été abrogée et remplacée
+  // par BAR-TH-174 (rénovation d'ampleur MI) — on ne soumet plus que la nouvelle fiche.
   const urls: string[] = [
     SITE_URL,
     `${SITE_URL}/services`,
     `${SITE_URL}/blog`,
     `${SITE_URL}/tarifs`,
     `${SITE_URL}/faq`,
+    `${SITE_URL}/cee/mandataire-vs-direct`,
+    `${SITE_URL}/maprimerenov-cumulaison-cee`,
+    `${SITE_URL}/cee/BAR-TH-143/guide`,
+    `${SITE_URL}/cee/BAR-TH-159/guide`,
+    `${SITE_URL}/cee/BAR-TH-174/guide`,
+    `${SITE_URL}/rge/qualifications/qualibat-5911-thermique`,
   ]
   counts.strategic = urls.length
 
@@ -140,7 +190,7 @@ export async function GET(request: Request) {
   const hours48 = 48 * 60 * 60 * 1000
 
   // 5a. Recent articles (published/modified in last 48h) — always submitted
-  const recentArticles = allArticlesMeta.filter(a => {
+  const recentArticles = allArticlesMeta.filter((a) => {
     const articleDate = new Date(a.date).getTime()
     return now - articleDate < hours48
   })
@@ -150,7 +200,7 @@ export async function GET(request: Request) {
   counts.blog = recentArticles.length
 
   // 5b. Prix articles — rotated daily for continuous re-submission
-  const prixArticles = allArticlesMeta.filter(a => a.slug.startsWith('prix-'))
+  const prixArticles = allArticlesMeta.filter((a) => a.slug.startsWith('prix-'))
   const prixBatch = rotateSlice(prixArticles, bucket)
   for (const article of prixBatch) {
     urls.push(`${SITE_URL}/blog/${article.slug}`)
@@ -158,9 +208,9 @@ export async function GET(request: Request) {
   counts.blogPrix = prixBatch.length
 
   // 5c. Non-prix, non-recent articles — rotated for background coverage
-  const recentSlugs = new Set(recentArticles.map(a => a.slug))
+  const recentSlugs = new Set(recentArticles.map((a) => a.slug))
   const otherArticles = allArticlesMeta.filter(
-    a => !a.slug.startsWith('prix-') && !recentSlugs.has(a.slug)
+    (a) => !a.slug.startsWith('prix-') && !recentSlugs.has(a.slug)
   )
   const otherBatch = rotateSlice(otherArticles, bucket)
   for (const article of otherBatch) {
@@ -185,19 +235,35 @@ export async function GET(request: Request) {
       logger.warn('IndexNow cron: failed to fetch new providers', { error: error.message })
     } else if (newProviders && newProviders.length > 0) {
       const hubPages = new Set<string>()
-      const serviceMap = new Map(services.map(s => [
-        s.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(),
-        s.slug,
-      ]))
+      const serviceMap = new Map(
+        services.map((s) => [
+          s.name
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim(),
+          s.slug,
+        ])
+      )
 
       for (const p of newProviders) {
         if (!p.specialty || !p.address_city) continue
 
-        const normalizedSpecialty = p.specialty.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+        const normalizedSpecialty = p.specialty
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .trim()
         const serviceSlug = serviceMap.get(normalizedSpecialty)
         if (!serviceSlug) continue
 
-        const citySlug = p.address_city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+        const citySlug = p.address_city
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .trim()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')
         if (!citySlug) continue
 
         hubPages.add(`${SITE_URL}/services/${serviceSlug}/${citySlug}`)
@@ -221,14 +287,14 @@ export async function GET(request: Request) {
 
   // ── 6b. RGE pSEO routes — city listing + service×city (rotated) ─────
   // /artisans-rge/{city} — top 30 villes, rotation 1/3 par jour (~10/jour)
-  const rgeTopCitySlugs = villes.slice(0, 30).map(v => v.slug)
-  const rgeCityUrls = rgeTopCitySlugs.map(slug => `${SITE_URL}/artisans-rge/${slug}`)
+  const rgeTopCitySlugs = villes.slice(0, 30).map((v) => v.slug)
+  const rgeCityUrls = rgeTopCitySlugs.map((slug) => `${SITE_URL}/artisans-rge/${slug}`)
   const rgeCityBatch = rotateSlice(rgeCityUrls, bucket)
   urls.push(...rgeCityBatch)
   counts.rgeCity = rgeCityBatch.length
 
   // /rge/{service}/{city} — 14 services × top 10 villes, rotation 1/3 par jour (~47/jour)
-  const rgeServiceTopCitySlugs = villes.slice(0, 10).map(v => v.slug)
+  const rgeServiceTopCitySlugs = villes.slice(0, 10).map((v) => v.slug)
   const allRgeServiceCityUrls: string[] = []
   for (const serviceSlug of RGE_ALLOWED_SERVICES) {
     for (const citySlug of rgeServiceTopCitySlugs) {

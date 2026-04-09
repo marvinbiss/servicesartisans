@@ -13,15 +13,19 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Fetch top-rated recent reviews (only published reviews)
-    // Note: reviews.artisan_id FK target is ambiguous in schema cache,
-    // so we fetch reviews without join and resolve provider name separately.
+    // Fetch top-rated recent reviews (only published reviews).
+    //
+    // Schéma prod réel (vérifié 2026-04-09, information_schema) :
+    //   id, provider_id, author_name, author_email, rating, title,
+    //   content, reply, reply_date, status, created_at, …
+    // ATTENTION : le code legacy dans d'autres fichiers utilise encore
+    // `comment`/`client_name`/`artisan_id` — refactor complet à venir.
     const { data: reviews, error } = await supabase
       .from('reviews')
-      .select('id, rating, comment, client_name, artisan_id, created_at')
+      .select('id, rating, content, author_name, provider_id, created_at')
       .eq('status', 'published')
       .gte('rating', 4)
-      .not('comment', 'is', null)
+      .not('content', 'is', null)
       .order('created_at', { ascending: false })
       .limit(6)
 
@@ -31,40 +35,46 @@ export async function GET() {
     }
 
     // Resolve artisan names from providers table in a single batch query
-    const artisanIds = Array.from(new Set((reviews || []).map(r => r.artisan_id).filter(Boolean)))
+    const providerIds = Array.from(
+      new Set((reviews || []).map((r) => r.provider_id).filter(Boolean))
+    )
     let providerNames: Record<string, string> = {}
 
-    if (artisanIds.length > 0) {
+    if (providerIds.length > 0) {
       const { data: providers } = await supabase
         .from('providers')
         .select('id, name')
-        .in('id', artisanIds)
+        .in('id', providerIds)
 
       if (providers) {
-        providerNames = Object.fromEntries(providers.map(p => [p.id, p.name]))
+        providerNames = Object.fromEntries(providers.map((p) => [p.id, p.name]))
       }
     }
 
-    // Transform reviews to include artisan info
+    // Transform reviews to include artisan info.
+    // Output keep `comment` as field name for backward compat with any
+    // client consuming this API by the old contract.
     const transformedReviews = (reviews || [])
-      .filter(r => r.comment && r.comment.length > 20)
-      .map(review => ({
+      .filter((r) => r.content && r.content.length > 20)
+      .map((review) => ({
         id: review.id,
-        author_name: review.client_name || 'Client',
+        author_name: review.author_name || 'Client',
         rating: review.rating,
-        comment: review.comment,
-        artisan_name: (review.artisan_id && providerNames[review.artisan_id]) || null,
+        comment: review.content,
+        artisan_name: (review.provider_id && providerNames[review.provider_id]) || null,
         created_at: review.created_at,
       }))
 
-    return NextResponse.json({
-      reviews: transformedReviews
-    }, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    return NextResponse.json(
+      {
+        reviews: transformedReviews,
       },
-    })
-
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        },
+      }
+    )
   } catch (error) {
     logger.error('Error fetching featured reviews:', error)
     return NextResponse.json(

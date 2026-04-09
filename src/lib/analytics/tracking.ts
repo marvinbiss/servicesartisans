@@ -71,6 +71,9 @@ export type BookingEvent =
   | 'rge_provider_selected'
   | 'cee_qualification_shown'
   | 'cee_cta_click'
+  // RGE enriched section on artisan profile
+  | 'rge_section_view'
+  | 'rge_section_click'
 
 export interface TrackingData {
   event: BookingEvent
@@ -134,6 +137,7 @@ export function trackEvent(event: BookingEvent, properties?: Record<string, unkn
 
   // Debug logging in development
   if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
     console.log('[Analytics]', event, properties)
   }
 }
@@ -301,12 +305,7 @@ export const SignupTracking = {
 // Devis tracking
 export const DevisTracking = {
   // Devis request is finalized and sent to artisan(s)
-  devisCompleted: (
-    devisId: string,
-    serviceSlug: string,
-    city?: string,
-    artisanCount?: number
-  ) => {
+  devisCompleted: (devisId: string, serviceSlug: string, city?: string, artisanCount?: number) => {
     trackEvent('devis_completed', {
       devisId,
       serviceSlug,
@@ -319,10 +318,7 @@ export const DevisTracking = {
 }
 
 // Conversion rate calculation
-export function calculateConversionRate(
-  profileViews: number,
-  completedBookings: number
-): number {
+export function calculateConversionRate(profileViews: number, completedBookings: number): number {
   if (profileViews === 0) return 0
   return Math.round((completedBookings / profileViews) * 100 * 100) / 100
 }
@@ -353,10 +349,8 @@ export function analyzeFunnel(stepCounts: number[]): FunnelAnalysis[] {
       index === 0
         ? 0
         : stepCounts[index - 1] > 0
-        ? Math.round(
-            ((stepCounts[index - 1] - stepCounts[index]) / stepCounts[index - 1]) * 100
-          )
-        : 0,
+          ? Math.round(((stepCounts[index - 1] - stepCounts[index]) / stepCounts[index - 1]) * 100)
+          : 0,
   }))
 }
 

@@ -1,5 +1,87 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
+import { logger } from '@/lib/logger'
+import { createAdminClient } from '@/lib/supabase/admin'
+
+const RGE_STALE_WARN_DAYS = 7
+const RGE_STALE_CRITICAL_DAYS = 14
+
+type RgeFreshness = {
+  ok: boolean
+  lastSyncedAt: string | null
+  daysStale: number | null
+  severity: 'ok' | 'warn' | 'error' | 'unknown'
+}
+
+/**
+ * Fail-open freshness check for the weekly RGE ADEME sync.
+ * Logs structured events but never throws — sitemap health must not be impacted.
+ */
+async function checkRgeFreshness(): Promise<RgeFreshness> {
+  try {
+    const supabase = createAdminClient()
+    const { data, error } = await supabase
+      .from('providers')
+      .select('rge_last_synced_at')
+      .not('rge_last_synced_at', 'is', null)
+      .order('rge_last_synced_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (error) {
+      logger.warn('rge_sync_freshness_check_failed', {
+        kind: 'rge_sync_check_error',
+        error: error.message,
+      })
+      return { ok: false, lastSyncedAt: null, daysStale: null, severity: 'unknown' }
+    }
+
+    const lastSyncedAt = data?.rge_last_synced_at ?? null
+    if (!lastSyncedAt) {
+      logger.warn('RGE sync has never run', {
+        kind: 'rge_sync_stale',
+        last_synced_at: null,
+        days_stale: null,
+      })
+      return { ok: false, lastSyncedAt: null, daysStale: null, severity: 'warn' }
+    }
+
+    const daysStale = (Date.now() - new Date(lastSyncedAt).getTime()) / 86_400_000
+
+    if (daysStale > RGE_STALE_CRITICAL_DAYS) {
+      logger.error('RGE sync critically stale', undefined, {
+        kind: 'rge_sync_stale',
+        severity: 'critical',
+        last_synced_at: lastSyncedAt,
+        days_stale: Math.round(daysStale * 10) / 10,
+      })
+      return { ok: false, lastSyncedAt, daysStale, severity: 'error' }
+    }
+
+    if (daysStale > RGE_STALE_WARN_DAYS) {
+      logger.error('RGE sync stale', undefined, {
+        kind: 'rge_sync_stale',
+        severity: 'warn',
+        last_synced_at: lastSyncedAt,
+        days_stale: Math.round(daysStale * 10) / 10,
+      })
+      return { ok: false, lastSyncedAt, daysStale, severity: 'error' }
+    }
+
+    logger.info('RGE sync healthy', {
+      kind: 'rge_sync_ok',
+      last_synced_at: lastSyncedAt,
+      days_stale: Math.round(daysStale * 10) / 10,
+    })
+    return { ok: true, lastSyncedAt, daysStale, severity: 'ok' }
+  } catch (err) {
+    logger.warn('rge_sync_freshness_check_exception', {
+      kind: 'rge_sync_check_error',
+      error: err instanceof Error ? err.message : String(err),
+    })
+    return { ok: false, lastSyncedAt: null, daysStale: null, severity: 'unknown' }
+  }
+}
 
 /**
  * Daily cron: Verify all sitemaps return HTTP 200 with valid XML.
@@ -15,10 +97,16 @@ export async function GET(request: Request) {
   }
 
   // Fetch sitemap index to get all child sitemaps
-  const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
+  const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, {
+    cache: 'no-store',
+    signal: AbortSignal.timeout(15000),
+  })
   if (!indexRes.ok) {
     console.error('[sitemap-health] CRITICAL: sitemap index returned', indexRes.status)
-    return NextResponse.json({ error: 'Sitemap index failed', status: indexRes.status }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Sitemap index failed', status: indexRes.status },
+      { status: 500 }
+    )
   }
 
   const indexXml = await indexRes.text()
@@ -74,14 +162,22 @@ export async function GET(request: Request) {
   if (!allOk) {
     console.error(`[sitemap-health] ALERT: ${failures.length} sitemaps failed:`, failures)
   } else {
-    console.log(`[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`)
+    console.warn(`[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`)
   }
+
+  const rgeFreshness = await checkRgeFreshness()
 
   return NextResponse.json({
     healthy: allOk,
     checked: results.length,
     totalUrls,
     failures: failures.length > 0 ? failures : undefined,
+    rge: {
+      healthy: rgeFreshness.ok,
+      lastSyncedAt: rgeFreshness.lastSyncedAt,
+      daysStale: rgeFreshness.daysStale,
+      severity: rgeFreshness.severity,
+    },
     timestamp: new Date().toISOString(),
   })
 }

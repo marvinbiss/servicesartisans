@@ -3,9 +3,11 @@ import type { BlogArticle } from './articles'
 export const reglementationArticles: Record<string, BlogArticle> = {
   'assurance-dommages-ouvrage-guide-complet': {
     title: 'Assurance Dommages-Ouvrage : Guide 2026',
-    excerpt: 'Obligatoire pour tout maître d\'ouvrage, l\'assurance dommages-ouvrage garantit une réparation rapide des désordres. Fonctionnement, coût et pièges.',
+    excerpt:
+      "Obligatoire pour tout maître d'ouvrage, l'assurance dommages-ouvrage garantit une réparation rapide des désordres. Fonctionnement, coût et pièges.",
     metaTitle: 'Dommages-Ouvrage : obligatoire ? (Guide 2026)',
-    metaDescription: 'Assurance dommages-ouvrage expliquée : coût 1-4% du chantier, amende 75 000€ sans. Qui doit souscrire, quand et pourquoi.',
+    metaDescription:
+      'Assurance dommages-ouvrage expliquée : coût 1-4% du chantier, amende 75 000€ sans. Qui doit souscrire, quand et pourquoi.',
     content: [
       "L'assurance dommages-ouvrage (DO) est l'une des protections les plus importantes — et les plus méconnues — du particulier qui fait construire ou rénover. Instituée par la loi Spinetta du 4 janvier 1978 (articles L.242-1 et suivants du Code des assurances), elle permet d'obtenir la réparation des désordres relevant de la garantie décennale, sans attendre qu'un tribunal désigne un responsable.",
       "## Qui doit souscrire une dommages-ouvrage ?\n\nL'article L.242-1 du Code des assurances impose la souscription à tout maître d'ouvrage : particulier, promoteur, SCI, syndicat de copropriété. Si vous faites construire une maison, une extension de plus de 20 m² ou des travaux de gros œuvre réalisés par un [maçon](/services/macon) ou tout autre corps de métier, vous devez impérativement souscrire avant l'ouverture du chantier.\n\n:::warning Attention\nLe défaut de souscription est sanctionné pénalement par une amende de 75 000 € (article L.243-3 du Code des assurances). En cas de revente dans les 10 ans, l'absence de DO engage votre responsabilité vis-à-vis de l'acquéreur qui pourra demander une réduction de prix.\n:::",
@@ -15,30 +17,50 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/assurance-dommages-ouvrage.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-06',
     updatedDate: '2026-02-08',
     readTime: '10 min',
     category: 'Réglementation',
     tags: ['Assurance', 'Dommages-ouvrage', 'Garantie décennale', 'Construction'],
     faq: [
-      { question: 'La dommages-ouvrage est-elle obligatoire pour de simples travaux de rénovation ?', answer: 'La DO est obligatoire uniquement pour les travaux relevant de la garantie décennale : construction neuve, extension, gros œuvre. Pour une rénovation légère (peinture, carrelage), elle n\'est pas requise.' },
-      { question: 'Que se passe-t-il si l\'artisan n\'a pas de décennale ?', answer: 'C\'est une situation grave. Sans décennale, l\'artisan est personnellement responsable sur ses biens. Si votre DO a été souscrite, elle vous indemnisera quand même, puis se retournera directement contre l\'artisan.' },
-      { question: 'Peut-on souscrire une DO après le début des travaux ?', answer: 'Théoriquement non, la souscription doit intervenir avant l\'ouverture du chantier. En pratique, certains assureurs acceptent une souscription en cours de chantier moyennant une surprime, mais c\'est de plus en plus rare.' },
-      { question: 'La DO est-elle transmissible en cas de revente ?', answer: 'Oui, la DO est attachée au bien et non au propriétaire. En cas de revente dans les 10 ans, elle est automatiquement transférée à l\'acquéreur. L\'absence de DO peut constituer un vice caché.' },
+      {
+        question:
+          'La dommages-ouvrage est-elle obligatoire pour de simples travaux de rénovation ?',
+        answer:
+          "La DO est obligatoire uniquement pour les travaux relevant de la garantie décennale : construction neuve, extension, gros œuvre. Pour une rénovation légère (peinture, carrelage), elle n'est pas requise.",
+      },
+      {
+        question: "Que se passe-t-il si l'artisan n'a pas de décennale ?",
+        answer:
+          "C'est une situation grave. Sans décennale, l'artisan est personnellement responsable sur ses biens. Si votre DO a été souscrite, elle vous indemnisera quand même, puis se retournera directement contre l'artisan.",
+      },
+      {
+        question: 'Peut-on souscrire une DO après le début des travaux ?',
+        answer:
+          "Théoriquement non, la souscription doit intervenir avant l'ouverture du chantier. En pratique, certains assureurs acceptent une souscription en cours de chantier moyennant une surprime, mais c'est de plus en plus rare.",
+      },
+      {
+        question: 'La DO est-elle transmissible en cas de revente ?',
+        answer:
+          "Oui, la DO est attachée au bien et non au propriétaire. En cas de revente dans les 10 ans, elle est automatiquement transférée à l'acquéreur. L'absence de DO peut constituer un vice caché.",
+      },
     ],
     keyTakeaways: [
       "La dommages-ouvrage est obligatoire pour tout maître d'ouvrage, sous peine de 75 000 € d'amende.",
-      "Elle permet une indemnisation sous 150 jours maximum, sans attendre un jugement.",
-      "Le coût représente 2 à 5 % du montant total des travaux TTC.",
-      "Sans DO, les recours judiciaires durent en moyenne 3 à 5 ans."
+      'Elle permet une indemnisation sous 150 jours maximum, sans attendre un jugement.',
+      'Le coût représente 2 à 5 % du montant total des travaux TTC.',
+      'Sans DO, les recours judiciaires durent en moyenne 3 à 5 ans.',
     ],
   },
   'tva-reduite-travaux-renovation-guide': {
     title: 'TVA Travaux : 5,5 %, 10 % ou 20 % ?',
     metaTitle: 'TVA Travaux 2026 : 5,5%, 10% ou 20% ?',
-    metaDescription: 'Quel taux de TVA pour vos travaux ? 5,5% (réno énergétique), 10% (rénovation), 20% (neuf). Conditions détaillées + exemples.',
-    excerpt: 'Le taux de TVA applicable à vos travaux dépend de la nature des interventions et de l\'ancienneté du logement. Décryptage des règles en vigueur en 2026.',
+    metaDescription:
+      'Quel taux de TVA pour vos travaux ? 5,5% (réno énergétique), 10% (rénovation), 20% (neuf). Conditions détaillées + exemples.',
+    excerpt:
+      "Le taux de TVA applicable à vos travaux dépend de la nature des interventions et de l'ancienneté du logement. Décryptage des règles en vigueur en 2026.",
     content: [
       "La TVA représente une part significative du coût de vos travaux. Selon le type d'intervention et l'âge du logement, vous pouvez bénéficier de taux réduits avantageux. Ce guide fait le point sur les règles applicables en 2026, conformément aux articles 278-0 bis A, 279-0 bis et 278 du Code général des impôts (CGI).",
       "## TVA à 5,5 % : travaux d'amélioration énergétique\n\nLe taux super-réduit de 5,5 % s'applique aux travaux d'amélioration de la performance énergétique :\n\n- [Isolation thermique](/blog/prix-isolation-thermique-2026-tarifs) (combles, murs, planchers)\n- Remplacement de fenêtres (simple vers double vitrage)\n- Installation de [pompe à chaleur](/blog/chauffage-pompe-chaleur-vs-chaudiere-gaz-2026), chaudière biomasse\n- VMC double flux\n- Volets isolants\n\n:::warning Changement mars 2025\nDepuis le 1er mars 2025, les chaudières gaz et fioul sont soumises à la TVA à 20 % (fin du taux réduit). La TVA réduite (5,5 % ou 10 %) s'applique uniquement aux équipements non fossiles (PAC, chaudière biomasse, etc.).\n:::\n\n### Conditions\n\n- Logement achevé depuis plus de 2 ans\n- Affecté à l'habitation (résidence principale ou secondaire)\n- Travaux réalisés par un professionnel\n\n:::info Bon à savoir\nLa TVA à 5,5 % s'applique non seulement aux matériaux mais aussi à la main-d'œuvre, contrairement à certaines idées reçues. Pour un chantier d'isolation à 15 000 € HT, l'économie par rapport au taux normal est de 2 175 € (15 000 × 14,5 %).\n:::",
@@ -48,29 +70,44 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/tva-travaux.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-08',
     updatedDate: '2026-02-07',
     readTime: '11 min',
     category: 'Réglementation',
     tags: ['TVA', 'Fiscalité', 'Rénovation', 'Travaux'],
     faq: [
-      { question: 'La TVA réduite s\'applique-t-elle aux résidences secondaires ?', answer: 'Oui, la TVA à 10 % et à 5,5 % s\'appliquent aux résidences secondaires de plus de 2 ans, à condition qu\'elles soient affectées à l\'habitation. Les locaux professionnels et commerciaux ne sont pas éligibles.' },
-      { question: 'Qui est responsable en cas d\'erreur de taux de TVA ?', answer: 'Le client est responsable de l\'exactitude des informations déclarées sur l\'attestation (ancienneté du logement, affectation). L\'artisan est responsable de la bonne application du taux sur la facture. En cas de redressement, les deux parties peuvent être mises en cause.' },
-      { question: 'Peut-on bénéficier de la TVA réduite en fournissant soi-même les matériaux ?', answer: 'Non, la TVA réduite s\'applique uniquement aux matériaux fournis et posés par le professionnel. Si vous achetez les matériaux vous-même, ils seront facturés à 20 % en magasin.' },
+      {
+        question: "La TVA réduite s'applique-t-elle aux résidences secondaires ?",
+        answer:
+          "Oui, la TVA à 10 % et à 5,5 % s'appliquent aux résidences secondaires de plus de 2 ans, à condition qu'elles soient affectées à l'habitation. Les locaux professionnels et commerciaux ne sont pas éligibles.",
+      },
+      {
+        question: "Qui est responsable en cas d'erreur de taux de TVA ?",
+        answer:
+          "Le client est responsable de l'exactitude des informations déclarées sur l'attestation (ancienneté du logement, affectation). L'artisan est responsable de la bonne application du taux sur la facture. En cas de redressement, les deux parties peuvent être mises en cause.",
+      },
+      {
+        question: 'Peut-on bénéficier de la TVA réduite en fournissant soi-même les matériaux ?',
+        answer:
+          "Non, la TVA réduite s'applique uniquement aux matériaux fournis et posés par le professionnel. Si vous achetez les matériaux vous-même, ils seront facturés à 20 % en magasin.",
+      },
     ],
     keyTakeaways: [
       "La TVA à 5,5 % s'applique aux travaux d'amélioration énergétique dans les logements de plus de 2 ans.",
-      "La TVA à 10 % concerne la rénovation courante (peinture, plomberie, carrelage) dans les logements de plus de 2 ans.",
+      'La TVA à 10 % concerne la rénovation courante (peinture, plomberie, carrelage) dans les logements de plus de 2 ans.',
       "Depuis mars 2025, l'attestation cerfa n'est plus requise : une mention sur le devis suffit.",
-      "Vérifiez la ventilation des taux sur les devis mixtes pour ne pas payer de TVA en trop."
+      'Vérifiez la ventilation des taux sur les devis mixtes pour ne pas payer de TVA en trop.',
     ],
   },
   'permis-construire-declaration-prealable-guide': {
     title: 'Permis ou Déclaration Préalable ?',
     metaTitle: 'Permis ou Déclaration Préalable ? (2026)',
-    metaDescription: 'Permis de construire ou déclaration préalable ? Le seuil des 20m² (40m² en PLU). Délais, documents et cas concrets expliqués.',
-    excerpt: 'Selon la nature et l\'ampleur de vos travaux, vous devez déposer un permis de construire ou une simple déclaration préalable. Voici comment faire le bon choix.',
+    metaDescription:
+      'Permis de construire ou déclaration préalable ? Le seuil des 20m² (40m² en PLU). Délais, documents et cas concrets expliqués.',
+    excerpt:
+      "Selon la nature et l'ampleur de vos travaux, vous devez déposer un permis de construire ou une simple déclaration préalable. Voici comment faire le bon choix.",
     content: [
       "Avant de lancer vos travaux, une question administrative cruciale se pose : faut-il un permis de construire (PC) ou une déclaration préalable de travaux (DP) ? Le Code de l'urbanisme (articles R.421-1 à R.421-17) définit précisément les seuils. Se tromper de procédure expose à des sanctions pouvant aller jusqu'à la démolition de l'ouvrage.",
       "## Quand faut-il une déclaration préalable ?\n\nLa DP est requise pour :\n\n- Les constructions nouvelles créant entre 5 et 20 m² de surface de plancher (confiées à un [maçon](/services/macon))\n- Les modifications de l'aspect extérieur (ravalement, changement de fenêtres)\n- Les changements de destination sans modification de structure\n- Les clôtures dans certaines zones protégées\n- Les piscines de 10 à 100 m² non couvertes (faites appel à un [pisciniste](/services/pisciniste) pour la construction)\n\n:::info Bon à savoir\nEn zone urbaine couverte par un PLU, le seuil de la déclaration préalable est relevé à 40 m² pour les extensions (au lieu de 20 m²). Cela facilite considérablement les projets d'agrandissement en ville.\n:::",
@@ -79,60 +116,90 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/permis-construire.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-11',
     updatedDate: '2026-02-07',
     readTime: '12 min',
     category: 'Réglementation',
     tags: ['Permis de construire', 'Urbanisme', 'Déclaration préalable', 'Travaux'],
     faq: [
-      { question: 'Peut-on commencer les travaux dès le dépôt de la demande ?', answer: 'Non, vous devez attendre la fin du délai d\'instruction ET l\'affichage de l\'autorisation sur le terrain pendant 2 mois (délai de recours des tiers). Des travaux commencés prématurément sont considérés comme réalisés sans autorisation.' },
-      { question: 'Faut-il un architecte pour une extension de 35 m² ?', answer: 'Non, sauf si la surface totale de la maison après extension dépasse 150 m². En dessous de ce seuil, vous pouvez déposer le dossier vous-même.' },
-      { question: 'Combien de temps un permis de construire est-il valable ?', answer: 'Un permis de construire est valable 3 ans. Les travaux doivent commencer dans ce délai. Une prolongation d\'un an est possible sur demande avant l\'expiration.' },
+      {
+        question: 'Peut-on commencer les travaux dès le dépôt de la demande ?',
+        answer:
+          "Non, vous devez attendre la fin du délai d'instruction ET l'affichage de l'autorisation sur le terrain pendant 2 mois (délai de recours des tiers). Des travaux commencés prématurément sont considérés comme réalisés sans autorisation.",
+      },
+      {
+        question: 'Faut-il un architecte pour une extension de 35 m² ?',
+        answer:
+          'Non, sauf si la surface totale de la maison après extension dépasse 150 m². En dessous de ce seuil, vous pouvez déposer le dossier vous-même.',
+      },
+      {
+        question: 'Combien de temps un permis de construire est-il valable ?',
+        answer:
+          "Un permis de construire est valable 3 ans. Les travaux doivent commencer dans ce délai. Une prolongation d'un an est possible sur demande avant l'expiration.",
+      },
     ],
     keyTakeaways: [
-      "Déclaration préalable pour les surfaces de 5 à 20 m² (40 m² en zone PLU urbaine).",
-      "Permis de construire obligatoire au-delà de 20 m² (40 m² en zone PLU) et architecte au-delà de 150 m².",
+      'Déclaration préalable pour les surfaces de 5 à 20 m² (40 m² en zone PLU urbaine).',
+      'Permis de construire obligatoire au-delà de 20 m² (40 m² en zone PLU) et architecte au-delà de 150 m².',
       "Les délais d'instruction sont de 1 mois (DP), 2 mois (PC maison) et 3 mois (PC autres projets).",
-      "L'absence d'autorisation expose à une amende de 1 200 à 6 000 €/m² et à la démolition possible."
+      "L'absence d'autorisation expose à une amende de 1 200 à 6 000 €/m² et à la démolition possible.",
     ],
   },
   'certificats-economies-energie-cee-guide': {
-    title: 'CEE : Certificats d\'Économies d\'Énergie 2026',
-    excerpt: 'Les CEE vous permettent de financer une partie de vos travaux de rénovation énergétique grâce aux primes versées par les fournisseurs d\'énergie. Mode d\'emploi complet.',
-    metaTitle: 'CEE 2026 : jusqu\'à 5 000€ de prime — Guide complet',
-    metaDescription: 'Primes CEE 2026 : PAC 2 500-4 000€, isolation 10-25€/m². Cumulables avec MaPrimeRénov\'. Inscription AVANT devis obligatoire.',
+    title: "CEE : Certificats d'Économies d'Énergie 2026",
+    excerpt:
+      "Les CEE vous permettent de financer une partie de vos travaux de rénovation énergétique grâce aux primes versées par les fournisseurs d'énergie. Mode d'emploi complet.",
+    metaTitle: "CEE 2026 : jusqu'à 5 000€ de prime — Guide complet",
+    metaDescription:
+      "Primes CEE 2026 : PAC 2 500-4 000€, isolation 10-25€/m². Cumulables avec MaPrimeRénov'. Inscription AVANT devis obligatoire.",
     content: [
       "Le dispositif des Certificats d'Économies d'Énergie (CEE), instauré par la loi POPE du 13 juillet 2005 (articles L.221-1 et suivants du Code de l'énergie), oblige les fournisseurs d'énergie (EDF, Engie, TotalEnergies) à promouvoir l'efficacité énergétique. Concrètement, ils financent une partie de vos travaux via des primes, des bons d'achat ou des prêts bonifiés.",
-      "## Quels travaux sont éligibles aux CEE ?\n\nLes opérations standardisées sont listées dans des fiches publiées au Journal officiel. Les plus courantes :\n\n- [Isolation des combles](/blog/prix-isolation-thermique-2026-tarifs) (fiche BAR-EN-101)\n- Isolation des murs (BAR-EN-102)\n- Remplacement de chaudière par une [pompe à chaleur](/blog/chauffage-pompe-chaleur-vs-chaudiere-gaz-2026) (BAR-TH-104)\n- Fenêtres double vitrage (BAR-EN-104)\n- VMC double flux (BAR-TH-125)\n\n:::info Bon à savoir\nLes fiches d'opérations standardisées définissent précisément les critères techniques (résistance thermique minimale, COP minimum pour les PAC). Un artisan RGE compétent, comme un [spécialiste en isolation thermique](/services/isolation-thermique) ou en [pompe à chaleur](/services/pompe-a-chaleur), connaît ces exigences et dimensionne les travaux en conséquence.\n:::",
+      "## Quels travaux sont éligibles aux CEE ?\n\nLes opérations standardisées sont listées dans des fiches publiées au Journal officiel. Les plus courantes :\n\n- [Isolation des combles](/blog/prix-isolation-thermique-2026-tarifs) (fiche BAR-EN-101)\n- Isolation des murs (BAR-EN-102)\n- Remplacement de chaudière par une [pompe à chaleur](/blog/chauffage-pompe-chaleur-vs-chaudiere-gaz-2026) (BAR-TH-171, remplace la BAR-TH-104 abrogée le 01/01/2024)\n- Fenêtres double vitrage (BAR-EN-104)\n- VMC double flux (BAR-TH-125)\n\n:::info Bon à savoir\nLes fiches d'opérations standardisées définissent précisément les critères techniques (résistance thermique minimale, COP minimum pour les PAC). Un artisan RGE compétent, comme un [spécialiste en isolation thermique](/services/isolation-thermique) ou en [pompe à chaleur](/services/pompe-a-chaleur), connaît ces exigences et dimensionne les travaux en conséquence.\n:::",
       "## Combien pouvez-vous toucher en 2026 ?\n\nLes montants varient selon la zone climatique (H1, H2, H3), la nature des travaux et vos revenus :\n\n:::budget\n| Travaux | Prime CEE (zone H1, ménage modeste) |\n| Isolation combles perdus | 10 - 12 €/m² |\n| Isolation murs (ITE) | 15 - 25 €/m² |\n| PAC air-eau | 2 500 - 4 000 € |\n| Chaudière biomasse | 3 000 - 5 000 € |\n| Fenêtres double vitrage | 40 - 100 €/fenêtre (selon profil de revenus) |\n| VMC double flux | 500 - 1 000 € |\n:::\n\n### Le coup de pouce Rénovation performante\n\nLa prime Coup de pouce bonifie les CEE pour les rénovations globales atteignant un gain énergétique d'au moins 55 %. Le montant peut atteindre 5 000 € pour les ménages modestes. Ce bonus est cumulable avec [MaPrimeRénov'](/blog/aide-maprimerenov-2026-montants-conditions) Parcours accompagné.",
       "## Comment obtenir votre prime CEE ?\n\n### Les étapes\n\n1. **Choisissez un fournisseur** ou un délégataire et inscrivez-vous **AVANT** de signer le devis\n2. **Faites réaliser les travaux** par un artisan [RGE](/blog/label-rge-artisan-travaux-energetiques)\n3. **Envoyez la facture** et l'attestation sur l'honneur\n4. **Recevez votre prime** sous 4 à 8 semaines\n\n:::warning Attention\nLa règle fondamentale est de s'inscrire au dispositif CEE avant la signature du devis. Si vous signez d'abord et demandez la prime ensuite, votre dossier sera refusé. C'est l'erreur la plus fréquente des particuliers et elle est irréparable.\n:::\n\n## Peut-on cumuler les CEE avec d'autres aides ?\n\nOui ! Les CEE sont cumulables avec MaPrimeRénov', l'[éco-PTZ](/blog/eco-pret-taux-zero-guide-complet-2026), la [TVA à 5,5 %](/blog/tva-reduite-travaux-renovation-guide) et les aides locales. Ce cumul peut couvrir jusqu'à 80 % du coût des travaux pour les ménages modestes. Consultez notre [guide du cumul des aides](/blog/cumul-aides-renovation-2026-tableau).\n\n## Comparatif des principaux acteurs CEE\n\n| Acteur | Mode de versement | Délai moyen |\n| --- | --- | --- |\n| EDF (Prime énergie) | Virement | 4 semaines |\n| TotalEnergies | Chèque | 6 semaines |\n| Effy | Virement | 3 semaines |\n\n:::tip Conseil pro\nComparez les montants proposés par différents acteurs CEE avant de vous inscrire. Les écarts peuvent atteindre 20-30 % pour une même opération. Utilisez les simulateurs en ligne de chaque fournisseur.\n:::\n\n:::takeaway\n- Inscrivez-vous aux CEE AVANT de signer le devis (règle non négociable)\n- Les primes couvrent 10-30 % du coût des travaux selon les opérations\n- Le Coup de pouce Rénovation performante peut atteindre 5 000 €\n- Les CEE sont cumulables avec toutes les autres aides\n- Comparez les montants entre fournisseurs (écarts de 20-30 %)\n- Les travaux doivent être réalisés par un artisan RGE\n:::",
     ],
     image: '/images/blog/cee-certificats.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-13',
     updatedDate: '2026-02-08',
     readTime: '12 min',
     category: 'Aides & Subventions',
     tags: ['CEE', 'Primes énergie', 'Rénovation énergétique', 'Aides'],
     faq: [
-      { question: 'Peut-on demander les CEE après avoir signé le devis ?', answer: 'Non, c\'est la cause de refus n° 1. L\'inscription doit être faite avant la signature du devis. Il n\'existe aucune exception ni dérogation à cette règle.' },
-      { question: 'Les CEE sont-ils imposables ?', answer: 'Non, les primes CEE versées aux particuliers pour des travaux dans leur résidence principale ne sont pas imposables. Elles ne sont pas à déclarer aux impôts.' },
-      { question: 'Peut-on changer de fournisseur CEE en cours de dossier ?', answer: 'Non, une fois inscrit auprès d\'un fournisseur et le dossier engagé, vous ne pouvez pas transférer votre dossier chez un concurrent. D\'où l\'importance de comparer avant de s\'inscrire.' },
+      {
+        question: 'Peut-on demander les CEE après avoir signé le devis ?',
+        answer:
+          "Non, c'est la cause de refus n° 1. L'inscription doit être faite avant la signature du devis. Il n'existe aucune exception ni dérogation à cette règle.",
+      },
+      {
+        question: 'Les CEE sont-ils imposables ?',
+        answer:
+          'Non, les primes CEE versées aux particuliers pour des travaux dans leur résidence principale ne sont pas imposables. Elles ne sont pas à déclarer aux impôts.',
+      },
+      {
+        question: 'Peut-on changer de fournisseur CEE en cours de dossier ?',
+        answer:
+          "Non, une fois inscrit auprès d'un fournisseur et le dossier engagé, vous ne pouvez pas transférer votre dossier chez un concurrent. D'où l'importance de comparer avant de s'inscrire.",
+      },
     ],
     keyTakeaways: [
-      "Inscrivez-vous aux CEE avant de signer le devis : cette règle est non négociable.",
-      "Les primes CEE couvrent 10 à 30 % du coût des travaux selon les opérations et les revenus.",
+      'Inscrivez-vous aux CEE avant de signer le devis : cette règle est non négociable.',
+      'Les primes CEE couvrent 10 à 30 % du coût des travaux selon les opérations et les revenus.',
       "Les CEE sont cumulables avec MaPrimeRénov', éco-PTZ et TVA réduite.",
-      "Comparez les montants entre fournisseurs (EDF, Engie, TotalEnergies) : les écarts atteignent 20 à 30 %."
+      'Comparez les montants entre fournisseurs (EDF, Engie, TotalEnergies) : les écarts atteignent 20 à 30 %.',
     ],
   },
   'eco-pret-taux-zero-guide-complet-2026': {
     title: 'Éco-PTZ 2026 : Conditions et Montants',
-    excerpt: 'L\'éco-PTZ permet d\'emprunter jusqu\'à 50 000 € sans intérêts pour financer vos travaux de rénovation énergétique. Conditions, plafonds et démarches en 2026.',
-    metaTitle: 'Éco-PTZ 2026 : jusqu\'à 50 000€ à taux zéro — Guide',
-    metaDescription: 'Éco-PTZ 2026 : empruntez jusqu\'à 50 000€ sans intérêts pour vos travaux. Sans condition de revenus. Conditions, plafonds et banques.',
+    excerpt:
+      "L'éco-PTZ permet d'emprunter jusqu'à 50 000 € sans intérêts pour financer vos travaux de rénovation énergétique. Conditions, plafonds et démarches en 2026.",
+    metaTitle: "Éco-PTZ 2026 : jusqu'à 50 000€ à taux zéro — Guide",
+    metaDescription:
+      "Éco-PTZ 2026 : empruntez jusqu'à 50 000€ sans intérêts pour vos travaux. Sans condition de revenus. Conditions, plafonds et banques.",
     content: [
       "L'éco-prêt à taux zéro (éco-PTZ) est un prêt sans intérêts, accordé sans condition de revenus, destiné à financer des travaux de rénovation énergétique. Prévu par les articles 244 quater U du CGI et R.319-1 du Code de la construction, il a été prolongé jusqu'au 31 décembre 2027.",
       "## Les conditions d'éligibilité\n\nLe logement doit être une résidence principale, construite depuis plus de 2 ans. Aucune condition de revenus n'est requise. Les travaux doivent être réalisés par un artisan [RGE](/blog/label-rge-artisan-travaux-energetiques).\n\n:::info Bon à savoir\nL'éco-PTZ est accessible aux propriétaires occupants et bailleurs, ainsi qu'aux copropriétés. C'est l'une des rares aides sans condition de revenus, ce qui la rend accessible aux ménages aisés qui ne bénéficient pas de MaPrimeRénov'.\n:::",
@@ -141,27 +208,41 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/eco-ptz.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-16',
     updatedDate: '2026-02-09',
     readTime: '11 min',
     category: 'Aides & Subventions',
     tags: ['Éco-PTZ', 'Prêt', 'Rénovation énergétique', 'Financement'],
     faq: [
-      { question: 'Toutes les banques proposent-elles l\'éco-PTZ ?', answer: 'Non, seules les banques ayant signé une convention avec l\'État le proposent. Les principales sont : Crédit Agricole, BNP Paribas, La Banque Postale, Société Générale, Crédit Mutuel, CIC. Contactez votre banque pour vérifier.' },
-      { question: 'Peut-on obtenir un deuxième éco-PTZ ?', answer: 'Oui, un éco-PTZ complémentaire est possible si le montant total des deux prêts ne dépasse pas 30 000 € (ou 50 000 € pour une rénovation globale). Le deuxième doit être demandé dans les 5 ans suivant le premier.' },
-      { question: 'L\'éco-PTZ est-il compatible avec un prêt immobilier classique ?', answer: 'Oui, l\'éco-PTZ n\'affecte pas votre capacité d\'emprunt pour un prêt immobilier. La banque peut toutefois tenir compte des mensualités dans le calcul du taux d\'endettement.' },
+      {
+        question: "Toutes les banques proposent-elles l'éco-PTZ ?",
+        answer:
+          "Non, seules les banques ayant signé une convention avec l'État le proposent. Les principales sont : Crédit Agricole, BNP Paribas, La Banque Postale, Société Générale, Crédit Mutuel, CIC. Contactez votre banque pour vérifier.",
+      },
+      {
+        question: 'Peut-on obtenir un deuxième éco-PTZ ?',
+        answer:
+          'Oui, un éco-PTZ complémentaire est possible si le montant total des deux prêts ne dépasse pas 30 000 € (ou 50 000 € pour une rénovation globale). Le deuxième doit être demandé dans les 5 ans suivant le premier.',
+      },
+      {
+        question: "L'éco-PTZ est-il compatible avec un prêt immobilier classique ?",
+        answer:
+          "Oui, l'éco-PTZ n'affecte pas votre capacité d'emprunt pour un prêt immobilier. La banque peut toutefois tenir compte des mensualités dans le calcul du taux d'endettement.",
+      },
     ],
     keyTakeaways: [
       "L'éco-PTZ est un prêt sans intérêts, sans condition de revenus, jusqu'à 50 000 € sur 20 ans.",
-      "Les travaux doivent être réalisés par un artisan RGE dans un logement de plus de 2 ans.",
+      'Les travaux doivent être réalisés par un artisan RGE dans un logement de plus de 2 ans.',
       "Le prêt est cumulable avec MaPrimeRénov', CEE et TVA réduite.",
-      "L'accord de la banque doit être obtenu avant le début des travaux."
+      "L'accord de la banque doit être obtenu avant le début des travaux.",
     ],
   },
   'audit-energetique-dpe-obligations-2026': {
     title: 'Audit et DPE : Obligations 2026',
-    excerpt: 'DPE obligatoire, audit énergétique pour les passoires thermiques, calendrier d\'interdiction de location : le point complet sur vos obligations en 2026.',
+    excerpt:
+      "DPE obligatoire, audit énergétique pour les passoires thermiques, calendrier d'interdiction de location : le point complet sur vos obligations en 2026.",
     content: [
       "Le Diagnostic de Performance Énergétique (DPE) et l'audit énergétique sont au cœur de la politique de rénovation énergétique en France. La loi Climat et Résilience du 22 août 2021 a considérablement renforcé leurs implications, créant de nouvelles obligations pour les propriétaires.",
       "## Le DPE : rappel des fondamentaux\n\nLe DPE classe les logements de A (très performant) à G (passoire thermique) selon leur consommation d'énergie et leurs émissions de GES. Depuis le 1er juillet 2021, il est devenu opposable juridiquement : un acquéreur peut se retourner contre le vendeur si la classe réelle est inférieure à celle annoncée.\n\n:::warning Attention\nUn DPE erroné peut donner lieu à une action en justice de l'acquéreur pour diminution du prix de vente ou annulation de la transaction. Le diagnostiqueur engage sa responsabilité civile professionnelle.\n:::",
@@ -170,27 +251,41 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/audit-dpe.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-19',
     updatedDate: '2026-02-10',
     readTime: '12 min',
     category: 'Réglementation',
     tags: ['DPE', 'Audit énergétique', 'Passoires thermiques', 'Location'],
     faq: [
-      { question: 'Que faire si mon logement est classé G ?', answer: 'Si vous êtes propriétaire bailleur, vous ne pouvez plus louer à de nouveaux locataires depuis janvier 2025. Réalisez un audit énergétique et engagez des travaux de rénovation (isolation, chauffage). MaPrimeRénov\' Parcours accompagné finance jusqu\'à 80 % du coût pour les ménages très modestes (profil Bleu).' },
-      { question: 'Le DPE est-il fiable ?', answer: 'Le DPE a été profondément réformé en 2021 pour le rendre plus fiable et opposable. Cependant, des écarts subsistent entre diagnostiqueurs. En cas de doute, demandez un second DPE à un autre professionnel.' },
-      { question: 'L\'audit énergétique est-il obligatoire pour une rénovation ?', answer: 'L\'audit n\'est pas obligatoire pour engager des travaux. Il est obligatoire pour la vente d\'un logement classé E, F ou G, et recommandé pour le Parcours accompagné de MaPrimeRénov\'.' },
+      {
+        question: 'Que faire si mon logement est classé G ?',
+        answer:
+          "Si vous êtes propriétaire bailleur, vous ne pouvez plus louer à de nouveaux locataires depuis janvier 2025. Réalisez un audit énergétique et engagez des travaux de rénovation (isolation, chauffage). MaPrimeRénov' Parcours accompagné finance jusqu'à 80 % du coût pour les ménages très modestes (profil Bleu).",
+      },
+      {
+        question: 'Le DPE est-il fiable ?',
+        answer:
+          'Le DPE a été profondément réformé en 2021 pour le rendre plus fiable et opposable. Cependant, des écarts subsistent entre diagnostiqueurs. En cas de doute, demandez un second DPE à un autre professionnel.',
+      },
+      {
+        question: "L'audit énergétique est-il obligatoire pour une rénovation ?",
+        answer:
+          "L'audit n'est pas obligatoire pour engager des travaux. Il est obligatoire pour la vente d'un logement classé E, F ou G, et recommandé pour le Parcours accompagné de MaPrimeRénov'.",
+      },
     ],
     keyTakeaways: [
-      "Le DPE est opposable juridiquement depuis juillet 2021 et une erreur engage la responsabilité du vendeur.",
-      "Les logements classés G sont interdits à la location depuis 2025, les F le seront en 2028.",
+      'Le DPE est opposable juridiquement depuis juillet 2021 et une erreur engage la responsabilité du vendeur.',
+      'Les logements classés G sont interdits à la location depuis 2025, les F le seront en 2028.',
       "L'audit énergétique est obligatoire pour la vente des logements classés E, F et G.",
-      "Le DPE coûte 100 à 250 € et l'audit énergétique 800 à 1 500 € pour une maison."
+      "Le DPE coûte 100 à 250 € et l'audit énergétique 800 à 1 500 € pour une maison.",
     ],
   },
   'reglementation-thermique-re2020-impact': {
     title: 'RE2020 : Impact Construction et Rénovation',
-    excerpt: 'La Réglementation Environnementale 2020 transforme les exigences de construction neuve. Découvrez ses impacts concrets sur vos projets et les matériaux à privilégier.',
+    excerpt:
+      'La Réglementation Environnementale 2020 transforme les exigences de construction neuve. Découvrez ses impacts concrets sur vos projets et les matériaux à privilégier.',
     content: [
       "Entrée en vigueur le 1er janvier 2022, la RE2020 (décret n° 2021-1004) remplace la RT2012 et marque un tournant majeur dans la construction française. Pour la première fois, la réglementation intègre l'empreinte carbone des bâtiments sur l'ensemble de leur cycle de vie.",
       "## Les trois piliers de la RE2020\n\n1. **Performance énergétique** : indicateur Bbio abaissé de 30 % par rapport à la RT2012\n2. **Réduction de l'empreinte carbone** : indicateurs Ic énergie et Ic construction\n3. **Confort d'été** : seuil de 1 250 degrés-heures d'inconfort maximal\n\n:::info Bon à savoir\nLa RE2020 s'applique aux permis de construire déposés depuis le 1er janvier 2022 pour les logements. Elle ne s'applique pas directement aux rénovations, qui restent soumises à la réglementation thermique par élément.\n:::",
@@ -199,27 +294,41 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/re2020.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-22',
     updatedDate: '2026-02-09',
     readTime: '11 min',
     category: 'Réglementation',
     tags: ['RE2020', 'Construction neuve', 'Performance énergétique', 'Carbone'],
     faq: [
-      { question: 'La RE2020 s\'applique-t-elle à ma rénovation ?', answer: 'Non, la RE2020 s\'applique uniquement aux constructions neuves. Les rénovations sont soumises à la réglementation thermique par élément (arrêté du 3 mai 2007 modifié), qui impose des performances minimales pour chaque composant remplacé.' },
-      { question: 'Peut-on encore installer une chaudière gaz dans le neuf ?', answer: 'Non, depuis janvier 2022, les chaudières gaz ne respectent plus le seuil de 4 kg CO2/m²/an imposé par la RE2020 pour les logements neufs. En rénovation, l\'installation reste autorisée.' },
-      { question: 'Les maisons en bois sont-elles favorisées par la RE2020 ?', answer: 'Oui, le bois de construction stocke du carbone et bénéficie d\'un bilan carbone favorable dans le calcul RE2020. Les constructions ossature bois ou bois massif (CLT) sont de plus en plus compétitives.' },
+      {
+        question: "La RE2020 s'applique-t-elle à ma rénovation ?",
+        answer:
+          "Non, la RE2020 s'applique uniquement aux constructions neuves. Les rénovations sont soumises à la réglementation thermique par élément (arrêté du 3 mai 2007 modifié), qui impose des performances minimales pour chaque composant remplacé.",
+      },
+      {
+        question: 'Peut-on encore installer une chaudière gaz dans le neuf ?',
+        answer:
+          "Non, depuis janvier 2022, les chaudières gaz ne respectent plus le seuil de 4 kg CO2/m²/an imposé par la RE2020 pour les logements neufs. En rénovation, l'installation reste autorisée.",
+      },
+      {
+        question: 'Les maisons en bois sont-elles favorisées par la RE2020 ?',
+        answer:
+          "Oui, le bois de construction stocke du carbone et bénéficie d'un bilan carbone favorable dans le calcul RE2020. Les constructions ossature bois ou bois massif (CLT) sont de plus en plus compétitives.",
+      },
     ],
     keyTakeaways: [
       "La RE2020 intègre pour la première fois l'empreinte carbone du bâtiment sur tout son cycle de vie.",
-      "Le chauffage gaz est interdit en construction neuve depuis janvier 2022.",
-      "Les matériaux biosourcés (bois, chanvre, fibre de bois) sont favorisés par les indicateurs carbone.",
-      "Le surcoût de la RE2020 est estimé à 5-10 %, compensé par des économies d'énergie de 300 à 600 €/an."
+      'Le chauffage gaz est interdit en construction neuve depuis janvier 2022.',
+      'Les matériaux biosourcés (bois, chanvre, fibre de bois) sont favorisés par les indicateurs carbone.',
+      "Le surcoût de la RE2020 est estimé à 5-10 %, compensé par des économies d'énergie de 300 à 600 €/an.",
     ],
   },
   'responsabilite-artisan-maitre-ouvrage': {
     title: 'Responsabilité Artisan : Qui Paie Quoi ?',
-    excerpt: 'Garantie de parfait achèvement, garantie biennale, décennale : les responsabilités de l\'artisan et du maître d\'ouvrage sont encadrées par la loi. Explications.',
+    excerpt:
+      "Garantie de parfait achèvement, garantie biennale, décennale : les responsabilités de l'artisan et du maître d'ouvrage sont encadrées par la loi. Explications.",
     content: [
       "Le régime de responsabilité des constructeurs, codifié aux articles 1792 et suivants du Code civil, est l'un des plus protecteurs d'Europe pour le maître d'ouvrage. Comprendre qui est responsable de quoi est essentiel avant, pendant et après vos travaux.",
       "## Les trois garanties légales\n\n### Garantie de parfait achèvement (1 an)\n\nPrévue par l'article 1792-6 du Code civil, elle court pendant un an après [réception](/blog/reception-travaux-proces-verbal-reserves). L'artisan doit réparer tous les désordres signalés lors de la réception (réserves) ou notifiés par LRAR durant l'année suivante, qu'il s'agisse d'un [plombier](/services/plombier), d'un [maçon](/services/macon) ou de tout autre corps de métier. C'est la garantie la plus large.\n\n### Garantie biennale (2 ans)\n\nPrévue par l'article 1792-3, elle couvre les éléments d'équipement dissociables : robinetterie, volets, radiateurs, portes intérieures, ballon d'eau chaude.\n\n### Garantie décennale (10 ans)\n\nPrévue par l'article 1792, elle couvre les dommages compromettant la solidité de l'ouvrage. L'artisan est présumé responsable : c'est à lui de prouver qu'il n'est pas fautif. Voir notre [guide complet de la décennale](/blog/garantie-decennale-tout-savoir).\n\n:::warning Attention\nSans réception formelle des travaux, aucune garantie ne court. Exigez toujours un PV de réception écrit, daté et signé par les deux parties. C'est le point de départ de toutes les protections légales.\n:::",
@@ -228,102 +337,144 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/responsabilite-artisan.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-24',
     updatedDate: '2026-02-10',
     readTime: '12 min',
     category: 'Réglementation',
-    tags: ['Responsabilité', 'Garantie décennale', 'Maître d\'ouvrage', 'Droit'],
+    tags: ['Responsabilité', 'Garantie décennale', "Maître d'ouvrage", 'Droit'],
     faq: [
-      { question: 'Que couvre exactement la garantie de parfait achèvement ?', answer: 'Elle couvre TOUS les défauts constatés lors de la réception (réserves) ou signalés par LRAR pendant l\'année suivante. C\'est la garantie la plus large : elle inclut les défauts esthétiques, fonctionnels et structurels, quelle que soit leur importance.' },
-      { question: 'La garantie décennale s\'applique-t-elle aux travaux de peinture ?', answer: 'Non, la peinture relève de la garantie de parfait achèvement (1 an). La garantie décennale couvre uniquement les dommages compromettant la solidité de l\'ouvrage ou le rendant impropre à sa destination.' },
-      { question: 'Peut-on refuser la réception des travaux ?', answer: 'Oui, si les travaux ne sont pas terminés ou si les désordres sont suffisamment graves pour empêcher une utilisation normale. Le refus doit être motivé par écrit.' },
+      {
+        question: 'Que couvre exactement la garantie de parfait achèvement ?',
+        answer:
+          "Elle couvre TOUS les défauts constatés lors de la réception (réserves) ou signalés par LRAR pendant l'année suivante. C'est la garantie la plus large : elle inclut les défauts esthétiques, fonctionnels et structurels, quelle que soit leur importance.",
+      },
+      {
+        question: "La garantie décennale s'applique-t-elle aux travaux de peinture ?",
+        answer:
+          "Non, la peinture relève de la garantie de parfait achèvement (1 an). La garantie décennale couvre uniquement les dommages compromettant la solidité de l'ouvrage ou le rendant impropre à sa destination.",
+      },
+      {
+        question: 'Peut-on refuser la réception des travaux ?',
+        answer:
+          'Oui, si les travaux ne sont pas terminés ou si les désordres sont suffisamment graves pour empêcher une utilisation normale. Le refus doit être motivé par écrit.',
+      },
     ],
     keyTakeaways: [
       "Trois garanties protègent le maître d'ouvrage : parfait achèvement (1 an), biennale (2 ans), décennale (10 ans).",
       "La garantie décennale repose sur une présomption de responsabilité de l'artisan.",
-      "La réception des travaux est le point de départ de toutes les garanties légales.",
-      "En cas de litige : mise en demeure par LRAR, médiation gratuite, puis action en justice."
+      'La réception des travaux est le point de départ de toutes les garanties légales.',
+      'En cas de litige : mise en demeure par LRAR, médiation gratuite, puis action en justice.',
     ],
   },
   'reception-travaux-proces-verbal-reserves': {
     title: 'Réception Travaux : PV et Réserves',
-    excerpt: 'La réception des travaux est une étape juridique décisive. Voici comment rédiger le procès-verbal, formuler des réserves et protéger vos intérêts.',
+    excerpt:
+      'La réception des travaux est une étape juridique décisive. Voici comment rédiger le procès-verbal, formuler des réserves et protéger vos intérêts.',
     content: [
       "La réception des travaux est définie par l'article 1792-6 du Code civil comme l'acte par lequel le maître de l'ouvrage déclare accepter l'ouvrage avec ou sans réserves. C'est le moment le plus important de votre chantier sur le plan juridique.",
       "## Pourquoi la réception est-elle si importante ?\n\nElle déclenche le point de départ des trois garanties légales (parfait achèvement, biennale, [décennale](/blog/garantie-decennale-tout-savoir)). Elle transfère la garde de l'ouvrage au maître d'ouvrage. Elle rend exigible le solde du prix. Sans réception, vous êtes dans un flou juridique dangereux.",
       "## Comment organiser la réception ?\n\nConvenez d'une date avec l'artisan (qu'il s'agisse d'un [maçon](/services/macon), d'un électricien ou d'un couvreur) lorsqu'il estime les travaux terminés. Prévoyez au moins 2 heures pour une visite minutieuse. Munissez-vous du [devis](/blog/devis-travaux-comprendre), du contrat, des plans et d'un mètre ruban. Si possible, faites-vous accompagner d'un expert en bâtiment.",
       "## Le procès-verbal : que doit-il contenir ?\n\n- Date de la réception\n- Identification des parties (noms, adresses, SIRET)\n- Description de l'ouvrage réceptionné\n- Liste des réserves numérotées avec description précise et localisation\n- Mention « avec réserves » ou « sans réserves »\n- Signatures des deux parties\n- Délai de levée des réserves (généralement 60 jours)",
-      "## Comment formuler des réserves efficaces ?\n\nSoyez précis : « fissure horizontale de 50 cm sur le mur nord de la chambre 2, à 1,20 m du sol » plutôt que « fissures ». Photographiez chaque réserve avec un mètre visible. Ajoutez un délai de levée des réserves dans le PV.",
+      '## Comment formuler des réserves efficaces ?\n\nSoyez précis : « fissure horizontale de 50 cm sur le mur nord de la chambre 2, à 1,20 m du sol » plutôt que « fissures ». Photographiez chaque réserve avec un mètre visible. Ajoutez un délai de levée des réserves dans le PV.',
       "## Peut-on refuser la réception ?\n\nOui, si les travaux ne sont pas terminés ou si les désordres empêchent une utilisation normale. Le refus doit être motivé par écrit. L'artisan devra corriger avant de solliciter une nouvelle réception.",
       "## La réception tacite : attention au piège\n\nSi vous prenez possession de l'ouvrage et payez l'intégralité sans réserves, les tribunaux peuvent considérer la réception acquise tacitement. Vous perdez alors la possibilité de formuler des réserves.",
       "## Le solde des 5 %\n\nL'article 1er de la loi du 19 décembre 1990 autorise la consignation de 5 % du prix total jusqu'à la levée des réserves. Si les réserves ne sont pas levées dans le délai convenu, vous pouvez utiliser cette somme pour faire intervenir un autre artisan.",
-      "## Les désordres découverts après réception\n\nSi vous découvrez des défauts dans le mois suivant la réception, signalez-les immédiatement par LRAR. Les tribunaux admettent parfois un délai raisonnable pour les désordres indécelables lors de la visite.",
+      '## Les désordres découverts après réception\n\nSi vous découvrez des défauts dans le mois suivant la réception, signalez-les immédiatement par LRAR. Les tribunaux admettent parfois un délai raisonnable pour les désordres indécelables lors de la visite.',
       "\n\n:::warning Attention\nSans réception formelle, vous êtes dans un flou juridique dangereux. Les garanties légales (parfait achèvement, biennale, décennale) ne commencent à courir qu'à partir de la date de réception.\n:::",
-      "\n\n:::tip Conseil pro\nFaites-vous accompagner par un expert en bâtiment lors de la réception des travaux importants (coût : 300 à 800 €). Un professionnel détectera des défauts invisibles pour un non-initié, notamment en [plomberie](/services/plombier) ou en électricité.\n:::",
+      '\n\n:::tip Conseil pro\nFaites-vous accompagner par un expert en bâtiment lors de la réception des travaux importants (coût : 300 à 800 €). Un professionnel détectera des défauts invisibles pour un non-initié, notamment en [plomberie](/services/plombier) ou en électricité.\n:::',
       "\n\n:::info Bon à savoir\nL'article 1er de la loi du 19 décembre 1990 autorise la consignation de 5 % du prix total jusqu'à la levée des réserves. Si les réserves ne sont pas levées dans le délai convenu, vous pouvez utiliser cette somme pour faire intervenir un autre artisan.\n:::",
       "\n\n:::takeaway\n- La réception est le point de départ des trois garanties légales\n- Exigez toujours un PV de réception écrit, daté et signé\n- Formulez des réserves précises avec photos à l'appui\n- Retenez 5 % du prix jusqu'à la levée des réserves\n- Ne payez jamais l'intégralité sans réception formelle\n- Faites-vous accompagner par un expert pour les gros chantiers\n:::",
     ],
     image: '/images/blog/reception-travaux.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-27',
     updatedDate: '2026-02-10',
     readTime: '12 min',
     category: 'Réglementation',
     tags: ['Réception', 'Procès-verbal', 'Réserves', 'Garanties'],
     faq: [
-      { question: 'Peut-on refuser de signer le PV de réception ?', answer: 'Oui, si les travaux ne sont pas terminés ou si les désordres sont trop importants. Le refus doit être motivé par écrit. L\'artisan devra corriger avant de solliciter une nouvelle réception.' },
-      { question: 'Que se passe-t-il si l\'artisan refuse de venir à la réception ?', answer: 'Envoyez-lui une convocation par LRAR avec un délai de 15 jours. S\'il ne se présente pas, vous pouvez procéder à une réception unilatérale, idéalement en présence d\'un huissier.' },
-      { question: 'La réception tacite est-elle valable ?', answer: 'Oui, si vous prenez possession de l\'ouvrage et payez l\'intégralité sans réserves, les tribunaux peuvent considérer la réception acquise tacitement. Vous perdez alors la possibilité de formuler des réserves.' },
+      {
+        question: 'Peut-on refuser de signer le PV de réception ?',
+        answer:
+          "Oui, si les travaux ne sont pas terminés ou si les désordres sont trop importants. Le refus doit être motivé par écrit. L'artisan devra corriger avant de solliciter une nouvelle réception.",
+      },
+      {
+        question: "Que se passe-t-il si l'artisan refuse de venir à la réception ?",
+        answer:
+          "Envoyez-lui une convocation par LRAR avec un délai de 15 jours. S'il ne se présente pas, vous pouvez procéder à une réception unilatérale, idéalement en présence d'un huissier.",
+      },
+      {
+        question: 'La réception tacite est-elle valable ?',
+        answer:
+          "Oui, si vous prenez possession de l'ouvrage et payez l'intégralité sans réserves, les tribunaux peuvent considérer la réception acquise tacitement. Vous perdez alors la possibilité de formuler des réserves.",
+      },
     ],
     keyTakeaways: [
       "La réception des travaux est l'acte juridique déclenchant les trois garanties légales.",
-      "Formulez des réserves précises avec photos et localisation sur le procès-verbal.",
+      'Formulez des réserves précises avec photos et localisation sur le procès-verbal.',
       "Retenez 5 % du prix total jusqu'à la levée des réserves (loi du 19 décembre 1990).",
-      "Ne payez jamais l'intégralité sans réception formelle pour éviter la réception tacite."
+      "Ne payez jamais l'intégralité sans réception formelle pour éviter la réception tacite.",
     ],
   },
   'litige-artisan-recours-mediation-justice': {
     title: 'Litige Artisan : Recours et Médiation',
-    excerpt: 'Travaux mal réalisés, retards, surfacturation ? Découvrez les étapes à suivre pour résoudre un litige avec un artisan, de la médiation au tribunal.',
+    excerpt:
+      'Travaux mal réalisés, retards, surfacturation ? Découvrez les étapes à suivre pour résoudre un litige avec un artisan, de la médiation au tribunal.',
     content: [
       "Malgré toutes les précautions, un litige peut survenir avec un artisan — [plombier](/services/plombier), électricien ou maçon — : malfaçons, retards importants, abandon de chantier, surfacturation. La loi offre plusieurs voies de recours, de la résolution amiable à l'action en justice.",
       "## Étape 1 : la réclamation amiable\n\nCommencez par un courrier recommandé avec AR adressé à l'artisan. Décrivez précisément les désordres, joignez des photos, fixez un délai raisonnable (15 à 30 jours). Ce courrier constitue une mise en demeure au sens de l'article 1231 du Code civil.",
       "## Étape 2 : la médiation de la consommation\n\nDepuis 2016 (ordonnance n° 2015-1033), tout professionnel doit proposer un médiateur. La médiation est gratuite pour le consommateur et l'avis est rendu sous 90 jours. Consultez le site du médiateur indiqué dans les CGV de l'artisan.",
       "## Étape 3 : l'expertise amiable\n\nSi le désaccord porte sur la qualité technique des travaux d'un [électricien](/services/electricien) ou d'un autre corps de métier, faites intervenir un expert en bâtiment. Coût : 800 à 2 000 €. Le rapport sera un élément de preuve précieux en justice.",
-      "## Étape 4 : la conciliation de justice\n\nAvant toute action en justice, saisissez gratuitement un conciliateur de justice. Ce bénévole reçoit les deux parties et tente de trouver un accord en quelques semaines.",
+      '## Étape 4 : la conciliation de justice\n\nAvant toute action en justice, saisissez gratuitement un conciliateur de justice. Ce bénévole reçoit les deux parties et tente de trouver un accord en quelques semaines.',
       "## Étape 5 : l'action en justice\n\nTribunal judiciaire pour les litiges supérieurs à 10 000 € (avocat obligatoire). Juge des contentieux de la protection pour les litiges inférieurs à 10 000 €.",
-      "## Les délais de prescription\n\nAction pour malfaçon (hors décennale) : 5 ans (article 2224 du Code civil). [Décennale](/blog/garantie-decennale-tout-savoir) : 10 ans. Parfait achèvement : 1 an. Biennale : 2 ans. Ne laissez pas passer ces délais !",
+      '## Les délais de prescription\n\nAction pour malfaçon (hors décennale) : 5 ans (article 2224 du Code civil). [Décennale](/blog/garantie-decennale-tout-savoir) : 10 ans. Parfait achèvement : 1 an. Biennale : 2 ans. Ne laissez pas passer ces délais !',
       "## Le référé expertise : l'arme efficace\n\nEn cas d'urgence, demandez une expertise judiciaire en référé. Le juge désigne un expert dont le rapport fait autorité devant le tribunal du fond.",
-      "\n\n:::warning Attention\nNe laissez pas passer les délais de prescription ! Action pour malfaçon (hors décennale) : 5 ans. Décennale : 10 ans. Parfait achèvement : 1 an. Biennale : 2 ans. Passé ces délais, vos recours sont éteints.\n:::",
+      '\n\n:::warning Attention\nNe laissez pas passer les délais de prescription ! Action pour malfaçon (hors décennale) : 5 ans. Décennale : 10 ans. Parfait achèvement : 1 an. Biennale : 2 ans. Passé ces délais, vos recours sont éteints.\n:::',
       "\n\n:::tip Conseil pro\nVotre assurance protection juridique (souvent incluse dans l'assurance habitation) peut prendre en charge les frais d'avocat et d'expertise. Vérifiez votre contrat avant d'engager des frais.\n:::",
-      "\n\n:::budget\n| Recours | Coût estimé |\n| Conciliation | Gratuit |\n| Médiation | Gratuit pour le consommateur |\n| Expertise amiable | 800 - 2 000 € |\n| Avocat | 1 500 - 5 000 € |\n| Expertise judiciaire | 2 000 - 8 000 € |\n:::",
+      '\n\n:::budget\n| Recours | Coût estimé |\n| Conciliation | Gratuit |\n| Médiation | Gratuit pour le consommateur |\n| Expertise amiable | 800 - 2 000 € |\n| Avocat | 1 500 - 5 000 € |\n| Expertise judiciaire | 2 000 - 8 000 € |\n:::',
       "\n\n:::takeaway\n- Commencez toujours par une réclamation amiable par LRAR\n- La médiation est gratuite et obligatoire avant la justice pour les litiges < 5 000 €\n- Le référé expertise est l'arme efficace en cas d'urgence\n- Votre assurance protection juridique peut couvrir les frais\n- Conservez tous les documents : contrat, devis, factures, photos, échanges\n- Les délais de prescription varient de 1 à 10 ans selon la garantie\n:::",
     ],
     image: '/images/blog/litige-artisan.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-29',
     updatedDate: '2026-02-10',
     readTime: '13 min',
     category: 'Réglementation',
     tags: ['Litige', 'Médiation', 'Justice', 'Recours'],
     faq: [
-      { question: 'Combien de temps dure une procédure judiciaire en droit de la construction ?', answer: 'En première instance, comptez 12 à 24 mois avec expertise judiciaire. En appel, 12 à 18 mois supplémentaires. La médiation est beaucoup plus rapide : 90 jours maximum.' },
-      { question: 'Peut-on engager un autre artisan pour finir les travaux ?', answer: 'Oui, après une mise en demeure restée sans effet. Faites constater l\'état d\'avancement par un huissier avant de faire intervenir un autre professionnel. Conservez les factures pour demander remboursement.' },
-      { question: 'La médiation est-elle obligatoire avant d\'aller en justice ?', answer: 'Pour les litiges inférieurs à 5 000 €, une tentative de résolution amiable (médiation ou conciliation) est obligatoire avant toute saisine du tribunal. Au-delà, elle est fortement recommandée mais pas obligatoire.' },
+      {
+        question: 'Combien de temps dure une procédure judiciaire en droit de la construction ?',
+        answer:
+          'En première instance, comptez 12 à 24 mois avec expertise judiciaire. En appel, 12 à 18 mois supplémentaires. La médiation est beaucoup plus rapide : 90 jours maximum.',
+      },
+      {
+        question: 'Peut-on engager un autre artisan pour finir les travaux ?',
+        answer:
+          "Oui, après une mise en demeure restée sans effet. Faites constater l'état d'avancement par un huissier avant de faire intervenir un autre professionnel. Conservez les factures pour demander remboursement.",
+      },
+      {
+        question: "La médiation est-elle obligatoire avant d'aller en justice ?",
+        answer:
+          'Pour les litiges inférieurs à 5 000 €, une tentative de résolution amiable (médiation ou conciliation) est obligatoire avant toute saisine du tribunal. Au-delà, elle est fortement recommandée mais pas obligatoire.',
+      },
     ],
     keyTakeaways: [
-      "Commencez toujours par une mise en demeure par LRAR avec un délai de 15 à 30 jours.",
-      "La médiation de la consommation est gratuite et doit rendre un avis sous 90 jours.",
+      'Commencez toujours par une mise en demeure par LRAR avec un délai de 15 à 30 jours.',
+      'La médiation de la consommation est gratuite et doit rendre un avis sous 90 jours.',
       "Votre assurance protection juridique couvre souvent les frais d'avocat et d'expertise.",
-      "Les délais de prescription varient de 1 an (parfait achèvement) à 10 ans (décennale)."
+      'Les délais de prescription varient de 1 an (parfait achèvement) à 10 ans (décennale).',
     ],
   },
   'label-rge-artisan-travaux-energetiques': {
-    title: 'Label RGE : Pourquoi C\'est Indispensable',
-    excerpt: 'Le label RGE conditionne l\'accès aux aides financières. Décryptage de ce label et de ses implications pour vos projets de rénovation énergétique.',
+    title: "Label RGE : Pourquoi C'est Indispensable",
+    excerpt:
+      "Le label RGE conditionne l'accès aux aides financières. Décryptage de ce label et de ses implications pour vos projets de rénovation énergétique.",
     content: [
       "Le label RGE (Reconnu Garant de l'Environnement) est une qualification délivrée aux artisans — spécialistes en [isolation thermique](/services/isolation-thermique), installateurs de [pompe à chaleur](/services/pompe-a-chaleur) et autres — qui respectent des critères de compétence pour les travaux de rénovation énergétique. Depuis 2014, faire appel à un artisan RGE est obligatoire pour bénéficier des aides publiques.",
       "## Pourquoi le label RGE est-il si important ?\n\nSans artisan RGE, pas de [MaPrimeRénov'](/blog/aide-maprimerenov-2026-montants-conditions), pas de [CEE](/blog/certificats-economies-energie-cee-guide), pas d'[éco-PTZ](/blog/eco-pret-taux-zero-guide-complet-2026), pas de [TVA à 5,5 %](/blog/tva-reduite-travaux-renovation-guide). Le label RGE est la clé d'entrée de toutes les aides à la rénovation énergétique.",
@@ -338,129 +489,186 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/label-rge.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-01',
     updatedDate: '2026-02-10',
     readTime: '11 min',
     category: 'Réglementation',
     tags: ['RGE', 'Label', 'Rénovation énergétique', 'Qualifications'],
     faq: [
-      { question: 'Comment vérifier qu\'un artisan est bien RGE ?', answer: 'Consultez l\'annuaire officiel sur france-renov.gouv.fr. Recherchez par nom, SIRET ou localisation. Le certificat doit mentionner les domaines de compétence et la date de validité.' },
-      { question: 'Un artisan peut-il perdre son label RGE ?', answer: 'Oui, en cas de non-conformité lors d\'un audit de suivi, de plaintes répétées ou de non-respect des critères. L\'organisme de qualification suspend ou retire le label.' },
-      { question: 'Le label RGE garantit-il la qualité des travaux ?', answer: 'Le label garantit une compétence technique attestée par formation, références et audits. Cependant, il ne garantit pas la qualité de chaque chantier individuel. Les avis clients restent un complément indispensable.' },
+      {
+        question: "Comment vérifier qu'un artisan est bien RGE ?",
+        answer:
+          "Consultez l'annuaire officiel sur france-renov.gouv.fr. Recherchez par nom, SIRET ou localisation. Le certificat doit mentionner les domaines de compétence et la date de validité.",
+      },
+      {
+        question: 'Un artisan peut-il perdre son label RGE ?',
+        answer:
+          "Oui, en cas de non-conformité lors d'un audit de suivi, de plaintes répétées ou de non-respect des critères. L'organisme de qualification suspend ou retire le label.",
+      },
+      {
+        question: 'Le label RGE garantit-il la qualité des travaux ?',
+        answer:
+          'Le label garantit une compétence technique attestée par formation, références et audits. Cependant, il ne garantit pas la qualité de chaque chantier individuel. Les avis clients restent un complément indispensable.',
+      },
     ],
     keyTakeaways: [
       "Sans artisan RGE, pas de MaPrimeRénov', de CEE, d'éco-PTZ ni de TVA à 5,5 %.",
-      "Vérifiez la validité et le domaine de compétence du label sur france-renov.gouv.fr.",
-      "La qualification RGE est valable 4 ans avec un audit de suivi tous les 2 ans.",
-      "L'usurpation du label RGE est une pratique trompeuse sanctionnée par la DGCCRF."
+      'Vérifiez la validité et le domaine de compétence du label sur france-renov.gouv.fr.',
+      'La qualification RGE est valable 4 ans avec un audit de suivi tous les 2 ans.',
+      "L'usurpation du label RGE est une pratique trompeuse sanctionnée par la DGCCRF.",
     ],
   },
   'qualibat-qualifelec-certifications-batiment': {
-    title: 'Qualibat, Qualifelec, Qualit\'EnR : Guide',
-    excerpt: 'Qualibat, Qualifelec, Qualit\'EnR, Qualigaz... Le monde des certifications du bâtiment est complexe. Décryptage pour y voir clair et choisir le bon artisan.',
+    title: "Qualibat, Qualifelec, Qualit'EnR : Guide",
+    excerpt:
+      "Qualibat, Qualifelec, Qualit'EnR, Qualigaz... Le monde des certifications du bâtiment est complexe. Décryptage pour y voir clair et choisir le bon artisan.",
     content: [
       "Les certifications et qualifications professionnelles du bâtiment sont un gage de compétence technique. Mais entre Qualibat, Qualifelec, Qualit'EnR et les dizaines de mentions existantes, il est facile de s'y perdre. Ce guide vous aide à décrypter l'essentiel.",
       "## Qualibat : la référence du bâtiment\n\nQualibat délivre des certificats dans plus de 400 domaines : gros œuvre, second œuvre, [isolation](/blog/prix-isolation-thermique-2026-tarifs), couverture, [plomberie](/services/plombier), menuiserie. Chaque qualification atteste de la capacité technique, financière et juridique de l'entreprise. Validité : 4 ans avec audit intermédiaire à 2 ans.",
       "## Qualifelec : l'expertise électrique\n\nQualifelec qualifie les entreprises du génie [électrique](/blog/electricite-normes-securite) : installations réalisées par un [électricien](/services/electricien), éclairage, domotique, bornes de recharge, photovoltaïque. La mention [RGE](/blog/label-rge-artisan-travaux-energetiques) peut être ajoutée pour les travaux liés à l'efficacité énergétique.",
       "## Qualit'EnR : les énergies renouvelables\n\nQualit'EnR regroupe : QualiPAC (pompes à chaleur), Qualibois (chauffage bois), Qualisol (solaire thermique), QualiPV (photovoltaïque). Ces qualifications impliquent formation spécifique, références et audits.",
       "## Qualigaz : les installations gaz\n\nQualigaz délivre des certificats de conformité pour les installations gaz. Bien que le gaz recule dans le neuf ([RE2020](/blog/reglementation-thermique-re2020-impact)), cette qualification reste essentielle pour les interventions sur l'existant.",
-      "## Comment vérifier une certification ?\n\nChaque organisme a un annuaire en ligne : qualibat.com, qualifelec.fr, qualit-enr.org. Recherchez par nom, SIRET ou localisation.",
+      '## Comment vérifier une certification ?\n\nChaque organisme a un annuaire en ligne : qualibat.com, qualifelec.fr, qualit-enr.org. Recherchez par nom, SIRET ou localisation.',
       "## Le coût des certifications pour l'artisan\n\nQualibat : 300 à 800 €/an. Qualifelec : 400 à 1 200 €/an. Qualit'EnR : 200 à 600 € par qualification. Ces coûts sont un investissement dans la qualité et la crédibilité.",
       "\n\n:::info Bon à savoir\nChaque organisme de certification dispose d'un annuaire en ligne : qualibat.com, qualifelec.fr, qualit-enr.org. Recherchez par nom, SIRET ou localisation. Le certificat doit mentionner la raison sociale, le SIRET, les domaines de qualification et la validité.\n:::",
-      "\n\n:::warning Attention\nAttention à la différence entre une certification (vérifiée par un organisme indépendant) et une simple déclaration de compétence. Seule la certification offre une garantie vérifiée par des audits réguliers.\n:::",
+      '\n\n:::warning Attention\nAttention à la différence entre une certification (vérifiée par un organisme indépendant) et une simple déclaration de compétence. Seule la certification offre une garantie vérifiée par des audits réguliers.\n:::',
       "\n\n:::takeaway\n- Qualibat : référence du bâtiment (400+ domaines)\n- Qualifelec : expertise électrique et domotique\n- Qualit'EnR : énergies renouvelables (PAC, solaire, bois)\n- Qualigaz : installations gaz\n- Vérifiez toujours sur les annuaires officiels en ligne\n- Certification ≠ déclaration : seule la certification est vérifiée par un tiers\n:::",
     ],
     image: '/images/blog/certifications-batiment.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-03',
     updatedDate: '2026-02-09',
     readTime: '11 min',
     category: 'Réglementation',
     tags: ['Qualibat', 'Qualifelec', 'Certifications', 'Qualifications'],
     faq: [
-      { question: 'Un artisan peut-il exercer sans certification ?', answer: 'Oui, la certification n\'est pas obligatoire pour exercer. Cependant, certaines qualifications (RGE notamment) sont obligatoires pour que les clients bénéficient des aides publiques.' },
-      { question: 'Combien coûte une certification pour un artisan ?', answer: 'Qualibat : 300 à 800 €/an. Qualifelec : 400 à 1 200 €/an. Qualit\'EnR : 200 à 600 € par qualification. Ces coûts sont un investissement dans la qualité et la crédibilité professionnelle.' },
-      { question: 'Comment savoir quelle certification exiger pour mes travaux ?', answer: 'Qualibat pour le bâtiment général, Qualifelec pour l\'électricité, Qualit\'EnR pour les ENR (PAC, solaire), Qualigaz pour le gaz. Pour les aides publiques, la mention RGE est indispensable.' },
+      {
+        question: 'Un artisan peut-il exercer sans certification ?',
+        answer:
+          "Oui, la certification n'est pas obligatoire pour exercer. Cependant, certaines qualifications (RGE notamment) sont obligatoires pour que les clients bénéficient des aides publiques.",
+      },
+      {
+        question: 'Combien coûte une certification pour un artisan ?',
+        answer:
+          "Qualibat : 300 à 800 €/an. Qualifelec : 400 à 1 200 €/an. Qualit'EnR : 200 à 600 € par qualification. Ces coûts sont un investissement dans la qualité et la crédibilité professionnelle.",
+      },
+      {
+        question: 'Comment savoir quelle certification exiger pour mes travaux ?',
+        answer:
+          "Qualibat pour le bâtiment général, Qualifelec pour l'électricité, Qualit'EnR pour les ENR (PAC, solaire), Qualigaz pour le gaz. Pour les aides publiques, la mention RGE est indispensable.",
+      },
     ],
     keyTakeaways: [
-      "Qualibat est la référence du bâtiment avec plus de 400 domaines de certification.",
-      "Qualifelec qualifie les entreprises en électricité, domotique et bornes de recharge.",
+      'Qualibat est la référence du bâtiment avec plus de 400 domaines de certification.',
+      'Qualifelec qualifie les entreprises en électricité, domotique et bornes de recharge.',
       "Qualit'EnR regroupe les qualifications énergies renouvelables : QualiPAC, Qualibois, Qualisol, QualiPV.",
-      "Vérifiez toujours les certifications sur les annuaires officiels en ligne des organismes."
+      'Vérifiez toujours les certifications sur les annuaires officiels en ligne des organismes.',
     ],
   },
   'diagnostic-immobilier-obligatoire-liste': {
     title: 'Diagnostics Immobiliers 2026 : Liste',
-    excerpt: 'DPE, amiante, plomb, électricité, gaz, termites... Quels diagnostics sont obligatoires pour vendre ou louer en 2026 ? Liste complète et tarifs.',
+    excerpt:
+      'DPE, amiante, plomb, électricité, gaz, termites... Quels diagnostics sont obligatoires pour vendre ou louer en 2026 ? Liste complète et tarifs.',
     content: [
       "Avant de vendre ou de louer un bien immobilier, le propriétaire doit constituer un Dossier de Diagnostics Techniques (DDT) réalisé par un [diagnostiqueur](/services/diagnostiqueur) certifié. Les articles L.271-4 à L.271-6 du Code de la construction et de l'habitation définissent ces obligations. Voici la liste complète pour 2026.",
       "## Le DPE (Diagnostic de Performance Énergétique)\n\nObligatoire pour toute vente et location. Validité : 10 ans. Coût : 100 à 250 €. Le DPE classe le logement de A à G et est opposable juridiquement depuis le 1er juillet 2021. Voir notre guide sur l'[audit énergétique et DPE](/blog/audit-energetique-dpe-obligations-2026).",
-      "## Les diagnostics par type de bien\n\n### Diagnostic amiante\n\nObligatoire pour les biens construits avant le 1er juillet 1997. Validité : illimitée si négatif, 3 ans si présence. Coût : 80 à 150 €.\n\n### Diagnostic plomb (CREP)\n\nObligatoire pour les biens construits avant le 1er janvier 1949. Validité : illimitée si négatif, 1 an (vente) / 6 ans (location) si présence. Coût : 100 à 200 €.\n\n### Diagnostic électricité\n\nObligatoire pour les installations de plus de 15 ans. Validité : 3 ans (vente), 6 ans (location). Coût : 80 à 150 €. Voir notre guide sur les [normes électriques](/blog/electricite-normes-securite).\n\n### Diagnostic gaz\n\nObligatoire pour les installations de plus de 15 ans. Validité : 3 ans (vente), 6 ans (location). Coût : 100 à 150 €.\n\n### Diagnostic termites\n\nObligatoire dans les zones délimitées par arrêté préfectoral. Validité : 6 mois. Coût : 100 à 200 €.\n\n### État des risques et pollutions (ERP)\n\nObligatoire pour toute vente et location en zone couverte par un plan de prévention des risques. Validité : 6 mois. Gratuit sur georisques.gouv.fr.",
+      '## Les diagnostics par type de bien\n\n### Diagnostic amiante\n\nObligatoire pour les biens construits avant le 1er juillet 1997. Validité : illimitée si négatif, 3 ans si présence. Coût : 80 à 150 €.\n\n### Diagnostic plomb (CREP)\n\nObligatoire pour les biens construits avant le 1er janvier 1949. Validité : illimitée si négatif, 1 an (vente) / 6 ans (location) si présence. Coût : 100 à 200 €.\n\n### Diagnostic électricité\n\nObligatoire pour les installations de plus de 15 ans. Validité : 3 ans (vente), 6 ans (location). Coût : 80 à 150 €. Voir notre guide sur les [normes électriques](/blog/electricite-normes-securite).\n\n### Diagnostic gaz\n\nObligatoire pour les installations de plus de 15 ans. Validité : 3 ans (vente), 6 ans (location). Coût : 100 à 150 €.\n\n### Diagnostic termites\n\nObligatoire dans les zones délimitées par arrêté préfectoral. Validité : 6 mois. Coût : 100 à 200 €.\n\n### État des risques et pollutions (ERP)\n\nObligatoire pour toute vente et location en zone couverte par un plan de prévention des risques. Validité : 6 mois. Gratuit sur georisques.gouv.fr.',
       "## Coût d'un pack diagnostic complet\n\nEn regroupant tous les diagnostics : 400 à 700 € pour un appartement, 500 à 900 € pour une maison. Comparez les [devis](/blog/devis-travaux-comment-comparer-choisir).",
-      "\n\n:::budget\n| Diagnostic | Coût moyen | Validité |\n| DPE | 100 - 250 € | 10 ans |\n| Amiante | 80 - 150 € | Illimitée si négatif |\n| Plomb (CREP) | 100 - 200 € | Illimitée si négatif |\n| Électricité | 80 - 150 € | 3 ans (vente), 6 ans (location) |\n| Gaz | 100 - 150 € | 3 ans (vente), 6 ans (location) |\n| Termites | 100 - 200 € | 6 mois |\n| Pack complet (appartement) | 400 - 700 € | Variable |\n| Pack complet (maison) | 500 - 900 € | Variable |\n:::",
-      "\n\n:::tip Conseil pro\nRegroupez tous les diagnostics chez un même [diagnostiqueur professionnel](/services/diagnostiqueur) pour obtenir un tarif pack. Anticipez : certains diagnostics (termites, ERP) ne sont valables que 6 mois.\n:::",
-      "\n\n:::takeaway\n- Le DPE est obligatoire pour toute vente et location (10 ans de validité)\n- Amiante obligatoire pour les biens construits avant juillet 1997\n- Plomb obligatoire pour les biens construits avant janvier 1949\n- Électricité et gaz obligatoires pour les installations de plus de 15 ans\n- Pack complet : 400-700 € (appartement), 500-900 € (maison)\n- Anticipez les diagnostics à courte validité (termites, ERP : 6 mois)\n:::",
+      '\n\n:::budget\n| Diagnostic | Coût moyen | Validité |\n| DPE | 100 - 250 € | 10 ans |\n| Amiante | 80 - 150 € | Illimitée si négatif |\n| Plomb (CREP) | 100 - 200 € | Illimitée si négatif |\n| Électricité | 80 - 150 € | 3 ans (vente), 6 ans (location) |\n| Gaz | 100 - 150 € | 3 ans (vente), 6 ans (location) |\n| Termites | 100 - 200 € | 6 mois |\n| Pack complet (appartement) | 400 - 700 € | Variable |\n| Pack complet (maison) | 500 - 900 € | Variable |\n:::',
+      '\n\n:::tip Conseil pro\nRegroupez tous les diagnostics chez un même [diagnostiqueur professionnel](/services/diagnostiqueur) pour obtenir un tarif pack. Anticipez : certains diagnostics (termites, ERP) ne sont valables que 6 mois.\n:::',
+      '\n\n:::takeaway\n- Le DPE est obligatoire pour toute vente et location (10 ans de validité)\n- Amiante obligatoire pour les biens construits avant juillet 1997\n- Plomb obligatoire pour les biens construits avant janvier 1949\n- Électricité et gaz obligatoires pour les installations de plus de 15 ans\n- Pack complet : 400-700 € (appartement), 500-900 € (maison)\n- Anticipez les diagnostics à courte validité (termites, ERP : 6 mois)\n:::',
     ],
     image: '/images/blog/diagnostics-immobiliers.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-05',
     updatedDate: '2026-02-10',
     readTime: '12 min',
     category: 'Réglementation',
     tags: ['Diagnostics', 'Immobilier', 'DPE', 'Vente'],
     faq: [
-      { question: 'Qui paie les diagnostics : le vendeur ou l\'acheteur ?', answer: 'Les diagnostics sont à la charge du vendeur (pour une vente) ou du propriétaire bailleur (pour une location). L\'acheteur ou le locataire ne paie rien.' },
-      { question: 'Que se passe-t-il si un diagnostic est manquant ?', answer: 'En cas de vente, le vendeur ne peut pas se prévaloir de la clause d\'exonération des vices cachés pour les défauts qui auraient été révélés par le diagnostic manquant. En location, le locataire peut demander l\'annulation du bail ou une diminution du loyer.' },
-      { question: 'Les diagnostics sont-ils obligatoires pour une donation ?', answer: 'Oui, les mêmes diagnostics que pour une vente sont obligatoires en cas de donation. Le DDT (Dossier de Diagnostics Techniques) doit être annexé à l\'acte notarié.' },
+      {
+        question: "Qui paie les diagnostics : le vendeur ou l'acheteur ?",
+        answer:
+          "Les diagnostics sont à la charge du vendeur (pour une vente) ou du propriétaire bailleur (pour une location). L'acheteur ou le locataire ne paie rien.",
+      },
+      {
+        question: 'Que se passe-t-il si un diagnostic est manquant ?',
+        answer:
+          "En cas de vente, le vendeur ne peut pas se prévaloir de la clause d'exonération des vices cachés pour les défauts qui auraient été révélés par le diagnostic manquant. En location, le locataire peut demander l'annulation du bail ou une diminution du loyer.",
+      },
+      {
+        question: 'Les diagnostics sont-ils obligatoires pour une donation ?',
+        answer:
+          "Oui, les mêmes diagnostics que pour une vente sont obligatoires en cas de donation. Le DDT (Dossier de Diagnostics Techniques) doit être annexé à l'acte notarié.",
+      },
     ],
     keyTakeaways: [
-      "Le DPE est obligatoire pour toute vente et location, avec une validité de 10 ans.",
-      "Les diagnostics amiante et plomb sont obligatoires pour les biens construits avant 1997 et 1949 respectivement.",
-      "Un pack diagnostic complet coûte 400 à 700 € (appartement) ou 500 à 900 € (maison).",
-      "Les diagnostics sont à la charge du vendeur (vente) ou du propriétaire bailleur (location)."
+      'Le DPE est obligatoire pour toute vente et location, avec une validité de 10 ans.',
+      'Les diagnostics amiante et plomb sont obligatoires pour les biens construits avant 1997 et 1949 respectivement.',
+      'Un pack diagnostic complet coûte 400 à 700 € (appartement) ou 500 à 900 € (maison).',
+      'Les diagnostics sont à la charge du vendeur (vente) ou du propriétaire bailleur (location).',
     ],
   },
   'amiante-plomb-diagnostic-avant-travaux': {
     title: 'Amiante et Plomb : Diagnostics Travaux',
-    excerpt: 'Avant d\'entamer des travaux dans un bâtiment ancien, les diagnostics amiante et plomb sont obligatoires. Procédures, coûts et obligations de chacun.',
+    excerpt:
+      "Avant d'entamer des travaux dans un bâtiment ancien, les diagnostics amiante et plomb sont obligatoires. Procédures, coûts et obligations de chacun.",
     content: [
       "L'amiante et le plomb sont deux substances dangereuses encore présentes dans de nombreux bâtiments français. Avant tous travaux de rénovation, des diagnostics spécifiques sont obligatoires pour protéger les occupants et les travailleurs.",
       "## Le diagnostic amiante avant travaux (DAAT)\n\nObligatoire avant tous travaux dans un bâtiment construit avant le 1er juillet 1997 (article R.4412-97 du Code du travail). Le DAAT, réalisé par un [diagnostiqueur](/services/diagnostiqueur) certifié, implique des sondages destructifs dans les matériaux susceptibles de contenir de l'amiante.\n\n### Où trouve-t-on de l'amiante ?\n\n- Flocages et calorifugeages\n- Dalles de sol vinyle et colles\n- Plaques de fibrociment (toiture, façade)\n- Enduits et colles de carrelage\n- Joints de dilatation\n- Gaines de ventilation",
       "## Le diagnostic plomb avant travaux\n\nObligatoire avant travaux dans les bâtiments construits avant le 1er janvier 1949 (arrêté du 19 août 2011). Le plomb se trouve principalement dans les peintures anciennes (céruse) et les canalisations.\n\n### Les seuils réglementaires\n\nPlomb : seuil d'intervention de 1 mg/cm² dans les revêtements. Amiante : toute présence impose des précautions définies par le Code du travail.",
       "## Les obligations de l'artisan et le désamiantage\n\nL'artisan doit prendre connaissance du diagnostic, établir un mode opératoire adapté (article R.4412-145 du Code du travail), former ses salariés, utiliser les EPI adaptés, et gérer les déchets dans des filières agréées.\n\nLe retrait d'amiante doit être effectué par une entreprise certifiée. Coût : 25 à 90 €/m². Un plan de retrait doit être soumis à l'inspection du travail au moins un mois avant le début des travaux.",
       "\n\n:::warning Attention\nLe non-respect des obligations de diagnostic amiante et plomb avant travaux est puni de 9 000 € d'amende (article L.4741-1 du Code du travail). En cas de mise en danger, jusqu'à 15 000 € d'amende et un an d'emprisonnement.\n:::",
-      "\n\n:::budget\n| Diagnostic | Coût moyen |\n| Diagnostic amiante avant travaux (DAAT) | 200 - 800 € |\n| Diagnostic plomb avant travaux | 150 - 400 € |\n| Désamiantage | 25 - 90 €/m² |\n| Traitement plomb (décapage) | 30 - 80 €/m² |\n:::",
+      '\n\n:::budget\n| Diagnostic | Coût moyen |\n| Diagnostic amiante avant travaux (DAAT) | 200 - 800 € |\n| Diagnostic plomb avant travaux | 150 - 400 € |\n| Désamiantage | 25 - 90 €/m² |\n| Traitement plomb (décapage) | 30 - 80 €/m² |\n:::',
       "\n\n:::tip Conseil pro\nN'entamez jamais de travaux dans un bâtiment ancien sans les diagnostics amiante et plomb. Sur notre plateforme, les professionnels référencés, comme nos [plombiers](/services/plombier) et maçons, connaissent ces obligations et sauront vous orienter vers des diagnostiqueurs certifiés.\n:::",
       "\n\n:::takeaway\n- DAAT obligatoire avant travaux dans les bâtiments d'avant juillet 1997\n- Diagnostic plomb obligatoire dans les bâtiments d'avant janvier 1949\n- L'amiante se trouve dans les dalles, colles, plaques fibrociment, flocages\n- Le plomb se trouve dans les peintures anciennes et les canalisations\n- Le désamiantage doit être réalisé par une entreprise certifiée\n- Sanctions : jusqu'à 15 000 € d'amende et 1 an d'emprisonnement\n:::",
     ],
     image: '/images/blog/amiante-plomb.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-06',
     updatedDate: '2026-02-10',
     readTime: '12 min',
     category: 'Réglementation',
     tags: ['Amiante', 'Plomb', 'Diagnostic', 'Sécurité'],
     faq: [
-      { question: 'Comment savoir si mon bâtiment contient de l\'amiante ?', answer: 'Tout bâtiment construit avant le 1er juillet 1997 est susceptible de contenir de l\'amiante. Seul un diagnostic amiante réalisé par un professionnel certifié peut confirmer sa présence ou son absence.' },
-      { question: 'Peut-on réaliser soi-même des travaux dans un bâtiment contenant de l\'amiante ?', answer: 'Non, les travaux en présence d\'amiante sont strictement encadrés par le Code du travail. Le retrait doit être effectué par une entreprise certifiée, avec un plan de retrait soumis à l\'inspection du travail.' },
-      { question: 'Que faire si on découvre de l\'amiante en cours de chantier ?', answer: 'Arrêtez immédiatement les travaux, évacuez la zone et faites appel à un diagnostiqueur certifié. Un plan de retrait devra être élaboré et soumis à l\'inspection du travail avant toute reprise.' },
+      {
+        question: "Comment savoir si mon bâtiment contient de l'amiante ?",
+        answer:
+          "Tout bâtiment construit avant le 1er juillet 1997 est susceptible de contenir de l'amiante. Seul un diagnostic amiante réalisé par un professionnel certifié peut confirmer sa présence ou son absence.",
+      },
+      {
+        question: "Peut-on réaliser soi-même des travaux dans un bâtiment contenant de l'amiante ?",
+        answer:
+          "Non, les travaux en présence d'amiante sont strictement encadrés par le Code du travail. Le retrait doit être effectué par une entreprise certifiée, avec un plan de retrait soumis à l'inspection du travail.",
+      },
+      {
+        question: "Que faire si on découvre de l'amiante en cours de chantier ?",
+        answer:
+          "Arrêtez immédiatement les travaux, évacuez la zone et faites appel à un diagnostiqueur certifié. Un plan de retrait devra être élaboré et soumis à l'inspection du travail avant toute reprise.",
+      },
     ],
     keyTakeaways: [
-      "Le diagnostic amiante avant travaux est obligatoire dans les bâtiments construits avant juillet 1997.",
-      "Le diagnostic plomb avant travaux est obligatoire dans les bâtiments construits avant janvier 1949.",
+      'Le diagnostic amiante avant travaux est obligatoire dans les bâtiments construits avant juillet 1997.',
+      'Le diagnostic plomb avant travaux est obligatoire dans les bâtiments construits avant janvier 1949.',
       "Le désamiantage doit être réalisé par une entreprise certifiée avec un plan de retrait soumis à l'inspection.",
-      "Les sanctions vont jusqu'à 15 000 € d'amende et 1 an d'emprisonnement pour non-respect."
+      "Les sanctions vont jusqu'à 15 000 € d'amende et 1 an d'emprisonnement pour non-respect.",
     ],
   },
   'accessibilite-pmr-logement-normes': {
     title: 'Accessibilité PMR 2026 : Normes et Aides',
-    excerpt: 'Adapter un logement pour une personne à mobilité réduite : normes à respecter, travaux nécessaires et aides disponibles en 2026.',
-    metaTitle: 'Accessibilité PMR : jusqu\'à 15 400€ d\'aide en 2026',
-    metaDescription: 'Normes PMR logement et aides 2026 : MaPrimeAdapt\' (70%), crédit d\'impôt 25%. Douche, rampe, monte-escalier : prix et subventions.',
+    excerpt:
+      'Adapter un logement pour une personne à mobilité réduite : normes à respecter, travaux nécessaires et aides disponibles en 2026.',
+    metaTitle: "Accessibilité PMR : jusqu'à 15 400€ d'aide en 2026",
+    metaDescription:
+      "Normes PMR logement et aides 2026 : MaPrimeAdapt' (70%), crédit d'impôt 25%. Douche, rampe, monte-escalier : prix et subventions.",
     content: [
       "L'adaptation du logement aux personnes à mobilité réduite (PMR) est un enjeu majeur dans une société vieillissante. La loi du 11 février 2005 pour l'égalité des droits et des chances a posé les bases de l'accessibilité universelle.",
       "## Les normes d'accessibilité en logement\n\nLa norme NF P 99-611 définit :\n\n- Largeur de portes de 90 cm minimum\n- Couloirs de 120 cm de large\n- Absence de ressaut supérieur à 2 cm\n- Douche de plain-pied sans seuil\n- WC avec aire de manœuvre de 150 cm de diamètre\n- Revêtements antidérapants",
@@ -468,32 +676,46 @@ export const reglementationArticles: Record<string, BlogArticle> = {
       "## Les aides disponibles en 2026\n\n### MaPrimeAdapt'\n\nLancée le 1er janvier 2024, MaPrimeAdapt' finance jusqu'à 70 % des travaux d'adaptation pour les personnes âgées de plus de 70 ans ou en situation de handicap, sous conditions de revenus. Plafond : 22 000 € de travaux, soit une aide maximale de 15 400 €.\n\n### Les autres aides\n\n- ANAH : jusqu'à 50 % pour les ménages modestes\n- Crédit d'impôt : 25 % des dépenses (plafond 5 000 € personne seule, 10 000 € couple)\n- Caisses de retraite (CARSAT, MSA) : 3 000 à 5 000 €\n- Aides des collectivités locales\n- [TVA réduite](/blog/tva-reduite-travaux-renovation-guide) à 10 % (certains équipements à 5,5 %)",
       "\n\n:::budget\n| Travaux d'adaptation | Prix moyen |\n| Remplacement baignoire par douche italienne | 3 000 - 8 000 € |\n| Élargissement de portes | 500 - 1 500 €/porte |\n| Rampe d'accès | 1 500 - 5 000 € |\n| Monte-escalier | 5 000 - 15 000 € |\n| Motorisation volets | 300 - 800 €/fenêtre |\n| Cuisine adaptée | 2 000 - 6 000 € |\n:::",
       "\n\n:::info Bon à savoir\nMaPrimeAdapt', lancée le 1er janvier 2024, finance jusqu'à 70 % des travaux d'adaptation pour les personnes âgées de plus de 70 ans ou en situation de handicap, sous conditions de revenus. Plafond : 22 000 € de travaux, soit une aide maximale de 15 400 €.\n:::",
-      "\n\n:::tip Conseil pro\nAvant de commencer les travaux, faites évaluer vos besoins par un ergothérapeute (200 à 500 €, prise en charge possible). Ce professionnel analyse les capacités de la personne et préconise les aménagements adaptés.\n:::",
+      '\n\n:::tip Conseil pro\nAvant de commencer les travaux, faites évaluer vos besoins par un ergothérapeute (200 à 500 €, prise en charge possible). Ce professionnel analyse les capacités de la personne et préconise les aménagements adaptés.\n:::',
       "\n\n:::takeaway\n- Normes PMR : portes 90 cm, couloirs 120 cm, douche plain-pied, WC avec aire de 150 cm\n- MaPrimeAdapt' finance jusqu'à 70 % des travaux (plafond 15 400 €)\n- Crédit d'impôt de 25 % pour l'accessibilité (plafond 5 000 €/personne)\n- TVA réduite à 10 % (certains équipements à 5,5 %)\n- Consultez un ergothérapeute pour définir les aménagements adaptés\n- Aides complémentaires : ANAH, caisses de retraite, collectivités locales\n:::",
     ],
     image: '/images/blog/accessibilite-pmr.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-07',
     updatedDate: '2026-02-10',
     readTime: '12 min',
     category: 'Réglementation',
     tags: ['Accessibilité', 'PMR', 'Handicap', 'Aides'],
     faq: [
-      { question: 'MaPrimeAdapt\' est-elle accessible à tous ?', answer: 'Non, elle est réservée aux personnes de plus de 70 ans ou en situation de handicap (GIR 1 à 6, taux d\'incapacité ≥ 50 %), sous conditions de revenus. Les propriétaires occupants et bailleurs sont éligibles.' },
-      { question: 'Faut-il un artisan spécialisé PMR ?', answer: 'Ce n\'est pas obligatoire mais fortement recommandé. Un artisan expérimenté en normes PMR garantit le respect des dimensions, pentes et caractéristiques réglementaires. Demandez des références en accessibilité.' },
-      { question: 'La douche à l\'italienne est-elle obligatoire en PMR ?', answer: 'La norme exige une douche de plain-pied sans seuil supérieur à 2 cm. La douche à l\'italienne répond naturellement à cette exigence et est la solution la plus couramment installée.' },
+      {
+        question: "MaPrimeAdapt' est-elle accessible à tous ?",
+        answer:
+          "Non, elle est réservée aux personnes de plus de 70 ans ou en situation de handicap (GIR 1 à 6, taux d'incapacité ≥ 50 %), sous conditions de revenus. Les propriétaires occupants et bailleurs sont éligibles.",
+      },
+      {
+        question: 'Faut-il un artisan spécialisé PMR ?',
+        answer:
+          "Ce n'est pas obligatoire mais fortement recommandé. Un artisan expérimenté en normes PMR garantit le respect des dimensions, pentes et caractéristiques réglementaires. Demandez des références en accessibilité.",
+      },
+      {
+        question: "La douche à l'italienne est-elle obligatoire en PMR ?",
+        answer:
+          "La norme exige une douche de plain-pied sans seuil supérieur à 2 cm. La douche à l'italienne répond naturellement à cette exigence et est la solution la plus couramment installée.",
+      },
     ],
     keyTakeaways: [
-      "Les normes PMR exigent des portes de 90 cm, des couloirs de 120 cm et une douche plain-pied.",
+      'Les normes PMR exigent des portes de 90 cm, des couloirs de 120 cm et une douche plain-pied.',
       "MaPrimeAdapt' finance jusqu'à 70 % des travaux d'adaptation pour les personnes âgées ou handicapées.",
       "Le crédit d'impôt de 25 % est disponible pour les travaux d'accessibilité (plafond 5 000 €/personne).",
-      "Consultez un ergothérapeute (200 à 500 €) pour définir les aménagements adaptés aux besoins réels."
+      'Consultez un ergothérapeute (200 à 500 €) pour définir les aménagements adaptés aux besoins réels.',
     ],
   },
   'reglementation-ravalement-facade-obligations': {
     title: 'Ravalement Façade : Obligations Légales',
-    excerpt: 'Le ravalement de façade est une obligation légale dans de nombreuses communes. Délais, sanctions, autorisations et aides : tout ce que vous devez savoir.',
+    excerpt:
+      'Le ravalement de façade est une obligation légale dans de nombreuses communes. Délais, sanctions, autorisations et aides : tout ce que vous devez savoir.',
     content: [
       "Le ravalement de façade n'est pas qu'une question d'esthétique : c'est une obligation légale inscrite dans le Code de la construction et de l'habitation (article L.132-1). De nombreuses communes imposent un ravalement périodique.",
       "## L'obligation décennale de ravalement\n\nDans les communes ayant pris un arrêté en ce sens (Paris, Lyon, Marseille et de nombreuses villes), les propriétaires doivent maintenir leurs façades en bon état en faisant appel à un [maçon](/services/macon) ou un façadier qualifié. À Paris, l'obligation est décennale (tous les 10 ans).",
@@ -501,33 +723,47 @@ export const reglementationArticles: Record<string, BlogArticle> = {
       "## Les autorisations et l'obligation d'isolation\n\nUn ravalement nécessite une [déclaration préalable de travaux](/blog/permis-construire-declaration-prealable-guide) sauf si les travaux ne modifient pas l'aspect extérieur. En zone ABF, l'avis de l'Architecte des Bâtiments de France est requis.\n\nDepuis le décret n° 2016-711, un ravalement important (plus de 50 % de la surface de façade) doit s'accompagner d'une [isolation thermique](/blog/prix-isolation-thermique-2026-tarifs), sauf impossibilité technique ou surcoût disproportionné.",
       "## Les aides pour le ravalement et la copropriété\n\n- [MaPrimeRénov'](/blog/aide-maprimerenov-2026-montants-conditions) si le ravalement inclut une ITE\n- [CEE](/blog/certificats-economies-energie-cee-guide) pour l'isolation des murs par l'extérieur\n- ANAH pour les propriétaires modestes\n- Subventions communales spécifiques\n\nEn copropriété, le ravalement est voté en AG à la majorité de l'article 25. Les charges sont réparties selon les tantièmes.",
       "\n\n:::warning Attention\nSi le propriétaire ne respecte pas l'obligation de ravalement, le maire peut prendre un arrêté d'injonction de ravaler dans un délai de 6 mois. En cas de non-exécution, les travaux peuvent être réalisés d'office aux frais du propriétaire.\n:::",
-      "\n\n:::budget\n| Type de ravalement | Prix moyen |\n| Nettoyage et peinture | 30 - 60 €/m² |\n| Ravalement complet avec réparation | 50 - 100 €/m² |\n| Ravalement avec ITE | 100 - 200 €/m² |\n| Immeuble 300 m² de façade | 15 000 - 60 000 € |\n:::",
+      '\n\n:::budget\n| Type de ravalement | Prix moyen |\n| Nettoyage et peinture | 30 - 60 €/m² |\n| Ravalement complet avec réparation | 50 - 100 €/m² |\n| Ravalement avec ITE | 100 - 200 €/m² |\n| Immeuble 300 m² de façade | 15 000 - 60 000 € |\n:::',
       "\n\n:::tip Conseil pro\nProfitez d'un ravalement obligatoire pour ajouter une isolation par l'extérieur (ITE) avec un [couvreur](/services/couvreur) ou un spécialiste façade. Le surcoût est amorti par les économies d'énergie et les aides (MaPrimeRénov', CEE). Depuis le décret n° 2016-711, un ravalement important doit s'accompagner d'une isolation thermique.\n:::",
       "\n\n:::takeaway\n- Le ravalement est une obligation légale (décennale dans certaines communes)\n- Déclaration préalable requise (sauf si identique à l'existant)\n- Obligation d'isolation lors d'un ravalement important (décret 2016-711)\n- Prix : 30-60 €/m² (nettoyage) à 100-200 €/m² (avec ITE)\n- Aides disponibles si le ravalement inclut une ITE\n- En copropriété : vote en AG à la majorité de l'article 25\n:::",
     ],
     image: '/images/blog/ravalement-facade.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-01-31',
     updatedDate: '2026-02-09',
     readTime: '11 min',
     category: 'Réglementation',
     tags: ['Ravalement', 'Façade', 'Urbanisme', 'Obligations'],
     faq: [
-      { question: 'Le ravalement est-il obligatoire dans toutes les communes ?', answer: 'Non, seules les communes ayant pris un arrêté en ce sens imposent un ravalement périodique. À Paris, l\'obligation est décennale. Renseignez-vous en mairie.' },
-      { question: 'Faut-il une autorisation pour un ravalement ?', answer: 'Une déclaration préalable est nécessaire sauf si les travaux ne modifient pas l\'aspect extérieur. En zone ABF, l\'avis de l\'Architecte des Bâtiments de France est requis dans tous les cas.' },
-      { question: 'L\'isolation est-elle obligatoire lors d\'un ravalement ?', answer: 'Depuis le décret n° 2016-711, un ravalement touchant plus de 50 % de la surface de façade doit s\'accompagner d\'une isolation thermique, sauf impossibilité technique ou surcoût disproportionné (plus de 5 ans de retour sur investissement).' },
+      {
+        question: 'Le ravalement est-il obligatoire dans toutes les communes ?',
+        answer:
+          "Non, seules les communes ayant pris un arrêté en ce sens imposent un ravalement périodique. À Paris, l'obligation est décennale. Renseignez-vous en mairie.",
+      },
+      {
+        question: 'Faut-il une autorisation pour un ravalement ?',
+        answer:
+          "Une déclaration préalable est nécessaire sauf si les travaux ne modifient pas l'aspect extérieur. En zone ABF, l'avis de l'Architecte des Bâtiments de France est requis dans tous les cas.",
+      },
+      {
+        question: "L'isolation est-elle obligatoire lors d'un ravalement ?",
+        answer:
+          "Depuis le décret n° 2016-711, un ravalement touchant plus de 50 % de la surface de façade doit s'accompagner d'une isolation thermique, sauf impossibilité technique ou surcoût disproportionné (plus de 5 ans de retour sur investissement).",
+      },
     ],
     keyTakeaways: [
-      "Le ravalement de façade est une obligation légale décennale dans certaines communes (Paris, Lyon).",
+      'Le ravalement de façade est une obligation légale décennale dans certaines communes (Paris, Lyon).',
       "Un ravalement important (plus de 50 % de façade) doit s'accompagner d'une isolation thermique.",
       "Une déclaration préalable de travaux est nécessaire sauf si l'aspect extérieur reste identique.",
-      "Le prix varie de 30 à 60 €/m² (nettoyage) à 100 à 200 €/m² (avec ITE)."
+      'Le prix varie de 30 à 60 €/m² (nettoyage) à 100 à 200 €/m² (avec ITE).',
     ],
   },
   'urbanisme-regles-construction-extension': {
-    title: 'Règles d\'Urbanisme : Construire Légalement',
-    excerpt: 'PLU, emprise au sol, hauteur maximale... Les règles d\'urbanisme encadrent strictement vos projets de construction et d\'extension. Le guide pour ne rien oublier.',
+    title: "Règles d'Urbanisme : Construire Légalement",
+    excerpt:
+      "PLU, emprise au sol, hauteur maximale... Les règles d'urbanisme encadrent strictement vos projets de construction et d'extension. Le guide pour ne rien oublier.",
     content: [
       "Avant de construire ou d'agrandir, vous devez connaître les règles d'urbanisme applicables. Le Plan Local d'Urbanisme (PLU), prévu par les articles L.151-1 et suivants du Code de l'urbanisme, fixe les règles de constructibilité de chaque parcelle.",
       "## Le PLU : la bible de l'urbanisme local\n\nLe PLU divise le territoire en zones : urbaines (U), à urbaniser (AU), agricoles (A) et naturelles (N). Chaque zone a son règlement propre : constructions autorisées, hauteurs maximales, distances, emprise au sol maximale, obligations de stationnement.",
@@ -540,29 +776,44 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/urbanisme-regles.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-02',
     updatedDate: '2026-02-09',
     readTime: '12 min',
     category: 'Réglementation',
     tags: ['Urbanisme', 'PLU', 'Construction', 'Extension'],
     faq: [
-      { question: 'Où consulter le PLU de ma commune ?', answer: 'Le PLU est consultable en mairie (service urbanisme) et sur geoportail-urbanisme.gouv.fr. Demandez un extrait du règlement pour votre parcelle et un certificat d\'urbanisme pour connaître précisément vos droits à construire.' },
-      { question: 'Peut-on construire en limite de propriété ?', answer: 'Cela dépend du PLU. Certaines zones autorisent la construction en limite séparative, d\'autres imposent un recul minimum (souvent 3 m ou la moitié de la hauteur). Consultez le règlement de zone.' },
-      { question: 'La taxe d\'aménagement s\'applique-t-elle aux extensions ?', answer: 'Oui, la taxe d\'aménagement s\'applique à toute surface de plancher créée, y compris les extensions. Le taux communal varie de 1 à 5 %. La valeur forfaitaire est d\'environ 886 €/m² en 2026 hors Île-de-France.' },
+      {
+        question: 'Où consulter le PLU de ma commune ?',
+        answer:
+          "Le PLU est consultable en mairie (service urbanisme) et sur geoportail-urbanisme.gouv.fr. Demandez un extrait du règlement pour votre parcelle et un certificat d'urbanisme pour connaître précisément vos droits à construire.",
+      },
+      {
+        question: 'Peut-on construire en limite de propriété ?',
+        answer:
+          "Cela dépend du PLU. Certaines zones autorisent la construction en limite séparative, d'autres imposent un recul minimum (souvent 3 m ou la moitié de la hauteur). Consultez le règlement de zone.",
+      },
+      {
+        question: "La taxe d'aménagement s'applique-t-elle aux extensions ?",
+        answer:
+          "Oui, la taxe d'aménagement s'applique à toute surface de plancher créée, y compris les extensions. Le taux communal varie de 1 à 5 %. La valeur forfaitaire est d'environ 886 €/m² en 2026 hors Île-de-France.",
+      },
     ],
     keyTakeaways: [
-      "Le PLU fixe les règles de constructibilité : hauteur, distances, emprise au sol, stationnement.",
-      "Extensions : pas de formalité sous 5 m², déclaration préalable de 5 à 40 m², permis au-delà.",
+      'Le PLU fixe les règles de constructibilité : hauteur, distances, emprise au sol, stationnement.',
+      'Extensions : pas de formalité sous 5 m², déclaration préalable de 5 à 40 m², permis au-delà.',
       "L'architecte est obligatoire si la surface totale après extension dépasse 150 m².",
-      "Demandez un certificat d'urbanisme gratuit en mairie avant tout projet de construction."
+      "Demandez un certificat d'urbanisme gratuit en mairie avant tout projet de construction.",
     ],
   },
   'aides-renovation-2026-cumul-guide': {
     title: 'Cumuler les Aides Rénovation 2026',
     metaTitle: 'Cumuler les Aides Rénovation 2026 : méthode',
-    metaDescription: 'Comment cumuler MaPrimeRénov\' + CEE + éco-PTZ + TVA 5,5% ? Jusqu\'à 70% financés. Ordre de cumul + simulation. Guide complet.',
-    excerpt: 'MaPrimeRénov\', CEE, éco-PTZ, TVA réduite, aides locales... En 2026, le cumul des aides peut couvrir jusqu\'à 80 % du coût de vos travaux. Stratégie optimale.',
+    metaDescription:
+      "Comment cumuler MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5% ? Jusqu'à 70% financés. Ordre de cumul + simulation. Guide complet.",
+    excerpt:
+      "MaPrimeRénov', CEE, éco-PTZ, TVA réduite, aides locales... En 2026, le cumul des aides peut couvrir jusqu'à 80 % du coût de vos travaux. Stratégie optimale.",
     content: [
       "La France dispose d'un arsenal d'aides à la rénovation énergétique parmi les plus généreux d'Europe. La bonne nouvelle : la plupart sont cumulables. La mauvaise : les règles de cumul sont complexes. Ce guide vous donne la stratégie optimale pour maximiser votre financement.",
       "## Les aides cumulables en 2026\n\n[MaPrimeRénov'](/blog/aide-maprimerenov-2026-montants-conditions), [CEE](/blog/certificats-economies-energie-cee-guide), [éco-PTZ](/blog/eco-pret-taux-zero-guide-complet-2026), [TVA à 5,5 %](/blog/tva-reduite-travaux-renovation-guide), aides des collectivités locales, chèque énergie. Toutes sont cumulables, sous réserve que le total ne dépasse pas le coût TTC des travaux.",
@@ -577,55 +828,82 @@ export const reglementationArticles: Record<string, BlogArticle> = {
     ],
     image: '/images/blog/cumul-aides.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-09',
     updatedDate: '2026-02-11',
     readTime: '14 min',
     category: 'Aides & Subventions',
-    tags: ['Aides', 'Cumul', 'MaPrimeRénov\'', 'Stratégie'],
+    tags: ['Aides', 'Cumul', "MaPrimeRénov'", 'Stratégie'],
     faq: [
-      { question: 'Quel est le reste à charge minimum possible ?', answer: 'Pour les ménages très modestes en rénovation globale, le reste à charge peut descendre à 10-20 % du coût total grâce au cumul MaPrimeRénov\' (80 % pour les ménages très modestes) + CEE + éco-PTZ. Le total des aides ne peut pas dépasser 100 % du coût TTC.' },
-      { question: 'L\'Accompagnateur Rénov\' est-il obligatoire ?', answer: 'Oui, pour le Parcours accompagné de MaPrimeRénov\'. Il réalise l\'audit, propose les scénarios de travaux et monte les dossiers. Coût : 1 000 à 2 000 €, pris en charge à 100 % pour les ménages modestes.' },
-      { question: 'Peut-on cumuler les aides locales avec MaPrimeRénov\' ?', answer: 'Oui, les aides locales sont cumulables avec toutes les aides nationales, sous réserve que le total ne dépasse pas 100 % du coût TTC des travaux. Renseignez-vous auprès de votre mairie ou sur aides-territoires.beta.gouv.fr.' },
+      {
+        question: 'Quel est le reste à charge minimum possible ?',
+        answer:
+          "Pour les ménages très modestes en rénovation globale, le reste à charge peut descendre à 10-20 % du coût total grâce au cumul MaPrimeRénov' (80 % pour les ménages très modestes) + CEE + éco-PTZ. Le total des aides ne peut pas dépasser 100 % du coût TTC.",
+      },
+      {
+        question: "L'Accompagnateur Rénov' est-il obligatoire ?",
+        answer:
+          "Oui, pour le Parcours accompagné de MaPrimeRénov'. Il réalise l'audit, propose les scénarios de travaux et monte les dossiers. Coût : 1 000 à 2 000 €, pris en charge à 100 % pour les ménages modestes.",
+      },
+      {
+        question: "Peut-on cumuler les aides locales avec MaPrimeRénov' ?",
+        answer:
+          'Oui, les aides locales sont cumulables avec toutes les aides nationales, sous réserve que le total ne dépasse pas 100 % du coût TTC des travaux. Renseignez-vous auprès de votre mairie ou sur aides-territoires.beta.gouv.fr.',
+      },
     ],
     keyTakeaways: [
       "Toutes les aides sont cumulables : MaPrimeRénov' + CEE + éco-PTZ + TVA 5,5 % + aides locales.",
-      "La rénovation globale (gain ≥ 55 %) offre les taux de prise en charge les plus élevés (30 à 80 %).",
-      "Le reste à charge peut descendre à moins de 10 % pour les ménages très modestes.",
-      "Respectez scrupuleusement le calendrier d'inscription aux aides pour ne perdre aucun euro."
+      'La rénovation globale (gain ≥ 55 %) offre les taux de prise en charge les plus élevés (30 à 80 %).',
+      'Le reste à charge peut descendre à moins de 10 % pour les ménages très modestes.',
+      "Respectez scrupuleusement le calendrier d'inscription aux aides pour ne perdre aucun euro.",
     ],
   },
   'contrat-travaux-clauses-essentielles': {
     title: 'Contrat Travaux : Clauses Essentielles',
-    excerpt: 'Un contrat de travaux bien rédigé vous protège en cas de litige. Découvrez les clauses indispensables à vérifier avant de signer, et celles à ajouter.',
+    excerpt:
+      'Un contrat de travaux bien rédigé vous protège en cas de litige. Découvrez les clauses indispensables à vérifier avant de signer, et celles à ajouter.',
     content: [
       "Le contrat de travaux est le document qui encadre juridiquement la relation entre le maître d'ouvrage et l'artisan, qu'il s'agisse d'un [plombier](/services/plombier), d'un [maçon](/services/macon) ou de tout autre professionnel du bâtiment. Bien que le Code civil n'impose pas de formalisme particulier pour les marchés privés, un contrat écrit et détaillé est votre meilleure protection.",
       "## L'identification des parties et la description des travaux\n\nLe contrat doit mentionner les coordonnées complètes : nom, raison sociale, adresse, [SIRET](/blog/trouver-artisan-verifie-siren) de l'artisan. Vérifiez que le SIRET correspond bien à l'entreprise qui réalisera les travaux.\n\nLa description des travaux est la clause la plus importante. Nature des interventions, matériaux (marque, référence, qualité), quantités, dimensions. Méfiez-vous des descriptions vagues.",
       "## Le prix, les délais et les assurances\n\n### Prix et conditions de paiement\n\nPrix total TTC avec décomposition par poste, taux de [TVA](/blog/tva-reduite-travaux-renovation-guide) applicable, échéancier de paiement. L'article 1799-1 du Code civil interdit de demander plus de 30 % à la commande pour les marchés supérieurs à 12 000 € HT.\n\n### Délais d'exécution\n\nDate de début et de fin des travaux. Pénalités de retard (en général 1/1000e du montant HT par jour). Causes légitimes de report (intempéries, force majeure).\n\n### Assurances\n\nAttestations de RC professionnelle et de [garantie décennale](/blog/garantie-decennale-tout-savoir) en annexe du contrat, avec numéros de police, nom de l'assureur et dates de validité.",
       "## Les clauses de réception, résiliation et sous-traitance\n\n### Clause de réception\n\nModalités de [réception](/blog/reception-travaux-proces-verbal-reserves) : visite contradictoire, procès-verbal, traitement des réserves, retenue de garantie de 5 %.\n\n### Clause de résiliation\n\nL'article 1794 du Code civil autorise la résiliation à tout moment, moyennant indemnisation. Prévoyez les conditions pour chaque partie.\n\n### Clause de sous-traitance\n\nAutorisation préalable obligatoire (article 3 de la loi du 31 décembre 1975). L'artisan principal reste responsable vis-à-vis du maître d'ouvrage.\n\n### Le CCMI\n\nPour la construction de maison individuelle, le CCMI (loi du 19 décembre 1990) offre des protections renforcées : prix ferme et définitif, pénalités de retard automatiques, garantie de livraison.",
-      "\n\n:::warning Attention\nRefusez les clauses abusives : clause excluant la garantie décennale (illégale), clause imposant un tribunal éloigné, clause autorisant des modifications de prix unilatérales, clause imposant un paiement intégral avant la fin des travaux.\n:::",
-      "\n\n:::tip Conseil pro\nNe signez jamais dans la précipitation. Prenez le temps de lire et de vérifier toutes les clauses. Un bon contrat protège les deux parties et prévient les litiges. Consultez un juriste en droit de la construction pour les marchés importants (> 20 000 €).\n:::",
-      "\n\n:::info Bon à savoir\nPour la construction de maison individuelle, le CCMI (loi du 19 décembre 1990) offre des protections renforcées : prix ferme et définitif, pénalités de retard automatiques, garantie de livraison à prix et délais convenus.\n:::",
+      '\n\n:::warning Attention\nRefusez les clauses abusives : clause excluant la garantie décennale (illégale), clause imposant un tribunal éloigné, clause autorisant des modifications de prix unilatérales, clause imposant un paiement intégral avant la fin des travaux.\n:::',
+      '\n\n:::tip Conseil pro\nNe signez jamais dans la précipitation. Prenez le temps de lire et de vérifier toutes les clauses. Un bon contrat protège les deux parties et prévient les litiges. Consultez un juriste en droit de la construction pour les marchés importants (> 20 000 €).\n:::',
+      '\n\n:::info Bon à savoir\nPour la construction de maison individuelle, le CCMI (loi du 19 décembre 1990) offre des protections renforcées : prix ferme et définitif, pénalités de retard automatiques, garantie de livraison à prix et délais convenus.\n:::',
       "\n\n:::takeaway\n- Le contrat doit identifier les parties (avec SIRET vérifiable)\n- Description détaillée des travaux : nature, matériaux, quantités, prix\n- Échéancier de paiement avec acompte maximum de 30 %\n- Délais d'exécution avec pénalités de retard\n- Assurances en annexe (RC Pro + décennale)\n- Clause de réception avec retenue de garantie de 5 %\n- Clause de médiation préalable obligatoire\n:::",
     ],
     image: '/images/blog/contrat-travaux.jpg',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-02-10',
     updatedDate: '2026-02-11',
     readTime: '13 min',
     category: 'Réglementation',
     tags: ['Contrat', 'Travaux', 'Clauses', 'Protection'],
     faq: [
-      { question: 'Un contrat écrit est-il obligatoire ?', answer: 'Non, le Code civil n\'impose pas de formalisme pour les marchés privés. Cependant, un contrat écrit est votre meilleure protection en cas de litige. Sans écrit, c\'est parole contre parole devant le tribunal.' },
-      { question: 'L\'artisan peut-il modifier le prix en cours de chantier ?', answer: 'Non, sauf imprévu majeur non décelable au moment du devis. Toute modification doit faire l\'objet d\'un avenant écrit signé par les deux parties, avec un devis complémentaire accepté.' },
-      { question: 'Que doit contenir un avenant au contrat ?', answer: 'L\'avenant doit décrire précisément les modifications (travaux supplémentaires, changement de matériaux), le surcoût ou l\'économie associée, l\'impact sur les délais, et être signé par les deux parties avant exécution.' },
+      {
+        question: 'Un contrat écrit est-il obligatoire ?',
+        answer:
+          "Non, le Code civil n'impose pas de formalisme pour les marchés privés. Cependant, un contrat écrit est votre meilleure protection en cas de litige. Sans écrit, c'est parole contre parole devant le tribunal.",
+      },
+      {
+        question: "L'artisan peut-il modifier le prix en cours de chantier ?",
+        answer:
+          "Non, sauf imprévu majeur non décelable au moment du devis. Toute modification doit faire l'objet d'un avenant écrit signé par les deux parties, avec un devis complémentaire accepté.",
+      },
+      {
+        question: 'Que doit contenir un avenant au contrat ?',
+        answer:
+          "L'avenant doit décrire précisément les modifications (travaux supplémentaires, changement de matériaux), le surcoût ou l'économie associée, l'impact sur les délais, et être signé par les deux parties avant exécution.",
+      },
     ],
     keyTakeaways: [
-      "Le contrat doit identifier les parties (SIRET) et décrire précisément les travaux, matériaux et quantités.",
+      'Le contrat doit identifier les parties (SIRET) et décrire précisément les travaux, matériaux et quantités.',
       "L'acompte ne doit pas dépasser 30 % du montant total pour les marchés supérieurs à 12 000 € HT.",
       "Exigez les attestations d'assurance (RC Pro + décennale) en annexe du contrat.",
-      "Prévoyez une clause de retenue de 5 % jusqu'à la levée des réserves de réception."
+      "Prévoyez une clause de retenue de 5 % jusqu'à la levée des réserves de réception.",
     ],
   },
 }
