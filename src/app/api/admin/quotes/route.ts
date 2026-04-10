@@ -9,7 +9,10 @@ import { z } from 'zod'
 const quotesQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'sent', 'accepted', 'refused', 'completed']).optional().default('all'),
+  status: z
+    .enum(['all', 'pending', 'sent', 'accepted', 'refused', 'completed'])
+    .optional()
+    .default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
@@ -36,7 +39,10 @@ export async function GET(request: NextRequest) {
     const result = quotesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -66,12 +72,17 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const { data: demandes, count, error } = await query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const {
+      data: demandes,
+      count,
+      error,
+    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
 
     if (error) {
-      logger.warn('Devis requests query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('Devis requests query failed, returning empty list', {
+        code: error.code,
+        message: error.message,
+      })
       return NextResponse.json({
         success: true,
         demandes: [],
@@ -84,7 +95,16 @@ export async function GET(request: NextRequest) {
 
     // Fetch lead_assignments for these demandes to show which artisan(s) received each request
     const demandeIds = (demandes || []).map((d) => d.id)
-    let assignmentsByLead: Record<string, Array<{ id: string; status: string; assigned_at: string; provider_name: string; provider_id: string }>> = {}
+    const assignmentsByLead: Record<
+      string,
+      Array<{
+        id: string
+        status: string
+        assigned_at: string
+        provider_name: string
+        provider_id: string
+      }>
+    > = {}
 
     if (demandeIds.length > 0) {
       const { data: assignments } = await supabase
@@ -149,16 +169,10 @@ export async function DELETE(request: NextRequest) {
     const supabase = createAdminClient()
 
     // Delete related lead_assignments first (FK-free polymorphic link)
-    await supabase
-      .from('lead_assignments')
-      .delete()
-      .eq('lead_id', id)
+    await supabase.from('lead_assignments').delete().eq('lead_id', id)
 
     // Delete the devis_request
-    const { error } = await supabase
-      .from('devis_requests')
-      .delete()
-      .eq('id', id)
+    const { error } = await supabase.from('devis_requests').delete().eq('id', id)
 
     if (error) {
       logger.error('Devis request delete error', error)

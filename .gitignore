@@ -15,6 +15,12 @@ out/
 *.swp
 *.swo
 
+# Claude Code worktrees (local agent isolation, never committed)
+.claude/worktrees/
+
+# Local research/dryrun scripts (read-only, env-dependent, not for prod)
+scripts/dryrun-*.ts
+
 # OS
 .DS_Store
 Thumbs.db

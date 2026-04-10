@@ -33,7 +33,10 @@ export async function GET(request: NextRequest) {
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -41,9 +44,8 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit
 
-    let query = supabase
-      .from('conversations')
-      .select(`
+    const query = supabase.from('conversations').select(
+      `
         *,
         client:profiles!client_id (
           id,
@@ -54,11 +56,15 @@ export async function GET(request: NextRequest) {
           id,
           name
         )
-      `, { count: 'exact' })
+      `,
+      { count: 'exact' }
+    )
 
-    const { data: conversations, count, error } = await query
-      .order('last_message_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const {
+      data: conversations,
+      count,
+      error,
+    } = await query.order('last_message_at', { ascending: false }).range(offset, offset + limit - 1)
 
     if (error) {
       // If the conversations table doesn't exist or FK fails, return empty

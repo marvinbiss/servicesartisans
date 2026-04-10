@@ -219,10 +219,7 @@ class ChatService {
   /**
    * Mark all messages in a conversation as read
    */
-  async markMessagesAsRead(
-    conversationId: string,
-    userId: string
-  ): Promise<void> {
+  async markMessagesAsRead(conversationId: string, userId: string): Promise<void> {
     await this.supabase
       .from('messages')
       .update({ read_at: new Date().toISOString() })
@@ -234,16 +231,14 @@ class ChatService {
   /**
    * Get conversation messages with pagination
    */
-  async getMessages(
-    conversationId: string,
-    limit = 50,
-    before?: string
-  ): Promise<ChatMessage[]> {
+  async getMessages(conversationId: string, limit = 50, before?: string): Promise<ChatMessage[]> {
     let query = this.supabase
       .from('messages')
-      .select(`
+      .select(
+        `
         id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, reply_to_message_id, rich_content
-      `)
+      `
+      )
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: false })
       .limit(limit)
@@ -265,14 +260,12 @@ class ChatService {
   /**
    * Search messages in a conversation
    */
-  async searchMessages(
-    conversationId: string,
-    query: string,
-    limit = 20
-  ): Promise<ChatMessage[]> {
+  async searchMessages(conversationId: string, query: string, limit = 20): Promise<ChatMessage[]> {
     const { data, error } = await this.supabase
       .from('messages')
-      .select('id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, reply_to_message_id, rich_content')
+      .select(
+        'id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, reply_to_message_id, rich_content'
+      )
       .eq('conversation_id', conversationId)
       .ilike('content', `%${query}%`)
       .order('created_at', { ascending: false })
@@ -298,7 +291,9 @@ class ChatService {
     // Try to find existing conversation
     const { data: existing } = await this.supabase
       .from('conversations')
-      .select('id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at')
+      .select(
+        'id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at'
+      )
       .eq('client_id', clientId)
       .eq('provider_id', providerId)
       .eq('status', 'active')
@@ -331,19 +326,18 @@ class ChatService {
   /**
    * Get all conversations for a user
    */
-  async getConversations(
-    userId: string,
-    userType: 'client' | 'artisan'
-  ): Promise<Conversation[]> {
+  async getConversations(userId: string, userType: 'client' | 'artisan'): Promise<Conversation[]> {
     const column = userType === 'client' ? 'client_id' : 'provider_id'
 
     const { data, error } = await this.supabase
       .from('conversations')
-      .select(`
+      .select(
+        `
         id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at,
         client:profiles!client_id(id, full_name),
         provider:providers!provider_id(id, name)
-      `)
+      `
+      )
       .eq(column, userId)
       .eq('status', 'active')
       .order('last_message_at', { ascending: false })
@@ -372,9 +366,13 @@ class ChatService {
 
     // Validate MIME type
     const ALLOWED_TYPES = [
-      'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
       'application/pdf',
-      'text/plain', 'text/csv',
+      'text/plain',
+      'text/csv',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ]
@@ -384,7 +382,7 @@ class ChatService {
     }
 
     // Sanitize filename: keep only alphanumeric, dots, hyphens
-    const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
     const fileExt = safeName.split('.').pop()
     const fileName = `${conversationId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
@@ -397,9 +395,9 @@ class ChatService {
       return null
     }
 
-    const { data: { publicUrl } } = this.supabase.storage
-      .from('messages')
-      .getPublicUrl(data.path)
+    const {
+      data: { publicUrl },
+    } = this.supabase.storage.from('messages').getPublicUrl(data.path)
 
     return { url: publicUrl }
   }

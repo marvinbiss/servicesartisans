@@ -1,7 +1,22 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { AlertTriangle, ArrowRight, Shield, Clock, Euro, MapPin, ChevronDown, Lightbulb, ListChecks, Eye, Users, Thermometer, Building2, BookOpen } from 'lucide-react'
+import {
+  AlertTriangle,
+  ArrowRight,
+  Shield,
+  Clock,
+  Euro,
+  MapPin,
+  ChevronDown,
+  Lightbulb,
+  ListChecks,
+  Eye,
+  Users,
+  Thermometer,
+  Building2,
+  BookOpen,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
@@ -17,9 +32,15 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
-const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), {
+  ssr: false,
+})
 
 // ---------------------------------------------------------------------------
 // Static params: top 10 problems x top 30 cities = 300 pre-rendered pages
@@ -35,9 +56,7 @@ const top10Cities = [...villes]
 
 export function generateStaticParams() {
   const top10Problems = getProblemSlugs().slice(0, 5)
-  return top10Problems.flatMap((p) =>
-    top10Cities.map((v) => ({ probleme: p, ville: v.slug }))
-  )
+  return top10Problems.flatMap((p) => top10Cities.map((v) => ({ probleme: p, ville: v.slug })))
 }
 
 export const dynamicParams = true
@@ -101,24 +120,48 @@ type ProblemCategory =
 
 function getProblemCategory(primaryService: string, slug: string): ProblemCategory {
   const plomberieProblems = [
-    'fuite-eau', 'canalisation-bouchee', 'robinet-qui-fuit', 'robinet-qui-goutte',
-    'wc-bouche', 'wc-qui-coule', 'chasse-eau-bloquee', 'degat-des-eaux',
-    'inondation', 'gel-tuyaux', 'ballon-eau-chaude-panne', 'panne-ballon-eau-chaude',
+    'fuite-eau',
+    'canalisation-bouchee',
+    'robinet-qui-fuit',
+    'robinet-qui-goutte',
+    'wc-bouche',
+    'wc-qui-coule',
+    'chasse-eau-bloquee',
+    'degat-des-eaux',
+    'inondation',
+    'gel-tuyaux',
+    'ballon-eau-chaude-panne',
+    'panne-ballon-eau-chaude',
     'odeur-egout',
   ]
   const electriciteProblems = [
-    'panne-electrique', 'court-circuit', 'disjoncteur-qui-saute', 'prise-qui-chauffe',
-    'interphone-panne', 'alarme-declenchee',
+    'panne-electrique',
+    'court-circuit',
+    'disjoncteur-qui-saute',
+    'prise-qui-chauffe',
+    'interphone-panne',
+    'alarme-declenchee',
   ]
   const chauffageProblems = [
-    'panne-chaudiere', 'chaudiere-qui-fuit', 'radiateur-froid', 'panne-chauffage',
+    'panne-chaudiere',
+    'chaudiere-qui-fuit',
+    'radiateur-froid',
+    'panne-chauffage',
   ]
   const toitureProblems = [
-    'infiltration-toiture', 'tuile-cassee', 'gouttiere-bouchee', 'toit-qui-fuit', 'fuite-toiture',
+    'infiltration-toiture',
+    'tuile-cassee',
+    'gouttiere-bouchee',
+    'toit-qui-fuit',
+    'fuite-toiture',
   ]
   const humiditeProblems = [
-    'humidite', 'moisissure', 'mur-humide', 'fenetre-qui-condense',
-    'peinture-qui-cloque', 'probleme-isolation',
+    'humidite',
+    'moisissure',
+    'mur-humide',
+    'fenetre-qui-condense',
+    'peinture-qui-cloque',
+    'probleme-isolation',
   ]
   const nuisiblesProblems = ['nuisibles', 'infestation-fourmis']
 
@@ -140,7 +183,7 @@ interface CorrelationInsight {
 function getProblemCityCorrelation(
   category: ProblemCategory,
   commune: CommuneData | null,
-  villeName: string,
+  villeName: string
 ): CorrelationInsight[] {
   if (!commune) return []
   const insights: CorrelationInsight[] = []
@@ -181,7 +224,11 @@ function getProblemCityCorrelation(
           severity: 'high',
         })
       }
-      if (commune.prix_m2_moyen != null && commune.prix_m2_moyen < 2500 && commune.nb_logements != null) {
+      if (
+        commune.prix_m2_moyen != null &&
+        commune.prix_m2_moyen < 2500 &&
+        commune.nb_logements != null
+      ) {
         insights.push({
           text: `Le prix moyen au m² de ${formatNumber(commune.prix_m2_moyen)} € à ${villeName} suggère un parc immobilier ancien, souvent associé à des installations électriques qui nécessitent une mise aux normes.`,
           severity: 'medium',
@@ -264,10 +311,7 @@ function getProblemCityCorrelation(
           severity: 'high',
         })
       }
-      if (
-        commune.temperature_moyenne_hiver != null &&
-        commune.temperature_moyenne_ete != null
-      ) {
+      if (commune.temperature_moyenne_hiver != null && commune.temperature_moyenne_ete != null) {
         const delta = commune.temperature_moyenne_ete - commune.temperature_moyenne_hiver
         if (delta > 18) {
           insights.push({
@@ -369,17 +413,23 @@ function getProblemCityCorrelation(
 
 function getInsightIcon(severity: 'high' | 'medium' | 'low'): string {
   switch (severity) {
-    case 'high': return '!!'
-    case 'medium': return '!'
-    case 'low': return 'i'
+    case 'high':
+      return '!!'
+    case 'medium':
+      return '!'
+    case 'low':
+      return 'i'
   }
 }
 
 function getInsightColors(severity: 'high' | 'medium' | 'low') {
   switch (severity) {
-    case 'high': return { bg: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' }
-    case 'medium': return { bg: 'bg-amber-100', text: 'text-amber-700', dot: 'bg-amber-500' }
-    case 'low': return { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-500' }
+    case 'high':
+      return { bg: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' }
+    case 'medium':
+      return { bg: 'bg-amber-100', text: 'text-amber-700', dot: 'bg-amber-500' }
+    case 'low':
+      return { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-500' }
   }
 }
 
@@ -423,7 +473,14 @@ export async function generateMetadata({
       description,
       url: `${SITE_URL}/problemes/${probleme}/${ville}`,
       type: 'website',
-      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `${problem.name} à ${villeData.name}` }],
+      images: [
+        {
+          url: `${SITE_URL}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${problem.name} à ${villeData.name}`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -476,12 +533,12 @@ export default async function ProblemeVillePage({
 
   // FAQ: 3 problem-specific + 2 from trade
   const localFaq = problem.faq.slice(0, 3).map((f) => ({
-    question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
+    question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
     answer: f.a,
   }))
   const tradeFaq = trade
     ? trade.faq.slice(0, 2).map((f) => ({
-        question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
+        question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
         answer: f.a,
       }))
     : []
@@ -546,40 +603,46 @@ export default async function ProblemeVillePage({
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[
-            { label: 'Problèmes', href: '/problemes' },
-            { label: problem.name, href: `/problemes/${probleme}` },
-            { label: villeData.name },
-          ]} />
+          <Breadcrumb
+            items={[
+              { label: 'Problèmes', href: '/problemes' },
+              { label: problem.name, href: `/problemes/${probleme}` },
+              { label: villeData.name },
+            ]}
+          />
         </div>
       </div>
 
       {/* Hero */}
-      <section className={`relative bg-gradient-to-br ${gradient} text-white py-16 md:py-20 overflow-hidden`}>
+      <section
+        className={`relative bg-gradient-to-br ${gradient} text-white py-16 md:py-20 overflow-hidden`}
+      >
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-sm font-semibold">
-              <span className={`w-2.5 h-2.5 rounded-full ${urgencyDotColors[problem.urgencyLevel]} animate-pulse`} />
+              <span
+                className={`w-2.5 h-2.5 rounded-full ${urgencyDotColors[problem.urgencyLevel]} animate-pulse`}
+              />
               {urgencyLabels[problem.urgencyLevel]}
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            {h1}
-          </h1>
-          <p className="text-xl opacity-90 max-w-2xl mb-8">
-            {problem.description}
-          </p>
+          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">{h1}</h1>
+          <p className="text-xl opacity-90 max-w-2xl mb-8">{problem.description}</p>
           <div className="flex flex-wrap gap-3 mb-8">
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Euro className="w-4 h-4" />
-              <span className="text-sm">{minPrice} – {maxPrice} €</span>
+              <span className="text-sm">
+                {minPrice} – {maxPrice} €
+              </span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <MapPin className="w-4 h-4" />
-              <span className="text-sm">{villeData.name} ({villeData.departementCode})</span>
+              <span className="text-sm">
+                {villeData.name} ({villeData.departementCode})
+              </span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4" />
@@ -623,7 +686,8 @@ export default async function ProblemeVillePage({
               Comment reconnaître ce problème ?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              À {villeData.name}, voici les signes qui indiquent un problème de {problem.name.toLowerCase()}.
+              À {villeData.name}, voici les signes qui indiquent un problème de{' '}
+              {problem.name.toLowerCase()}.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
@@ -648,13 +712,14 @@ export default async function ProblemeVillePage({
               <ListChecks className="w-4 h-4" />
               Actions immédiates
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Que faire en urgence ?
-            </h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Que faire en urgence ?</h2>
           </div>
           <div className="space-y-4">
             {problem.immediateActions.map((action, i) => (
-              <div key={i} className="flex items-start gap-4 bg-white rounded-xl border border-gray-200 p-5">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-white rounded-xl border border-gray-200 p-5"
+              >
                 <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <span className="text-red-600 font-bold">{i + 1}</span>
                 </div>
@@ -672,7 +737,9 @@ export default async function ProblemeVillePage({
             Coût à {villeData.name}
           </h2>
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-8">
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Fourchette de prix à {villeData.name}</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              Fourchette de prix à {villeData.name}
+            </h3>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
                 {minPrice} — {maxPrice}
@@ -685,8 +752,8 @@ export default async function ProblemeVillePage({
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
@@ -706,7 +773,11 @@ export default async function ProblemeVillePage({
             <LocalFactorCard
               icon={<Users className="w-5 h-5 text-blue-600" />}
               title="Artisans locaux"
-              value={commune?.nb_entreprises_artisanales ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises` : null}
+              value={
+                commune?.nb_entreprises_artisanales
+                  ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises`
+                  : null
+              }
               description={
                 commune?.nb_entreprises_artisanales
                   ? `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ce qui garantit un bon choix de professionnels pour intervenir rapidement.`
@@ -726,11 +797,11 @@ export default async function ProblemeVillePage({
             <LocalFactorCard
               icon={<Building2 className="w-5 h-5 text-purple-600" />}
               title="Type de logement"
-              value={commune?.part_maisons_pct ? `${commune.part_maisons_pct} % de maisons` : null}
+              value={commune?.part_maisons_pct ? `${commune.part_maisons_pct} % de maisons` : null}
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les problèmes de ${problem.name.toLowerCase()} y sont courants.`
+                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les problèmes de ${problem.name.toLowerCase()} y sont courants.`
                     : `À ${villeData.name}, les appartements sont majoritaires. Les interventions en copropriété peuvent impliquer le syndic.`
                   : `La répartition entre maisons et appartements influence les spécificités des interventions à ${villeData.name}.`
               }
@@ -738,7 +809,11 @@ export default async function ProblemeVillePage({
             <LocalFactorCard
               icon={<MapPin className="w-5 h-5 text-amber-600" />}
               title="Population"
-              value={commune?.population ? formatNumber(commune.population) + ' habitants' : villeData.population + ' habitants'}
+              value={
+                commune?.population
+                  ? formatNumber(commune.population) + ' habitants'
+                  : villeData.population + ' habitants'
+              }
               description={`${villeData.name} est une commune de ${villeData.departement} (${villeData.region}). La densité de population influence les délais d'intervention des artisans.`}
             />
           </div>
@@ -753,13 +828,14 @@ export default async function ProblemeVillePage({
               <Shield className="w-4 h-4" />
               Prévention
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Prévention à {villeData.name}
-            </h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Prévention à {villeData.name}</h2>
           </div>
           <div className="space-y-4">
             {problem.preventiveTips.map((tip, i) => (
-              <div key={i} className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5"
+              >
                 <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Lightbulb className="w-4 h-4 text-green-600" />
                 </div>
@@ -774,7 +850,8 @@ export default async function ProblemeVillePage({
       {(() => {
         const category = getProblemCategory(problem.primaryService, problem.slug)
         const insights = getProblemCityCorrelation(category, commune, villeData.name)
-        const hasLocalResources = commune?.nb_artisans_btp != null || commune?.nb_artisans_rge != null
+        const hasLocalResources =
+          commune?.nb_artisans_btp != null || commune?.nb_artisans_rge != null
 
         if (insights.length === 0 && !hasLocalResources) return null
 
@@ -790,7 +867,9 @@ export default async function ProblemeVillePage({
                   Pourquoi ce problème est fréquent à {villeData.name}
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto text-sm">
-                  Les caractéristiques climatiques, démographiques et immobilières de {villeData.name} influencent directement la fréquence des problèmes de {problem.name.toLowerCase()}.
+                  Les caractéristiques climatiques, démographiques et immobilières de{' '}
+                  {villeData.name} influencent directement la fréquence des problèmes de{' '}
+                  {problem.name.toLowerCase()}.
                 </p>
               </div>
 
@@ -803,7 +882,9 @@ export default async function ProblemeVillePage({
                         key={i}
                         className="bg-white rounded-xl border-l-4 border-blue-500 shadow-sm p-5 flex items-start gap-4"
                       >
-                        <div className={`w-8 h-8 ${colors.bg} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                        <div
+                          className={`w-8 h-8 ${colors.bg} rounded-lg flex items-center justify-center flex-shrink-0`}
+                        >
                           <span className={`text-xs font-bold ${colors.text}`}>
                             {getInsightIcon(insight.severity)}
                           </span>
@@ -829,8 +910,12 @@ export default async function ProblemeVillePage({
                           <Building2 className="w-5 h-5 text-blue-600" />
                         </div>
                         <div>
-                          <p className="text-lg font-bold text-gray-900">{formatNumber(commune.nb_artisans_btp)}</p>
-                          <p className="text-xs text-gray-500">artisans du bâtiment à {villeData.name}</p>
+                          <p className="text-lg font-bold text-gray-900">
+                            {formatNumber(commune.nb_artisans_btp)}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            artisans du bâtiment à {villeData.name}
+                          </p>
                         </div>
                       </div>
                     )}
@@ -840,7 +925,9 @@ export default async function ProblemeVillePage({
                           <Shield className="w-5 h-5 text-green-600" />
                         </div>
                         <div>
-                          <p className="text-lg font-bold text-gray-900">{formatNumber(commune.nb_artisans_rge)}</p>
+                          <p className="text-lg font-bold text-gray-900">
+                            {formatNumber(commune.nb_artisans_rge)}
+                          </p>
                           <p className="text-xs text-gray-500">artisans certifiés RGE</p>
                         </div>
                       </div>
@@ -873,9 +960,7 @@ export default async function ProblemeVillePage({
                   <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
                   <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
-                  {item.answer}
-                </div>
+                <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed">{item.answer}</div>
               </details>
             ))}
           </div>
@@ -900,7 +985,10 @@ export default async function ProblemeVillePage({
           />
           <p className="text-white/60 text-sm mt-6">
             Ou{' '}
-            <Link href={`/urgence/${problem.primaryService}/${ville}`} className="underline hover:text-white transition-colors">
+            <Link
+              href={`/urgence/${problem.primaryService}/${ville}`}
+              className="underline hover:text-white transition-colors"
+            >
               {tradeName.toLowerCase()} urgence {'à'} {villeData.name}
             </Link>
           </p>
@@ -917,10 +1005,10 @@ export default async function ProblemeVillePage({
           ...problem.relatedServices,
         ]
         const relatedArticles = allArticlesMeta
-          .filter(a =>
-            a.tags.some(tag =>
-              serviceKeywords.some(kw =>
-                tag.toLowerCase().includes(kw) || kw.includes(tag.toLowerCase())
+          .filter((a) =>
+            a.tags.some((tag) =>
+              serviceKeywords.some(
+                (kw) => tag.toLowerCase().includes(kw) || kw.includes(tag.toLowerCase())
               )
             )
           )
@@ -941,7 +1029,7 @@ export default async function ProblemeVillePage({
                 </h2>
               </div>
               <div className="space-y-4">
-                {relatedArticles.map(article => (
+                {relatedArticles.map((article) => (
                   <Link
                     key={article.slug}
                     href={`/blog/${article.slug}`}
@@ -952,7 +1040,9 @@ export default async function ProblemeVillePage({
                         {article.title}
                       </h3>
                       <p className="text-xs text-gray-500 line-clamp-2">{article.excerpt}</p>
-                      <span className="inline-block mt-2 text-xs text-blue-600 font-medium">{article.readTime}</span>
+                      <span className="inline-block mt-2 text-xs text-blue-600 font-medium">
+                        {article.readTime}
+                      </span>
                     </div>
                     <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 flex-shrink-0 mt-1 transition-colors" />
                   </Link>
@@ -1014,7 +1104,8 @@ export default async function ProblemeVillePage({
                     {rp.name} à {villeData.name}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {Math.round(rp.estimatedCost.min * multiplier)} – {Math.round(rp.estimatedCost.max * multiplier)} €
+                    {Math.round(rp.estimatedCost.min * multiplier)} –{' '}
+                    {Math.round(rp.estimatedCost.max * multiplier)} €
                   </div>
                 </Link>
               ))}
@@ -1031,22 +1122,40 @@ export default async function ProblemeVillePage({
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Ce problème</h3>
               <div className="space-y-2">
-                <Link href={`/problemes/${probleme}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href={`/problemes/${probleme}`}
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
                   {problem.name} en France
                 </Link>
-                <Link href={`/devis/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href={`/devis/${problem.primaryService}/${ville}`}
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
                   Devis {tradeName.toLowerCase()} à {villeData.name}
                 </Link>
-                <Link href={`/services/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href={`/services/${problem.primaryService}/${ville}`}
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
                   {tradeName} à {villeData.name}
                 </Link>
-                <Link href={`/urgence/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href={`/urgence/${problem.primaryService}/${ville}`}
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
                   {tradeName} urgence à {villeData.name}
                 </Link>
-                <Link href={`/tarifs/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href={`/tarifs/${problem.primaryService}/${ville}`}
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
                   Tarifs {tradeName.toLowerCase()} à {villeData.name}
                 </Link>
-                <Link href={`/avis/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href={`/avis/${problem.primaryService}/${ville}`}
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
                   Avis {tradeName.toLowerCase()} à {villeData.name}
                 </Link>
               </div>
@@ -1054,11 +1163,18 @@ export default async function ProblemeVillePage({
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">À {villeData.name}</h3>
               <div className="space-y-2">
-                <Link href={`/villes/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href={`/villes/${ville}`}
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
                   Artisans à {villeData.name}
                 </Link>
                 {relatedProblems.slice(0, 3).map((rp) => (
-                  <Link key={rp.slug} href={`/problemes/${rp.slug}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                  <Link
+                    key={rp.slug}
+                    href={`/problemes/${rp.slug}/${ville}`}
+                    className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  >
                     {rp.name} à {villeData.name}
                   </Link>
                 ))}
@@ -1067,10 +1183,27 @@ export default async function ProblemeVillePage({
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/problemes" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Tous les problèmes</Link>
-                <Link href="/urgence" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Urgence artisan 24h/24</Link>
-                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Guide des tarifs</Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1">FAQ</Link>
+                <Link
+                  href="/problemes"
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
+                  Tous les problèmes
+                </Link>
+                <Link
+                  href="/urgence"
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
+                  Urgence artisan 24h/24
+                </Link>
+                <Link
+                  href="/tarifs"
+                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                >
+                  Guide des tarifs
+                </Link>
+                <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                  FAQ
+                </Link>
               </div>
             </div>
           </div>
@@ -1087,7 +1220,12 @@ export default async function ProblemeVillePage({
         region={villeData.region}
       />
 
-      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} ville={ville} villeName={villeData.name} />
+      <CrossIntentLinks
+        service={problem.primaryService}
+        serviceName={tradeName}
+        ville={ville}
+        villeName={villeData.name}
+      />
 
       <DeepPageLinks currentService={problem.primaryService} currentVille={ville} skipCrossIntent />
 
@@ -1097,13 +1235,22 @@ export default async function ProblemeVillePage({
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({villeData.region}). Ils varient selon la complexité du problème et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant — nous mettons en relation mais ne réalisons pas les interventions.
+              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en
+              fonction des données régionales ({villeData.region}). Ils varient selon la complexité
+              du problème et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un
+              annuaire indépendant — nous mettons en relation mais ne réalisons pas les
+              interventions.
             </p>
           </div>
         </div>
       </section>
 
-      <StickyMobileCTA serviceSlug={problem.primaryService} cityName={villeData.name} citySlug={ville} ctaText="Devis gratuit" />
+      <StickyMobileCTA
+        serviceSlug={problem.primaryService}
+        cityName={villeData.name}
+        citySlug={ville}
+        ctaText="Devis gratuit"
+      />
       <ExitIntentPopup />
     </div>
   )

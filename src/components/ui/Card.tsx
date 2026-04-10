@@ -10,22 +10,14 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
-  (
-    {
-      variant = 'default',
-      padding = 'md',
-      hover = false,
-      className,
-      children,
-      ...props
-    },
-    ref
-  ) => {
+  ({ variant = 'default', padding = 'md', hover = false, className, children, ...props }, ref) => {
     const variants = {
       default: 'bg-white border border-sand-300 rounded-2xl shadow-soft',
       outlined: 'bg-transparent border-2 border-sand-400 rounded-2xl',
-      elevated: 'bg-white rounded-2xl shadow-[0_4px_20px_-2px_rgba(28,25,23,0.05),0_12px_40px_-4px_rgba(28,25,23,0.06)]',
-      premium: 'bg-gradient-to-br from-white via-white to-primary-50/50 border border-primary-100/50 rounded-2xl shadow-[0_4px_20px_-2px_rgba(232,107,75,0.06),0_12px_40px_-4px_rgba(232,107,75,0.04)]',
+      elevated:
+        'bg-white rounded-2xl shadow-[0_4px_20px_-2px_rgba(28,25,23,0.05),0_12px_40px_-4px_rgba(28,25,23,0.06)]',
+      premium:
+        'bg-gradient-to-br from-white via-white to-primary-50/50 border border-primary-100/50 rounded-2xl shadow-[0_4px_20px_-2px_rgba(232,107,75,0.06),0_12px_40px_-4px_rgba(232,107,75,0.04)]',
     }
 
     const paddings = {
@@ -73,7 +65,7 @@ export function CardHeader({ title, subtitle, action, className, ...props }: Car
   )
 }
 
-export interface CardContentProps extends HTMLAttributes<HTMLDivElement> {}
+export type CardContentProps = HTMLAttributes<HTMLDivElement>
 
 export function CardContent({ className, children, ...props }: CardContentProps) {
   return (
@@ -83,7 +75,7 @@ export function CardContent({ className, children, ...props }: CardContentProps)
   )
 }
 
-export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {}
+export type CardFooterProps = HTMLAttributes<HTMLDivElement>
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (

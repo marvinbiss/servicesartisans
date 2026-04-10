@@ -50,6 +50,25 @@ export default tseslint.config(
     },
   },
   {
+    // Service workers ship with both browser and serviceworker globals.
+    // Without this, eslint reports `self`, `console`, `caches`, `fetch`, etc. as undefined.
+    files: ['**/sw.js', '**/service-worker.js'],
+    languageOptions: {
+      globals: {
+        self: 'readonly',
+        caches: 'readonly',
+        clients: 'readonly',
+        console: 'readonly',
+        fetch: 'readonly',
+        Response: 'readonly',
+        Request: 'readonly',
+        URL: 'readonly',
+        addEventListener: 'readonly',
+        skipWaiting: 'readonly',
+      },
+    },
+  },
+  {
     ignores: [
       'node_modules/**',
       '.next/**',
@@ -58,6 +77,16 @@ export default tseslint.config(
       '*.config.js',
       '*.config.ts',
       'scripts/**',
+      // Claude Code worktrees: full repo copies created by background agents.
+      // Without this ignore, eslint re-lints every worktree and reports
+      // ~4000 phantom errors against duplicated source files.
+      '.claude/worktrees/**',
+      // Bundled debug assets (non-source, vendored)
+      'src/assets/debug/**',
+      // Capacitor / Android build intermediates (Gradle generated)
+      'android/**',
+      // Root-level analysis scripts (one-shot, not part of the app)
+      '_*.mjs',
     ],
   }
 )

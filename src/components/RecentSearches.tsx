@@ -26,7 +26,9 @@ export function recordSearch(search: Omit<RecentSearch, 'timestamp'>) {
     filtered.unshift({ ...search, timestamp: Date.now() })
     // Keep max items
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered.slice(0, MAX_ITEMS)))
-  } catch {}
+  } catch {
+    // localStorage indisponible (quota, mode privé, SSR) — recherche récente non sauvegardée
+  }
 }
 
 export default function RecentSearches() {
@@ -41,7 +43,9 @@ export default function RecentSearches() {
         const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
         setSearches(items.filter((s) => s.timestamp > weekAgo).slice(0, MAX_ITEMS))
       }
-    } catch {}
+    } catch {
+      // localStorage corrompu ou indisponible — on ignore et on rend une liste vide
+    }
   }, [])
 
   const clearAll = () => {

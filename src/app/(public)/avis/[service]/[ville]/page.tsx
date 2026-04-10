@@ -37,7 +37,6 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import dynamic from 'next/dynamic'
 
-
 function getClimatLabel(zone: string | null): string {
   const labels: Record<string, string> = {
     oceanique: 'Climat océanique',
@@ -49,12 +48,13 @@ function getClimatLabel(zone: string | null): string {
   return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
 }
 
-const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
-  { ssr: false }
-)
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
+const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), {
+  ssr: false,
+})
 
 export const revalidate = 86400 // Revalidate every 24h
 
@@ -94,7 +94,9 @@ async function getTopProviders(cityName: string, _serviceSlug: string): Promise<
 
     const { data, error } = await supabase
       .from('providers')
-      .select('id, user_id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
+      .select(
+        'id, user_id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty'
+      )
       .eq('is_active', true)
       .gt('review_count', 0)
       // Use .in() with INSEE codes instead of ILIKE to avoid full table scan on 750K rows
@@ -109,7 +111,6 @@ async function getTopProviders(cityName: string, _serviceSlug: string): Promise<
     return []
   }
 }
-
 
 async function getRecentReviews(artisanIds: string[]): Promise<AvisReview[]> {
   if (IS_BUILD || artisanIds.length === 0) return []
@@ -216,7 +217,13 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1 as const,
+      'max-image-preview': 'large' as const,
+      'max-video-preview': -1 as const,
+    },
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -267,33 +274,41 @@ export default async function AvisServiceVillePage({
   // ----- Fetch real data from database -----
   const allProviders = await getTopProviders(villeData.name, service)
   // Filter by specialty matching this service (case-insensitive)
-  const serviceProviders = allProviders.filter(p =>
-    p.specialty?.toLowerCase().includes(tradeLower) ||
-    p.specialty?.toLowerCase().includes(service.replace(/-/g, ' '))
+  const serviceProviders = allProviders.filter(
+    (p) =>
+      p.specialty?.toLowerCase().includes(tradeLower) ||
+      p.specialty?.toLowerCase().includes(service.replace(/-/g, ' '))
   )
   // Use service-specific providers if available, otherwise all providers in city
-  const topProviders = serviceProviders.length >= 2 ? serviceProviders.slice(0, 6) : allProviders.slice(0, 6)
+  const topProviders =
+    serviceProviders.length >= 2 ? serviceProviders.slice(0, 6) : allProviders.slice(0, 6)
   // reviews.artisan_id references profiles.id = providers.user_id
-  const artisanIds = topProviders.map(p => p.user_id).filter((uid): uid is string => !!uid)
+  const artisanIds = topProviders.map((p) => p.user_id).filter((uid): uid is string => !!uid)
   const reviews = await getRecentReviews(artisanIds)
 
   // Calculate aggregate stats
   const totalReviews = topProviders.reduce((sum, p) => sum + (p.review_count || 0), 0)
-  const ratedProviders = topProviders.filter(p => p.rating_average && p.rating_average > 0)
-  const avgRating = ratedProviders.length > 0
-    ? ratedProviders.reduce((sum, p) => sum + (p.rating_average || 0), 0) / ratedProviders.length
-    : 0
+  const ratedProviders = topProviders.filter((p) => p.rating_average && p.rating_average > 0)
+  const avgRating =
+    ratedProviders.length > 0
+      ? ratedProviders.reduce((sum, p) => sum + (p.rating_average || 0), 0) / ratedProviders.length
+      : 0
   const roundedRating = Math.round(avgRating * 10) / 10
 
   // Rating distribution from reviews
-  const ratingDistribution = [5, 4, 3, 2, 1].map(stars => ({
+  const ratingDistribution = [5, 4, 3, 2, 1].map((stars) => ({
     stars,
-    count: reviews.filter(r => r.rating === stars).length,
-    pct: reviews.length > 0 ? Math.round((reviews.filter(r => r.rating === stars).length / reviews.length) * 100) : 0,
+    count: reviews.filter((r) => r.rating === stars).length,
+    pct:
+      reviews.length > 0
+        ? Math.round((reviews.filter((r) => r.rating === stars).length / reviews.length) * 100)
+        : 0,
   }))
 
   // Provider map keyed by user_id (= artisan_id in reviews) for review display
-  const providerMap = new Map(topProviders.filter(p => p.user_id).map(p => [p.user_id as string, p]))
+  const providerMap = new Map(
+    topProviders.filter((p) => p.user_id).map((p) => [p.user_id as string, p])
+  )
 
   // ----- JSON-LD schemas -----
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -306,18 +321,19 @@ export default async function AvisServiceVillePage({
   // Review-specific FAQ (localized)
   const reviewFaqItems = [
     {
-      question: `Comment trouver un bon ${tradeLower} à ${villeData.name} ?`,
+      question: `Comment trouver un bon ${tradeLower} à ${villeData.name} ?`,
       answer: `Pour trouver un bon ${tradeLower} à ${villeData.name}, consultez les avis clients, vérifiez les certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance décennale, RC pro'}) et comparez plusieurs devis. Les tarifs locaux vont de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     },
     {
-      question: `Quel est le prix moyen d'un ${tradeLower} à ${villeData.name} ?`,
+      question: `Quel est le prix moyen d'un ${tradeLower} à ${villeData.name} ?`,
       answer: `À ${villeData.name} (${villeData.region}), les tarifs d'un ${tradeLower} varient de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Ces prix sont ajustés selon le coût de la vie régional. Demandez plusieurs devis pour comparer.`,
     },
     {
-      question: `Quelles certifications vérifier pour un ${tradeLower} à ${villeData.name} ?`,
-      answer: trade.certifications.length > 0
-        ? `Pour un ${tradeLower} à ${villeData.name}, vérifiez les certifications suivantes : ${trade.certifications.join(', ')}. L'assurance décennale et la RC pro sont obligatoires.`
-        : `Vérifiez au minimum l'assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux à ${villeData.name} fournit ces documents sans difficulté.`,
+      question: `Quelles certifications vérifier pour un ${tradeLower} à ${villeData.name} ?`,
+      answer:
+        trade.certifications.length > 0
+          ? `Pour un ${tradeLower} à ${villeData.name}, vérifiez les certifications suivantes : ${trade.certifications.join(', ')}. L'assurance décennale et la RC pro sont obligatoires.`
+          : `Vérifiez au minimum l'assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux à ${villeData.name} fournit ces documents sans difficulté.`,
     },
   ]
 
@@ -328,7 +344,7 @@ export default async function AvisServiceVillePage({
     return ha - hb
   })
   const tradeFaqItems = tradeFaqSorted.slice(0, 2).map((f) => ({
-    question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
+    question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
     answer: f.a,
   }))
 
@@ -341,10 +357,15 @@ export default async function AvisServiceVillePage({
   const hasRealReviews = totalReviews > 0
 
   const schemaReviews = hasRealReviews
-    ? reviews.slice(0, 5).map(r => ({
+    ? reviews.slice(0, 5).map((r) => ({
         '@type': 'Review' as const,
-        author: { '@type': 'Person' as const, name: r.client_name || "Client vérifié" },
-        reviewRating: { '@type': 'Rating' as const, ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+        author: { '@type': 'Person' as const, name: r.client_name || 'Client vérifié' },
+        reviewRating: {
+          '@type': 'Rating' as const,
+          ratingValue: r.rating,
+          bestRating: 5,
+          worstRating: 1,
+        },
         reviewBody: r.comment,
         ...(r.created_at ? { datePublished: r.created_at.split('T')[0] } : {}),
       }))
@@ -365,16 +386,18 @@ export default async function AvisServiceVillePage({
       addressCountry: 'FR',
     },
     priceRange: `${minPrice}–${maxPrice} ${trade.priceRange.unit}`,
-    ...(hasRealReviews ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: roundedRating,
-        reviewCount: totalReviews,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      review: schemaReviews,
-    } : {}),
+    ...(hasRealReviews
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: roundedRating,
+            reviewCount: totalReviews,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          review: schemaReviews,
+        }
+      : {}),
   }
 
   // ----- Related links -----
@@ -479,16 +502,18 @@ export default async function AvisServiceVillePage({
               })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Consultez les avis et recommandations pour choisir un {tradeLower} de confiance
-              à {villeData.name} ({villeData.departement}).
-              Prix local : {minPrice} à {maxPrice} {trade.priceRange.unit}.
+              Consultez les avis et recommandations pour choisir un {tradeLower} de confiance à{' '}
+              {villeData.name} ({villeData.departement}). Prix local : {minPrice} à {maxPrice}{' '}
+              {trade.priceRange.unit}.
             </p>
             <LastUpdated label="Avis vérifiés le" className="justify-center text-slate-500 mb-4" />
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               {totalReviews > 0 && (
                 <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
                   <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  <span className="text-sm font-medium">{roundedRating.toFixed(1)}/5 — {totalReviews} avis</span>
+                  <span className="text-sm font-medium">
+                    {roundedRating.toFixed(1)}/5 — {totalReviews} avis
+                  </span>
                 </div>
               )}
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -504,9 +529,7 @@ export default async function AvisServiceVillePage({
               {commune?.nb_entreprises_artisanales && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>
-                    {formatNumber(commune.nb_entreprises_artisanales)} artisans locaux
-                  </span>
+                  <span>{formatNumber(commune.nb_entreprises_artisanales)} artisans locaux</span>
                 </div>
               )}
             </div>
@@ -522,7 +545,9 @@ export default async function AvisServiceVillePage({
               <div className="text-center">
                 <div className="flex items-center gap-2 justify-center mb-1">
                   <Star className="w-7 h-7 text-amber-500 fill-amber-500" />
-                  <span className="text-3xl font-bold text-gray-900">{roundedRating.toFixed(1)}</span>
+                  <span className="text-3xl font-bold text-gray-900">
+                    {roundedRating.toFixed(1)}
+                  </span>
                 </div>
                 <div className="text-sm text-gray-500">Note moyenne</div>
               </div>
@@ -541,7 +566,10 @@ export default async function AvisServiceVillePage({
                     <span className="text-xs text-gray-500 w-3">{stars}</span>
                     <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                     <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-amber-400 rounded-full" style={{ width: `${pct}%` }} />
+                      <div
+                        className="h-full bg-amber-400 rounded-full"
+                        style={{ width: `${pct}%` }}
+                      />
                     </div>
                     <span className="text-xs text-gray-400 w-8">{pct}%</span>
                   </div>
@@ -562,9 +590,7 @@ export default async function AvisServiceVillePage({
             <h2 className="font-heading text-xl font-bold text-gray-900 mb-2">
               Aucun avis pour {tradeLower} à {villeData.name} pour le moment
             </h2>
-            <p className="text-gray-500 mb-6">
-              Soyez le premier à partager votre expérience !
-            </p>
+            <p className="text-gray-500 mb-6">Soyez le premier à partager votre expérience !</p>
             <Link
               href={`/services/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
@@ -613,11 +639,15 @@ export default async function AvisServiceVillePage({
                       </div>
                     </div>
                     {i < 3 && (
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                        i === 0 ? 'bg-amber-100 text-amber-700' :
-                        i === 1 ? 'bg-gray-100 text-gray-600' :
-                        'bg-orange-50 text-orange-600'
-                      }`}>
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                          i === 0
+                            ? 'bg-amber-100 text-amber-700'
+                            : i === 1
+                              ? 'bg-gray-100 text-gray-600'
+                              : 'bg-orange-50 text-orange-600'
+                        }`}
+                      >
                         {i + 1}
                       </div>
                     )}
@@ -625,18 +655,20 @@ export default async function AvisServiceVillePage({
                   {provider.rating_average && provider.rating_average > 0 && (
                     <div className="flex items-center gap-2">
                       <div className="flex">
-                        {[1, 2, 3, 4, 5].map(star => (
+                        {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
                             className={`w-4 h-4 ${
-                              star <= Math.round(provider.rating_average!)
+                              star <= Math.round(provider.rating_average ?? 0)
                                 ? 'text-amber-400 fill-amber-400'
                                 : 'text-gray-200'
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="text-sm font-semibold text-gray-900">{provider.rating_average.toFixed(1)}</span>
+                      <span className="text-sm font-semibold text-gray-900">
+                        {provider.rating_average.toFixed(1)}
+                      </span>
                       <span className="text-xs text-gray-500">({provider.review_count} avis)</span>
                     </div>
                   )}
@@ -658,7 +690,7 @@ export default async function AvisServiceVillePage({
               Avis authentiques de clients ayant fait appel à un {tradeLower} à {villeData.name}.
             </p>
             <div className="space-y-4">
-              {reviews.slice(0, 5).map(review => {
+              {reviews.slice(0, 5).map((review) => {
                 const provider = providerMap.get(review.artisan_id)
                 return (
                   <div key={review.id} className="bg-white rounded-xl border border-gray-100 p-5">
@@ -680,7 +712,7 @@ export default async function AvisServiceVillePage({
                         )}
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
-                        {[1, 2, 3, 4, 5].map(star => (
+                        {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
                             className={`w-4 h-4 ${
@@ -694,7 +726,9 @@ export default async function AvisServiceVillePage({
                     </div>
                     {review.comment && (
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        {review.comment.length > 300 ? review.comment.slice(0, 300) + '…' : review.comment}
+                        {review.comment.length > 300
+                          ? review.comment.slice(0, 300) + '…'
+                          : review.comment}
                       </p>
                     )}
                     <div className="mt-3 text-xs text-gray-400">
@@ -730,8 +764,7 @@ export default async function AvisServiceVillePage({
             Comment choisir un {tradeLower} à {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Les critères essentiels pour trouver un artisan de confiance à{' '}
-            {villeData.name}.
+            Les critères essentiels pour trouver un artisan de confiance à {villeData.name}.
           </p>
           <div className="space-y-4">
             {reviewCriteria.map((criterion) => {
@@ -748,9 +781,7 @@ export default async function AvisServiceVillePage({
                     <h3 className="font-heading font-semibold text-gray-900 mb-1">
                       {criterion.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {criterion.description}
-                    </p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{criterion.description}</p>
                   </div>
                 </div>
               )
@@ -773,14 +804,13 @@ export default async function AvisServiceVillePage({
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté à {villeData.name} et ses alentours,
-              main-d'&oelig;uvre incluse
+              Prix moyen constaté à {villeData.name} et ses alentours, main-d'&oelig;uvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
@@ -816,8 +846,7 @@ export default async function AvisServiceVillePage({
             Facteurs locaux à {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Plusieurs facteurs locaux influencent le choix d'un {tradeLower}
-            à {villeData.name}.
+            Plusieurs facteurs locaux influencent le choix d'un {tradeLower}à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             {/* Artisan density */}
@@ -853,16 +882,12 @@ export default async function AvisServiceVillePage({
               icon={<Building2 className="w-5 h-5 text-green-600" />}
               bgColor="bg-green-50"
               title="Type de logement"
-              value={
-                commune?.part_maisons_pct
-                  ? `${commune.part_maisons_pct} % de maisons`
-                  : null
-              }
+              value={commune?.part_maisons_pct ? `${commune.part_maisons_pct} % de maisons` : null}
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles, ce qui influence les types de travaux de ${tradeLower} demandés.`
-                    : `À ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
+                    ? `À ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles, ce qui influence les types de travaux de ${tradeLower} demandés.`
+                    : `À ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
                   : `La répartition entre maisons et appartements à ${villeData.name} influence les types de travaux demandés.`
               }
             />
@@ -886,125 +911,190 @@ export default async function AvisServiceVillePage({
       </section>
 
       {/* ─── MARCHÉ LOCAL ─────────────────────────────────────── */}
-      {commune && (commune.nb_entreprises_artisanales || commune.pct_passoires_dpe || commune.revenu_median || commune.nb_maprimerenov_annuel || commune.nb_transactions_annuelles) && (
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
-              Le marché à {villeData.name}
-            </h2>
-            <p className="text-gray-500 text-sm text-center mb-8">
-              Données locales pour contextualiser votre recherche de {tradeLower} à {villeData.name}.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-6">
-              {/* Marché artisanal local */}
-              {commune.nb_entreprises_artisanales != null && (
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Building2 className="w-5 h-5 text-amber-600" />
+      {commune &&
+        (commune.nb_entreprises_artisanales ||
+          commune.pct_passoires_dpe ||
+          commune.revenu_median ||
+          commune.nb_maprimerenov_annuel ||
+          commune.nb_transactions_annuelles) && (
+          <section className="py-16 bg-gray-50">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+                Le marché à {villeData.name}
+              </h2>
+              <p className="text-gray-500 text-sm text-center mb-8">
+                Données locales pour contextualiser votre recherche de {tradeLower} à{' '}
+                {villeData.name}.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-6">
+                {/* Marché artisanal local */}
+                {commune.nb_entreprises_artisanales != null && (
+                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Building2 className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Marché artisanal local</h3>
                     </div>
-                    <h3 className="font-semibold text-gray-900">Marché artisanal local</h3>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li>
+                        &Agrave; {villeData.name},{' '}
+                        <span className="font-semibold">
+                          {formatNumber(commune.nb_entreprises_artisanales)}
+                        </span>{' '}
+                        entreprises artisanales sont référencées.
+                      </li>
+                      {commune.nb_artisans_btp != null && (
+                        <li>
+                          <span className="font-semibold">
+                            {formatNumber(commune.nb_artisans_btp)}
+                          </span>{' '}
+                          spécialisées dans le bâtiment.
+                        </li>
+                      )}
+                      {commune.nb_artisans_rge != null && (
+                        <li>
+                          Dont{' '}
+                          <span className="font-semibold">
+                            {formatNumber(commune.nb_artisans_rge)}
+                          </span>{' '}
+                          certifiées RGE.
+                        </li>
+                      )}
+                    </ul>
+                    {commune.population > 0 && (
+                      <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                        {(() => {
+                          const ratio = Math.round(
+                            (commune.nb_entreprises_artisanales / commune.population) * 10000
+                          )
+                          const level = ratio >= 200 ? 'forte' : ratio >= 80 ? 'modérée' : 'faible'
+                          return `Avec un ratio de ${ratio} artisans pour 10 000 habitants, la concurrence est ${level} à ${villeData.name}.`
+                        })()}
+                      </p>
+                    )}
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    <li>&Agrave; {villeData.name}, <span className="font-semibold">{formatNumber(commune.nb_entreprises_artisanales)}</span> entreprises artisanales sont référencées.</li>
-                    {commune.nb_artisans_btp != null && (
-                      <li><span className="font-semibold">{formatNumber(commune.nb_artisans_btp)}</span> spécialisées dans le bâtiment.</li>
-                    )}
-                    {commune.nb_artisans_rge != null && (
-                      <li>Dont <span className="font-semibold">{formatNumber(commune.nb_artisans_rge)}</span> certifiées RGE.</li>
-                    )}
-                  </ul>
-                  {commune.population > 0 && (
-                    <p className="mt-3 text-xs text-gray-500 leading-relaxed">
-                      {(() => {
-                        const ratio = Math.round((commune.nb_entreprises_artisanales / commune.population) * 10000)
-                        const level = ratio >= 200 ? 'forte' : ratio >= 80 ? 'modérée' : 'faible'
-                        return `Avec un ratio de ${ratio} artisans pour 10 000 habitants, la concurrence est ${level} à ${villeData.name}.`
-                      })()}
-                    </p>
-                  )}
-                </div>
-              )}
+                )}
 
-              {/* Qualité du parc immobilier */}
-              {(commune.pct_passoires_dpe != null || commune.part_maisons_pct != null) && (
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Zap className="w-5 h-5 text-green-600" />
+                {/* Qualité du parc immobilier */}
+                {(commune.pct_passoires_dpe != null || commune.part_maisons_pct != null) && (
+                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Zap className="w-5 h-5 text-green-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Qualité du parc immobilier</h3>
                     </div>
-                    <h3 className="font-semibold text-gray-900">Qualité du parc immobilier</h3>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      {commune.pct_passoires_dpe != null && (
+                        <li>
+                          <span className="font-semibold">{commune.pct_passoires_dpe}&nbsp;%</span>{' '}
+                          de passoires thermiques (DPE F ou G).
+                        </li>
+                      )}
+                      {commune.nb_dpe_total != null && (
+                        <li>
+                          Sur{' '}
+                          <span className="font-semibold">
+                            {formatNumber(commune.nb_dpe_total)}
+                          </span>{' '}
+                          diagnostics réalisés.
+                        </li>
+                      )}
+                      {commune.part_maisons_pct != null && (
+                        <li>{commune.part_maisons_pct}&nbsp;% de maisons individuelles.</li>
+                      )}
+                    </ul>
+                    {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 15 && (
+                      <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                        Un parc avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques
+                        génère une forte demande en rénovation énergétique à {villeData.name}.
+                      </p>
+                    )}
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    {commune.pct_passoires_dpe != null && (
-                      <li><span className="font-semibold">{commune.pct_passoires_dpe}&nbsp;%</span> de passoires thermiques (DPE F ou G).</li>
-                    )}
-                    {commune.nb_dpe_total != null && (
-                      <li>Sur <span className="font-semibold">{formatNumber(commune.nb_dpe_total)}</span> diagnostics réalisés.</li>
-                    )}
-                    {commune.part_maisons_pct != null && (
-                      <li>{commune.part_maisons_pct}&nbsp;% de maisons individuelles.</li>
-                    )}
-                  </ul>
-                  {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 15 && (
-                    <p className="mt-3 text-xs text-gray-500 leading-relaxed">
-                      Un parc avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques génère une forte demande en rénovation énergétique à {villeData.name}.
-                    </p>
-                  )}
-                </div>
-              )}
+                )}
 
-              {/* Pouvoir d'achat et prix */}
-              {(commune.revenu_median != null || commune.prix_m2_moyen != null) && (
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Euro className="w-5 h-5 text-blue-600" />
+                {/* Pouvoir d'achat et prix */}
+                {(commune.revenu_median != null || commune.prix_m2_moyen != null) && (
+                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Euro className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Pouvoir d'achat et prix</h3>
                     </div>
-                    <h3 className="font-semibold text-gray-900">Pouvoir d'achat et prix</h3>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      {commune.revenu_median != null && (
+                        <li>
+                          Revenu médian :{' '}
+                          <span className="font-semibold">
+                            {formatNumber(commune.revenu_median)}&nbsp;€
+                          </span>{' '}
+                          / an.
+                        </li>
+                      )}
+                      {commune.prix_m2_moyen != null && (
+                        <li>
+                          Prix au m&sup2; :{' '}
+                          <span className="font-semibold">
+                            {formatNumber(commune.prix_m2_moyen)}&nbsp;€
+                          </span>
+                          .
+                        </li>
+                      )}
+                    </ul>
+                    {commune.revenu_median != null && commune.prix_m2_moyen != null && (
+                      <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                        {(() => {
+                          const prixM2 = commune.prix_m2_moyen
+                          const revenu = commune.revenu_median
+                          const level =
+                            prixM2 >= 4000
+                              ? 'premium'
+                              : prixM2 >= 2000
+                                ? 'intermédiaire'
+                                : 'accessible'
+                          return `Le revenu médian de ${formatNumber(revenu)} € et un prix au m² de ${formatNumber(prixM2)} € situent ${villeData.name} dans un marché ${level}.`
+                        })()}
+                      </p>
+                    )}
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    {commune.revenu_median != null && (
-                      <li>Revenu médian : <span className="font-semibold">{formatNumber(commune.revenu_median)}&nbsp;€</span> / an.</li>
-                    )}
-                    {commune.prix_m2_moyen != null && (
-                      <li>Prix au m&sup2; : <span className="font-semibold">{formatNumber(commune.prix_m2_moyen)}&nbsp;€</span>.</li>
-                    )}
-                  </ul>
-                  {commune.revenu_median != null && commune.prix_m2_moyen != null && (
-                    <p className="mt-3 text-xs text-gray-500 leading-relaxed">
-                      {(() => {
-                        const level = commune.prix_m2_moyen! >= 4000 ? 'premium' : commune.prix_m2_moyen! >= 2000 ? 'intermédiaire' : 'accessible'
-                        return `Le revenu médian de ${formatNumber(commune.revenu_median!)} € et un prix au m² de ${formatNumber(commune.prix_m2_moyen!)} € situent ${villeData.name} dans un marché ${level}.`
-                      })()}
-                    </p>
-                  )}
-                </div>
-              )}
+                )}
 
-              {/* Indicateurs de satisfaction */}
-              {(commune.nb_maprimerenov_annuel != null || commune.nb_transactions_annuelles != null) && (
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <TrendingUp className="w-5 h-5 text-purple-600" />
+                {/* Indicateurs de satisfaction */}
+                {(commune.nb_maprimerenov_annuel != null ||
+                  commune.nb_transactions_annuelles != null) && (
+                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <TrendingUp className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Indicateurs d'activité</h3>
                     </div>
-                    <h3 className="font-semibold text-gray-900">Indicateurs d'activité</h3>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      {commune.nb_maprimerenov_annuel != null && (
+                        <li>
+                          <span className="font-semibold">
+                            {formatNumber(commune.nb_maprimerenov_annuel)}
+                          </span>{' '}
+                          dossiers MaPrimeRénov' déposés, signe d'un marché actif.
+                        </li>
+                      )}
+                      {commune.nb_transactions_annuelles != null && (
+                        <li>
+                          <span className="font-semibold">
+                            {formatNumber(commune.nb_transactions_annuelles)}
+                          </span>{' '}
+                          transactions immobilières, source de demande en travaux.
+                        </li>
+                      )}
+                    </ul>
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    {commune.nb_maprimerenov_annuel != null && (
-                      <li><span className="font-semibold">{formatNumber(commune.nb_maprimerenov_annuel)}</span> dossiers MaPrimeRénov' déposés, signe d'un marché actif.</li>
-                    )}
-                    {commune.nb_transactions_annuelles != null && (
-                      <li><span className="font-semibold">{formatNumber(commune.nb_transactions_annuelles)}</span> transactions immobilières, source de demande en travaux.</li>
-                    )}
-                  </ul>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
 
       {/* ─── TIPS ─────────────────────────────────────────────── */}
       <section className="py-16 bg-gray-50">
@@ -1036,8 +1126,8 @@ export default async function AvisServiceVillePage({
               Certifications à vérifier à {villeData.name}
             </h2>
             <p className="text-gray-600 text-center mb-8">
-              Vérifiez que votre {tradeLower} à {villeData.name} possède
-              les certifications adaptées à votre projet.
+              Vérifiez que votre {tradeLower} à {villeData.name} possède les certifications adaptées
+              à votre projet.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
@@ -1062,19 +1152,12 @@ export default async function AvisServiceVillePage({
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
-              <details
-                key={i}
-                className="bg-white rounded-xl border border-gray-200 group"
-              >
+              <details key={i} className="bg-white rounded-xl border border-gray-200 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">
-                    {item.question}
-                  </h3>
+                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
                   <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">
-                  {item.answer}
-                </div>
+                <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">{item.answer}</div>
               </details>
             ))}
           </div>
@@ -1099,7 +1182,10 @@ export default async function AvisServiceVillePage({
           />
           <p className="text-blue-200 text-sm mt-6">
             Ou{' '}
-            <Link href={`/services/${service}/${villeSlug}`} className="underline hover:text-white transition-colors">
+            <Link
+              href={`/services/${service}/${villeSlug}`}
+              className="underline hover:text-white transition-colors"
+            >
               voir les {tradeLower}s {'à'} {villeData.name}
             </Link>
           </p>
@@ -1149,8 +1235,8 @@ export default async function AvisServiceVillePage({
                     Avis {t.name.toLowerCase()} à {villeData.name}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {Math.round(t.priceRange.min * m)} —{' '}
-                    {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                    {Math.round(t.priceRange.min * m)} — {Math.round(t.priceRange.max * m)}{' '}
+                    {t.priceRange.unit}
                   </div>
                 </Link>
               )
@@ -1207,22 +1293,23 @@ export default async function AvisServiceVillePage({
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">
-              Transparence éditoriale
-            </h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence éditoriale</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les informations présentées pour {villeData.name} sont
-              indicatives et destinées à vous aider dans le choix
-              d'un {tradeLower}. Les prix affichés sont des fourchettes
-              ajustées en fonction des données régionales (
-              {villeData.region}). Seul un devis personnalisé fait foi.{' '}
-              {SITE_NAME} est un annuaire indépendant.
+              Les informations présentées pour {villeData.name} sont indicatives et destinées à vous
+              aider dans le choix d'un {tradeLower}. Les prix affichés sont des fourchettes ajustées
+              en fonction des données régionales ({villeData.region}). Seul un devis personnalisé
+              fait foi. {SITE_NAME} est un annuaire indépendant.
             </p>
           </div>
         </div>
       </section>
 
-      <VerticalCrossLinks currentService={service} villeSlug={villeSlug} villeName={villeData.name} intent="avis" />
+      <VerticalCrossLinks
+        currentService={service}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        intent="avis"
+      />
 
       <InContentLinks
         serviceSlug={service}
@@ -1243,11 +1330,21 @@ export default async function AvisServiceVillePage({
         currentIntent="avis"
       />
 
-      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="avis" skipCrossIntent />
+      <DeepPageLinks
+        currentService={service}
+        currentVille={villeSlug}
+        currentIntent="avis"
+        skipCrossIntent
+      />
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
-      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Devis gratuit" />
+      <StickyMobileCTA
+        serviceSlug={service}
+        cityName={villeData.name}
+        citySlug={villeSlug}
+        ctaText="Devis gratuit"
+      />
       <ExitIntentPopup
         sessionKey="sa:exit-avis"
         description="Contactez un artisan bien noté — devis gratuit et sans engagement."
@@ -1284,9 +1381,7 @@ function LocalFactorCard({
         </div>
         <div>
           <h3 className="font-semibold text-gray-900 text-sm">{title}</h3>
-          {value && (
-            <p className="text-xs text-blue-600 font-medium">{value}</p>
-          )}
+          {value && <p className="text-xs text-blue-600 font-medium">{value}</p>}
         </div>
       </div>
       <p className="text-gray-600 text-sm leading-relaxed">{description}</p>

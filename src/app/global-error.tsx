@@ -11,8 +11,7 @@ export default function GlobalError({
       <body
         style={{
           margin: 0,
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           backgroundColor: '#f8fafc',
           color: '#1e293b',
           display: 'flex',
@@ -71,6 +70,7 @@ export default function GlobalError({
             >
               Réessayer
             </button>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- global-error must do a full reload, Link defeats the boundary */}
             <a
               href="/"
               style={{

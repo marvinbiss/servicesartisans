@@ -33,7 +33,9 @@ const pbtOpts = (numRuns: number): fc.Parameters<unknown> => ({
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(() => ({
     auth: {
-      getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: { message: 'not authenticated' } }),
+      getUser: vi
+        .fn()
+        .mockResolvedValue({ data: { user: null }, error: { message: 'not authenticated' } }),
     },
     from: vi.fn(() => ({
       select: vi.fn().mockReturnThis(),
@@ -117,7 +119,7 @@ const arbitraryPayload = fc.oneof(
   fc.constant({ admin: true, role: 'super_admin' }),
   // XSS attempts
   fc.constant('<script>alert(1)</script>'),
-  fc.constant({ __proto__: { isAdmin: true } }),
+  fc.constant({ __proto__: { isAdmin: true } })
 )
 
 const arbitraryMethod = fc.constantFrom('GET', 'POST', 'PUT', 'DELETE', 'PATCH')
@@ -148,9 +150,11 @@ describe('PBT: Auth invariant', () => {
 
   it('artisan routes reject any unauthenticated request regardless of payload', async () => {
     for (const route of protectedArtisanRoutes) {
-      let handlerModule: Record<string, Function>
+      let handlerModule: Record<string, (...args: unknown[]) => unknown>
       try {
-        handlerModule = await import(`@/app/api/artisan/${route.replace('/api/artisan/', '')}/route`)
+        handlerModule = await import(
+          `@/app/api/artisan/${route.replace('/api/artisan/', '')}/route`
+        )
       } catch {
         // Route may use dynamic segments, skip
         continue
@@ -169,14 +173,14 @@ describe('PBT: Auth invariant', () => {
           expect(status).toBeGreaterThanOrEqual(400)
           expect(status).toBeLessThan(500)
         }),
-        pbtOpts(20),
+        pbtOpts(20)
       )
     }
   })
 
   it('admin routes reject any unauthenticated request regardless of payload', async () => {
     for (const route of protectedAdminRoutes) {
-      let handlerModule: Record<string, Function>
+      let handlerModule: Record<string, (...args: unknown[]) => unknown>
       try {
         handlerModule = await import(`@/app/api/admin/${route.replace('/api/admin/', '')}/route`)
       } catch {
@@ -194,7 +198,7 @@ describe('PBT: Auth invariant', () => {
           expect(response.status).toBeGreaterThanOrEqual(400)
           expect(response.status).toBeLessThan(500)
         }),
-        pbtOpts(20),
+        pbtOpts(20)
       )
     }
   })
@@ -217,7 +221,7 @@ describe('PBT: Validation invariant', () => {
       email: fc.oneof(fc.string(), fc.integer()),
       amount: fc.oneof(fc.string(), fc.constant(-1), fc.constant(NaN)),
     }),
-    fc.object({ maxDepth: 3, maxKeys: 10 }),
+    fc.object({ maxDepth: 3, maxKeys: 10 })
   )
 
   it('POST with random invalid body never returns 500', async () => {
@@ -229,7 +233,7 @@ describe('PBT: Validation invariant', () => {
     ]
 
     for (const routePath of postRoutes) {
-      let handlerModule: Record<string, Function>
+      let handlerModule: Record<string, (...args: unknown[]) => unknown>
       try {
         handlerModule = await import(routePath)
       } catch {
@@ -247,7 +251,7 @@ describe('PBT: Validation invariant', () => {
           // INVARIANT: invalid input → 4xx (auth or validation), NEVER 500
           expect(response.status).toBeLessThan(500)
         }),
-        pbtOpts(30),
+        pbtOpts(30)
       )
     }
   })
@@ -267,12 +271,14 @@ describe('PBT: Role isolation', () => {
         }),
         async () => {
           // With mock returning unauthenticated, guard must always reject
-          const result = await (requireArtisan as any)()
+          const result = await (
+            requireArtisan as () => Promise<{ error?: unknown; user?: unknown }>
+          )()
           expect(result.error).toBeTruthy()
           expect(result.user).toBeFalsy()
-        },
+        }
       ),
-      pbtOpts(50),
+      pbtOpts(50)
     )
   })
 
@@ -281,18 +287,28 @@ describe('PBT: Role isolation', () => {
 
     // Arbitrary resource/action combinations
     const arbitraryResource = fc.constantFrom(
-      'users', 'providers', 'claims', 'settings', 'payments', 'reports',
-      'analytics', 'cms', 'seo', 'prospection',
+      'users',
+      'providers',
+      'claims',
+      'settings',
+      'payments',
+      'reports',
+      'analytics',
+      'cms',
+      'seo',
+      'prospection'
     )
     const arbitraryAction = fc.constantFrom('read', 'write')
 
     await fc.assert(
       fc.asyncProperty(arbitraryResource, arbitraryAction, async (resource, action) => {
-        const result = await (requirePermission as any)(resource, action)
+        const result = await (
+          requirePermission as (r: string, a: string) => Promise<{ success: boolean }>
+        )(resource, action)
         // INVARIANT: without admin session, always fails
         expect(result.success).toBe(false)
       }),
-      pbtOpts(30),
+      pbtOpts(30)
     )
   })
 })
@@ -301,13 +317,10 @@ describe('PBT: Role isolation', () => {
 
 describe('PBT: Response shape', () => {
   it('error responses always have parseable JSON body', async () => {
-    const routes = [
-      '@/app/api/artisan/provider/route',
-      '@/app/api/artisan/avis/route',
-    ]
+    const routes = ['@/app/api/artisan/provider/route', '@/app/api/artisan/avis/route']
 
     for (const routePath of routes) {
-      let handlerModule: Record<string, Function>
+      let handlerModule: Record<string, (...args: unknown[]) => unknown>
       try {
         handlerModule = await import(routePath)
       } catch {
@@ -332,7 +345,7 @@ describe('PBT: Response shape', () => {
             expect(hasErrorInfo).toBeTruthy()
           }
         }),
-        pbtOpts(10),
+        pbtOpts(10)
       )
     }
   })
@@ -345,16 +358,13 @@ describe('PBT: GET idempotency', () => {
     const arbitraryQueryParams = fc.dictionary(
       fc.stringMatching(/^[a-z_]{1,20}$/),
       fc.oneof(fc.string(), fc.nat().map(String), fc.constant('')),
-      { minKeys: 0, maxKeys: 5 },
+      { minKeys: 0, maxKeys: 5 }
     )
 
-    const routes = [
-      '@/app/api/artisan/provider/route',
-      '@/app/api/artisan/stats/route',
-    ]
+    const routes = ['@/app/api/artisan/provider/route', '@/app/api/artisan/stats/route']
 
     for (const routePath of routes) {
-      let handlerModule: Record<string, Function>
+      let handlerModule: Record<string, (...args: unknown[]) => unknown>
       try {
         handlerModule = await import(routePath)
       } catch {
@@ -380,7 +390,7 @@ describe('PBT: GET idempotency', () => {
           expect(res1.status).toBeLessThan(500)
           expect(res2.status).toBeLessThan(500)
         }),
-        pbtOpts(15),
+        pbtOpts(15)
       )
     }
   })
@@ -399,16 +409,14 @@ describe('PBT: UUID parameter handling', () => {
       fc.constant("'; DROP TABLE --"),
       fc.constant('../../../etc/passwd'),
       fc.constant('<script>'),
-      fc.uuid(), // valid UUID but non-existent → should be 404, not 500
+      fc.uuid() // valid UUID but non-existent → should be 404, not 500
     )
 
     // Routes that take [id] param
-    const dynamicRoutes = [
-      { path: '@/app/api/artisan/leads/[id]/route', paramName: 'id' },
-    ]
+    const dynamicRoutes = [{ path: '@/app/api/artisan/leads/[id]/route', paramName: 'id' }]
 
     for (const route of dynamicRoutes) {
-      let handlerModule: Record<string, Function>
+      let handlerModule: Record<string, (...args: unknown[]) => unknown>
       try {
         handlerModule = await import(route.path)
       } catch {
@@ -426,7 +434,7 @@ describe('PBT: UUID parameter handling', () => {
           // INVARIANT: bad ID → 4xx, NEVER 500
           expect(response.status).toBeLessThan(500)
         }),
-        pbtOpts(30),
+        pbtOpts(30)
       )
     }
   })

@@ -35,7 +35,9 @@ export default function ExitIntentModal() {
           ville: parsed.formData?.ville || '',
         })
       }
-    } catch {}
+    } catch {
+      // localStorage corrompu/indisponible — pas de pré-remplissage de contexte
+    }
   }, [])
 
   // Check if already shown this session
@@ -44,7 +46,9 @@ export default function ExitIntentModal() {
       if (sessionStorage.getItem(SESSION_KEY)) {
         setHasTriggered(true)
       }
-    } catch {}
+    } catch {
+      // sessionStorage indisponible (mode privé) — l'exit intent reste armé
+    }
   }, [])
 
   // Exit intent listener (desktop only: mouseleave toward top)
@@ -70,7 +74,9 @@ export default function ExitIntentModal() {
       setIsOpen(true)
       try {
         sessionStorage.setItem(SESSION_KEY, '1')
-      } catch {}
+      } catch {
+        // sessionStorage indisponible — pas de persistance, peut se réafficher
+      }
     }
 
     document.documentElement.addEventListener('mouseleave', handleMouseLeave)
@@ -79,6 +85,14 @@ export default function ExitIntentModal() {
       document.documentElement.removeEventListener('mouseleave', handleMouseLeave)
     }
   }, [hasTriggered])
+
+  const close = useCallback(() => {
+    setIsOpen(false)
+    // Restore focus
+    setTimeout(() => {
+      previousFocusRef.current?.focus()
+    }, 100)
+  }, [])
 
   // Focus trap & escape key
   useEffect(() => {
@@ -132,15 +146,7 @@ export default function ExitIntentModal() {
       document.body.style.width = ''
       window.scrollTo(0, scrollY)
     }
-  }, [isOpen])
-
-  const close = useCallback(() => {
-    setIsOpen(false)
-    // Restore focus
-    setTimeout(() => {
-      previousFocusRef.current?.focus()
-    }, 100)
-  }, [])
+  }, [isOpen, close])
 
   const handleResume = useCallback(() => {
     close()
@@ -246,7 +252,9 @@ export default function ExitIntentModal() {
           {/* Phone alternative */}
           <a
             href={PHONE_TEL}
-            onClick={() => { trackEvent('phone_click', { source: 'exit_intent_modal' }) }}
+            onClick={() => {
+              trackEvent('phone_click', { source: 'exit_intent_modal' })
+            }}
             className="mt-2 w-full inline-flex items-center justify-center gap-2 border-2 border-accent-200 bg-accent-50 text-accent-700 font-semibold px-6 py-3 rounded-xl hover:bg-accent-100 hover:border-accent-300 transition-all duration-200"
             aria-label="Appeler ServicesArtisans"
           >
@@ -267,8 +275,12 @@ export default function ExitIntentModal() {
       {/* Inline animations */}
       <style jsx>{`
         @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
         .animate-fade-in {
           animation: fade-in 0.2s ease-out;

@@ -21,17 +21,17 @@ export function sanitizeSearchQuery(input: string): string {
   // Escape PostgreSQL LIKE special characters
   sanitized = sanitized
     .replace(/\\/g, '\\\\') // Escape backslashes first
-    .replace(/%/g, '\\%')   // Escape percent
-    .replace(/_/g, '\\_')   // Escape underscore
+    .replace(/%/g, '\\%') // Escape percent
+    .replace(/_/g, '\\_') // Escape underscore
 
   // Remove any potential SQL injection patterns
   sanitized = sanitized
-    .replace(/'/g, "''")    // Escape single quotes
-    .replace(/"/g, '""')    // Escape double quotes
-    .replace(/;/g, '')      // Remove semicolons
-    .replace(/--/g, '')     // Remove SQL comments
-    .replace(/\/\*/g, '')   // Remove block comment start
-    .replace(/\*\//g, '')   // Remove block comment end
+    .replace(/'/g, "''") // Escape single quotes
+    .replace(/"/g, '""') // Escape double quotes
+    .replace(/;/g, '') // Remove semicolons
+    .replace(/--/g, '') // Remove SQL comments
+    .replace(/\/\*/g, '') // Remove block comment start
+    .replace(/\*\//g, '') // Remove block comment end
 
   return sanitized.trim()
 }
@@ -62,6 +62,7 @@ export function sanitizeUserInput(input: string): string {
   }
 
   // Remove null bytes and control characters
+  // eslint-disable-next-line no-control-regex -- intentional: this IS the sanitizer for control chars
   let sanitized = input.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
 
   // Limit length

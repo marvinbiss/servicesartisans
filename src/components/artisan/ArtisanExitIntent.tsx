@@ -28,10 +28,7 @@ interface ArtisanExitIntentProps {
   isClaimed?: boolean
 }
 
-export function ArtisanExitIntent({
-  artisan,
-  isClaimed = false,
-}: ArtisanExitIntentProps) {
+export function ArtisanExitIntent({ artisan, isClaimed = false }: ArtisanExitIntentProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [hasTriggered, setHasTriggered] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
@@ -50,7 +47,9 @@ export function ArtisanExitIntent({
       if (sessionStorage.getItem(SESSION_KEY)) {
         setHasTriggered(true)
       }
-    } catch {}
+    } catch {
+      // sessionStorage indisponible (mode privé / SSR) — on laisse hasTriggered false
+    }
   }, [])
 
   const show = useCallback(() => {
@@ -58,14 +57,18 @@ export function ArtisanExitIntent({
     if (typeof window === 'undefined') return
     try {
       if (sessionStorage.getItem(SESSION_KEY)) return
-    } catch {}
+    } catch {
+      // sessionStorage indisponible — on continue le flow d'affichage
+    }
     if (document.body.hasAttribute('data-estimation-open')) return
 
     setHasTriggered(true)
     setIsOpen(true)
     try {
       sessionStorage.setItem(SESSION_KEY, '1')
-    } catch {}
+    } catch {
+      // sessionStorage indisponible — pas de persistance, l'exit intent pourra se réafficher
+    }
 
     trackEvent('exit_intent_shown', {
       source: 'artisan_page',
@@ -250,7 +253,8 @@ export function ArtisanExitIntent({
               <li className="flex items-center gap-2.5">
                 <FileText className="w-4 h-4 text-accent-500 flex-shrink-0" />
                 <span className="text-sm text-charcoal-700">
-                  <strong>Devis gratuit</strong>{city ? ` de ${specialtyLower}s à ${city}` : ` de ${specialtyLower}s`}
+                  <strong>Devis gratuit</strong>
+                  {city ? ` de ${specialtyLower}s à ${city}` : ` de ${specialtyLower}s`}
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
@@ -309,12 +313,22 @@ export function ArtisanExitIntent({
       {/* Animations CSS */}
       <style jsx>{`
         @keyframes eiOverlayIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
         @keyframes eiModalIn {
-          from { opacity: 0; transform: scale(0.9) translateY(20px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
+          from {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
         }
       `}</style>
     </div>

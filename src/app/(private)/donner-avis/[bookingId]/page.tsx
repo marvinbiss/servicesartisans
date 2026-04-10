@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { Star, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 
@@ -84,7 +85,7 @@ export default function ReviewPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error?.message || data.error || 'Erreur lors de l\'envoi')
+        throw new Error(data.error?.message || data.error || "Erreur lors de l'envoi")
       }
 
       setSubmitted(true)
@@ -95,13 +96,7 @@ export default function ReviewPage() {
     }
   }
 
-  const ratingLabels = [
-    'Très mauvais',
-    'Mauvais',
-    'Moyen',
-    'Bien',
-    'Excellent',
-  ]
+  const ratingLabels = ['Très mauvais', 'Mauvais', 'Moyen', 'Bien', 'Excellent']
 
   if (loading) {
     return (
@@ -116,16 +111,14 @@ export default function ReviewPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
-            Lien invalide
-          </h1>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">Lien invalide</h1>
           <p className="text-gray-600 mb-6">{error}</p>
-          <a
+          <Link
             href="/"
             className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
           >
             Retour à l'accueil
-          </a>
+          </Link>
         </div>
       </div>
     )
@@ -138,18 +131,17 @@ export default function ReviewPage() {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Merci pour votre avis !
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Merci pour votre avis !</h1>
           <p className="text-gray-600 mb-6">
-            Votre retour aide {bookingInfo?.artisanName} à s'améliorer et aide d'autres clients à faire leur choix.
+            Votre retour aide {bookingInfo?.artisanName} à s'améliorer et aide d'autres clients à
+            faire leur choix.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
           >
             Découvrir d'autres artisans
-          </a>
+          </Link>
         </div>
       </div>
     )
@@ -160,12 +152,8 @@ export default function ReviewPage() {
       <div className="max-w-lg mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Donnez votre avis
-          </h1>
-          <p className="text-gray-600">
-            Comment s'est passé votre rendez-vous ?
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Donnez votre avis</h1>
+          <p className="text-gray-600">Comment s'est passé votre rendez-vous ?</p>
         </div>
 
         {/* Booking info card */}
@@ -177,9 +165,7 @@ export default function ReviewPage() {
               </span>
             </div>
             <div>
-              <h2 className="font-semibold text-gray-900">
-                {bookingInfo?.artisanName}
-              </h2>
+              <h2 className="font-semibold text-gray-900">{bookingInfo?.artisanName}</h2>
               <p className="text-sm text-gray-500">
                 {bookingInfo?.serviceName} • {bookingInfo?.date}
               </p>
@@ -191,9 +177,7 @@ export default function ReviewPage() {
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-6">
           {/* Star rating */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Note globale *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-3">Note globale *</label>
             <div className="flex justify-center gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -254,10 +238,7 @@ export default function ReviewPage() {
 
           {/* Comment */}
           <div className="mb-6">
-            <label
-              htmlFor="comment"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
+            <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
               Votre commentaire (optionnel)
             </label>
             <textarea
@@ -268,9 +249,7 @@ export default function ReviewPage() {
               placeholder="Partagez votre expérience..."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
             />
-            <p className="text-xs text-gray-500 mt-1">
-              {comment.length}/500 caractères
-            </p>
+            <p className="text-xs text-gray-500 mt-1">{comment.length}/500 caractères</p>
           </div>
 
           {/* Error message */}

@@ -29,8 +29,12 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
 
 export const revalidate = 86400 // 24h
 
@@ -74,13 +78,14 @@ export async function generateMetadata({
     title = titleTemplates[titleHash % titleTemplates.length]
   }
 
-  const ratingSnippet = stats.totalReviews > 0 && stats.avgRating > 0
-    ? `Note moyenne ${stats.avgRating}/5 sur ${stats.totalReviews} avis vérifiés. `
-    : ''
+  const ratingSnippet =
+    stats.totalReviews > 0 && stats.avgRating > 0
+      ? `Note moyenne ${stats.avgRating}/5 sur ${stats.totalReviews} avis vérifiés. `
+      : ''
   const descHash = Math.abs(hashCode(`avis-desc-${service}`))
   const descTemplates = [
     `${ratingSnippet}Consultez les avis sur les ${tradeLower}s. Comparez les profils, vérifiez les certifications et choisissez un professionnel de confiance. Tarifs : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
-    `${ratingSnippet}Avis ${tradeLower} : comment bien choisir ? Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, conseils et retours clients vérifiés sur ${SITE_NAME}.`,
+    `${ratingSnippet}Avis ${tradeLower} : comment bien choisir ? Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, conseils et retours clients vérifiés sur ${SITE_NAME}.`,
     `${ratingSnippet}Trouvez un ${tradeLower} de confiance grâce aux avis vérifiés. Prix : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite sur ${SITE_NAME}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -137,11 +142,22 @@ interface ServiceAvisReview {
 }
 
 async function getServiceStats(serviceSlug: string) {
-  if (IS_BUILD) return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+  if (IS_BUILD)
+    return {
+      providers: [] as ServiceAvisProvider[],
+      reviews: [] as ServiceAvisReview[],
+      totalReviews: 0,
+      avgRating: 0,
+    }
 
   const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
   if (!specialties || specialties.length === 0) {
-    return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+    return {
+      providers: [] as ServiceAvisProvider[],
+      reviews: [] as ServiceAvisReview[],
+      totalReviews: 0,
+      avgRating: 0,
+    }
   }
 
   try {
@@ -151,7 +167,9 @@ async function getServiceStats(serviceSlug: string) {
     // Get top providers for this specific service by specialty
     const { data: providers } = await supabase
       .from('providers')
-      .select('id, user_id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
+      .select(
+        'id, user_id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty'
+      )
       .eq('is_active', true)
       .in('specialty', specialties)
       .gt('review_count', 0)
@@ -160,20 +178,27 @@ async function getServiceStats(serviceSlug: string) {
       .limit(6)
 
     if (!providers || providers.length === 0) {
-      return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+      return {
+        providers: [] as ServiceAvisProvider[],
+        reviews: [] as ServiceAvisReview[],
+        totalReviews: 0,
+        avgRating: 0,
+      }
     }
 
     const topProviders = providers
 
     const totalReviews = topProviders.reduce((sum, p) => sum + (p.review_count || 0), 0)
-    const ratedProviders = topProviders.filter(p => p.rating_average && p.rating_average > 0)
-    const avgRating = ratedProviders.length > 0
-      ? ratedProviders.reduce((sum, p) => sum + (p.rating_average || 0), 0) / ratedProviders.length
-      : 0
+    const ratedProviders = topProviders.filter((p) => p.rating_average && p.rating_average > 0)
+    const avgRating =
+      ratedProviders.length > 0
+        ? ratedProviders.reduce((sum, p) => sum + (p.rating_average || 0), 0) /
+          ratedProviders.length
+        : 0
 
     // Fetch recent reviews for these providers
     // reviews.artisan_id references profiles.id = providers.user_id
-    const artisanIds = topProviders.map(p => p.user_id).filter((uid): uid is string => !!uid)
+    const artisanIds = topProviders.map((p) => p.user_id).filter((uid): uid is string => !!uid)
     let reviews: ServiceAvisReview[] = []
     if (artisanIds.length > 0) {
       const { data: reviewData } = await supabase
@@ -196,7 +221,12 @@ async function getServiceStats(serviceSlug: string) {
       avgRating: Math.round(avgRating * 10) / 10,
     }
   } catch {
-    return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+    return {
+      providers: [] as ServiceAvisProvider[],
+      reviews: [] as ServiceAvisReview[],
+      totalReviews: 0,
+      avgRating: 0,
+    }
   }
 }
 
@@ -226,18 +256,19 @@ export default async function AvisServicePage({
   // Merge trade FAQ + review-specific FAQ
   const reviewFaqItems = [
     {
-      question: `Comment choisir un bon ${tradeLower} ?`,
+      question: `Comment choisir un bon ${tradeLower} ?`,
       answer: `Pour choisir un bon ${tradeLower}, vérifiez ses certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance décennale, RC pro'}), comparez les avis clients et demandez plusieurs devis. Les tarifs habituels vont de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
     },
     {
-      question: `Combien coûte un ${tradeLower} ?`,
+      question: `Combien coûte un ${tradeLower} ?`,
       answer: `Les tarifs d’un ${tradeLower} varient généralement de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}, selon la complexité de l’intervention et votre région. Demandez plusieurs devis pour comparer.`,
     },
     {
-      question: `Quelles certifications vérifier pour un ${tradeLower} ?`,
-      answer: trade.certifications.length > 0
-        ? `Pour un ${tradeLower}, les certifications à vérifier sont : ${trade.certifications.join(', ')}. Vérifiez également l’assurance décennale et la responsabilité civile professionnelle.`
-        : `Vérifiez au minimum l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux fournit ces documents sans difficulté.`,
+      question: `Quelles certifications vérifier pour un ${tradeLower} ?`,
+      answer:
+        trade.certifications.length > 0
+          ? `Pour un ${tradeLower}, les certifications à vérifier sont : ${trade.certifications.join(', ')}. Vérifiez également l’assurance décennale et la responsabilité civile professionnelle.`
+          : `Vérifiez au minimum l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux fournit ces documents sans difficulté.`,
     },
   ]
 
@@ -264,7 +295,7 @@ export default async function AvisServicePage({
     url: `${SITE_URL}/avis/${service}`,
     ratingValue: serviceStats.avgRating,
     reviewCount: serviceStats.totalReviews,
-    reviews: serviceStats.reviews.slice(0, 3).map(r => ({
+    reviews: serviceStats.reviews.slice(0, 3).map((r) => ({
       authorName: r.client_name || 'Client vérifié',
       rating: r.rating,
       comment: r.comment,
@@ -390,10 +421,7 @@ export default async function AvisServicePage({
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
-            items={[
-              { label: 'Avis', href: '/avis' },
-              { label: `Avis ${tradeLower}` },
-            ]}
+            items={[{ label: 'Avis', href: '/avis' }, { label: `Avis ${tradeLower}` }]}
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <div className="text-center">
@@ -411,16 +439,14 @@ export default async function AvisServicePage({
               })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Consultez les avis et recommandations pour bien choisir votre {tradeLower}.
-              Prix indicatif : {trade.priceRange.min} à {trade.priceRange.max}{' '}
-              {trade.priceRange.unit}.
+              Consultez les avis et recommandations pour bien choisir votre {tradeLower}. Prix
+              indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
                 <span>
-                  {trade.priceRange.min} – {trade.priceRange.max}{' '}
-                  {trade.priceRange.unit}
+                  {trade.priceRange.min} – {trade.priceRange.max} {trade.priceRange.unit}
                 </span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -430,7 +456,9 @@ export default async function AvisServicePage({
               {serviceStats.totalReviews > 0 && (
                 <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
                   <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  <span className="text-sm font-medium">{serviceStats.avgRating.toFixed(1)}/5 — {serviceStats.totalReviews} avis</span>
+                  <span className="text-sm font-medium">
+                    {serviceStats.avgRating.toFixed(1)}/5 — {serviceStats.totalReviews} avis
+                  </span>
                 </div>
               )}
             </div>
@@ -445,23 +473,17 @@ export default async function AvisServicePage({
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
               Pourquoi consulter les avis avant de choisir un {tradeLower} ?
             </h2>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              {editorialIntro}
-            </p>
+            <p className="text-gray-700 leading-relaxed mb-6">{editorialIntro}</p>
 
             <h2 className="font-heading text-xl font-bold text-gray-900 mb-3 mt-8">
               Ce que les clients regardent chez un {tradeLower}
             </h2>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              {editorialAnalysis}
-            </p>
+            <p className="text-gray-700 leading-relaxed mb-6">{editorialAnalysis}</p>
 
             <h2 className="font-heading text-xl font-bold text-gray-900 mb-3 mt-8">
               Nos conseils pour bien choisir votre {tradeLower}
             </h2>
-            <p className="text-gray-700 leading-relaxed">
-              {editorialConseil}
-            </p>
+            <p className="text-gray-700 leading-relaxed">{editorialConseil}</p>
           </div>
         </div>
       </section>
@@ -490,9 +512,7 @@ export default async function AvisServicePage({
                     <h3 className="font-heading font-semibold text-gray-900 mb-1">
                       {criterion.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {criterion.description}
-                    </p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{criterion.description}</p>
                   </div>
                 </div>
               )
@@ -513,10 +533,7 @@ export default async function AvisServicePage({
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {serviceStats.providers.map((provider, i) => (
-                <div
-                  key={provider.id}
-                  className="bg-white border border-gray-200 rounded-xl p-5"
-                >
+                <div key={provider.id} className="bg-white border border-gray-200 rounded-xl p-5">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
@@ -524,15 +541,21 @@ export default async function AvisServicePage({
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900 text-sm">{provider.name}</div>
-                        <div className="text-xs text-gray-500">{provider.address_city || 'France'}</div>
+                        <div className="text-xs text-gray-500">
+                          {provider.address_city || 'France'}
+                        </div>
                       </div>
                     </div>
                     {i < 3 && (
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                        i === 0 ? 'bg-amber-100 text-amber-700' :
-                        i === 1 ? 'bg-gray-100 text-gray-600' :
-                        'bg-orange-50 text-orange-600'
-                      }`}>
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                          i === 0
+                            ? 'bg-amber-100 text-amber-700'
+                            : i === 1
+                              ? 'bg-gray-100 text-gray-600'
+                              : 'bg-orange-50 text-orange-600'
+                        }`}
+                      >
                         {i + 1}
                       </div>
                     )}
@@ -540,18 +563,20 @@ export default async function AvisServicePage({
                   {provider.rating_average && provider.rating_average > 0 && (
                     <div className="flex items-center gap-2">
                       <div className="flex">
-                        {[1, 2, 3, 4, 5].map(star => (
+                        {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
                             className={`w-4 h-4 ${
-                              star <= Math.round(provider.rating_average!)
+                              star <= Math.round(provider.rating_average ?? 0)
                                 ? 'text-amber-400 fill-amber-400'
                                 : 'text-gray-200'
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="text-sm font-semibold text-gray-900">{provider.rating_average.toFixed(1)}</span>
+                      <span className="text-sm font-semibold text-gray-900">
+                        {provider.rating_average.toFixed(1)}
+                      </span>
                       <span className="text-xs text-gray-500">({provider.review_count} avis)</span>
                     </div>
                   )}
@@ -579,7 +604,7 @@ export default async function AvisServicePage({
               Retours d'expérience vérifiés de clients.
             </p>
             <div className="space-y-4">
-              {serviceStats.reviews.map(review => (
+              {serviceStats.reviews.map((review) => (
                 <div key={review.id} className="bg-gray-50 rounded-xl border border-gray-100 p-5">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -592,7 +617,7 @@ export default async function AvisServicePage({
                       </span>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      {[1, 2, 3, 4, 5].map(star => (
+                      {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
                           className={`w-4 h-4 ${
@@ -606,11 +631,17 @@ export default async function AvisServicePage({
                   </div>
                   {review.comment && (
                     <p className="text-gray-700 text-sm leading-relaxed">
-                      {review.comment.length > 300 ? review.comment.slice(0, 300) + '…' : review.comment}
+                      {review.comment.length > 300
+                        ? review.comment.slice(0, 300) + '…'
+                        : review.comment}
                     </p>
                   )}
                   <div className="mt-3 text-xs text-gray-400">
-                    {new Date(review.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    {new Date(review.created_at).toLocaleDateString('fr-FR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
                   </div>
                 </div>
               ))}
@@ -738,19 +769,12 @@ export default async function AvisServicePage({
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
-              <details
-                key={i}
-                className="bg-gray-50 rounded-xl border border-gray-200 group"
-              >
+              <details key={i} className="bg-gray-50 rounded-xl border border-gray-200 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">
-                    {item.question}
-                  </h3>
+                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
                   <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">
-                  {item.answer}
-                </div>
+                <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">{item.answer}</div>
               </details>
             ))}
           </div>
@@ -805,8 +829,7 @@ export default async function AvisServicePage({
                     Avis {t.name.toLowerCase()}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {t.priceRange.min} — {t.priceRange.max}{' '}
-                    {t.priceRange.unit}
+                    {t.priceRange.min} — {t.priceRange.max} {t.priceRange.unit}
                   </div>
                 </Link>
               )
@@ -818,9 +841,7 @@ export default async function AvisServicePage({
       {/* Voir aussi */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-gray-900 mb-6">
-            Voir aussi
-          </h2>
+          <h2 className="font-heading text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
@@ -863,9 +884,7 @@ export default async function AvisServicePage({
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
-                Avis associés
-              </h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Avis associés</h3>
               <div className="space-y-2">
                 {otherTrades.slice(0, 4).map((slug) => {
                   const t = tradeContent[slug]
@@ -883,14 +902,9 @@ export default async function AvisServicePage({
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
-                Informations utiles
-              </h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link
-                  href="/avis"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
+                <Link href="/avis" className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   Tous les avis artisans
                 </Link>
                 <Link
@@ -911,10 +925,7 @@ export default async function AvisServicePage({
                 >
                   Comment ça marche
                 </Link>
-                <Link
-                  href="/faq"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
+                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   FAQ
                 </Link>
               </div>
@@ -936,16 +947,10 @@ export default async function AvisServicePage({
             >
               Comment nous référençons les artisans
             </Link>
-            <Link
-              href="/politique-avis"
-              className="text-blue-600 hover:text-blue-800"
-            >
+            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
               Notre politique des avis
             </Link>
-            <Link
-              href="/mediation"
-              className="text-blue-600 hover:text-blue-800"
-            >
+            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
               Service de médiation
             </Link>
           </nav>
@@ -953,14 +958,15 @@ export default async function AvisServicePage({
       </section>
 
       {/* Barometre cross-link */}
-      {BAROMETRE_METIERS.some(m => m.slug === service) && (
+      {BAROMETRE_METIERS.some((m) => m.slug === service) && (
         <section className="py-12 bg-white border-t">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
               Baromètre {trade.name}
             </h2>
             <p className="text-gray-600 text-sm mb-6">
-              Consultez les statistiques détaillées des {trade.name.toLowerCase()}s en France : nombre d'artisans, note moyenne, taux de vérification par département.
+              Consultez les statistiques détaillées des {trade.name.toLowerCase()}s en France :
+              nombre d'artisans, note moyenne, taux de vérification par département.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -970,7 +976,7 @@ export default async function AvisServicePage({
                 <Star className="w-4 h-4" />
                 Statistiques {trade.name.toLowerCase()} en France
               </Link>
-              {departements.slice(0, 5).map(dept => (
+              {departements.slice(0, 5).map((dept) => (
                 <Link
                   key={dept.slug}
                   href={`/departements/${dept.slug}/${service}`}
@@ -987,23 +993,23 @@ export default async function AvisServicePage({
       <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="avis" />
 
       <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="avis" />
-      <TopicalClusterLinks serviceSlug={service} serviceName={trade.name} currentPath={`/avis/${service}`} />
+      <TopicalClusterLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        currentPath={`/avis/${service}`}
+      />
       <DeepPageLinks currentService={service} currentIntent="avis" skipCrossIntent />
 
       {/* Editorial credibility */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">
-              Transparence éditoriale
-            </h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence éditoriale</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les informations présentées sur cette page sont
-              indicatives et destinées à vous aider dans le choix
-              d'un artisan. Les prix affichés sont des fourchettes
-              basées sur des moyennes constatées en France. Seul un
-              devis personnalisé fait foi. ServicesArtisans est un annuaire
-              indépendant.
+              Les informations présentées sur cette page sont indicatives et destinées à vous aider
+              dans le choix d'un artisan. Les prix affichés sont des fourchettes basées sur des
+              moyennes constatées en France. Seul un devis personnalisé fait foi. ServicesArtisans
+              est un annuaire indépendant.
             </p>
           </div>
         </div>

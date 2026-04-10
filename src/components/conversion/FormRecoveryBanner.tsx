@@ -62,7 +62,9 @@ export default function FormRecoveryBanner() {
   const handleRestart = useCallback(() => {
     try {
       localStorage.removeItem(STORAGE_KEY)
-    } catch {}
+    } catch {
+      // localStorage indisponible — l'event ci-dessous reset quand même le form en mémoire
+    }
     // Dispatch custom event so DevisForm resets
     window.dispatchEvent(new CustomEvent('sa:devis-restart'))
     setDismissed(true)
@@ -81,9 +83,7 @@ export default function FormRecoveryBanner() {
       role="status"
       aria-live="polite"
       className={`mb-4 overflow-hidden transition-all duration-500 ease-out ${
-        dismissed
-          ? 'max-h-0 opacity-0 -translate-y-2'
-          : 'max-h-40 opacity-100 translate-y-0'
+        dismissed ? 'max-h-0 opacity-0 -translate-y-2' : 'max-h-40 opacity-100 translate-y-0'
       }`}
     >
       <div className="relative bg-gradient-to-r from-primary-50 to-sand-100 border border-primary-200/60 rounded-2xl px-4 py-3.5 sm:px-6 sm:py-4">
@@ -108,9 +108,7 @@ export default function FormRecoveryBanner() {
               {summary && (
                 <>
                   {' '}
-                  <span className="font-semibold text-charcoal-900">
-                    ({summary})
-                  </span>
+                  <span className="font-semibold text-charcoal-900">({summary})</span>
                 </>
               )}
               . Reprendre ?

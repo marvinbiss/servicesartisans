@@ -4,10 +4,11 @@
  *          validation Zod, sanitization HTML, auth, cache invalidation
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { readFileSync, existsSync } from 'fs'
+import { resolve } from 'path'
 // Type alias for mock responses used in tests
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MockResponse = { status: number; body: Record<string, any> }
-
 
 // ============================================
 // Mock setup — must come before route imports
@@ -69,15 +70,17 @@ vi.mock('@/lib/cms-revalidate', () => ({
 
 // --- Supabase mock builder ---
 
-function createMockQueryBuilder(overrides: {
-  selectData?: unknown
-  selectError?: { code?: string; message?: string } | null
-  insertData?: unknown
-  insertError?: { code?: string; message?: string } | null
-  updateData?: unknown
-  updateError?: { code?: string; message?: string } | null
-  count?: number | null
-} = {}) {
+function createMockQueryBuilder(
+  overrides: {
+    selectData?: unknown
+    selectError?: { code?: string; message?: string } | null
+    insertData?: unknown
+    insertError?: { code?: string; message?: string } | null
+    updateData?: unknown
+    updateError?: { code?: string; message?: string } | null
+    count?: number | null
+  } = {}
+) {
   const {
     selectData = null,
     selectError = null,
@@ -130,7 +133,12 @@ vi.mock('@/lib/supabase/admin', () => ({
 // --- Admin auth mock ---
 let mockAuthResult: {
   success: boolean
-  admin?: { id: string; email: string; role: string; permissions: Record<string, Record<string, boolean>> }
+  admin?: {
+    id: string
+    email: string
+    role: string
+    permissions: Record<string, Record<string, boolean>>
+  }
   error?: unknown
 }
 
@@ -218,7 +226,7 @@ describe('POST /api/admin/cms (Create)', () => {
 
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody())
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(201)
     expect(res.body).toEqual({ success: true, data: created })
@@ -227,7 +235,7 @@ describe('POST /api/admin/cms (Create)', () => {
   it('rejects missing title with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', { slug: 'test', page_type: 'static' })
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -236,7 +244,7 @@ describe('POST /api/admin/cms (Create)', () => {
   it('rejects invalid slug format with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody({ slug: 'Invalid Slug!' }))
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -245,7 +253,7 @@ describe('POST /api/admin/cms (Create)', () => {
   it('rejects invalid page_type with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody({ page_type: 'invalid' }))
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -253,12 +261,15 @@ describe('POST /api/admin/cms (Create)', () => {
 
   it('rejects duplicate slug (23505 error) with 409', async () => {
     mockSupabaseFrom = vi.fn(() =>
-      createMockQueryBuilder({ insertData: null, insertError: { code: '23505', message: 'duplicate key' } })
+      createMockQueryBuilder({
+        insertData: null,
+        insertError: { code: '23505', message: 'duplicate key' },
+      })
     )
 
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody())
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(409)
     expect(res.body.success).toBe(false)
@@ -271,7 +282,7 @@ describe('POST /api/admin/cms (Create)', () => {
 
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody())
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(401)
   })
@@ -297,11 +308,14 @@ describe('POST /api/admin/cms (Create)', () => {
     mockSupabaseFrom = vi.fn(() => createMockQueryBuilder({ insertData: created }))
 
     const { POST } = await import('@/app/api/admin/cms/route')
-    const req = makeJsonRequest('/api/admin/cms', validCreateBody({
-      title: 'Test <b>bold</b>',
-      meta_title: '<b>Meta</b>',
-    }))
-    const res = await POST(req) as unknown as MockResponse
+    const req = makeJsonRequest(
+      '/api/admin/cms',
+      validCreateBody({
+        title: 'Test <b>bold</b>',
+        meta_title: '<b>Meta</b>',
+      })
+    )
+    const res = (await POST(req)) as unknown as MockResponse
 
     // The insert should have been called with sanitized text fields
     expect(res.status).toBe(201)
@@ -325,7 +339,7 @@ describe('POST /api/admin/cms (Create)', () => {
 
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody({ content_json: bigJson }))
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('JSON')
@@ -339,7 +353,7 @@ describe('POST /api/admin/cms (Create)', () => {
 
     const { POST } = await import('@/app/api/admin/cms/route')
     const req = makeJsonRequest('/api/admin/cms', validCreateBody({ structured_data: bigData }))
-    const res = await POST(req) as unknown as MockResponse
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('structur')
@@ -347,11 +361,14 @@ describe('POST /api/admin/cms (Create)', () => {
 
   it('rejects service page without service_slug with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/route')
-    const req = makeJsonRequest('/api/admin/cms', validCreateBody({
-      page_type: 'service',
-      service_slug: undefined,
-    }))
-    const res = await POST(req) as unknown as MockResponse
+    const req = makeJsonRequest(
+      '/api/admin/cms',
+      validCreateBody({
+        page_type: 'service',
+        service_slug: undefined,
+      })
+    )
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -359,12 +376,15 @@ describe('POST /api/admin/cms (Create)', () => {
 
   it('rejects location page without location_slug with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/route')
-    const req = makeJsonRequest('/api/admin/cms', validCreateBody({
-      page_type: 'location',
-      service_slug: 'plomberie',
-      // location_slug missing
-    }))
-    const res = await POST(req) as unknown as MockResponse
+    const req = makeJsonRequest(
+      '/api/admin/cms',
+      validCreateBody({
+        page_type: 'location',
+        service_slug: 'plomberie',
+        // location_slug missing
+      })
+    )
+    const res = (await POST(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -382,15 +402,15 @@ describe('GET /api/admin/cms (List)', () => {
       const builder = createMockQueryBuilder({ selectData: pages, count: 1 })
       // Override single — list queries do not call .single()
       // Instead the chain resolves via range() returning the promise
-      builder.range = vi.fn().mockReturnValue(
-        Promise.resolve({ data: pages, error: null, count: 1 })
-      )
+      builder.range = vi
+        .fn()
+        .mockReturnValue(Promise.resolve({ data: pages, error: null, count: 1 }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -403,15 +423,13 @@ describe('GET /api/admin/cms (List)', () => {
   it('filters by page_type', async () => {
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder({ selectData: [], count: 0 })
-      builder.range = vi.fn().mockReturnValue(
-        Promise.resolve({ data: [], error: null, count: 0 })
-      )
+      builder.range = vi.fn().mockReturnValue(Promise.resolve({ data: [], error: null, count: 0 }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms?page_type=blog')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     // Verify eq was called with page_type filter
@@ -422,15 +440,13 @@ describe('GET /api/admin/cms (List)', () => {
   it('filters by status', async () => {
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder({ selectData: [], count: 0 })
-      builder.range = vi.fn().mockReturnValue(
-        Promise.resolve({ data: [], error: null, count: 0 })
-      )
+      builder.range = vi.fn().mockReturnValue(Promise.resolve({ data: [], error: null, count: 0 }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms?status=published')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     const fromResult = mockSupabaseFrom.mock.results[0].value
@@ -440,15 +456,13 @@ describe('GET /api/admin/cms (List)', () => {
   it('searches by title (ilike)', async () => {
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder({ selectData: [], count: 0 })
-      builder.range = vi.fn().mockReturnValue(
-        Promise.resolve({ data: [], error: null, count: 0 })
-      )
+      builder.range = vi.fn().mockReturnValue(Promise.resolve({ data: [], error: null, count: 0 }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms?search=plombier')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     const fromResult = mockSupabaseFrom.mock.results[0].value
@@ -458,15 +472,13 @@ describe('GET /api/admin/cms (List)', () => {
   it('sorts by different columns', async () => {
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder({ selectData: [], count: 0 })
-      builder.range = vi.fn().mockReturnValue(
-        Promise.resolve({ data: [], error: null, count: 0 })
-      )
+      builder.range = vi.fn().mockReturnValue(Promise.resolve({ data: [], error: null, count: 0 }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms?sortBy=title&sortOrder=asc')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     const fromResult = mockSupabaseFrom.mock.results[0].value
@@ -476,15 +488,13 @@ describe('GET /api/admin/cms (List)', () => {
   it('filters inactive pages by default', async () => {
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder({ selectData: [], count: 0 })
-      builder.range = vi.fn().mockReturnValue(
-        Promise.resolve({ data: [], error: null, count: 0 })
-      )
+      builder.range = vi.fn().mockReturnValue(Promise.resolve({ data: [], error: null, count: 0 }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     const fromResult = mockSupabaseFrom.mock.results[0].value
@@ -494,15 +504,13 @@ describe('GET /api/admin/cms (List)', () => {
   it('shows inactive pages when show_inactive=true', async () => {
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder({ selectData: [], count: 0 })
-      builder.range = vi.fn().mockReturnValue(
-        Promise.resolve({ data: [], error: null, count: 0 })
-      )
+      builder.range = vi.fn().mockReturnValue(Promise.resolve({ data: [], error: null, count: 0 }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms?show_inactive=true')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     // Should NOT have filtered by is_active
@@ -515,7 +523,7 @@ describe('GET /api/admin/cms (List)', () => {
   it('rejects invalid page parameter with 400', async () => {
     const { GET } = await import('@/app/api/admin/cms/route')
     const req = makeRequest('/api/admin/cms?page=0')
-    const res = await GET(req) as unknown as MockResponse
+    const res = (await GET(req)) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -532,7 +540,9 @@ describe('GET /api/admin/cms/[id] (Get single)', () => {
 
     const { GET } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}`)
-    const res = await GET(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await GET(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -542,7 +552,9 @@ describe('GET /api/admin/cms/[id] (Get single)', () => {
   it('rejects invalid UUID with 400', async () => {
     const { GET } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeRequest('/api/admin/cms/not-a-uuid')
-    const res = await GET(req, { params: Promise.resolve({ id: 'not-a-uuid' }) }) as unknown as MockResponse
+    const res = (await GET(req, {
+      params: Promise.resolve({ id: 'not-a-uuid' }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('ID invalide')
@@ -550,12 +562,17 @@ describe('GET /api/admin/cms/[id] (Get single)', () => {
 
   it('returns 404 for non-existent page', async () => {
     mockSupabaseFrom = vi.fn(() =>
-      createMockQueryBuilder({ selectData: null, selectError: { code: 'PGRST116', message: 'not found' } })
+      createMockQueryBuilder({
+        selectData: null,
+        selectError: { code: 'PGRST116', message: 'not found' },
+      })
     )
 
     const { GET } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}`)
-    const res = await GET(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await GET(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(404)
     expect(res.body.error.message).toContain('non trouv')
@@ -567,7 +584,9 @@ describe('GET /api/admin/cms/[id] (Get single)', () => {
 
     const { GET } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}`)
-    const res = await GET(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await GET(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(401)
   })
@@ -584,7 +603,9 @@ describe('PUT /api/admin/cms/[id] (Update)', () => {
 
     const { PUT } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}`, { title: 'Updated Title' }, 'PUT')
-    const res = await PUT(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await PUT(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -594,20 +615,22 @@ describe('PUT /api/admin/cms/[id] (Update)', () => {
   it('rejects invalid UUID with 400', async () => {
     const { PUT } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeJsonRequest('/api/admin/cms/bad-id', { title: 'test' }, 'PUT')
-    const res = await PUT(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
+    const res = (await PUT(req, {
+      params: Promise.resolve({ id: 'bad-id' }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('ID invalide')
   })
 
   it('returns 404 for non-existent page', async () => {
-    mockSupabaseFrom = vi.fn(() =>
-      createMockQueryBuilder({ updateData: null, updateError: null })
-    )
+    mockSupabaseFrom = vi.fn(() => createMockQueryBuilder({ updateData: null, updateError: null }))
 
     const { PUT } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}`, { title: 'test' }, 'PUT')
-    const res = await PUT(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await PUT(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(404)
   })
@@ -630,7 +653,9 @@ describe('PUT /api/admin/cms/[id] (Update)', () => {
 
     const { PUT } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}`, { title: '<b>Clean Title</b>' }, 'PUT')
-    const res = await PUT(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await PUT(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     // Verify update was called with stripped title
@@ -657,7 +682,9 @@ describe('PUT /api/admin/cms/[id] (Update)', () => {
   it('rejects invalid slug format with 400', async () => {
     const { PUT } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}`, { slug: 'INVALID SLUG!!' }, 'PUT')
-    const res = await PUT(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await PUT(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -675,7 +702,9 @@ describe('DELETE /api/admin/cms/[id] (Soft delete)', () => {
 
     const { DELETE } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}`)
-    const res = await DELETE(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await DELETE(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -690,7 +719,9 @@ describe('DELETE /api/admin/cms/[id] (Soft delete)', () => {
   it('rejects invalid UUID with 400', async () => {
     const { DELETE } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeRequest('/api/admin/cms/bad-id')
-    const res = await DELETE(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
+    const res = (await DELETE(req, {
+      params: Promise.resolve({ id: 'bad-id' }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('ID invalide')
@@ -713,7 +744,9 @@ describe('DELETE /api/admin/cms/[id] (Soft delete)', () => {
 
     const { DELETE } = await import('@/app/api/admin/cms/[id]/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}`)
-    const res = await DELETE(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await DELETE(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(403)
   })
@@ -725,12 +758,18 @@ describe('DELETE /api/admin/cms/[id] (Soft delete)', () => {
 
 describe('POST /api/admin/cms/[id]/publish (Publish)', () => {
   it('publishes draft page and returns 200', async () => {
-    const published = { ...validPageData, status: 'published', published_at: '2026-01-15T00:00:00Z' }
+    const published = {
+      ...validPageData,
+      status: 'published',
+      published_at: '2026-01-15T00:00:00Z',
+    }
     mockSupabaseFrom = vi.fn(() => createMockQueryBuilder({ updateData: published }))
 
     const { POST } = await import('@/app/api/admin/cms/[id]/publish/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}/publish`)
-    const res = await POST(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await POST(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -751,7 +790,9 @@ describe('POST /api/admin/cms/[id]/publish (Publish)', () => {
 
     const { POST } = await import('@/app/api/admin/cms/[id]/publish/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}/publish`)
-    const res = await POST(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await POST(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(409)
     expect(res.body.error.message).toContain('publi')
@@ -760,7 +801,9 @@ describe('POST /api/admin/cms/[id]/publish (Publish)', () => {
   it('rejects invalid UUID with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/[id]/publish/route')
     const req = makeRequest('/api/admin/cms/bad-id/publish')
-    const res = await POST(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
+    const res = (await POST(req, {
+      params: Promise.resolve({ id: 'bad-id' }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('ID invalide')
@@ -772,13 +815,19 @@ describe('POST /api/admin/cms/[id]/publish (Publish)', () => {
 
     const { POST } = await import('@/app/api/admin/cms/[id]/publish/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}/publish`)
-    const res = await POST(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await POST(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(403)
   })
 
   it('invalidates cache after publish', async () => {
-    const published = { ...validPageData, status: 'published', published_at: '2026-01-15T00:00:00Z' }
+    const published = {
+      ...validPageData,
+      status: 'published',
+      published_at: '2026-01-15T00:00:00Z',
+    }
     mockSupabaseFrom = vi.fn(() => createMockQueryBuilder({ updateData: published }))
 
     const { POST } = await import('@/app/api/admin/cms/[id]/publish/route')
@@ -804,7 +853,12 @@ describe('DELETE /api/admin/cms/[id]/publish (Unpublish)', () => {
       fromCallCount++
       if (fromCallCount === 1) {
         return createMockQueryBuilder({
-          selectData: { page_type: 'static', slug: 'test', service_slug: null, location_slug: null },
+          selectData: {
+            page_type: 'static',
+            slug: 'test',
+            service_slug: null,
+            location_slug: null,
+          },
         })
       }
       return createMockQueryBuilder({ updateData: unpublished })
@@ -812,7 +866,9 @@ describe('DELETE /api/admin/cms/[id]/publish (Unpublish)', () => {
 
     const { DELETE } = await import('@/app/api/admin/cms/[id]/publish/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}/publish`)
-    const res = await DELETE(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await DELETE(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -823,7 +879,9 @@ describe('DELETE /api/admin/cms/[id]/publish (Unpublish)', () => {
   it('rejects invalid UUID with 400', async () => {
     const { DELETE } = await import('@/app/api/admin/cms/[id]/publish/route')
     const req = makeRequest('/api/admin/cms/bad-id/publish')
-    const res = await DELETE(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
+    const res = (await DELETE(req, {
+      params: Promise.resolve({ id: 'bad-id' }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('ID invalide')
@@ -838,7 +896,12 @@ describe('DELETE /api/admin/cms/[id]/publish (Unpublish)', () => {
       fromCallCount++
       if (fromCallCount === 1) {
         return createMockQueryBuilder({
-          selectData: { page_type: 'static', slug: 'test', service_slug: null, location_slug: null },
+          selectData: {
+            page_type: 'static',
+            slug: 'test',
+            service_slug: null,
+            location_slug: null,
+          },
         })
       }
       return createMockQueryBuilder({ updateData: unpublished })
@@ -846,7 +909,9 @@ describe('DELETE /api/admin/cms/[id]/publish (Unpublish)', () => {
 
     const { DELETE } = await import('@/app/api/admin/cms/[id]/publish/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}/publish`)
-    const res = await DELETE(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await DELETE(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.body.data.published_at).toBeNull()
     // Verify the update payload includes published_at: null
@@ -867,7 +932,12 @@ describe('DELETE /api/admin/cms/[id]/publish (Unpublish)', () => {
       fromCallCount++
       if (fromCallCount === 1) {
         return createMockQueryBuilder({
-          selectData: { page_type: 'static', slug: 'test', service_slug: null, location_slug: null },
+          selectData: {
+            page_type: 'static',
+            slug: 'test',
+            service_slug: null,
+            location_slug: null,
+          },
         })
       }
       return createMockQueryBuilder({ updateData: unpublished })
@@ -889,7 +959,12 @@ describe('GET /api/admin/cms/[id]/versions (Version history)', () => {
   it('returns version history', async () => {
     const versions = [
       { id: VERSION_ID, page_id: PAGE_ID, version_number: 2, title: 'V2' },
-      { id: '880e8400-e29b-41d4-a716-446655440003', page_id: PAGE_ID, version_number: 1, title: 'V1' },
+      {
+        id: '880e8400-e29b-41d4-a716-446655440003',
+        page_id: PAGE_ID,
+        version_number: 1,
+        title: 'V1',
+      },
     ]
 
     mockSupabaseFrom = vi.fn(() => {
@@ -904,15 +979,15 @@ describe('GET /api/admin/cms/[id]/versions (Version history)', () => {
         return Promise.resolve({ data: null, error: null })
       })
       // Override limit for version list query
-      builder.limit = vi.fn().mockReturnValue(
-        Promise.resolve({ data: versions, error: null })
-      )
+      builder.limit = vi.fn().mockReturnValue(Promise.resolve({ data: versions, error: null }))
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/[id]/versions/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}/versions`)
-    const res = await GET(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await GET(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -922,7 +997,9 @@ describe('GET /api/admin/cms/[id]/versions (Version history)', () => {
   it('rejects invalid UUID with 400', async () => {
     const { GET } = await import('@/app/api/admin/cms/[id]/versions/route')
     const req = makeRequest('/api/admin/cms/bad-id/versions')
-    const res = await GET(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
+    const res = (await GET(req, {
+      params: Promise.resolve({ id: 'bad-id' }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('ID invalide')
@@ -931,15 +1008,19 @@ describe('GET /api/admin/cms/[id]/versions (Version history)', () => {
   it('returns 404 for non-existent page', async () => {
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder()
-      builder.single = vi.fn().mockReturnValue(
-        Promise.resolve({ data: null, error: { code: 'PGRST116', message: 'not found' } })
-      )
+      builder.single = vi
+        .fn()
+        .mockReturnValue(
+          Promise.resolve({ data: null, error: { code: 'PGRST116', message: 'not found' } })
+        )
       return builder
     })
 
     const { GET } = await import('@/app/api/admin/cms/[id]/versions/route')
     const req = makeRequest(`/api/admin/cms/${PAGE_ID}/versions`)
-    const res = await GET(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await GET(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(404)
     expect(res.body.error.message).toContain('non trouv')
@@ -962,7 +1043,11 @@ describe('POST /api/admin/cms/[id]/restore (Restore version)', () => {
       meta_title: 'Restored Meta',
       meta_description: 'Restored Desc',
     }
-    const restored = { ...validPageData, title: 'Restored Title', content_html: '<p>Restored content</p>' }
+    const restored = {
+      ...validPageData,
+      title: 'Restored Title',
+      content_html: '<p>Restored content</p>',
+    }
 
     mockSupabaseFrom = vi.fn(() => {
       const builder = createMockQueryBuilder()
@@ -981,7 +1066,9 @@ describe('POST /api/admin/cms/[id]/restore (Restore version)', () => {
 
     const { POST } = await import('@/app/api/admin/cms/[id]/restore/route')
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}/restore`, { version_id: VERSION_ID })
-    const res = await POST(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await POST(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -991,7 +1078,9 @@ describe('POST /api/admin/cms/[id]/restore (Restore version)', () => {
   it('rejects invalid UUID with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/[id]/restore/route')
     const req = makeJsonRequest('/api/admin/cms/bad-id/restore', { version_id: VERSION_ID })
-    const res = await POST(req, { params: Promise.resolve({ id: 'bad-id' }) }) as unknown as MockResponse
+    const res = (await POST(req, {
+      params: Promise.resolve({ id: 'bad-id' }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.error.message).toContain('ID invalide')
@@ -1000,7 +1089,9 @@ describe('POST /api/admin/cms/[id]/restore (Restore version)', () => {
   it('rejects invalid version_id with 400', async () => {
     const { POST } = await import('@/app/api/admin/cms/[id]/restore/route')
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}/restore`, { version_id: 'not-a-uuid' })
-    const res = await POST(req, { params: Promise.resolve({ id: PAGE_ID }) }) as unknown as MockResponse
+    const res = (await POST(req, {
+      params: Promise.resolve({ id: PAGE_ID }),
+    })) as unknown as MockResponse
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
@@ -1144,19 +1235,23 @@ describe('CMS Validation — createPageSchema', () => {
 
   it('rejects location page without location_slug', async () => {
     const { createPageSchema } = await import('@/lib/cms-utils')
-    const result = createPageSchema.safeParse(validCreateBody({
-      page_type: 'location',
-      service_slug: 'plomberie',
-    }))
+    const result = createPageSchema.safeParse(
+      validCreateBody({
+        page_type: 'location',
+        service_slug: 'plomberie',
+      })
+    )
     expect(result.success).toBe(false)
   })
 
   it('rejects location page without service_slug', async () => {
     const { createPageSchema } = await import('@/lib/cms-utils')
-    const result = createPageSchema.safeParse(validCreateBody({
-      page_type: 'location',
-      location_slug: 'paris',
-    }))
+    const result = createPageSchema.safeParse(
+      validCreateBody({
+        page_type: 'location',
+        location_slug: 'paris',
+      })
+    )
     expect(result.success).toBe(false)
   })
 
@@ -1174,13 +1269,17 @@ describe('CMS Validation — createPageSchema', () => {
 
   it('accepts meta_description up to 170 chars', async () => {
     const { createPageSchema } = await import('@/lib/cms-utils')
-    const result = createPageSchema.safeParse(validCreateBody({ meta_description: 'x'.repeat(170) }))
+    const result = createPageSchema.safeParse(
+      validCreateBody({ meta_description: 'x'.repeat(170) })
+    )
     expect(result.success).toBe(true)
   })
 
   it('rejects meta_description over 170 chars', async () => {
     const { createPageSchema } = await import('@/lib/cms-utils')
-    const result = createPageSchema.safeParse(validCreateBody({ meta_description: 'x'.repeat(171) }))
+    const result = createPageSchema.safeParse(
+      validCreateBody({ meta_description: 'x'.repeat(171) })
+    )
     expect(result.success).toBe(false)
   })
 
@@ -1315,10 +1414,6 @@ describe('CMS Utils — UUID_RE', () => {
 // ============================================
 
 describe('CMS API — Files existence & structure', () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { readFileSync, existsSync } = require('fs') as typeof import('fs')
-  const { resolve } = require('path') as typeof import('path')
-
   const BASE = resolve(__dirname, '..', '..')
 
   const requiredRoutes = [
@@ -1365,7 +1460,7 @@ describe('CMS API — Files existence & structure', () => {
   })
 
   it('routes with POST+JSON body use zod safeParse', () => {
-    const routesWithPost = requiredRoutes.filter(r => {
+    const routesWithPost = requiredRoutes.filter((r) => {
       const content = readFileSync(resolve(BASE, r), 'utf-8')
       return content.includes('export async function POST') && content.includes('request.json()')
     })
@@ -1384,11 +1479,13 @@ describe('CMS API — Files existence & structure', () => {
   })
 
   it('routes with mutations call invalidateCache', () => {
-    const mutationRoutes = requiredRoutes.filter(r => {
+    const mutationRoutes = requiredRoutes.filter((r) => {
       const content = readFileSync(resolve(BASE, r), 'utf-8')
-      return content.includes('export async function PUT') ||
+      return (
+        content.includes('export async function PUT') ||
         content.includes('export async function DELETE') ||
         (content.includes('export async function POST') && r !== 'src/app/api/admin/cms/route.ts')
+      )
     })
 
     for (const route of mutationRoutes) {

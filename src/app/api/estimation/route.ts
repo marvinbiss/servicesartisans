@@ -29,11 +29,13 @@ const contextSchema = z.object({
   ville: z.string().min(1),
   departement: z.string().max(3).optional().default(''),
   pageUrl: z.string().optional(),
-  artisan: z.object({
-    name: z.string().min(1),
-    slug: z.string().optional().default(''),
-    publicId: z.string().optional().default(''),
-  }).optional(),
+  artisan: z
+    .object({
+      name: z.string().min(1),
+      slug: z.string().optional().default(''),
+      publicId: z.string().optional().default(''),
+    })
+    .optional(),
 })
 
 const requestSchema = z.object({
@@ -76,7 +78,7 @@ function buildSystemPrompt(
   departement: string,
   coefficient: number,
   formattedGrid: string,
-  artisanName?: string,
+  artisanName?: string
 ): string {
   const artisanLine = artisanName
     ? `\n• Artisan : ${artisanName}\nLe visiteur consulte la fiche de ${artisanName}, un ${metierName.toLowerCase()} à ${ville}.`
@@ -118,11 +120,14 @@ RÈGLES STRICTES :
  * Strips newlines, control characters, limits length, allows only safe chars.
  */
 function sanitizeForPrompt(str: string): string {
-  return str
-    .replace(/[\n\r]/g, '')
-    .replace(/[\x00-\x1f\x7f-\x9f]/g, '')
-    .slice(0, 100)
-    .replace(/[^a-zA-ZÀ-ÿ0-9 \-']/g, '')
+  return (
+    str
+      .replace(/[\n\r]/g, '')
+      // eslint-disable-next-line no-control-regex -- intentional: prompt injection sanitizer
+      .replace(/[\x00-\x1f\x7f-\x9f]/g, '')
+      .slice(0, 100)
+      .replace(/[^a-zA-ZÀ-ÿ0-9 \-']/g, '')
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -142,7 +147,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: 'Trop de requêtes. Veuillez réessayer dans une minute.' },
-        { status: 429, headers: getRateLimitHeaders(rateLimitResult) },
+        { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
       )
     }
 
@@ -153,7 +158,7 @@ export async function POST(request: NextRequest) {
     if (!validation.success) {
       return NextResponse.json(
         { error: 'Données invalides', details: validation.error.flatten() },
-        { status: 400 },
+        { status: 400 }
       )
     }
 
@@ -167,7 +172,7 @@ export async function POST(request: NextRequest) {
     if (messages.length > 20) {
       return NextResponse.json(
         { error: 'Conversation trop longue, veuillez recommencer.' },
-        { status: 429 },
+        { status: 429 }
       )
     }
 
@@ -189,7 +194,7 @@ export async function POST(request: NextRequest) {
         return (data as Tarif[]) ?? []
       },
       86400, // 24h
-      { skipNull: true },
+      { skipNull: true }
     )
 
     // 3. Fetch geographic coefficient (cached 7d)
@@ -203,12 +208,15 @@ export async function POST(request: NextRequest) {
           .single()
 
         if (error) {
-          logger.warn('Coefficient géo non trouvé, utilisation de 1.0', { action: 'estimation', departement })
+          logger.warn('Coefficient géo non trouvé, utilisation de 1.0', {
+            action: 'estimation',
+            departement,
+          })
           return null
         }
         return data as CoefficientGeo
       },
-      604800, // 7 days
+      604800 // 7 days
     )
 
     const coefficient = coeffData?.coefficient ?? 1.0
@@ -217,10 +225,19 @@ export async function POST(request: NextRequest) {
     const safeMetier = sanitizeForPrompt(metier)
     const safeVille = sanitizeForPrompt(ville)
     const safeDepartement = sanitizeForPrompt(departement)
-    const safeArtisanName = context.artisan?.name ? sanitizeForPrompt(context.artisan.name) : undefined
+    const safeArtisanName = context.artisan?.name
+      ? sanitizeForPrompt(context.artisan.name)
+      : undefined
 
     const formattedGrid = formatGrid(tarifs)
-    const systemPrompt = buildSystemPrompt(safeMetier, safeVille, safeDepartement, coefficient, formattedGrid, safeArtisanName)
+    const systemPrompt = buildSystemPrompt(
+      safeMetier,
+      safeVille,
+      safeDepartement,
+      coefficient,
+      formattedGrid,
+      safeArtisanName
+    )
 
     // 5. Call Anthropic with streaming + timeout
     const anthropic = new Anthropic()
@@ -228,15 +245,18 @@ export async function POST(request: NextRequest) {
     const abortController = new AbortController()
     const timeout = setTimeout(() => abortController.abort(), 15_000)
 
-    const stream = anthropic.messages.stream({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 512,
-      system: systemPrompt,
-      messages: messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      })),
-    }, { signal: abortController.signal })
+    const stream = anthropic.messages.stream(
+      {
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 512,
+        system: systemPrompt,
+        messages: messages.map((m) => ({
+          role: m.role,
+          content: m.content,
+        })),
+      },
+      { signal: abortController.signal }
+    )
 
     // 6. Return a ReadableStream
     const encoder = new TextEncoder()
@@ -245,10 +265,7 @@ export async function POST(request: NextRequest) {
       async start(controller) {
         try {
           for await (const event of stream) {
-            if (
-              event.type === 'content_block_delta' &&
-              event.delta.type === 'text_delta'
-            ) {
+            if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
               controller.enqueue(encoder.encode(event.delta.text))
             }
           }
@@ -257,8 +274,14 @@ export async function POST(request: NextRequest) {
         } catch (streamError) {
           clearTimeout(timeout)
           if (abortController.signal.aborted) {
-            logger.error('Anthropic stream timed out after 15s', streamError, { action: 'estimation' })
-            controller.enqueue(encoder.encode('\n\nDésolé, le service est temporairement surchargé. Veuillez réessayer.'))
+            logger.error('Anthropic stream timed out after 15s', streamError, {
+              action: 'estimation',
+            })
+            controller.enqueue(
+              encoder.encode(
+                '\n\nDésolé, le service est temporairement surchargé. Veuillez réessayer.'
+              )
+            )
             controller.close()
           } else {
             logger.error('Erreur streaming Anthropic', streamError, { action: 'estimation' })
@@ -279,8 +302,11 @@ export async function POST(request: NextRequest) {
     const errMsg = error instanceof Error ? error.message : String(error)
     logger.error('Estimation API error', error, { action: 'estimation', message: errMsg })
     return NextResponse.json(
-      { error: 'Erreur serveur', debug: process.env.NODE_ENV === 'development' ? errMsg : undefined },
-      { status: 500 },
+      {
+        error: 'Erreur serveur',
+        debug: process.env.NODE_ENV === 'development' ? errMsg : undefined,
+      },
+      { status: 500 }
     )
   }
 }

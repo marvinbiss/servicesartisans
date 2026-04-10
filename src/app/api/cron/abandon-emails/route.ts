@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
   const supabase = createAdminClient()
   const now = new Date()
-  let sent = { email1: 0, email2: 0, email3: 0 }
+  const sent = { email1: 0, email2: 0, email3: 0 }
 
   try {
     // Email 1: 30 min after abandon, not yet sent
@@ -113,7 +113,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(`[abandon-emails] Sent: ${sent.email1} email1, ${sent.email2} email2, ${sent.email3} email3`)
+    console.warn(
+      `[abandon-emails] Sent: ${sent.email1} email1, ${sent.email2} email2, ${sent.email3} email3`
+    )
     return NextResponse.json({ ok: true, sent })
   } catch (err) {
     console.error('[abandon-emails] Cron error:', err)

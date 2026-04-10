@@ -2,7 +2,7 @@
  * Tests — Admin Provider [id] API (/api/admin/providers/[id])
  * GET: fetch provider by ID, invalid UUID, 404, auth check
  * PATCH: update provider fields, invalid data, invalid UUID
- * DELETE: soft delete (is_active=false), invalid UUID
+ * DELETE: hard delete (cleans related rows + provider), invalid UUID
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
@@ -14,17 +14,20 @@ const ADMIN_ID = '550e8400-e29b-41d4-a716-446655440000'
 const PROVIDER_UUID = '550e8400-e29b-41d4-a716-446655440001'
 
 // --- NextResponse mock ---
-const mockJsonFn = vi.fn((body: unknown, init?: { status?: number; headers?: Record<string, string> }) => ({
-  body,
-  status: init?.status ?? 200,
-  headers: {
-    set: vi.fn(),
-  },
-}))
+const mockJsonFn = vi.fn(
+  (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => ({
+    body,
+    status: init?.status ?? 200,
+    headers: {
+      set: vi.fn(),
+    },
+  })
+)
 
 vi.mock('next/server', () => ({
   NextResponse: {
-    json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => mockJsonFn(body, init),
+    json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) =>
+      mockJsonFn(body, init),
   },
 }))
 
@@ -43,7 +46,8 @@ type MockResult = { data: unknown; error: unknown }
 
 let mockSelectResult: MockResult = { data: null, error: null }
 let mockUpdateResult: MockResult = { data: null, error: null }
-let lastOperation: 'select' | 'update' = 'select'
+let mockDeleteResult: MockResult = { data: null, error: null }
+let lastOperation: 'select' | 'update' | 'delete' = 'select'
 
 function makeBuilder(getResult: () => MockResult) {
   const b: Record<string, unknown> = {}
@@ -51,6 +55,10 @@ function makeBuilder(getResult: () => MockResult) {
   b.eq = vi.fn().mockReturnValue(b)
   b.update = vi.fn((_data: unknown) => {
     lastOperation = 'update'
+    return b
+  })
+  b.delete = vi.fn(() => {
+    lastOperation = 'delete'
     return b
   })
   b.single = vi.fn().mockReturnValue(b)
@@ -67,6 +75,7 @@ vi.mock('@/lib/supabase/admin', () => ({
       // Return a builder that dynamically picks the right result
       return makeBuilder(() => {
         if (lastOperation === 'update') return mockUpdateResult
+        if (lastOperation === 'delete') return mockDeleteResult
         return mockSelectResult
       })
     }),
@@ -76,7 +85,12 @@ vi.mock('@/lib/supabase/admin', () => ({
 // --- Admin auth mock ---
 let mockAuthResult: {
   success: boolean
-  admin?: { id: string; email: string; role: string; permissions: Record<string, Record<string, boolean>> }
+  admin?: {
+    id: string
+    email: string
+    role: string
+    permissions: Record<string, Record<string, boolean>>
+  }
   error?: unknown
 }
 
@@ -139,6 +153,7 @@ beforeEach(() => {
   lastOperation = 'select'
   mockSelectResult = { data: sampleProviderRow(), error: null }
   mockUpdateResult = { data: sampleProviderRow(), error: null }
+  mockDeleteResult = { data: null, error: null }
   mockAuthResult = {
     success: true,
     admin: {
@@ -159,10 +174,10 @@ beforeEach(() => {
 describe('GET /api/admin/providers/[id]', () => {
   it('returns provider by ID (200)', async () => {
     const { GET } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await GET(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; provider: Record<string, unknown> }; status: number }
+    const result = (await GET({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      body: { success: boolean; provider: Record<string, unknown> }
+      status: number
+    }
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
@@ -180,10 +195,10 @@ describe('GET /api/admin/providers/[id]', () => {
 
   it('returns 400 for invalid UUID', async () => {
     const { GET } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await GET(
-      {} as never,
-      makeParams('not-a-uuid'),
-    ) as unknown as { body: { success: boolean; error: string }; status: number }
+    const result = (await GET({} as never, makeParams('not-a-uuid'))) as unknown as {
+      body: { success: boolean; error: string }
+      status: number
+    }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -194,10 +209,10 @@ describe('GET /api/admin/providers/[id]', () => {
     mockSelectResult = { data: null, error: { code: 'PGRST116', message: 'not found' } }
 
     const { GET } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await GET(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; error: string }; status: number }
+    const result = (await GET({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      body: { success: boolean; error: string }
+      status: number
+    }
 
     expect(result.status).toBe(404)
     expect(result.body.success).toBe(false)
@@ -211,10 +226,9 @@ describe('GET /api/admin/providers/[id]', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await GET(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { status: number }
+    const result = (await GET({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      status: number
+    }
 
     expect(result.status).toBe(401)
   })
@@ -235,10 +249,9 @@ describe('GET /api/admin/providers/[id]', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await GET(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { provider: Record<string, unknown> } }
+    const result = (await GET({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      body: { provider: Record<string, unknown> }
+    }
 
     const p = result.body.provider
     expect(p.address_street).toBe('5 Avenue Foch')
@@ -270,10 +283,9 @@ describe('GET /api/admin/providers/[id]', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await GET(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { provider: Record<string, unknown> } }
+    const result = (await GET({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      body: { provider: Record<string, unknown> }
+    }
 
     const p = result.body.provider
     expect(p.user_id).toBeNull()
@@ -308,10 +320,13 @@ describe('PATCH /api/admin/providers/[id]', () => {
     }
 
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await PATCH(
+    const result = (await PATCH(
       makePatchRequest({ name: 'Updated Plomberie', is_verified: true }),
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; data: Record<string, unknown>; message: string }; status: number }
+      makeParams(PROVIDER_UUID)
+    )) as unknown as {
+      body: { success: boolean; data: Record<string, unknown>; message: string }
+      status: number
+    }
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
@@ -321,22 +336,24 @@ describe('PATCH /api/admin/providers/[id]', () => {
 
   it('returns 400 for invalid data (zod validation)', async () => {
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await PATCH(
+    const result = (await PATCH(
       makePatchRequest({ email: 'not-an-email' }),
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; error: string; details: unknown }; status: number }
+      makeParams(PROVIDER_UUID)
+    )) as unknown as { body: { success: boolean; error: string; details: unknown }; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
-    expect((result.body.error as unknown as { message: string }).message).toBe('Erreur de validation')
+    expect((result.body.error as unknown as { message: string }).message).toBe(
+      'Erreur de validation'
+    )
   })
 
   it('returns 400 for invalid UUID', async () => {
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await PATCH(
+    const result = (await PATCH(
       makePatchRequest({ name: 'Test' }),
-      makeParams('bad-uuid'),
-    ) as unknown as { body: { success: boolean; error: string }; status: number }
+      makeParams('bad-uuid')
+    )) as unknown as { body: { success: boolean; error: string }; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -350,20 +367,20 @@ describe('PATCH /api/admin/providers/[id]', () => {
     }
 
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await PATCH(
+    const result = (await PATCH(
       makePatchRequest({ name: 'Test' }),
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { status: number }
+      makeParams(PROVIDER_UUID)
+    )) as unknown as { status: number }
 
     expect(result.status).toBe(403)
   })
 
   it('returns 400 for invalid JSON body', async () => {
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await PATCH(
+    const result = (await PATCH(
       { json: () => Promise.reject(new Error('Invalid JSON')) } as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; error: string }; status: number }
+      makeParams(PROVIDER_UUID)
+    )) as unknown as { body: { success: boolean; error: string }; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -378,10 +395,10 @@ describe('PATCH /api/admin/providers/[id]', () => {
     }
 
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await PATCH(
+    const result = (await PATCH(
       makePatchRequest({ name: 'Test' }),
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; error: string }; status: number }
+      makeParams(PROVIDER_UUID)
+    )) as unknown as { body: { success: boolean; error: string }; status: number }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
@@ -396,17 +413,14 @@ describe('PATCH /api/admin/providers/[id]', () => {
     }
 
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
-    await PATCH(
-      makePatchRequest({ name: 'Logged Update' }),
-      makeParams(PROVIDER_UUID),
-    )
+    await PATCH(makePatchRequest({ name: 'Logged Update' }), makeParams(PROVIDER_UUID))
 
     expect(mockLogAdminAction).toHaveBeenCalledWith(
       ADMIN_ID,
       'provider.update',
       'provider',
       PROVIDER_UUID,
-      expect.objectContaining({ updated_at: expect.any(String) }),
+      expect.objectContaining({ updated_at: expect.any(String) })
     )
   })
 
@@ -420,7 +434,7 @@ describe('PATCH /api/admin/providers/[id]', () => {
     const { PATCH } = await import('@/app/api/admin/providers/[id]/route')
     await PATCH(
       makePatchRequest({ description: '<script>alert("xss")</script>Clean text' }),
-      makeParams(PROVIDER_UUID),
+      makeParams(PROVIDER_UUID)
     )
 
     // The logAdminAction should have been called with sanitized data
@@ -429,7 +443,7 @@ describe('PATCH /api/admin/providers/[id]', () => {
       'provider.update',
       'provider',
       PROVIDER_UUID,
-      expect.objectContaining({ description: 'alert("xss")Clean text' }),
+      expect.objectContaining({ description: 'alert("xss")Clean text' })
     )
   })
 })
@@ -439,27 +453,26 @@ describe('PATCH /api/admin/providers/[id]', () => {
 // ============================================
 
 describe('DELETE /api/admin/providers/[id]', () => {
-  it('soft deletes provider by setting is_active=false (200)', async () => {
-    lastOperation = 'update'
-    mockUpdateResult = { data: null, error: null }
+  it('hard deletes provider and related rows (200)', async () => {
+    mockDeleteResult = { data: null, error: null }
 
     const { DELETE } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await DELETE(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; message: string }; status: number }
+    const result = (await DELETE({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      body: { success: boolean; message: string }
+      status: number
+    }
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
-    expect(result.body.message).toBe('Artisan supprimé')
+    expect(result.body.message).toBe('Artisan supprimé définitivement')
   })
 
   it('returns 400 for invalid UUID', async () => {
     const { DELETE } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await DELETE(
-      {} as never,
-      makeParams('invalid-id'),
-    ) as unknown as { body: { success: boolean; error: string }; status: number }
+    const result = (await DELETE({} as never, makeParams('invalid-id'))) as unknown as {
+      body: { success: boolean; error: string }
+      status: number
+    }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -473,26 +486,24 @@ describe('DELETE /api/admin/providers/[id]', () => {
     }
 
     const { DELETE } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await DELETE(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { status: number }
+    const result = (await DELETE({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      status: number
+    }
 
     expect(result.status).toBe(403)
   })
 
   it('returns 500 on database error', async () => {
-    lastOperation = 'update'
-    mockUpdateResult = {
+    mockDeleteResult = {
       data: null,
       error: { code: '42501', message: 'permission denied' },
     }
 
     const { DELETE } = await import('@/app/api/admin/providers/[id]/route')
-    const result = await DELETE(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    ) as unknown as { body: { success: boolean; error: string }; status: number }
+    const result = (await DELETE({} as never, makeParams(PROVIDER_UUID))) as unknown as {
+      body: { success: boolean; error: string }
+      status: number
+    }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
@@ -500,20 +511,16 @@ describe('DELETE /api/admin/providers/[id]', () => {
   })
 
   it('calls logAdminAction on successful delete', async () => {
-    lastOperation = 'update'
-    mockUpdateResult = { data: null, error: null }
+    mockDeleteResult = { data: null, error: null }
 
     const { DELETE } = await import('@/app/api/admin/providers/[id]/route')
-    await DELETE(
-      {} as never,
-      makeParams(PROVIDER_UUID),
-    )
+    await DELETE({} as never, makeParams(PROVIDER_UUID))
 
     expect(mockLogAdminAction).toHaveBeenCalledWith(
       ADMIN_ID,
-      'provider.delete',
+      'provider.hard_delete',
       'provider',
-      PROVIDER_UUID,
+      PROVIDER_UUID
     )
   })
 })

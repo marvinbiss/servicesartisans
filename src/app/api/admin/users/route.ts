@@ -46,7 +46,10 @@ export async function GET(request: NextRequest) {
     const result = usersQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -73,7 +76,7 @@ export async function GET(request: NextRequest) {
     // Fetch profiles for ALL returned users so type filters operate on the full set
     const profilesMap = new Map<string, Record<string, unknown>>()
     try {
-      const userIds = authUsers.users.map(u => u.id)
+      const userIds = authUsers.users.map((u) => u.id)
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
           .from('profiles')
@@ -81,7 +84,7 @@ export async function GET(request: NextRequest) {
           .in('id', userIds)
 
         if (profiles) {
-          profiles.forEach(p => profilesMap.set(p.id, p))
+          profiles.forEach((p) => profilesMap.set(p.id, p))
         }
       }
     } catch {
@@ -89,14 +92,18 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform ALL users first
-    let users = authUsers.users.map(user => {
+    let users = authUsers.users.map((user) => {
       const profile = profilesMap.get(user.id) || {}
       return {
         id: user.id,
         email: user.email || '',
-        full_name: (profile.full_name as string) || user.user_metadata?.full_name || user.user_metadata?.name || null,
+        full_name:
+          (profile.full_name as string) ||
+          user.user_metadata?.full_name ||
+          user.user_metadata?.name ||
+          null,
         phone: (profile.phone_e164 as string) || user.user_metadata?.phone || null,
-        user_type: Boolean(user.user_metadata?.is_artisan) ? 'artisan' : 'client',
+        user_type: user.user_metadata?.is_artisan ? 'artisan' : 'client',
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
         subscription_plan: 'gratuit',
@@ -110,25 +117,26 @@ export async function GET(request: NextRequest) {
 
     // Apply type/ban filter BEFORE pagination so counts are accurate
     if (filter === 'clients') {
-      users = users.filter(u => u.user_type === 'client')
+      users = users.filter((u) => u.user_type === 'client')
     } else if (filter === 'artisans') {
-      users = users.filter(u => u.user_type === 'artisan')
+      users = users.filter((u) => u.user_type === 'artisan')
     } else if (filter === 'banned') {
-      users = users.filter(u => u.is_banned)
+      users = users.filter((u) => u.is_banned)
     }
 
     // Apply plan filter
     if (plan !== 'all') {
-      users = users.filter(u => u.subscription_plan === plan)
+      users = users.filter((u) => u.subscription_plan === plan)
     }
 
     // Apply search
     if (search) {
       const searchLower = search.toLowerCase()
-      users = users.filter(u =>
-        u.email.toLowerCase().includes(searchLower) ||
-        (u.full_name && u.full_name.toLowerCase().includes(searchLower)) ||
-        (u.phone && u.phone.includes(search))
+      users = users.filter(
+        (u) =>
+          u.email.toLowerCase().includes(searchLower) ||
+          (u.full_name && u.full_name.toLowerCase().includes(searchLower)) ||
+          (u.phone && u.phone.includes(search))
       )
     }
 
@@ -170,7 +178,10 @@ export async function POST(request: NextRequest) {
     const result = createUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -199,16 +210,14 @@ export async function POST(request: NextRequest) {
     // Try to create/update profile if table exists
     if (authData.user) {
       try {
-        await supabase
-          .from('profiles')
-          .upsert({
-            id: authData.user.id,
-            email,
-            full_name,
-            role: user_type === 'artisan' ? 'artisan' : 'client',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          })
+        await supabase.from('profiles').upsert({
+          id: authData.user.id,
+          email,
+          full_name,
+          role: user_type === 'artisan' ? 'artisan' : 'client',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
       } catch {
         // profiles table doesn't exist, that's OK
       }
@@ -216,7 +225,10 @@ export async function POST(request: NextRequest) {
 
     // Log d'audit
     if (authData.user) {
-      await logAdminAction(authResult.admin.id, 'user.create', 'user', authData.user.id, { email, user_type })
+      await logAdminAction(authResult.admin.id, 'user.create', 'user', authData.user.id, {
+        email,
+        user_type,
+      })
     }
 
     return NextResponse.json({

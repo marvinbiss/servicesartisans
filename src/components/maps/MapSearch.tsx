@@ -3,9 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  Star, Phone, MapPin, Loader2, Navigation, Layers, Shield
-} from 'lucide-react'
+import { Star, Phone, MapPin, Loader2, Navigation, Layers, Shield } from 'lucide-react'
 import Link from 'next/link'
 import NextImage from 'next/image'
 import { getArtisanUrl } from '@/lib/utils'
@@ -14,43 +12,22 @@ import { useGeolocation } from '@/hooks/useGeolocation'
 import { useMapSearchCache } from '@/hooks/useMapSearchCache'
 import MapFilters from './MapFilters'
 import type { Filters } from './MapFilters'
-import {
-  DesktopResultsSidebar,
-  MobileResultsToggle,
-  MobileResultsDrawer,
-} from './MapResultsList'
+import { DesktopResultsSidebar, MobileResultsToggle, MobileResultsDrawer } from './MapResultsList'
 import type { MapProvider } from './MapResultsList'
 import './map-styles.css'
 
 // Dynamic imports for Leaflet
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-)
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-)
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
-)
-const MapBoundsHandler = dynamic(
-  () => import('./MapBoundsHandler'),
-  { ssr: false }
-)
-const MapPerformanceIndicator = dynamic(
-  () => import('./MapPerformanceIndicator'),
-  { ssr: false }
-)
-const MapViewController = dynamic(
-  () => import('./MapViewController'),
-  { ssr: false }
-)
+const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
+  ssr: false,
+})
+const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), {
+  ssr: false,
+})
+const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), { ssr: false })
+const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), { ssr: false })
+const MapBoundsHandler = dynamic(() => import('./MapBoundsHandler'), { ssr: false })
+const MapPerformanceIndicator = dynamic(() => import('./MapPerformanceIndicator'), { ssr: false })
+const MapViewController = dynamic(() => import('./MapViewController'), { ssr: false })
 
 interface MapBounds {
   north: number
@@ -62,16 +39,16 @@ interface MapBounds {
 const MAP_STYLES = {
   street: {
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '© OpenStreetMap'
+    attribution: '© OpenStreetMap',
   },
   light: {
     url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    attribution: '© CartoDB'
+    attribution: '© CartoDB',
   },
   dark: {
     url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attribution: '© CartoDB'
-  }
+    attribution: '© CartoDB',
+  },
 }
 
 export default function MapSearch() {
@@ -95,9 +72,10 @@ export default function MapSearch() {
 
   // World-class geolocation hook
   const geolocation = useGeolocation({ enableHighAccuracy: true })
-  const userLocation: [number, number] | null = geolocation.latitude && geolocation.longitude
-    ? [geolocation.latitude, geolocation.longitude]
-    : null
+  const userLocation: [number, number] | null =
+    geolocation.latitude && geolocation.longitude
+      ? [geolocation.latitude, geolocation.longitude]
+      : null
 
   // World-class caching system
   const searchCache = useMapSearchCache<MapProvider[]>()
@@ -107,7 +85,7 @@ export default function MapSearch() {
     service: '',
     minRating: 0,
     verified: false,
-    emergency: false
+    emergency: false,
   })
 
   const [mapCenter, setMapCenter] = useState<[number, number]>([46.603354, 1.888334])
@@ -115,90 +93,96 @@ export default function MapSearch() {
 
   // Count active filters
   const activeFilterCount = useMemo(() => {
-    return [
-      filters.service,
-      filters.minRating > 0,
-      filters.verified,
-      filters.emergency
-    ].filter(Boolean).length
+    return [filters.service, filters.minRating > 0, filters.verified, filters.emergency].filter(
+      Boolean
+    ).length
   }, [filters])
 
   // World-class search with caching and performance monitoring
-  const searchInBounds = useCallback(async (bounds: MapBounds, query?: string) => {
-    if (!bounds) return
+  const searchInBounds = useCallback(
+    async (bounds: MapBounds, query?: string) => {
+      if (!bounds) return
 
-    // Check cache first
-    const cacheKey = { ...filters, query }
-    const cachedData = searchCache.get(bounds, cacheKey)
+      // Check cache first
+      const cacheKey = { ...filters, query }
+      const cachedData = searchCache.get(bounds, cacheKey)
 
-    if (cachedData) {
-      setProviders(cachedData)
-      setShowPerformance(true)
-      return
-    }
-
-    setLoading(true)
-    const startTime = performance.now()
-
-    try {
-      const params = new URLSearchParams({
-        north: bounds.north.toString(),
-        south: bounds.south.toString(),
-        east: bounds.east.toString(),
-        west: bounds.west.toString(),
-        limit: '100',
-        ...(query && { q: query }),
-        ...(filters.service && { service: filters.service }),
-        ...(filters.minRating > 0 && { minRating: filters.minRating.toString() }),
-        ...(filters.verified && { verified: 'true' }),
-      })
-
-      const response = await fetch(`/api/search/map?${params}`)
-      const data = await response.json()
-
-      if (data.success && data.providers) {
-        setProviders(data.providers)
-        // Cache the results
-        searchCache.set(bounds, data.providers, cacheKey)
+      if (cachedData) {
+        setProviders(cachedData)
+        setShowPerformance(true)
+        return
       }
-    } catch (error) {
-      console.error('Search error:', error)
-    } finally {
-      const endTime = performance.now()
-      setResponseTime(Math.round(endTime - startTime))
-      setShowPerformance(true)
-      setLoading(false)
-    }
-  }, [filters, searchCache])
+
+      setLoading(true)
+      const startTime = performance.now()
+
+      try {
+        const params = new URLSearchParams({
+          north: bounds.north.toString(),
+          south: bounds.south.toString(),
+          east: bounds.east.toString(),
+          west: bounds.west.toString(),
+          limit: '100',
+          ...(query && { q: query }),
+          ...(filters.service && { service: filters.service }),
+          ...(filters.minRating > 0 && { minRating: filters.minRating.toString() }),
+          ...(filters.verified && { verified: 'true' }),
+        })
+
+        const response = await fetch(`/api/search/map?${params}`)
+        const data = await response.json()
+
+        if (data.success && data.providers) {
+          setProviders(data.providers)
+          // Cache the results
+          searchCache.set(bounds, data.providers, cacheKey)
+        }
+      } catch (error) {
+        console.error('Search error:', error)
+      } finally {
+        const endTime = performance.now()
+        setResponseTime(Math.round(endTime - startTime))
+        setShowPerformance(true)
+        setLoading(false)
+      }
+    },
+    [filters, searchCache]
+  )
 
   // Handle bounds change with debounce
-  const handleBoundsChange = useCallback((bounds: MapBounds) => {
-    setCurrentBounds(bounds)
+  const handleBoundsChange = useCallback(
+    (bounds: MapBounds) => {
+      setCurrentBounds(bounds)
 
-    if (searchDebounceRef.current) {
-      clearTimeout(searchDebounceRef.current)
-    }
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current)
+      }
 
-    searchDebounceRef.current = setTimeout(() => {
-      searchInBounds(bounds, searchQuery)
-    }, 300)
-  }, [searchInBounds, searchQuery])
+      searchDebounceRef.current = setTimeout(() => {
+        searchInBounds(bounds, searchQuery)
+      }, 300)
+    },
+    [searchInBounds, searchQuery]
+  )
 
   // Handle search input change with debounce
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchQuery(value)
-    if (currentBounds) {
-      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
-      searchDebounceRef.current = setTimeout(() => {
-        searchInBounds(currentBounds, value)
-      }, 500)
-    }
-  }, [currentBounds, searchInBounds])
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchQuery(value)
+      if (currentBounds) {
+        if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
+        searchDebounceRef.current = setTimeout(() => {
+          searchInBounds(currentBounds, value)
+        }, 500)
+      }
+    },
+    [currentBounds, searchInBounds]
+  )
 
   // World-class user location with better error handling
   const getUserLocation = useCallback(() => {
     geolocation.getLocation()
-  }, [])
+  }, [geolocation])
 
   // Update map when geolocation changes
   useEffect(() => {
@@ -210,7 +194,7 @@ export default function MapSearch() {
 
   // Toggle favorite
   const toggleFavorite = (id: string) => {
-    setFavorites(prev => {
+    setFavorites((prev) => {
       const next = new Set(prev)
       if (next.has(id)) {
         next.delete(id)
@@ -229,29 +213,33 @@ export default function MapSearch() {
   }, [])
 
   // Custom marker icon
-  const createMarkerIcon = useCallback((provider: MapProvider, isHovered: boolean, isSelected: boolean) => {
-    if (typeof window === 'undefined') return null
+  const createMarkerIcon = useCallback(
+    (provider: MapProvider, isHovered: boolean, isSelected: boolean) => {
+      if (typeof window === 'undefined') return null
 
-    const L = require('leaflet')
+      // eslint-disable-next-line @typescript-eslint/no-require-imports -- Leaflet has window deps, must be loaded synchronously after the SSR guard above
+      const L = require('leaflet')
 
-    const isHighlighted = isHovered || isSelected
-    const size = isHighlighted ? 48 : 38
-    const zIndex = isHighlighted ? 1000 : 1
+      const isHighlighted = isHovered || isSelected
+      const size = isHighlighted ? 48 : 38
+      const zIndex = isHighlighted ? 1000 : 1
 
-    let bgColor = '#3b82f6' // blue default
-    if (provider.is_verified) bgColor = '#22c55e' // green
+      let bgColor = '#3b82f6' // blue default
+      if (provider.is_verified) bgColor = '#22c55e' // green
 
-    // World-class: pulse animation for selected
-    const pulseAnimation = isSelected ? `
+      // World-class: pulse animation for selected
+      const pulseAnimation = isSelected
+        ? `
       @keyframes pulse {
         0%, 100% { transform: rotate(-45deg) scale(1); }
         50% { transform: rotate(-45deg) scale(1.05); }
       }
-    ` : ''
+    `
+        : ''
 
-    return L.divIcon({
-      className: 'custom-marker',
-      html: `
+      return L.divIcon({
+        className: 'custom-marker',
+        html: `
         <style>${pulseAnimation}</style>
         <div style="
           background: ${bgColor};
@@ -279,11 +267,13 @@ export default function MapSearch() {
           ">${provider.rating_average?.toFixed(1) || '—'}</span>
         </div>
       `,
-      iconSize: [size, size],
-      iconAnchor: [size / 2, size],
-      popupAnchor: [0, -size]
-    })
-  }, [])
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size],
+        popupAnchor: [0, -size],
+      })
+    },
+    []
+  )
 
   // Scroll to provider in list
   const scrollToProvider = (providerId: string) => {
@@ -302,11 +292,13 @@ export default function MapSearch() {
     setMapReady(true)
   }, [])
 
-  // Initial load
+  // Initial load — volontairement découplé de currentBounds/searchInBounds
+  // pour éviter une boucle de requêtes à chaque drag/zoom
   useEffect(() => {
     if (mapReady && currentBounds) {
       searchInBounds(currentBounds)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapReady, filters])
 
   return (
@@ -358,15 +350,16 @@ export default function MapSearch() {
               <MapViewController selectedProvider={selectedProvider} providers={providers} />
 
               {providers
-                .filter(p =>
-                  p.latitude &&
-                  p.longitude &&
-                  !isNaN(p.latitude) &&
-                  !isNaN(p.longitude) &&
-                  p.latitude >= -90 &&
-                  p.latitude <= 90 &&
-                  p.longitude >= -180 &&
-                  p.longitude <= 180
+                .filter(
+                  (p) =>
+                    p.latitude &&
+                    p.longitude &&
+                    !isNaN(p.latitude) &&
+                    !isNaN(p.longitude) &&
+                    p.latitude >= -90 &&
+                    p.latitude <= 90 &&
+                    p.longitude >= -180 &&
+                    p.longitude <= 180
                 )
                 .map((provider) => (
                   <Marker
@@ -383,7 +376,7 @@ export default function MapSearch() {
                         scrollToProvider(provider.id)
                       },
                       mouseover: () => setHoveredProvider(provider),
-                      mouseout: () => setHoveredProvider(null)
+                      mouseout: () => setHoveredProvider(null),
                     }}
                   >
                     <Popup className="custom-popup" maxWidth={300} minWidth={240}>
@@ -392,7 +385,14 @@ export default function MapSearch() {
                           <div className="relative flex-shrink-0 rounded-xl">
                             <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
                               {provider.avatar_url ? (
-                                <NextImage src={provider.avatar_url} alt={provider.name} width={80} height={80} sizes="80px" className="w-full h-full object-cover" />
+                                <NextImage
+                                  src={provider.avatar_url}
+                                  alt={provider.name}
+                                  width={80}
+                                  height={80}
+                                  sizes="80px"
+                                  className="w-full h-full object-cover"
+                                />
                               ) : (
                                 <span className="text-3xl font-bold text-gray-400">
                                   {provider.name.charAt(0)}
@@ -405,7 +405,9 @@ export default function MapSearch() {
                           <div className="flex-1 min-w-0">
                             {/* Name and verification */}
                             <div className="flex items-start justify-between gap-2 mb-1">
-                              <h3 className="font-bold text-gray-900 text-base leading-tight">{provider.name}</h3>
+                              <h3 className="font-bold text-gray-900 text-base leading-tight">
+                                {provider.name}
+                              </h3>
                               {provider.is_verified && (
                                 <span title="Artisan référencé">
                                   <Shield className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -414,15 +416,21 @@ export default function MapSearch() {
                             </div>
 
                             {/* Specialty */}
-                            <p className="text-sm text-blue-600 font-medium mb-2">{provider.specialty || 'Artisan'}</p>
+                            <p className="text-sm text-blue-600 font-medium mb-2">
+                              {provider.specialty || 'Artisan'}
+                            </p>
 
                             {/* Rating - Enhanced */}
                             <div className="flex items-center gap-1.5">
                               <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
                                 <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                                <span className="font-bold text-gray-900 text-sm">{provider.rating_average?.toFixed(1)}</span>
+                                <span className="font-bold text-gray-900 text-sm">
+                                  {provider.rating_average?.toFixed(1)}
+                                </span>
                               </div>
-                              <span className="text-gray-500 text-sm">({provider.review_count} avis)</span>
+                              <span className="text-gray-500 text-sm">
+                                ({provider.review_count} avis)
+                              </span>
                             </div>
 
                             {/* Location */}
@@ -430,33 +438,36 @@ export default function MapSearch() {
                               <MapPin className="w-3.5 h-3.5 text-gray-400" />
                               {provider.address_city}
                             </p>
-
                           </div>
                         </div>
 
                         {/* Actions - World Class Design */}
                         <div className="flex gap-2 mt-4">
                           <Link
-                            href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
+                            href={getArtisanUrl({
+                              stable_id: provider.stable_id,
+                              slug: provider.slug,
+                              specialty: provider.specialty,
+                              city: provider.address_city,
+                            })}
                             className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                           >
                             Voir le profil
                           </Link>
                           <a
-                              href={PHONE_TEL}
-                              className="px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-semibold rounded-lg hover:from-green-700 hover:to-green-800 flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
-                              title="Appeler ServicesArtisans"
-                              aria-label="Appeler ServicesArtisans"
-                            >
-                              <Phone className="w-4 h-4" aria-hidden="true" />
-                              Appeler
-                            </a>
+                            href={PHONE_TEL}
+                            className="px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-semibold rounded-lg hover:from-green-700 hover:to-green-800 flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                            title="Appeler ServicesArtisans"
+                            aria-label="Appeler ServicesArtisans"
+                          >
+                            <Phone className="w-4 h-4" aria-hidden="true" />
+                            Appeler
+                          </a>
                         </div>
                       </div>
                     </Popup>
                   </Marker>
-                ))
-              }
+                ))}
 
               {/* User Location Marker */}
               {userLocation && (
@@ -464,6 +475,7 @@ export default function MapSearch() {
                   position={userLocation}
                   icon={(() => {
                     if (typeof window === 'undefined') return undefined
+                    // eslint-disable-next-line @typescript-eslint/no-require-imports -- Leaflet has window deps, must be loaded synchronously after the SSR guard above
                     const L = require('leaflet')
                     return L.divIcon({
                       className: 'user-location-marker',
@@ -478,7 +490,7 @@ export default function MapSearch() {
                         "></div>
                       `,
                       iconSize: [20, 20],
-                      iconAnchor: [10, 10]
+                      iconAnchor: [10, 10],
                     })
                   })()}
                 />
@@ -508,7 +520,9 @@ export default function MapSearch() {
               {geolocation.loading ? (
                 <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
               ) : (
-                <Navigation className={`w-5 h-5 ${userLocation ? 'text-blue-600' : 'text-gray-700'}`} />
+                <Navigation
+                  className={`w-5 h-5 ${userLocation ? 'text-blue-600' : 'text-gray-700'}`}
+                />
               )}
             </button>
 
@@ -588,7 +602,9 @@ export default function MapSearch() {
                       <p className="text-sm text-blue-600">{hoveredProvider.specialty}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                        <span className="font-medium">{hoveredProvider.rating_average?.toFixed(1)}</span>
+                        <span className="font-medium">
+                          {hoveredProvider.rating_average?.toFixed(1)}
+                        </span>
                       </div>
                     </div>
                   </div>

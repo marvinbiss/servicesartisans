@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Phone, CheckCircle, Clock, Zap, Users, ArrowRight } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -54,7 +55,8 @@ export function PlatformSidebarCTA({
             Besoin d&apos;un artisan ?
           </h3>
           <p className="text-sm text-charcoal-600 mb-5">
-            Un conseiller vous trouve un professionnel disponible et vous rappelle en moins de 2 minutes.
+            Un conseiller vous trouve un professionnel disponible et vous rappelle en moins de 2
+            minutes.
           </p>
 
           {/* CTA téléphone — MASSIF */}
@@ -63,14 +65,18 @@ export function PlatformSidebarCTA({
             onClick={() => {
               trackEvent('phone_click', { source: 'platform_sidebar' })
             }}
-            animate={shouldPulse ? {
-              scale: [1, 1.03, 1],
-              boxShadow: [
-                '0 10px 25px rgba(16, 185, 129, 0.3)',
-                '0 10px 40px rgba(16, 185, 129, 0.5)',
-                '0 10px 25px rgba(16, 185, 129, 0.3)',
-              ],
-            } : {}}
+            animate={
+              shouldPulse
+                ? {
+                    scale: [1, 1.03, 1],
+                    boxShadow: [
+                      '0 10px 25px rgba(16, 185, 129, 0.3)',
+                      '0 10px 40px rgba(16, 185, 129, 0.5)',
+                      '0 10px 25px rgba(16, 185, 129, 0.3)',
+                    ],
+                  }
+                : {}
+            }
             transition={shouldPulse ? { duration: 0.8, ease: 'easeInOut' } : {}}
             className="w-full py-4 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-accent-500/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 mb-2"
             aria-label={`Appeler au ${PHONE_NUMBER}`}
@@ -93,19 +99,25 @@ export function PlatformSidebarCTA({
                 <div className="w-7 h-7 rounded-lg bg-accent-50 flex items-center justify-center flex-shrink-0">
                   <Zap className="w-3.5 h-3.5 text-accent-600" aria-hidden="true" />
                 </div>
-                <span><strong>Gratuit</strong> et sans engagement</span>
+                <span>
+                  <strong>Gratuit</strong> et sans engagement
+                </span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
                 <div className="w-7 h-7 rounded-lg bg-accent-50 flex items-center justify-center flex-shrink-0">
                   <Users className="w-3.5 h-3.5 text-accent-600" aria-hidden="true" />
                 </div>
-                <span>Artisans <strong>vérifiés SIRET</strong></span>
+                <span>
+                  Artisans <strong>vérifiés SIRET</strong>
+                </span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
                 <div className="w-7 h-7 rounded-lg bg-accent-50 flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-3.5 h-3.5 text-accent-600" aria-hidden="true" />
                 </div>
-                <span>Rappel en <strong>moins de 2 min</strong></span>
+                <span>
+                  Rappel en <strong>moins de 2 min</strong>
+                </span>
               </div>
             </div>
           </div>
@@ -113,7 +125,7 @@ export function PlatformSidebarCTA({
 
         {/* Bottom CTA secondary — pour ceux qui ne veulent pas appeler */}
         <div className="border-t border-sand-200 bg-sand-50 px-5 py-3">
-          <a
+          <Link
             href="/devis"
             onClick={() => {
               trackEvent('artisan_devis_click', { source: 'platform_sidebar_secondary' })
@@ -122,7 +134,7 @@ export function PlatformSidebarCTA({
           >
             Ou demandez un devis en ligne
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </a>
+          </Link>
         </div>
       </motion.div>
 
@@ -132,11 +144,7 @@ export function PlatformSidebarCTA({
           Vous êtes ce professionnel ?
         </h4>
         <div className="space-y-3">
-          <ClaimButton
-            providerId={providerId}
-            providerName={providerName}
-            hasSiret={hasSiret}
-          />
+          <ClaimButton providerId={providerId} providerName={providerName} hasSiret={hasSiret} />
           <RemovalRequestButton
             providerId={providerId}
             providerName={providerName}

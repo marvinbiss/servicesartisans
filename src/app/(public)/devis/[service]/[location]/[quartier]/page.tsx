@@ -6,7 +6,11 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
-import { hashCode, getRegionalMultiplier, generateQuartierContent } from '@/lib/seo/location-content'
+import {
+  hashCode,
+  getRegionalMultiplier,
+  generateQuartierContent,
+} from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getQuartierBySlug, getQuartiersByVille, getNearbyCities } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
@@ -89,7 +93,14 @@ export async function generateMetadata({
       description,
       url: canonicalUrl,
       type: 'website',
-      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Devis ${trade.name} à ${quartierName}, ${ville.name}` }],
+      images: [
+        {
+          url: serviceImage.src,
+          width: 800,
+          height: 600,
+          alt: `Devis ${trade.name} à ${quartierName}, ${ville.name}`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -126,8 +137,9 @@ export default async function DevisQuartierPage({
 
   // --- Tips (3 hash-selected) ---
   const tipHash = hashCode(`tips-dq-${service}-${location}-${quartier}`)
-  const selectedTips = Array.from({ length: Math.min(3, trade.tips.length) }, (_, i) =>
-    trade.tips[(tipHash + i) % trade.tips.length]
+  const selectedTips = Array.from(
+    { length: Math.min(3, trade.tips.length) },
+    (_, i) => trade.tips[(tipHash + i) % trade.tips.length]
   )
 
   // --- FAQ: 2 trade + 3 quartier ---
@@ -185,11 +197,14 @@ export default async function DevisQuartierPage({
   ]
 
   // --- Cross-links ---
-  const otherQuartiers = getQuartiersByVille(location).filter((q) => q.slug !== quartier).slice(0, 10)
+  const otherQuartiers = getQuartiersByVille(location)
+    .filter((q) => q.slug !== quartier)
+    .slice(0, 10)
   const relatedSlugs = relatedServices[service] || []
-  const otherServices = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 6).filter((s) => tradeContent[s])
-    : tradeSlugs.filter((s) => s !== service).slice(0, 6)
+  const otherServices =
+    relatedSlugs.length > 0
+      ? relatedSlugs.slice(0, 6).filter((s) => tradeContent[s])
+      : tradeSlugs.filter((s) => s !== service).slice(0, 6)
   const nearbyCities = getNearbyCities(location, 6)
 
   return (
@@ -199,13 +214,21 @@ export default async function DevisQuartierPage({
       {/* ─── 1. HERO ──────────────────────────────────────────── */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
@@ -238,11 +261,15 @@ export default async function DevisQuartierPage({
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
-                <span>{minPrice} – {maxPrice} {unit}</span>
+                <span>
+                  {minPrice} – {maxPrice} {unit}
+                </span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <MapPin className="w-4 h-4 text-amber-400" />
-                <span>{quartierName}, {ville.departementCode}</span>
+                <span>
+                  {quartierName}, {ville.departementCode}
+                </span>
               </div>
             </div>
           </div>
@@ -273,7 +300,11 @@ export default async function DevisQuartierPage({
           <div className="not-prose grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
             <StatCard label="Type de bâti" value={profile.eraLabel} color="amber" />
             <StatCard label="Densité urbaine" value={profile.densityLabel} color="blue" />
-            <StatCard label="Département" value={`${ville.departementCode} — ${ville.departement}`} color="slate" />
+            <StatCard
+              label="Département"
+              value={`${ville.departementCode} — ${ville.departement}`}
+              color="slate"
+            />
             <StatCard label="Région" value={ville.region} color="emerald" />
           </div>
         </div>
@@ -298,8 +329,8 @@ export default async function DevisQuartierPage({
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${ville.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                  : `Les tarifs en ${ville.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                  ? `Les tarifs en ${ville.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs en ${ville.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
@@ -324,7 +355,9 @@ export default async function DevisQuartierPage({
                 >
                   <span className="text-gray-700">{label}</span>
                   {adjustedPrice && (
-                    <span className="font-semibold text-amber-700 whitespace-nowrap">{adjustedPrice}</span>
+                    <span className="font-semibold text-amber-700 whitespace-nowrap">
+                      {adjustedPrice}
+                    </span>
                   )}
                 </div>
               )
@@ -341,7 +374,10 @@ export default async function DevisQuartierPage({
           </h2>
           <div className="space-y-4">
             {selectedTips.map((tip, i) => (
-              <div key={i} className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5"
+              >
                 <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-amber-600" />
                 </div>
@@ -363,9 +399,7 @@ export default async function DevisQuartierPage({
               {combinedFaq.map((item, i) => (
                 <details key={i} className="bg-white rounded-xl border border-gray-200 group">
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <h3 className="text-base font-semibold text-gray-900 pr-4">
-                      {item.question}
-                    </h3>
+                    <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
                     <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                   </summary>
                   <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">
@@ -382,10 +416,11 @@ export default async function DevisQuartierPage({
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Prêt à lancer votre projet à {quartierName} ?
+            Prêt à lancer votre projet à {quartierName} ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit auprès de professionnels référencés à {quartierName}.
+            Comparez les profils et obtenez un devis gratuit auprès de professionnels référencés à{' '}
+            {quartierName}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
@@ -491,16 +526,28 @@ export default async function DevisQuartierPage({
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
               <div className="space-y-2">
-                <Link href={`/devis/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href={`/devis/${service}`}
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
                   Devis {tradeLower} en France
                 </Link>
-                <Link href={`/tarifs/${service}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href={`/tarifs/${service}/${location}`}
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
                   Tarifs {tradeLower} à {ville.name}
                 </Link>
-                <Link href={`/services/${service}/${location}/${quartier}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href={`/services/${service}/${location}/${quartier}`}
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
                   {trade.name} à {quartierName}
                 </Link>
-                <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href={`/services/${service}`}
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
                   {trade.name} — tous les artisans
                 </Link>
               </div>
@@ -508,14 +555,21 @@ export default async function DevisQuartierPage({
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Cette ville</h3>
               <div className="space-y-2">
-                <Link href={`/villes/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href={`/villes/${location}`}
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
                   Artisans à {ville.name}
                 </Link>
                 {otherServices.slice(0, 3).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (
-                    <Link key={slug} href={`/devis/${slug}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                    <Link
+                      key={slug}
+                      href={`/devis/${slug}/${location}`}
+                      className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                    >
                       Devis {t.name.toLowerCase()} à {ville.name}
                     </Link>
                   )
@@ -525,10 +579,27 @@ export default async function DevisQuartierPage({
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/devis" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Demander un devis</Link>
-                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
+                <Link
+                  href="/devis"
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
+                  Demander un devis
+                </Link>
+                <Link
+                  href="/tarifs"
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
+                  Guide complet des tarifs
+                </Link>
+                <Link
+                  href="/comment-ca-marche"
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
+                  Comment ça marche
+                </Link>
+                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                  FAQ
+                </Link>
               </div>
             </div>
           </div>
@@ -541,12 +612,14 @@ export default async function DevisQuartierPage({
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affichés pour {quartierName} à {ville.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({ville.region}). Ils varient selon la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant.
+              Les prix affichés pour {quartierName} à {ville.name} sont des fourchettes indicatives
+              ajustées en fonction des données régionales ({ville.region}). Ils varient selon la
+              complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait
+              foi. {SITE_NAME} est un annuaire indépendant.
             </p>
           </div>
         </div>
       </section>
-
     </div>
   )
 }
@@ -562,15 +635,7 @@ const STAT_COLORS: Record<string, { bg: string; border: string; text: string }> 
   emerald: { bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-700' },
 }
 
-function StatCard({
-  label,
-  value,
-  color,
-}: {
-  label: string
-  value: string
-  color: string
-}) {
+function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
   const c = STAT_COLORS[color] ?? STAT_COLORS.slate
   return (
     <div className={`text-center p-3 ${c.bg} rounded-xl border ${c.border}`}>

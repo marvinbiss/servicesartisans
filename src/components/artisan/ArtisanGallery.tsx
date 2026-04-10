@@ -18,10 +18,10 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
   // Only show if artisan has real portfolio items
   const photos = artisan.portfolio || []
 
-  if (photos.length === 0) {
-    return null
-  }
-
+  // All hooks must be called unconditionally — early return must come AFTER hooks.
+  // Bug fix : précédemment le `if (photos.length === 0) return null` était placé
+  // avant les useCallback/useEffect, ce qui violait les Rules of Hooks et pouvait
+  // crasher React si un artisan passait de 0 → N portfolio items entre deux rendus.
   const openLightbox = useCallback((index: number) => {
     setCurrentIndex(index)
     setLightboxOpen(true)
@@ -55,6 +55,10 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [lightboxOpen, closeLightbox, goToPrevious, goToNext])
 
+  if (photos.length === 0) {
+    return null
+  }
+
   const currentPhoto = photos[currentIndex]
 
   // Get thumbnail URL for display
@@ -64,9 +68,9 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
 
   // Count different media types
   const stats = {
-    images: photos.filter(p => !p.mediaType || p.mediaType === 'image').length,
-    videos: photos.filter(p => p.mediaType === 'video').length,
-    beforeAfter: photos.filter(p => p.mediaType === 'before_after').length,
+    images: photos.filter((p) => !p.mediaType || p.mediaType === 'image').length,
+    videos: photos.filter((p) => p.mediaType === 'video').length,
+    beforeAfter: photos.filter((p) => p.mediaType === 'before_after').length,
   }
 
   return (
@@ -101,7 +105,12 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             role="button"
             tabIndex={0}
             onClick={() => openLightbox(0)}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(0) } }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                openLightbox(0)
+              }
+            }}
           >
             <Image
               src={getThumbnail(photos[0])}
@@ -136,7 +145,12 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
               role="button"
               tabIndex={0}
               onClick={() => openLightbox(index + 1)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(index + 1) } }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  openLightbox(index + 1)
+                }
+              }}
             >
               <Image
                 src={getThumbnail(photo)}
@@ -159,9 +173,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
               {/* Show more overlay on last visible image */}
               {index === 3 && photos.length > 5 && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <span className="text-white font-semibold text-lg">
-                    +{photos.length - 5}
-                  </span>
+                  <span className="text-white font-semibold text-lg">+{photos.length - 5}</span>
                 </div>
               )}
             </motion.div>
@@ -224,7 +236,10 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-                onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  goToPrevious()
+                }}
                 aria-label="Photo précédente"
               >
                 <ChevronLeft className="w-8 h-8 text-white" />
@@ -235,7 +250,10 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-                onClick={(e) => { e.stopPropagation(); goToNext(); }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  goToNext()
+                }}
                 aria-label="Photo suivante"
               >
                 <ChevronRight className="w-8 h-8 text-white" />
@@ -297,7 +315,10 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                       ? 'ring-2 ring-white opacity-100'
                       : 'opacity-50 hover:opacity-75'
                   }`}
-                  onClick={(e) => { e.stopPropagation(); setCurrentIndex(index); }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setCurrentIndex(index)
+                  }}
                 >
                   <Image
                     src={getThumbnail(photo)}
