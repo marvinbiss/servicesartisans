@@ -90,8 +90,14 @@ BEGIN;
 -- decret plutot que sur un libelle Qualibat nominatif. INT[] pour supporter
 -- les fiches qui citent plusieurs categories (ex : BAR-TH-171 cite 5° ou 5°+6°).
 
+-- Defensive : si la migration 384 n'a pas ete appliquee, les UPDATE ci-dessous
+-- casseraient. On garantit la presence des colonnes prerequises ici.
 ALTER TABLE cee_operations
-  ADD COLUMN IF NOT EXISTS rge_decret_category INT[] NOT NULL DEFAULT ARRAY[]::INT[];
+  ADD COLUMN IF NOT EXISTS rge_decret_category INT[] NOT NULL DEFAULT ARRAY[]::INT[],
+  ADD COLUMN IF NOT EXISTS rge_formulation_arrete TEXT,
+  ADD COLUMN IF NOT EXISTS version_dgec TEXT,
+  ADD COLUMN IF NOT EXISTS date_application DATE,
+  ADD COLUMN IF NOT EXISTS arrete_source TEXT;
 
 COMMENT ON COLUMN cee_operations.rge_decret_category IS
   'Categories du decret 2014-812 du 16 juillet 2014 citees par l''arrete CEE. '
