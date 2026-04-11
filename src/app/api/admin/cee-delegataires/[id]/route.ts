@@ -102,6 +102,38 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
 
   const supabase = createAdminClient()
 
+  // Garde-fou vague 1 : la contrainte DB `cee_delegataires_vague1_not_inactive`
+  // (migration 386) interdit de passer une ligne vague_priorite=1 en statut
+  // 'inactif'. On pré-vérifie pour renvoyer un 422 explicite plutôt que
+  // laisser Postgres lever une erreur générique captée en 500.
+  if (updates.statut === 'inactif') {
+    const { data: current, error: fetchError } = await supabase
+      .from('cee_delegataires')
+      .select('vague_priorite')
+      .eq('id', id)
+      .single()
+
+    if (fetchError || !current) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Délégataire introuvable' } },
+        { status: 404 }
+      )
+    }
+    if (current.vague_priorite === 1) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'vague1_cannot_be_inactive',
+            message:
+              'Un délégataire en vague 1 (POC mandataire) ne peut pas être désactivé. Rétrograde-le en vague 2 ou 3 avant.',
+          },
+        },
+        { status: 422 }
+      )
+    }
+  }
+
   const { data, error } = await supabase
     .from('cee_delegataires')
     .update(updates)
