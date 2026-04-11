@@ -80,10 +80,10 @@ interface AvisProvider {
 interface AvisReview {
   id: string
   rating: number
-  comment: string | null
-  client_name: string | null
+  content: string | null
+  author_name: string | null
   created_at: string
-  artisan_id: string
+  provider_id: string
 }
 
 async function getTopProviders(cityName: string, _serviceSlug: string): Promise<AvisProvider[]> {
@@ -112,18 +112,18 @@ async function getTopProviders(cityName: string, _serviceSlug: string): Promise<
   }
 }
 
-async function getRecentReviews(artisanIds: string[]): Promise<AvisReview[]> {
-  if (IS_BUILD || artisanIds.length === 0) return []
+async function getRecentReviews(providerIds: string[]): Promise<AvisReview[]> {
+  if (IS_BUILD || providerIds.length === 0) return []
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
     const { data, error } = await supabase
       .from('reviews')
-      .select('id, rating, comment, client_name, created_at, artisan_id')
-      .in('artisan_id', artisanIds)
+      .select('id, rating, content, author_name, created_at, provider_id')
+      .in('provider_id', providerIds)
       .eq('status', 'published')
-      .not('comment', 'is', null)
+      .not('content', 'is', null)
       .order('rating', { ascending: false })
       .order('created_at', { ascending: false })
       .limit(8)
@@ -213,15 +213,10 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
 
-  // BLOCKED: reviews schema drift in prod (comment/client_name/artisan_id vs
-  // content/author_name/provider_id) makes the reviews queries below return 0,
-  // so this page renders as a thin template with no unique content.
-  // Hardcoded noindex until the cross-cutting schema fix lands.
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    robots: { index: false, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -280,9 +275,9 @@ export default async function AvisServiceVillePage({
   // Use service-specific providers if available, otherwise all providers in city
   const topProviders =
     serviceProviders.length >= 2 ? serviceProviders.slice(0, 6) : allProviders.slice(0, 6)
-  // reviews.artisan_id references profiles.id = providers.user_id
-  const artisanIds = topProviders.map((p) => p.user_id).filter((uid): uid is string => !!uid)
-  const reviews = await getRecentReviews(artisanIds)
+  // reviews.provider_id references providers.id directly
+  const providerIds = topProviders.map((p) => p.id).filter((pid): pid is string => !!pid)
+  const reviews = await getRecentReviews(providerIds)
 
   // Calculate aggregate stats
   const totalReviews = topProviders.reduce((sum, p) => sum + (p.review_count || 0), 0)
@@ -303,10 +298,8 @@ export default async function AvisServiceVillePage({
         : 0,
   }))
 
-  // Provider map keyed by user_id (= artisan_id in reviews) for review display
-  const providerMap = new Map(
-    topProviders.filter((p) => p.user_id).map((p) => [p.user_id as string, p])
-  )
+  // Provider map keyed by provider id (= provider_id in reviews) for review display
+  const providerMap = new Map(topProviders.filter((p) => p.id).map((p) => [p.id as string, p]))
 
   // ----- JSON-LD schemas -----
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -357,14 +350,14 @@ export default async function AvisServiceVillePage({
   const schemaReviews = hasRealReviews
     ? reviews.slice(0, 5).map((r) => ({
         '@type': 'Review' as const,
-        author: { '@type': 'Person' as const, name: r.client_name || 'Client vérifié' },
+        author: { '@type': 'Person' as const, name: r.author_name || 'Client vérifié' },
         reviewRating: {
           '@type': 'Rating' as const,
           ratingValue: r.rating,
           bestRating: 5,
           worstRating: 1,
         },
-        reviewBody: r.comment,
+        reviewBody: r.content,
         ...(r.created_at ? { datePublished: r.created_at.split('T')[0] } : {}),
       }))
     : []
@@ -689,14 +682,14 @@ export default async function AvisServiceVillePage({
             </p>
             <div className="space-y-4">
               {reviews.slice(0, 5).map((review) => {
-                const provider = providerMap.get(review.artisan_id)
+                const provider = providerMap.get(review.provider_id)
                 return (
                   <div key={review.id} className="bg-white rounded-xl border border-gray-100 p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-semibold text-gray-900 text-sm">
-                            {review.client_name || 'Client vérifié'}
+                            {review.author_name || 'Client vérifié'}
                           </span>
                           <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                             <CheckCircle className="w-3 h-3" />
@@ -722,11 +715,11 @@ export default async function AvisServiceVillePage({
                         ))}
                       </div>
                     </div>
-                    {review.comment && (
+                    {review.content && (
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        {review.comment.length > 300
-                          ? review.comment.slice(0, 300) + '…'
-                          : review.comment}
+                        {review.content.length > 300
+                          ? review.content.slice(0, 300) + '…'
+                          : review.content}
                       </p>
                     )}
                     <div className="mt-3 text-xs text-gray-400">

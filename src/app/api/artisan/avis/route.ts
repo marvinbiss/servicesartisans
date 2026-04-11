@@ -14,6 +14,37 @@ export async function GET(request: Request) {
   try {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Non authentifié' } },
+        { status: 401 }
+      )
+    }
+
+    // Resolve provider.id from user.id (reviews.provider_id → providers.id)
+    const { data: providerRow } = await supabase
+      .from('providers')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('is_active', true)
+      .limit(1)
+      .maybeSingle()
+
+    const providerId = providerRow?.id
+    if (!providerId) {
+      return NextResponse.json({
+        avis: [],
+        stats: {
+          moyenne: 0,
+          total: 0,
+          distribution: [5, 4, 3, 2, 1].map((note) => ({ note, count: 0 })),
+        },
+        page: 1,
+        limit: 20,
+        total: 0,
+        totalPages: 0,
+      })
+    }
 
     // Parse pagination & sort params
     const { searchParams } = new URL(request.url)
@@ -48,10 +79,17 @@ export async function GET(request: Request) {
     const to = page * limit - 1
 
     // Fetch reviews for this artisan — explicit columns only (no fraud/scoring fields)
-    const { data: reviews, error: reviewsError, count } = await supabase
+    const {
+      data: reviews,
+      error: reviewsError,
+      count,
+    } = await supabase
       .from('reviews')
-      .select('id, artisan_id, rating, comment, artisan_response, artisan_responded_at, client_name, booking_id, created_at, updated_at', { count: 'exact' })
-      .eq('artisan_id', user!.id)
+      .select(
+        'id, provider_id, rating, content, reply, reply_date, author_name, booking_id, created_at, updated_at',
+        { count: 'exact' }
+      )
+      .eq('provider_id', providerId)
       .order(orderColumn, { ascending })
       .range(from, to)
 
@@ -68,32 +106,32 @@ export async function GET(request: Request) {
 
     // Calcul des stats via COUNT SQL (pas de fetch de toutes les lignes)
     const [count1, count2, count3, count4, count5] = await Promise.all(
-      [1, 2, 3, 4, 5].map(rating =>
+      [1, 2, 3, 4, 5].map((rating) =>
         supabase
           .from('reviews')
           .select('*', { count: 'exact', head: true })
-          .eq('artisan_id', user!.id)
+          .eq('provider_id', providerId)
           .eq('rating', rating)
       )
     )
 
     const counts = [count1, count2, count3, count4, count5]
-    const hasStatsError = counts.some(c => c.error)
+    const hasStatsError = counts.some((c) => c.error)
 
     let stats
     if (hasStatsError) {
       stats = {
         moyenne: 0,
         total: 0,
-        distribution: [5, 4, 3, 2, 1].map(note => ({ note, count: 0 })),
+        distribution: [5, 4, 3, 2, 1].map((note) => ({ note, count: 0 })),
       }
     } else {
-      const ratingCounts = counts.map(c => c.count || 0) // index 0 = rating 1, index 4 = rating 5
+      const ratingCounts = counts.map((c) => c.count || 0) // index 0 = rating 1, index 4 = rating 5
       const totalReviews = ratingCounts.reduce((sum, c) => sum + c, 0)
       const weightedSum = ratingCounts.reduce((sum, c, i) => sum + (i + 1) * c, 0)
       const averageRating = totalReviews > 0 ? weightedSum / totalReviews : 0
 
-      const distribution = [5, 4, 3, 2, 1].map(note => ({
+      const distribution = [5, 4, 3, 2, 1].map((note) => ({
         note,
         count: ratingCounts[note - 1],
       }))
@@ -115,9 +153,6 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     logger.error('Reviews GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

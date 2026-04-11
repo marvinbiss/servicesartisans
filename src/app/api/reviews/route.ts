@@ -41,12 +41,12 @@ interface BookingWithRelations {
 interface Review {
   id: string
   rating: number
-  comment: string | null
+  content: string | null
   would_recommend: boolean
-  client_name: string
+  author_name: string
   created_at: string
-  artisan_response: string | null
-  artisan_responded_at: string | null
+  reply: string | null
+  reply_date: string | null
 }
 
 // Initialize Supabase client (anon key only — RLS enforced)
@@ -71,7 +71,11 @@ function getArtisanDisplayName(artisan: ArtisanProfile | ArtisanProfile[] | null
 }
 
 // Helper to get client info from profiles join
-function getClientInfo(client: ClientProfile | ClientProfile[] | null): { name: string; email: string; phone: string | null } {
+function getClientInfo(client: ClientProfile | ClientProfile[] | null): {
+  name: string
+  email: string
+  phone: string | null
+} {
   if (!client) return { name: 'Client', email: '', phone: null }
   const profile = Array.isArray(client) ? client[0] : client
   return {
@@ -82,12 +86,14 @@ function getClientInfo(client: ClientProfile | ClientProfile[] | null): { name: 
 }
 
 // Query schema for GET request - require full UUID for bookingId to prevent enumeration
-const getQuerySchema = z.object({
-  bookingId: z.string().uuid('ID de réservation invalide').optional(),
-  artisanId: z.string().uuid().optional(),
-}).refine(data => data.bookingId || data.artisanId, {
-  message: 'bookingId ou artisanId requis',
-})
+const getQuerySchema = z
+  .object({
+    bookingId: z.string().uuid('ID de réservation invalide').optional(),
+    artisanId: z.string().uuid().optional(),
+  })
+  .refine((data) => data.bookingId || data.artisanId, {
+    message: 'bookingId ou artisanId requis',
+  })
 
 // GET /api/reviews - Get booking info for review or artisan reviews
 export const dynamic = 'force-dynamic'
@@ -118,7 +124,8 @@ export async function GET(request: Request) {
     if (bookingId) {
       const { data: booking, error } = await supabase
         .from('bookings')
-        .select(`
+        .select(
+          `
           id,
           client_id,
           provider_id,
@@ -126,7 +133,8 @@ export async function GET(request: Request) {
           status,
           client:profiles!client_id(full_name, email, phone_e164),
           artisan:providers!bookings_provider_id_fkey(id, name)
-        `)
+        `
+        )
         .eq('id', bookingId)
         .single()
 
@@ -152,7 +160,9 @@ export async function GET(request: Request) {
       if (process.env.REVIEW_HMAC_SECRET) {
         try {
           const authSupabase = await createServerClient()
-          const { data: { user } } = await authSupabase.auth.getUser()
+          const {
+            data: { user },
+          } = await authSupabase.auth.getUser()
           if (user && typedBooking.client_id === user.id) {
             reviewToken = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
               .update(bookingId)
@@ -178,17 +188,19 @@ export async function GET(request: Request) {
     if (artisanId) {
       const { data: reviews, error } = await supabase
         .from('reviews')
-        .select(`
+        .select(
+          `
           id,
           rating,
-          comment,
+          content,
           would_recommend,
-          client_name,
+          author_name,
           created_at,
-          artisan_response,
-          artisan_responded_at
-        `)
-        .eq('artisan_id', artisanId)
+          reply,
+          reply_date
+        `
+        )
+        .eq('provider_id', artisanId)
         .eq('status', 'published')
         .order('created_at', { ascending: false })
 
@@ -204,12 +216,12 @@ export async function GET(request: Request) {
 
       // Calculate stats
       const totalReviews = typedReviews.length
-      const avgRating = totalReviews > 0
-        ? typedReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
-        : 0
-      const recommendRate = totalReviews > 0
-        ? (typedReviews.filter((r) => r.would_recommend).length / totalReviews) * 100
-        : 0
+      const avgRating =
+        totalReviews > 0 ? typedReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
+      const recommendRate =
+        totalReviews > 0
+          ? (typedReviews.filter((r) => r.would_recommend).length / totalReviews) * 100
+          : 0
 
       // Rating distribution
       const distribution = [0, 0, 0, 0, 0]
@@ -238,10 +250,9 @@ export async function GET(request: Request) {
     )
   } catch (error) {
     logger.error('Reviews GET error:', error)
-    return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur serveur'),
-      { status: 500 }
-    )
+    return NextResponse.json(createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur serveur'), {
+      status: 500,
+    })
   }
 }
 
@@ -253,8 +264,14 @@ export async function POST(request: Request) {
     const rl = await checkRateLimit(`reviews:${ip}`, { window: 60_000, max: 5 })
     if (!rl.allowed) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.RATE_LIMIT_EXCEEDED, 'Trop de requêtes, veuillez réessayer plus tard'),
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        createErrorResponse(
+          ErrorCode.RATE_LIMIT_EXCEEDED,
+          'Trop de requêtes, veuillez réessayer plus tard'
+        ),
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
@@ -265,11 +282,9 @@ export async function POST(request: Request) {
 
     if (!validation.success) {
       return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          'Donnees invalides',
-          { fields: formatZodErrors(validation.errors) }
-        ),
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Donnees invalides', {
+          fields: formatZodErrors(validation.errors),
+        }),
         { status: 400 }
       )
     }
@@ -288,10 +303,15 @@ export async function POST(request: Request) {
 
     // Auth check: reviewer must be authenticated
     const authSupabase = await createServerClient()
-    const { data: { user } } = await authSupabase.auth.getUser()
+    const {
+      data: { user },
+    } = await authSupabase.auth.getUser()
     if (!user) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Authentification requise pour laisser un avis'),
+        createErrorResponse(
+          ErrorCode.UNAUTHORIZED,
+          'Authentification requise pour laisser un avis'
+        ),
         { status: 401 }
       )
     }
@@ -302,13 +322,15 @@ export async function POST(request: Request) {
     // Join profiles via client_id to get client name and email
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
-      .select(`
+      .select(
+        `
         id,
         client_id,
         provider_id,
         status,
         client:profiles!client_id(full_name, email, phone_e164)
-      `)
+      `
+      )
       .eq('id', bookingId)
       .single()
 
@@ -323,7 +345,10 @@ export async function POST(request: Request) {
     // Auth check: the reviewer must be the booking's client
     if (booking.client_id !== user.id) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Vous ne pouvez laisser un avis que pour vos propres réservations'),
+        createErrorResponse(
+          ErrorCode.UNAUTHORIZED,
+          'Vous ne pouvez laisser un avis que pour vos propres réservations'
+        ),
         { status: 403 }
       )
     }
@@ -344,14 +369,19 @@ export async function POST(request: Request) {
       const provided = Buffer.from(reviewToken, 'hex')
       const expectedBuf = Buffer.from(expected, 'hex')
       if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
-        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), { status: 401 })
+        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), {
+          status: 401,
+        })
       }
     }
 
     // Check booking status
     if (!['confirmed', 'completed'].includes(booking.status)) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Cette reservation ne peut pas etre evaluee'),
+        createErrorResponse(
+          ErrorCode.VALIDATION_ERROR,
+          'Cette reservation ne peut pas etre evaluee'
+        ),
         { status: 400 }
       )
     }
@@ -365,7 +395,10 @@ export async function POST(request: Request) {
 
     if (existingReview) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.REVIEW_ALREADY_EXISTS, 'Vous avez déjà laissé un avis pour cette réservation'),
+        createErrorResponse(
+          ErrorCode.REVIEW_ALREADY_EXISTS,
+          'Vous avez déjà laissé un avis pour cette réservation'
+        ),
         { status: 409 }
       )
     }
@@ -382,11 +415,11 @@ export async function POST(request: Request) {
       .from('reviews')
       .insert({
         booking_id: booking.id,
-        artisan_id: booking.provider_id,
-        client_name: clientInfo.name,
-        client_email: clientInfo.email,
+        provider_id: booking.provider_id,
+        author_name: clientInfo.name,
+        author_email: clientInfo.email,
         rating,
-        comment: cleanComment,
+        content: cleanComment,
         would_recommend: wouldRecommend,
         status: fraudIndicators.length > 0 ? 'pending_review' : 'published',
         fraud_indicators: fraudIndicators.length > 0 ? fraudIndicators : null,
@@ -398,13 +431,15 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Review insert error:', insertError)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la creation de l\'avis'),
+        createErrorResponse(ErrorCode.DATABASE_ERROR, "Erreur lors de la creation de l'avis"),
         { status: 500 }
       )
     }
 
     // Update artisan's average rating (non-blocking)
-    updateArtisanRating(supabase, booking.provider_id).catch((err) => logger.error('Update rating failed', err))
+    updateArtisanRating(supabase, booking.provider_id).catch((err) =>
+      logger.error('Update rating failed', err)
+    )
 
     // Revalidation on-demand des pages affectées (non-bloquant)
     try {
@@ -443,16 +478,17 @@ export async function POST(request: Request) {
           id: review.id,
           status: review.status,
         },
-        message: fraudIndicators.length > 0
-          ? 'Votre avis sera publie apres verification'
-          : 'Merci pour votre avis !',
+        message:
+          fraudIndicators.length > 0
+            ? 'Votre avis sera publie apres verification'
+            : 'Merci pour votre avis !',
       }),
       { status: 201 }
     )
   } catch (error) {
     logger.error('Reviews POST error:', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de l\'envoi de l\'avis'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, "Erreur lors de l'envoi de l'avis"),
       { status: 500 }
     )
   }
@@ -493,15 +529,16 @@ function detectFraudIndicators(comment: string, rating: number): string[] {
 }
 
 // Update artisan's average rating (using ALL real reviews, not just published)
-async function updateArtisanRating(supabase: SupabaseClientType, artisanId: string) {
+async function updateArtisanRating(supabase: SupabaseClientType, providerId: string) {
   const { data: reviews } = await supabase
     .from('reviews')
     .select('rating')
-    .eq('artisan_id', artisanId)
-    // REMOVED: .eq('status', 'published') to include ALL real reviews in rating calculation
+    .eq('provider_id', providerId)
+  // REMOVED: .eq('status', 'published') to include ALL real reviews in rating calculation
 
   if (reviews && reviews.length > 0) {
-    const avgRating = reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
+    const avgRating =
+      reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
 
     await supabase
       .from('providers')
@@ -509,6 +546,6 @@ async function updateArtisanRating(supabase: SupabaseClientType, artisanId: stri
         rating_average: Math.round(avgRating * 10) / 10,
         review_count: reviews.length,
       })
-      .eq('id', artisanId)
+      .eq('id', providerId)
   }
 }

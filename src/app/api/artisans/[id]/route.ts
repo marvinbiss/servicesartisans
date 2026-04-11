@@ -13,10 +13,11 @@ import { z } from 'zod'
 export const revalidate = 300 // ISR - revalidate every 5 minutes
 
 // Schema for artisan ID (UUID or slug)
-const artisanIdSchema = z.string().min(1).max(255).regex(
-  /^[a-zA-Z0-9-]+$/,
-  'ID artisan invalide'
-)
+const artisanIdSchema = z
+  .string()
+  .min(1)
+  .max(255)
+  .regex(/^[a-zA-Z0-9-]+$/, 'ID artisan invalide')
 
 // Type pour les données artisan enrichies
 interface ArtisanDetails {
@@ -104,10 +105,7 @@ function generateDescription(name: string, specialty: string, city: string): str
 
 // REMOVED: generateSyntheticReviews function (illegal fake review generation)
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Validate artisan ID parameter
     const idValidation = artisanIdSchema.safeParse(params.id)
@@ -118,8 +116,8 @@ export async function GET(
           error: {
             code: 'VALIDATION_ERROR',
             message: 'ID artisan invalide',
-            details: idValidation.error.flatten()
-          }
+            details: idValidation.error.flatten(),
+          },
         },
         { status: 400 }
       )
@@ -138,10 +136,9 @@ export async function GET(
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(artisanId)
 
     // First, try a simple query to find the provider
-    const PROVIDER_COLUMNS = 'id,name,slug,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form_code,description,meta_description,website,latitude,longitude'
-    let simpleQuery = supabase
-      .from('providers')
-      .select(PROVIDER_COLUMNS)
+    const PROVIDER_COLUMNS =
+      'id,name,slug,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form_code,description,meta_description,website,latitude,longitude'
+    let simpleQuery = supabase.from('providers').select(PROVIDER_COLUMNS)
 
     if (isUUID) {
       simpleQuery = simpleQuery.eq('id', artisanId)
@@ -166,7 +163,8 @@ export async function GET(
       try {
         const { data: fullProvider } = await supabase
           .from('providers')
-          .select(`
+          .select(
+            `
             ${PROVIDER_COLUMNS},
             provider_services (
               service_id, price_min, price_max, price_unit,
@@ -177,7 +175,8 @@ export async function GET(
               location:locations (id, name, slug, postal_code)
             ),
             portfolio_items (id, title, description, image_url, category)
-          `)
+          `
+          )
           .eq('id', simpleProvider.id)
           .single()
 
@@ -196,8 +195,8 @@ export async function GET(
       // Fetch reviews (provider_faq table does not exist in migrations — faq hardcoded to [])
       const { data: providerReviews } = await supabase
         .from('reviews')
-        .select('id, rating, client_name, comment, created_at')
-        .eq('artisan_id', provider.id)
+        .select('id, rating, author_name, content, created_at')
+        .eq('provider_id', provider.id)
         .order('created_at', { ascending: false })
         .limit(100)
 
@@ -210,52 +209,59 @@ export async function GET(
       }
 
       // Extraire les services
-      const services = provider.provider_services?.map((ps: { service?: { name: string } }) =>
-        ps.service?.name
-      ).filter(Boolean) || []
+      const services =
+        provider.provider_services
+          ?.map((ps: { service?: { name: string } }) => ps.service?.name)
+          .filter(Boolean) || []
 
       // Extraire les zones d'intervention
-      const interventionZones = provider.provider_locations?.map((pl: {
-        location?: { name: string; postal_code?: string }
-      }) => {
-        if (pl.location?.name) {
-          return pl.location.postal_code
-            ? `${pl.location.name} (${pl.location.postal_code})`
-            : pl.location.name
-        }
-        return null
-      }).filter(Boolean) || []
+      const interventionZones =
+        provider.provider_locations
+          ?.map((pl: { location?: { name: string; postal_code?: string } }) => {
+            if (pl.location?.name) {
+              return pl.location.postal_code
+                ? `${pl.location.name} (${pl.location.postal_code})`
+                : pl.location.name
+            }
+            return null
+          })
+          .filter(Boolean) || []
 
       // Récupérer le portfolio réel (filtrer les données de démo avec images Unsplash)
       const portfolio = (provider.portfolio_items || [])
         .filter((item: { image_url?: string }) => {
           // Exclure les images de démo (Unsplash, placeholder, etc.)
           const imageUrl = item.image_url || ''
-          return !imageUrl.includes('unsplash.com') &&
-                 !imageUrl.includes('placeholder') &&
-                 !imageUrl.includes('picsum.photos') &&
-                 imageUrl.length > 0
+          return (
+            !imageUrl.includes('unsplash.com') &&
+            !imageUrl.includes('placeholder') &&
+            !imageUrl.includes('picsum.photos') &&
+            imageUrl.length > 0
+          )
         })
-        .map((item: {
-          id: string
-          title?: string
-          description?: string
-          image_url?: string
-          category?: string
-        }) => ({
-          id: item.id,
-          title: item.title || 'Réalisation',
-          description: item.description || '',
-          imageUrl: item.image_url || '',
-          category: item.category || 'Travaux',
-        }))
+        .map(
+          (item: {
+            id: string
+            title?: string
+            description?: string
+            image_url?: string
+            category?: string
+          }) => ({
+            id: item.id,
+            title: item.title || 'Réalisation',
+            description: item.description || '',
+            imageUrl: item.image_url || '',
+            category: item.category || 'Travaux',
+          })
+        )
 
       // provider_faq table does not exist in migrations — return empty array
       const faq: Array<{ question: string; answer: string }> = []
 
       const postalCode = provider.address_postal_code || ''
       const deptCode = getDeptCodeFromPostal(postalCode)
-      const departmentName = getDepartmentName(deptCode) || getDepartmentName(provider.address_department)
+      const departmentName =
+        getDepartmentName(deptCode) || getDepartmentName(provider.address_department)
       const regionName = getRegionName(deptCode) || getRegionName(provider.address_region)
 
       const finalRating = averageRating > 0 ? averageRating : 0
@@ -264,13 +270,14 @@ export async function GET(
 
       // Generate description if not available
       const existingDescription = provider.description || provider.meta_description
-      const finalDescription = (existingDescription && existingDescription.length > 50)
-        ? existingDescription
-        : generateDescription(
-            provider.name || 'Cet artisan',
-            finalSpecialty,
-            provider.address_city || 'votre région'
-          )
+      const finalDescription =
+        existingDescription && existingDescription.length > 50
+          ? existingDescription
+          : generateDescription(
+              provider.name || 'Cet artisan',
+              finalSpecialty,
+              provider.address_city || 'votre région'
+            )
 
       artisan = {
         id: provider.id,
@@ -294,21 +301,25 @@ export async function GET(
         is_center: false,
         team_size: null,
         services: services.length > 0 ? services : [finalSpecialty],
-        service_prices: provider.provider_services?.map((ps: {
-          service?: { name: string }
-          price_min?: number
-          price_max?: number
-          price_unit?: string
-        }) => ({
-          name: ps.service?.name || 'Service',
-          description: '',
-          price: ps.price_min && ps.price_max
-            ? `${ps.price_min}-${ps.price_max}€`
-            : ps.price_min
-              ? `A partir de ${ps.price_min}€`
-              : 'Sur devis',
-          duration: undefined
-        })) || [],
+        service_prices:
+          provider.provider_services?.map(
+            (ps: {
+              service?: { name: string }
+              price_min?: number
+              price_max?: number
+              price_unit?: string
+            }) => ({
+              name: ps.service?.name || 'Service',
+              description: '',
+              price:
+                ps.price_min && ps.price_max
+                  ? `${ps.price_min}-${ps.price_max}€`
+                  : ps.price_min
+                    ? `A partir de ${ps.price_min}€`
+                    : 'Sur devis',
+              duration: undefined,
+            })
+          ) || [],
         accepts_new_clients: true,
         intervention_zones: interventionZones,
         member_since: provider.created_at
@@ -329,16 +340,16 @@ export async function GET(
 
       // Transformer les avis réels
       if (providerReviews && providerReviews.length > 0) {
-        reviews = providerReviews.map(r => ({
+        reviews = providerReviews.map((r) => ({
           id: r.id,
-          author: r.client_name || 'Client',
+          author: r.author_name || 'Client',
           rating: r.rating,
           date: new Date(r.created_at).toLocaleDateString('fr-FR', {
             day: 'numeric',
             month: 'long',
-            year: 'numeric'
+            year: 'numeric',
           }),
-          comment: r.comment || '',
+          comment: r.content || '',
           service: services[0] || 'Prestation',
           hasPhoto: false,
           photoUrl: null,
@@ -360,13 +371,21 @@ export async function GET(
       if (profile && !profileError) {
         source = 'profile'
 
-        // Récupérer les avis pour ce profil
-        const { data: profileReviews } = await supabase
-          .from('reviews')
-          .select('id, rating, comment, client_name, created_at')
-          .eq('artisan_id', artisanId)
-          .order('created_at', { ascending: false })
-          .limit(20)
+        // Récupérer les avis pour ce profil via son provider associé
+        const { data: profileProvider } = await supabase
+          .from('providers')
+          .select('id')
+          .eq('user_id', artisanId)
+          .maybeSingle()
+
+        const { data: profileReviews } = profileProvider?.id
+          ? await supabase
+              .from('reviews')
+              .select('id, rating, content, author_name, created_at')
+              .eq('provider_id', profileProvider.id)
+              .order('created_at', { ascending: false })
+              .limit(20)
+          : { data: null }
 
         // Récupérer le portfolio (filtrer les données de démo)
         const { data: portfolioData } = await supabase
@@ -379,24 +398,28 @@ export async function GET(
           .filter((item: { image_url?: string }) => {
             // Exclure les images de démo (Unsplash, placeholder, etc.)
             const imageUrl = item.image_url || ''
-            return !imageUrl.includes('unsplash.com') &&
-                   !imageUrl.includes('placeholder') &&
-                   !imageUrl.includes('picsum.photos') &&
-                   imageUrl.length > 0
+            return (
+              !imageUrl.includes('unsplash.com') &&
+              !imageUrl.includes('placeholder') &&
+              !imageUrl.includes('picsum.photos') &&
+              imageUrl.length > 0
+            )
           })
-          .map((item: {
-            id: string
-            title?: string
-            description?: string
-            image_url?: string
-            category?: string
-          }) => ({
-            id: item.id,
-            title: item.title || 'Réalisation',
-            description: item.description || '',
-            imageUrl: item.image_url || '',
-            category: item.category || 'Travaux',
-          }))
+          .map(
+            (item: {
+              id: string
+              title?: string
+              description?: string
+              image_url?: string
+              category?: string
+            }) => ({
+              id: item.id,
+              title: item.title || 'Réalisation',
+              description: item.description || '',
+              imageUrl: item.image_url || '',
+              category: item.category || 'Travaux',
+            })
+          )
 
         // artisan_faq table does not exist in migrations — return empty
         const faq: Array<{ question: string; answer: string }> = []
@@ -449,16 +472,16 @@ export async function GET(
         }
 
         // Transformer les avis
-        reviews = (profileReviews || []).map(r => ({
+        reviews = (profileReviews || []).map((r) => ({
           id: r.id,
-          author: r.client_name || 'Client',
+          author: r.author_name || 'Client',
           rating: r.rating,
           date: new Date(r.created_at).toLocaleDateString('fr-FR', {
             day: 'numeric',
             month: 'long',
-            year: 'numeric'
+            year: 'numeric',
           }),
-          comment: r.comment || '',
+          comment: r.content || '',
           service: 'Prestation',
           hasPhoto: false,
           photoUrl: null,
@@ -474,8 +497,8 @@ export async function GET(
           success: false,
           error: {
             code: 'NOT_FOUND',
-            message: 'Artisan non trouvé'
-          }
+            message: 'Artisan non trouvé',
+          },
         },
         { status: 404 }
       )
@@ -491,7 +514,6 @@ export async function GET(
     response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
 
     return response
-
   } catch (error) {
     logger.error('Error fetching artisan', error)
     return NextResponse.json(
@@ -499,8 +521,8 @@ export async function GET(
         success: false,
         error: {
           code: 'SERVER_ERROR',
-          message: 'Erreur serveur'
-        }
+          message: 'Erreur serveur',
+        },
       },
       { status: 500 }
     )

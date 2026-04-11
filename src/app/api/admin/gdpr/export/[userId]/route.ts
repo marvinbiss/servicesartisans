@@ -7,10 +7,7 @@ import { isValidUuid } from '@/lib/sanitize'
 export const dynamic = 'force-dynamic'
 
 // POST - Exporter les données d'un utilisateur (RGPD)
-export async function POST(
-  _request: NextRequest,
-  { params }: { params: { userId: string } }
-) {
+export async function POST(_request: NextRequest, { params }: { params: { userId: string } }) {
   try {
     // Validate userId parameter
     if (!isValidUuid(params.userId)) {
@@ -30,15 +27,27 @@ export async function POST(
     const userId = params.userId
 
     // Récupérer toutes les données de l'utilisateur
-    const [
-      { data: profile },
-      { data: bookings },
-      { data: reviews },
-    ] = await Promise.all([
-      supabase.from('profiles').select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count').eq('id', userId).single(),
-      supabase.from('bookings').select('id, provider_id, client_id, status, scheduled_date, notes, created_at').or(`provider_id.eq.${userId},client_id.eq.${userId}`),
-      supabase.from('reviews').select('id, booking_id, artisan_id, client_name, client_email, rating, comment, status, created_at').eq('artisan_id', userId),
+    const [{ data: profile }, { data: bookings }, { data: userProvider }] = await Promise.all([
+      supabase
+        .from('profiles')
+        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
+        .eq('id', userId)
+        .single(),
+      supabase
+        .from('bookings')
+        .select('id, provider_id, client_id, status, scheduled_date, notes, created_at')
+        .or(`provider_id.eq.${userId},client_id.eq.${userId}`),
+      supabase.from('providers').select('id').eq('user_id', userId).maybeSingle(),
     ])
+
+    const { data: reviews } = userProvider?.id
+      ? await supabase
+          .from('reviews')
+          .select(
+            'id, booking_id, provider_id, author_name, author_email, rating, content, status, created_at'
+          )
+          .eq('provider_id', userProvider.id)
+      : { data: [] }
 
     const exportData = {
       profile,

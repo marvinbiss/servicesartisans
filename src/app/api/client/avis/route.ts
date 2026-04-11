@@ -15,17 +15,17 @@ import { z } from 'zod'
 
 // POST request schema
 const createReviewSchema = z.object({
-  artisan_id: z.string().uuid(),
+  provider_id: z.string().uuid(),
   booking_id: z.string().uuid().optional().nullable(),
   rating: z.number().int().min(1).max(5),
-  comment: z.string().min(10).max(2000),
+  content: z.string().min(10).max(2000),
 })
 
 // PUT request schema
 const updateReviewSchema = z.object({
   review_id: z.string().uuid(),
   rating: z.number().int().min(1).max(5).optional(),
-  comment: z.string().min(10).max(2000).optional(),
+  content: z.string().min(10).max(2000).optional(),
 })
 
 // DELETE query params schema
@@ -40,13 +40,13 @@ export async function GET() {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Fetch published reviews by this client via bookings (reviews has no direct client FK)
@@ -63,12 +63,17 @@ export async function GET() {
     // Note: profiles does not have company_name or avatar_url
     const { data: avisPublies, error: avisError } = await supabase
       .from('reviews')
-      .select(`
+      .select(
+        `
         *,
-        artisan:providers!artisan_id(id, name),
+        artisan:providers!provider_id(id, name),
         booking:bookings!booking_id(service_name)
-      `)
-      .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
+      `
+      )
+      .in(
+        'booking_id',
+        bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000']
+      )
       .order('created_at', { ascending: false })
 
     if (avisError) {
@@ -83,16 +88,17 @@ export async function GET() {
     const avisEnAttente: unknown[] = []
 
     // Format published reviews
-    const formattedAvisPublies = avisPublies?.map(r => ({
-      id: r.id,
-      artisan: r.artisan?.name || 'Artisan',
-      artisan_id: r.artisan_id,
-      service: (r.booking as { service_name?: string } | null)?.service_name || null,
-      date: r.created_at,
-      note: r.rating,
-      commentaire: r.comment,
-      reponse: r.artisan_response,
-    })) || []
+    const formattedAvisPublies =
+      avisPublies?.map((r) => ({
+        id: r.id,
+        artisan: r.artisan?.name || 'Artisan',
+        provider_id: r.provider_id,
+        service: (r.booking as { service_name?: string } | null)?.service_name || null,
+        date: r.created_at,
+        note: r.rating,
+        commentaire: r.content,
+        reponse: r.reply,
+      })) || []
 
     return NextResponse.json({
       avisPublies: formattedAvisPublies,
@@ -100,10 +106,7 @@ export async function GET() {
     })
   } catch (error) {
     logger.error('Client avis GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -112,13 +115,13 @@ export async function POST(request: Request) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -129,7 +132,7 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-    const { artisan_id, booking_id, rating, comment } = result.data
+    const { provider_id, booking_id, rating, content } = result.data
 
     // Fetch client profile to get name and email for the review record
     const { data: clientProfile } = await supabase
@@ -138,16 +141,16 @@ export async function POST(request: Request) {
       .eq('id', user.id)
       .single()
 
-    // Insert review (reviews has client_name, client_email — no user_id FK)
+    // Insert review (reviews has author_name, author_email — no user_id FK)
     const { data: review, error: insertError } = await supabase
       .from('reviews')
       .insert({
-        artisan_id,
+        provider_id,
         booking_id: booking_id || null,
-        client_name: clientProfile?.full_name || user.email || 'Client',
-        client_email: clientProfile?.email || user.email || '',
+        author_name: clientProfile?.full_name || user.email || 'Client',
+        author_email: clientProfile?.email || user.email || '',
         rating,
-        comment,
+        content,
       })
       .select()
       .single()
@@ -155,7 +158,7 @@ export async function POST(request: Request) {
     if (insertError) {
       logger.error('Error inserting review:', insertError)
       return NextResponse.json(
-        { error: 'Erreur lors de la publication de l\'avis' },
+        { error: "Erreur lors de la publication de l'avis" },
         { status: 500 }
       )
     }
@@ -165,7 +168,7 @@ export async function POST(request: Request) {
       const { data: providerData } = await supabase
         .from('providers')
         .select('specialty, address_city, slug, stable_id')
-        .eq('user_id', artisan_id)
+        .eq('id', provider_id)
         .single()
 
       if (providerData) {
@@ -180,7 +183,7 @@ export async function POST(request: Request) {
         revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
 
         logger.info('Revalidated paths after client review submission', {
-          artisanId: artisan_id,
+          providerId: provider_id,
           reviewId: review.id,
         })
       }
@@ -195,10 +198,7 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Client avis POST error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -207,13 +207,13 @@ export async function PUT(request: Request) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -224,7 +224,7 @@ export async function PUT(request: Request) {
         { status: 400 }
       )
     }
-    const { review_id, rating, comment } = result.data
+    const { review_id, rating, content } = result.data
 
     // Verify the review belongs to this client via booking ownership
     const { data: existingReview } = await supabase
@@ -234,10 +234,7 @@ export async function PUT(request: Request) {
       .single()
 
     if (!existingReview) {
-      return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Avis non trouvé ou non autorisé' }, { status: 403 })
     }
 
     const { data: ownerBooking } = await supabase
@@ -248,10 +245,7 @@ export async function PUT(request: Request) {
       .single()
 
     if (!ownerBooking) {
-      return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Avis non trouvé ou non autorisé' }, { status: 403 })
     }
 
     // Update review
@@ -259,14 +253,14 @@ export async function PUT(request: Request) {
       .from('reviews')
       .update({
         rating,
-        comment,
+        content,
       })
       .eq('id', review_id)
 
     if (updateError) {
       logger.error('Error updating review:', updateError)
       return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour de l\'avis' },
+        { error: "Erreur lors de la mise à jour de l'avis" },
         { status: 500 }
       )
     }
@@ -277,10 +271,7 @@ export async function PUT(request: Request) {
     })
   } catch (error) {
     logger.error('Client avis PUT error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -289,13 +280,13 @@ export async function DELETE(request: Request) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -319,10 +310,7 @@ export async function DELETE(request: Request) {
       .single()
 
     if (!existingReview) {
-      return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Avis non trouvé ou non autorisé' }, { status: 403 })
     }
 
     const { data: ownerBooking } = await supabase
@@ -333,22 +321,16 @@ export async function DELETE(request: Request) {
       .single()
 
     if (!ownerBooking) {
-      return NextResponse.json(
-        { error: 'Avis non trouvé ou non autorisé' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Avis non trouvé ou non autorisé' }, { status: 403 })
     }
 
     // Delete review
-    const { error: deleteError } = await supabase
-      .from('reviews')
-      .delete()
-      .eq('id', review_id)
+    const { error: deleteError } = await supabase.from('reviews').delete().eq('id', review_id)
 
     if (deleteError) {
       logger.error('Error deleting review:', deleteError)
       return NextResponse.json(
-        { error: 'Erreur lors de la suppression de l\'avis' },
+        { error: "Erreur lors de la suppression de l'avis" },
         { status: 500 }
       )
     }
@@ -359,9 +341,6 @@ export async function DELETE(request: Request) {
     })
   } catch (error) {
     logger.error('Client avis DELETE error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

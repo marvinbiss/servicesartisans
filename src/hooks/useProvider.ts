@@ -57,7 +57,9 @@ export function useProvider(): UseProviderReturn {
       setIsLoading(true)
       setError(null)
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         setProvider(null)
         setStats(null)
@@ -67,7 +69,9 @@ export function useProvider(): UseProviderReturn {
       // Fetch provider profile with explicit column list
       const { data: providerData, error: providerError } = await supabase
         .from('providers')
-        .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+        .select(
+          'id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at'
+        )
         .eq('user_id', user.id)
         .single()
 
@@ -90,22 +94,17 @@ export function useProvider(): UseProviderReturn {
           .select('id, status')
           .eq('provider_id', providerData.id)
           .limit(500),
-        supabase
-          .from('reviews')
-          .select('rating')
-          .eq('artisan_id', user.id)
-          .limit(500),
+        supabase.from('reviews').select('rating').eq('provider_id', providerData.id).limit(500),
       ])
 
       if (bookingsData) {
-        const completed = bookingsData.filter(b => b.status === 'completed')
-        const pending = bookingsData.filter(b => b.status === 'pending')
+        const completed = bookingsData.filter((b) => b.status === 'completed')
+        const pending = bookingsData.filter((b) => b.status === 'pending')
         const totalRevenue = 0 // bookings table has no price column
 
-        const ratings = reviewsData?.map(r => r.rating) || []
-        const avgRating = ratings.length > 0
-          ? ratings.reduce((a, b) => a + b, 0) / ratings.length
-          : 0
+        const ratings = reviewsData?.map((r) => r.rating) || []
+        const avgRating =
+          ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0
 
         setStats({
           totalBookings: bookingsData.length,
@@ -125,22 +124,25 @@ export function useProvider(): UseProviderReturn {
     }
   }, [supabase])
 
-  const updateProvider = useCallback(async (data: Partial<Provider>) => {
-    if (!provider) throw new Error('No provider to update')
+  const updateProvider = useCallback(
+    async (data: Partial<Provider>) => {
+      if (!provider) throw new Error('No provider to update')
 
-    try {
-      const { error: updateError } = await supabase
-        .from('providers')
-        .update(data)
-        .eq('id', provider.id)
+      try {
+        const { error: updateError } = await supabase
+          .from('providers')
+          .update(data)
+          .eq('id', provider.id)
 
-      if (updateError) throw updateError
+        if (updateError) throw updateError
 
-      setProvider(prev => prev ? { ...prev, ...data } : null)
-    } catch (err) {
-      throw err instanceof Error ? err : new Error('Failed to update provider')
-    }
-  }, [provider, supabase])
+        setProvider((prev) => (prev ? { ...prev, ...data } : null))
+      } catch (err) {
+        throw err instanceof Error ? err : new Error('Failed to update provider')
+      }
+    },
+    [provider, supabase]
+  )
 
   useEffect(() => {
     fetchProvider()

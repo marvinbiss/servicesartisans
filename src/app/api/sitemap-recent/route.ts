@@ -18,7 +18,12 @@ import { SITE_URL } from '@/lib/seo/config'
  */
 
 function escapeXml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 }
 
 export const dynamic = 'force-dynamic'
@@ -52,9 +57,13 @@ export async function GET() {
       for (const p of recentProviders) {
         const lastmod = new Date(p.updated_at).toISOString().split('T')[0]
         const service = p.specialty?.toLowerCase().trim()
-        const city = p.address_city?.toLowerCase().trim()
-          ?.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        const city = p.address_city
+          ?.toLowerCase()
+          .trim()
+          ?.normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '')
 
         // Service hub page (one per service)
         if (service && !seenServiceHub.has(service)) {
@@ -93,31 +102,31 @@ export async function GET() {
     // 2. Recently created reviews (avis pages)
     const { data: recentReviews } = await supabase
       .from('reviews')
-      .select('artisan_id, created_at')
+      .select('provider_id, created_at')
       .eq('status', 'published')
       .gte('created_at', sevenDaysAgo)
-      .not('artisan_id', 'is', null)
+      .not('provider_id', 'is', null)
       .order('created_at', { ascending: false })
       .limit(500)
 
     if (recentReviews && recentReviews.length > 0) {
-      const artisanIds = Array.from(new Set(recentReviews.map(r => r.artisan_id)))
+      const providerIds = Array.from(new Set(recentReviews.map((r) => r.provider_id)))
       const { data: providers } = await supabase
         .from('providers')
-        .select('user_id, specialty')
-        .in('user_id', artisanIds)
+        .select('id, specialty')
+        .in('id', providerIds)
 
       if (providers) {
-        const specialtyByUserId = new Map<string, string>()
+        const specialtyById = new Map<string, string>()
         for (const p of providers) {
-          if (p.user_id && p.specialty) {
-            specialtyByUserId.set(p.user_id, p.specialty.toLowerCase().trim())
+          if (p.id && p.specialty) {
+            specialtyById.set(p.id, p.specialty.toLowerCase().trim())
           }
         }
 
         const seenAvis = new Set<string>()
         for (const r of recentReviews) {
-          const svc = specialtyByUserId.get(r.artisan_id)
+          const svc = specialtyById.get(r.provider_id)
           if (svc && !seenAvis.has(svc)) {
             seenAvis.add(svc)
             urls.push({
@@ -161,8 +170,9 @@ export async function GET() {
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...urls.map(u =>
-      `  <url><loc>${escapeXml(u.loc)}</loc><lastmod>${escapeXml(u.lastmod)}</lastmod><changefreq>${escapeXml(u.changefreq)}</changefreq><priority>${escapeXml(u.priority)}</priority></url>`
+    ...urls.map(
+      (u) =>
+        `  <url><loc>${escapeXml(u.loc)}</loc><lastmod>${escapeXml(u.lastmod)}</lastmod><changefreq>${escapeXml(u.changefreq)}</changefreq><priority>${escapeXml(u.priority)}</priority></url>`
     ),
     '</urlset>',
   ].join('\n')

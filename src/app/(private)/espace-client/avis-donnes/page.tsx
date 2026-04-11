@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger'
 interface AvisPublie {
   id: string
   artisan: string
-  artisan_id: string
+  provider_id: string
   service: string | null
   date: string
   note: number
@@ -21,7 +21,7 @@ interface AvisPublie {
 interface AvisEnAttente {
   id: string
   artisan: string
-  artisan_id: string
+  provider_id: string
   service: string | null
   date: string
   booking_id: string
@@ -73,7 +73,7 @@ export default function AvisDonnesPage() {
           body: JSON.stringify({
             review_id: editingAvis.id,
             rating: note,
-            comment: commentaire,
+            content: commentaire,
           }),
         })
 
@@ -88,10 +88,10 @@ export default function AvisDonnesPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            artisan_id: selectedAvis.artisan_id,
+            provider_id: selectedAvis.provider_id,
             booking_id: selectedAvis.booking_id,
             rating: note,
-            comment: commentaire,
+            content: commentaire,
           }),
         })
 
@@ -103,7 +103,7 @@ export default function AvisDonnesPage() {
       }
     } catch (err) {
       logger.error('Error submitting avis', err)
-      setError('Erreur lors de l\'envoi de votre avis. Veuillez réessayer.')
+      setError("Erreur lors de l'envoi de votre avis. Veuillez réessayer.")
     } finally {
       setSubmitting(false)
       setNote(5)
@@ -124,7 +124,7 @@ export default function AvisDonnesPage() {
       }
     } catch (err) {
       logger.error('Error deleting avis', err)
-      setError('Erreur lors de la suppression de l\'avis. Veuillez réessayer.')
+      setError("Erreur lors de la suppression de l'avis. Veuillez réessayer.")
     }
   }
 
@@ -158,15 +158,15 @@ export default function AvisDonnesPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
-            items={[
-              { label: 'Espace Client', href: '/espace-client' },
-              { label: 'Avis donnés' }
-            ]}
+            items={[{ label: 'Espace Client', href: '/espace-client' }, { label: 'Avis donnés' }]}
             className="mb-4"
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/espace-client/mes-demandes" className="text-gray-600 hover:text-gray-900">
+              <Link
+                href="/espace-client/mes-demandes"
+                className="text-gray-600 hover:text-gray-900"
+              >
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -188,7 +188,13 @@ export default function AvisDonnesPage() {
             {error && (
               <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center justify-between">
                 <span>{error}</span>
-                <button type="button" onClick={() => setError(null)} className="text-red-500 hover:text-red-700 font-medium ml-4">✕</button>
+                <button
+                  type="button"
+                  onClick={() => setError(null)}
+                  className="text-red-500 hover:text-red-700 font-medium ml-4"
+                >
+                  ✕
+                </button>
               </div>
             )}
             {/* En attente */}
@@ -236,10 +242,7 @@ export default function AvisDonnesPage() {
               ) : (
                 <div className="space-y-4">
                   {avisPublies.map((avis) => (
-                    <div
-                      key={avis.id}
-                      className="border border-gray-200 rounded-lg p-4"
-                    >
+                    <div key={avis.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
@@ -259,7 +262,9 @@ export default function AvisDonnesPage() {
                           <p className="text-gray-700">{avis.commentaire}</p>
                           {avis.reponse && (
                             <div className="mt-3 bg-gray-50 rounded-lg p-3">
-                              <p className="text-sm font-medium text-gray-700 mb-1">Réponse de l'artisan :</p>
+                              <p className="text-sm font-medium text-gray-700 mb-1">
+                                Réponse de l'artisan :
+                              </p>
                               <p className="text-sm text-gray-600">{avis.reponse}</p>
                             </div>
                           )}
@@ -296,7 +301,9 @@ export default function AvisDonnesPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              {editingAvis ? 'Modifier votre avis' : `Laisser un avis pour ${selectedAvis?.artisan}`}
+              {editingAvis
+                ? 'Modifier votre avis'
+                : `Laisser un avis pour ${selectedAvis?.artisan}`}
             </h2>
             <p className="text-gray-600 mb-6">
               Service : {editingAvis?.service || selectedAvis?.service}
@@ -305,9 +312,7 @@ export default function AvisDonnesPage() {
             <form onSubmit={handleSubmitAvis} className="space-y-6">
               {/* Note */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Votre note
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Votre note</label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((value) => (
                     <button
@@ -359,7 +364,7 @@ export default function AvisDonnesPage() {
                   className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {editingAvis ? 'Mettre à jour' : 'Publier l\'avis'}
+                  {editingAvis ? 'Mettre à jour' : "Publier l'avis"}
                 </button>
               </div>
             </form>

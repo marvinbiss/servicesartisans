@@ -6,12 +6,12 @@ import { Star, ThumbsUp, MessageCircle, ChevronDown, Filter, User, CheckCircle }
 interface Review {
   id: string
   rating: number
-  comment: string | null
+  content: string | null
   would_recommend: boolean
-  client_name: string
+  author_name: string
   created_at: string
-  artisan_response: string | null
-  artisan_responded_at: string | null
+  reply: string | null
+  reply_date: string | null
   helpful_count: number
   booking_id?: string | null
   user_id?: string | null
@@ -69,9 +69,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
 
       setVotedReviews((prev) => new Set(prev).add(reviewId))
       setReviews((prev) =>
-        prev.map((r) =>
-          r.id === reviewId ? { ...r, helpful_count: r.helpful_count + 1 } : r
-        )
+        prev.map((r) => (r.id === reviewId ? { ...r, helpful_count: r.helpful_count + 1 } : r))
       )
     } catch (error) {
       console.error('Error voting:', error)
@@ -147,9 +145,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
     return (
       <div className="bg-gray-50 rounded-xl p-8 text-center">
         <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">
-          Pas encore d'avis
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-700 mb-2">Pas encore d'avis</h3>
         <p className="text-gray-500">
           Soyez le premier à laisser un avis après votre rendez-vous !
         </p>
@@ -168,9 +164,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
             <div className="flex justify-center md:justify-start mt-1">
               {renderStars(Math.round(stats.average), 'lg')}
             </div>
-            <p className="text-sm text-gray-600 mt-1">
-              {stats.total} avis
-            </p>
+            <p className="text-sm text-gray-600 mt-1">{stats.total} avis</p>
           </div>
 
           {/* Rating distribution */}
@@ -203,15 +197,9 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
 
           {/* Recommendation rate */}
           <div className="text-center md:border-l md:pl-6">
-            <div className="text-3xl font-bold text-green-600">
-              {stats.recommendRate}%
-            </div>
-            <p className="text-sm text-gray-600">
-              recommandent
-            </p>
-            <p className="text-xs text-gray-500">
-              {artisanName || 'cet artisan'}
-            </p>
+            <div className="text-3xl font-bold text-green-600">{stats.recommendRate}%</div>
+            <p className="text-sm text-gray-600">recommandent</p>
+            <p className="text-xs text-gray-500">{artisanName || 'cet artisan'}</p>
           </div>
         </div>
       </div>
@@ -250,10 +238,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
       {/* Reviews list */}
       <div className="space-y-4">
         {displayedReviews.map((review) => (
-          <div
-            key={review.id}
-            className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm"
-          >
+          <div key={review.id} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
@@ -261,7 +246,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                   <User className="w-5 h-5 text-violet-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{review.client_name}</p>
+                  <p className="font-medium text-gray-900">{review.author_name}</p>
                   <p className="text-xs text-gray-500">{formatDate(review.created_at)}</p>
                 </div>
               </div>
@@ -285,21 +270,17 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
             </div>
 
             {/* Comment */}
-            {review.comment && (
-              <p className="text-gray-700 mb-4">{review.comment}</p>
-            )}
+            {review.content && <p className="text-gray-700 mb-4">{review.content}</p>}
 
             {/* Artisan response */}
-            {review.artisan_response && (
+            {review.reply && (
               <div className="bg-violet-50 rounded-lg p-4 mb-4">
                 <p className="text-xs font-medium text-violet-700 mb-1">
                   Réponse de {artisanName || "l'artisan"}
                 </p>
-                <p className="text-sm text-gray-700">{review.artisan_response}</p>
-                {review.artisan_responded_at && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    {formatDate(review.artisan_responded_at)}
-                  </p>
+                <p className="text-sm text-gray-700">{review.reply}</p>
+                {review.reply_date && (
+                  <p className="text-xs text-gray-500 mt-1">{formatDate(review.reply_date)}</p>
                 )}
               </div>
             )}
@@ -316,9 +297,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                 }`}
               >
                 <ThumbsUp className="w-4 h-4" />
-                <span>
-                  Utile ({review.helpful_count})
-                </span>
+                <span>Utile ({review.helpful_count})</span>
               </button>
             </div>
           </div>

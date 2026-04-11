@@ -13,10 +13,7 @@ const gdprDeleteSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Supprimer/Anonymiser les données d'un utilisateur (RGPD)
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { userId: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { userId: string } }) {
   try {
     // Verify admin with users:delete permission (GDPR deletion is critical)
     const authResult = await requirePermission('users', 'delete')
@@ -37,7 +34,10 @@ export async function POST(
     const result = gdprDeleteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Confirmation requise (SUPPRIMER)', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Confirmation requise (SUPPRIMER)', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -72,16 +72,16 @@ export async function POST(
         })
         .eq('id', userId)
 
-      // Étape 4 — Anonymiser les avis client (filtrés par client_email)
+      // Étape 4 — Anonymiser les avis client (filtrés par author_email)
       completedSteps.push('anonymize_client_reviews')
       if (profileData?.email) {
         await supabase
           .from('reviews')
           .update({
-            client_name: 'Utilisateur supprimé',
-            client_email: 'deleted@anonymized.local',
+            author_name: 'Utilisateur supprimé',
+            author_email: 'deleted@anonymized.local',
           })
-          .eq('client_email', profileData.email)
+          .eq('author_email', profileData.email)
       }
 
       // Étape 5 — Anonymiser les réponses d'avis uniquement si l'utilisateur est un artisan
@@ -90,10 +90,10 @@ export async function POST(
         await supabase
           .from('reviews')
           .update({
-            artisan_response: null,
-            artisan_responded_at: null,
+            reply: null,
+            reply_date: null,
           })
-          .eq('artisan_id', userId)
+          .eq('provider_id', artisanRecord.id)
       }
 
       // Étape 6 — Désactiver le provider si c'est un artisan

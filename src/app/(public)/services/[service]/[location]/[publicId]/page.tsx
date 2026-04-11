@@ -317,12 +317,12 @@ interface SimilarProviderRow {
 interface ReviewRow {
   id: string
   rating: number
-  comment: string | null
+  content: string | null
   created_at: string
-  client_name: string | null
+  author_name: string | null
   has_media: boolean | null
-  artisan_response: string | null
-  artisan_responded_at: string | null
+  reply: string | null
+  reply_date: string | null
 }
 
 // Fetch similar artisans (same specialty, same department)
@@ -383,15 +383,15 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
         `
         id,
         rating,
-        comment,
+        content,
         created_at,
-        client_name,
+        author_name,
         has_media,
-        artisan_response,
-        artisan_responded_at
+        reply,
+        reply_date
       `
       )
-      .eq('artisan_id', providerId)
+      .eq('provider_id', providerId)
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .limit(100) // Increased limit to show more reviews
@@ -399,20 +399,20 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
     if (reviews && reviews.length > 0) {
       return (reviews as ReviewRow[]).map((r) => ({
         id: r.id,
-        author: r.client_name || 'Client',
+        author: r.author_name || 'Client',
         rating: r.rating,
         date: new Date(r.created_at).toLocaleDateString('fr-FR', {
           day: 'numeric',
           month: 'long',
           year: 'numeric',
         }),
-        comment: r.comment || '',
+        comment: r.content || '',
         dateISO: r.created_at ? r.created_at.split('T')[0] : undefined,
         service: serviceName || '',
         verified: false,
         hasPhoto: r.has_media || false,
-        artisan_response: r.artisan_response || null,
-        artisan_responded_at: r.artisan_responded_at || null,
+        artisan_response: r.reply || null,
+        artisan_responded_at: r.reply_date || null,
       }))
     }
 

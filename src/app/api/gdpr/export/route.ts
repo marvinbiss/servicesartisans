@@ -20,7 +20,9 @@ export async function POST(request: Request) {
   try {
     const supabase = await createClient()
 
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
@@ -32,7 +34,10 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = exportPostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Requête invalide', details: result.error.flatten() } },
+        { status: 400 }
+      )
     }
     const { format } = result.data
 
@@ -48,7 +53,11 @@ export async function POST(request: Request) {
 
     if (existingRequest) {
       return NextResponse.json(
-        { success: false, error: { message: 'Vous avez déjà une demande d\'export en cours' }, requestId: existingRequest.id },
+        {
+          success: false,
+          error: { message: "Vous avez déjà une demande d'export en cours" },
+          requestId: existingRequest.id,
+        },
         { status: 400 }
       )
     }
@@ -90,7 +99,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('GDPR export error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Échec du traitement de la demande d\'export' } },
+      { success: false, error: { message: "Échec du traitement de la demande d'export" } },
       { status: 500 }
     )
   }
@@ -101,7 +110,9 @@ export async function GET(request: Request) {
   try {
     const supabase = await createClient()
 
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
@@ -124,7 +135,7 @@ export async function GET(request: Request) {
 
       if (!exportRequest) {
         return NextResponse.json(
-          { success: false, error: { message: 'Demande d\'export introuvable' } },
+          { success: false, error: { message: "Demande d'export introuvable" } },
           { status: 404 }
         )
       }
@@ -143,7 +154,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('GDPR export status error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Échec de la récupération du statut d\'export' } },
+      { success: false, error: { message: "Échec de la récupération du statut d'export" } },
       { status: 500 }
     )
   }
@@ -162,6 +173,12 @@ async function collectUserData(userId: string) {
 
   const userEmail: string | null = profileResult.data?.email ?? null
 
+  const { data: userProvider } = await adminSupabase
+    .from('providers')
+    .select('id')
+    .eq('user_id', userId)
+    .maybeSingle()
+
   const [
     bookingsResult,
     reviewsReceivedResult,
@@ -171,19 +188,23 @@ async function collectUserData(userId: string) {
   ] = await Promise.all([
     adminSupabase
       .from('bookings')
-      .select('id, client_id, provider_id, status, scheduled_date, address, city, postal_code, total_amount, payment_status, created_at')
+      .select(
+        'id, client_id, provider_id, status, scheduled_date, address, city, postal_code, total_amount, payment_status, created_at'
+      )
       .or(`client_id.eq.${userId},provider_id.eq.${userId}`),
 
-    adminSupabase
-      .from('reviews')
-      .select('id, rating, comment, created_at, artisan_id')
-      .eq('artisan_id', userId),
+    userProvider?.id
+      ? adminSupabase
+          .from('reviews')
+          .select('id, rating, content, created_at, provider_id')
+          .eq('provider_id', userProvider.id)
+      : Promise.resolve({ data: [] }),
 
     userEmail
       ? adminSupabase
           .from('reviews')
-          .select('id, rating, comment, created_at, artisan_id')
-          .eq('client_email', userEmail)
+          .select('id, rating, content, created_at, provider_id')
+          .eq('author_email', userEmail)
       : Promise.resolve({ data: [] }),
 
     adminSupabase

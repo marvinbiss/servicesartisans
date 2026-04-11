@@ -22,17 +22,25 @@ const BATCH_SIZE = 200
 
 export async function GET(request: Request) {
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!supabaseUrl || !serviceRoleKey) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Configuration Supabase manquante' } },
+        { status: 500 }
+      )
+    }
+    const supabase = createClient(supabaseUrl, serviceRoleKey)
     // Verify cron secret
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access attempt to calculate-trust-badges')
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     logger.info('[Cron] Starting review metrics recalculation')
@@ -44,10 +52,10 @@ export async function GET(request: Request) {
     let hasMore = true
 
     while (hasMore) {
-      // Fetch active providers with their current metrics (user_id needed to match artisan_id in reviews)
+      // Fetch active providers with their current metrics
       const { data: providers, error } = await supabase
         .from('providers')
-        .select('id, user_id, rating_average, review_count')
+        .select('id, rating_average, review_count')
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
         .order('id')
@@ -64,14 +72,9 @@ export async function GET(request: Request) {
       }
 
       // Batch-fetch all reviews for this batch of providers (eliminates N+1)
-      const userIds = providers
-        .map(p => p.user_id)
-        .filter((id): id is string => !!id)
+      const providerIds = providers.map((p) => p.id).filter((id): id is string => !!id)
 
-      const skippedInBatch = providers.filter(p => !p.user_id).length
-      totalSkipped += skippedInBatch
-
-      if (userIds.length === 0) {
+      if (providerIds.length === 0) {
         if (providers.length < BATCH_SIZE) {
           hasMore = false
         } else {
@@ -83,40 +86,34 @@ export async function GET(request: Request) {
       // Single query instead of N queries
       const { data: allReviews, error: reviewError } = await supabase
         .from('reviews')
-        .select('artisan_id, rating')
-        .in('artisan_id', userIds)
+        .select('provider_id, rating')
+        .in('provider_id', providerIds)
         .eq('status', 'published')
 
       if (reviewError) {
         logger.error('[Cron] Error batch-fetching reviews:', reviewError)
         totalErrors++
       } else {
-        // Group reviews by artisan_id
-        const reviewsByArtisan = new Map<string, number[]>()
+        // Group reviews by provider_id
+        const reviewsByProvider = new Map<string, number[]>()
         for (const r of allReviews || []) {
-          const existing = reviewsByArtisan.get(r.artisan_id) || []
+          const existing = reviewsByProvider.get(r.provider_id) || []
           existing.push(r.rating || 0)
-          reviewsByArtisan.set(r.artisan_id, existing)
+          reviewsByProvider.set(r.provider_id, existing)
         }
 
         // Prepare batch updates
         const updates: Promise<void>[] = []
 
         for (const provider of providers) {
-          if (!provider.user_id) continue
-
-          const ratings = reviewsByArtisan.get(provider.user_id) || []
+          const ratings = reviewsByProvider.get(provider.id) || []
           const reviewCount = ratings.length
-          const ratingAverage = reviewCount > 0
-            ? ratings.reduce((sum, r) => sum + r, 0) / reviewCount
-            : 0
+          const ratingAverage =
+            reviewCount > 0 ? ratings.reduce((sum, r) => sum + r, 0) / reviewCount : 0
           const roundedRating = Math.round(ratingAverage * 100) / 100
 
           // Skip update if nothing changed
-          if (
-            provider.rating_average === roundedRating &&
-            provider.review_count === reviewCount
-          ) {
+          if (provider.rating_average === roundedRating && provider.review_count === reviewCount) {
             totalSkipped++
             continue
           }
@@ -127,17 +124,19 @@ export async function GET(request: Request) {
                 .from('providers')
                 .update({ rating_average: roundedRating, review_count: reviewCount })
                 .eq('id', provider.id)
-            ).then(({ error: updateError }) => {
-              if (updateError) {
+            )
+              .then(({ error: updateError }) => {
+                if (updateError) {
+                  totalErrors++
+                  logger.error(`[Cron] Error updating provider ${provider.id}:`, updateError)
+                } else {
+                  totalUpdated++
+                }
+              })
+              .catch((err) => {
                 totalErrors++
-                logger.error(`[Cron] Error updating provider ${provider.id}:`, updateError)
-              } else {
-                totalUpdated++
-              }
-            }).catch((err) => {
-              totalErrors++
-              logger.error(`[Cron] Error processing provider ${provider.id}:`, err)
-            })
+                logger.error(`[Cron] Error processing provider ${provider.id}:`, err)
+              })
           )
         }
 
@@ -184,7 +183,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Cron] Error in calculate-trust-badges:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors du recalcul des métriques d\'avis' } },
+      { success: false, error: { message: "Erreur lors du recalcul des métriques d'avis" } },
       { status: 500 }
     )
   }

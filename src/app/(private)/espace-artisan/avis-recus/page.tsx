@@ -9,11 +9,11 @@ import { logger } from '@/lib/logger'
 
 interface Avis {
   id: string
-  client_name: string
+  author_name: string
   created_at: string
   rating: number
-  comment: string | null
-  artisan_response: string | null
+  content: string | null
+  reply: string | null
 }
 
 interface Stats {
@@ -28,7 +28,7 @@ export default function AvisRecusPage() {
   const [stats, setStats] = useState<Stats>({
     moyenne: 0,
     total: 0,
-    distribution: [5, 4, 3, 2, 1].map(note => ({ note, count: 0 })),
+    distribution: [5, 4, 3, 2, 1].map((note) => ({ note, count: 0 })),
   })
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -58,7 +58,7 @@ export default function AvisRecusPage() {
     } finally {
       setLoading(false)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sort])
 
   useEffect(() => {
@@ -73,11 +73,7 @@ export default function AvisRecusPage() {
 
     // Optimistic: show the reply immediately
     const previousAvis = avis
-    setAvis(prev =>
-      prev.map(a =>
-        a.id === reviewId ? { ...a, artisan_response: trimmedReply } : a
-      )
-    )
+    setAvis((prev) => prev.map((a) => (a.id === reviewId ? { ...a, reply: trimmedReply } : a)))
     setReplyingTo(null)
     setReplyText('')
 
@@ -94,14 +90,14 @@ export default function AvisRecusPage() {
         setReplyingTo(reviewId)
         setReplyText(trimmedReply)
         const data = await response.json().catch(() => ({}))
-        setReplyError(data.error || 'Erreur lors de l\'envoi de la réponse')
+        setReplyError(data.error || "Erreur lors de l'envoi de la réponse")
       }
     } catch {
       // Rollback on network error
       setAvis(previousAvis)
       setReplyingTo(reviewId)
       setReplyText(trimmedReply)
-      setReplyError('Erreur lors de l\'envoi de la réponse')
+      setReplyError("Erreur lors de l'envoi de la réponse")
     }
   }
   if (loading) {
@@ -146,7 +142,10 @@ export default function AvisRecusPage() {
           {/* Content */}
           <main id="main-content" className="lg:col-span-3 space-y-8">
             {fetchError && (
-              <div role="alert" className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <div
+                role="alert"
+                className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"
+              >
                 {fetchError}
               </div>
             )}
@@ -154,13 +153,17 @@ export default function AvisRecusPage() {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-gray-900 mb-2">{Number(stats.moyenne).toFixed(1)}</div>
+                  <div className="text-5xl font-bold text-gray-900 mb-2">
+                    {Number(stats.moyenne).toFixed(1)}
+                  </div>
                   <div className="flex justify-center mb-2">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
                         className={`w-6 h-6 ${
-                          i < Math.round(stats.moyenne) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                          i < Math.round(stats.moyenne)
+                            ? 'text-yellow-400 fill-current'
+                            : 'text-gray-300'
                         }`}
                       />
                     ))}
@@ -174,7 +177,9 @@ export default function AvisRecusPage() {
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-yellow-400 rounded-full h-2"
-                          style={{ width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%` }}
+                          style={{
+                            width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%`,
+                          }}
                         />
                       </div>
                       <span className="text-sm text-gray-500 w-8">{item.count}</span>
@@ -187,9 +192,7 @@ export default function AvisRecusPage() {
             {/* Avis list */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Derniers avis
-                </h2>
+                <h2 className="text-lg font-semibold text-gray-900">Derniers avis</h2>
                 <div className="flex items-center gap-2">
                   <ArrowUpDown className="w-4 h-4 text-gray-400" />
                   <select
@@ -209,11 +212,14 @@ export default function AvisRecusPage() {
               </div>
               <div className="space-y-6">
                 {avis.map((item) => (
-                  <div key={item.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                  <div
+                    key={item.id}
+                    className="border-b border-gray-100 pb-6 last:border-0 last:pb-0"
+                  >
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-3 mb-1">
-                          <span className="font-medium text-gray-900">{item.client_name}</span>
+                          <span className="font-medium text-gray-900">{item.author_name}</span>
                           <div className="flex">
                             {[...Array(5)].map((_, i) => (
                               <Star
@@ -226,10 +232,12 @@ export default function AvisRecusPage() {
                           </div>
                         </div>
                         <p className="text-sm text-gray-500">
-                          {new Date(item.created_at).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}
+                          {new Date(item.created_at).toLocaleDateString('fr-FR', {
+                            timeZone: 'Europe/Paris',
+                          })}
                         </p>
                       </div>
-                      {!item.artisan_response && (
+                      {!item.reply && (
                         <button
                           onClick={() => setReplyingTo(item.id)}
                           className="flex items-center gap-2 text-blue-600 text-sm hover:underline"
@@ -239,7 +247,7 @@ export default function AvisRecusPage() {
                         </button>
                       )}
                     </div>
-                    <p className="text-gray-700 mb-3">{item.comment}</p>
+                    <p className="text-gray-700 mb-3">{item.content}</p>
 
                     {/* Reply form */}
                     {replyingTo === item.id && (
@@ -264,9 +272,7 @@ export default function AvisRecusPage() {
                           className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
                           rows={3}
                         />
-                        {replyError && (
-                          <p className="text-red-600 text-sm mb-2">{replyError}</p>
-                        )}
+                        {replyError && <p className="text-red-600 text-sm mb-2">{replyError}</p>}
                         <button
                           onClick={() => handleReply(item.id)}
                           disabled={!replyText.trim()}
@@ -277,21 +283,17 @@ export default function AvisRecusPage() {
                       </div>
                     )}
 
-                    {item.artisan_response && (
+                    {item.reply && (
                       <div className="bg-blue-50 rounded-lg p-4 ml-4">
                         <p className="text-sm text-blue-600 font-medium mb-1">Votre réponse :</p>
-                        <p className="text-gray-700 text-sm">{item.artisan_response}</p>
+                        <p className="text-gray-700 text-sm">{item.reply}</p>
                       </div>
                     )}
                   </div>
                 ))}
               </div>
 
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-              />
+              <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
             </div>
 
             {/* Tips */}
@@ -301,9 +303,9 @@ export default function AvisRecusPage() {
                 <div>
                   <h3 className="font-semibold mb-2">Conseil pour améliorer vos avis</h3>
                   <p className="text-green-100 text-sm">
-                    Répondez rapidement aux avis de vos clients, même positifs. Cela montre votre professionnalisme
-                    et encourage d'autres clients à laisser leur avis. Les artisans qui répondent aux avis
-                    peuvent recevoir davantage de demandes.
+                    Répondez rapidement aux avis de vos clients, même positifs. Cela montre votre
+                    professionnalisme et encourage d'autres clients à laisser leur avis. Les
+                    artisans qui répondent aux avis peuvent recevoir davantage de demandes.
                   </p>
                 </div>
               </div>

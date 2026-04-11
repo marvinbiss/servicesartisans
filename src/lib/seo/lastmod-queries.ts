@@ -9,7 +9,7 @@
  *
  * Tables used:
  *   - providers: updated_at, address_city, address_department, address_region, specialty, is_active
- *   - reviews: created_at, artisan_id (→ profiles.id → providers.user_id)
+ *   - reviews: created_at, provider_id (→ providers.id)
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -297,42 +297,37 @@ export async function getLastReviewByService(): Promise<LastmodMap> {
   if (!supabase) return map
 
   try {
-    // Reviews are linked to artisan_id (profiles.id).
-    // We need providers.specialty via providers.user_id = reviews.artisan_id.
-    // Use a join: reviews + profiles → get provider specialty.
-    // Actually reviews.artisan_id → profiles.id, and providers.user_id → profiles.id
-    // So we need: reviews JOIN providers ON providers.user_id = reviews.artisan_id
-    // Supabase JS doesn't support arbitrary joins, so we do two queries.
+    // reviews.provider_id → providers.id directly.
 
-    // Step 1: Get recent reviews with artisan_id
+    // Step 1: Get recent reviews with provider_id
     const { data: reviews, error: revErr } = await supabase
       .from('reviews')
-      .select('artisan_id, created_at')
+      .select('provider_id, created_at')
       .eq('status', 'published')
-      .not('artisan_id', 'is', null)
+      .not('provider_id', 'is', null)
       .order('created_at', { ascending: false })
       .limit(2000)
 
     if (revErr || !reviews || reviews.length === 0) return map
 
-    // Step 2: Get provider specialties for these artisan_ids
-    const artisanIds = Array.from(new Set(reviews.map((r) => r.artisan_id)))
+    // Step 2: Get provider specialties for these provider ids
+    const providerIds = Array.from(new Set(reviews.map((r) => r.provider_id)))
     const { data: providers, error: provErr } = await supabase
       .from('providers')
-      .select('user_id, specialty')
-      .in('user_id', artisanIds)
+      .select('id, specialty')
+      .in('id', providerIds)
 
     if (provErr || !providers) return map
 
-    const specialtyByUserId = new Map<string, string>()
+    const specialtyById = new Map<string, string>()
     for (const p of providers) {
-      if (p.user_id && p.specialty) {
-        specialtyByUserId.set(p.user_id, normalizeKey(p.specialty))
+      if (p.id && p.specialty) {
+        specialtyById.set(p.id, normalizeKey(p.specialty))
       }
     }
 
     for (const r of reviews) {
-      const svc = specialtyByUserId.get(r.artisan_id)
+      const svc = specialtyById.get(r.provider_id)
       if (!svc) continue
       if (!map.has(svc)) {
         const d = toDateStr(r.created_at)

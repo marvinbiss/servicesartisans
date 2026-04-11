@@ -50,7 +50,7 @@ async function countAnalyticsInRange(
   providerId: string,
   eventType: string,
   gte: string,
-  lt?: string,
+  lt?: string
 ): Promise<number> {
   let query = adminClient
     .from('analytics_events')
@@ -85,13 +85,13 @@ export async function GET(request: Request) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifie' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifie' }, { status: 401 })
     }
 
     // Get profile
@@ -102,18 +102,12 @@ export async function GET(request: Request) {
       .single()
 
     if (!profile) {
-      return NextResponse.json(
-        { error: 'Profil introuvable' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Profil introuvable' }, { status: 404 })
     }
 
     // Verify artisan role
     if (profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
 
     // Try optimized RPC first (single query for all stats)
@@ -133,7 +127,9 @@ export async function GET(request: Request) {
     // -----------------------------------------------------------------------
     const { data: providerRows } = await supabase
       .from('providers')
-      .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
+      .select(
+        'id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website'
+      )
       .eq('user_id', user.id)
       .eq('is_active', true)
       .limit(1)
@@ -177,10 +173,7 @@ export async function GET(request: Request) {
     ] = await Promise.all([
       // Conversations for this provider
       providerId
-        ? supabase
-            .from('conversations')
-            .select('id')
-            .eq('provider_id', providerId)
+        ? supabase.from('conversations').select('id').eq('provider_id', providerId)
         : Promise.resolve({ data: [] as { id: string }[] }),
 
       // Total lead_assignments count for demandesRecues
@@ -233,14 +226,14 @@ export async function GET(request: Request) {
       supabase
         .from('reviews')
         .select('id', { count: 'exact', head: true })
-        .eq('artisan_id', user.id)
+        .eq('provider_id', providerId)
         .gte('rating', 4),
 
       // Positive reviews in current period (for change %)
       supabase
         .from('reviews')
         .select('id', { count: 'exact', head: true })
-        .eq('artisan_id', user.id)
+        .eq('provider_id', providerId)
         .gte('rating', 4)
         .gte('created_at', currentStart),
 
@@ -248,7 +241,7 @@ export async function GET(request: Request) {
       supabase
         .from('reviews')
         .select('id', { count: 'exact', head: true })
-        .eq('artisan_id', user.id)
+        .eq('provider_id', providerId)
         .gte('rating', 4)
         .gte('created_at', previousStart)
         .lt('created_at', currentStart),
@@ -272,10 +265,22 @@ export async function GET(request: Request) {
 
       // Analytics previous period
       providerId
-        ? countAnalyticsInRange(adminClient, providerId, 'artisan_profile_view', previousStart, currentStart)
+        ? countAnalyticsInRange(
+            adminClient,
+            providerId,
+            'artisan_profile_view',
+            previousStart,
+            currentStart
+          )
         : Promise.resolve(0),
       providerId
-        ? countAnalyticsInRange(adminClient, providerId, 'phone_reveal', previousStart, currentStart)
+        ? countAnalyticsInRange(
+            adminClient,
+            providerId,
+            'phone_reveal',
+            previousStart,
+            currentStart
+          )
         : Promise.resolve(0),
       providerId
         ? countAnalyticsInRange(adminClient, providerId, 'phone_click', previousStart, currentStart)
@@ -285,8 +290,10 @@ export async function GET(request: Request) {
     // -----------------------------------------------------------------------
     // Wave 2 — Dependent queries (need results from wave 1)
     // -----------------------------------------------------------------------
-    const convIds = (conversationsResult.data ?? []).map(c => c.id)
-    const recentLeadIds = (recentAssignmentsResult.data ?? []).map((a: { lead_id: string }) => a.lead_id)
+    const convIds = (conversationsResult.data ?? []).map((c) => c.id)
+    const recentLeadIds = (recentAssignmentsResult.data ?? []).map(
+      (a: { lead_id: string }) => a.lead_id
+    )
 
     const [unreadResult, recentDemandesResult] = await Promise.all([
       // Unread client messages in provider conversations
@@ -310,20 +317,21 @@ export async function GET(request: Request) {
     // -----------------------------------------------------------------------
     // Assemble response
     // -----------------------------------------------------------------------
-    const demandesRecuesCount = ('count' in leadAssignmentsCountResult
-      ? leadAssignmentsCountResult.count : 0) ?? 0
-    const pendingDemandesCount = ('count' in pendingLeadAssignmentsResult
-      ? pendingLeadAssignmentsResult.count : 0) ?? 0
-    const curLeadAssignments = ('count' in curLeadAssignmentsResult
-      ? curLeadAssignmentsResult.count : 0) ?? 0
-    const prevLeadAssignments = ('count' in prevLeadAssignmentsResult
-      ? prevLeadAssignmentsResult.count : 0) ?? 0
+    const demandesRecuesCount =
+      ('count' in leadAssignmentsCountResult ? leadAssignmentsCountResult.count : 0) ?? 0
+    const pendingDemandesCount =
+      ('count' in pendingLeadAssignmentsResult ? pendingLeadAssignmentsResult.count : 0) ?? 0
+    const curLeadAssignments =
+      ('count' in curLeadAssignmentsResult ? curLeadAssignmentsResult.count : 0) ?? 0
+    const prevLeadAssignments =
+      ('count' in prevLeadAssignmentsResult ? prevLeadAssignmentsResult.count : 0) ?? 0
     const clientsSatisfaitsCount = ('count' in reviewsResult ? reviewsResult.count : 0) ?? 0
-    const curPositiveReviews = ('count' in curPositiveReviewsResult
-      ? curPositiveReviewsResult.count : 0) ?? 0
-    const prevPositiveReviews = ('count' in prevPositiveReviewsResult
-      ? prevPositiveReviewsResult.count : 0) ?? 0
-    const portfolioPhotoCount = ('count' in portfolioCountResult ? portfolioCountResult.count : 0) ?? 0
+    const curPositiveReviews =
+      ('count' in curPositiveReviewsResult ? curPositiveReviewsResult.count : 0) ?? 0
+    const prevPositiveReviews =
+      ('count' in prevPositiveReviewsResult ? prevPositiveReviewsResult.count : 0) ?? 0
+    const portfolioPhotoCount =
+      ('count' in portfolioCountResult ? portfolioCountResult.count : 0) ?? 0
 
     // Current analytics values
     const curPV = typeof curProfileViews === 'number' ? curProfileViews : 0
@@ -339,13 +347,19 @@ export async function GET(request: Request) {
     const periodRevenue = rpcStats?.periodRevenue || 0
     const lastPeriodRevenue = rpcStats?.lastPeriodRevenue || 0
 
-    const bookingsChange = lastPeriodBookings > 0
-      ? ((periodBookings - lastPeriodBookings) / lastPeriodBookings) * 100
-      : periodBookings > 0 ? 100 : 0
+    const bookingsChange =
+      lastPeriodBookings > 0
+        ? ((periodBookings - lastPeriodBookings) / lastPeriodBookings) * 100
+        : periodBookings > 0
+          ? 100
+          : 0
 
-    const revenueChange = lastPeriodRevenue > 0
-      ? ((periodRevenue - lastPeriodRevenue) / lastPeriodRevenue) * 100
-      : periodRevenue > 0 ? 100 : 0
+    const revenueChange =
+      lastPeriodRevenue > 0
+        ? ((periodRevenue - lastPeriodRevenue) / lastPeriodRevenue) * 100
+        : periodRevenue > 0
+          ? 100
+          : 0
 
     // Transform bookingsByDay to include day names
     const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
@@ -402,23 +416,23 @@ export async function GET(request: Request) {
       topServices: rpcStats?.topServices || [],
     }
 
-    return NextResponse.json({
-      stats,
-      profile,
-      provider: providerForUnread || null,
-      recentDemandes: recentDemandesResult.data || [],
-    }, {
-      headers: {
-        'Cache-Control': 'private, no-cache, no-store, must-revalidate',
-        'Server-Timing': `db;dur=${Date.now() - startTime}`,
+    return NextResponse.json(
+      {
+        stats,
+        profile,
+        provider: providerForUnread || null,
+        recentDemandes: recentDemandesResult.data || [],
       },
-    })
+      {
+        headers: {
+          'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+          'Server-Timing': `db;dur=${Date.now() - startTime}`,
+        },
+      }
+    )
   } catch (error) {
     logger.error('Stats GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -431,7 +445,7 @@ async function getLegacyStats(
   user: { id: string },
   profile: Record<string, unknown>,
   period: Period,
-  startTime: number,
+  startTime: number
 ) {
   const { currentStart, previousStart } = periodDates(period)
   const adminClient = createAdminClient()
@@ -440,7 +454,9 @@ async function getLegacyStats(
   // Provider record — use limit(1) instead of single() to avoid crash on multi-provider
   const { data: legacyProviderRows } = await supabase
     .from('providers')
-    .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website')
+    .select(
+      'id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email, siret, avatar_url, services_offered, service_prices, opening_hours, website'
+    )
     .eq('user_id', user.id)
     .eq('is_active', true)
     .limit(1)
@@ -448,10 +464,7 @@ async function getLegacyStats(
   const legacyProvider = legacyProviderRows?.[0] ?? null
 
   if (!legacyProvider) {
-    return NextResponse.json(
-      { error: 'Profil artisan introuvable ou désactivé' },
-      { status: 403 }
-    )
+    return NextResponse.json({ error: 'Profil artisan introuvable ou désactivé' }, { status: 403 })
   }
 
   const providerId = legacyProvider.id
@@ -530,23 +543,20 @@ async function getLegacyStats(
       : Promise.resolve({ data: [] as { lead_id: string }[] }),
 
     // All reviews (for average rating)
-    supabase
-      .from('reviews')
-      .select('id, rating')
-      .eq('artisan_id', user.id),
+    supabase.from('reviews').select('id, rating').eq('provider_id', providerId),
 
     // Positive reviews (clientsSatisfaits)
     supabase
       .from('reviews')
       .select('id', { count: 'exact', head: true })
-      .eq('artisan_id', user.id)
+      .eq('provider_id', providerId)
       .gte('rating', 4),
 
     // Positive reviews in current period (for change %)
     supabase
       .from('reviews')
       .select('id', { count: 'exact', head: true })
-      .eq('artisan_id', user.id)
+      .eq('provider_id', providerId)
       .gte('rating', 4)
       .gte('created_at', currentStart),
 
@@ -554,7 +564,7 @@ async function getLegacyStats(
     supabase
       .from('reviews')
       .select('id', { count: 'exact', head: true })
-      .eq('artisan_id', user.id)
+      .eq('provider_id', providerId)
       .gte('rating', 4)
       .gte('created_at', previousStart)
       .lt('created_at', currentStart),
@@ -578,7 +588,13 @@ async function getLegacyStats(
 
     // Analytics previous period
     providerId
-      ? countAnalyticsInRange(adminClient, providerId, 'artisan_profile_view', previousStart, currentStart)
+      ? countAnalyticsInRange(
+          adminClient,
+          providerId,
+          'artisan_profile_view',
+          previousStart,
+          currentStart
+        )
       : Promise.resolve(0),
     providerId
       ? countAnalyticsInRange(adminClient, providerId, 'phone_reveal', previousStart, currentStart)
@@ -591,8 +607,10 @@ async function getLegacyStats(
   // -----------------------------------------------------------------------
   // Wave 2 — Dependent queries
   // -----------------------------------------------------------------------
-  const convIds = (conversationsResult.data ?? []).map(c => c.id)
-  const recentLeadIds = (recentAssignmentsResult.data ?? []).map((a: { lead_id: string }) => a.lead_id)
+  const convIds = (conversationsResult.data ?? []).map((c) => c.id)
+  const recentLeadIds = (recentAssignmentsResult.data ?? []).map(
+    (a: { lead_id: string }) => a.lead_id
+  )
 
   const [unreadResult, recentDemandesResult] = await Promise.all([
     supabase
@@ -614,28 +632,27 @@ async function getLegacyStats(
   // -----------------------------------------------------------------------
   // Compute stats
   // -----------------------------------------------------------------------
-  const demandesRecuesCount = ('count' in leadAssignmentsCountResult
-    ? leadAssignmentsCountResult.count : 0) ?? 0
-  const pendingDemandesCount = ('count' in pendingLeadAssignmentsResult
-    ? pendingLeadAssignmentsResult.count : 0) ?? 0
-  const legacyCurLeadAssignments = ('count' in curLeadAssignmentsResult
-    ? curLeadAssignmentsResult.count : 0) ?? 0
-  const legacyPrevLeadAssignments = ('count' in prevLeadAssignmentsResult
-    ? prevLeadAssignmentsResult.count : 0) ?? 0
-  const clientsSatisfaitsCount = ('count' in positiveReviewsResult
-    ? positiveReviewsResult.count : 0) ?? 0
-  const curPositiveReviews = ('count' in curPositiveReviewsResult
-    ? curPositiveReviewsResult.count : 0) ?? 0
-  const prevPositiveReviews = ('count' in prevPositiveReviewsResult
-    ? prevPositiveReviewsResult.count : 0) ?? 0
-  const portfolioPhotoCount = ('count' in portfolioCountResult
-    ? portfolioCountResult.count : 0) ?? 0
+  const demandesRecuesCount =
+    ('count' in leadAssignmentsCountResult ? leadAssignmentsCountResult.count : 0) ?? 0
+  const pendingDemandesCount =
+    ('count' in pendingLeadAssignmentsResult ? pendingLeadAssignmentsResult.count : 0) ?? 0
+  const legacyCurLeadAssignments =
+    ('count' in curLeadAssignmentsResult ? curLeadAssignmentsResult.count : 0) ?? 0
+  const legacyPrevLeadAssignments =
+    ('count' in prevLeadAssignmentsResult ? prevLeadAssignmentsResult.count : 0) ?? 0
+  const clientsSatisfaitsCount =
+    ('count' in positiveReviewsResult ? positiveReviewsResult.count : 0) ?? 0
+  const curPositiveReviews =
+    ('count' in curPositiveReviewsResult ? curPositiveReviewsResult.count : 0) ?? 0
+  const prevPositiveReviews =
+    ('count' in prevPositiveReviewsResult ? prevPositiveReviewsResult.count : 0) ?? 0
+  const portfolioPhotoCount =
+    ('count' in portfolioCountResult ? portfolioCountResult.count : 0) ?? 0
 
   const reviews = reviewsResult.data ?? []
   const reviewCount = reviews.length
-  const averageRating = reviewCount > 0
-    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
-    : 0
+  const averageRating =
+    reviewCount > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount : 0
 
   const curPV = typeof curProfileViews === 'number' ? curProfileViews : 0
   const curPR = typeof curPhoneReveals === 'number' ? curPhoneReveals : 0
@@ -697,15 +714,18 @@ async function getLegacyStats(
     topServices: [],
   }
 
-  return NextResponse.json({
-    stats,
-    profile,
-    provider: legacyProvider || null,
-    recentDemandes: recentDemandesResult.data || [],
-  }, {
-    headers: {
-      'Cache-Control': 'private, no-cache, no-store, must-revalidate',
-      'Server-Timing': `db;dur=${Date.now() - startTime}`,
+  return NextResponse.json(
+    {
+      stats,
+      profile,
+      provider: legacyProvider || null,
+      recentDemandes: recentDemandesResult.data || [],
     },
-  })
+    {
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+        'Server-Timing': `db;dur=${Date.now() - startTime}`,
+      },
+    }
+  )
 }

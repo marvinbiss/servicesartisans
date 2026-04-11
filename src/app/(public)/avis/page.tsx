@@ -11,8 +11,12 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
 
 export const revalidate = 86400 // 24h
 
@@ -120,14 +124,15 @@ const faqItems = [
 ]
 
 interface TopReview {
-  client_name: string
+  author_name: string
   rating: number
-  comment: string
+  content: string
   created_at: string
 }
 
 async function getPlatformStats() {
-  if (IS_BUILD) return { totalReviews: 0, avgRating: 0, providerCount: 0, topReviews: [] as TopReview[] }
+  if (IS_BUILD)
+    return { totalReviews: 0, avgRating: 0, providerCount: 0, topReviews: [] as TopReview[] }
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -151,10 +156,10 @@ async function getPlatformStats() {
       // Get top recent reviews for JSON-LD schema
       supabase
         .from('reviews')
-        .select('client_name, rating, comment, created_at')
+        .select('author_name, rating, content, created_at')
         .eq('status', 'published')
         .gte('rating', 4)
-        .not('comment', 'is', null)
+        .not('content', 'is', null)
         .order('created_at', { ascending: false })
         .limit(5),
     ])
@@ -168,11 +173,13 @@ async function getPlatformStats() {
     }
 
     const totalReviews = stats.reduce((sum, p) => sum + (p.review_count || 0), 0)
-    const avgRating = stats.reduce((sum, p) => sum + (p.rating_average || 0), 0) / stats.filter(p => p.rating_average && p.rating_average > 0).length
+    const avgRating =
+      stats.reduce((sum, p) => sum + (p.rating_average || 0), 0) /
+      stats.filter((p) => p.rating_average && p.rating_average > 0).length
 
     // Filter reviews with meaningful content (>20 chars)
     const topReviews: TopReview[] = (rawTopReviews || [])
-      .filter((r) => r.comment && r.comment.length > 20 && r.client_name)
+      .filter((r) => r.content && r.content.length > 20 && r.author_name)
       .slice(0, 5)
 
     return {
@@ -195,9 +202,7 @@ export default async function AvisPage() {
       <div className="min-h-screen bg-gray-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -225,36 +230,42 @@ export default async function AvisPage() {
               answer: item.answer,
             }))
           ),
-          ...(platformStats.totalReviews > 0 ? [{
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'ServicesArtisans',
-            url: SITE_URL,
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: platformStats.avgRating,
-              reviewCount: platformStats.totalReviews,
-              bestRating: 5,
-              worstRating: 1,
-            },
-            ...(platformStats.topReviews.length > 0 ? {
-              review: platformStats.topReviews.map((r) => ({
-                '@type': 'Review',
-                author: {
-                  '@type': 'Person',
-                  name: r.client_name,
+          ...(platformStats.totalReviews > 0
+            ? [
+                {
+                  '@context': 'https://schema.org',
+                  '@type': 'Organization',
+                  name: 'ServicesArtisans',
+                  url: SITE_URL,
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: platformStats.avgRating,
+                    reviewCount: platformStats.totalReviews,
+                    bestRating: 5,
+                    worstRating: 1,
+                  },
+                  ...(platformStats.topReviews.length > 0
+                    ? {
+                        review: platformStats.topReviews.map((r) => ({
+                          '@type': 'Review',
+                          author: {
+                            '@type': 'Person',
+                            name: r.author_name,
+                          },
+                          reviewRating: {
+                            '@type': 'Rating',
+                            ratingValue: r.rating,
+                            bestRating: 5,
+                            worstRating: 1,
+                          },
+                          reviewBody: r.content,
+                          datePublished: r.created_at.split('T')[0],
+                        })),
+                      }
+                    : {}),
                 },
-                reviewRating: {
-                  '@type': 'Rating',
-                  ratingValue: r.rating,
-                  bestRating: 5,
-                  worstRating: 1,
-                },
-                reviewBody: r.comment,
-                datePublished: r.created_at.split('T')[0],
-              })),
-            } : {}),
-          }] : []),
+              ]
+            : []),
         ]}
       />
 
@@ -298,8 +309,8 @@ export default async function AvisPage() {
               de confiance
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Consultez les avis vérifiés, comparez les profils
-              et choisissez l'artisan qui correspond à votre projet.
+              Consultez les avis vérifiés, comparez les profils et choisissez l'artisan qui
+              correspond à votre projet.
             </p>
 
             {/* Trust badges */}
@@ -312,12 +323,8 @@ export default async function AvisPage() {
                       <Icon className="w-5 h-5 text-blue-400" />
                     </div>
                     <div className="text-left">
-                      <div className="text-sm font-semibold text-white">
-                        {badge.label}
-                      </div>
-                      <div className="text-xs text-slate-500">
-                        {badge.sublabel}
-                      </div>
+                      <div className="text-sm font-semibold text-white">{badge.label}</div>
+                      <div className="text-xs text-slate-500">{badge.sublabel}</div>
                     </div>
                   </div>
                 )
@@ -336,16 +343,22 @@ export default async function AvisPage() {
                 <div>
                   <div className="flex items-center gap-2 justify-center mb-1">
                     <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
-                    <span className="text-3xl font-bold text-gray-900">{platformStats.avgRating.toFixed(1)}</span>
+                    <span className="text-3xl font-bold text-gray-900">
+                      {platformStats.avgRating.toFixed(1)}
+                    </span>
                   </div>
                   <div className="text-sm text-gray-500">Note moyenne</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-gray-900">{platformStats.totalReviews.toLocaleString('fr-FR')}</div>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {platformStats.totalReviews.toLocaleString('fr-FR')}
+                  </div>
                   <div className="text-sm text-gray-500">Avis vérifiés</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-gray-900">{platformStats.providerCount.toLocaleString('fr-FR')}</div>
+                  <div className="text-3xl font-bold text-gray-900">
+                    {platformStats.providerCount.toLocaleString('fr-FR')}
+                  </div>
                   <div className="text-sm text-gray-500">Artisans notés</div>
                 </div>
               </div>
@@ -384,9 +397,7 @@ export default async function AvisPage() {
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <div className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center shadow-sm">
-                      <span className="text-xs font-bold text-slate-700">
-                        {item.number}
-                      </span>
+                      <span className="text-xs font-bold text-slate-700">{item.number}</span>
                     </div>
                   </div>
                   <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">
@@ -406,9 +417,7 @@ export default async function AvisPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
-              FAQ
-            </p>
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">FAQ</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
               Questions fréquentes
             </h2>
@@ -424,9 +433,7 @@ export default async function AvisPage() {
                 className="group bg-white rounded-xl border border-gray-100 overflow-hidden"
               >
                 <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
-                  <span className="font-semibold text-slate-900 pr-4">
-                    {item.question}
-                  </span>
+                  <span className="font-semibold text-slate-900 pr-4">{item.question}</span>
                   <ChevronDown className="w-5 h-5 text-gray-400 shrink-0 group-open:rotate-180 transition-transform duration-200" />
                 </summary>
                 <div className="px-6 pb-5 text-slate-500 leading-relaxed text-sm">
@@ -460,8 +467,7 @@ export default async function AvisPage() {
                   {trade.name}
                 </div>
                 <div className="text-xs text-gray-400 mt-1">
-                  {trade.priceRange.min}–{trade.priceRange.max}{' '}
-                  {trade.priceRange.unit}
+                  {trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}
                 </div>
               </Link>
             ))}
@@ -589,19 +595,34 @@ export default async function AvisPage() {
             <div>
               <h3 className="font-semibold text-gray-900 mb-4 text-lg">Navigation</h3>
               <div className="space-y-1.5">
-                <Link href="/services" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                <Link
+                  href="/services"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" /> Tous les services
                 </Link>
-                <Link href="/villes" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                <Link
+                  href="/villes"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" /> Toutes les villes
                 </Link>
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                <Link
+                  href="/departements"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" /> Tous les départements
                 </Link>
-                <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                <Link
+                  href="/regions"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" /> Toutes les régions
                 </Link>
-                <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                <Link
+                  href="/blog"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" /> Blog
                 </Link>
               </div>
@@ -618,8 +639,8 @@ export default async function AvisPage() {
             Besoin d'un artisan de confiance&nbsp;?
           </h2>
           <p className="text-slate-500 mb-6 max-w-md mx-auto">
-            Comparez les avis, consultez les profils et demandez un devis gratuit
-            auprès d'artisans référencés.
+            Comparez les avis, consultez les profils et demandez un devis gratuit auprès d'artisans
+            référencés.
           </p>
           <Link
             href="/devis"

@@ -22,10 +22,7 @@ const updateUserSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un utilisateur
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with users:read permission
     const authResult = await requirePermission('users', 'read')
@@ -73,7 +70,9 @@ export async function GET(
     try {
       const { data: provider } = await supabase
         .from('providers')
-        .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+        .select(
+          'id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at'
+        )
         .eq('user_id', userId)
         .maybeSingle()
       providerData = provider
@@ -85,15 +84,21 @@ export async function GET(
     let bookingsCount = 0
     try {
       const [{ count: providerCount }, { count: clientCount }] = await Promise.all([
-        supabase.from('bookings').select('id', { count: 'exact', head: true }).eq('provider_id', userId),
-        supabase.from('bookings').select('id', { count: 'exact', head: true }).eq('client_id', userId),
+        supabase
+          .from('bookings')
+          .select('id', { count: 'exact', head: true })
+          .eq('provider_id', userId),
+        supabase
+          .from('bookings')
+          .select('id', { count: 'exact', head: true })
+          .eq('client_id', userId),
       ])
       bookingsCount = (providerCount || 0) + (clientCount || 0)
     } catch {
       // bookings table doesn't exist
     }
 
-    // Get reviews count (reviews has client_email, not client_id FK to profiles)
+    // Get reviews count (reviews has author_email, not client_id FK to profiles)
     let reviewsCount = 0
     try {
       const clientEmail = user.email
@@ -101,7 +106,7 @@ export async function GET(
         const { count } = await supabase
           .from('reviews')
           .select('id', { count: 'exact', head: true })
-          .eq('client_email', clientEmail)
+          .eq('author_email', clientEmail)
         reviewsCount = count || 0
       }
     } catch {
@@ -113,9 +118,15 @@ export async function GET(
       user: {
         id: user.id,
         email: user.email,
-        full_name: profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || null,
+        full_name:
+          profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || null,
         phone: profile.phone_e164 || user.user_metadata?.phone || null,
-        user_type: profile.role === 'artisan' ? 'artisan' : (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
+        user_type:
+          profile.role === 'artisan'
+            ? 'artisan'
+            : user.user_metadata?.is_artisan
+              ? 'artisan'
+              : 'client',
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
         subscription_plan: null,
@@ -140,10 +151,7 @@ export async function GET(
 }
 
 // PATCH - Mettre à jour un utilisateur
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with users:write permission
     const authResult = await requirePermission('users', 'write')
@@ -164,7 +172,10 @@ export async function PATCH(
     const result = updateUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -173,7 +184,8 @@ export async function PATCH(
     const userMetadataUpdates: Record<string, unknown> = {}
     if (result.data.full_name !== undefined) userMetadataUpdates.full_name = result.data.full_name
     if (result.data.phone !== undefined) userMetadataUpdates.phone = result.data.phone
-    if (result.data.user_type !== undefined) userMetadataUpdates.is_artisan = result.data.user_type === 'artisan'
+    if (result.data.user_type !== undefined)
+      userMetadataUpdates.is_artisan = result.data.user_type === 'artisan'
 
     if (Object.keys(userMetadataUpdates).length > 0) {
       const { error: authError } = await supabase.auth.admin.updateUserById(userId, {
@@ -187,9 +199,7 @@ export async function PATCH(
     // Try to update profile if table exists
     try {
       // Only include columns that actually exist on profiles table
-      const allowedFields = [
-        'full_name',
-      ]
+      const allowedFields = ['full_name']
 
       const updates: Record<string, unknown> = {}
       for (const field of allowedFields) {
@@ -203,12 +213,10 @@ export async function PATCH(
       }
       updates.updated_at = new Date().toISOString()
 
-      await supabase
-        .from('profiles')
-        .upsert({
-          id: userId,
-          ...updates,
-        })
+      await supabase.from('profiles').upsert({
+        id: userId,
+        ...updates,
+      })
     } catch {
       // profiles table doesn't exist
     }
@@ -230,10 +238,7 @@ export async function PATCH(
 }
 
 // DELETE - Supprimer un utilisateur
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with users:delete permission
     const authResult = await requirePermission('users', 'delete')

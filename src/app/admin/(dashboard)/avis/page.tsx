@@ -18,14 +18,15 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Review {
   id: string
-  client_name: string
-  client_email: string
+  author_name: string
+  author_email: string
   provider_name: string
   provider_id: string
   rating: number
-  comment: string
+  content: string
   response?: string
   status: 'pending_review' | 'published' | 'hidden' | 'flagged'
+  moderation_status?: 'pending' | 'approved' | 'rejected'
   created_at: string
 }
 
@@ -35,7 +36,9 @@ interface ReviewsResponse {
 }
 
 export default function AdminReviewsPage() {
-  const [filter, setFilter] = useState<'all' | 'pending_review' | 'flagged' | 'published' | 'hidden'>('pending_review')
+  const [filter, setFilter] = useState<
+    'all' | 'pending_review' | 'flagged' | 'published' | 'hidden'
+  >('pending_review')
   const [page, setPage] = useState(1)
   const [actionError, setActionError] = useState<string | null>(null)
 
@@ -63,7 +66,7 @@ export default function AdminReviewsPage() {
       setModerationModal({ open: false, reviewId: '', status: 'published' })
       mutate()
     } catch {
-      setActionError('Erreur lors de la modération de l\'avis')
+      setActionError("Erreur lors de la modération de l'avis")
     }
   }
 
@@ -85,7 +88,7 @@ export default function AdminReviewsPage() {
         })
         mutate()
       } catch {
-        setActionError('Erreur lors de la modération de l\'avis')
+        setActionError("Erreur lors de la modération de l'avis")
       }
     })()
   }
@@ -97,13 +100,25 @@ export default function AdminReviewsPage() {
   const getStatusBadge = (review: Review) => {
     switch (review.status) {
       case 'flagged':
-        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs flex items-center gap-1"><Flag className="w-3 h-3" /> Signalé</span>
+        return (
+          <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs flex items-center gap-1">
+            <Flag className="w-3 h-3" /> Signalé
+          </span>
+        )
       case 'pending_review':
-        return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">En attente</span>
+        return (
+          <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">
+            En attente
+          </span>
+        )
       case 'published':
-        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Publié</span>
+        return (
+          <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Publié</span>
+        )
       case 'hidden':
-        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Masqué</span>
+        return (
+          <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Masqué</span>
+        )
     }
   }
 
@@ -134,24 +149,38 @@ export default function AdminReviewsPage() {
             {(['all', 'pending_review', 'flagged', 'published', 'hidden'] as const).map((f) => (
               <button
                 key={f}
-                onClick={() => { setFilter(f); setPage(1); }}
+                onClick={() => {
+                  setFilter(f)
+                  setPage(1)
+                }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === f
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {f === 'all' ? 'Tous' :
-                 f === 'pending_review' ? 'En attente' :
-                 f === 'flagged' ? 'Signalés' :
-                 f === 'published' ? 'Publiés' : 'Masqués'}
+                {f === 'all'
+                  ? 'Tous'
+                  : f === 'pending_review'
+                    ? 'En attente'
+                    : f === 'flagged'
+                      ? 'Signalés'
+                      : f === 'published'
+                        ? 'Publiés'
+                        : 'Masqués'}
               </button>
             ))}
           </div>
         </div>
 
         {/* Error Banner */}
-        {displayError && <ErrorBanner message={displayError} onDismiss={() => setActionError(null)} onRetry={() => mutate()} />}
+        {displayError && (
+          <ErrorBanner
+            message={displayError}
+            onDismiss={() => setActionError(null)}
+            onRetry={() => mutate()}
+          />
+        )}
 
         {/* Reviews List */}
         <div className="space-y-4">
@@ -166,7 +195,10 @@ export default function AdminReviewsPage() {
             </div>
           ) : (
             displayReviews.map((review) => (
-              <div key={review.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div
+                key={review.id}
+                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex flex-col sm:flex-row items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
@@ -174,10 +206,10 @@ export default function AdminReviewsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900">{review.client_name}</h3>
+                        <h3 className="font-medium text-gray-900">{review.author_name}</h3>
                         {getStatusBadge(review)}
                       </div>
-                      <p className="text-sm text-gray-500">{review.client_email}</p>
+                      <p className="text-sm text-gray-500">{review.author_email}</p>
                       <div className="flex items-center gap-3 mt-1">
                         {renderStars(review.rating)}
                         <span className="text-sm text-gray-400 flex items-center gap-1">
@@ -194,7 +226,7 @@ export default function AdminReviewsPage() {
                 </div>
 
                 <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                  <p className="text-gray-700">{review.comment}</p>
+                  <p className="text-gray-700">{review.content}</p>
                 </div>
 
                 {review.response && (

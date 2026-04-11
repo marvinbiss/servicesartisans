@@ -30,7 +30,10 @@ export async function GET(request: NextRequest) {
     const result = exportQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -63,7 +66,7 @@ export async function GET(request: NextRequest) {
       case 'reviews': {
         const { data: reviews } = await supabase
           .from('reviews')
-          .select('id, artisan_id, client_name, rating, comment, status, created_at')
+          .select('id, provider_id, author_name, rating, content, status, created_at')
           .order('created_at', { ascending: false })
         data = reviews || []
         filename = 'reviews'
@@ -71,13 +74,16 @@ export async function GET(request: NextRequest) {
       }
       default:
         return NextResponse.json(
-          { success: false, error: { message: 'Type d\'export invalide' } },
+          { success: false, error: { message: "Type d'export invalide" } },
           { status: 400 }
         )
     }
 
     // Log d'audit pour l'export de données
-    await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, { format, recordCount: data.length })
+    await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, {
+      format,
+      recordCount: data.length,
+    })
 
     if (format === 'csv') {
       if (data.length === 0) {
@@ -87,8 +93,8 @@ export async function GET(request: NextRequest) {
       const headers = Object.keys(data[0] as object)
       const csv = [
         headers.join(','),
-        ...data.map(row =>
-          headers.map(h => JSON.stringify((row as Record<string, unknown>)[h] ?? '')).join(',')
+        ...data.map((row) =>
+          headers.map((h) => JSON.stringify((row as Record<string, unknown>)[h] ?? '')).join(',')
         ),
       ].join('\n')
 

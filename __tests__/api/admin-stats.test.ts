@@ -18,7 +18,9 @@ const mockJsonFn = vi.fn((body: unknown, init?: { status?: number }) => {
     body,
     status: init?.status ?? 200,
     headers: {
-      set: (key: string, value: string) => { capturedHeaders[key] = value },
+      set: (key: string, value: string) => {
+        capturedHeaders[key] = value
+      },
     },
   }
   return resp
@@ -91,7 +93,12 @@ vi.mock('@/lib/supabase/admin', () => ({
 // --- Admin auth mock ---
 let mockAuthResult: {
   success: boolean
-  admin?: { id: string; email: string; role: string; permissions: Record<string, Record<string, boolean>> }
+  admin?: {
+    id: string
+    email: string
+    role: string
+    permissions: Record<string, Record<string, boolean>>
+  }
   error?: unknown
 }
 
@@ -106,24 +113,51 @@ vi.mock('@/lib/admin-auth', () => ({
 function buildAllSuccessResults(): MockQueryResult[] {
   return [
     // Batch 1 (14 queries)
-    { count: 150, data: null, error: null },           // totalUsers
-    { count: 42, data: null, error: null },             // totalArtisans
-    { count: 300, data: null, error: null },            // totalBookings
-    { count: 3, data: null, error: null },              // pendingReports
+    { count: 150, data: null, error: null }, // totalUsers
+    { count: 42, data: null, error: null }, // totalArtisans
+    { count: 300, data: null, error: null }, // totalBookings
+    { count: 3, data: null, error: null }, // pendingReports
     { data: [{ rating: 4 }, { rating: 5 }, { rating: 3 }], error: null }, // reviews
-    { count: 5, data: null, error: null },              // newUsersToday
-    { count: 8, data: null, error: null },              // newBookingsToday
-    { count: 20, data: null, error: null },             // usersThisMonth
-    { count: 15, data: null, error: null },             // usersLastMonth
-    { count: 50, data: null, error: null },             // bookingsThisMonth
-    { count: 40, data: null, error: null },             // bookingsLastMonth
+    { count: 5, data: null, error: null }, // newUsersToday
+    { count: 8, data: null, error: null }, // newBookingsToday
+    { count: 20, data: null, error: null }, // usersThisMonth
+    { count: 15, data: null, error: null }, // usersLastMonth
+    { count: 50, data: null, error: null }, // bookingsThisMonth
+    { count: 40, data: null, error: null }, // bookingsLastMonth
     { data: [{ total_amount: 100 }, { total_amount: 200 }], error: null }, // revThisMonth
-    { data: [{ total_amount: 150 }], error: null },     // revLastMonth
-    { count: 30, data: null, error: null },             // activeUsers7d
+    { data: [{ total_amount: 150 }], error: null }, // revLastMonth
+    { count: 30, data: null, error: null }, // activeUsers7d
     // Batch 2 (6 queries)
-    { data: [{ id: 'b1', status: 'pending', created_at: '2026-02-15T10:00:00Z', city: 'Paris' }], error: null },
-    { data: [{ id: 'r1', rating: 5, client_name: 'Jean', status: 'published', created_at: '2026-02-14T10:00:00Z' }], error: null },
-    { data: [{ id: 'rpt1', target_type: 'review', reason: 'spam', description: 'Test', status: 'pending', created_at: '2026-02-13T10:00:00Z', reporter_id: null }], error: null },
+    {
+      data: [{ id: 'b1', status: 'pending', created_at: '2026-02-15T10:00:00Z', city: 'Paris' }],
+      error: null,
+    },
+    {
+      data: [
+        {
+          id: 'r1',
+          rating: 5,
+          author_name: 'Jean',
+          status: 'published',
+          created_at: '2026-02-14T10:00:00Z',
+        },
+      ],
+      error: null,
+    },
+    {
+      data: [
+        {
+          id: 'rpt1',
+          target_type: 'review',
+          reason: 'spam',
+          description: 'Test',
+          status: 'pending',
+          created_at: '2026-02-13T10:00:00Z',
+          reporter_id: null,
+        },
+      ],
+      error: null,
+    },
     { data: [{ created_at: '2026-02-10T10:00:00Z' }], error: null }, // chartProfiles
     { data: [{ created_at: '2026-02-10T10:00:00Z' }], error: null }, // chartBookings
     { data: [{ created_at: '2026-02-10T10:00:00Z' }], error: null }, // chartReviews
@@ -161,14 +195,12 @@ describe('GET /api/admin/stats', () => {
     const { GET } = await import('@/app/api/admin/stats/route')
     const result = await GET()
 
-    expect(result).toEqual(
-      expect.objectContaining({ status: 401 })
-    )
+    expect(result).toEqual(expect.objectContaining({ status: 401 }))
   })
 
   it('returns success: true with all stats on success', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: Record<string, unknown> }
+    const result = (await GET()) as unknown as { body: Record<string, unknown> }
 
     expect(result.body).toHaveProperty('success', true)
     expect(result.body).toHaveProperty('stats')
@@ -179,7 +211,7 @@ describe('GET /api/admin/stats', () => {
 
   it('computes correct stat values from DB', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: Record<string, unknown> } }
+    const result = (await GET()) as unknown as { body: { stats: Record<string, unknown> } }
     const stats = result.body.stats
 
     expect(stats.totalUsers).toBe(150)
@@ -193,7 +225,7 @@ describe('GET /api/admin/stats', () => {
 
   it('computes average rating from reviews', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { averageRating: number } } }
+    const result = (await GET()) as unknown as { body: { stats: { averageRating: number } } }
 
     // (4 + 5 + 3) / 3 = 4.0
     expect(result.body.stats.averageRating).toBe(4)
@@ -201,7 +233,7 @@ describe('GET /api/admin/stats', () => {
 
   it('returns zero totalRevenue (no amount column in bookings)', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { totalRevenue: number } } }
+    const result = (await GET()) as unknown as { body: { stats: { totalRevenue: number } } }
 
     // total_amount does not exist in bookings table — revenue is always 0
     expect(result.body.stats.totalRevenue).toBe(0)
@@ -209,7 +241,9 @@ describe('GET /api/admin/stats', () => {
 
   it('computes trend percentages', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { trends: Record<string, number> } } }
+    const result = (await GET()) as unknown as {
+      body: { stats: { trends: Record<string, number> } }
+    }
     const trends = result.body.stats.trends
 
     // users: (20 - 15) / 15 = 33%
@@ -220,7 +254,9 @@ describe('GET /api/admin/stats', () => {
 
   it('builds activity feed from bookings and reviews', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { recentActivity: Array<{ id: string; type: string }> } }
+    const result = (await GET()) as unknown as {
+      body: { recentActivity: Array<{ id: string; type: string }> }
+    }
     const activity = result.body.recentActivity
 
     expect(activity.length).toBe(2)
@@ -233,7 +269,7 @@ describe('GET /api/admin/stats', () => {
 
   it('returns pending reports from user_reports', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { pendingReports: Array<{ id: string }> } }
+    const result = (await GET()) as unknown as { body: { pendingReports: Array<{ id: string }> } }
 
     expect(result.body.pendingReports.length).toBe(1)
     expect(result.body.pendingReports[0].id).toBe('rpt1')
@@ -241,7 +277,7 @@ describe('GET /api/admin/stats', () => {
 
   it('generates 30-day chart data', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { chartData: Array<{ date: string }> } }
+    const result = (await GET()) as unknown as { body: { chartData: Array<{ date: string }> } }
 
     expect(result.body.chartData).toHaveLength(30)
     // Each entry has date, users, bookings, reviews
@@ -264,10 +300,16 @@ describe('GET /api/admin/stats', () => {
 
   it('logs Supabase query errors without crashing', async () => {
     // Make the first query (totalUsers) return a Supabase error
-    queryResults[0] = { data: null, error: { code: 'PGRST301', message: 'permission denied' }, count: null }
+    queryResults[0] = {
+      data: null,
+      error: { code: 'PGRST301', message: 'permission denied' },
+      count: null,
+    }
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { success: boolean; stats: { totalUsers: number } } }
+    const result = (await GET()) as unknown as {
+      body: { success: boolean; stats: { totalUsers: number } }
+    }
 
     // Should still return success with fallback value
     expect(result.body.success).toBe(true)
@@ -284,18 +326,20 @@ describe('GET /api/admin/stats', () => {
     queryResults[4] = { data: [], error: null } // empty reviews
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { averageRating: number } } }
+    const result = (await GET()) as unknown as { body: { stats: { averageRating: number } } }
 
     expect(result.body.stats.averageRating).toBe(0)
   })
 
   it('handles trend when previous period is zero', async () => {
-    queryResults[8] = { count: 0, data: null, error: null }  // usersLastMonth = 0
-    queryResults[9] = { count: 10, data: null, error: null }  // bookingsThisMonth = 10
-    queryResults[10] = { count: 0, data: null, error: null }  // bookingsLastMonth = 0
+    queryResults[8] = { count: 0, data: null, error: null } // usersLastMonth = 0
+    queryResults[9] = { count: 10, data: null, error: null } // bookingsThisMonth = 10
+    queryResults[10] = { count: 0, data: null, error: null } // bookingsLastMonth = 0
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: { stats: { trends: Record<string, number> } } }
+    const result = (await GET()) as unknown as {
+      body: { stats: { trends: Record<string, number> } }
+    }
 
     // When previous is 0 and current > 0, trend = 100
     expect(result.body.stats.trends.users).toBe(100)
@@ -319,11 +363,13 @@ describe('GET /api/admin/stats', () => {
 
     // Mock createAdminClient to throw
     vi.doMock('@/lib/supabase/admin', () => ({
-      createAdminClient: () => { throw new Error('Connection refused') },
+      createAdminClient: () => {
+        throw new Error('Connection refused')
+      },
     }))
 
     const { GET } = await import('@/app/api/admin/stats/route')
-    const result = await GET() as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await GET()) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(500)
     expect(result.body).toHaveProperty('success', false)

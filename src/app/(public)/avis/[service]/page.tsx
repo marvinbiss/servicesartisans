@@ -135,10 +135,10 @@ interface ServiceAvisProvider {
 interface ServiceAvisReview {
   id: string
   rating: number
-  comment: string | null
-  client_name: string | null
+  content: string | null
+  author_name: string | null
   created_at: string
-  artisan_id: string
+  provider_id: string
 }
 
 async function getServiceStats(serviceSlug: string) {
@@ -197,16 +197,16 @@ async function getServiceStats(serviceSlug: string) {
         : 0
 
     // Fetch recent reviews for these providers
-    // reviews.artisan_id references profiles.id = providers.user_id
-    const artisanIds = topProviders.map((p) => p.user_id).filter((uid): uid is string => !!uid)
+    // reviews.provider_id references providers.id directly
+    const providerIds = topProviders.map((p) => p.id).filter((pid): pid is string => !!pid)
     let reviews: ServiceAvisReview[] = []
-    if (artisanIds.length > 0) {
+    if (providerIds.length > 0) {
       const { data: reviewData } = await supabase
         .from('reviews')
-        .select('id, rating, comment, client_name, created_at, artisan_id')
-        .in('artisan_id', artisanIds)
+        .select('id, rating, content, author_name, created_at, provider_id')
+        .in('provider_id', providerIds)
         .eq('status', 'published')
-        .not('comment', 'is', null)
+        .not('content', 'is', null)
         .order('rating', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(6)
@@ -296,9 +296,9 @@ export default async function AvisServicePage({
     ratingValue: serviceStats.avgRating,
     reviewCount: serviceStats.totalReviews,
     reviews: serviceStats.reviews.slice(0, 3).map((r) => ({
-      authorName: r.client_name || 'Client vérifié',
+      authorName: r.author_name || 'Client vérifié',
       rating: r.rating,
-      comment: r.comment,
+      comment: r.content,
       datePublished: r.created_at?.split('T')[0] || '',
     })),
   })
@@ -609,7 +609,7 @@ export default async function AvisServicePage({
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-gray-900 text-sm">
-                        {review.client_name || 'Client vérifié'}
+                        {review.author_name || 'Client vérifié'}
                       </span>
                       <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                         <CheckCircle className="w-3 h-3" />
@@ -629,11 +629,11 @@ export default async function AvisServicePage({
                       ))}
                     </div>
                   </div>
-                  {review.comment && (
+                  {review.content && (
                     <p className="text-gray-700 text-sm leading-relaxed">
-                      {review.comment.length > 300
-                        ? review.comment.slice(0, 300) + '…'
-                        : review.comment}
+                      {review.content.length > 300
+                        ? review.content.slice(0, 300) + '…'
+                        : review.content}
                     </p>
                   )}
                   <div className="mt-3 text-xs text-gray-400">

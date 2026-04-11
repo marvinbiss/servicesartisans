@@ -91,9 +91,9 @@ export interface HomepageProvider {
 }
 
 export interface HomepageReview {
-  client_name: string | null
+  author_name: string | null
   rating: number
-  comment: string | null
+  content: string | null
   created_at: string
 }
 
@@ -109,19 +109,12 @@ export async function getSiteStats(): Promise<SiteStats> {
     const supabase = createAdminClient()
 
     const [providerRes, reviewCountRes, ratingsRes, deptRes] = await Promise.all([
-      supabase
-        .from('providers')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true),
+      supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
       supabase
         .from('reviews')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'published'),
-      supabase
-        .from('reviews')
-        .select('rating')
-        .eq('status', 'published')
-        .limit(500),
+      supabase.from('reviews').select('rating').eq('status', 'published').limit(500),
       supabase
         .from('communes')
         .select('departement_code')
@@ -140,7 +133,7 @@ export async function getSiteStats(): Promise<SiteStats> {
       if (computed >= 1 && computed <= 5) avgRating = computed
     }
 
-    const depts = new Set(deptRes.data?.map(c => c.departement_code).filter(Boolean))
+    const depts = new Set(deptRes.data?.map((c) => c.departement_code).filter(Boolean))
     const deptCount = depts.size || 96
 
     return { artisanCount, reviewCount, avgRating, deptCount }
@@ -150,8 +143,14 @@ export async function getSiteStats(): Promise<SiteStats> {
 }
 
 const HOMEPAGE_SERVICE_SLUGS = [
-  'plombier', 'electricien', 'serrurier', 'chauffagiste',
-  'peintre-en-batiment', 'menuisier', 'macon', 'jardinier',
+  'plombier',
+  'electricien',
+  'serrurier',
+  'chauffagiste',
+  'peintre-en-batiment',
+  'menuisier',
+  'macon',
+  'jardinier',
 ]
 
 /** Données complètes pour la homepage : stats + providers + avis + compteurs */
@@ -184,7 +183,9 @@ export async function getHomepageData(): Promise<HomepageData> {
         }),
       supabase
         .from('providers')
-        .select('name, slug, specialty, address_city, address_postal_code, is_verified, rating_average, review_count, stable_id')
+        .select(
+          'name, slug, specialty, address_city, address_postal_code, is_verified, rating_average, review_count, stable_id'
+        )
         .eq('is_active', true)
         .eq('is_verified', true)
         .not('rating_average', 'is', null)
@@ -198,9 +199,9 @@ export async function getHomepageData(): Promise<HomepageData> {
         .limit(3),
       supabase
         .from('reviews')
-        .select('client_name, rating, comment, created_at')
+        .select('author_name, rating, content, created_at')
         .eq('status', 'published')
-        .not('comment', 'is', null)
+        .not('content', 'is', null)
         .order('created_at', { ascending: false })
         .limit(10),
     ])

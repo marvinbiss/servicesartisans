@@ -51,6 +51,7 @@ function makeAdminBuilder(resultGetter: () => { data: unknown; error: unknown })
   b.or = vi.fn().mockReturnValue(b)
   b.order = vi.fn().mockReturnValue(b)
   b.single = vi.fn().mockReturnValue(b)
+  b.maybeSingle = vi.fn().mockReturnValue(b)
   ;(b as Record<string, unknown>).then = (resolve: (v: unknown) => unknown) => {
     const result = resultGetter()
     return resolve({ data: result.data, error: result.error })
@@ -65,14 +66,19 @@ const mockAdminSupabase = {
   }),
 }
 
-let mockUser: { id: string; email: string } | null = { id: '550e8400-e29b-41d4-a716-446655440099', email: 'test@example.com' }
+let mockUser: { id: string; email: string } | null = {
+  id: '550e8400-e29b-41d4-a716-446655440099',
+  email: 'test@example.com',
+}
 
 const mockSupabase = {
   auth: {
-    getUser: vi.fn(() => Promise.resolve({
-      data: { user: mockUser },
-      error: null,
-    })),
+    getUser: vi.fn(() =>
+      Promise.resolve({
+        data: { user: mockUser },
+        error: null,
+      })
+    ),
   },
 }
 
@@ -122,7 +128,10 @@ describe('POST /api/gdpr/export', () => {
     mockUser = null
 
     const { POST } = await import('@/app/api/gdpr/export/route')
-    const result = await POST(makePostRequest({ format: 'json' })) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(makePostRequest({ format: 'json' }))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(401)
     expect(result.body.error).toEqual({ message: 'Authentification requise' })
@@ -130,7 +139,10 @@ describe('POST /api/gdpr/export', () => {
 
   it('returns 400 for invalid format', async () => {
     const { POST } = await import('@/app/api/gdpr/export/route')
-    const result = await POST(makePostRequest({ format: 'xml' })) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(makePostRequest({ format: 'xml' }))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(400)
     expect((result.body.error as { message: string }).message).toBe('Requ\u00eate invalide')
@@ -139,11 +151,24 @@ describe('POST /api/gdpr/export', () => {
   it('returns 400 when existing pending request exists', async () => {
     // First admin from() call: check for existing pending request => found one
     adminQueryResults = [
-      { data: { id: 'existing-req-id', user_id: USER_UUID, format: 'json', status: 'pending', completed_at: null, created_at: '2026-02-24T00:00:00Z' }, error: null },
+      {
+        data: {
+          id: 'existing-req-id',
+          user_id: USER_UUID,
+          format: 'json',
+          status: 'pending',
+          completed_at: null,
+          created_at: '2026-02-24T00:00:00Z',
+        },
+        error: null,
+      },
     ]
 
     const { POST } = await import('@/app/api/gdpr/export/route')
-    const result = await POST(makePostRequest({ format: 'json' })) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(makePostRequest({ format: 'json' }))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(400)
     expect(result.body.requestId).toBe('existing-req-id')
@@ -151,24 +176,42 @@ describe('POST /api/gdpr/export', () => {
 
   it('returns successful export data', async () => {
     // Call 0: check for existing pending request => none
-    // Calls 1-6: collectUserData calls (profiles, bookings, reviews x2, messages, user_preferences)
+    // Call 1: profiles (collectUserData)
+    // Call 2: providers userProvider lookup (maybeSingle)
+    // Calls 3-7: bookings, reviews received (gated), reviews written (gated), messages, user_preferences
     // Plus insert + update for the export request itself
     adminQueryResults = [
       { data: null, error: null }, // no existing pending request
       // collectUserData calls:
-      { data: { id: USER_UUID, email: 'test@example.com', full_name: 'Test User', phone_e164: null, role: 'viewer', subscription_plan: 'gratuit', created_at: '2026-01-01', updated_at: '2026-01-01' }, error: null }, // profiles
+      {
+        data: {
+          id: USER_UUID,
+          email: 'test@example.com',
+          full_name: 'Test User',
+          phone_e164: null,
+          role: 'viewer',
+          subscription_plan: 'gratuit',
+          created_at: '2026-01-01',
+          updated_at: '2026-01-01',
+        },
+        error: null,
+      }, // profiles
+      { data: null, error: null }, // userProvider (none — user is not an artisan)
       { data: [], error: null }, // bookings
-      { data: [], error: null }, // reviews received
-      { data: [], error: null }, // reviews written
+      { data: [], error: null }, // reviews written (author_email path; reviews_received is gated off)
       { data: [], error: null }, // messages
       { data: null, error: null }, // user_preferences
     ]
-    adminInsertResult = { data: { id: 'new-export-id', user_id: USER_UUID, format: 'json', status: 'pending' }, error: null }
+    adminInsertResult = {
+      data: { id: 'new-export-id', user_id: USER_UUID, format: 'json', status: 'pending' },
+      error: null,
+    }
     adminUpdateResult = { data: null, error: null }
 
     const { POST } = await import('@/app/api/gdpr/export/route')
-    const result = await POST(makePostRequest({ format: 'json' })) as unknown as {
-      body: { success: boolean; requestId: string; data: Record<string, unknown>; message: string }; status: number
+    const result = (await POST(makePostRequest({ format: 'json' }))) as unknown as {
+      body: { success: boolean; requestId: string; data: Record<string, unknown>; message: string }
+      status: number
     }
 
     expect(result.status).toBe(200)
@@ -188,7 +231,10 @@ describe('GET /api/gdpr/export', () => {
     mockUser = null
 
     const { GET } = await import('@/app/api/gdpr/export/route')
-    const result = await GET(makeGetRequest()) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await GET(makeGetRequest())) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(401)
     expect(result.body.error).toEqual({ message: 'Authentification requise' })
@@ -203,13 +249,12 @@ describe('GET /api/gdpr/export', () => {
       completed_at: '2026-02-24T01:00:00Z',
       created_at: '2026-02-24T00:00:00Z',
     }
-    adminQueryResults = [
-      { data: exportData, error: null },
-    ]
+    adminQueryResults = [{ data: exportData, error: null }]
 
     const { GET } = await import('@/app/api/gdpr/export/route')
-    const result = await GET(makeGetRequest({ requestId: 'req-123' })) as unknown as {
-      body: Record<string, unknown>; status: number
+    const result = (await GET(makeGetRequest({ requestId: 'req-123' }))) as unknown as {
+      body: Record<string, unknown>
+      status: number
     }
 
     expect(result.status).toBe(200)
@@ -219,16 +264,29 @@ describe('GET /api/gdpr/export', () => {
 
   it('returns all requests when no requestId provided', async () => {
     const requests = [
-      { id: 'req-1', user_id: USER_UUID, format: 'json', status: 'completed', completed_at: '2026-02-24T01:00:00Z', created_at: '2026-02-24T00:00:00Z' },
-      { id: 'req-2', user_id: USER_UUID, format: 'csv', status: 'pending', completed_at: null, created_at: '2026-02-23T00:00:00Z' },
+      {
+        id: 'req-1',
+        user_id: USER_UUID,
+        format: 'json',
+        status: 'completed',
+        completed_at: '2026-02-24T01:00:00Z',
+        created_at: '2026-02-24T00:00:00Z',
+      },
+      {
+        id: 'req-2',
+        user_id: USER_UUID,
+        format: 'csv',
+        status: 'pending',
+        completed_at: null,
+        created_at: '2026-02-23T00:00:00Z',
+      },
     ]
-    adminQueryResults = [
-      { data: requests, error: null },
-    ]
+    adminQueryResults = [{ data: requests, error: null }]
 
     const { GET } = await import('@/app/api/gdpr/export/route')
-    const result = await GET(makeGetRequest()) as unknown as {
-      body: { requests: Array<Record<string, unknown>> }; status: number
+    const result = (await GET(makeGetRequest())) as unknown as {
+      body: { requests: Array<Record<string, unknown>> }
+      status: number
     }
 
     expect(result.status).toBe(200)

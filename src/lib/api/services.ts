@@ -94,7 +94,10 @@ export async function getArtisans(params: {
       const supabase = await createClient()
       let query = supabase
         .from('providers')
-        .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active', { count: 'exact' })
+        .select(
+          'id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active',
+          { count: 'exact' }
+        )
         .eq('is_active', true)
         .eq('is_verified', true)
 
@@ -112,8 +115,7 @@ export async function getArtisans(params: {
       }
 
       // Order by rating
-      query = query
-        .order('rating_average', { ascending: false, nullsFirst: false })
+      query = query.order('rating_average', { ascending: false, nullsFirst: false })
 
       if (params.limit) {
         query = query.limit(params.limit)
@@ -159,7 +161,9 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('providers')
-        .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active')
+        .select(
+          'id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active'
+        )
         .eq('id', id)
         .eq('is_active', true)
         .single()
@@ -195,10 +199,11 @@ export async function getArtisanReviews(artisanId: string, limit = 10) {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('reviews')
-        .select(`
-          id, provider_id, rating, comment, client_name, would_recommend, status, artisan_response, artisan_responded_at, helpful_count, created_at,
-          client:profiles!reviews_client_id_fkey(full_name)
-        `)
+        .select(
+          `
+          id, provider_id, rating, content, author_name, would_recommend, status, reply, reply_date, helpful_count, created_at
+        `
+        )
         .eq('provider_id', artisanId)
         // REMOVED: .eq('is_verified', true) to show ALL real reviews
         .order('created_at', { ascending: false })
