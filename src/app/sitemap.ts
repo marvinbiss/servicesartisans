@@ -93,7 +93,6 @@ export async function generateSitemaps() {
   const serviceCitiesBatchCount = Math.ceil((services.length * SITEMAP_CITY_COUNT) / LARGE_BATCH)
 
   const emergencySlugs = Object.keys(tradeContent)
-  const avisServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
   // Tier 2: tarifs-task, avis, problemes use top 500 cities only
@@ -129,10 +128,9 @@ export async function generateSitemaps() {
       id: `tarifs-task-cities-${i}`,
     })),
     { id: 'avis-services' },
-    ...Array.from(
-      { length: Math.ceil((avisServiceSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
-      (_, i) => ({ id: `avis-service-cities-${i}` })
-    ),
+    // avis-service-cities-* removed — reviews schema drift (comment/client_name
+    // /artisan_id vs content/author_name/provider_id in prod) makes /avis/{svc}/{ville}
+    // render empty reviews = thin page. Re-enable once schema is aligned.
     { id: 'problemes' },
     ...Array.from(
       { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
@@ -713,18 +711,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
   }
 
-  // ── Devis service×city pages (Full scale: all cities) ─────────
+  // ── Devis service×city pages — pruned to qualified combos only ────
+  // Combos without ≥1 active provider are excluded (HCU anti-thin).
   if (id.startsWith('devis-service-cities-')) {
     const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
+    const { qualifiedCombos } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const svc of services) {
       for (const ville of phase1Cities) {
+        if (qualifiedCombos && !qualifiedCombos.has(`${svc.slug}::${ville.slug}`)) continue
         if (count >= end) break outer
         if (count >= start)
           result.push({
@@ -739,7 +740,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Urgence service×city pages (Full scale: all cities) ───────
+  // ── Urgence service×city pages — pruned to qualified combos only ──
   if (id.startsWith('urgence-service-cities-')) {
     const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
@@ -747,11 +748,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const end = start + BATCH
     const emergencySlugs = Object.keys(tradeContent)
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
+    const { qualifiedCombos } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const svc of emergencySlugs) {
       for (const v of phase1Cities) {
+        if (qualifiedCombos && !qualifiedCombos.has(`${svc}::${v.slug}`)) continue
         if (count >= end) break outer
         if (count >= start)
           result.push({
@@ -766,18 +769,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs service×city pages (Full scale: all cities) ────────
+  // ── Tarifs service×city pages — pruned to qualified combos only ───
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
+    const { qualifiedCombos } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
     outer: for (const svc of services) {
       for (const v of phase1Cities) {
+        if (qualifiedCombos && !qualifiedCombos.has(`${svc.slug}::${v.slug}`)) continue
         if (count >= end) break outer
         if (count >= start)
           result.push({
@@ -845,31 +850,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Avis service×city pages (Tier 2: top 500 cities) ───────────
+  // ── Avis service×city pages — BLOCKED until reviews schema drift fix.
+  // Reviews queries use columns that don't exist in prod (comment/client_name/artisan_id
+  // vs content/author_name/provider_id). Template renders empty reviews → thin page.
+  // Return empty sitemap to remove all /avis/{service}/{ville} from index.
   if (id.startsWith('avis-service-cities-')) {
-    const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
-    const tradeSlugs = Object.keys(tradeContent)
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
-
-    outer: for (const svc of tradeSlugs) {
-      for (const v of phase1Cities) {
-        if (count >= end) break outer
-        if (count >= start)
-          result.push({
-            url: `${SITE_URL}/avis/${svc}/${v.slug}`,
-            changeFrequency: 'monthly',
-            priority: 0.5,
-          })
-        count++
-      }
-    }
-
-    return result
+    return []
   }
 
   // ── Problemes hub + individual pages ────────────────────────────────

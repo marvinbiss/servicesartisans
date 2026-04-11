@@ -13,11 +13,16 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
+import { villes } from '@/lib/data/france'
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
 /** Map of slug → ISO date string (YYYY-MM-DD) */
 export type LastmodMap = Map<string, string>
+
+/** Set of `${serviceSlug}::${villeSlug}` combos that have ≥1 qualified provider */
+export type QualifiedCombos = Set<string>
 
 // ─── Helpers ────────────────────────────────────────────────────────────
 
@@ -36,7 +41,11 @@ function toDateStr(d: string | null | undefined): string | undefined {
  * strip diacritics via NFD decomposition, then lowercase + trim.
  */
 function normalizeKey(s: string): string {
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
+  return s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
 }
 
 /**
@@ -307,7 +316,7 @@ export async function getLastReviewByService(): Promise<LastmodMap> {
     if (revErr || !reviews || reviews.length === 0) return map
 
     // Step 2: Get provider specialties for these artisan_ids
-    const artisanIds = Array.from(new Set(reviews.map(r => r.artisan_id)))
+    const artisanIds = Array.from(new Set(reviews.map((r) => r.artisan_id)))
     const { data: providers, error: provErr } = await supabase
       .from('providers')
       .select('user_id, specialty')
@@ -337,6 +346,86 @@ export async function getLastReviewByService(): Promise<LastmodMap> {
   return map
 }
 
+// ─── Query: Qualified service×ville combos for sitemap pruning ──────────
+
+/**
+ * Returns a Set<`${serviceSlug}::${villeSlug}`> of combos that have at least
+ * one active, indexable provider in the DB. Used by sitemap.ts to prune
+ * thin pSEO pages (devis/urgence/tarifs/avis × ville) that have no matching
+ * artisan — these pages trigger HCU signals when crawled at scale with zero
+ * unique content.
+ *
+ * Fail-open: returns `null` if the query fails. Callers must treat `null`
+ * as "include everything" to avoid accidental mass pruning on DB blips.
+ */
+export async function getQualifiedServiceCityCombos(): Promise<QualifiedCombos | null> {
+  const supabase = safeAdminClient()
+  if (!supabase) return null
+
+  // Reverse lookup: DB specialty string → service slug used in URLs.
+  const specialtyToService = new Map<string, string>()
+  for (const [serviceSlug, specialties] of Object.entries(SERVICE_TO_SPECIALTIES)) {
+    for (const sp of specialties) {
+      // First writer wins — prefer direct match (e.g. 'plombier'→'plombier')
+      // over aliases (e.g. 'peintre'→'peintre-en-batiment').
+      if (!specialtyToService.has(sp)) {
+        specialtyToService.set(sp, serviceSlug)
+      }
+    }
+  }
+
+  // City name → ville slug. Normalized for diacritic-free matching.
+  const cityToSlug = new Map<string, string>()
+  for (const v of villes) {
+    cityToSlug.set(normalizeKey(v.name), v.slug)
+  }
+
+  try {
+    const combos: QualifiedCombos = new Set()
+    const pageSize = 1000
+    let from = 0
+    // Hard cap to avoid runaway build time. 38k active providers today,
+    // headroom to 200k before this becomes an issue.
+    const maxRows = 200_000
+
+    while (from < maxRows) {
+      const { data, error } = await supabase
+        .from('providers')
+        .select('specialty, address_city')
+        .eq('is_active', true)
+        .eq('noindex', false)
+        .not('specialty', 'is', null)
+        .not('address_city', 'is', null)
+        .range(from, from + pageSize - 1)
+
+      if (error) {
+        // Fail-open on any query error.
+        return null
+      }
+      if (!data || data.length === 0) break
+
+      for (const row of data) {
+        const specialty = row.specialty as string | null
+        const city = row.address_city as string | null
+        if (!specialty || !city) continue
+
+        const svcSlug = specialtyToService.get(specialty.toLowerCase().trim())
+        const villeSlug = cityToSlug.get(normalizeKey(city))
+        if (!svcSlug || !villeSlug) continue
+
+        combos.add(`${svcSlug}::${villeSlug}`)
+      }
+
+      if (data.length < pageSize) break
+      from += pageSize
+    }
+
+    return combos
+  } catch {
+    return null
+  }
+}
+
 // ─── Aggregated fetch: all lastmod data in parallel ─────────────────────
 
 export interface SitemapLastmodData {
@@ -347,6 +436,7 @@ export interface SitemapLastmodData {
   byDeptService: LastmodMap
   byRegionService: LastmodMap
   reviewByService: LastmodMap
+  qualifiedCombos: QualifiedCombos | null
 }
 
 /**
@@ -362,6 +452,7 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     byDeptService,
     byRegionService,
     reviewByService,
+    qualifiedCombos,
   ] = await Promise.all([
     getLastmodByCity(),
     getLastmodByDepartment(),
@@ -370,7 +461,17 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     getLastmodByDeptService(),
     getLastmodByRegionService(),
     getLastReviewByService(),
+    getQualifiedServiceCityCombos(),
   ])
 
-  return { byCity, byDepartment, byRegion, byService, byDeptService, byRegionService, reviewByService }
+  return {
+    byCity,
+    byDepartment,
+    byRegion,
+    byService,
+    byDeptService,
+    byRegionService,
+    reviewByService,
+    qualifiedCombos,
+  }
 }

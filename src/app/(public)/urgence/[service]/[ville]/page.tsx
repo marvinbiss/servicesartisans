@@ -28,6 +28,8 @@ import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber, monthName } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
+import { hasProvidersByServiceAndLocation } from '@/lib/supabase'
+import { shouldNoindex } from '@/lib/seo/pruning'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -178,7 +180,7 @@ export function generateStaticParams() {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -233,11 +235,18 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/urgence/${service}/${villeSlug}`
 
+  // Gate indexation on provider availability (HCU anti-thin). Fail-open during build.
+  const hasProviders = await hasProvidersByServiceAndLocation(service, villeSlug)
+  const noindex = shouldNoindex(`/urgence/${service}/${villeSlug}`, {
+    providerCount: hasProviders ? 1 : 0,
+    hasUniqueData: false,
+  })
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    robots: { index: true, follow: true },
+    robots: { index: !noindex, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,

@@ -1,7 +1,17 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { CheckCircle, Euro, ChevronDown, MapPin, Users, Thermometer, Building2, Leaf, ArrowRight } from 'lucide-react'
+import {
+  CheckCircle,
+  Euro,
+  ChevronDown,
+  MapPin,
+  Users,
+  Thermometer,
+  Building2,
+  Leaf,
+  ArrowRight,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
@@ -9,7 +19,12 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
-import { getProvidersByServiceAndLocation, getRgeProviderCountByServiceAndLocation } from '@/lib/supabase'
+import {
+  getProvidersByServiceAndLocation,
+  getRgeProviderCountByServiceAndLocation,
+  hasProvidersByServiceAndLocation,
+} from '@/lib/supabase'
+import { shouldNoindex } from '@/lib/seo/pruning'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import { hashCode } from '@/lib/seo/location-content'
@@ -33,9 +48,15 @@ import { getDefaultAuthor } from '@/lib/data/team'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
-const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), {
+  ssr: false,
+})
 
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
@@ -72,18 +93,18 @@ function getRegionalMultiplier(region: string): number {
   const multipliers: Record<string, number> = {
     'Ile-de-France': 1.25,
     'Île-de-France': 1.25,
-    "Provence-Alpes-Côte d'Azur": 1.10,
-    'Auvergne-Rhône-Alpes': 1.10,
-    'Occitanie': 1.05,
-    'Nouvelle-Aquitaine': 1.00,
+    "Provence-Alpes-Côte d'Azur": 1.1,
+    'Auvergne-Rhône-Alpes': 1.1,
+    Occitanie: 1.05,
+    'Nouvelle-Aquitaine': 1.0,
     'Hauts-de-France': 0.95,
     'Grand Est': 0.95,
-    'Bretagne': 1.00,
-    'Pays de la Loire': 1.00,
-    'Normandie': 0.95,
+    Bretagne: 1.0,
+    'Pays de la Loire': 1.0,
+    Normandie: 0.95,
     'Centre-Val de Loire': 0.95,
     'Bourgogne-Franche-Comté': 0.95,
-    'Corse': 1.10,
+    Corse: 1.1,
   }
   return multipliers[region] ?? 1.0
 }
@@ -168,11 +189,20 @@ export async function generateMetadata({
 
   const canonicalUrl = `${SITE_URL}/tarifs/${service}/${villeSlug}`
 
+  // Gate indexation on provider availability (HCU anti-thin).
+  // Fail-open: hasProvidersByServiceAndLocation returns true during build and
+  // on error, so pages stay indexed unless ISR confirms 0 providers.
+  const hasProviders = await hasProvidersByServiceAndLocation(service, villeSlug)
+  const noindex = shouldNoindex(`/tarifs/${service}/${villeSlug}`, {
+    providerCount: hasProviders ? 1 : 0,
+    hasUniqueData: false,
+  })
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    robots: { index: true, follow: true },
+    robots: { index: !noindex, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -238,9 +268,8 @@ export default async function TarifsServiceVillePage({
 
   const author = getDefaultAuthor()
 
-
   const dbOfferCount = commune?.nb_entreprises_artisanales
-  const offerCount = dbOfferCount || (3 + Math.abs(hashCode(`offers-${service}`)) % 20)
+  const offerCount = dbOfferCount || 3 + (Math.abs(hashCode(`offers-${service}`)) % 20)
 
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -286,7 +315,7 @@ export default async function TarifsServiceVillePage({
         name,
         url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
       }
-    })
+    }),
   }
 
   const speakableSchema = getSpeakableSchema({
@@ -297,24 +326,35 @@ export default async function TarifsServiceVillePage({
   const relatedCities = getNearbyCities(villeSlug, 6)
 
   const relatedSlugs = relatedServices[service] || []
-  const otherTrades = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 6).filter((s) => tradeContent[s])
-    : tradeSlugs.filter((s) => s !== service).slice(0, 6)
+  const otherTrades =
+    relatedSlugs.length > 0
+      ? relatedSlugs.slice(0, 6).filter((s) => tradeContent[s])
+      : tradeSlugs.filter((s) => s !== service).slice(0, 6)
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, speakableSchema]} />
+      <JsonLd
+        data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, speakableSchema]}
+      />
 
       {/* Hero */}
       <section className="relative bg-gradient-hero text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.08) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.08) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
@@ -341,11 +381,13 @@ export default async function TarifsServiceVillePage({
               })()}
             </h1>
             <p className="text-xl text-sand-400 max-w-3xl mx-auto mb-4">
-              Prix {tradeLower} {'à'} {villeData.name} ({villeData.departement}) :
-              {' '}{minPrice} {'à'} {maxPrice} {trade.priceRange.unit}.
-              Tarifs adapt{'é'}s au march{'é'} local.
+              Prix {tradeLower} {'à'} {villeData.name} ({villeData.departement}) : {minPrice} {'à'}{' '}
+              {maxPrice} {trade.priceRange.unit}. Tarifs adapt{'é'}s au march{'é'} local.
             </p>
-            <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-sand-500 mb-4" />
+            <LastUpdated
+              label="Tarifs vérifiés et mis à jour le"
+              className="justify-center text-sand-500 mb-4"
+            />
             <p className="text-sm text-sand-500">
               Tarifs vérifiés par{' '}
               <Link href="/a-propos" className="underline hover:text-white transition-colors">
@@ -356,11 +398,15 @@ export default async function TarifsServiceVillePage({
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-secondary-400" />
-                <span>{minPrice} {'–'} {maxPrice} {trade.priceRange.unit}</span>
+                <span>
+                  {minPrice} {'–'} {maxPrice} {trade.priceRange.unit}
+                </span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <MapPin className="w-4 h-4 text-secondary-400" />
-                <span>{villeData.name} ({villeData.departementCode})</span>
+                <span>
+                  {villeData.name} ({villeData.departementCode})
+                </span>
               </div>
               {commune?.nb_entreprises_artisanales && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -391,16 +437,31 @@ export default async function TarifsServiceVillePage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="snippet-answer" data-speakable="true">
             <p className="text-base text-charcoal-700 leading-relaxed">
-              Le <strong>prix {tradeLower} {'à'} {villeData.name}</strong> est de{' '}
-              <strong>{minPrice} {'à'} {maxPrice} {trade.priceRange.unit}</strong> en 2026.
+              Le{' '}
+              <strong>
+                prix {tradeLower} {'à'} {villeData.name}
+              </strong>{' '}
+              est de{' '}
+              <strong>
+                {minPrice} {'à'} {maxPrice} {trade.priceRange.unit}
+              </strong>{' '}
+              en 2026.
               {multiplier !== 1.0 && (
-                <> Les tarifs en {villeData.region} sont{' '}
-                {multiplier > 1.0
-                  ? `${Math.round((multiplier - 1) * 100)} % supérieurs`
-                  : `${Math.round((1 - multiplier) * 100)} % inférieurs`}
-                {' '}{'à'} la moyenne nationale.</>
-              )}
-              {' '}Prestations courantes : {trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
+                <>
+                  {' '}
+                  Les tarifs en {villeData.region} sont{' '}
+                  {multiplier > 1.0
+                    ? `${Math.round((multiplier - 1) * 100)} % supérieurs`
+                    : `${Math.round((1 - multiplier) * 100)} % inférieurs`}{' '}
+                  {'à'} la moyenne nationale.
+                </>
+              )}{' '}
+              Prestations courantes :{' '}
+              {trade.commonTasks
+                .slice(0, 3)
+                .map((t) => t.split(':')[0].trim().toLowerCase())
+                .join(', ')}
+              .
             </p>
           </div>
         </div>
@@ -434,7 +495,9 @@ export default async function TarifsServiceVillePage({
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-emerald-900">
-                    {rgeCount} {tradeLower}{rgeCount > 1 ? 's' : ''} certifié{rgeCount > 1 ? 's' : ''} RGE à {villeData.name}
+                    {rgeCount} {tradeLower}
+                    {rgeCount > 1 ? 's' : ''} certifié{rgeCount > 1 ? 's' : ''} RGE à{' '}
+                    {villeData.name}
                   </div>
                   <div className="text-xs text-emerald-700">
                     Requis pour MaPrimeRénov&apos;, CEE et TVA 5,5 %
@@ -472,8 +535,8 @@ export default async function TarifsServiceVillePage({
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit} TTC</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constat{'é'} {'à'} {villeData.name} et ses alentours,
-              main-d&apos;oeuvre incluse, TTC
+              Prix moyen constat{'é'} {'à'} {villeData.name} et ses alentours, main-d&apos;oeuvre
+              incluse, TTC
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">
@@ -544,7 +607,11 @@ export default async function TarifsServiceVillePage({
             <LocalFactorCard
               icon={<Users className="w-5 h-5 text-secondary-600" />}
               title="Concurrence locale"
-              value={commune?.nb_entreprises_artisanales ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises` : null}
+              value={
+                commune?.nb_entreprises_artisanales
+                  ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises`
+                  : null
+              }
               description={
                 commune?.nb_entreprises_artisanales
                   ? commune.nb_entreprises_artisanales > 500
@@ -577,19 +644,25 @@ export default async function TarifsServiceVillePage({
             <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {commune.prix_m2_moyen && (
                 <div className="bg-white rounded-xl border border-sand-300 p-4 text-center">
-                  <div className="font-heading text-2xl font-bold text-charcoal-900">{formatNumber(commune.prix_m2_moyen)} {'€'}/m{'²'}</div>
+                  <div className="font-heading text-2xl font-bold text-charcoal-900">
+                    {formatNumber(commune.prix_m2_moyen)} {'€'}/m{'²'}
+                  </div>
                   <div className="text-sm text-charcoal-500 mt-1">Prix immobilier moyen</div>
                 </div>
               )}
               {commune.nb_artisans_rge != null && commune.nb_artisans_rge > 0 && (
                 <div className="bg-white rounded-xl border border-sand-300 p-4 text-center">
-                  <div className="font-heading text-2xl font-bold text-charcoal-900">{formatNumber(commune.nb_artisans_rge)}</div>
+                  <div className="font-heading text-2xl font-bold text-charcoal-900">
+                    {formatNumber(commune.nb_artisans_rge)}
+                  </div>
                   <div className="text-sm text-charcoal-500 mt-1">Artisans RGE certifi{'é'}s</div>
                 </div>
               )}
               {commune.population && (
                 <div className="bg-white rounded-xl border border-sand-300 p-4 text-center">
-                  <div className="font-heading text-2xl font-bold text-charcoal-900">{formatNumber(commune.population)}</div>
+                  <div className="font-heading text-2xl font-bold text-charcoal-900">
+                    {formatNumber(commune.population)}
+                  </div>
                   <div className="text-sm text-charcoal-500 mt-1">Habitants</div>
                 </div>
               )}
@@ -609,7 +682,12 @@ export default async function TarifsServiceVillePage({
       {/* Speakable Answer Box */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <SpeakableAnswerBox
-          answer={`${trade.name} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit} (prix ajusté région ${villeData.region}). Prestations courantes : ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join(', ')}. ${commune?.nb_entreprises_artisanales ? `${commune.nb_entreprises_artisanales} entreprises artisanales dans la commune.` : ''}`}
+          answer={`${trade.name} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit} (prix ajusté région ${villeData.region}). Prestations courantes : ${trade.commonTasks
+            .slice(0, 3)
+            .map((t) => t.split(':')[0].trim())
+            .join(
+              ', '
+            )}. ${commune?.nb_entreprises_artisanales ? `${commune.nb_entreprises_artisanales} entreprises artisanales dans la commune.` : ''}`}
         />
       </div>
 
@@ -620,27 +698,32 @@ export default async function TarifsServiceVillePage({
             Combien co{'û'}te un {tradeLower} {'à'} {villeData.name} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Le tarif horaire d'un {tradeLower} {'à'} {villeData.name} se situe entre {minPrice} et {maxPrice} {trade.priceRange.unit}.
-            Ce prix varie selon la complexit{'é'} de l'intervention, l'accessibilit{'é'} du chantier et les mat{'é'}riaux n{'é'}cessaires.
-            {multiplier >= 1.2 ? ` Les tarifs en ${villeData.region} sont généralement 20 à 25 % supérieurs à la moyenne nationale.` : ''}
+            Le tarif horaire d'un {tradeLower} {'à'} {villeData.name} se situe entre {minPrice} et{' '}
+            {maxPrice} {trade.priceRange.unit}. Ce prix varie selon la complexit{'é'} de
+            l'intervention, l'accessibilit{'é'} du chantier et les mat{'é'}riaux n{'é'}cessaires.
+            {multiplier >= 1.2
+              ? ` Les tarifs en ${villeData.region} sont généralement 20 à 25 % supérieurs à la moyenne nationale.`
+              : ''}
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-charcoal-900">
             Comment trouver un bon {tradeLower} {'à'} {villeData.name} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Pour trouver un {tradeLower} fiable {'à'} {villeData.name}, v{'é'}rifiez son num{'é'}ro SIRET,
-            demandez une copie de son assurance d{'é'}cennale et comparez au moins 3 devis.
-            Consultez les avis clients et privil{'é'}giez les artisans certifi{'é'}s{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''}.
+            Pour trouver un {tradeLower} fiable {'à'} {villeData.name}, v{'é'}rifiez son num{'é'}ro
+            SIRET, demandez une copie de son assurance d{'é'}cennale et comparez au moins 3 devis.
+            Consultez les avis clients et privil{'é'}giez les artisans certifi{'é'}s
+            {trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''}.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-charcoal-900">
             Quel est le d{'é'}lai d'intervention d'un {tradeLower} {'à'} {villeData.name} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            En moyenne, un {tradeLower} {'à'} {villeData.name} peut intervenir sous {trade.averageResponseTime.split(',')[0].toLowerCase()}.
-            En cas d'urgence, certains professionnels proposent des interventions sous 1 {'à'} 2 heures,
-            avec une majoration tarifaire de 50 {'à'} 100 %.
+            En moyenne, un {tradeLower} {'à'} {villeData.name} peut intervenir sous{' '}
+            {trade.averageResponseTime.split(',')[0].toLowerCase()}. En cas d'urgence, certains
+            professionnels proposent des interventions sous 1 {'à'} 2 heures, avec une majoration
+            tarifaire de 50 {'à'} 100 %.
           </p>
         </div>
       </section>
@@ -653,7 +736,10 @@ export default async function TarifsServiceVillePage({
           </h2>
           <div className="space-y-4">
             {trade.tips.slice(0, 4).map((tip, i) => (
-              <div key={i} className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5"
+              >
                 <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-secondary-600" />
                 </div>
@@ -696,7 +782,8 @@ export default async function TarifsServiceVillePage({
             Obtenez un devis exact de {tradeLower} {'à'} {villeData.name}
           </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Ces tarifs sont indicatifs. Obtenez un devis personnalis{'é'} d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
+            Ces tarifs sont indicatifs. Obtenez un devis personnalis{'é'} d'artisans v{'é'}rifi{'é'}
+            s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
           </p>
           <TarifsDevisCTA
             service={service}
@@ -707,7 +794,10 @@ export default async function TarifsServiceVillePage({
           />
           <p className="text-primary-200 text-sm mt-6">
             Ou{' '}
-            <Link href={`/services/${service}/${villeSlug}`} className="underline hover:text-white transition-colors">
+            <Link
+              href={`/services/${service}/${villeSlug}`}
+              className="underline hover:text-white transition-colors"
+            >
               voir les {tradeLower}s {'à'} {villeData.name}
             </Link>
           </p>
@@ -756,7 +846,8 @@ export default async function TarifsServiceVillePage({
                     {t.name} {'à'} {villeData.name}
                   </div>
                   <div className="text-xs text-charcoal-500 mt-1">
-                    {Math.round(t.priceRange.min * m)} {'—'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                    {Math.round(t.priceRange.min * m)} {'—'} {Math.round(t.priceRange.max * m)}{' '}
+                    {t.priceRange.unit}
                   </div>
                 </Link>
               )
@@ -787,10 +878,14 @@ export default async function TarifsServiceVillePage({
                   if (!t) return null
                   const m = getRegionalMultiplier(villeData.region)
                   return (
-                    <div key={slug} className="bg-sand-50 rounded-xl border border-sand-300 p-4 space-y-2.5">
+                    <div
+                      key={slug}
+                      className="bg-sand-50 rounded-xl border border-sand-300 p-4 space-y-2.5"
+                    >
                       <div className="font-semibold text-charcoal-900 text-sm">{t.name}</div>
                       <div className="text-xs text-charcoal-500">
-                        {Math.round(t.priceRange.min * m)} {'–'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                        {Math.round(t.priceRange.min * m)} {'–'} {Math.round(t.priceRange.max * m)}{' '}
+                        {t.priceRange.unit}
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         <Link
@@ -828,7 +923,9 @@ export default async function TarifsServiceVillePage({
         return (
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4">Probl{'è'}mes courants</h2>
+              <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4">
+                Probl{'è'}mes courants
+              </h2>
               <div className="flex flex-wrap gap-3">
                 {problems.map((p) => (
                   <Link
@@ -853,22 +950,40 @@ export default async function TarifsServiceVillePage({
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Ce service</h3>
               <div className="space-y-2">
-                <Link href={`/tarifs/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/tarifs/${service}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Tarifs {tradeLower} en France
                 </Link>
-                <Link href={`/services/${service}/${villeSlug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/services/${service}/${villeSlug}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   {trade.name} {'à'} {villeData.name}
                 </Link>
-                <Link href={`/services/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/services/${service}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   {trade.name} {'—'} tous les artisans
                 </Link>
-                <Link href={`/devis/${service}/${villeSlug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/devis/${service}/${villeSlug}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Devis {tradeLower} {'à'} {villeData.name}
                 </Link>
-                <Link href={`/avis/${service}/${villeSlug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/avis/${service}/${villeSlug}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Avis {tradeLower} {'à'} {villeData.name}
                 </Link>
-                <Link href={`/urgence/${service}/${villeSlug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/urgence/${service}/${villeSlug}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   {trade.name} urgence {'à'} {villeData.name}
                 </Link>
               </div>
@@ -876,14 +991,21 @@ export default async function TarifsServiceVillePage({
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Cette ville</h3>
               <div className="space-y-2">
-                <Link href={`/villes/${villeSlug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/villes/${villeSlug}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Artisans {'à'} {villeData.name}
                 </Link>
                 {otherTrades.slice(0, 5).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (
-                    <Link key={slug} href={`/tarifs/${slug}/${villeSlug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                    <Link
+                      key={slug}
+                      href={`/tarifs/${slug}/${villeSlug}`}
+                      className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                    >
                       Tarifs {t.name.toLowerCase()} {'à'} {villeData.name}
                     </Link>
                   )
@@ -893,10 +1015,30 @@ export default async function TarifsServiceVillePage({
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/tarifs" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Comment {'ç'}a marche</Link>
-                <Link href="/devis" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Demander un devis</Link>
-                <Link href="/faq" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">FAQ</Link>
+                <Link
+                  href="/tarifs"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Guide complet des tarifs
+                </Link>
+                <Link
+                  href="/comment-ca-marche"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Comment {'ç'}a marche
+                </Link>
+                <Link
+                  href="/devis"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Demander un devis
+                </Link>
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  FAQ
+                </Link>
               </div>
             </div>
           </div>
@@ -907,15 +1049,25 @@ export default async function TarifsServiceVillePage({
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">M{'é'}thodologie tarifaire</h3>
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              M{'é'}thodologie tarifaire
+            </h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affich{'é'}s pour {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l'urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
+              Les prix affich{'é'}s pour {villeData.name} sont des fourchettes indicatives ajust
+              {'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient
+              selon la complexit{'é'} du chantier, les mat{'é'}riaux et l'urgence. Seul un devis
+              personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
             </p>
           </div>
         </div>
       </section>
 
-      <VerticalCrossLinks currentService={service} villeSlug={villeSlug} villeName={villeData.name} intent="tarifs" />
+      <VerticalCrossLinks
+        currentService={service}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        intent="tarifs"
+      />
 
       <InContentLinks
         serviceSlug={service}
@@ -936,14 +1088,23 @@ export default async function TarifsServiceVillePage({
         currentIntent="tarifs"
       />
 
-      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="tarifs" skipCrossIntent />
+      <DeepPageLinks
+        currentService={service}
+        currentVille={villeSlug}
+        currentIntent="tarifs"
+        skipCrossIntent
+      />
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
-      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Comparer les prix gratuitement" />
+      <StickyMobileCTA
+        serviceSlug={service}
+        cityName={villeData.name}
+        citySlug={villeSlug}
+        ctaText="Comparer les prix gratuitement"
+      />
 
       <ExitIntentPopup />
-
     </div>
   )
 }

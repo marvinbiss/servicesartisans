@@ -169,7 +169,7 @@ export const dynamicParams = true
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -213,17 +213,15 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
 
+  // BLOCKED: reviews schema drift in prod (comment/client_name/artisan_id vs
+  // content/author_name/provider_id) makes the reviews queries below return 0,
+  // so this page renders as a thin template with no unique content.
+  // Hardcoded noindex until the cross-cutting schema fix lands.
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    robots: {
-      index: true,
-      follow: true,
-      'max-snippet': -1 as const,
-      'max-image-preview': 'large' as const,
-      'max-video-preview': -1 as const,
-    },
+    robots: { index: false, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,

@@ -3,7 +3,14 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, departements } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
-import { STATIC_BATCH, LARGE_BATCH, PROVIDER_BATCH_SIZE, MAX_PROVIDER_SITEMAPS, SITEMAP_CITY_COUNT, SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
+import {
+  STATIC_BATCH,
+  LARGE_BATCH,
+  PROVIDER_BATCH_SIZE,
+  MAX_PROVIDER_SITEMAPS,
+  SITEMAP_CITY_COUNT,
+  SITEMAP_CITY_COUNT_TIER2,
+} from '@/lib/seo/sitemap-config'
 
 /**
  * Sitemap index generator — workaround for Next.js 14.2 not auto-generating
@@ -17,34 +24,57 @@ import { STATIC_BATCH, LARGE_BATCH, PROVIDER_BATCH_SIZE, MAX_PROVIDER_SITEMAPS, 
 export async function GET() {
   const emergencySlugs = Object.keys(tradeContent)
   const tradeSlugs = getTradesSlugs()
-  const avisServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
-  const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
+  const totalTaskCount = Object.values(tradeContent).reduce(
+    (sum, t) => sum + t.commonTasks.length,
+    0
+  )
 
   const ids: string[] = [
     'static',
     // service × city — full scale: 47 services × 2 267 cities
-    ...Array.from({ length: Math.ceil(services.length * SITEMAP_CITY_COUNT / LARGE_BATCH) }, (_, i) => `service-cities-${i}`),
+    ...Array.from(
+      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / LARGE_BATCH) },
+      (_, i) => `service-cities-${i}`
+    ),
     'cities',
     'geo',
     'devis-services',
-    ...Array.from({ length: Math.ceil(services.length * SITEMAP_CITY_COUNT / STATIC_BATCH) }, (_, i) => `devis-service-cities-${i}`),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * SITEMAP_CITY_COUNT / STATIC_BATCH) }, (_, i) => `urgence-service-cities-${i}`),
-    ...Array.from({ length: Math.ceil(services.length * SITEMAP_CITY_COUNT / STATIC_BATCH) }, (_, i) => `tarifs-service-cities-${i}`),
+    ...Array.from(
+      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
+      (_, i) => `devis-service-cities-${i}`
+    ),
+    ...Array.from(
+      { length: Math.ceil((emergencySlugs.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
+      (_, i) => `urgence-service-cities-${i}`
+    ),
+    ...Array.from(
+      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
+      (_, i) => `tarifs-service-cities-${i}`
+    ),
     // Tier 2: tarifs-tâche, avis, problèmes → top 500 cities
-    ...Array.from({ length: Math.ceil(totalTaskCount * SITEMAP_CITY_COUNT_TIER2 / LARGE_BATCH) }, (_, i) => `tarifs-task-cities-${i}`),
+    ...Array.from(
+      { length: Math.ceil((totalTaskCount * SITEMAP_CITY_COUNT_TIER2) / LARGE_BATCH) },
+      (_, i) => `tarifs-task-cities-${i}`
+    ),
     'avis-services',
-    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * SITEMAP_CITY_COUNT_TIER2 / STATIC_BATCH) }, (_, i) => `avis-service-cities-${i}`),
+    // avis-service-cities-* removed pending reviews schema drift fix.
     'problemes',
-    ...Array.from({ length: Math.ceil(problemSlugs.length * SITEMAP_CITY_COUNT_TIER2 / STATIC_BATCH) }, (_, i) => `problemes-cities-${i}`),
+    ...Array.from(
+      { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
+      (_, i) => `problemes-cities-${i}`
+    ),
     // dept × service — 105 depts × 47 services
-    ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / LARGE_BATCH) }, (_, i) => `dept-services-${i}`),
+    ...Array.from(
+      { length: Math.ceil((departements.length * tradeSlugs.length) / LARGE_BATCH) },
+      (_, i) => `dept-services-${i}`
+    ),
     'barometre',
     'region-services',
     // RGE pSEO — Tier 2 (top 500 villes). Keep in sync with sitemap.ts.
     'rge-city',
-    'rge-service',       // /rge/[service] — 14 URLs (hub par métier)
+    'rge-service', // /rge/[service] — 14 URLs (hub par métier)
     'rge-qualification', // /rge/qualifications + /rge/qualifications/[slug] — 5 URLs
     'rge-service-city',
     // CEE pSEO — Tier 2 (19 op\u00e9rations × top 500 villes = 9 500 URLs)
@@ -77,7 +107,7 @@ export async function GET() {
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...ids.map(id => `  <sitemap><loc>${SITE_URL}/sitemap/${id}.xml</loc></sitemap>`),
+    ...ids.map((id) => `  <sitemap><loc>${SITE_URL}/sitemap/${id}.xml</loc></sitemap>`),
     '</sitemapindex>',
   ].join('\n')
 

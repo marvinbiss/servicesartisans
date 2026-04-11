@@ -1,7 +1,17 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight, CheckCircle, Euro, ChevronDown, ChevronRight, MapPin, Users, Thermometer, Building2 } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle,
+  Euro,
+  ChevronDown,
+  ChevronRight,
+  MapPin,
+  Users,
+  Thermometer,
+  Building2,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -20,6 +30,8 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
+import { hasProvidersByServiceAndLocation } from '@/lib/supabase'
+import { shouldNoindex } from '@/lib/seo/pruning'
 
 export const revalidate = 86400
 
@@ -85,7 +97,7 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -130,18 +142,32 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/devis/${service}/${location}`
 
+  // Gate indexation on provider availability (HCU anti-thin). Fail-open during build.
+  const hasProviders = await hasProvidersByServiceAndLocation(service, location)
+  const noindex = shouldNoindex(`/devis/${service}/${location}`, {
+    providerCount: hasProviders ? 1 : 0,
+    hasUniqueData: false,
+  })
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    robots: { index: true, follow: true },
+    robots: { index: !noindex, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,
       description,
       url: canonicalUrl,
       type: 'website',
-      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Devis ${trade.name} à ${villeData.name}` }],
+      images: [
+        {
+          url: serviceImage.src,
+          width: 800,
+          height: 600,
+          alt: `Devis ${trade.name} à ${villeData.name}`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -242,9 +268,10 @@ export default async function DevisServiceLocationPage({
 
   // Related services
   const relatedSlugs = relatedServices[service] || []
-  const otherTrades = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 6).filter((s) => tradeContent[s])
-    : tradeSlugs.filter((s) => s !== service).slice(0, 6)
+  const otherTrades =
+    relatedSlugs.length > 0
+      ? relatedSlugs.slice(0, 6).filter((s) => tradeContent[s])
+      : tradeSlugs.filter((s) => s !== service).slice(0, 6)
 
   // H1 variation
   const h1Text = (() => {
@@ -377,18 +404,22 @@ export default async function DevisServiceLocationPage({
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Devis gratuit de {tradeLower}s à {villeData.name} ({villeData.departement}).
-            Prix local : {minPrice} à {maxPrice} {trade.priceRange.unit}.
+            Devis gratuit de {tradeLower}s à {villeData.name} ({villeData.departement}). Prix local
+            : {minPrice} à {maxPrice} {trade.priceRange.unit}.
           </p>
           {/* Inline trust signals */}
           <div className="flex flex-wrap items-center gap-3 mt-4">
             <div className="flex items-center gap-1.5 text-xs text-charcoal-500 bg-sand-50 px-3 py-1.5 rounded-full border border-sand-200">
               <Euro className="w-3.5 h-3.5 text-primary-400" />
-              <span>{minPrice} – {maxPrice} {trade.priceRange.unit}</span>
+              <span>
+                {minPrice} – {maxPrice} {trade.priceRange.unit}
+              </span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-charcoal-500 bg-sand-50 px-3 py-1.5 rounded-full border border-sand-200">
               <MapPin className="w-3.5 h-3.5 text-primary-400" />
-              <span>{villeData.name} ({villeData.departementCode})</span>
+              <span>
+                {villeData.name} ({villeData.departementCode})
+              </span>
             </div>
             {commune?.nb_entreprises_artisanales && (
               <div className="flex items-center gap-1.5 text-xs text-charcoal-500 bg-sand-50 px-3 py-1.5 rounded-full border border-sand-200">
@@ -399,7 +430,9 @@ export default async function DevisServiceLocationPage({
             {recentDevisCount >= 120 && (
               <div className="flex items-center gap-1.5 text-xs text-accent-700 bg-accent-50 px-3 py-1.5 rounded-full border border-accent-100">
                 <span className="w-1.5 h-1.5 bg-accent-500 rounded-full animate-pulse" />
-                <span>{recentDevisCount} devis demandé{recentDevisCount > 1 ? 's' : ''} ce mois-ci</span>
+                <span>
+                  {recentDevisCount} devis demandé{recentDevisCount > 1 ? 's' : ''} ce mois-ci
+                </span>
               </div>
             )}
           </div>
@@ -459,7 +492,10 @@ export default async function DevisServiceLocationPage({
           </p>
           <div className="space-y-3">
             {editorialDescribe.tips.map((tip, i) => (
-              <div key={i} className="flex items-start gap-3 bg-sand-50 rounded-xl border border-sand-300 p-4">
+              <div
+                key={i}
+                className="flex items-start gap-3 bg-sand-50 rounded-xl border border-sand-300 p-4"
+              >
                 <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-xs font-bold text-primary-600">{i + 1}</span>
                 </div>
@@ -481,7 +517,10 @@ export default async function DevisServiceLocationPage({
           </p>
           <div className="space-y-3">
             {editorialChecklist.items.map((item, i) => (
-              <div key={i} className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4">
+              <div
+                key={i}
+                className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4"
+              >
                 <CheckCircle className="w-5 h-5 text-secondary-600 flex-shrink-0 mt-0.5" />
                 <p className="text-charcoal-700 text-sm leading-relaxed">{item}</p>
               </div>
@@ -497,9 +536,7 @@ export default async function DevisServiceLocationPage({
             Tarifs indicatifs {tradeLower} à {villeData.name}
           </h2>
           <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-6 border border-primary-200">
-            <p className="text-charcoal-700 text-sm leading-relaxed">
-              {editorialTarifs.text}
-            </p>
+            <p className="text-charcoal-700 text-sm leading-relaxed">{editorialTarifs.text}</p>
           </div>
           <div className="mt-4 text-center">
             <a
@@ -543,7 +580,10 @@ export default async function DevisServiceLocationPage({
           </h2>
           <div className="space-y-4">
             {trade.commonTasks.map((task, i) => (
-              <div key={i} className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5 hover:bg-primary-50 hover:border-primary-200 transition-colors">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5 hover:bg-primary-50 hover:border-primary-200 transition-colors"
+              >
                 <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Euro className="w-4 h-4 text-primary-500" />
                 </div>
@@ -577,7 +617,11 @@ export default async function DevisServiceLocationPage({
             <LocalFactorCard
               icon={<Users className="w-5 h-5 text-secondary-600" />}
               title="Concurrence locale"
-              value={commune?.nb_entreprises_artisanales ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises` : null}
+              value={
+                commune?.nb_entreprises_artisanales
+                  ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises`
+                  : null
+              }
               description={
                 commune?.nb_entreprises_artisanales
                   ? commune.nb_entreprises_artisanales > 500
@@ -627,7 +671,7 @@ export default async function DevisServiceLocationPage({
                   <p className="text-charcoal-600 text-sm leading-relaxed">
                     {commune.nb_artisans_btp != null
                       ? `${formatNumber(commune.nb_artisans_btp)} artisans BTP référencés à ${villeData.name}, ce qui favorise la concurrence et des devis compétitifs.`
-                      : `${formatNumber(commune.nb_entreprises_artisanales!)} entreprises artisanales à ${villeData.name}, ce qui favorise la concurrence et des devis compétitifs.`}
+                      : `${formatNumber(commune.nb_entreprises_artisanales ?? 0)} entreprises artisanales à ${villeData.name}, ce qui favorise la concurrence et des devis compétitifs.`}
                   </p>
                 </div>
               )}
@@ -638,10 +682,14 @@ export default async function DevisServiceLocationPage({
                     <div className="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="w-5 h-5 text-accent-600" />
                     </div>
-                    <h3 className="font-semibold text-charcoal-900 text-sm">Artisans RGE certifiés</h3>
+                    <h3 className="font-semibold text-charcoal-900 text-sm">
+                      Artisans RGE certifiés
+                    </h3>
                   </div>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    {formatNumber(commune.nb_artisans_rge)} artisans RGE certifiés à {villeData.name} pour les travaux éligibles aux aides à la rénovation énergétique.
+                    {formatNumber(commune.nb_artisans_rge)} artisans RGE certifiés à{' '}
+                    {villeData.name} pour les travaux éligibles aux aides à la rénovation
+                    énergétique.
                   </p>
                 </div>
               )}
@@ -655,7 +703,8 @@ export default async function DevisServiceLocationPage({
                     <h3 className="font-semibold text-charcoal-900 text-sm">Budget des ménages</h3>
                   </div>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    Le revenu médian à {villeData.name} est de {formatEuro(commune.revenu_median)}/an, ce qui contextualise le budget moyen des ménages pour les travaux.
+                    Le revenu médian à {villeData.name} est de {formatEuro(commune.revenu_median)}
+                    /an, ce qui contextualise le budget moyen des ménages pour les travaux.
                   </p>
                 </div>
               )}
@@ -669,7 +718,8 @@ export default async function DevisServiceLocationPage({
                     <h3 className="font-semibold text-charcoal-900 text-sm">Prix immobilier</h3>
                   </div>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    Le prix au m² de {formatEuro(commune.prix_m2_moyen)} à {villeData.name} permet d'estimer le budget travaux proportionnel à la valeur du bien.
+                    Le prix au m² de {formatEuro(commune.prix_m2_moyen)} à {villeData.name} permet
+                    d'estimer le budget travaux proportionnel à la valeur du bien.
                   </p>
                 </div>
               )}
@@ -680,10 +730,13 @@ export default async function DevisServiceLocationPage({
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Thermometer className="w-5 h-5 text-red-600" />
                     </div>
-                    <h3 className="font-semibold text-charcoal-900 text-sm">Passoires thermiques</h3>
+                    <h3 className="font-semibold text-charcoal-900 text-sm">
+                      Passoires thermiques
+                    </h3>
                   </div>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques (DPE F ou G) à {villeData.name} — forte demande en rénovation énergétique.
+                    {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques (DPE F ou G) à{' '}
+                    {villeData.name} — forte demande en rénovation énergétique.
                   </p>
                 </div>
               )}
@@ -698,8 +751,10 @@ export default async function DevisServiceLocationPage({
                   </div>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
                     {getClimatLabel(commune.climat_zone ?? null)}
-                    {commune.jours_gel_annuels != null && ` avec ${commune.jours_gel_annuels} jours de gel par an`}
-                    {' — '}un facteur à prendre en compte pour planifier vos travaux de {tradeLower}.
+                    {commune.jours_gel_annuels != null &&
+                      ` avec ${commune.jours_gel_annuels} jours de gel par an`}
+                    {' — '}un facteur à prendre en compte pour planifier vos travaux de {tradeLower}
+                    .
                   </p>
                 </div>
               )}
@@ -710,7 +765,9 @@ export default async function DevisServiceLocationPage({
                     <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Building2 className="w-5 h-5 text-indigo-600" />
                     </div>
-                    <h3 className="font-semibold text-charcoal-900 text-sm">Type de bâti dominant</h3>
+                    <h3 className="font-semibold text-charcoal-900 text-sm">
+                      Type de bâti dominant
+                    </h3>
                   </div>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
                     {commune.part_maisons_pct > 50
@@ -731,25 +788,43 @@ export default async function DevisServiceLocationPage({
                   {commune.revenu_median != null && commune.revenu_median < 22000 && (
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov' Bleu</strong> (barème le plus avantageux).</span>
+                      <span>
+                        Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux
+                        ménages à {villeData.name} peuvent être éligibles à{' '}
+                        <strong>MaPrimeRénov' Bleu</strong> (barème le plus avantageux).
+                      </span>
                     </li>
                   )}
-                  {commune.revenu_median != null && commune.revenu_median >= 22000 && commune.revenu_median < 28000 && (
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov' Jaune</strong> (barème avantageux).</span>
-                    </li>
-                  )}
+                  {commune.revenu_median != null &&
+                    commune.revenu_median >= 22000 &&
+                    commune.revenu_median < 28000 && (
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
+                        <span>
+                          Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de
+                          nombreux ménages à {villeData.name} peuvent être éligibles à{' '}
+                          <strong>MaPrimeRénov' Jaune</strong> (barème avantageux).
+                        </span>
+                      </li>
+                    )}
                   {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 20 && (
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques, la rénovation énergétique est une <strong>urgence</strong> à {villeData.name}. Les aides de l'État sont renforcées pour ces logements.</span>
+                      <span>
+                        Avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques, la
+                        rénovation énergétique est une <strong>urgence</strong> à {villeData.name}.
+                        Les aides de l'État sont renforcées pour ces logements.
+                      </span>
                     </li>
                   )}
                   {commune.jours_gel_annuels != null && commune.jours_gel_annuels > 30 && (
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec {commune.jours_gel_annuels} jours de gel par an, l'<strong>isolation</strong> est une priorité à {villeData.name} pour réduire la facture de chauffage.</span>
+                      <span>
+                        Avec {commune.jours_gel_annuels} jours de gel par an, l'
+                        <strong>isolation</strong> est une priorité à {villeData.name} pour réduire
+                        la facture de chauffage.
+                      </span>
                     </li>
                   )}
                 </ul>
@@ -767,7 +842,10 @@ export default async function DevisServiceLocationPage({
           </h2>
           <div className="space-y-4">
             {trade.tips.map((tip, i) => (
-              <div key={i} className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5"
+              >
                 <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-secondary-600" />
                 </div>
@@ -793,9 +871,7 @@ export default async function DevisServiceLocationPage({
                   </h3>
                   <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
-                  {item.a}
-                </div>
+                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">{item.a}</div>
               </details>
             ))}
           </div>
@@ -809,7 +885,8 @@ export default async function DevisServiceLocationPage({
             Trouver un {tradeLower} à {villeData.name}
           </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit auprès de professionnels référencés à {villeData.name}.
+            Comparez les profils et obtenez un devis gratuit auprès de professionnels référencés à{' '}
+            {villeData.name}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
@@ -873,7 +950,8 @@ export default async function DevisServiceLocationPage({
                     Devis {t.name.toLowerCase()} à {villeData.name}
                   </div>
                   <div className="text-xs text-charcoal-500 mt-1">
-                    {Math.round(t.priceRange.min * m)} — {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                    {Math.round(t.priceRange.min * m)} — {Math.round(t.priceRange.max * m)}{' '}
+                    {t.priceRange.unit}
                   </div>
                 </Link>
               )
@@ -903,10 +981,14 @@ export default async function DevisServiceLocationPage({
                   if (!t) return null
                   const m = getRegionalMultiplier(villeData.region)
                   return (
-                    <div key={slug} className="bg-white rounded-xl border border-sand-300 p-4 space-y-2.5">
+                    <div
+                      key={slug}
+                      className="bg-white rounded-xl border border-sand-300 p-4 space-y-2.5"
+                    >
                       <div className="font-semibold text-charcoal-900 text-sm">{t.name}</div>
                       <div className="text-xs text-charcoal-500">
-                        {Math.round(t.priceRange.min * m)}–{Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                        {Math.round(t.priceRange.min * m)}–{Math.round(t.priceRange.max * m)}{' '}
+                        {t.priceRange.unit}
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         <Link
@@ -944,7 +1026,9 @@ export default async function DevisServiceLocationPage({
         return (
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4">Problèmes courants</h2>
+              <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4">
+                Problèmes courants
+              </h2>
               <div className="flex flex-wrap gap-3">
                 {problems.map((p) => (
                   <Link
@@ -964,18 +1048,32 @@ export default async function DevisServiceLocationPage({
       {/* ─── Cross-intent navigation ─────────────────────── */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">Voir aussi</h2>
+          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
+            Voir aussi
+          </h2>
           <div className="flex flex-wrap gap-3">
-            <Link href={`/avis/${service}/${location}`} className="px-4 py-2 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium border border-primary-100 hover:border-primary-200 transition-colors">
+            <Link
+              href={`/avis/${service}/${location}`}
+              className="px-4 py-2 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium border border-primary-100 hover:border-primary-200 transition-colors"
+            >
               Avis {tradeLower} à {villeData.name}
             </Link>
-            <Link href={`/tarifs/${service}/${location}`} className="px-4 py-2 bg-accent-50 text-accent-700 rounded-lg text-sm font-medium border border-accent-100 hover:border-accent-200 transition-colors">
+            <Link
+              href={`/tarifs/${service}/${location}`}
+              className="px-4 py-2 bg-accent-50 text-accent-700 rounded-lg text-sm font-medium border border-accent-100 hover:border-accent-200 transition-colors"
+            >
               Tarifs {tradeLower} à {villeData.name}
             </Link>
-            <Link href={`/urgence/${service}/${location}`} className="px-4 py-2 bg-red-50 text-red-800 rounded-lg text-sm font-medium border border-red-100 hover:border-red-200 transition-colors">
+            <Link
+              href={`/urgence/${service}/${location}`}
+              className="px-4 py-2 bg-red-50 text-red-800 rounded-lg text-sm font-medium border border-red-100 hover:border-red-200 transition-colors"
+            >
               Urgence {tradeLower} à {villeData.name}
             </Link>
-            <Link href={`/services/${service}/${location}`} className="px-4 py-2 bg-sand-50 text-charcoal-800 rounded-lg text-sm font-medium border border-sand-300 hover:border-sand-400 transition-colors">
+            <Link
+              href={`/services/${service}/${location}`}
+              className="px-4 py-2 bg-sand-50 text-charcoal-800 rounded-lg text-sm font-medium border border-sand-300 hover:border-sand-400 transition-colors"
+            >
               {trade.name} à {villeData.name}
             </Link>
           </div>
@@ -990,22 +1088,40 @@ export default async function DevisServiceLocationPage({
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Ce service</h3>
               <div className="space-y-2">
-                <Link href={`/devis/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/devis/${service}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Devis {tradeLower} en France
                 </Link>
-                <Link href={`/tarifs/${service}/${location}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/tarifs/${service}/${location}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Tarifs {tradeLower} à {villeData.name}
                 </Link>
-                <Link href={`/services/${service}/${location}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/services/${service}/${location}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   {trade.name} à {villeData.name}
                 </Link>
-                <Link href={`/services/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/services/${service}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   {trade.name} — tous les artisans
                 </Link>
-                <Link href={`/avis/${service}/${location}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/avis/${service}/${location}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Avis {tradeLower} à {villeData.name}
                 </Link>
-                <Link href={`/urgence/${service}/${location}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/urgence/${service}/${location}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   {trade.name} urgence à {villeData.name}
                 </Link>
               </div>
@@ -1013,14 +1129,21 @@ export default async function DevisServiceLocationPage({
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Cette ville</h3>
               <div className="space-y-2">
-                <Link href={`/villes/${location}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                <Link
+                  href={`/villes/${location}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Artisans à {villeData.name}
                 </Link>
                 {otherTrades.slice(0, 5).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (
-                    <Link key={slug} href={`/devis/${slug}/${location}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                    <Link
+                      key={slug}
+                      href={`/devis/${slug}/${location}`}
+                      className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                    >
                       Devis {t.name.toLowerCase()} à {villeData.name}
                     </Link>
                   )
@@ -1030,10 +1153,30 @@ export default async function DevisServiceLocationPage({
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/devis" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Demander un devis</Link>
-                <Link href="/tarifs" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Comment ça marche</Link>
-                <Link href="/faq" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">FAQ</Link>
+                <Link
+                  href="/devis"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Demander un devis
+                </Link>
+                <Link
+                  href="/tarifs"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Guide complet des tarifs
+                </Link>
+                <Link
+                  href="/comment-ca-marche"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Comment ça marche
+                </Link>
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  FAQ
+                </Link>
               </div>
             </div>
           </div>
@@ -1046,7 +1189,10 @@ export default async function DevisServiceLocationPage({
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({villeData.region}). Ils varient selon la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant.
+              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en
+              fonction des données régionales ({villeData.region}). Ils varient selon la complexité
+              du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi.{' '}
+              {SITE_NAME} est un annuaire indépendant.
             </p>
           </div>
         </div>
@@ -1062,7 +1208,12 @@ export default async function DevisServiceLocationPage({
         region={villeData.region}
       />
 
-      <VerticalCrossLinks currentService={service} villeSlug={location} villeName={villeData.name} intent="devis" />
+      <VerticalCrossLinks
+        currentService={service}
+        villeSlug={location}
+        villeName={villeData.name}
+        intent="devis"
+      />
 
       <CrossIntentLinks
         service={service}
@@ -1072,7 +1223,12 @@ export default async function DevisServiceLocationPage({
         currentIntent="devis"
       />
 
-      <DeepPageLinks currentService={service} currentVille={location} currentIntent="devis" skipCrossIntent />
+      <DeepPageLinks
+        currentService={service}
+        currentVille={location}
+        currentIntent="devis"
+        skipCrossIntent
+      />
 
       <MoneyPageBoost currentService={service} currentVille={location} />
     </div>
