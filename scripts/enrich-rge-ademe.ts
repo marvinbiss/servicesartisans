@@ -17,6 +17,10 @@
  *   SUPABASE_SERVICE_ROLE_KEY
  */
 
+import * as path from 'path'
+import * as dotenv from 'dotenv'
+dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
+
 import { createClient } from '@supabase/supabase-js'
 import { syncRgeFromAdeme } from '../src/lib/rge/sync'
 
@@ -63,6 +67,7 @@ async function main() {
   console.log(`  Unique SIRETs      : ${result.uniqueSirets}`)
   console.log(`  Providers matched  : ${result.providersMatched}`)
   console.log(`  Providers updated  : ${result.providersUpdated}`)
+  console.log(`  Contacts enriched  : ${result.contactsEnriched}`)
   console.log(`  Stale cleared      : ${result.staleCleared}`)
   console.log(`  Communes updated   : ${result.communesUpdated}`)
   console.log(`  Total RGE actifs   : ${result.totalRgeActifs}`)

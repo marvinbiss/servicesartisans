@@ -74,6 +74,15 @@ export interface RgeQualification {
   url: string | null
 }
 
+/**
+ * Note (migration 406 — 2026-04-11) : `providers.rge_categories_decret` est
+ * désormais recalculé automatiquement par la RPC `rge_bulk_update_providers`
+ * à chaque appel, via `derive_rge_categories_from_qualif` (migration 404).
+ * Aucun calcul côté TypeScript — la source unique est Postgres. Le payload
+ * envoyé ci-dessous reste identique : la colonne est dérivée inline depuis
+ * `rge_qualifications` côté SQL.
+ */
+
 export interface AggregatedProvider {
   siret: string
   qualifications: RgeQualification[]

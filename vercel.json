@@ -114,6 +114,10 @@
     {
       "path": "/api/cron/purge-prospection",
       "schedule": "0 3 1 * *"
+    },
+    {
+      "path": "/api/cron/cee-dossier-transitions",
+      "schedule": "0 * * * *"
     }
   ]
 }
