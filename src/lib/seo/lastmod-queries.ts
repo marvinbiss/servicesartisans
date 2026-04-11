@@ -410,7 +410,12 @@ export async function getQualifiedServiceCityCombos(): Promise<QualifiedCombos |
         if (!specialty || !city) continue
 
         const svcSlug = specialtyToService.get(specialty.toLowerCase().trim())
-        const villeSlug = cityToSlug.get(normalizeKey(city))
+        // Strip arrondissement suffix so "Paris 18e arrondissement",
+        // "Lyon 1er", "Marseille 15e" all map back to paris/lyon/marseille.
+        const cityKey = normalizeKey(city)
+          .replace(/\s+\d+\s*(er|e|eme|ieme)?\s*(arr|arrondissement)?\.?\s*$/, '')
+          .trim()
+        const villeSlug = cityToSlug.get(cityKey)
         if (!svcSlug || !villeSlug) continue
 
         combos.add(`${svcSlug}::${villeSlug}`)
