@@ -49,7 +49,7 @@ function checkRateLimit(channel: ProspectionChannel): boolean {
 
   // Remove timestamps outside the window
   rateLimitCounters[key].timestamps = rateLimitCounters[key].timestamps.filter(
-    ts => now - ts < windowMs
+    (ts) => now - ts < windowMs
   )
 
   // Check if we're at the per-minute limit
@@ -96,7 +96,9 @@ export async function enqueueCampaignMessages(
   // Charger la campagne avec template et liste
   const { data: campaign, error: campError } = await supabase
     .from('prospection_campaigns')
-    .select('id, name, channel, list_id, template_id, status, ab_test_enabled, ab_split_percent, template:prospection_templates(id, name, channel, subject, body, variables), list:prospection_lists(id, name)')
+    .select(
+      'id, name, channel, list_id, template_id, status, ab_test_enabled, ab_split_percent, template:prospection_templates(id, name, channel, subject, body, variables), list:prospection_lists(id, name)'
+    )
     .eq('id', campaignId)
     .single()
 
@@ -133,10 +135,15 @@ export async function enqueueCampaignMessages(
   }
 
   // Charger les contacts
-  const contactIds = members.map(m => m.contact_id)
+  // P1.4 : on récupère aussi consent_proof + colonnes Bloctel pour appliquer
+  // la base légale par canal (Art. L.34-5 CPCE pour SMS/WhatsApp,
+  // L.223-1 C.conso pour voice). Voir docs/prospection/base-legale-canaux.md.
+  const contactIds = members.map((m) => m.contact_id)
   const { data: contacts, error: contactError } = await supabase
     .from('prospection_contacts')
-    .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, city, postal_code, department, region, commune_code, custom_fields, is_active, consent_status')
+    .select(
+      'id, contact_type, company_name, contact_name, email, phone, phone_e164, city, postal_code, department, region, commune_code, custom_fields, is_active, consent_status, consent_proof, bloctel_listed, bloctel_checked_at'
+    )
     .in('id', contactIds)
     .eq('is_active', true)
     .eq('consent_status', 'opted_in')
@@ -146,16 +153,124 @@ export async function enqueueCampaignMessages(
   }
 
   // Filtrer les contacts qui ont le canal nécessaire
-  const validContacts = ((contacts || []) as unknown as ProspectionContact[]).filter(c => {
+  let validContacts = ((contacts || []) as unknown as ProspectionContact[]).filter((c) => {
     if (campaign.channel === 'email') return !!c.email
     return !!c.phone_e164
   })
+
+  // ============================================================
+  // P1.4 — Base légale par canal (fail-close)
+  // ============================================================
+  // SMS / WhatsApp : Art. L.34-5 CPCE exige un consentement explicite
+  // préalable, PAS d'exception B2B. Sanction : 15 000 € par envoi illégal.
+  // On filtre donc sur consent_proof IS NOT NULL (preuve opposable).
+  // Le statut 'opted_in' seul ne suffit pas — sans preuve horodatée,
+  // impossible de démontrer le consentement en cas de contrôle CNIL.
+  if (campaign.channel === 'sms' || campaign.channel === 'whatsapp') {
+    const beforeCount = validContacts.length
+    validContacts = validContacts.filter(
+      (c) => c.consent_status === 'opted_in' && c.consent_proof != null
+    )
+    const skippedConsent = beforeCount - validContacts.length
+    if (skippedConsent > 0) {
+      logger.info('Prospection: contacts SMS/WhatsApp sans preuve de consentement filtrés', {
+        campaignId,
+        channel: campaign.channel,
+        skipped: skippedConsent,
+      })
+    }
+    if (validContacts.length === 0) {
+      throw new Error(
+        `Canal ${campaign.channel} : aucun contact avec preuve de consentement (consent_proof). ` +
+          `Art. L.34-5 CPCE exige un opt-in explicite tracé — campagne refusée pour protéger ` +
+          `ServicesArtisans (sanction 15 000 € par envoi illégal).`
+      )
+    }
+  }
+
+  // Voice : L.223-1 Code de la consommation impose le filtrage Bloctel avant
+  // tout démarchage téléphonique. Sanction : 75 000 € par infraction.
+  // Fail-close : on exclut TRUE (inscrit Bloctel) ET NULL (jamais vérifié).
+  if (campaign.channel === 'voice') {
+    const beforeCount = validContacts.length
+    validContacts = validContacts.filter((c) => c.bloctel_listed === false)
+    const skippedBloctel = beforeCount - validContacts.length
+    if (skippedBloctel > 0) {
+      logger.info('Prospection: contacts voice non vérifiés/listés Bloctel filtrés', {
+        campaignId,
+        skipped: skippedBloctel,
+      })
+    }
+    if (validContacts.length === 0) {
+      throw new Error(
+        `Canal voice : aucun contact vérifié absent de Bloctel (bloctel_listed=false). ` +
+          `L.223-1 C.conso impose le filtrage — importer d'abord le fichier Bloctel via ` +
+          `importBloctelFile() (sanction 75 000 € par infraction).`
+      )
+    }
+  }
+
+  // P0 garde-fou : filtrer les emails présents dans email_suppressions.
+  // Sans cette étape, on relance les hard bounces / plaintes et on brûle
+  // la réputation du domaine (Gmail/Outlook bannissent les senders qui
+  // persistent à écrire à des adresses déjà rejetées). Migration 308 avait
+  // créé la table mais la queue ne l'utilisait jamais — audit 2026-04-11.
+  //
+  // On passe par la RPC `find_suppressed_emails` (migration 392) pour :
+  //   1. matcher via `lower(email)` — l'index unique est sur lower(email),
+  //      un `.in('email', ...)` PostgREST serait case-sensitive et laisserait
+  //      passer les suppressions stockées en mixed-case.
+  //   2. factoriser le chunking — on découpe en batches de 500 pour ne pas
+  //      exploser l'URL/payload PostgREST sur les grosses campagnes (50k+).
+  if (campaign.channel === 'email' && validContacts.length > 0) {
+    const emailsToCheck = validContacts
+      .map((c) => c.email?.toLowerCase())
+      .filter((e): e is string => !!e)
+
+    if (emailsToCheck.length > 0) {
+      const SUPPRESSION_CHUNK = 500
+      const suppressedSet = new Set<string>()
+
+      for (let i = 0; i < emailsToCheck.length; i += SUPPRESSION_CHUNK) {
+        const chunk = emailsToCheck.slice(i, i + SUPPRESSION_CHUNK)
+        const { data: suppressed, error: supError } = await supabase.rpc('find_suppressed_emails', {
+          p_emails: chunk,
+        })
+
+        if (supError) {
+          // Fail-close : si on ne peut pas vérifier la suppression list,
+          // on refuse l'envoi plutôt que de risquer un burn domain.
+          throw new Error(
+            `email_suppressions lookup failed: ${supError.message} — refus d'enqueue pour protéger la réputation du domaine`
+          )
+        }
+
+        for (const email of (suppressed || []) as string[]) {
+          suppressedSet.add(email.toLowerCase())
+        }
+      }
+
+      const beforeCount = validContacts.length
+      validContacts = validContacts.filter((c) => {
+        const email = c.email?.toLowerCase()
+        return email ? !suppressedSet.has(email) : false
+      })
+      const skipped = beforeCount - validContacts.length
+      if (skipped > 0) {
+        logger.info('Prospection: emails supprimés filtrés', { campaignId, skipped })
+      }
+    }
+  }
 
   // Déterminer le variant A/B
   const template = campaign.template as unknown as ProspectionTemplate
   const messages = validContacts.map((contact: ProspectionContact, index: number) => {
     const isVariantB = campaign.ab_test_enabled && index % 100 < campaign.ab_split_percent
-    const renderedBody = renderTemplate(template.body, contact, campaign as unknown as ProspectionCampaign)
+    const renderedBody = renderTemplate(
+      template.body,
+      contact,
+      campaign as unknown as ProspectionCampaign
+    )
     const renderedSubject = template.subject
       ? renderTemplate(template.subject, contact, campaign as unknown as ProspectionCampaign)
       : null
@@ -177,9 +292,7 @@ export async function enqueueCampaignMessages(
   const batchSize = 500
   for (let i = 0; i < messages.length; i += batchSize) {
     const batch = messages.slice(i, i + batchSize)
-    const { error: insertError } = await supabase
-      .from('prospection_messages')
-      .insert(batch)
+    const { error: insertError } = await supabase.from('prospection_messages').insert(batch)
 
     if (insertError) {
       logger.error('Failed to enqueue batch', { error: insertError.message, offset: i })
@@ -249,13 +362,17 @@ export async function processBatch(
   }
 
   // The RPC returns raw message rows without contacts — fetch contacts separately
-  const contactIds = Array.from(new Set(claimedMessages.map((m: ProspectionMessage) => m.contact_id)))
+  const contactIds = Array.from(
+    new Set(claimedMessages.map((m: ProspectionMessage) => m.contact_id))
+  )
   const { data: contacts } = await supabase
     .from('prospection_contacts')
     .select('id, email, phone_e164')
     .in('id', contactIds)
 
-  const contactMap = new Map(((contacts || []) as unknown as ProspectionContact[]).map((c: ProspectionContact) => [c.id, c]))
+  const contactMap = new Map(
+    ((contacts || []) as unknown as ProspectionContact[]).map((c: ProspectionContact) => [c.id, c])
+  )
   const messages = claimedMessages.map((m: ProspectionMessage) => ({
     ...m,
     contact: contactMap.get(m.contact_id) || null,
@@ -268,8 +385,8 @@ export async function processBatch(
   // Envoyer par canal
   if (channel === 'email') {
     // Batch email - separate messages with valid emails from those without
-    const emailMessages = messages.filter(m => m.contact?.email)
-    const skippedMessages = messages.filter(m => !m.contact?.email)
+    const emailMessages = messages.filter((m) => m.contact?.email)
+    const skippedMessages = messages.filter((m) => !m.contact?.email)
 
     // Mark messages without email as failed
     for (const msg of skippedMessages) {
@@ -278,8 +395,8 @@ export async function processBatch(
       await updateMessageFailed(supabase, msg.id, 'No email address')
     }
 
-    const emailParams = emailMessages.map(m => ({
-      to: m.contact.email!,
+    const emailParams = emailMessages.map((m) => ({
+      to: m.contact.email as string,
       subject: m.rendered_subject || 'ServicesArtisans',
       html: m.rendered_body || '',
       tags: [{ name: 'campaign_id', value: campaignId }],
@@ -402,7 +519,7 @@ export async function processBatch(
       }
 
       // Rate limiting delay between sends
-      await new Promise(resolve => setTimeout(resolve, delayMs))
+      await new Promise((resolve) => setTimeout(resolve, delayMs))
     }
   }
 
@@ -509,7 +626,9 @@ export async function getQueueStats(campaignId: string): Promise<QueueStats> {
  * Messages with retries remaining go back to 'queued'; those that exceeded max retries are marked 'failed'.
  * Can be called from processBatch or externally via cron.
  */
-export async function reconcileOrphanedMessages(supabase: ReturnType<typeof createAdminClient>): Promise<number> {
+export async function reconcileOrphanedMessages(
+  supabase: ReturnType<typeof createAdminClient>
+): Promise<number> {
   const TEN_MINUTES_AGO = new Date(Date.now() - 10 * 60 * 1000).toISOString()
 
   // Reset stuck 'sending' messages that have been in that state for > 10 minutes
@@ -545,7 +664,9 @@ export async function reconcileOrphanedMessages(supabase: ReturnType<typeof crea
 
   const reconciledCount = (stuck?.length || 0) + (failed?.length || 0)
   if (reconciledCount > 0) {
-    logger.warn(`Reconciled ${reconciledCount} orphaned messages (${stuck?.length || 0} requeued, ${failed?.length || 0} failed)`)
+    logger.warn(
+      `Reconciled ${reconciledCount} orphaned messages (${stuck?.length || 0} requeued, ${failed?.length || 0} failed)`
+    )
   }
 
   return reconciledCount

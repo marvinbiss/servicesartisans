@@ -5,6 +5,7 @@
 
 import crypto from 'crypto'
 import { logger } from '@/lib/logger'
+import { buildOptoutUrl } from './optout'
 import type { ProspectionContact, ProspectionCampaign } from '@/types/prospection'
 
 /**
@@ -16,7 +17,11 @@ import type { ProspectionContact, ProspectionCampaign } from '@/types/prospectio
 function escapeTemplateValue(value: unknown): string {
   if (value === null || value === undefined) return ''
   const str = String(value)
-  return str.replace(/<[^>]*>/g, '').replace(/\{\{/g, '').replace(/\}\}/g, '').slice(0, 500)
+  return str
+    .replace(/<[^>]*>/g, '')
+    .replace(/\{\{/g, '')
+    .replace(/\}\}/g, '')
+    .slice(0, 500)
 }
 
 // Variables disponibles dans les templates
@@ -59,7 +64,9 @@ function getUnsubscribeSigningKey(): string {
     throw new Error('UNSUBSCRIBE_SECRET or SUPABASE_SERVICE_ROLE_KEY must be set')
   }
 
-  logger.warn('UNSUBSCRIBE_SECRET not set - deriving key from SUPABASE_SERVICE_ROLE_KEY hash. Set a dedicated secret in production.')
+  logger.warn(
+    'UNSUBSCRIBE_SECRET not set - deriving key from SUPABASE_SERVICE_ROLE_KEY hash. Set a dedicated secret in production.'
+  )
   return deriveSigningKey(serviceRoleKey)
 }
 
@@ -85,7 +92,10 @@ export function verifyUnsubscribeToken(
   const signature = signedToken.substring(dotIndex + 1)
 
   const signingKey = getUnsubscribeSigningKey()
-  const expectedSignature = crypto.createHmac('sha256', signingKey).update(token).digest('base64url')
+  const expectedSignature = crypto
+    .createHmac('sha256', signingKey)
+    .update(token)
+    .digest('base64url')
 
   try {
     if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
@@ -145,10 +155,70 @@ export function renderTemplate(
   // Lien de désinscription with HMAC-signed token to prevent tampering
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
   const unsubToken = generateUnsubscribeToken(contact.id, campaign.channel)
-  rendered = rendered.replaceAll('{{unsubscribe_link}}', `${siteUrl}/api/prospection/unsubscribe?token=${unsubToken}`)
+  rendered = rendered.replaceAll(
+    '{{unsubscribe_link}}',
+    `${siteUrl}/api/prospection/unsubscribe?token=${unsubToken}`
+  )
+
+  // Lien opt-out RGPD/CNIL (P1.3) — URL signée (email+campaign) vers
+  // /api/prospection/optout qui trace dans prospection_optouts + réplique
+  // dans email_suppressions via trigger DB. Requis par l'article L.34-5 CPCE.
+  // Fail-safe : si l'email est absent (canal SMS/WhatsApp pur), on injecte
+  // une chaîne vide pour ne pas laisser le placeholder visible.
+  if (contact.email) {
+    try {
+      rendered = rendered.replaceAll('{{optout_url}}', buildOptoutUrl(contact.email, campaign.id))
+    } catch (err) {
+      logger.error('Failed to build optout URL', {
+        error: err instanceof Error ? err.message : 'unknown',
+      })
+      rendered = rendered.replaceAll('{{optout_url}}', '')
+    }
+  } else {
+    rendered = rendered.replaceAll('{{optout_url}}', '')
+  }
 
   // Date du jour
   rendered = rendered.replaceAll('{{date}}', new Date().toLocaleDateString('fr-FR'))
+
+  // Footer légal obligatoire (article L.34-5 CPCE) : si le template email
+  // ne contient aucun VRAI lien vers une route d'opt-out, on injecte un
+  // footer minimal. La détection par mot-clé (regex précédente) était
+  // fragile :
+  //   - Un template avec {{optout_url}} brut matchait → footer sauté
+  //     alors que sans href, le contact n'avait aucun lien cliquable.
+  //   - Un CTA "Désabonnement de la newsletter" sans vrai lien matchait
+  //     aussi → non-conformité silencieuse.
+  // La nouvelle détection cherche un href vers les routes opt-out connues.
+  if (campaign.channel === 'email' && contact.email) {
+    const hasOptoutLink =
+      /href\s*=\s*["'][^"']*\/(api\/prospection\/optout|api\/prospection\/unsubscribe|unsubscribe)(\?|["'])/i.test(
+        rendered
+      )
+
+    if (!hasOptoutLink) {
+      const optoutUrl = buildOptoutUrl(contact.email, campaign.id)
+      // Détection plain text : pas de <html> ni <body> → on append un
+      // footer texte brut (pas HTML) en fin. Sinon on utilise le footer
+      // HTML injecté avant </body> (ou à la fin si pas de </body>).
+      const isPlainText = !/<html[\s>]/i.test(rendered) && !/<body[\s>]/i.test(rendered)
+
+      if (isPlainText) {
+        const textFooter = `\n\n---\nPour ne plus recevoir ces emails : ${optoutUrl}\n(Conformément à l'article L.34-5 CPCE)`
+        rendered = `${rendered}${textFooter}`
+      } else {
+        const footer = `<div style="margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#6b7280;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;text-align:center">
+  <p>Vous recevez cet email dans le cadre de la prospection commerciale ServicesArtisans.<br>
+  Conformément à l'article L.34-5 du Code des postes et communications électroniques, vous pouvez <a href="${optoutUrl}" style="color:#2563eb;text-decoration:underline">vous désinscrire en un clic</a>.</p>
+</div>`
+        if (rendered.includes('</body>')) {
+          rendered = rendered.replace('</body>', `${footer}\n</body>`)
+        } else {
+          rendered = `${rendered}\n${footer}`
+        }
+      }
+    }
+  }
 
   return rendered
 }
@@ -158,7 +228,7 @@ export function renderTemplate(
  */
 export function extractVariables(template: string): string[] {
   const matches = template.match(/\{\{(\w+)\}\}/g) || []
-  return Array.from(new Set(matches.map(m => m.replace(/\{\{|\}\}/g, ''))))
+  return Array.from(new Set(matches.map((m) => m.replace(/\{\{|\}\}/g, ''))))
 }
 
 /**
@@ -173,14 +243,13 @@ export function validateTemplate(
     ...Object.keys(CONTACT_VARIABLES),
     ...Object.keys(CAMPAIGN_VARIABLES),
     'unsubscribe_link',
+    'optout_url',
     'date',
   ])
 
-  const missing = vars.filter(v =>
-    !allKnownVars.has(v) && !v.startsWith('custom_')
-  )
+  const missing = vars.filter((v) => !allKnownVars.has(v) && !v.startsWith('custom_'))
 
-  const missingRequired = (requiredVars || []).filter(v => !vars.includes(v))
+  const missingRequired = (requiredVars || []).filter((v) => !vars.includes(v))
 
   return {
     valid: missing.length === 0 && missingRequired.length === 0,
@@ -216,6 +285,9 @@ export function renderPreview(template: string): string {
     custom_fields: {},
     consent_status: 'unknown',
     opted_out_at: null,
+    consent_proof: null,
+    bloctel_listed: null,
+    bloctel_checked_at: null,
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),

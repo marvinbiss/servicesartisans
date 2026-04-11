@@ -110,6 +110,10 @@
     {
       "path": "/api/cron/rge-sync",
       "schedule": "0 2 * * 0"
+    },
+    {
+      "path": "/api/cron/purge-prospection",
+      "schedule": "0 3 1 * *"
     }
   ]
 }

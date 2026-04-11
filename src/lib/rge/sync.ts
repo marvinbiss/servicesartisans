@@ -11,6 +11,7 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { tryAcquireLock, releaseLock } from '@/lib/cache/redis-client'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -79,6 +80,10 @@ export interface AggregatedProvider {
   valid_until: string
   organismes: string[]
   source_url: string
+  /** Téléphone déclaré par l'artisan dans le registre ADEME (première valeur non-vide trouvée) */
+  telephone: string | null
+  /** Email déclaré par l'artisan dans le registre ADEME (première valeur non-vide trouvée) */
+  email: string | null
 }
 
 export interface RgeSyncOptions {
@@ -106,6 +111,7 @@ export interface RgeSyncResult {
   uniqueSirets: number
   providersMatched: number
   providersUpdated: number
+  contactsEnriched: number
   staleCleared: number
   communesUpdated: number
   totalRgeActifs: number
@@ -131,6 +137,28 @@ function isValidDate(iso: string | undefined): iso is string {
   if (!iso) return false
   const d = new Date(iso)
   return !Number.isNaN(d.getTime())
+}
+
+/**
+ * Normalise un numéro de téléphone français brut ADEME → format E.164-ish (0XXXXXXXXX).
+ * Retourne null si le résultat ne fait pas 10 chiffres.
+ */
+function normalizePhone(raw: string | undefined | null): string | null {
+  if (!raw) return null
+  const cleaned = raw.replace(/[\s.\-/()]+/g, '').trim()
+  if (cleaned.startsWith('+33') && cleaned.length >= 12) {
+    return '0' + cleaned.slice(3).replace(/\D/g, '')
+  }
+  const digits = cleaned.replace(/\D/g, '')
+  if (digits.length === 10 && digits.startsWith('0')) return digits
+  return null
+}
+
+function normalizeEmail(raw: string | undefined | null): string | null {
+  if (!raw) return null
+  const trimmed = raw.trim().toLowerCase()
+  if (!trimmed || !trimmed.includes('@') || !trimmed.includes('.')) return null
+  return trimmed
 }
 
 // ---------------------------------------------------------------------------
@@ -237,6 +265,9 @@ export function aggregateBySiret(
       url: row.url_qualification || null,
     }
 
+    const phone = normalizePhone(row.telephone)
+    const email = normalizeEmail(row.email)
+
     const existing = byS.get(siret)
     if (existing) {
       const dupKey = `${qual.code}|${qual.organisme}`
@@ -248,6 +279,9 @@ export function aggregateBySiret(
         if (qual.date_fin > existing.valid_until) existing.valid_until = qual.date_fin
         if (!existing.organismes.includes(qual.organisme)) existing.organismes.push(qual.organisme)
       }
+      // Garde le premier tel/email non-null trouvé pour ce SIRET
+      if (!existing.telephone && phone) existing.telephone = phone
+      if (!existing.email && email) existing.email = email
     } else {
       byS.set(siret, {
         siret,
@@ -255,6 +289,8 @@ export function aggregateBySiret(
         valid_until: qual.date_fin,
         organismes: [qual.organisme],
         source_url: `https://france-renov.gouv.fr/annuaire-rge?siret=${siret}`,
+        telephone: phone,
+        email,
       })
     }
   }
@@ -286,6 +322,10 @@ interface RgeBulkUpdateRow {
   rge_organismes: string[]
   rge_last_synced_at: string
   rge_source_url: string
+  /** Téléphone ADEME — la RPC n'écrit que si providers.phone IS NULL ET claimed_at IS NULL */
+  ademe_telephone: string | null
+  /** Email ADEME — la RPC n'écrit que si providers.email IS NULL ET claimed_at IS NULL */
+  ademe_email: string | null
 }
 
 export async function matchAndUpdate(
@@ -293,7 +333,7 @@ export async function matchAndUpdate(
   supabase: SupabaseClient,
   dryRun: boolean,
   log: Pick<Console, 'log' | 'warn' | 'error'> = console
-): Promise<{ matched: number; updated: number }> {
+): Promise<{ matched: number; updated: number; contactsEnriched: number }> {
   log.log('→ Matching against providers.siret...')
 
   const sirets = Array.from(aggregated.keys())
@@ -301,6 +341,7 @@ export async function matchAndUpdate(
   const RPC_BATCH = 500
   let matched = 0
   let updated = 0
+  let contactsEnriched = 0
   const now = new Date().toISOString()
 
   for (let i = 0; i < sirets.length; i += SELECT_BATCH) {
@@ -340,6 +381,8 @@ export async function matchAndUpdate(
       if (!p.siret) continue
       const agg = aggregated.get(p.siret)
       if (!agg) continue
+      const hasAdemeContact = !!(agg.telephone || agg.email)
+      if (hasAdemeContact) contactsEnriched++
       payload.push({
         id: p.id,
         rge_qualifications: agg.qualifications,
@@ -347,6 +390,8 @@ export async function matchAndUpdate(
         rge_organismes: agg.organismes,
         rge_last_synced_at: now,
         rge_source_url: agg.source_url,
+        ademe_telephone: agg.telephone,
+        ademe_email: agg.email,
       })
     }
 
@@ -388,8 +433,8 @@ export async function matchAndUpdate(
     }
   }
 
-  log.log(`✓ Matched ${matched} providers, updated ${updated}`)
-  return { matched, updated }
+  log.log(`✓ Matched ${matched} providers, updated ${updated}, contacts ADEME ${contactsEnriched}`)
+  return { matched, updated, contactsEnriched }
 }
 
 // ---------------------------------------------------------------------------
@@ -516,59 +561,92 @@ export async function syncRgeFromAdeme(
   )
   log.log('')
 
-  const rows = await fetchAllAdemeRows(limit, log)
-  const { aggregated, expired, skipped } = aggregateBySiret(rows, log)
-  const { matched, updated } = await matchAndUpdate(aggregated, supabase, dryRun, log)
-
-  let cleared = 0
-  if (isPartialSync) {
-    log.warn(
-      '⚠ Partial sync detected — skipping clearStaleRge() to avoid erasing providers outside the limited window.'
-    )
-    log.warn(
-      '  To run a full sync (with stale cleanup), omit `limit` or pass `isPartialSync: false` explicitly.'
-    )
-  } else if (rows.length < ADEME_MIN_ROWS_FOR_CLEAR) {
-    // Garde-fou P0 : dataset ADEME anormalement petit — refuser le clear.
-    // Scénario cauchemar : ADEME renvoie 0 ou très peu de lignes (API down, schéma modifié,
-    // rate-limit silencieux, coupure réseau à mi-pagination). Si on clearStaleRge ici on efface
-    // TOUS les providers RGE actuels. Le sync doit planter proprement, PAS effacer les données.
-    log.error(
-      `✗ ADEME dataset anormalement petit (${rows.length} lignes < seuil ${ADEME_MIN_ROWS_FOR_CLEAR}).`
-    )
-    log.error('  Refus de lancer clearStaleRge() pour protéger les données existantes.')
-    log.error(
-      '  Causes probables : ADEME API partiellement down, schéma modifié, rate-limit, coupure réseau.'
-    )
-    log.error("  Les UPDATEs déjà appliqués sont conservés ; aucun provider n'est effacé.")
-    throw new Error(
-      `ADEME returned only ${rows.length} rows (< ${ADEME_MIN_ROWS_FOR_CLEAR} threshold) — ` +
-        `refusing to run clearStaleRge to protect existing providers. Check ADEME API health.`
-    )
-  } else {
-    cleared = await clearStaleRge(new Set(aggregated.keys()), supabase, dryRun, log, false)
+  // Garde-fou P0 : verrou distribué Redis — empêche deux syncs concurrentes.
+  // Scénario cauchemar : cron hebdo déclenché pendant qu'un sync manuel tourne
+  // → race condition sur clearStaleRge(), double backfill, locks PostgreSQL
+  // qui s'accumulent. TTL 1h = durée max estimée + marge.
+  // Dry-run ne pose pas de verrou (lecture seule).
+  const LOCK_KEY = 'rge:sync'
+  const LOCK_TTL_SECONDS = 3_600
+  let lockToken: string | null = null
+  if (!dryRun) {
+    lockToken = await tryAcquireLock(LOCK_KEY, LOCK_TTL_SECONDS)
+    if (!lockToken) {
+      throw new Error(
+        'syncRgeFromAdeme: verrou Redis `sa:lock:rge:sync` déjà détenu. ' +
+          'Un autre sync est en cours (cron + manuel ?). Réessayer plus tard ou ' +
+          'libérer le verrou manuellement si un sync a crashé : DEL sa:lock:rge:sync.'
+      )
+    }
+    log.log(`✓ Verrou Redis acquis (TTL ${LOCK_TTL_SECONDS}s)`)
   }
 
-  let communesUpdated = 0
-  let totalRgeActifs = 0
-  if (!skipBackfill) {
-    const b = await backfillCommunes(supabase, dryRun, log)
-    communesUpdated = b.communesUpdated
-    totalRgeActifs = b.totalRgeActifs
-  } else {
-    log.log('→ Skipping commune backfill (option.skipBackfill)')
-  }
+  try {
+    const rows = await fetchAllAdemeRows(limit, log)
+    const { aggregated, expired, skipped } = aggregateBySiret(rows, log)
+    const { matched, updated, contactsEnriched } = await matchAndUpdate(
+      aggregated,
+      supabase,
+      dryRun,
+      log
+    )
 
-  return {
-    ademeRowsFetched: rows.length,
-    expiredFiltered: expired,
-    invalidSkipped: skipped,
-    uniqueSirets: aggregated.size,
-    providersMatched: matched,
-    providersUpdated: updated,
-    staleCleared: cleared,
-    communesUpdated,
-    totalRgeActifs,
-    durationSeconds: Math.round((Date.now() - t0) / 1000),
+    let cleared = 0
+    if (isPartialSync) {
+      log.warn(
+        '⚠ Partial sync detected — skipping clearStaleRge() to avoid erasing providers outside the limited window.'
+      )
+      log.warn(
+        '  To run a full sync (with stale cleanup), omit `limit` or pass `isPartialSync: false` explicitly.'
+      )
+    } else if (rows.length < ADEME_MIN_ROWS_FOR_CLEAR) {
+      // Garde-fou P0 : dataset ADEME anormalement petit — refuser le clear.
+      // Scénario cauchemar : ADEME renvoie 0 ou très peu de lignes (API down, schéma modifié,
+      // rate-limit silencieux, coupure réseau à mi-pagination). Si on clearStaleRge ici on efface
+      // TOUS les providers RGE actuels. Le sync doit planter proprement, PAS effacer les données.
+      log.error(
+        `✗ ADEME dataset anormalement petit (${rows.length} lignes < seuil ${ADEME_MIN_ROWS_FOR_CLEAR}).`
+      )
+      log.error('  Refus de lancer clearStaleRge() pour protéger les données existantes.')
+      log.error(
+        '  Causes probables : ADEME API partiellement down, schéma modifié, rate-limit, coupure réseau.'
+      )
+      log.error("  Les UPDATEs déjà appliqués sont conservés ; aucun provider n'est effacé.")
+      throw new Error(
+        `ADEME returned only ${rows.length} rows (< ${ADEME_MIN_ROWS_FOR_CLEAR} threshold) — ` +
+          `refusing to run clearStaleRge to protect existing providers. Check ADEME API health.`
+      )
+    } else {
+      cleared = await clearStaleRge(new Set(aggregated.keys()), supabase, dryRun, log, false)
+    }
+
+    let communesUpdated = 0
+    let totalRgeActifs = 0
+    if (!skipBackfill) {
+      const b = await backfillCommunes(supabase, dryRun, log)
+      communesUpdated = b.communesUpdated
+      totalRgeActifs = b.totalRgeActifs
+    } else {
+      log.log('→ Skipping commune backfill (option.skipBackfill)')
+    }
+
+    return {
+      ademeRowsFetched: rows.length,
+      expiredFiltered: expired,
+      invalidSkipped: skipped,
+      uniqueSirets: aggregated.size,
+      providersMatched: matched,
+      providersUpdated: updated,
+      contactsEnriched,
+      staleCleared: cleared,
+      communesUpdated,
+      totalRgeActifs,
+      durationSeconds: Math.round((Date.now() - t0) / 1000),
+    }
+  } finally {
+    if (lockToken) {
+      await releaseLock(LOCK_KEY, lockToken)
+      log.log('✓ Verrou Redis libéré')
+    }
   }
 }

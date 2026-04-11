@@ -9,8 +9,24 @@ export type ContactSource = 'import' | 'database' | 'manual' | 'api' | 'scraping
 export type ConsentStatus = 'opted_in' | 'opted_out' | 'unknown'
 export type ProspectionChannel = 'email' | 'sms' | 'whatsapp' | 'voice'
 export type AudienceType = 'artisan' | 'client' | 'mairie'
-export type CampaignStatus = 'draft' | 'scheduled' | 'sending' | 'paused' | 'completed' | 'cancelled'
-export type MessageStatus = 'queued' | 'sending' | 'sent' | 'delivered' | 'read' | 'replied' | 'failed' | 'bounced' | 'opted_out' | 'cancelled'
+export type CampaignStatus =
+  | 'draft'
+  | 'scheduled'
+  | 'sending'
+  | 'paused'
+  | 'completed'
+  | 'cancelled'
+export type MessageStatus =
+  | 'queued'
+  | 'sending'
+  | 'sent'
+  | 'delivered'
+  | 'read'
+  | 'replied'
+  | 'failed'
+  | 'bounced'
+  | 'opted_out'
+  | 'cancelled'
 export type AIProvider = 'claude' | 'openai'
 export type ListType = 'static' | 'dynamic'
 export type ConversationStatus = 'open' | 'ai_handling' | 'human_required' | 'resolved' | 'archived'
@@ -43,9 +59,37 @@ export interface ProspectionContact {
   custom_fields: Record<string, unknown>
   consent_status: ConsentStatus
   opted_out_at: string | null
+  // P1.4 — Base légale par canal (migration 394)
+  // SMS/WhatsApp : preuve opposable d'opt-in (Art. L.34-5 CPCE).
+  // NULL = consentement non prouvé → envoi SMS/WhatsApp interdit.
+  consent_proof: ProspectionConsentProof | null
+  // Voice : état Bloctel (L.223-1 C.conso). NULL=pas vérifié, TRUE=inscrit
+  // (ne pas appeler), FALSE=appel autorisé.
+  bloctel_listed: boolean | null
+  bloctel_checked_at: string | null
   is_active: boolean
   created_at: string
   updated_at: string
+}
+
+/**
+ * Preuve opposable d'un opt-in SMS/WhatsApp (Art. L.34-5 CPCE).
+ * Doit contenir au minimum les clés `timestamp`, `source`, `optin_text_version`
+ * (contrainte CHECK côté DB, migration 394).
+ */
+export interface ProspectionConsentProof {
+  /** ISO-8601 UTC du moment où le contact a coché la case opt-in. */
+  timestamp: string
+  /** Origine du consentement : 'form:artisan-signup', 'landing:rge', etc. */
+  source: string
+  /** Hash SHA-256 de l'IP (pas de stockage en clair — RGPD data minimization). */
+  ip_hash?: string | null
+  /** User-Agent du navigateur au moment de l'opt-in. */
+  user_agent?: string | null
+  /** Version du texte légal affiché à côté de la checkbox (audit trail). */
+  optin_text_version: string
+  /** Champ libre pour metadata additionnelle (A/B test variant, etc.). */
+  [extra: string]: unknown
 }
 
 export interface ProspectionContactInsert {
@@ -418,11 +462,52 @@ export const CHANNEL_COSTS = {
   },
   whatsapp: {
     marketing: 0.0511,
-    utility: 0.0200,
-    authentication: 0.0150,
+    utility: 0.02,
+    authentication: 0.015,
   },
   email: {
     per_email: 0.001,
     free_tier_limit: 3000,
   },
 } as const
+
+// ============================================
+// Purge RGPD (migration 395)
+// ============================================
+
+/** Audit trail d'une exécution du cron /api/cron/purge-prospection. */
+export interface ProspectionPurgeLog {
+  id: string
+  run_at: string
+  contacts_soft_deleted: number
+  contacts_hard_deleted: number
+  oldest_activity_cutoff: string | null
+  duration_ms: number | null
+  error_message: string | null
+  dry_run: boolean
+}
+
+export interface ProspectionPurgeLogInsert {
+  contacts_soft_deleted?: number
+  contacts_hard_deleted?: number
+  oldest_activity_cutoff?: string | null
+  duration_ms?: number | null
+  error_message?: string | null
+  dry_run?: boolean
+}
+
+export type ProspectionPurgeLogUpdate = Partial<ProspectionPurgeLogInsert>
+
+/**
+ * Archive intermédiaire des contacts soft-deleted.
+ * Conservation max 5 ans après archived_at, puis hard DELETE.
+ */
+export interface ProspectionContactArchive extends ProspectionContact {
+  archived_at: string
+}
+
+export type ProspectionContactArchiveInsert = ProspectionContact & {
+  archived_at?: string
+}
+
+export type ProspectionContactArchiveUpdate = Partial<ProspectionContactArchiveInsert>

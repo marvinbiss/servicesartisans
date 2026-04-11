@@ -11,7 +11,7 @@ const isAvailable = Boolean(REST_URL && REST_TOKEN)
 async function redisCommand<T = unknown>(command: (string | number)[]): Promise<T | null> {
   if (!isAvailable) return null
   try {
-    const res = await fetch(REST_URL!, {
+    const res = await fetch(REST_URL as string, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${REST_TOKEN}`,
@@ -94,6 +94,56 @@ export class CacheService {
 
 // Default cache instance
 export const cache = new CacheService()
+
+/**
+ * Verrou distribué Redis (SET NX EX) — utilisé pour empêcher deux exécutions
+ * concurrentes d'un cron lourd (ex: sync RGE ADEME).
+ *
+ * Signature :
+ *   const token = await tryAcquireLock('rge:sync', 3600)
+ *   if (!token) throw new Error('locked by another process')
+ *   try { ... } finally { await releaseLock('rge:sync', token) }
+ *
+ * On stocke un token unique (crypto.randomUUID) comme valeur de la clef.
+ * `releaseLock` vérifie via Lua EVAL que la valeur == token avant DEL :
+ * sans ce check, un process qui dépasse le TTL puis appelle releaseLock
+ * effacerait la clef nouvellement posée par un autre process → deux syncs
+ * concurrents. Pattern Redis recommandé ("correct lock").
+ *
+ * Retour :
+ *   - string (token) si lock acquis
+ *   - null si détenu par un autre process ou erreur Redis transitoire
+ *   - 'fail-open' si Redis absent (dev local)
+ */
+export async function tryAcquireLock(key: string, ttlSeconds: number): Promise<string | null> {
+  if (!isAvailable) return 'fail-open' // fail-open en dev si Redis absent
+  const token = crypto.randomUUID()
+  const result = await redisCommand<string>([
+    'SET',
+    `sa:lock:${key}`,
+    token,
+    'NX',
+    'EX',
+    ttlSeconds,
+  ])
+  return result === 'OK' ? token : null
+}
+
+// Lua script : DEL uniquement si la valeur actuelle == token passé.
+// Exécuté atomiquement côté Redis → pas de race condition check-then-del.
+const RELEASE_LOCK_LUA = `
+if redis.call("GET", KEYS[1]) == ARGV[1] then
+  return redis.call("DEL", KEYS[1])
+else
+  return 0
+end
+`.trim()
+
+export async function releaseLock(key: string, token: string): Promise<void> {
+  if (!isAvailable) return
+  if (token === 'fail-open') return
+  await redisCommand(['EVAL', RELEASE_LOCK_LUA, 1, `sa:lock:${key}`, token])
+}
 
 /**
  * Minimal RateLimiter shim — delegates to Upstash REST (sliding window)

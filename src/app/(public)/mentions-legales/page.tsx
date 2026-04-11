@@ -13,17 +13,25 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Mentions légales',
-  description: 'Mentions légales du site ServicesArtisans.fr - Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
+  description:
+    "Mentions légales du site ServicesArtisans.fr - Informations juridiques, éditeur, hébergeur et conditions d'utilisation.",
   alternates: {
     canonical: `${SITE_URL}/mentions-legales`,
   },
   robots: { index: false, follow: true },
   openGraph: {
     title: 'Mentions légales',
-    description: 'Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
+    description: "Informations juridiques, éditeur, hébergeur et conditions d'utilisation.",
     url: `${SITE_URL}/mentions-legales`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Mentions légales' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Mentions légales',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -50,9 +58,7 @@ export default async function MentionsLegalesPage() {
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'Mentions légales' }]} className="mb-4" />
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
           </div>
         </section>
 
@@ -84,9 +90,7 @@ export default async function MentionsLegalesPage() {
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <Breadcrumb items={[{ label: 'Mentions légales' }]} className="mb-4" />
-          <h1 className="font-heading text-3xl font-bold text-gray-900">
-            Mentions légales
-          </h1>
+          <h1 className="font-heading text-3xl font-bold text-gray-900">Mentions légales</h1>
         </div>
       </section>
 
@@ -94,93 +98,166 @@ export default async function MentionsLegalesPage() {
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm p-8 prose prose-gray max-w-none">
-
             <h2>Éditeur du site</h2>
             {isPreLaunch && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 not-prose mb-4">
                 <p className="text-blue-800 text-sm">
-                  Le site {companyIdentity.name} est en cours de développement.
-                  Les informations légales complètes (dénomination sociale, SIRET, adresse du siège)
-                  seront publiées lors de l'immatriculation de la société.
+                  Le site {companyIdentity.name} est en cours de développement. Les informations
+                  légales complètes (dénomination sociale, SIRET, adresse du siège) seront publiées
+                  lors de l'immatriculation de la société.
                 </p>
                 <p className="text-blue-800 text-sm mt-2">
-                  Contact : <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.email}</strong></a>
+                  Contact :{' '}
+                  <a
+                    href={`mailto:${companyIdentity.email}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    <strong>{companyIdentity.email}</strong>
+                  </a>
                 </p>
               </div>
             )}
             <ul>
               {companyIdentity.legalName && (
-                <li><strong>Raison sociale :</strong> {companyIdentity.legalName}</li>
+                <li>
+                  <strong>Raison sociale :</strong> {companyIdentity.legalName}
+                </li>
               )}
               {companyIdentity.formeJuridique && (
-                <li><strong>Forme juridique :</strong> {companyIdentity.formeJuridique}</li>
+                <li>
+                  <strong>Forme juridique :</strong> {companyIdentity.formeJuridique}
+                </li>
               )}
               {companyIdentity.capitalSocial && (
-                <li><strong>Capital social :</strong> {companyIdentity.capitalSocial}</li>
+                <li>
+                  <strong>Capital social :</strong> {companyIdentity.capitalSocial}
+                </li>
               )}
               {companyIdentity.siret && (
-                <li><strong>SIRET :</strong> {companyIdentity.siret}</li>
+                <li>
+                  <strong>SIRET :</strong> {companyIdentity.siret}
+                </li>
               )}
               {companyIdentity.rcs && (
-                <li><strong>RCS :</strong> {companyIdentity.rcs}</li>
+                <li>
+                  <strong>RCS :</strong> {companyIdentity.rcs}
+                </li>
               )}
               {companyIdentity.tvaIntracom && (
-                <li><strong>TVA intracommunautaire :</strong> {companyIdentity.tvaIntracom}</li>
+                <li>
+                  <strong>TVA intracommunautaire :</strong> {companyIdentity.tvaIntracom}
+                </li>
               )}
               {companyIdentity.address && (
-                <li><strong>Siège social :</strong> {companyIdentity.address}</li>
+                <li>
+                  <strong>Siège social :</strong> {companyIdentity.address}
+                </li>
               )}
               {companyIdentity.phone && (
-                <li><strong>Téléphone :</strong> <a href={`tel:${formatPhoneForTel(companyIdentity.phone)}`} className="text-blue-600 hover:underline">{companyIdentity.phone}</a> (n° plateforme)</li>
+                <li>
+                  <strong>Téléphone :</strong>{' '}
+                  <a
+                    href={`tel:${formatPhoneForTel(companyIdentity.phone)}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {companyIdentity.phone}
+                  </a>{' '}
+                  (n° plateforme)
+                </li>
               )}
               {companyIdentity.directeurPublication && (
-                <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
+                <li>
+                  <strong>Directeur de la publication :</strong>{' '}
+                  {companyIdentity.directeurPublication}
+                </li>
               )}
-              <li><strong>Email :</strong> <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline">{companyIdentity.email}</a></li>
+              <li>
+                <strong>Email :</strong>{' '}
+                <a
+                  href={`mailto:${companyIdentity.email}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {companyIdentity.email}
+                </a>
+              </li>
             </ul>
 
             <h2>Hébergement</h2>
             <ul>
-              <li><strong>Hébergeur :</strong> {companyIdentity.hosting.name}</li>
-              <li><strong>Adresse :</strong> {companyIdentity.hosting.address}</li>
-              <li><strong>Site web :</strong> {companyIdentity.hosting.website}</li>
+              <li>
+                <strong>Hébergeur :</strong> {companyIdentity.hosting.name}
+              </li>
+              <li>
+                <strong>Adresse :</strong> {companyIdentity.hosting.address}
+              </li>
+              <li>
+                <strong>Site web :</strong> {companyIdentity.hosting.website}
+              </li>
             </ul>
 
             <h2>Propriété intellectuelle</h2>
             <p>
-              L'ensemble du contenu de ce site (textes, images, logos, icônes, mise en page)
-              est protégé par le droit de la propriété intellectuelle. Toute reproduction,
-              représentation ou diffusion, totale ou partielle, du contenu de ce site,
-              par quelque procédé que ce soit, sans l'autorisation expresse de l'éditeur,
-              est interdite et constitue une contrefaçon.
+              L'ensemble du contenu de ce site (textes, images, logos, icônes, mise en page) est
+              protégé par le droit de la propriété intellectuelle. Toute reproduction,
+              représentation ou diffusion, totale ou partielle, du contenu de ce site, par quelque
+              procédé que ce soit, sans l'autorisation expresse de l'éditeur, est interdite et
+              constitue une contrefaçon.
             </p>
 
             <h2>Protection des données personnelles</h2>
             <p>
-              Le traitement des données personnelles collectées sur ce site est décrit
-              dans notre <Link href="/confidentialite">politique de confidentialité</Link>.
+              Le traitement des données personnelles collectées sur ce site est décrit dans notre{' '}
+              <Link href="/confidentialite">politique de confidentialité</Link>.
+            </p>
+
+            <h2>Traitement de données issues de l&apos;ADEME (artisans RGE)</h2>
+            <p>
+              ServicesArtisans utilise, dans le cadre de son activité de mise en relation et de son
+              projet de mandataire CEE, la base Open Data de l&apos;ADEME{' '}
+              <em>« Liste des entreprises titulaires d&apos;un signe de qualité RGE »</em>, publiée
+              sous Licence Ouverte Etalab 2.0 sur data.gouv.fr. Ce traitement est fondé sur
+              l&apos;intérêt légitime au sens de l&apos;article 6.1.f du RGPD et respecte le régime
+              de prospection électronique B2B prévu à l&apos;article L.34-5 du Code des Postes et
+              Communications Électroniques. Les artisans concernés disposent à tout moment d&apos;un
+              droit d&apos;opposition exerçable en un clic depuis chaque message reçu, ou par email
+              à{' '}
+              <a
+                href={`mailto:${companyIdentity.dpoEmail}`}
+                className="text-blue-600 hover:underline"
+              >
+                <strong>{companyIdentity.dpoEmail}</strong>
+              </a>
+              . Le détail de ce traitement (source, finalité, durée, destinataires, droits) est
+              décrit dans la section dédiée de notre{' '}
+              <Link href="/confidentialite">politique de confidentialité</Link>.
             </p>
 
             <h2>Délégué à la Protection des Données (DPO)</h2>
+            <p>Pour toute question relative à la protection de vos données personnelles :</p>
             <p>
-              Pour toute question relative à la protection de vos données personnelles :
+              Email :{' '}
+              <a
+                href={`mailto:${companyIdentity.dpoEmail}`}
+                className="text-blue-600 hover:underline"
+              >
+                <strong>{companyIdentity.dpoEmail}</strong>
+              </a>
             </p>
             <p>
-              Email : <a href={`mailto:${companyIdentity.dpoEmail}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.dpoEmail}</strong></a>
-            </p>
-            <p>
-              Vous pouvez exercer vos droits d&apos;accès, de rectification, de suppression et de portabilité
-              de vos données, ainsi que votre droit de limitation ou d&apos;opposition au traitement,
-              en contactant le DPO à l&apos;adresse ci-dessus. Pour en savoir plus, consultez notre{' '}
-              <Link href="/confidentialite">politique de confidentialité</Link>.
+              Vous pouvez exercer vos droits d&apos;accès, de rectification, de suppression et de
+              portabilité de vos données, ainsi que votre droit de limitation ou d&apos;opposition
+              au traitement, en contactant le DPO à l&apos;adresse ci-dessus. Pour en savoir plus,
+              consultez notre <Link href="/confidentialite">politique de confidentialité</Link>.
             </p>
 
             <h2>Contact</h2>
             <p>
-              Pour toute question relative aux mentions légales, vous pouvez nous contacter
-              par email : <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline"><strong>{companyIdentity.email}</strong></a>
+              Pour toute question relative aux mentions légales, vous pouvez nous contacter par
+              email :{' '}
+              <a href={`mailto:${companyIdentity.email}`} className="text-blue-600 hover:underline">
+                <strong>{companyIdentity.email}</strong>
+              </a>
             </p>
-
           </div>
 
           {/* Cross-links: Confiance et transparence */}
@@ -191,27 +268,42 @@ export default async function MentionsLegalesPage() {
             </p>
             <ul className="space-y-2">
               <li>
-                <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                <Link
+                  href="/notre-processus-de-verification"
+                  className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                >
                   Notre processus de vérification des artisans
                 </Link>
               </li>
               <li>
-                <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                <Link
+                  href="/politique-avis"
+                  className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                >
                   Politique de gestion des avis
                 </Link>
               </li>
               <li>
-                <Link href="/mediation" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                <Link
+                  href="/mediation"
+                  className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                >
                   Médiation et résolution des litiges
                 </Link>
               </li>
               <li>
-                <Link href="/a-propos" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                <Link
+                  href="/a-propos"
+                  className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                >
                   À propos de {companyIdentity.name}
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                <Link
+                  href="/contact"
+                  className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                >
                   Contact
                 </Link>
               </li>

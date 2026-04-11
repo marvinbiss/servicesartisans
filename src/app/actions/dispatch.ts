@@ -12,6 +12,13 @@ export interface DispatchOptions {
   latitude?: number
   longitude?: number
   sourceTable?: 'devis_requests' | 'leads'
+  /**
+   * Si true, le devis est éligible CEE (isolation, PAC, chauffe-eau thermo,
+   * VMC double-flux, menuiseries isolantes…). Le dispatch priorise — et
+   * filtre si `algorithm_config.require_rge_for_cee = true` — les artisans
+   * RGE-valides. Migration 391.
+   */
+  ceeEligible?: boolean
 }
 
 /**
@@ -36,10 +43,7 @@ export interface DispatchOptions {
  *
  * Returns array of assigned provider IDs (up to max_artisans_per_lead).
  */
-export async function dispatchLead(
-  leadId: string,
-  opts?: DispatchOptions
-): Promise<string[]> {
+export async function dispatchLead(leadId: string, opts?: DispatchOptions): Promise<string[]> {
   try {
     const supabase = createAdminClient()
 
@@ -82,6 +86,7 @@ export async function dispatchLead(
       p_latitude: latitude,
       p_longitude: longitude,
       p_source_table: opts?.sourceTable || 'devis_requests',
+      p_cee_eligible: opts?.ceeEligible ?? false,
     })
 
     if (error) {

@@ -30,11 +30,10 @@ function htmlEscape(str: string): string {
 
 const getResend = () => getResendClient()
 
-
 const devisSchema = z.object({
   service: z.string().min(1, 'Veuillez sélectionner un service'),
   urgency: z.enum(['flexible', 'mois', 'semaine', 'urgent'], {
-    message: 'Veuillez sélectionner l\'urgence',
+    message: "Veuillez sélectionner l'urgence",
   }),
   budget: z.string().max(20).optional(),
   description: z.string().optional(),
@@ -42,9 +41,15 @@ const devisSchema = z.object({
   ville: z.string().optional(),
   nom: z.string().min(2, 'Le nom est requis').optional().or(z.literal('')),
   email: z.string().email('Email invalide').optional().or(z.literal('')),
-  telephone: z.string().transform(cleanPhone).pipe(
-    z.string().min(10, 'Numéro de téléphone invalide').regex(/^(\+33|0033|0)[1-9]\d{8}$/, 'Format de téléphone français invalide')
-  ),
+  telephone: z
+    .string()
+    .transform(cleanPhone)
+    .pipe(
+      z
+        .string()
+        .min(10, 'Numéro de téléphone invalide')
+        .regex(/^(\+33|0033|0)[1-9]\d{8}$/, 'Format de téléphone français invalide')
+    ),
 })
 
 const serviceNames: Record<string, string> = {
@@ -68,7 +73,9 @@ const serviceNames: Record<string, string> = {
 
 /** Resolve a human-readable service name, with fallback for unknown slugs */
 function resolveServiceName(service: string): string {
-  return serviceNames[service] || service.charAt(0).toUpperCase() + service.slice(1).replace(/-/g, ' ')
+  return (
+    serviceNames[service] || service.charAt(0).toUpperCase() + service.slice(1).replace(/-/g, ' ')
+  )
 }
 
 const urgencyLabels: Record<string, string> = {
@@ -78,7 +85,6 @@ const urgencyLabels: Record<string, string> = {
   flexible: 'Pas urgent',
 }
 
-
 export async function POST(request: Request) {
   try {
     // Rate limiting (public endpoint — 10 requests per minute per IP)
@@ -87,7 +93,10 @@ export async function POST(request: Request) {
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
@@ -98,7 +107,9 @@ export async function POST(request: Request) {
     let clientId: string | null = null
     try {
       const serverSupabase = await createServerClient()
-      const { data: { user } } = await serverSupabase.auth.getUser()
+      const {
+        data: { user },
+      } = await serverSupabase.auth.getUser()
       clientId = user?.id ?? null
     } catch {
       // Anonymous submission - no session cookie
@@ -139,7 +150,9 @@ export async function POST(request: Request) {
 
     if (existing && existing.length > 0) {
       return NextResponse.json(
-        { error: 'Vous avez déjà soumis une demande similaire. Vérifiez votre email pour le suivi.' },
+        {
+          error: 'Vous avez déjà soumis une demande similaire. Vérifiez votre email pour le suivi.',
+        },
         { status: 409 }
       )
     }
@@ -183,7 +196,7 @@ export async function POST(request: Request) {
     if (dbError) {
       logger.error('Database error', dbError)
       return NextResponse.json(
-        { error: 'Erreur lors de l\'enregistrement de votre demande. Veuillez réessayer.' },
+        { error: "Erreur lors de l'enregistrement de votre demande. Veuillez réessayer." },
         { status: 500 }
       )
     }
@@ -213,7 +226,9 @@ export async function POST(request: Request) {
 
     // Log 'created' event - triggers "Demande bien reçue" notification to client
     if (lead) {
-      logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) => logger.error('Failed to log lead created event', err))
+      logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) =>
+        logger.error('Failed to log lead created event', err)
+      )
       // Pipedrive CRM sync — awaited inside a 4s timeout race so a slow Pipedrive
       // call can't block the user response indefinitely. On Vercel serverless, a bare
       // `void` promise is killed when the response returns, so we can't fire-and-forget.
@@ -221,7 +236,9 @@ export async function POST(request: Request) {
       try {
         await Promise.race([
           syncDevisRequestToPipedrive(lead.id),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Pipedrive sync timeout (4s)')), 4000)),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Pipedrive sync timeout (4s)')), 4000)
+          ),
         ])
       } catch (err) {
         logger.error('Pipedrive sync error', err)
@@ -243,19 +260,30 @@ export async function POST(request: Request) {
         postalCode: data.codePostal,
         urgency: urgencyMap[data.urgency] || 'normal',
         sourceTable: 'devis_requests',
+        ceeEligible: ceeResult.eligible,
       }).catch((err) => {
         logger.error('Failed to dispatch lead', err)
         return []
       })
       if (assignedProviders.length > 0) {
-        logLeadEvent(lead.id, 'dispatched', { metadata: { count: assignedProviders.length } }).catch((err) => logger.error('Failed to log lead dispatched event', err))
+        logLeadEvent(lead.id, 'dispatched', {
+          metadata: { count: assignedProviders.length },
+        }).catch((err) => logger.error('Failed to log lead dispatched event', err))
         // Log devis_completed analytics event (server-side)
-        supabase.from('analytics_events').insert({
-          event_type: 'devis_completed',
-          metadata: { devisId: lead.id, serviceSlug: data.service, city: data.ville, artisanCount: assignedProviders.length },
-        }).then(({ error: analyticsErr }) => {
-          if (analyticsErr) logger.error('Failed to log devis_completed event', analyticsErr)
-        })
+        supabase
+          .from('analytics_events')
+          .insert({
+            event_type: 'devis_completed',
+            metadata: {
+              devisId: lead.id,
+              serviceSlug: data.service,
+              city: data.ville,
+              artisanCount: assignedProviders.length,
+            },
+          })
+          .then(({ error: analyticsErr }) => {
+            if (analyticsErr) logger.error('Failed to log devis_completed event', analyticsErr)
+          })
       }
     }
 
@@ -298,12 +326,13 @@ export async function POST(request: Request) {
     }
 
     // Notification to admin
-    if (resend) emailPromises.push(
-      resend.emails.send({
-        from: fromEmail,
-        to: 'contact@servicesartisans.fr',
-        subject: `[Nouveau Devis] ${resolveServiceName(data.service)} - ${data.ville || 'France'}`,
-        html: `
+    if (resend)
+      emailPromises.push(
+        resend.emails.send({
+          from: fromEmail,
+          to: 'contact@servicesartisans.fr',
+          subject: `[Nouveau Devis] ${resolveServiceName(data.service)} - ${data.ville || 'France'}`,
+          html: `
           <h2>Nouvelle demande de devis</h2>
           <h3>Client</h3>
           <ul>
@@ -322,8 +351,8 @@ export async function POST(request: Request) {
           </ul>
           ${lead ? `<p>ID: ${lead.id}</p>` : ''}
         `,
-      })
-    )
+        })
+      )
 
     const emailResults = await Promise.allSettled(emailPromises)
 
@@ -345,9 +374,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Devis API error', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
