@@ -93,6 +93,12 @@ export async function GET(request: Request) {
   let hardDeleted = 0
   let candidateCount = 0
   let errorMessage: string | null = null
+  // Traçabilité reprise manuelle : contacts archivés mais dont l'anonymisation
+  // a échoué. À rejouer manuellement (ou au prochain run si updated_at non touché).
+  const archivedButNotAnonymized: string[] = []
+  // Collecte de toutes les erreurs de soft-delete sur tout le run (pas juste la
+  // première) pour éviter le masquage silencieux.
+  const softDeleteErrors: { contactId: string; message: string }[] = []
 
   try {
     // -------------------------------------------------------------------
@@ -234,21 +240,57 @@ export async function GET(request: Request) {
       // du contact (`anonymized-${id}@deleted.invalid`). Les updates du
       // chunk sont émis en parallèle via Promise.all pour limiter la
       // latence cumulée.
+      //
+      // Traçabilité drift archive/soft-delete : on log le batch en cours
+      // AVANT l'update. Si un crash survient entre l'archive (déjà commitée
+      // ci-dessus) et l'update, les logs permettent de retrouver les ids
+      // archivés mais toujours actifs pour une reprise manuelle.
+      logger.info('[purge-prospection] Soft-delete chunk en cours', {
+        action: 'purge-prospection',
+        chunkIndex: i,
+        chunkSize: chunkIds.length,
+        contactIds: chunkIds,
+      })
+
       const softDeleteResults = await Promise.all(
-        chunkIds.map((contactId) =>
-          supabase
+        chunkIds.map(async (contactId) => {
+          const { error } = await supabase
             .from('prospection_contacts')
             .update(buildAnonymizedPayload(contactId))
             .eq('id', contactId)
-        )
+          return { contactId, error }
+        })
       )
 
-      const firstSoftDeleteError = softDeleteResults.find((r) => r.error)?.error
-      if (firstSoftDeleteError) {
-        throw new Error(`Soft-delete chunk ${i}: ${firstSoftDeleteError.message}`)
+      // Compter les succès réels (pas chunkIds.length) + collecter toutes
+      // les erreurs (pas juste la première) pour éviter le masquage.
+      for (const result of softDeleteResults) {
+        if (result.error) {
+          softDeleteErrors.push({
+            contactId: result.contactId,
+            message: result.error.message,
+          })
+          archivedButNotAnonymized.push(result.contactId)
+        } else {
+          softDeleted += 1
+        }
       }
+    }
 
-      softDeleted += chunkIds.length
+    // Log consolidé de toutes les erreurs de soft-delete sur tout le run.
+    // On ne throw qu'après la boucle complète : les chunks suivants ont
+    // pu être traités, et on a besoin de la liste complète pour la reprise.
+    if (softDeleteErrors.length > 0) {
+      logger.error('[purge-prospection] Erreurs soft-delete (toutes)', {
+        action: 'purge-prospection',
+        totalErrors: softDeleteErrors.length,
+        errors: softDeleteErrors,
+        archived_but_not_anonymized: archivedButNotAnonymized,
+        hint: 'Ces contacts sont archivés mais toujours actifs. Reprise manuelle requise.',
+      })
+      throw new Error(
+        `Soft-delete: ${softDeleteErrors.length} erreur(s), premier échec contact=${softDeleteErrors[0]?.contactId ?? 'unknown'}: ${softDeleteErrors[0]?.message ?? 'unknown'}`
+      )
     }
 
     // -------------------------------------------------------------------
@@ -306,6 +348,9 @@ export async function GET(request: Request) {
       action: 'purge-prospection',
       error: errorMessage,
       softDeletedBeforeError: softDeleted,
+      softDeleteErrorsCount: softDeleteErrors.length,
+      softDeleteErrors,
+      archived_but_not_anonymized: archivedButNotAnonymized,
       cutoff: cutoffDay,
       durationMs,
     })
