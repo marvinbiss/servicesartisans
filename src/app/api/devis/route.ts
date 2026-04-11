@@ -15,6 +15,7 @@ import { dispatchLead } from '@/app/actions/dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
 import { qualifyDevisForCee } from '@/lib/cee/qualify'
+import { runCeeDispatchFireAndForget } from '@/lib/cee/dispatcher-integration'
 
 export const dynamic = 'force-dynamic'
 
@@ -233,15 +234,26 @@ export async function POST(request: Request) {
       // call can't block the user response indefinitely. On Vercel serverless, a bare
       // `void` promise is killed when the response returns, so we can't fire-and-forget.
       // Failures (incl. timeout) are caught and replayed by /api/cron/pipedrive-retry.
+      // Timer extrait pour être cleared en finally : sans clear, le timeout continue
+      // de tourner jusqu'à 4s même après un succès rapide → fuite de handle qui
+      // maintient la lambda Vercel chaude. Même pattern que la race CEE plus bas.
+      let pipedriveTimeoutHandle: ReturnType<typeof setTimeout> | null = null
       try {
         await Promise.race([
           syncDevisRequestToPipedrive(lead.id),
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Pipedrive sync timeout (4s)')), 4000)
-          ),
+          new Promise((_, reject) => {
+            pipedriveTimeoutHandle = setTimeout(
+              () => reject(new Error('Pipedrive sync timeout (4s)')),
+              4000
+            )
+          }),
         ])
       } catch (err) {
         logger.error('Pipedrive sync error', err)
+      } finally {
+        if (pipedriveTimeoutHandle !== null) {
+          clearTimeout(pipedriveTimeoutHandle)
+        }
       }
     }
 
@@ -265,6 +277,59 @@ export async function POST(request: Request) {
         logger.error('Failed to dispatch lead', err)
         return []
       })
+      // Dispatcher CEE — brique 3 du pipeline mandataire. Fail-OPEN : toute
+      // erreur est absorbée par runCeeDispatchFireAndForget (logger.warn,
+      // jamais de throw). On applique quand même une race avec timeout car sur
+      // Vercel serverless, les promesses non-awaited sont killed quand la
+      // réponse repart. Si le dispatcher est lent, on laisse tomber côté
+      // tunnel — un reconcile futur pourra re-router depuis cee_dossiers.
+      if (ceeResult.eligible && assignedProviders.length > 0) {
+        const CEE_DISPATCH_TIMEOUT_MS = 8000
+        // 8s : enrich + getDelegatairesByOperation(N) + write cee_dossiers. À suivre via logs cee-dispatch.timeout_exceeded.
+        const TIMEOUT_SENTINEL = Symbol('cee-dispatch-timeout')
+        // Timer extrait pour pouvoir être cleared en try/finally : sans clear,
+        // le timeout continue de tourner jusqu'à 8s même après un dispatch
+        // rapide → fuite de handle sur la lambda Vercel.
+        let timeoutHandle: ReturnType<typeof setTimeout> | null = null
+        try {
+          const raceResult = await Promise.race([
+            runCeeDispatchFireAndForget(supabase, {
+              devisId: lead.id,
+              clientId: clientId ?? null,
+              serviceSlug: data.service,
+              postalCode: data.codePostal ?? null,
+              candidateProviderIds: assignedProviders,
+            }),
+            new Promise<typeof TIMEOUT_SENTINEL>((resolve) => {
+              timeoutHandle = setTimeout(() => resolve(TIMEOUT_SENTINEL), CEE_DISPATCH_TIMEOUT_MS)
+            }),
+          ])
+          if (raceResult === TIMEOUT_SENTINEL) {
+            logger.warn('cee-dispatch: timeout exceeded, fire-and-forget aborted', {
+              action: 'cee-dispatch',
+              reason: 'timeout_exceeded',
+              timeoutMs: CEE_DISPATCH_TIMEOUT_MS,
+              devisId: lead.id,
+            })
+          }
+        } catch (ceeErr) {
+          // Filet ultime — runCeeDispatchFireAndForget ne throw pas, mais on
+          // garde la ceinture. Zéro PII dans les logs (action + devisId only).
+          logger.warn('cee-dispatch: unexpected throw in fire-and-forget', {
+            action: 'cee-dispatch',
+            devisId: lead.id,
+            error: ceeErr instanceof Error ? ceeErr.message : String(ceeErr),
+          })
+        } finally {
+          // Garantit qu'aucun timer ne reste armé après la race (succès, timeout,
+          // ou throw). Évite toute fuite de handle même si le pattern est plus
+          // fragile qu'il n'y paraît.
+          if (timeoutHandle !== null) {
+            clearTimeout(timeoutHandle)
+          }
+        }
+      }
+
       if (assignedProviders.length > 0) {
         logLeadEvent(lead.id, 'dispatched', {
           metadata: { count: assignedProviders.length },

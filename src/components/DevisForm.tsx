@@ -27,6 +27,7 @@ import {
 import { trackEvent } from '@/lib/analytics/tracking'
 import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
+import CeePrimeEstimateCard from '@/components/devis/CeePrimeEstimateCard'
 
 interface FormData {
   service: string
@@ -995,6 +996,12 @@ export default function DevisForm({
                 <Users className="w-4 h-4 flex-shrink-0" />
                 <p className="text-sm">14 500+ artisans référencés sur notre plateforme</p>
               </div>
+
+              {/* Carte prime CEE — visible dès que service + CP sont saisis */}
+              <CeePrimeEstimateCard
+                serviceSlug={formData.service}
+                postalCode={selectedVillePostal}
+              />
 
               <button
                 type="button"
