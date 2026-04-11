@@ -108,7 +108,7 @@ COMMENT ON COLUMN cee_operations.rge_decret_category IS
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[11, 13, 14],
+       rge_decret_category = '{11,13,14}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -134,7 +134,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[11, 12],
+       rge_decret_category = '{11,12}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -157,7 +157,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[15],
+       rge_decret_category = '{15}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -180,7 +180,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[9, 10],
+       rge_decret_category = '{9,10}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -203,7 +203,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[3, 4],
+       rge_decret_category = '{3,4}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -226,7 +226,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[3],
+       rge_decret_category = '{3}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -249,7 +249,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[8],
+       rge_decret_category = '{8}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -272,7 +272,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[8],
+       rge_decret_category = '{8}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -322,7 +322,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[2],
+       rge_decret_category = '{2}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -345,7 +345,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[6],
+       rge_decret_category = '{6}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -370,7 +370,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[5, 6],
+       rge_decret_category = '{5,6}'::INT[],
        rge_formulation_arrete =
          'L''operation est realisee par un professionnel qualifie. Le '
          'signe de qualite fait reference aux exigences prevues aux '
@@ -422,7 +422,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[5, 6],
+       rge_decret_category = '{5,6}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -448,7 +448,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[5, 6],
+       rge_decret_category = '{5,6}'::INT[],
        rge_formulation_arrete =
          'Le professionnel realisant l''operation est titulaire d''un signe '
          'de qualite repondant aux memes exigences que celles prevues a '
@@ -474,7 +474,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
+       rge_decret_category = '{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17}'::INT[],
        rge_formulation_arrete =
          'Pour chaque categorie de travaux mentionnee aux 1° a 16° du I de '
          'l''article 1er du decret n° 2014-812 du 16 juillet 2014 realisee '
@@ -501,7 +501,7 @@ UPDATE cee_operations
 UPDATE cee_operations
    SET rge_requirement_status = 'dispensed',
        rge_qualifications_requises = ARRAY[]::TEXT[],
-       rge_decret_category = ARRAY[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
+       rge_decret_category = '{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17}'::INT[],
        rge_formulation_arrete =
          'Pour chaque categorie de travaux mentionnee aux 1° a 16° du I de '
          'l''article 1er du decret n° 2014-812 du 16 juillet 2014 realisee '

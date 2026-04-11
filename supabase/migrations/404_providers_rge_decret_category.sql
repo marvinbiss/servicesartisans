@@ -103,27 +103,27 @@ BEGIN
   -- (generaliste « materiaux d'isolation ») car le decret liste 1° en tete
   -- de chapitre isolation.
   IF d LIKE '%isolation%' AND (d LIKE '%exterieur%' OR d LIKE '%extérieur%' OR d LIKE '%ite%') THEN
-    RETURN ARRAY[1, 11];
+    RETURN '{1,11}'::INT[];
   END IF;
 
   -- ITI murs → cat. 12° + 1° generaliste.
   IF d LIKE '%isolation%' AND (d LIKE '%interieur%' OR d LIKE '%intérieur%' OR d LIKE '%iti%') THEN
-    RETURN ARRAY[1, 12];
+    RETURN '{1,12}'::INT[];
   END IF;
 
   -- Combles perdus → cat. 13° (+ 1° generaliste + 14° si mention rampant).
   IF d LIKE '%combles%' OR d LIKE '%comble%' THEN
-    RETURN ARRAY[1, 13, 14];
+    RETURN '{1,13,14}'::INT[];
   END IF;
 
   -- Toiture / rampants → cat. 14° + 1°.
   IF d LIKE '%toiture%' OR d LIKE '%rampant%' THEN
-    RETURN ARRAY[1, 14];
+    RETURN '{1,14}'::INT[];
   END IF;
 
   -- Plancher bas → cat. 15° + 1°.
   IF d LIKE '%plancher%' THEN
-    RETURN ARRAY[1, 15];
+    RETURN '{1,15}'::INT[];
   END IF;
 
   -- Isolation generique (sans precision parois) : on inclut le cluster
@@ -131,7 +131,7 @@ BEGIN
   -- array overlap cote filtre, donc un provider ainsi marque couvrira toute
   -- fiche d'isolation.
   IF d LIKE '%isolation%' THEN
-    RETURN ARRAY[1, 11, 12, 13, 14, 15];
+    RETURN '{1,11,12,13,14,15}'::INT[];
   END IF;
 
   -- -------------------------------------------------------------------------
@@ -140,12 +140,12 @@ BEGIN
   -- Chauffe-eau thermodynamique → cat. 6°.
   IF d LIKE '%chauffe-eau thermodynamique%' OR d LIKE '%chauffe eau thermodynamique%'
      OR d LIKE '%cet%' OR d LIKE '%eau chaude sanitaire thermodynamique%' THEN
-    RETURN ARRAY[6];
+    RETURN '{6}'::INT[];
   END IF;
 
   -- Geothermie → cat. 5° (PAC eau/eau ou sol/eau).
   IF d LIKE '%geothermie%' OR d LIKE '%géothermie%' THEN
-    RETURN ARRAY[5];
+    RETURN '{5}'::INT[];
   END IF;
 
   -- Pompes a chaleur — toutes mentions (hors air/air qui n'est pas mappe
@@ -159,9 +159,9 @@ BEGIN
     -- PAC eau/eau, air/eau, sol/eau, hybride → cat. 5°.
     -- Si chauffage + ECS : la 6° sera aussi couverte si le libelle le mentionne.
     IF d LIKE '%ecs%' OR d LIKE '%eau chaude%' OR d LIKE '%hybride%' THEN
-      RETURN ARRAY[5, 6];
+      RETURN '{5,6}'::INT[];
     END IF;
-    RETURN ARRAY[5];
+    RETURN '{5}'::INT[];
   END IF;
 
   -- -------------------------------------------------------------------------
@@ -170,17 +170,17 @@ BEGIN
   -- Chaudiere bois → cat. 3°.
   IF d LIKE '%chaudiere%bois%' OR d LIKE '%chaudière%bois%' OR d LIKE '%chaudiere%biomasse%'
      OR d LIKE '%chaudière%biomasse%' THEN
-    RETURN ARRAY[3];
+    RETURN '{3}'::INT[];
   END IF;
 
   -- Poele / insert → cat. 4° (+ 3° generaliste chauffage bois).
   IF d LIKE '%poele%' OR d LIKE '%poêle%' OR d LIKE '%insert%' THEN
-    RETURN ARRAY[3, 4];
+    RETURN '{3,4}'::INT[];
   END IF;
 
   -- Bois / biomasse generique → cat. 3° + 4°.
   IF d LIKE '%bois%' OR d LIKE '%biomasse%' THEN
-    RETURN ARRAY[3, 4];
+    RETURN '{3,4}'::INT[];
   END IF;
 
   -- -------------------------------------------------------------------------
@@ -190,14 +190,14 @@ BEGIN
   IF d LIKE '%solaire thermique%' OR d LIKE '%chauffe-eau solaire%'
      OR d LIKE '%cesi%' OR d LIKE '%ssc%' OR d LIKE '%systeme solaire combine%'
      OR d LIKE '%système solaire combiné%' THEN
-    RETURN ARRAY[2, 16];
+    RETURN '{2,16}'::INT[];
   END IF;
 
   -- Solaire photovoltaique → cat. 7° (cas residuel, peu utilise par les
   -- arretes CEE actuels qui portent majoritairement sur chaleur/isolation).
   IF d LIKE '%photovoltaique%' OR d LIKE '%photovoltaïque%' OR d LIKE '%quali%pv%'
      OR d LIKE '%panneaux solaires%' THEN
-    RETURN ARRAY[7];
+    RETURN '{7}'::INT[];
   END IF;
 
   -- Solaire sans precision → ambigu, on exclut (pas de faux positif).
@@ -207,7 +207,7 @@ BEGIN
   -- VENTILATION
   -- -------------------------------------------------------------------------
   IF d LIKE '%ventilation%' OR d LIKE '%vmc%' THEN
-    RETURN ARRAY[8];
+    RETURN '{8}'::INT[];
   END IF;
 
   -- -------------------------------------------------------------------------
@@ -216,7 +216,7 @@ BEGIN
   -- Fenetres / portes-fenetres → cat. 9°. Volets/portes d'entree → 10°.
   IF d LIKE '%fenetre%' OR d LIKE '%fenêtre%' OR d LIKE '%menuiserie%exterieur%'
      OR d LIKE '%menuiserie%extérieur%' OR d LIKE '%vitrage%isolant%' THEN
-    RETURN ARRAY[9, 10];
+    RETURN '{9,10}'::INT[];
   END IF;
 
   -- -------------------------------------------------------------------------
@@ -225,7 +225,7 @@ BEGIN
   IF d LIKE '%renovation%globale%' OR d LIKE '%rénovation%globale%'
      OR d LIKE '%accompagnateur%renov%' OR d LIKE '%accompagnateur%rénov%'
      OR d LIKE '%audit%energetique%' OR d LIKE '%audit%énergétique%' THEN
-    RETURN ARRAY[17];
+    RETURN '{17}'::INT[];
   END IF;
 
   -- -------------------------------------------------------------------------
