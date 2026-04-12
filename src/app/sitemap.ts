@@ -743,8 +743,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
   }
 
-  // ── Devis service×city pages — pruned to qualified combos only ────
-  // Combos without ≥1 active provider are excluded (HCU anti-thin).
+  // ── Devis service×city pages — all combos, priority boost for qualified ─
+  // Pages have hasUniqueData: true (tradeContent + editorial + price tables + FAQ),
+  // so they're always indexed. Include all in sitemap for discovery.
   if (id.startsWith('devis-service-cities-')) {
     const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
@@ -757,14 +758,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     outer: for (const svc of services) {
       for (const ville of phase1Cities) {
-        if (qualifiedCombos && !qualifiedCombos.has(`${svc.slug}::${ville.slug}`)) continue
         if (count >= end) break outer
-        if (count >= start)
+        if (count >= start) {
+          const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc.slug}::${ville.slug}`)
           result.push({
             url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`,
             changeFrequency: 'monthly',
-            priority: 0.6,
+            priority: isQualified ? 0.7 : 0.5,
           })
+        }
         count++
       }
     }
@@ -772,7 +774,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Urgence service×city pages — pruned to qualified combos only ──
+  // ── Urgence service×city pages — all combos, priority boost for qualified ─
   if (id.startsWith('urgence-service-cities-')) {
     const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
@@ -786,14 +788,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     outer: for (const svc of emergencySlugs) {
       for (const v of phase1Cities) {
-        if (qualifiedCombos && !qualifiedCombos.has(`${svc}::${v.slug}`)) continue
         if (count >= end) break outer
-        if (count >= start)
+        if (count >= start) {
+          const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc}::${v.slug}`)
           result.push({
             url: `${SITE_URL}/urgence/${svc}/${v.slug}`,
             changeFrequency: 'monthly',
-            priority: 0.5,
+            priority: isQualified ? 0.6 : 0.4,
           })
+        }
         count++
       }
     }
@@ -801,7 +804,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs service×city pages — pruned to qualified combos only ───
+  // ── Tarifs service×city pages — all combos, priority boost for qualified ─
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
@@ -814,14 +817,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     outer: for (const svc of services) {
       for (const v of phase1Cities) {
-        if (qualifiedCombos && !qualifiedCombos.has(`${svc.slug}::${v.slug}`)) continue
         if (count >= end) break outer
-        if (count >= start)
+        if (count >= start) {
+          const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc.slug}::${v.slug}`)
           result.push({
             url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`,
             changeFrequency: 'monthly',
-            priority: 0.7,
+            priority: isQualified ? 0.7 : 0.5,
           })
+        }
         count++
       }
     }

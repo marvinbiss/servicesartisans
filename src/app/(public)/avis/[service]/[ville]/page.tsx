@@ -35,6 +35,7 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
+import IntentNavBar from '@/components/seo/IntentNavBar'
 import dynamic from 'next/dynamic'
 
 function getClimatLabel(zone: string | null): string {
@@ -217,6 +218,13 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: canonicalUrl },
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1 as const,
+      'max-image-preview': 'large' as const,
+      'max-video-preview': -1 as const,
+    },
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -530,6 +538,17 @@ export default async function AvisServiceVillePage({
           </div>
         </div>
       </section>
+
+      <IntentNavBar
+        serviceSlug={service}
+        villeSlug={villeSlug}
+        currentIntent="avis"
+        serviceName={trade.name}
+        villeName={villeData.name}
+        providerCount={topProviders.length}
+        avgRating={roundedRating > 0 ? roundedRating : undefined}
+        reviewCount={totalReviews > 0 ? totalReviews : undefined}
+      />
 
       {/* ─── REAL STATS BANNER ─────────────────────────── */}
       {totalReviews > 0 && (

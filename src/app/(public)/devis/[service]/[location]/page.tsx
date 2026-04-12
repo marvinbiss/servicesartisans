@@ -30,8 +30,15 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
-import { hasProvidersByServiceAndLocation } from '@/lib/supabase'
+import {
+  hasProvidersByServiceAndLocation,
+  getProvidersByServiceAndLocation,
+  getProvidersByServiceAndDepartment,
+} from '@/lib/supabase'
 import { shouldNoindex } from '@/lib/seo/pruning'
+import FallbackProviders from '@/components/seo/FallbackProviders'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import IntentNavBar from '@/components/seo/IntentNavBar'
 
 export const revalidate = 86400
 
@@ -146,7 +153,7 @@ export async function generateMetadata({
   const hasProviders = await hasProvidersByServiceAndLocation(service, location)
   const noindex = shouldNoindex(`/devis/${service}/${location}`, {
     providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: false,
+    hasUniqueData: true,
   })
 
   return {
@@ -194,6 +201,18 @@ export default async function DevisServiceLocationPage({
   if (!trade || !villeData) notFound()
 
   const commune = await getCommuneBySlug(location)
+
+  // Fetch providers for showcase — fallback to département if city has 0
+  let providers = await getProvidersByServiceAndLocation(service, location, { limit: 6 }).catch(
+    () => [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>
+  )
+  let isFallback = false
+  if (providers.length === 0) {
+    providers = await getProvidersByServiceAndDepartment(service, villeData.departement, {
+      limit: 6,
+    })
+    isFallback = true
+  }
 
   const multiplier = getRegionalMultiplier(villeData.region)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
@@ -438,6 +457,14 @@ export default async function DevisServiceLocationPage({
           </div>
         </div>
       </section>
+
+      <IntentNavBar
+        serviceSlug={service}
+        villeSlug={location}
+        currentIntent="devis"
+        serviceName={trade.name}
+        villeName={villeData.name}
+      />
 
       {/* ─── SPLIT LAYOUT: Form (60%) + Sidebar (40%) ────── */}
       <section className="py-8 md:py-12">
@@ -1197,6 +1224,25 @@ export default async function DevisServiceLocationPage({
           </div>
         </div>
       </section>
+
+      {/* Artisans disponibles — fallback to département if no local providers */}
+      {isFallback ? (
+        <FallbackProviders
+          providers={providers}
+          departmentName={villeData.departement}
+          serviceName={trade.name}
+          serviceSlug={service}
+          villeSlug={location}
+          villeName={villeData.name}
+        />
+      ) : providers.length > 0 ? (
+        <LocalProviderShowcase
+          providers={providers}
+          serviceName={trade.name}
+          cityName={villeData.name}
+          max={3}
+        />
+      ) : null}
 
       <InContentLinks
         serviceSlug={service}

@@ -21,6 +21,7 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import {
   getProvidersByServiceAndLocation,
+  getProvidersByServiceAndDepartment,
   getRgeProviderCountByServiceAndLocation,
   hasProvidersByServiceAndLocation,
 } from '@/lib/supabase'
@@ -30,6 +31,7 @@ import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import { hashCode } from '@/lib/seo/location-content'
 import LocalDataInsights from '@/components/seo/LocalDataInsights'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import FallbackProviders from '@/components/seo/FallbackProviders'
 import { getServiceImage } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
 import { relatedServices } from '@/lib/constants/navigation'
@@ -46,6 +48,7 @@ import StructuredPricingTable from '@/components/seo/StructuredPricingTable'
 import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
 import { getDefaultAuthor } from '@/lib/data/team'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
+import IntentNavBar from '@/components/seo/IntentNavBar'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -195,7 +198,7 @@ export async function generateMetadata({
   const hasProviders = await hasProvidersByServiceAndLocation(service, villeSlug)
   const noindex = shouldNoindex(`/tarifs/${service}/${villeSlug}`, {
     providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: false,
+    hasUniqueData: true,
   })
 
   return {
@@ -238,13 +241,23 @@ export default async function TarifsServiceVillePage({
   // Fetch commune data + providers + comptage RGE local en parallèle.
   // Le comptage RGE n'est fetché que pour les métiers éligibles (allowlist énergie/bâti).
   const rgeEligible = isRgeAllowedService(service)
-  const [commune, providers, rgeCount] = await Promise.all([
+  const [commune, directProviders, rgeCount] = await Promise.all([
     getCommuneBySlug(villeSlug),
     getProvidersByServiceAndLocation(service, villeSlug, { limit: 6 }).catch(() => []),
     rgeEligible
       ? getRgeProviderCountByServiceAndLocation(service, villeSlug).catch(() => 0)
       : Promise.resolve(0),
   ])
+
+  // Fallback: if 0 providers in this city, try the whole département
+  let providers = directProviders
+  let isFallback = false
+  if (providers.length === 0) {
+    providers = await getProvidersByServiceAndDepartment(service, villeData.departement, {
+      limit: 6,
+    })
+    isFallback = true
+  }
 
   const multiplier = getRegionalMultiplier(villeData.region)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
@@ -419,6 +432,15 @@ export default async function TarifsServiceVillePage({
         </div>
       </section>
 
+      <IntentNavBar
+        serviceSlug={service}
+        villeSlug={villeSlug}
+        currentIntent="tarifs"
+        serviceName={trade.name}
+        villeName={villeData.name}
+        providerCount={providers.length}
+      />
+
       {/* Immediate Answer Block — Position 0 / Featured Snippet target */}
       <div className="-mt-16 relative z-10 pb-6">
         <ImmediateAnswerBlock
@@ -514,12 +536,23 @@ export default async function TarifsServiceVillePage({
       )}
 
       {/* Artisans disponibles — real providers for this service+city */}
-      <LocalProviderShowcase
-        providers={providers}
-        serviceName={trade.name}
-        cityName={villeData.name}
-        max={3}
-      />
+      {isFallback ? (
+        <FallbackProviders
+          providers={providers}
+          departmentName={villeData.departement}
+          serviceName={trade.name}
+          serviceSlug={service}
+          villeSlug={villeSlug}
+          villeName={villeData.name}
+        />
+      ) : (
+        <LocalProviderShowcase
+          providers={providers}
+          serviceName={trade.name}
+          cityName={villeData.name}
+          max={3}
+        />
+      )}
 
       {/* Price range overview */}
       <section className="py-16 bg-white">

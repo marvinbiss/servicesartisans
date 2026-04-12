@@ -4,6 +4,7 @@ import {
   getServiceBySlug,
   getLocationBySlug,
   getProvidersByServiceAndLocation,
+  getProvidersByServiceAndDepartment,
   getProviderCountByServiceAndLocation,
   getRgeProviderCountByServiceAndLocation,
 } from '@/lib/supabase'
@@ -20,16 +21,30 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
 import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
 
-import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema, getEnrichedLocalServiceSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getItemListSchema,
+  getSpeakableSchema,
+  getEnrichedLocalServiceSchema,
+} from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getArtisanUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
-import { services as staticServicesList, villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
+import {
+  services as staticServicesList,
+  villes,
+  getVilleBySlug,
+  getNearbyCities,
+} from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import {
+  generateLocationContent,
+  hashCode,
+  getRegionalMultiplier,
+} from '@/lib/seo/location-content'
 import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { getPageContent } from '@/lib/cms'
 import { shouldNoindex } from '@/lib/seo/pruning'
@@ -41,25 +56,16 @@ import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import FallbackProviders from '@/components/seo/FallbackProviders'
 import dynamic from 'next/dynamic'
+import IntentNavBar from '@/components/seo/IntentNavBar'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
-const GeoPageCTA = dynamic(
-  () => import('@/components/conversion/GeoPageCTA'),
-  { ssr: false }
-)
+const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
 
-const MicroConversions = dynamic(
-  () => import('@/components/MicroConversions'),
-  { ssr: false }
-)
-
-
-const CallbackRequest = dynamic(
-  () => import('@/components/CallbackRequest'),
-  { ssr: false }
-)
+const CallbackRequest = dynamic(() => import('@/components/CallbackRequest'), { ssr: false })
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -78,8 +84,8 @@ export const dynamicParams = true
 const TOP_CITIES_COUNT = 10
 export function generateStaticParams() {
   const topCities = villes.slice(0, TOP_CITIES_COUNT)
-  return staticServicesList.flatMap(s =>
-    topCities.map(v => ({ service: s.slug, location: v.slug }))
+  return staticServicesList.flatMap((s) =>
+    topCities.map((v) => ({ service: s.slug, location: v.slug }))
   )
 }
 
@@ -152,7 +158,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     providerCount = count
   } catch {
     // DB down — fallback to static data
-    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
     const ville = getVilleBySlug(locationSlug)
     if (staticSvc) serviceName = staticSvc.name
     if (ville) {
@@ -176,25 +182,57 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const seoPairs = hasProviders
     ? [
-        { title: `${serviceName} ${locationName} 2026 — Devis Gratuit`, h1: `${serviceName} à ${locationName}` },
-        { title: `${serviceName} à ${locationName} : ${providerCount} Pros + Devis`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`, h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés` },
-        { title: `${serviceName} ${locationName} 2026 : ${providerCount} Artisans`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${serviceName} à ${locationName} — Devis Gratuit 2026`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        {
+          title: `${serviceName} ${locationName} 2026 — Devis Gratuit`,
+          h1: `${serviceName} à ${locationName}`,
+        },
+        {
+          title: `${serviceName} à ${locationName} : ${providerCount} Pros + Devis`,
+          h1: `Trouvez ${naturalTerm.article} à ${locationName}`,
+        },
+        {
+          title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
+          h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés`,
+        },
+        {
+          title: `${serviceName} ${locationName} 2026 : ${providerCount} Artisans`,
+          h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
+        },
+        {
+          title: `${serviceName} à ${locationName} — Devis Gratuit 2026`,
+          h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}`,
+        },
       ]
     : [
-        { title: `${serviceName} ${locationName} 2026 — Devis Gratuit`, h1: `${serviceName} à ${locationName}` },
-        { title: `${serviceName} à ${locationName} : Devis Gratuit 2026`, h1: `Trouvez ${naturalTerm.article} à ${locationName}` },
-        { title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`, h1: `${serviceName} à ${locationName} — Artisans qualifiés` },
-        { title: `${serviceName} à ${locationName} — Artisans 2026`, h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${serviceName} ${locationName} : Devis Gratuit 2026`, h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}` },
+        {
+          title: `${serviceName} ${locationName} 2026 — Devis Gratuit`,
+          h1: `${serviceName} à ${locationName}`,
+        },
+        {
+          title: `${serviceName} à ${locationName} : Devis Gratuit 2026`,
+          h1: `Trouvez ${naturalTerm.article} à ${locationName}`,
+        },
+        {
+          title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
+          h1: `${serviceName} à ${locationName} — Artisans qualifiés`,
+        },
+        {
+          title: `${serviceName} à ${locationName} — Artisans 2026`,
+          h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
+        },
+        {
+          title: `${serviceName} ${locationName} : Devis Gratuit 2026`,
+          h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}`,
+        },
       ]
 
   const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
 
   // Resolve trade content early for price range in descriptions
   const tradeContent = getTradeContent(serviceSlug)
-  const priceTag = tradeContent ? `${tradeContent.priceRange.min}€–${tradeContent.priceRange.max}€` : ''
+  const priceTag = tradeContent
+    ? `${tradeContent.priceRange.min}€–${tradeContent.priceRange.max}€`
+    : ''
 
   // Unique meta descriptions with provider count, price range, department and CTA
   const descHash = Math.abs(hashCode(`desc-${serviceSlug}-${locationSlug}`))
@@ -228,7 +266,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     robots: isNoindex
       ? { index: false, follow: true }
-      : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+      : {
+          index: true,
+          follow: true,
+          'max-snippet': -1 as const,
+          'max-image-preview': 'large' as const,
+          'max-video-preview': -1 as const,
+        },
     openGraph: {
       title,
       description,
@@ -271,22 +315,26 @@ function generateJsonLd(
       addressCountry: 'FR',
       ...(location.postal_code ? { postalCode: location.postal_code } : {}),
     },
-    ...(communeData?.latitude && communeData?.longitude ? {
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: communeData.latitude,
-        longitude: communeData.longitude,
-      },
-    } : {}),
+    ...(communeData?.latitude && communeData?.longitude
+      ? {
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: communeData.latitude,
+            longitude: communeData.longitude,
+          },
+        }
+      : {}),
     areaServed: {
       '@type': 'City',
       name: location.name,
-      ...(location.department_name ? {
-        containedInPlace: {
-          '@type': 'AdministrativeArea',
-          name: location.department_name,
-        },
-      } : {}),
+      ...(location.department_name
+        ? {
+            containedInPlace: {
+              '@type': 'AdministrativeArea',
+              name: location.department_name,
+            },
+          }
+        : {}),
     },
     ...(trade ? { priceRange: `${trade.priceRange.min}€–${trade.priceRange.max}€` } : {}),
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
@@ -305,14 +353,22 @@ function generateJsonLd(
       '@type': 'City',
       name: location.name,
       containedInPlace: [
-        ...(location.department_name ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: location.department_name,
-        }] : []),
-        ...(location.region_name ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: location.region_name,
-        }] : []),
+        ...(location.department_name
+          ? [
+              {
+                '@type': 'AdministrativeArea' as const,
+                name: location.department_name,
+              },
+            ]
+          : []),
+        ...(location.region_name
+          ? [
+              {
+                '@type': 'AdministrativeArea' as const,
+                name: location.region_name,
+              },
+            ]
+          : []),
       ],
     },
     provider: {
@@ -320,22 +376,24 @@ function generateJsonLd(
       '@id': `${SITE_URL}#organization`,
       name: 'ServicesArtisans',
     },
-    ...(trade ? {
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: `Prestations ${svcLower} à ${location.name}`,
-        itemListElement: trade.commonTasks.slice(0, 8).map(task => {
-          const parts = task.split(':')
-          return {
-            '@type': 'Offer',
-            itemOffered: {
-              '@type': 'Service',
-              name: parts[0].trim(),
-            },
-          }
-        }),
-      },
-    } : {}),
+    ...(trade
+      ? {
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: `Prestations ${svcLower} à ${location.name}`,
+            itemListElement: trade.commonTasks.slice(0, 8).map((task) => {
+              const parts = task.split(':')
+              return {
+                '@type': 'Offer',
+                itemOffered: {
+                  '@type': 'Service',
+                  name: parts[0].trim(),
+                },
+              }
+            }),
+          },
+        }
+      : {}),
     dateModified: new Date().toISOString().split('T')[0],
   }
 
@@ -362,9 +420,15 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   // CMS override — if admin published content for this specific service+city page
   let cmsPage = null
   try {
-    cmsPage = await getPageContent(`${serviceSlug}-${locationSlug}`, 'location', { serviceSlug, locationSlug })
+    cmsPage = await getPageContent(`${serviceSlug}-${locationSlug}`, 'location', {
+      serviceSlug,
+      locationSlug,
+    })
   } catch (err) {
-    logger.error('[CMS] Error fetching page content for', { slug: `${serviceSlug}-${locationSlug}`, error: err })
+    logger.error('[CMS] Error fetching page content for', {
+      slug: `${serviceSlug}-${locationSlug}`,
+      error: err,
+    })
   }
 
   if (cmsPage?.content_html) {
@@ -372,9 +436,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b border-sand-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -391,12 +453,26 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   try {
     resolvedService = await getServiceBySlug(serviceSlug)
     if (!resolvedService) {
-      const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
-      if (staticSvc) resolvedService = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+      const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
+      if (staticSvc)
+        resolvedService = {
+          id: '',
+          name: staticSvc.name,
+          slug: staticSvc.slug,
+          is_active: true,
+          created_at: '',
+        }
     }
   } catch {
-    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
-    if (staticSvc) resolvedService = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+    const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
+    if (staticSvc)
+      resolvedService = {
+        id: '',
+        name: staticSvc.name,
+        slug: staticSvc.slug,
+        is_active: true,
+        created_at: '',
+      }
   }
   if (!resolvedService) notFound()
   const service: Service = resolvedService
@@ -406,7 +482,10 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   try {
     const dbLocation = await getLocationBySlug(locationSlug)
     if (dbLocation) {
-      resolvedLocation = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
+      resolvedLocation = {
+        ...dbLocation,
+        id: ((dbLocation as Record<string, unknown>).code_insee as string) || '',
+      }
     } else {
       resolvedLocation = villeToLocation(locationSlug)
     }
@@ -418,16 +497,27 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
   // 3. Fetch providers + total count in parallel
   // (throw on providers failure so ISR keeps stale cache)
-  const [providers, totalProviderCount, rgeProviderCount] = await Promise.all([
+  const [directProviders, totalProviderCount, rgeProviderCount] = await Promise.all([
     getProvidersByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }),
     getProviderCountByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(() => -1),
     getRgeProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
   ])
 
-  // Hard 404: if DB confirmed 0 providers for this combo → not a real page.
-  // -1 means DB was unreachable → fail-open (keep serving stale ISR cache).
+  // Fallback: if 0 providers in this city, try the whole département
+  let providers = directProviders
+  let isFallback = false
   if (providers.length === 0 && totalProviderCount === 0) {
-    notFound()
+    const ville = getVilleBySlug(locationSlug)
+    if (ville) {
+      providers = await getProvidersByServiceAndDepartment(serviceSlug, ville.departement, {
+        limit: 6,
+      })
+      isFallback = true
+    }
+    // Hard 404: if BOTH direct and department fallback return 0 results
+    if (providers.length === 0) {
+      notFound()
+    }
   }
 
   const trade = getTradeContent(serviceSlug)
@@ -440,7 +530,14 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     // Commune table may not exist yet — continue without data
   }
 
-  const baseSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug, communeData)
+  const baseSchemas = generateJsonLd(
+    service,
+    location,
+    providers || [],
+    serviceSlug,
+    locationSlug,
+    communeData
+  )
 
   // Count recent devis requests for freshness signal
   let recentDevisCount = 0
@@ -472,9 +569,10 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
   // Compute average rating and total reviews from provider data (for ImmediateAnswerBlock)
   const ratedProviders = providers.filter((p) => p.rating_average && p.rating_average > 0)
-  const averageRating = ratedProviders.length > 0
-    ? ratedProviders.reduce((sum, p) => sum + (p.rating_average ?? 0), 0) / ratedProviders.length
-    : null
+  const averageRating =
+    ratedProviders.length > 0
+      ? ratedProviders.reduce((sum, p) => sum + (p.rating_average ?? 0), 0) / ratedProviders.length
+      : null
   const totalReviews = ratedProviders.reduce((sum, p) => sum + (p.review_count ?? 0), 0) || null
 
   // FAQ: combine 2 trade FAQ (hash-selected) + 4 location-specific FAQ
@@ -514,21 +612,27 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   const faqSchema = combinedFaq.length > 0 ? getFAQSchema(combinedFaq) : null
 
   // Task 2: ItemList JSON-LD for provider listings
-  const itemListSchema = providers.length > 0
-    ? getItemListSchema({
-        name: `${service.name} à ${location.name}`,
-        description: `Liste des ${service.name.toLowerCase()}s référencés à ${location.name}`,
-        url: `/services/${serviceSlug}/${locationSlug}`,
-        items: providers.slice(0, 20).map((p, i) => ({
-          name: p.name,
-          url: getArtisanUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }),
-          position: i + 1,
-          image: getServiceImage(serviceSlug).src,
-          rating: p.rating_average ?? undefined,
-          reviewCount: p.review_count ?? undefined,
-        })),
-      })
-    : null
+  const itemListSchema =
+    providers.length > 0
+      ? getItemListSchema({
+          name: `${service.name} à ${location.name}`,
+          description: `Liste des ${service.name.toLowerCase()}s référencés à ${location.name}`,
+          url: `/services/${serviceSlug}/${locationSlug}`,
+          items: providers.slice(0, 20).map((p, i) => ({
+            name: p.name,
+            url: getArtisanUrl({
+              stable_id: p.stable_id,
+              slug: p.slug,
+              specialty: p.specialty,
+              city: p.address_city,
+            }),
+            position: i + 1,
+            image: getServiceImage(serviceSlug).src,
+            rating: p.rating_average ?? undefined,
+            reviewCount: p.review_count ?? undefined,
+          })),
+        })
+      : null
 
   const jsonLdSchemas: Record<string, unknown>[] = [
     ...baseSchemas,
@@ -538,12 +642,16 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
   // Cross-link to semantically related services (with fallback to popular)
   const relatedSlugs = relatedServices[serviceSlug] || []
-  const otherServices = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 5).map(slug => {
-        const svc = staticServicesList.find(s => s.slug === slug)
-        return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
-      }).filter(Boolean) as { slug: string; name: string; icon: string }[]
-    : popularServices.filter(s => s.slug !== serviceSlug).slice(0, 5)
+  const otherServices =
+    relatedSlugs.length > 0
+      ? (relatedSlugs
+          .slice(0, 5)
+          .map((slug) => {
+            const svc = staticServicesList.find((s) => s.slug === slug)
+            return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
+          })
+          .filter(Boolean) as { slug: string; name: string; icon: string }[])
+      : popularServices.filter((s) => s.slug !== serviceSlug).slice(0, 5)
   const nearbyCities = getNearbyCities(locationSlug, 6)
   const deptCities: { slug: string; name: string }[] = [] // Removed: duplicated by DeepPageLinks module 3
 
@@ -576,31 +684,38 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   jsonLdSchemas.push(speakableSchema)
 
   // Schema enrichi avec OfferCatalog, AggregateRating et areaServed détaillé
-  jsonLdSchemas.push(getEnrichedLocalServiceSchema({
-    serviceName: trade?.name || service.name,
-    serviceType: trade?.name || service.name,
-    description: `${service.name} à ${location.name} — artisans référencés SIREN. Devis gratuit.`,
-    cityName: location.name,
-    regionName: location.region_name || '',
-    departmentName: location.department_name || '',
-    url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
-    image: getServiceImage(serviceSlug).src,
-    ...(trade ? {
-      lowPrice: trade.priceRange.min,
-      highPrice: trade.priceRange.max,
-      priceUnit: trade.priceRange.unit,
-      tasks: trade.commonTasks.slice(0, 10).map(task => {
-        const parts = task.split(':')
-        return { name: parts[0].trim(), description: parts.length > 1 ? parts[1].trim() : undefined }
-      }),
-    } : {}),
-    // NE PAS injecter ratingValue/reviewCount ici : ces valeurs viennent de
-    // providers.rating_average/review_count (données scrapées Google/PJ, pas
-    // d'avis vérifiés plateforme). Émettre un AggregateRating basé sur des
-    // avis non first-party = déclencheur de pénalité Google "review spam".
-    // Le calcul est gardé pour le rendu front (ImmediateAnswerBlock).
-    providerCount: providers.length,
-  }))
+  jsonLdSchemas.push(
+    getEnrichedLocalServiceSchema({
+      serviceName: trade?.name || service.name,
+      serviceType: trade?.name || service.name,
+      description: `${service.name} à ${location.name} — artisans référencés SIREN. Devis gratuit.`,
+      cityName: location.name,
+      regionName: location.region_name || '',
+      departmentName: location.department_name || '',
+      url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+      image: getServiceImage(serviceSlug).src,
+      ...(trade
+        ? {
+            lowPrice: trade.priceRange.min,
+            highPrice: trade.priceRange.max,
+            priceUnit: trade.priceRange.unit,
+            tasks: trade.commonTasks.slice(0, 10).map((task) => {
+              const parts = task.split(':')
+              return {
+                name: parts[0].trim(),
+                description: parts.length > 1 ? parts[1].trim() : undefined,
+              }
+            }),
+          }
+        : {}),
+      // NE PAS injecter ratingValue/reviewCount ici : ces valeurs viennent de
+      // providers.rating_average/review_count (données scrapées Google/PJ, pas
+      // d'avis vérifiés plateforme). Émettre un AggregateRating basé sur des
+      // avis non first-party = déclencheur de pénalité Google "review spam".
+      // Le calcul est gardé pour le rendu front (ImmediateAnswerBlock).
+      providerCount: providers.length,
+    })
+  )
 
   return (
     <>
@@ -616,13 +731,26 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       {/* Visual breadcrumb for navigation and SEO */}
       <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <Breadcrumb items={[
-            { label: 'Services', href: '/services' },
-            { label: service.name, href: `/services/${serviceSlug}` },
-            { label: location.name },
-          ]} />
+          <Breadcrumb
+            items={[
+              { label: 'Services', href: '/services' },
+              { label: service.name, href: `/services/${serviceSlug}` },
+              { label: location.name },
+            ]}
+          />
         </div>
       </div>
+
+      <IntentNavBar
+        serviceSlug={serviceSlug}
+        villeSlug={locationSlug}
+        currentIntent="services"
+        serviceName={service.name}
+        villeName={location.name}
+        providerCount={totalProviderCount}
+        avgRating={averageRating ?? undefined}
+        reviewCount={totalReviews ?? undefined}
+      />
 
       {/* SSR H1 — always in server component HTML for Googlebot */}
       <div className="bg-white border-b border-sand-200">
@@ -635,7 +763,8 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
               {location.department_name
                 ? `${location.department_name}${location.department_code ? ` (${location.department_code})` : ''}`
                 : location.postal_code}
-              {totalProviderCount > 0 && ` — ${totalProviderCount} artisan${totalProviderCount > 1 ? 's' : ''} vérifié${totalProviderCount > 1 ? 's' : ''}`}
+              {totalProviderCount > 0 &&
+                ` — ${totalProviderCount} artisan${totalProviderCount > 1 ? 's' : ''} vérifié${totalProviderCount > 1 ? 's' : ''}`}
             </p>
           )}
         </div>
@@ -644,26 +773,51 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       {/* JSON-LD LocalBusiness schemas for top providers (SEO only, no visual cards
            — the visual listing is handled by ServiceLocationPageClient below to avoid
            duplicate "Voir le profil" buttons for the same artisan on desktop) */}
-      <LocalProviderShowcase
-        providers={(providers || []).slice(0, 3)}
-        serviceName={service.name}
-        cityName={location.name}
-        max={3}
-        jsonLdOnly
-      />
+      {!isFallback && (
+        <LocalProviderShowcase
+          providers={(providers || []).slice(0, 3)}
+          serviceName={service.name}
+          cityName={location.name}
+          max={3}
+          jsonLdOnly
+        />
+      )}
+
+      {/* Fallback: département-level providers when 0 local providers */}
+      {isFallback && (
+        <FallbackProviders
+          providers={providers}
+          departmentName={location.department_name || ville?.departement || ''}
+          serviceName={service.name}
+          serviceSlug={serviceSlug}
+          villeSlug={locationSlug}
+          villeName={location.name}
+        />
+      )}
 
       {/* SSR provider links — crawlable by Googlebot even without JS execution */}
-      {providers.length > 0 && (
+      {providers.length > 0 && !isFallback && (
         <div className="sr-only" aria-hidden="true">
           <ul>
             {providers.slice(0, 10).map((p) => (
               <li key={p.id}>
-                <a href={getArtisanUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })}>
+                <a
+                  href={getArtisanUrl({
+                    stable_id: p.stable_id,
+                    slug: p.slug,
+                    specialty: p.specialty,
+                    city: p.address_city,
+                  })}
+                >
                   {p.name}
                 </a>
                 {p.address_city && <span> — {p.address_city}</span>}
                 {p.rating_average && p.rating_average > 0 && (
-                  <span> — Note : {p.rating_average.toFixed(1)}/5{p.review_count ? ` (${p.review_count} avis)` : ''}</span>
+                  <span>
+                    {' '}
+                    — Note : {p.rating_average.toFixed(1)}/5
+                    {p.review_count ? ` (${p.review_count} avis)` : ''}
+                  </span>
                 )}
               </li>
             ))}
@@ -814,13 +968,19 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       />
 
       <MoneyPageBoost currentService={serviceSlug} currentVille={locationSlug} />
-      <SeasonalLinks currentService={serviceSlug} villeSlug={locationSlug} villeName={location.name} />
+      <SeasonalLinks
+        currentService={serviceSlug}
+        villeSlug={locationSlug}
+        villeName={location.name}
+      />
 
       <StickyMobileCTA serviceSlug={serviceSlug} cityName={location.name} citySlug={locationSlug} />
 
-      <MicroConversions pageType="service-ville" serviceSlug={serviceSlug} cityName={location.name} />
-
+      <MicroConversions
+        pageType="service-ville"
+        serviceSlug={serviceSlug}
+        cityName={location.name}
+      />
     </>
   )
 }
-

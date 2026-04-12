@@ -28,8 +28,14 @@ import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber, monthName } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
-import { hasProvidersByServiceAndLocation } from '@/lib/supabase'
+import {
+  hasProvidersByServiceAndLocation,
+  getProvidersByServiceAndLocation,
+  getProvidersByServiceAndDepartment,
+} from '@/lib/supabase'
 import { shouldNoindex } from '@/lib/seo/pruning'
+import FallbackProviders from '@/components/seo/FallbackProviders'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -38,6 +44,7 @@ import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
+import IntentNavBar from '@/components/seo/IntentNavBar'
 import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
@@ -239,7 +246,7 @@ export async function generateMetadata({
   const hasProviders = await hasProvidersByServiceAndLocation(service, villeSlug)
   const noindex = shouldNoindex(`/urgence/${service}/${villeSlug}`, {
     providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: false,
+    hasUniqueData: true,
   })
 
   return {
@@ -287,6 +294,18 @@ export default async function UrgenceServiceVillePage({
   if (!trade || !villeData) notFound()
 
   const commune = await getCommuneBySlug(villeSlug)
+
+  // Fetch providers for showcase — fallback to département if city has 0
+  let providers = await getProvidersByServiceAndLocation(service, villeSlug, { limit: 6 }).catch(
+    () => [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>
+  )
+  let isFallback = false
+  if (providers.length === 0) {
+    providers = await getProvidersByServiceAndDepartment(service, villeData.departement, {
+      limit: 6,
+    })
+    isFallback = true
+  }
 
   const meta = emergencyMeta[service] || {
     gradient: 'from-red-600 to-red-800',
@@ -478,6 +497,14 @@ export default async function UrgenceServiceVillePage({
           </div>
         </div>
       </section>
+
+      <IntentNavBar
+        serviceSlug={service}
+        villeSlug={villeSlug}
+        currentIntent="urgence"
+        serviceName={trade.name}
+        villeName={villeData.name}
+      />
 
       {/* ─── URGENCY COUNTDOWN ─────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -1091,6 +1118,25 @@ export default async function UrgenceServiceVillePage({
           </div>
         </div>
       </section>
+
+      {/* Artisans disponibles — fallback to département if no local providers */}
+      {isFallback ? (
+        <FallbackProviders
+          providers={providers}
+          departmentName={villeData.departement}
+          serviceName={trade.name}
+          serviceSlug={service}
+          villeSlug={villeSlug}
+          villeName={villeData.name}
+        />
+      ) : providers.length > 0 ? (
+        <LocalProviderShowcase
+          providers={providers}
+          serviceName={trade.name}
+          cityName={villeData.name}
+          max={3}
+        />
+      ) : null}
 
       {/* ─── CROSS-LINKS: NEARBY CITIES ────────────────────── */}
       <section className="py-16 bg-white">
