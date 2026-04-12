@@ -14,6 +14,7 @@ import {
   FileCheck2,
   Percent,
   BookOpen,
+  TrendingUp,
 } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
@@ -454,6 +455,25 @@ export default async function CeeHubPage() {
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Lire les r&egrave;gles de cumul{' '}
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
+            <Link
+              href="/comparatif-primes-cee-2026"
+              className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <TrendingUp className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
+                Comparatif primes CEE 2026
+              </div>
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
+                Effy, Hellio, Sonergia, PrimesEnergie&nbsp;: montants, d&eacute;lais de paiement,
+                avis clients, forces et faiblesses.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Voir le comparatif <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </div>
             </Link>
           </div>

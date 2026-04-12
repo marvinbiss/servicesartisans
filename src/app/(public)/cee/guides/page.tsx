@@ -175,6 +175,18 @@ export default function CeeGuidesIndexPage() {
               Qualifications RGE
             </Link>
             <Link
+              href="/comparatif-primes-cee-2026"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+            >
+              Comparatif primes 2026
+            </Link>
+            <Link
+              href="/leads-exclusifs-vs-partages"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+            >
+              Leads exclusifs vs partag&eacute;s
+            </Link>
+            <Link
               href="/ademe"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
             >
