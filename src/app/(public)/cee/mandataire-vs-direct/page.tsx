@@ -15,6 +15,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 
+import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, SITE_NAME } from '@/lib/seo/config'
@@ -612,6 +613,11 @@ export default function MandataireVsDirectPage() {
           </li>
         </ul>
       </section>
+
+      {/* CTA inline - page de d\u00e9cision */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <CeeCTA variant="inline" />
+      </div>
 
       {/* CTAs finaux */}
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">

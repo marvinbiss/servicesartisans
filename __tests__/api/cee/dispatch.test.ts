@@ -93,6 +93,7 @@ function validBody(overrides: Record<string, unknown> = {}) {
 const routedOutcome: DispatchOutcome = {
   kind: 'cee_routed',
   operationCode: 'BAR-TH-104',
+  operationName: 'Pompe à chaleur de type air/eau ou eau/eau',
   providerId: PROVIDER_UUID_1,
   delegataireId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
   dossierId: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',

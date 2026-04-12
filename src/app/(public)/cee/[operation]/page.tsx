@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react'
 
+import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
@@ -311,6 +312,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         )}
       </section>
 
+      {/* CTA inline apr\u00e8s description */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+        <CeeCTA variant="inline" operationCode={operation.code} serviceSlug={rgeServices[0]} />
+      </div>
+
       {/* M\u00e9tiers RGE qualifi\u00e9s */}
       {rgeServices.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
@@ -438,6 +444,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+      {/* Sticky bottom mobile */}
+      <CeeCTA variant="sticky-bottom" operationCode={operation.code} serviceSlug={rgeServices[0]} />
     </main>
   )
 }

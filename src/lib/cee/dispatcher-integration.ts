@@ -42,6 +42,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 import { dispatchDevis, type DispatchOutcome } from './dispatcher'
+import { sendCeeEligibilityEmail } from './emails'
+import { sendCeeArtisanBriefing } from './artisan-notification'
 
 export interface CeeDispatchInput {
   devisId: string
@@ -49,6 +51,14 @@ export interface CeeDispatchInput {
   serviceSlug: string
   postalCode?: string | null
   candidateProviderIds: string[]
+  /** Nom du client (pour l'email CEE éligibilité). */
+  clientName?: string | null
+  /** Email du client (pour l'email CEE éligibilité). */
+  clientEmail?: string | null
+  /** Nom lisible du service (ex: "Chauffagiste"). */
+  serviceName?: string | null
+  /** Ville du client. */
+  ville?: string | null
 }
 
 /**
@@ -122,6 +132,43 @@ export async function runCeeDispatchFireAndForget(
         serviceSlug,
         operationCode: outcome.operationCode,
         dossierId: outcome.dossierId,
+      })
+
+      // --- Email éligibilité CEE au client (fire-and-forget) ---
+      if (input.clientEmail) {
+        sendCeeEligibilityEmail({
+          clientName: input.clientName || 'Client',
+          clientEmail: input.clientEmail,
+          serviceName: input.serviceName || serviceSlug,
+          ville: input.ville || '',
+          operationCode: outcome.operationCode,
+          operationName: outcome.operationName || outcome.operationCode,
+          primeEstimateMin: outcome.primeEstimate?.euros_classique_min ?? null,
+          primeEstimateMax: outcome.primeEstimate?.euros_classique_max ?? null,
+          justificatifs: outcome.justificatifsRequis,
+        }).catch((err) => {
+          logger.warn('cee-dispatch: échec envoi email éligibilité CEE, soft-fail', {
+            action: 'cee-email-eligibility',
+            devisId,
+            error: err instanceof Error ? err.message : String(err),
+          })
+        })
+      }
+
+      // --- Briefing CEE artisan RGE (fire-and-forget) ---
+      sendCeeArtisanBriefing(supabase, {
+        providerId: outcome.providerId,
+        dossierId: outcome.dossierId,
+        operationCode: outcome.operationCode,
+        operationName: outcome.operationName ?? null,
+        primeEstimate: outcome.primeEstimate ?? null,
+        justificatifsRequis: outcome.justificatifsRequis,
+      }).catch((err) => {
+        logger.warn('cee-dispatch: échec envoi briefing artisan CEE, soft-fail', {
+          action: 'cee-artisan-briefing',
+          devisId,
+          error: err instanceof Error ? err.message : String(err),
+        })
       })
     } else if (outcome.kind === 'fallback_non_cee') {
       logger.info('cee-dispatch: fallback non-CEE', {

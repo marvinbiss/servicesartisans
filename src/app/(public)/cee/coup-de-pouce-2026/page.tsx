@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 
+import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, SITE_NAME } from '@/lib/seo/config'
@@ -376,6 +377,11 @@ export default function CoupDePouce2026Page() {
           </div>
         </div>
       </section>
+
+      {/* CTA inline apr\u00e8s explication */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <CeeCTA variant="inline" />
+      </div>
 
       {/* Chartes actives 2026 */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">

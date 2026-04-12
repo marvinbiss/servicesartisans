@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import JsonLd from '@/components/JsonLd'
@@ -292,6 +293,16 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             <p key={i} dangerouslySetInnerHTML={{ __html: para }} />
           ))}
         </section>
+
+        {/* CTA inline contextualis\u00e9 */}
+        <div className="mb-8">
+          <CeeCTA
+            variant="inline"
+            operationCode={operation.code}
+            serviceSlug={rgeServices[0]}
+            ville={villeName}
+          />
+        </div>
 
         <section className="mb-10">
           {count === 0 ? (

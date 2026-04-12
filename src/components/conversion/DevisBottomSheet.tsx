@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 import { X, CheckCircle, ArrowRight, ArrowLeft, MapPin, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import { services } from '@/lib/data/france-light'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { useDevisForm, urgencyOptions } from '@/hooks/useDevisForm'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
+import CeePrimeEstimateCard from '@/components/devis/CeePrimeEstimateCard'
 
 interface DevisBottomSheetProps {
   isOpen: boolean
@@ -21,6 +22,9 @@ export default function DevisBottomSheet({
   prefilledService,
   prefilledCity,
 }: DevisBottomSheetProps) {
+  const [ceeEligible, setCeeEligible] = useState(false)
+  const [ceeOperationCodes, setCeeOperationCodes] = useState<string[]>([])
+
   const form = useDevisForm({
     source: 'bottom_sheet',
     initialData: {
@@ -29,7 +33,19 @@ export default function DevisBottomSheet({
     },
     initialStep: prefilledService && prefilledCity ? 3 : prefilledService ? 2 : 1,
     initialVilleQuery: prefilledCity || '',
+    onSubmitSuccess: (responseBody) => {
+      const body = responseBody as {
+        cee_eligible?: boolean
+        cee_operation_codes?: string[]
+      } | null
+      if (body?.cee_eligible) {
+        setCeeEligible(true)
+        setCeeOperationCodes(body.cee_operation_codes || [])
+      }
+    },
   })
+
+  const [selectedVillePostal, setSelectedVillePostal] = useState('')
 
   const sheetRef = useRef<HTMLDivElement>(null)
   const dragStartY = useRef<number | null>(null)
@@ -50,6 +66,7 @@ export default function DevisBottomSheet({
         startStep = 3
       }
       form.resetForm(newData, startStep)
+      setSelectedVillePostal('')
 
       trackEvent('form_started', {
         service: prefilledService || '',
@@ -253,6 +270,10 @@ export default function DevisBottomSheet({
                   city={form.formData.ville}
                   phone={form.formData.telephone}
                   compact
+                  ceeEligible={ceeEligible}
+                  ceeOperationCodes={ceeOperationCodes}
+                  serviceSlug={form.formData.service}
+                  postalCode={selectedVillePostal}
                 />
                 <button
                   onClick={onClose}
@@ -302,7 +323,10 @@ export default function DevisBottomSheet({
                           onChange={(e) => {
                             form.setVilleQuery(e.target.value)
                             form.setShowVilleSuggestions(true)
-                            if (e.target.value.length < 2) form.updateField('ville', '')
+                            if (e.target.value.length < 2) {
+                              form.updateField('ville', '')
+                              setSelectedVillePostal('')
+                            }
                           }}
                           onFocus={() => form.setShowVilleSuggestions(true)}
                           placeholder="Ville ou code postal"
@@ -313,7 +337,12 @@ export default function DevisBottomSheet({
                         />
                         <button
                           type="button"
-                          onClick={form.handleGeolocation}
+                          onClick={async () => {
+                            const result = await form.handleGeolocation()
+                            if (result?.postcode) {
+                              setSelectedVillePostal(result.postcode)
+                            }
+                          }}
                           disabled={form.geoLoading}
                           className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-primary-400 hover:text-primary-600 transition-colors touch-manipulation"
                           aria-label="Utiliser ma position"
@@ -330,7 +359,10 @@ export default function DevisBottomSheet({
                             <button
                               key={`${v.name}-${v.codePostal}`}
                               type="button"
-                              onClick={() => form.selectVille(v.name)}
+                              onClick={() => {
+                                form.selectVille(v.name)
+                                setSelectedVillePostal(v.codePostal)
+                              }}
                               className="w-full px-4 py-2.5 text-left text-sm hover:bg-sand-50 transition-colors flex items-center gap-2 touch-manipulation"
                             >
                               <MapPin className="w-3.5 h-3.5 text-charcoal-400 flex-shrink-0" />
@@ -343,6 +375,13 @@ export default function DevisBottomSheet({
                         </div>
                       )}
                     </div>
+
+                    {form.formData.service && selectedVillePostal && (
+                      <CeePrimeEstimateCard
+                        serviceSlug={form.formData.service}
+                        postalCode={selectedVillePostal}
+                      />
+                    )}
 
                     <button
                       type="button"

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ShieldCheck, CheckCircle2, ArrowRight, ExternalLink } from 'lucide-react'
 
+import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
@@ -171,6 +172,11 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
           ))}
         </article>
 
+        {/* CTA inline mid-content */}
+        <div className="mt-10 mb-10">
+          <CeeCTA variant="inline" operationCode={guide.code} />
+        </div>
+
         {/* Qualifications RGE requises */}
         <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-6">
           <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
@@ -294,6 +300,11 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* CTA inline bottom */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <CeeCTA variant="inline" operationCode={guide.code} />
+      </div>
 
       {/* CTAs */}
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">

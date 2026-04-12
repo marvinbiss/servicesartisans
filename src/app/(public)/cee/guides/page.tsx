@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BookOpen, ArrowRight, ShieldCheck } from 'lucide-react'
 
+import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
@@ -84,6 +85,11 @@ export default function CeeGuidesIndexPage() {
           </p>
         </div>
       </section>
+
+      {/* CTA hero */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10">
+        <CeeCTA variant="hero" />
+      </div>
 
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

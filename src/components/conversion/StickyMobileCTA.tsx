@@ -51,12 +51,7 @@ export default function StickyMobileCTA({
   useEffect(() => {
     if (shouldHide) return
 
-    const selectors = [
-      '[data-devis-form]',
-      '#devis',
-      '#devis-section',
-      'form[data-devis]',
-    ]
+    const selectors = ['[data-devis-form]', '#devis', '#devis-section', 'form[data-devis]']
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -125,20 +120,27 @@ export default function StickyMobileCTA({
   if (shouldHide) return null
 
   // Format phone for tel: link
-  const telHref = artisanPhone
-    ? `tel:${artisanPhone.replace(/[\s.\-()]/g, '')}`
-    : PHONE_TEL
+  const telHref = artisanPhone ? `tel:${artisanPhone.replace(/[\s.\-()]/g, '')}` : PHONE_TEL
+
+  // Build desktop devis link with pre-filled params
+  const devisHref =
+    serviceSlug && citySlug
+      ? `/devis/${serviceSlug}/${citySlug}`
+      : serviceSlug
+        ? `/devis/${serviceSlug}`
+        : '/devis'
 
   return (
     <>
-      {/* ── Sticky CTA Bar ── */}
+      {/* ── Sticky CTA Bar (mobile only) ── */}
       <div
         className={`
           fixed left-0 right-0 z-[51] md:hidden
           transition-all duration-300 ease-out
-          ${visible && hasAnimated && !formInView
-            ? 'translate-y-0 opacity-100'
-            : 'translate-y-full opacity-0 pointer-events-none'
+          ${
+            visible && hasAnimated && !formInView
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-full opacity-0 pointer-events-none'
           }
         `}
         style={{
@@ -154,7 +156,8 @@ export default function StickyMobileCTA({
             {providerCount && providerCount > 0 && (
               <p className="text-[11px] text-charcoal-500 text-center mb-1.5">
                 <span className="inline-block w-1.5 h-1.5 bg-accent-500 rounded-full mr-1 animate-pulse" />
-                {providerCount} artisan{providerCount > 1 ? 's' : ''} disponible{providerCount > 1 ? 's' : ''} près de chez vous
+                {providerCount} artisan{providerCount > 1 ? 's' : ''} disponible
+                {providerCount > 1 ? 's' : ''} près de chez vous
               </p>
             )}
 
@@ -165,7 +168,11 @@ export default function StickyMobileCTA({
                 <a
                   href={telHref}
                   className="flex items-center justify-center w-12 h-12 bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
-                  aria-label={artisanPhone ? `Appeler ${artisanName || 'l\'artisan'}` : 'Appeler ServicesArtisans'}
+                  aria-label={
+                    artisanPhone
+                      ? `Appeler ${artisanName || "l'artisan"}`
+                      : 'Appeler ServicesArtisans'
+                  }
                   onClick={() => {
                     trackEvent('phone_click', {
                       service: serviceSlug || '',
@@ -194,6 +201,37 @@ export default function StickyMobileCTA({
             </p>
           </div>
         </div>
+      </div>
+
+      {/* ── Sticky Desktop CTA (desktop only) ── */}
+      <div
+        className={`
+          fixed bottom-6 right-6 z-[51] hidden md:block
+          transition-all duration-300 ease-out
+          ${
+            visible && hasAnimated && !formInView
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-8 opacity-0 pointer-events-none'
+          }
+        `}
+      >
+        <a
+          href={devisHref}
+          onClick={() => {
+            trackEvent('form_started', {
+              service: serviceSlug || '',
+              source: 'sticky_desktop_cta',
+            })
+          }}
+          className="group flex items-center gap-3 bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white font-semibold px-6 py-4 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all"
+        >
+          <FileText className="w-5 h-5 flex-shrink-0" />
+          <span className="text-base">{ctaText}</span>
+        </a>
+        <p className="text-xs text-charcoal-400 text-center mt-2 flex items-center justify-center gap-1">
+          <span className="text-accent-500">&#10003;</span> Gratuit
+          <span className="text-sand-400">&#183;</span> Sans engagement
+        </p>
       </div>
 
       {/* ── Bottom Sheet Form ── */}

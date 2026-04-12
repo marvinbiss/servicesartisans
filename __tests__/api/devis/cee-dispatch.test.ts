@@ -89,6 +89,7 @@ function routedOutcome(dossierId = DOSSIER_ID): DispatchOutcome {
   return {
     kind: 'cee_routed',
     operationCode: 'BAR-TH-104',
+    operationName: 'Pompe à chaleur de type air/eau ou eau/eau',
     providerId: PROVIDER_1,
     delegataireId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
     dossierId,

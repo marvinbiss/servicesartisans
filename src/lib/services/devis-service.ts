@@ -227,7 +227,11 @@ export async function processDevis(
       clientId,
       data.service,
       data.codePostal ?? null,
-      assignedProviders
+      assignedProviders,
+      data.nom ?? null,
+      data.email ?? null,
+      serviceName,
+      data.ville ?? null
     )
   }
 
@@ -317,7 +321,11 @@ async function ceeDispatchWithTimeout(
   clientId: string | null,
   serviceSlug: string,
   postalCode: string | null,
-  candidateProviderIds: string[]
+  candidateProviderIds: string[],
+  clientName: string | null,
+  clientEmail: string | null,
+  serviceName: string | null,
+  ville: string | null
 ): Promise<void> {
   const CEE_DISPATCH_TIMEOUT_MS = 8000
   const TIMEOUT_SENTINEL = Symbol('cee-dispatch-timeout')
@@ -330,6 +338,10 @@ async function ceeDispatchWithTimeout(
         serviceSlug,
         postalCode,
         candidateProviderIds,
+        clientName,
+        clientEmail,
+        serviceName,
+        ville,
       }),
       new Promise<typeof TIMEOUT_SENTINEL>((resolve) => {
         timeoutHandle = setTimeout(() => resolve(TIMEOUT_SENTINEL), CEE_DISPATCH_TIMEOUT_MS)

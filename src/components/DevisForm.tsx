@@ -570,6 +570,8 @@ export default function DevisForm({
           budget={form.formData.budget || undefined}
           ceeEligible={ceeEligible}
           ceeOperationCodes={ceeOperationCodes}
+          serviceSlug={form.formData.service}
+          postalCode={selectedVillePostal}
         />
 
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">

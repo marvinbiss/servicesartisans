@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import CeeCTA from '@/components/cee/CeeCTA'
 import {
   ShieldCheck,
   Home,
@@ -257,6 +258,11 @@ export default async function CeeHubPage() {
           </div>
         </div>
       </section>
+
+      {/* CTA hero */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        <CeeCTA variant="hero" />
+      </div>
 
       {/* Catalogue par domaine */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
@@ -523,6 +529,11 @@ export default async function CeeHubPage() {
           </Link>
         </div>
       </section>
+
+      {/* CTA inline */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        <CeeCTA variant="inline" />
+      </div>
 
       {/* CTAs finaux */}
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">

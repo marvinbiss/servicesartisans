@@ -80,6 +80,8 @@ export type DispatchOutcome =
   | {
       kind: 'cee_routed'
       operationCode: string
+      /** Nom humain de l'opération FOS (ex: "Isolation des murs par l'extérieur"). */
+      operationName: string | null
       providerId: string
       delegataireId: string | null
       dossierId: string
@@ -394,6 +396,7 @@ export async function dispatchDevis(
       return {
         kind: 'cee_routed',
         operationCode: existing.operation_code,
+        operationName: existingItem.nom,
         providerId: existing.provider_id,
         delegataireId: existing.delegataire_id,
         dossierId: existing.id,
@@ -410,6 +413,7 @@ export async function dispatchDevis(
     return {
       kind: 'cee_routed',
       operationCode: existing.operation_code,
+      operationName: null,
       providerId: existing.provider_id,
       delegataireId: existing.delegataire_id,
       dossierId: existing.id,
@@ -463,6 +467,7 @@ export async function dispatchDevis(
   return {
     kind: 'cee_routed',
     operationCode: bestItem.code,
+    operationName: bestItem.nom,
     providerId: bestProvider.providerId,
     delegataireId,
     dossierId: dossier.id,

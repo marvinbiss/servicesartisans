@@ -3,7 +3,25 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, Shield, Clock, Star, MapPin, Wallet, Mail, MessageCircle, Copy, Check, BookOpen, FileText, ThumbsUp, ShieldCheck, ArrowRight, Sparkles, Leaf } from 'lucide-react'
+import {
+  CheckCircle,
+  Shield,
+  Clock,
+  Star,
+  MapPin,
+  Wallet,
+  Mail,
+  MessageCircle,
+  Copy,
+  Check,
+  BookOpen,
+  FileText,
+  ThumbsUp,
+  ShieldCheck,
+  ArrowRight,
+  Sparkles,
+  Leaf,
+} from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france-light'
 import { getArtisanUrl } from '@/lib/utils'
@@ -45,6 +63,10 @@ interface DevisConfirmationProps {
   ceeEligible?: boolean
   /** Codes FOS applicables (ex: ['BAR-EN-101','BAR-TH-129']) */
   ceeOperationCodes?: string[]
+  /** Slug du service (ex: "chauffagiste") — utilisé pour le contexte CEE */
+  serviceSlug?: string
+  /** Code postal 5 chiffres — utilisé pour le contexte CEE */
+  postalCode?: string
 }
 
 /* ─── Helpers ──────────────────────────────────────────────────────── */
@@ -73,6 +95,8 @@ export default function DevisConfirmation({
   compact = false,
   ceeEligible = false,
   ceeOperationCodes = [],
+  serviceSlug: _serviceSlug,
+  postalCode: _postalCode,
 }: DevisConfirmationProps) {
   const [providers, setProviders] = useState<MatchedProvider[]>([])
   const [loading, setLoading] = useState(true)
@@ -87,7 +111,8 @@ export default function DevisConfirmation({
     async function fetchProviders() {
       try {
         const supabase = getSupabaseClient()
-        const providerFields = 'id, name, slug, stable_id, specialty, address_city, rating_average, review_count, is_verified'
+        const providerFields =
+          'id, name, slug, stable_id, specialty, address_city, rating_average, review_count, is_verified'
 
         // Try same city first (ilike for case-insensitive match)
         // Use %service% pattern to match specialty variants (e.g., "plombier" matches "Plombier")
@@ -108,7 +133,7 @@ export default function DevisConfirmation({
           setProviderCount(cityData.length)
         } else {
           // Fallback: fill remaining slots with nearby providers (different city)
-          const existingIds = (cityData || []).map(p => p.id)
+          const existingIds = (cityData || []).map((p) => p.id)
           const remaining = 5 - (cityData?.length || 0)
 
           const { data: broadData } = await supabase
@@ -198,9 +223,7 @@ export default function DevisConfirmation({
             compact ? 'w-14 h-14' : 'w-20 h-20'
           } bg-accent-100 rounded-full flex items-center justify-center mx-auto`}
         >
-          <CheckCircle
-            className={`${compact ? 'w-7 h-7' : 'w-10 h-10'} text-accent-500`}
-          />
+          <CheckCircle className={`${compact ? 'w-7 h-7' : 'w-10 h-10'} text-accent-500`} />
         </div>
       </motion.div>
 
@@ -222,8 +245,8 @@ export default function DevisConfirmation({
           {providerCount !== null && providerCount >= 3
             ? `3 artisans ${serviceLabel.toLowerCase()} correspondent à votre besoin`
             : providerCount !== null && providerCount > 0
-            ? `${providerCount} artisan${providerCount > 1 ? 's' : ''} ${serviceLabel.toLowerCase()} trouvé${providerCount > 1 ? 's' : ''} près de chez vous`
-            : 'Nous recherchons les meilleurs artisans pour vous'}
+              ? `${providerCount} artisan${providerCount > 1 ? 's' : ''} ${serviceLabel.toLowerCase()} trouvé${providerCount > 1 ? 's' : ''} près de chez vous`
+              : 'Nous recherchons les meilleurs artisans pour vous'}
         </p>
         <p className={`font-medium text-accent-600 ${compact ? 'text-xs mb-4' : 'text-sm mb-6'}`}>
           Un conseiller vous rappelle rapidement
@@ -240,8 +263,7 @@ export default function DevisConfirmation({
         >
           <Wallet className="w-4 h-4 text-primary-500 flex-shrink-0" />
           <span className={`text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
-            <span className="font-medium">Budget indicatif :</span>{' '}
-            {budgetLabels[budget]}
+            <span className="font-medium">Budget indicatif :</span> {budgetLabels[budget]}
           </span>
         </motion.div>
       )}
@@ -261,8 +283,8 @@ export default function DevisConfirmation({
                 Vos travaux sont potentiellement éligibles à une prime CEE
               </p>
               <p className={`text-charcoal-600 mt-0.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
-                Certificats d&apos;Économies d&apos;Énergie — estimation et éligibilité
-                confirmées par votre artisan.
+                Certificats d&apos;Économies d&apos;Énergie — estimation et éligibilité confirmées
+                par votre artisan.
               </p>
             </div>
           </div>
@@ -272,7 +294,10 @@ export default function DevisConfirmation({
             <ul className={`mt-3 space-y-1.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
               {ceeDetails.slice(0, 4).map((op) => (
                 <li key={op.code} className="flex items-start gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <CheckCircle
+                    className="w-3.5 h-3.5 text-accent-600 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
                   <div className="flex-1 min-w-0">
                     <span className="font-medium text-charcoal-800">{op.code}</span>
                     <span className="text-charcoal-600"> — {op.nom}</span>
@@ -281,7 +306,8 @@ export default function DevisConfirmation({
               ))}
               {ceeDetails.length > 4 && (
                 <li className="text-charcoal-500 ml-5">
-                  + {ceeDetails.length - 4} autre{ceeDetails.length - 4 > 1 ? 's' : ''} opération{ceeDetails.length - 4 > 1 ? 's' : ''}
+                  + {ceeDetails.length - 4} autre{ceeDetails.length - 4 > 1 ? 's' : ''} opération
+                  {ceeDetails.length - 4 > 1 ? 's' : ''}
                 </li>
               )}
             </ul>
@@ -289,8 +315,13 @@ export default function DevisConfirmation({
 
           {/* Exigences RGE (agrégées de toutes les opérations) */}
           {requiredRgeQualifs.length > 0 && (
-            <div className={`mt-3 pt-3 border-t border-accent-100 flex items-start gap-2 ${compact ? 'text-[11px]' : 'text-xs'}`}>
-              <Leaf className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <div
+              className={`mt-3 pt-3 border-t border-accent-100 flex items-start gap-2 ${compact ? 'text-[11px]' : 'text-xs'}`}
+            >
+              <Leaf
+                className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
               <div className="flex-1 min-w-0">
                 <span className="font-semibold text-emerald-700">Artisan RGE requis :</span>{' '}
                 <span className="text-charcoal-600">
@@ -300,6 +331,82 @@ export default function DevisConfirmation({
               </div>
             </div>
           )}
+        </motion.div>
+      )}
+
+      {/* ── CEE mandataire — checklist pièces à préparer ── */}
+      {ceeEligible && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.32 }}
+          className={`rounded-xl border border-emerald-200 bg-emerald-50 p-4 ${compact ? 'mb-3' : 'mb-5'}`}
+        >
+          <div className="flex items-start gap-3">
+            <div
+              aria-hidden="true"
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-100"
+            >
+              <Sparkles className="h-5 w-5 text-emerald-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p
+                className={`font-heading font-semibold text-emerald-900 ${compact ? 'text-xs' : 'text-sm'}`}
+              >
+                Bonne nouvelle&nbsp;: vos travaux sont éligibles à une prime CEE&nbsp;!
+              </p>
+              <p className={`text-emerald-800 mt-1 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+                En tant que mandataire CEE, nous nous occupons de toutes les démarches pour
+                récupérer votre prime Certificats d&apos;Économies d&apos;Énergie. Aucune paperasse
+                supplémentaire pour vous.
+              </p>
+            </div>
+          </div>
+
+          {/* Opérations éligibles */}
+          {ceeOperationCodes.length > 0 && (
+            <div
+              className={`mt-3 pt-3 border-t border-emerald-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
+            >
+              <p className="font-medium text-emerald-800">
+                Opérations éligibles&nbsp;:{' '}
+                <span className="font-semibold text-emerald-900">
+                  {ceeOperationCodes.join(', ')}
+                </span>
+              </p>
+            </div>
+          )}
+
+          {/* Checklist pièces à préparer */}
+          <div
+            className={`mt-3 pt-3 border-t border-emerald-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
+          >
+            <p className="font-semibold text-emerald-900 mb-2">Pièces à préparer&nbsp;:</p>
+            <ul className="space-y-1.5">
+              {[
+                'Facture des travaux',
+                'Photos avant/après les travaux (avec géolocalisation activée)',
+                'Attestation sur l\u2019honneur signée',
+                'Justificatif de propriété ou bail',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <CheckCircle
+                    className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <span className="text-emerald-800">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Texte rassurant */}
+          <p
+            className={`mt-3 pt-3 border-t border-emerald-100 text-emerald-700 ${compact ? 'text-[11px]' : 'text-xs'}`}
+          >
+            Votre artisan RGE vous guidera pour chaque étape. La prime sera déduite de votre facture
+            ou versée après validation.
+          </p>
         </motion.div>
       )}
 
@@ -370,9 +477,7 @@ export default function DevisConfirmation({
                           <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                           {provider.rating_average.toFixed(1)}
                           {provider.review_count ? (
-                            <span className="text-charcoal-400">
-                              ({provider.review_count})
-                            </span>
+                            <span className="text-charcoal-400">({provider.review_count})</span>
                           ) : null}
                         </span>
                       ) : null}
@@ -416,7 +521,9 @@ export default function DevisConfirmation({
         <p className={`text-charcoal-400 text-center ${compact ? 'text-[10px]' : 'text-xs'}`}>
           Un SMS de confirmation a été envoyé au {maskedPhone}
         </p>
-        <div className={`mt-4 bg-sand-50 border border-sand-200 rounded-xl p-4 ${compact ? 'text-xs' : 'text-sm'}`}>
+        <div
+          className={`mt-4 bg-sand-50 border border-sand-200 rounded-xl p-4 ${compact ? 'text-xs' : 'text-sm'}`}
+        >
           <p className="font-semibold text-charcoal-800 mb-2">Prochaines étapes :</p>
           <ol className="list-decimal list-inside space-y-1.5 text-charcoal-600">
             <li>Les artisans analysent votre demande</li>
@@ -438,10 +545,7 @@ export default function DevisConfirmation({
           { icon: Shield, label: 'Vérifiés et assurés', color: 'text-primary-500' },
           { icon: Clock, label: 'Réponse rapide', color: 'text-amber-500' },
         ].map(({ icon: Icon, label, color }) => (
-          <div
-            key={label}
-            className="flex flex-col items-center gap-1.5 p-2 bg-sand-50 rounded-xl"
-          >
+          <div key={label} className="flex flex-col items-center gap-1.5 p-2 bg-sand-50 rounded-xl">
             <Icon className={`w-4 h-4 ${color}`} />
             <span className="text-[10px] sm:text-xs font-medium text-charcoal-600 text-center leading-tight">
               {label}
@@ -472,7 +576,9 @@ export default function DevisConfirmation({
         transition={{ delay: 1.3 }}
         className={`${compact ? 'mt-4' : 'mt-6'}`}
       >
-        <p className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
+        <p
+          className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}
+        >
           Pendant ce temps
         </p>
         <div className="space-y-2">
@@ -513,7 +619,9 @@ export default function DevisConfirmation({
         transition={{ delay: 1.5 }}
         className={`${compact ? 'mt-4' : 'mt-6'}`}
       >
-        <p className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
+        <p
+          className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}
+        >
           Recommandez ServicesArtisans
         </p>
         <div className="flex gap-2">

@@ -5,6 +5,7 @@ import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
+import CeeCTA from '@/components/cee/CeeCTA'
 import {
   Wind,
   ShieldCheck,
@@ -401,6 +402,11 @@ export default function PacAidesCumulablesPage() {
         </section>
 
         <RgeGuideBlock variant="service" serviceSlug="pompe-a-chaleur" />
+
+        {/* CTA inline CEE */}
+        <div className="max-w-5xl mx-auto px-4 py-8">
+          <CeeCTA variant="inline" serviceSlug="pompe-a-chaleur" operationCode="BAR-TH-171" />
+        </div>
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">
