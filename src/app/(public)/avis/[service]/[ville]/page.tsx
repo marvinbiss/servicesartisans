@@ -23,11 +23,12 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
-import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
+import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getCityValues } from '@/lib/insee-resolver'
+import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { getProblemsByService } from '@/lib/data/problems'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -36,6 +37,28 @@ import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import IntentNavBar from '@/components/seo/IntentNavBar'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
+import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
+import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
+import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
+import DevisCounterBlock from '@/components/seo/DevisCounterBlock'
+import FreshnessSignal from '@/components/seo/FreshnessSignal'
+import GlossaireTooltips from '@/components/seo/GlossaireTooltips'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import PhotoGalleryBlock from '@/components/seo/PhotoGalleryBlock'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import {
+  generateFAQSchema,
+  generateSpeakableSchema,
+  generateAggregateRatingSchema,
+} from '@/lib/seo/schema-enrichment'
+import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
+import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import dynamic from 'next/dynamic'
 
 function getClimatLabel(zone: string | null): string {
@@ -87,27 +110,52 @@ interface AvisReview {
   provider_id: string
 }
 
-async function getTopProviders(cityName: string, _serviceSlug: string): Promise<AvisProvider[]> {
+async function getTopProviders(
+  cityName: string,
+  serviceSlug: string,
+  departmentName: string
+): Promise<AvisProvider[]> {
   if (IS_BUILD) return []
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    const { data, error } = await supabase
+    // Specialty slugs for this service (for RPC fallback)
+    const specialtySlugs = SERVICE_TO_SPECIALTIES[serviceSlug] ?? [serviceSlug]
+
+    // 1) Try city-level first — all active providers (no review_count filter)
+    const { data: cityData } = await supabase
       .from('providers')
       .select(
         'id, user_id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty'
       )
       .eq('is_active', true)
-      .gt('review_count', 0)
-      // Use .in() with INSEE codes instead of ILIKE to avoid full table scan on 750K rows
       .in('address_city', getCityValues(cityName))
+      .in('specialty_slug', specialtySlugs)
       .order('rating_average', { ascending: false, nullsFirst: false })
-      .order('review_count', { ascending: false })
-      .limit(20)
+      .order('review_count', { ascending: false, nullsFirst: false })
+      .limit(6)
 
-    if (error || !data) return []
-    return data
+    if (cityData && cityData.length >= 2) return cityData
+
+    // 2) Fallback: department-level via RPC (indexed, fast)
+    const { data: deptData } = await supabase.rpc('get_providers_by_dept', {
+      p_specialty_slugs: specialtySlugs,
+      p_department: departmentName,
+      p_limit: 6,
+    })
+
+    if (deptData && deptData.length > 0) {
+      // Merge: city providers first, then dept providers (deduplicated)
+      const cityIds = new Set((cityData ?? []).map((p) => p.id))
+      const merged = [
+        ...(cityData ?? []),
+        ...deptData.filter((p: AvisProvider) => !cityIds.has(p.id)),
+      ]
+      return merged.slice(0, 6)
+    }
+
+    return cityData ?? []
   } catch {
     return []
   }
@@ -273,19 +321,18 @@ export default async function AvisServiceVillePage({
   const tradeLower = trade.name.toLowerCase()
 
   // ----- Fetch real data from database -----
-  const allProviders = await getTopProviders(villeData.name, service)
-  // Filter by specialty matching this service (case-insensitive)
-  const serviceProviders = allProviders.filter(
-    (p) =>
-      p.specialty?.toLowerCase().includes(tradeLower) ||
-      p.specialty?.toLowerCase().includes(service.replace(/-/g, ' '))
-  )
-  // Use service-specific providers if available, otherwise all providers in city
-  const topProviders =
-    serviceProviders.length >= 2 ? serviceProviders.slice(0, 6) : allProviders.slice(0, 6)
+  // Cascade: city-level first, fallback to department-level (all active, no review filter)
+  const topProviders = await getTopProviders(villeData.name, service, villeData.departement)
   // reviews.provider_id references providers.id directly
   const providerIds = topProviders.map((p) => p.id).filter((pid): pid is string => !!pid)
   const reviews = await getRecentReviews(providerIds)
+
+  // Enrichment data (social proof, freshness, AEO) — fail-open
+  const [reviewStats, topReviewsDept, dynamicLastMod] = await Promise.all([
+    getReviewStatsByDept(service, villeData.departement).catch(() => null),
+    getTopReviewsByDept(service, villeData.departement).catch(() => []),
+    getDynamicLastModified(service, villeData.departementCode).catch(() => null),
+  ])
 
   // Calculate aggregate stats
   const totalReviews = topProviders.reduce((sum, p) => sum + (p.review_count || 0), 0)
@@ -399,6 +446,32 @@ export default async function AvisServiceVillePage({
       : {}),
   }
 
+  // ----- Enriched schemas (Vague 3) -----
+  const enrichedFAQSchema = generateFAQSchema(
+    allFaqItems.map((f) => ({
+      question: f.question,
+      answer: f.answer,
+    }))
+  )
+
+  const enrichedSpeakableSchema = generateSpeakableSchema({
+    url: `${SITE_URL}/avis/${service}/${villeSlug}`,
+    title: `Avis ${tradeLower} à ${villeData.name}`,
+    cssSelectors: ['.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
+  })
+
+  // AggregateRating schema (only if review data available)
+  const aggregateRatingSchema = reviewStats
+    ? generateAggregateRatingSchema({
+        serviceName: trade.name,
+        villeName: villeData.name,
+        avgRating: reviewStats.avg_rating,
+        reviewCount: reviewStats.review_count,
+        serviceSlug: service,
+        villeSlug,
+      })
+    : null
+
   // ----- Related links -----
   const nearbyCities = getNearbyCities(villeSlug, 6)
   const relatedSlugs = relatedServices[service] || []
@@ -455,7 +528,16 @@ export default async function AvisServiceVillePage({
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, reviewSchema]} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          faqSchema,
+          reviewSchema,
+          ...(enrichedFAQSchema ? [enrichedFAQSchema] : []),
+          enrichedSpeakableSchema,
+          ...(aggregateRatingSchema ? [aggregateRatingSchema] : []),
+        ]}
+      />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
@@ -500,7 +582,7 @@ export default async function AvisServiceVillePage({
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
-            <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
+            <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4 speakable-summary">
               Consultez les avis et recommandations pour choisir un {tradeLower} de confiance à{' '}
               {villeData.name} ({villeData.departement}). Prix local : {minPrice} à {maxPrice}{' '}
               {trade.priceRange.unit}.
@@ -620,7 +702,7 @@ export default async function AvisServiceVillePage({
         <section className="py-12 bg-white">
           <div className="max-w-5xl mx-auto px-4">
             <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
-              {serviceProviders.length >= 2
+              {topProviders.length >= 2
                 ? `${trade.name}s les mieux notés à ${villeData.name}`
                 : `Artisans les mieux notés à ${villeData.name}`}
             </h2>
@@ -863,7 +945,7 @@ export default async function AvisServiceVillePage({
             Facteurs locaux à {villeData.name}
           </h2>
           <p className="text-charcoal-500 text-sm text-center mb-8">
-            Plusieurs facteurs locaux influencent le choix d'un {tradeLower}à {villeData.name}.
+            Plusieurs facteurs locaux influencent le choix d'un {tradeLower} à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             {/* Artisan density */}
@@ -1169,7 +1251,7 @@ export default async function AvisServiceVillePage({
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fréquentes — Avis {trade.name} à {villeData.name}
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-4 speakable-faq">
             {allFaqItems.map((item, i) => (
               <details key={i} className="bg-white rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
@@ -1312,6 +1394,55 @@ export default async function AvisServiceVillePage({
         )
       })()}
 
+      {/* ─── ENRICHMENT: Intelligence locale (Vague 2) ───────── */}
+      <ProblemesCourantsBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      {commune && (
+        <RisquesGeoBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      {commune && (
+        <ContexteDPEBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      <BarometrePrixBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        regionName={villeData.region}
+      />
+
+      <CalendrierSaisonnierBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />
+
+      {commune && (
+        <PrimesCEEBlock
+          serviceSlug={service}
+          serviceName={trade.name}
+          villeName={villeData.name}
+          communeData={commune}
+        />
+      )}
+
       {/* ─── EDITORIAL CREDIBILITY ────────────────────────────── */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1363,6 +1494,62 @@ export default async function AvisServiceVillePage({
       />
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
+
+      <MaillageInterneBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        departementSlug={getDepartementByCode(villeData.departementCode)?.slug}
+        departementName={villeData.departement}
+        regionName={villeData.region}
+        currentIntent="avis"
+      />
+
+      {/* ─── ENRICHMENT: Social proof, freshness, UGC, AEO (Vague 3) ─── */}
+
+      <AEOAnswerBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        departmentName={villeData.departement}
+        providerCount={topProviders.length}
+        avgRating={reviewStats?.avg_rating ?? null}
+        priceRange={{ min: minPrice, max: maxPrice }}
+        communePopulation={commune?.population ?? null}
+      />
+
+      <ReviewsDeptBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        departmentName={villeData.departement}
+        stats={reviewStats}
+        reviews={topReviewsDept}
+      />
+
+      <DevisCounterBlock
+        count={0}
+        serviceName={trade.name}
+        departmentName={villeData.departement}
+      />
+
+      <GlossaireTooltips serviceSlug={service} />
+
+      <PhotoGalleryBlock
+        serviceName={trade.name}
+        villeName={villeData.name}
+        departmentName={villeData.departement}
+        providerCount={topProviders.length}
+      />
+
+      <UserQuestionBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        villeSlug={villeSlug}
+      />
+
+      <FreshnessSignal lastModified={dynamicLastMod} />
 
       <StickyMobileCTA
         serviceSlug={service}

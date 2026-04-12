@@ -5,18 +5,37 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, Search, FileText, User } from 'lucide-react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
+import { createBrowserClient } from '@supabase/ssr'
 
-const navItems: { href: string; icon: typeof Home; label: string; prefetch?: boolean }[] = [
+const baseNavItems: { href: string; icon: typeof Home; label: string; prefetch?: boolean }[] = [
   { href: '/', icon: Home, label: 'Accueil' },
   { href: '/recherche', icon: Search, label: 'Recherche' },
   { href: '/devis', icon: FileText, label: 'Devis' },
-  { href: '/connexion', icon: User, label: 'Mon compte', prefetch: false },
 ]
 
 export default function MobileBottomNav() {
   const pathname = usePathname()
   const { isMenuOpen } = useMobileMenu()
+  const [accountHref, setAccountHref] = useState('/connexion')
   const [estimationOpen, setEstimationOpen] = useState(false)
+
+  // Check auth state to route "Mon compte" correctly
+  useEffect(() => {
+    try {
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+      )
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          const meta = session.user.user_metadata
+          setAccountHref(meta?.user_type === 'artisan' ? '/espace-artisan' : '/espace-client')
+        }
+      })
+    } catch {
+      // Fail silently — default to /connexion
+    }
+  }, [])
 
   // Watch for estimation widget open/close via body attribute
   useEffect(() => {
@@ -29,7 +48,7 @@ export default function MobileBottomNav() {
 
   // Ne pas afficher dans les espaces connectés (ils ont leur propre nav)
   const hideOnPages = ['/espace-client', '/espace-artisan', '/admin']
-  const shouldHide = hideOnPages.some(page => pathname.startsWith(page))
+  const shouldHide = hideOnPages.some((page) => pathname.startsWith(page))
 
   // Masquer quand le menu mobile est ouvert ou quand le widget estimation est ouvert
   if (shouldHide || isMenuOpen || estimationOpen) return null
@@ -40,7 +59,10 @@ export default function MobileBottomNav() {
       aria-label="Navigation mobile"
     >
       <div className="flex items-center justify-around h-14 pb-safe">
-        {navItems.map(({ href, icon: Icon, label, prefetch }) => {
+        {[
+          ...baseNavItems,
+          { href: accountHref, icon: User, label: 'Mon compte', prefetch: false },
+        ].map(({ href, icon: Icon, label, prefetch }) => {
           const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
 
           return (
@@ -54,7 +76,9 @@ export default function MobileBottomNav() {
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
-              <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
+              <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>
+                {label}
+              </span>
             </Link>
           )
         })}

@@ -665,13 +665,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       .filter((v): v is NonNullable<typeof v> => v != null)
     const mergedCities = [...phase1Cities, ...gscExtras]
 
+    const { byDeptServiceSlug } = await getLastmodData()
+
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
       for (const ville of mergedCities) {
-        // Service×city — no lastmod: static composition, never truly changes between deploys
-        // Priority 0.8: these are the primary conversion pages (service + location intent)
+        // Service×city — lastmod from latest provider activity in dept×service.
+        // If no data → omitted (honest). Priority 0.8: primary conversion pages.
+        const deptKey = `${normalizeName(ville.departement)}::${service.slug}`
+        const lastmod = byDeptServiceSlug.get(deptKey)
         allUrls.push({
           url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
+          lastModified: lastmod,
           changeFrequency: 'monthly',
           priority: 0.8,
         })
@@ -752,7 +757,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const start = batchIndex * BATCH
     const end = start + BATCH
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
-    const { qualifiedCombos } = await getLastmodData()
+    const { qualifiedCombos, byDeptServiceSlug } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -761,8 +766,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         if (count >= end) break outer
         if (count >= start) {
           const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc.slug}::${ville.slug}`)
+          const deptKey = `${normalizeName(ville.departement)}::${svc.slug}`
           result.push({
             url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`,
+            lastModified: byDeptServiceSlug.get(deptKey),
             changeFrequency: 'monthly',
             priority: isQualified ? 0.7 : 0.5,
           })
@@ -782,7 +789,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const end = start + BATCH
     const emergencySlugs = Object.keys(tradeContent)
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
-    const { qualifiedCombos } = await getLastmodData()
+    const { qualifiedCombos, byDeptServiceSlug } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -791,8 +798,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         if (count >= end) break outer
         if (count >= start) {
           const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc}::${v.slug}`)
+          const deptKey = `${normalizeName(v.departement)}::${svc}`
           result.push({
             url: `${SITE_URL}/urgence/${svc}/${v.slug}`,
+            lastModified: byDeptServiceSlug.get(deptKey),
             changeFrequency: 'monthly',
             priority: isQualified ? 0.6 : 0.4,
           })
@@ -811,7 +820,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const start = batchIndex * BATCH
     const end = start + BATCH
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
-    const { qualifiedCombos } = await getLastmodData()
+    const { qualifiedCombos, byDeptServiceSlug } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -820,8 +829,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         if (count >= end) break outer
         if (count >= start) {
           const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc.slug}::${v.slug}`)
+          const deptKey = `${normalizeName(v.departement)}::${svc.slug}`
           result.push({
             url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`,
+            lastModified: byDeptServiceSlug.get(deptKey),
             changeFrequency: 'monthly',
             priority: isQualified ? 0.7 : 0.5,
           })

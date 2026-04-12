@@ -207,7 +207,8 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 - **Pages service hub** (`/services/{slug}`, `/tarifs/{slug}`, `/urgence/{slug}`) — lastmod = dernier provider modifié pour ce service. Fallback `STATIC_DATE`
 - **Pages avis** (`/avis/{slug}`) — lastmod = date du dernier avis publié pour ce service
 - **Pages dept×service, region×service, baromètre** — lastmod = dernier provider modifié dans la zone×service
-- **Pages composition statique** (devis×ville, urgence×ville, tarifs×ville, problemes×ville) — pas de lastmod (composition template, pas de vrai changement)
+- **Pages pSEO service×ville** (services×ville, devis×ville, urgence×ville, tarifs×ville) — lastmod = dernier provider modifié dans le département×service (via `byDeptServiceSlug` dérivé de `byDeptService`). Si aucun → lastmod omis (honnête)
+- **Pages composition statique** (problemes×ville) — pas de lastmod (composition template, pas de vrai changement)
 - **Requêtes DB** centralisées dans `src/lib/seo/lastmod-queries.ts` — 7 requêtes batch en parallèle, lazy-loaded une seule fois
 - **Fail-safe** : si Supabase indisponible au build → toutes les maps vides → lastmod omis (jamais de faux lastmod)
 

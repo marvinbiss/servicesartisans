@@ -33,6 +33,7 @@ export default function InscriptionPage() {
     confirmPassword: '',
   })
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -265,6 +266,7 @@ export default function InscriptionPage() {
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      autoComplete="given-name"
                       className={`w-full pl-10 pr-4 py-3 bg-charcoal-800 border ${errors.firstName ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                       placeholder="Jean"
                     />
@@ -279,6 +281,7 @@ export default function InscriptionPage() {
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                    autoComplete="family-name"
                     className={`w-full px-4 py-3 bg-charcoal-800 border ${errors.lastName ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="Dupont"
                   />
@@ -296,6 +299,7 @@ export default function InscriptionPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    autoComplete="email"
                     className={`w-full pl-10 pr-4 py-3 bg-charcoal-800 border ${errors.email ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="jean.dupont@email.com"
                   />
@@ -311,6 +315,7 @@ export default function InscriptionPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    autoComplete="new-password"
                     className={`w-full pl-10 pr-12 py-3 bg-charcoal-800 border ${errors.password ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="8 caractères minimum"
                   />
@@ -348,12 +353,24 @@ export default function InscriptionPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    className={`w-full pl-10 pr-4 py-3 bg-charcoal-800 border ${errors.confirmPassword ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
+                    autoComplete="new-password"
+                    className={`w-full pl-10 pr-12 py-3 bg-charcoal-800 border ${errors.confirmPassword ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="Confirmez votre mot de passe"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-500 hover:text-sand-500"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
                 </div>
                 {errors.confirmPassword && (
                   <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>

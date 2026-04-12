@@ -436,7 +436,62 @@ export interface SitemapLastmodData {
   byDeptService: LastmodMap
   byRegionService: LastmodMap
   reviewByService: LastmodMap
+  /** Map<"deptName::serviceSlug", YYYY-MM-DD> — resolved from byDeptService via SERVICE_TO_SPECIALTIES */
+  byDeptServiceSlug: LastmodMap
   qualifiedCombos: QualifiedCombos | null
+}
+
+// ─── Derivation: dept×serviceSlug from dept×specialty ──────────────────
+
+/**
+ * Build a Map<"deptName::serviceSlug", YYYY-MM-DD> from the raw
+ * byDeptService Map<"deptName::specialty", YYYY-MM-DD>.
+ *
+ * Uses SERVICE_TO_SPECIALTIES to resolve service slugs to their underlying
+ * specialties. When a service maps to multiple specialties, the most recent
+ * date wins.
+ *
+ * This avoids an additional DB query — it's a pure post-processing step.
+ */
+function deriveDeptServiceSlugMap(byDeptService: LastmodMap): LastmodMap {
+  const result: LastmodMap = new Map()
+
+  // Build reverse lookup: specialty → service slugs
+  // Note: a specialty can map to multiple service slugs (e.g., 'peintre' → 'peintre', 'peintre-en-batiment')
+  const specialtyToSlugs = new Map<string, string[]>()
+  for (const [serviceSlug, specialties] of Object.entries(SERVICE_TO_SPECIALTIES)) {
+    for (const sp of specialties) {
+      const normSp = normalizeKey(sp)
+      const existing = specialtyToSlugs.get(normSp)
+      if (existing) {
+        existing.push(serviceSlug)
+      } else {
+        specialtyToSlugs.set(normSp, [serviceSlug])
+      }
+    }
+  }
+
+  // Iterate over all byDeptService entries and map to service slugs
+  for (const [key, date] of Array.from(byDeptService.entries())) {
+    const separatorIdx = key.indexOf('::')
+    if (separatorIdx === -1) continue
+    const dept = key.substring(0, separatorIdx)
+    const specialty = key.substring(separatorIdx + 2)
+
+    const slugs = specialtyToSlugs.get(specialty)
+    if (!slugs) continue
+
+    for (const slug of slugs) {
+      const newKey = `${dept}::${slug}`
+      const existing = result.get(newKey)
+      // Keep the most recent date
+      if (!existing || date > existing) {
+        result.set(newKey, date)
+      }
+    }
+  }
+
+  return result
 }
 
 /**
@@ -464,6 +519,9 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     getQualifiedServiceCityCombos(),
   ])
 
+  // Derive dept×serviceSlug map from the raw dept×specialty data (no extra DB call)
+  const byDeptServiceSlug = deriveDeptServiceSlugMap(byDeptService)
+
   return {
     byCity,
     byDepartment,
@@ -472,6 +530,7 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     byDeptService,
     byRegionService,
     reviewByService,
+    byDeptServiceSlug,
     qualifiedCombos,
   }
 }

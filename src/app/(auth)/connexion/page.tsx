@@ -3,17 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  ArrowRight,
-  AlertCircle,
-  Loader2,
-  Wrench,
-  User,
-} from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Loader2, Wrench } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getSafeRedirectPath } from '@/lib/safe-redirect'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
@@ -26,7 +16,7 @@ export default function ConnexionPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-  const [userType, setUserType] = useState<'particulier' | 'artisan'>('particulier')
+  const [userType] = useState<'particulier' | 'artisan'>('particulier')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -119,33 +109,7 @@ export default function ConnexionPage() {
               <p className="text-charcoal-400">Accédez à votre espace personnel</p>
             </div>
 
-            {/* User type toggle */}
-            <div className="bg-charcoal-800/50 rounded-2xl p-1.5 flex mb-8 border border-charcoal-700">
-              <button
-                type="button"
-                onClick={() => setUserType('particulier')}
-                className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
-                  userType === 'particulier'
-                    ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg'
-                    : 'text-charcoal-400 hover:text-white'
-                }`}
-              >
-                <User className="w-4 h-4" />
-                Particulier
-              </button>
-              <button
-                type="button"
-                onClick={() => setUserType('artisan')}
-                className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
-                  userType === 'artisan'
-                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg'
-                    : 'text-charcoal-400 hover:text-white'
-                }`}
-              >
-                <Wrench className="w-4 h-4" />
-                Artisan
-              </button>
-            </div>
+            {/* User type determined server-side after login — no toggle needed */}
 
             {error && (
               <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3 text-red-400">
@@ -164,6 +128,7 @@ export default function ConnexionPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    autoComplete="email"
                     className="w-full pl-10 pr-4 py-3 bg-charcoal-800 border border-charcoal-700 rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all"
                     placeholder="votre@email.com"
                   />
@@ -179,6 +144,7 @@ export default function ConnexionPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    autoComplete="current-password"
                     className="w-full pl-10 pr-12 py-3 bg-charcoal-800 border border-charcoal-700 rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all"
                     placeholder="••••••••"
                   />

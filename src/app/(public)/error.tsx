@@ -12,7 +12,7 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    // Error is already captured by Next.js error reporting
+    console.error('[PublicError]', error.message, error.digest)
   }, [error])
 
   return (

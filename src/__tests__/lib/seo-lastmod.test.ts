@@ -466,7 +466,52 @@ describe('fetchAllLastmodData', () => {
     expect(data.byDeptService).toBeInstanceOf(Map)
     expect(data.byRegionService).toBeInstanceOf(Map)
     expect(data.reviewByService).toBeInstanceOf(Map)
+    expect(data.byDeptServiceSlug).toBeInstanceOf(Map)
     // qualifiedCombos can be Set or null
+  })
+
+  it('derives byDeptServiceSlug from byDeptService via SERVICE_TO_SPECIALTIES', async () => {
+    // Return dept×specialty data for the providers query (getLastmodByDeptService)
+    let callCount = 0
+    mockFrom.mockImplementation(() => {
+      callCount++
+      const builder = createChainBuilder({ data: [], error: null })
+      builder.range = vi.fn().mockResolvedValue({ data: [], error: null })
+      // The 5th call is getLastmodByDeptService (order: city, dept, region, service, deptService, ...)
+      if (callCount === 5) {
+        builder.limit = vi.fn().mockResolvedValue({
+          data: [
+            // 'plombier' specialty → should map to 'plombier' service slug
+            {
+              address_department: 'Paris',
+              specialty: 'plombier',
+              updated_at: '2026-04-10T00:00:00Z',
+            },
+            // 'plomberie' specialty → should also map to 'plombier' service slug
+            {
+              address_department: 'Paris',
+              specialty: 'plomberie',
+              updated_at: '2026-04-08T00:00:00Z',
+            },
+            // 'electricien' specialty → should map to 'electricien' service slug
+            {
+              address_department: 'Rhône',
+              specialty: 'electricien',
+              updated_at: '2026-04-05T00:00:00Z',
+            },
+          ],
+          error: null,
+        })
+      }
+      return builder
+    })
+
+    const data = await fetchAllLastmodData()
+
+    // plombier service slug uses MAX of plombier (04-10) and plomberie (04-08) → 04-10
+    expect(data.byDeptServiceSlug.get('paris::plombier')).toBe('2026-04-10')
+    // electricien maps directly
+    expect(data.byDeptServiceSlug.get('rhone::electricien')).toBe('2026-04-05')
   })
 
   it('returns empty maps when supabase is unavailable', async () => {
