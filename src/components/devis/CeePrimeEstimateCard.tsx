@@ -14,6 +14,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Sparkles, Info } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface PublicEstimateItem {
   code: string
@@ -66,6 +67,7 @@ export function CeePrimeEstimateCard({ serviceSlug, postalCode }: CeePrimeEstima
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<PublicEstimateResponse | null>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const trackedRef = useRef(false)
 
   useEffect(() => {
     // Garde — on ne requête que si les deux champs sont plausibles
@@ -116,6 +118,14 @@ export function CeePrimeEstimateCard({ serviceSlug, postalCode }: CeePrimeEstima
       controller.abort()
     }
   }, [serviceSlug, postalCode])
+
+  // ---- Track cee_card_shown (une seule fois par montage) ----------------
+  useEffect(() => {
+    if (data?.eligible && !trackedRef.current) {
+      trackedRef.current = true
+      trackEvent('cee_card_shown', { serviceSlug, postalCode })
+    }
+  }, [data, serviceSlug, postalCode])
 
   // ---- Loading skeleton ------------------------------------------------
   if (loading) {

@@ -134,6 +134,29 @@ export async function runCeeDispatchFireAndForget(
         dossierId: outcome.dossierId,
       })
 
+      // --- Analytics event serveur (fire-and-forget) ---
+      supabase
+        .from('analytics_events')
+        .insert({
+          event_type: 'cee_dispatch_routed',
+          metadata: {
+            devisId,
+            operationCode: outcome.operationCode,
+            kwhcEstime: outcome.primeEstimate?.kwhc_max ?? null,
+            primeEstimee: outcome.primeEstimate?.euros_classique_max ?? null,
+          },
+          created_at: new Date().toISOString(),
+        })
+        .then(({ error: analyticsErr }) => {
+          if (analyticsErr) {
+            logger.warn('cee-dispatch: échec insert analytics cee_dispatch_routed', {
+              action: 'cee-analytics',
+              devisId,
+              error: analyticsErr.message,
+            })
+          }
+        })
+
       // --- Email éligibilité CEE au client (fire-and-forget) ---
       if (input.clientEmail) {
         sendCeeEligibilityEmail({
@@ -177,6 +200,27 @@ export async function runCeeDispatchFireAndForget(
         serviceSlug,
         reason: outcome.reason,
       })
+
+      // --- Analytics event serveur (fire-and-forget) ---
+      supabase
+        .from('analytics_events')
+        .insert({
+          event_type: 'cee_dispatch_fallback',
+          metadata: {
+            devisId,
+            reason: outcome.reason,
+          },
+          created_at: new Date().toISOString(),
+        })
+        .then(({ error: analyticsErr }) => {
+          if (analyticsErr) {
+            logger.warn('cee-dispatch: échec insert analytics cee_dispatch_fallback', {
+              action: 'cee-analytics',
+              devisId,
+              error: analyticsErr.message,
+            })
+          }
+        })
     } else {
       // outcome.kind === 'error'
       logger.warn('cee-dispatch: erreur dispatcher, soft-fail', {

@@ -72,6 +72,13 @@ export type BookingEvent =
   | 'rge_provider_selected'
   | 'cee_qualification_shown'
   | 'cee_cta_click'
+  | 'cee_card_shown'
+  | 'cee_simulator_submit'
+  | 'cee_simulator_result'
+  | 'cee_comparator_shown'
+  | 'cee_cta_clicked'
+  | 'cee_dispatch_routed'
+  | 'cee_dispatch_fallback'
   // RGE enriched section on artisan profile
   | 'rge_section_view'
   | 'rge_section_click'

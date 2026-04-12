@@ -27,6 +27,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { qualifyDevisForCee } from './qualify'
 import { getDelegatairesForOperations, type CeeDelegataire } from './delegataires'
 import { postalCodeToClimateZone, type ClimateZone } from './climate-zones'
+import { getLatestCeePrices } from './market-prices'
 import { logger } from '@/lib/logger'
 
 /**
@@ -170,7 +171,9 @@ function extractForfaitValues(forfaitsTable: unknown, zone: ClimateZone | null):
 function buildPrimeEstimate(
   forfaitsTable: unknown,
   forfaitBaseKwhc: number | null,
-  zone: ClimateZone | null
+  zone: ClimateZone | null,
+  priceClassique: number = CEE_PRICE_CLASSIQUE_EUR_PER_MWHC,
+  pricePrecarite: number = CEE_PRICE_PRECARITE_EUR_PER_MWHC
 ): CeePrimeEstimate | null {
   const extraction = extractForfaitValues(forfaitsTable, zone)
   const fromTable = extraction.values
@@ -206,10 +209,10 @@ function buildPrimeEstimate(
   return {
     kwhc_min: kwhcMin,
     kwhc_max: kwhcMax,
-    euros_classique_min: toEuros(kwhcMin, CEE_PRICE_CLASSIQUE_EUR_PER_MWHC),
-    euros_classique_max: toEuros(kwhcMax, CEE_PRICE_CLASSIQUE_EUR_PER_MWHC),
-    euros_precarite_min: toEuros(kwhcMin, CEE_PRICE_PRECARITE_EUR_PER_MWHC),
-    euros_precarite_max: toEuros(kwhcMax, CEE_PRICE_PRECARITE_EUR_PER_MWHC),
+    euros_classique_min: toEuros(kwhcMin, priceClassique),
+    euros_classique_max: toEuros(kwhcMax, priceClassique),
+    euros_precarite_min: toEuros(kwhcMin, pricePrecarite),
+    euros_precarite_max: toEuros(kwhcMax, pricePrecarite),
     zone: effectiveZone,
     assumptions,
   }
@@ -285,8 +288,11 @@ export async function enrichCeeQualification(
     }
   }
 
-  // Récupération batch des délégataires : 2 queries totales (pas 2N).
-  const delegatairesMap = await getDelegatairesForOperations(supabase, qualification.codes)
+  // Récupération batch des délégataires + cours de marché en parallèle.
+  const [delegatairesMap, ceePrices] = await Promise.all([
+    getDelegatairesForOperations(supabase, qualification.codes),
+    getLatestCeePrices(supabase),
+  ])
 
   const items: EnrichedCeeItem[] = (data as Array<Record<string, unknown>>).map((row) => {
     const code = row.code as string
@@ -302,7 +308,13 @@ export async function enrichCeeQualification(
       forfait_base_kwhc: forfaitBase,
       forfaits_table: row.forfaits_table ?? null,
       justificatifs_requis: normalizeJustificatifs(row.justificatifs_requis),
-      prime_estimate: buildPrimeEstimate(row.forfaits_table, forfaitBase, zone),
+      prime_estimate: buildPrimeEstimate(
+        row.forfaits_table,
+        forfaitBase,
+        zone,
+        ceePrices.classique,
+        ceePrices.precarite
+      ),
       delegataires: delegatairesMap.get(code) ?? [],
     }
   })

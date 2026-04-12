@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { Sparkles, ArrowRight } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 interface CeeCtaProps {
   serviceSlug?: string
@@ -25,11 +28,20 @@ export default function CeeCTA({
 }: CeeCtaProps) {
   const href = buildDevisHref(serviceSlug, operationCode)
 
+  const handleClick = () => {
+    trackEvent('cee_cta_clicked', {
+      variant,
+      serviceSlug: serviceSlug ?? null,
+      operationCode: operationCode ?? null,
+    })
+  }
+
   if (variant === 'sticky-bottom') {
     return (
       <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-emerald-700 border-t border-emerald-600 px-4 py-3 shadow-lg">
         <Link
           href={href}
+          onClick={handleClick}
           className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white text-emerald-800 font-semibold text-sm hover:bg-emerald-50 transition"
         >
           <Sparkles className="w-4 h-4" aria-hidden="true" />
@@ -63,6 +75,7 @@ export default function CeeCTA({
           </div>
           <Link
             href={href}
+            onClick={handleClick}
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-700 transition whitespace-nowrap"
           >
             Demander un devis gratuit
@@ -97,6 +110,7 @@ export default function CeeCTA({
           </p>
           <Link
             href={href}
+            onClick={handleClick}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-sm hover:bg-emerald-700 transition"
           >
             Demander un devis gratuit

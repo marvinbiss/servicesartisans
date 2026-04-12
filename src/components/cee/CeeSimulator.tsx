@@ -13,6 +13,7 @@
 import { useState, useRef, type FormEvent } from 'react'
 import Link from 'next/link'
 import { Search, Loader2, ArrowRight, MapPin, Info, AlertTriangle } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 /* ------------------------------------------------------------------ */
 /*  Types (miroir de l'API /api/cee/estimate)                         */
@@ -99,6 +100,8 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
     setResult(null)
     setHasSearched(true)
 
+    trackEvent('cee_simulator_submit', { serviceSlug, postalCode })
+
     try {
       const res = await fetch('/api/cee/estimate', {
         method: 'POST',
@@ -116,6 +119,10 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
       const body = (await res.json()) as EstimateResponse
       if (!controller.signal.aborted) {
         setResult(body)
+        trackEvent('cee_simulator_result', {
+          eligible: body.eligible,
+          codesCount: body.codes?.length ?? 0,
+        })
       }
     } catch {
       if (!controller.signal.aborted) {

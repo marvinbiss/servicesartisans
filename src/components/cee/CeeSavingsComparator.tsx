@@ -12,6 +12,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Leaf, Info } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 /* ─── Types API ───────────────────────────────────────────────────── */
 
@@ -110,6 +111,7 @@ export default function CeeSavingsComparator({
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<EstimateResponse | null>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const trackedRef = useRef(false)
 
   useEffect(() => {
     const slug = serviceSlug?.trim() ?? ''
@@ -156,6 +158,14 @@ export default function CeeSavingsComparator({
       controller.abort()
     }
   }, [serviceSlug, postalCode])
+
+  /* ── Track cee_comparator_shown (une seule fois par montage) ── */
+  useEffect(() => {
+    if (data?.eligible && !trackedRef.current) {
+      trackedRef.current = true
+      trackEvent('cee_comparator_shown', { serviceSlug, postalCode })
+    }
+  }, [data, serviceSlug, postalCode])
 
   /* ── Loading skeleton ── */
   if (loading) {
