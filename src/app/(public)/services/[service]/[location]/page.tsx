@@ -47,7 +47,12 @@ import {
 } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
-import { generateFAQSchema, generateSpeakableSchema } from '@/lib/seo/schema-enrichment'
+import {
+  generateFAQSchema,
+  generateSpeakableSchema,
+  generateAggregateRatingSchema,
+  generateItemListSchema,
+} from '@/lib/seo/schema-enrichment'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import {
   generateLocationContent,
@@ -66,6 +71,15 @@ import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import FallbackProviders from '@/components/seo/FallbackProviders'
+import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
+import DevisCounterBlock from '@/components/seo/DevisCounterBlock'
+import FreshnessSignal from '@/components/seo/FreshnessSignal'
+import GlossaireTooltips from '@/components/seo/GlossaireTooltips'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import PhotoGalleryBlock from '@/components/seo/PhotoGalleryBlock'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
+import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import dynamic from 'next/dynamic'
 import IntentNavBar from '@/components/seo/IntentNavBar'
 import type { Service, Location as LocationType, Provider } from '@/types'
@@ -568,6 +582,19 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     }
   }
 
+  // Social proof: department reviews (only if we have department info)
+  const deptName = location.department_name || getVilleBySlug(locationSlug)?.departement
+  let reviewStats: Awaited<ReturnType<typeof getReviewStatsByDept>> = null
+  let topReviews: Awaited<ReturnType<typeof getTopReviewsByDept>> = []
+  let dynamicLastMod: string | null = null
+  if (deptName) {
+    ;[reviewStats, topReviews, dynamicLastMod] = await Promise.all([
+      getReviewStatsByDept(serviceSlug, deptName).catch(() => null),
+      getTopReviewsByDept(serviceSlug, deptName).catch(() => []),
+      getDynamicLastModified(serviceSlug, location.department_code || '').catch(() => null),
+    ])
+  }
+
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
   const ville = getVilleBySlug(locationSlug)
   const locationContent = ville
@@ -698,6 +725,36 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     combinedFaq.map((f) => ({ question: f.question, answer: f.answer }))
   )
   if (enrichedFaqSchema) jsonLdSchemas.push(enrichedFaqSchema)
+
+  // Aggregate rating schema (only from first-party review stats, not scraped data)
+  if (reviewStats && reviewStats.avg_rating > 0 && reviewStats.review_count > 0) {
+    const aggRatingSchema = generateAggregateRatingSchema({
+      serviceName: service.name,
+      villeName: location.name,
+      avgRating: reviewStats.avg_rating,
+      reviewCount: reviewStats.review_count,
+      serviceSlug,
+      villeSlug: locationSlug,
+    })
+    if (aggRatingSchema) jsonLdSchemas.push(aggRatingSchema)
+  }
+
+  // ItemList schema for top providers (enriched version)
+  if (providers.length > 0) {
+    const enrichedItemList = generateItemListSchema({
+      serviceName: service.name,
+      villeName: location.name,
+      providers: providers.slice(0, 10).map((p) => ({
+        name: p.name,
+        slug: p.slug,
+        rating_average: p.rating_average,
+        review_count: p.review_count,
+      })),
+      serviceSlug,
+      villeSlug: locationSlug,
+    })
+    if (enrichedItemList) jsonLdSchemas.push(enrichedItemList)
+  }
 
   // Enriched speakable schema targeting specific CSS classes
   const enrichedSpeakable = generateSpeakableSchema({
@@ -1019,6 +1076,60 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         />
       </div>
       {/* --- end pSEO enrichment blocks --- */}
+
+      {/* --- Vague 3: social proof, freshness, UGC, AEO --- */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AEOAnswerBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          villeName={location.name}
+          departmentName={location.department_name || ''}
+          providerCount={totalProviderCount}
+          avgRating={averageRating}
+          priceRange={
+            trade
+              ? {
+                  min: Math.round(trade.priceRange.min * pricingMultiplier),
+                  max: Math.round(trade.priceRange.max * pricingMultiplier),
+                }
+              : null
+          }
+          communePopulation={communeData?.population ?? null}
+        />
+
+        <ReviewsDeptBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          departmentName={location.department_name || ''}
+          stats={reviewStats}
+          reviews={topReviews}
+        />
+
+        <DevisCounterBlock
+          count={recentDevisCount}
+          serviceName={service.name}
+          departmentName={location.department_name || ''}
+        />
+
+        <GlossaireTooltips serviceSlug={serviceSlug} />
+
+        <PhotoGalleryBlock
+          serviceName={service.name}
+          villeName={location.name}
+          departmentName={location.department_name || ''}
+          providerCount={totalProviderCount}
+        />
+
+        <UserQuestionBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          villeName={location.name}
+          villeSlug={locationSlug}
+        />
+
+        <FreshnessSignal lastModified={dynamicLastMod} />
+      </div>
+      {/* --- end Vague 3 --- */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
         <CallbackRequest serviceSlug={serviceSlug} cityName={location.name} />

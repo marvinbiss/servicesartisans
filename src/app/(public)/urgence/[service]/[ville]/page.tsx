@@ -53,7 +53,20 @@ import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBloc
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
-import { generateHowToSchemaUrgence, generateSpeakableSchema } from '@/lib/seo/schema-enrichment'
+import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
+import DevisCounterBlock from '@/components/seo/DevisCounterBlock'
+import FreshnessSignal from '@/components/seo/FreshnessSignal'
+import GlossaireTooltips from '@/components/seo/GlossaireTooltips'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import PhotoGalleryBlock from '@/components/seo/PhotoGalleryBlock'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import {
+  generateHowToSchemaUrgence,
+  generateSpeakableSchema,
+  generateAggregateRatingSchema,
+} from '@/lib/seo/schema-enrichment'
+import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
+import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
@@ -304,6 +317,13 @@ export default async function UrgenceServiceVillePage({
 
   const commune = await getCommuneBySlug(villeSlug)
 
+  // Enrichment data (social proof, freshness, AEO) — fail-open
+  const [reviewStats, topReviews, dynamicLastMod] = await Promise.all([
+    getReviewStatsByDept(service, villeData.departement).catch(() => null),
+    getTopReviewsByDept(service, villeData.departement).catch(() => []),
+    getDynamicLastModified(service, villeData.departementCode).catch(() => null),
+  ])
+
   // Fetch providers for showcase — fallback to département if city has 0
   let providers = await getProvidersByServiceAndLocation(service, villeSlug, { limit: 6 }).catch(
     () => [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>
@@ -428,6 +448,18 @@ export default async function UrgenceServiceVillePage({
     cssSelectors: ['.speakable-summary', '.speakable-faq'],
   })
 
+  // AggregateRating schema (only if review data available)
+  const aggregateRatingSchema = reviewStats
+    ? generateAggregateRatingSchema({
+        serviceName: trade.name,
+        villeName: villeData.name,
+        avgRating: reviewStats.avg_rating,
+        reviewCount: reviewStats.review_count,
+        serviceSlug: service,
+        villeSlug,
+      })
+    : null
+
   return (
     <div className="min-h-screen bg-sand-50">
       <SearchRecorder
@@ -435,7 +467,16 @@ export default async function UrgenceServiceVillePage({
         label={`Urgence ${trade.name} à ${villeData.name}`}
         href={`/urgence/${service}/${villeSlug}`}
       />
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, howToSchema, speakableSchema]} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          faqSchema,
+          serviceSchema,
+          howToSchema,
+          speakableSchema,
+          ...(aggregateRatingSchema ? [aggregateRatingSchema] : []),
+        ]}
+      />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
       <section
@@ -1218,6 +1259,51 @@ export default async function UrgenceServiceVillePage({
         regionName={villeData.region}
         currentIntent="urgence"
       />
+
+      {/* ─── ENRICHMENT: Social proof, freshness, UGC, AEO ─────── */}
+
+      <AEOAnswerBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        departmentName={villeData.departement}
+        providerCount={providers.length}
+        avgRating={reviewStats?.avg_rating ?? null}
+        priceRange={{ min: minPrice, max: maxPrice }}
+        communePopulation={commune?.population ?? null}
+      />
+
+      <ReviewsDeptBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        departmentName={villeData.departement}
+        stats={reviewStats}
+        reviews={topReviews}
+      />
+
+      <DevisCounterBlock
+        count={0}
+        serviceName={trade.name}
+        departmentName={villeData.departement}
+      />
+
+      <GlossaireTooltips serviceSlug={service} />
+
+      <PhotoGalleryBlock
+        serviceName={trade.name}
+        villeName={villeData.name}
+        departmentName={villeData.departement}
+        providerCount={providers.length}
+      />
+
+      <UserQuestionBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        villeSlug={villeSlug}
+      />
+
+      <FreshnessSignal lastModified={dynamicLastMod} />
 
       {/* ─── CROSS-LINKS: NEARBY CITIES ────────────────────── */}
       <section className="py-16 bg-white">

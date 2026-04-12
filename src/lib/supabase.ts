@@ -468,6 +468,158 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   demenageur: ['demenageur'], // NAF 49.42Z
 }
 
+// ---------------------------------------------------------------------------
+// Review stats by department (materialized view)
+// ---------------------------------------------------------------------------
+
+export async function getReviewStatsByDept(
+  serviceSlug: string,
+  departmentName: string
+): Promise<{ review_count: number; avg_rating: number; latest_review_at: string | null } | null> {
+  if (IS_BUILD) return null
+
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return null
+
+  const cacheKey = `review-stats-dept:${serviceSlug}:${departmentName}`
+
+  return getCachedData(
+    cacheKey,
+    async () => {
+      try {
+        return await retryWithBackoff(async () => {
+          const { data, error } = await supabase
+            .from('review_stats_by_dept')
+            .select('review_count, avg_rating, latest_review_at')
+            .eq('address_department', departmentName)
+            .in('specialty_slug', specialties)
+
+          if (error) throw error
+          if (!data || data.length === 0) return null
+
+          // Aggregate across specialties (a service can map to multiple)
+          const totalCount = data.reduce((sum, r) => sum + (r.review_count ?? 0), 0)
+          if (totalCount === 0) return null
+
+          const weightedSum = data.reduce(
+            (sum, r) => sum + (r.avg_rating ?? 0) * (r.review_count ?? 0),
+            0
+          )
+          const avgRating = Math.round((weightedSum / totalCount) * 10) / 10
+
+          // Latest review across all matching specialties
+          const latestReviewAt = data.reduce<string | null>((latest, r) => {
+            if (!r.latest_review_at) return latest
+            if (!latest) return r.latest_review_at
+            return r.latest_review_at > latest ? r.latest_review_at : latest
+          }, null)
+
+          return {
+            review_count: totalCount,
+            avg_rating: avgRating,
+            latest_review_at: latestReviewAt,
+          }
+        }, `getReviewStatsByDept(${serviceSlug}, ${departmentName})`)
+      } catch (err) {
+        logger.error(`[getReviewStatsByDept] FAILED for ${serviceSlug}/${departmentName}:`, {
+          error: err instanceof Error ? err.message : err,
+        })
+        return null
+      }
+    },
+    CACHE_TTL.artisans
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Top reviews by department (direct query on reviews + providers)
+// ---------------------------------------------------------------------------
+
+interface DeptReview {
+  id: string
+  rating: number
+  comment: string | null
+  created_at: string
+  author_name: string | null
+  provider_name: string
+  provider_city: string | null
+}
+
+export async function getTopReviewsByDept(
+  serviceSlug: string,
+  departmentName: string,
+  limit?: number
+): Promise<DeptReview[]> {
+  if (IS_BUILD) return []
+
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return []
+
+  const effectiveLimit = Math.min(Math.max(limit ?? 3, 1), 10)
+  const cacheKey = `top-reviews-dept:${serviceSlug}:${departmentName}:${effectiveLimit}`
+
+  return getCachedData(
+    cacheKey,
+    async () => {
+      try {
+        return await retryWithBackoff(async () => {
+          // Two-step query: Supabase JS doesn't support cross-table WHERE filters,
+          // so we first get provider IDs, then fetch their reviews.
+
+          // Step 1: Get provider IDs for this department + specialties
+          const { data: providers, error: provError } = await supabase
+            .from('providers')
+            .select('id')
+            .eq('address_department', departmentName)
+            .in('specialty', specialties)
+            .eq('is_active', true)
+            .limit(500)
+
+          if (provError) throw provError
+          if (!providers || providers.length === 0) return []
+
+          const providerIds = providers.map((p) => p.id)
+
+          // Step 2: Get top reviews for those providers
+          const { data: reviews, error: revError } = await supabase
+            .from('reviews')
+            .select(
+              'id, rating, comment, created_at, author_name, provider:provider_id(name, address_city)'
+            )
+            .eq('status', 'published')
+            .in('provider_id', providerIds)
+            .order('rating', { ascending: false })
+            .order('created_at', { ascending: false })
+            .limit(effectiveLimit)
+
+          if (revError) throw revError
+          if (!reviews || reviews.length === 0) return []
+
+          return reviews.map((r) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const prov = r.provider as any
+            return {
+              id: r.id,
+              rating: r.rating,
+              comment: r.comment,
+              created_at: r.created_at,
+              author_name: r.author_name,
+              provider_name: prov?.name ?? 'Artisan',
+              provider_city: prov?.address_city ?? null,
+            }
+          })
+        }, `getTopReviewsByDept(${serviceSlug}, ${departmentName})`)
+      } catch (err) {
+        logger.error(`[getTopReviewsByDept] FAILED for ${serviceSlug}/${departmentName}:`, {
+          error: err instanceof Error ? err.message : err,
+        })
+        return []
+      }
+    },
+    CACHE_TTL.artisans
+  )
+}
+
 export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
@@ -887,6 +1039,57 @@ export async function getProviderCountByService(serviceSlug: string): Promise<nu
   } catch {
     return 0
   }
+}
+
+/**
+ * Count recent devis requests (last 30 days) for a service×department pair.
+ * Uses postal_code prefix to match the department (French postal codes start with dept code).
+ * Fail-open: returns 0 on any error.
+ */
+export async function getDevisCountByDept(
+  serviceSlug: string,
+  departmentCode: string
+): Promise<number> {
+  if (IS_BUILD) return 0
+
+  const cacheKey = `devis-count:${serviceSlug}:${departmentCode}`
+
+  return getCachedData(
+    cacheKey,
+    async () => {
+      try {
+        const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+        if (!specialties || specialties.length === 0) return 0
+
+        const thirtyDaysAgo = new Date()
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+        // devis_requests stores service_name (human-readable), not slug.
+        // Use ilike to match any specialty name for this service.
+        // Also filter by postal_code prefix for the department.
+        const postalPrefix = `${departmentCode}%`
+
+        let total = 0
+        for (const specialty of specialties) {
+          const { count, error } = await supabase
+            .from('devis_requests')
+            .select('*', { count: 'exact', head: true })
+            .ilike('service_name', specialty)
+            .like('postal_code', postalPrefix)
+            .gte('created_at', thirtyDaysAgo.toISOString())
+
+          if (!error && count) {
+            total += count
+          }
+        }
+
+        return total
+      } catch {
+        return 0
+      }
+    },
+    CACHE_TTL.stats
+  )
 }
 
 export async function getLocationsByService(serviceSlug: string) {

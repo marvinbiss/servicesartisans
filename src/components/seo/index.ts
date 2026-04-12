@@ -1,3 +1,6 @@
 export { Breadcrumb } from './Breadcrumb'
+export { default as AEOAnswerBlock } from './AEOAnswerBlock'
 export { default as TopicalClusterLinks } from './TopicalClusterLinks'
 export { default as BlogClusterLinks } from './BlogClusterLinks'
+export { default as DevisCounterBlock } from './DevisCounterBlock'
+export { default as FreshnessSignal } from './FreshnessSignal'

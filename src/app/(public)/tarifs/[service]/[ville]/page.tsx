@@ -57,12 +57,22 @@ import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBloc
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
+import DevisCounterBlock from '@/components/seo/DevisCounterBlock'
+import FreshnessSignal from '@/components/seo/FreshnessSignal'
+import GlossaireTooltips from '@/components/seo/GlossaireTooltips'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import PhotoGalleryBlock from '@/components/seo/PhotoGalleryBlock'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
 import {
   generateFAQSchema,
   generateDetailedPricingSchema,
   generateSpeakableSchema,
+  generateAggregateRatingSchema,
   parseCommonTasksToPricingTasks,
 } from '@/lib/seo/schema-enrichment'
+import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
+import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -263,6 +273,13 @@ export default async function TarifsServiceVillePage({
       : Promise.resolve(0),
   ])
 
+  // Enrichment data (social proof, freshness, AEO) — fail-open
+  const [reviewStats, topReviews, dynamicLastMod] = await Promise.all([
+    getReviewStatsByDept(service, villeData.departement).catch(() => null),
+    getTopReviewsByDept(service, villeData.departement).catch(() => []),
+    getDynamicLastModified(service, villeData.departementCode).catch(() => null),
+  ])
+
   // Fallback: if 0 providers in this city, try the whole département
   let providers = directProviders
   let isFallback = false
@@ -373,6 +390,18 @@ export default async function TarifsServiceVillePage({
     cssSelectors: ['.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
   })
 
+  // AggregateRating schema (only if review data available)
+  const aggregateRatingSchema = reviewStats
+    ? generateAggregateRatingSchema({
+        serviceName: trade.name,
+        villeName: villeData.name,
+        avgRating: reviewStats.avg_rating,
+        reviewCount: reviewStats.review_count,
+        serviceSlug: service,
+        villeSlug,
+      })
+    : null
+
   const relatedCities = getNearbyCities(villeSlug, 6)
 
   const relatedSlugs = relatedServices[service] || []
@@ -393,6 +422,7 @@ export default async function TarifsServiceVillePage({
           ...(detailedPricingSchema ? [detailedPricingSchema] : []),
           ...(enrichedFAQSchema ? [enrichedFAQSchema] : []),
           enrichedSpeakableSchema,
+          ...(aggregateRatingSchema ? [aggregateRatingSchema] : []),
         ]}
       />
 
@@ -1235,6 +1265,51 @@ export default async function TarifsServiceVillePage({
         regionName={villeData.region}
         currentIntent="tarifs"
       />
+
+      {/* ─── ENRICHMENT: Social proof, freshness, UGC, AEO ─────── */}
+
+      <AEOAnswerBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        departmentName={villeData.departement}
+        providerCount={providers.length}
+        avgRating={reviewStats?.avg_rating ?? null}
+        priceRange={{ min: minPrice, max: maxPrice }}
+        communePopulation={commune?.population ?? null}
+      />
+
+      <ReviewsDeptBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        departmentName={villeData.departement}
+        stats={reviewStats}
+        reviews={topReviews}
+      />
+
+      <DevisCounterBlock
+        count={0}
+        serviceName={trade.name}
+        departmentName={villeData.departement}
+      />
+
+      <GlossaireTooltips serviceSlug={service} />
+
+      <PhotoGalleryBlock
+        serviceName={trade.name}
+        villeName={villeData.name}
+        departmentName={villeData.departement}
+        providerCount={providers.length}
+      />
+
+      <UserQuestionBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        villeSlug={villeSlug}
+      />
+
+      <FreshnessSignal lastModified={dynamicLastMod} />
 
       <StickyMobileCTA
         serviceSlug={service}

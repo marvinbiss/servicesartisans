@@ -326,6 +326,134 @@ export function generateSpeakableSchema(options: SpeakableOptions): Record<strin
 // Helper: parse commonTasks strings into PricingTask[]
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// 6. AggregateRating schema (LocalBusiness)
+// ---------------------------------------------------------------------------
+
+/**
+ * Generates a LocalBusiness schema with AggregateRating for service×city pages.
+ * Returns null if avgRating or reviewCount are invalid.
+ *
+ * @see https://developers.google.com/search/docs/appearance/structured-data/review-snippet
+ */
+export function generateAggregateRatingSchema(options: {
+  serviceName: string
+  villeName: string
+  avgRating: number
+  reviewCount: number
+  serviceSlug: string
+  villeSlug: string
+}): Record<string, unknown> | null {
+  const { serviceName, villeName, avgRating, reviewCount, serviceSlug, villeSlug } = options
+
+  if (avgRating <= 0 || reviewCount <= 0) return null
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: `${serviceName} à ${villeName} — ${SITE_NAME}`,
+    url: `${SITE_URL}/services/${serviceSlug}/${villeSlug}`,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: avgRating,
+      bestRating: 5,
+      worstRating: 1,
+      reviewCount,
+    },
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 7. ItemList schema (top providers)
+// ---------------------------------------------------------------------------
+
+/**
+ * Generates an ItemList schema with ListItem entries for top providers on a
+ * service×city page. Returns null if providers is empty.
+ *
+ * @see https://developers.google.com/search/docs/appearance/structured-data/carousel
+ */
+export function generateItemListSchema(options: {
+  serviceName: string
+  villeName: string
+  providers: Array<{
+    name: string
+    slug: string
+    rating_average?: number | null
+    review_count?: number | null
+  }>
+  serviceSlug: string
+  villeSlug: string
+}): Record<string, unknown> | null {
+  const { serviceName, villeName, providers } = options
+
+  if (!providers || providers.length === 0) return null
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${serviceName} à ${villeName} — artisans vérifiés`,
+    numberOfItems: providers.length,
+    itemListElement: providers.map((provider, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'LocalBusiness',
+        name: provider.name,
+        url: `${SITE_URL}/artisan/${provider.slug}`,
+        ...(provider.rating_average != null &&
+          provider.rating_average > 0 &&
+          provider.review_count != null &&
+          provider.review_count > 0 && {
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: provider.rating_average,
+              bestRating: 5,
+              worstRating: 1,
+              reviewCount: provider.review_count,
+            },
+          }),
+      },
+    })),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 8. Enhanced BreadcrumbList schema
+// ---------------------------------------------------------------------------
+
+/**
+ * Generates a BreadcrumbList schema with proper position numbers.
+ * Items should always start with "Accueil" and include service → location.
+ *
+ * @see https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
+ */
+export function generateEnhancedBreadcrumbSchema(options: {
+  items: Array<{ name: string; url: string }>
+}): Record<string, unknown> {
+  const { items } = options
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => {
+      const isLast = index === items.length - 1
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        ...(!isLast && {
+          item: item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url}`,
+        }),
+      }
+    }),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Helper: parse commonTasks strings into PricingTask[]
+// ---------------------------------------------------------------------------
+
 /**
  * Parses the `commonTasks` strings from TradeContent into structured PricingTask objects.
  *

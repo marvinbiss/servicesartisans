@@ -51,7 +51,17 @@ import {
   generateFAQSchema as generateFAQSchemaEnriched,
   generateHowToSchema,
   generateSpeakableSchema,
+  generateAggregateRatingSchema,
 } from '@/lib/seo/schema-enrichment'
+import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
+import DevisCounterBlock from '@/components/seo/DevisCounterBlock'
+import FreshnessSignal from '@/components/seo/FreshnessSignal'
+import GlossaireTooltips from '@/components/seo/GlossaireTooltips'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import PhotoGalleryBlock from '@/components/seo/PhotoGalleryBlock'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
+import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 
 export const revalidate = 86400
 
@@ -253,6 +263,13 @@ export default async function DevisServiceLocationPage({
     }
   }
 
+  // Social proof: department reviews
+  const [reviewStats, topReviews, dynamicLastMod] = await Promise.all([
+    getReviewStatsByDept(service, villeData.departement).catch(() => null),
+    getTopReviewsByDept(service, villeData.departement).catch(() => []),
+    getDynamicLastModified(service, villeData.departementCode).catch(() => null),
+  ])
+
   // Schemas
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -448,6 +465,18 @@ export default async function DevisServiceLocationPage({
           howToSchema,
           ...(enrichedFaqSchema ? [enrichedFaqSchema] : []),
           speakableSchema,
+          ...(reviewStats && reviewStats.avg_rating > 0 && reviewStats.review_count > 0
+            ? [
+                generateAggregateRatingSchema({
+                  serviceName: trade.name,
+                  villeName: villeData.name,
+                  avgRating: reviewStats.avg_rating,
+                  reviewCount: reviewStats.review_count,
+                  serviceSlug: service,
+                  villeSlug: location,
+                }),
+              ].filter(Boolean)
+            : []),
         ]}
       />
 
@@ -1345,6 +1374,53 @@ export default async function DevisServiceLocationPage({
         regionName={villeData.region}
         currentIntent="devis"
       />
+
+      {/* --- Vague 3: social proof, freshness, UGC, AEO --- */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AEOAnswerBlock
+          serviceSlug={service}
+          serviceName={trade.name}
+          villeName={villeData.name}
+          departmentName={villeData.departement}
+          providerCount={providers.length}
+          avgRating={reviewStats?.avg_rating ?? null}
+          priceRange={{ min: minPrice, max: maxPrice }}
+          communePopulation={commune?.population ?? null}
+        />
+
+        <ReviewsDeptBlock
+          serviceSlug={service}
+          serviceName={trade.name}
+          departmentName={villeData.departement}
+          stats={reviewStats}
+          reviews={topReviews}
+        />
+
+        <DevisCounterBlock
+          count={recentDevisCount}
+          serviceName={trade.name}
+          departmentName={villeData.departement}
+        />
+
+        <GlossaireTooltips serviceSlug={service} />
+
+        <PhotoGalleryBlock
+          serviceName={trade.name}
+          villeName={villeData.name}
+          departmentName={villeData.departement}
+          providerCount={providers.length}
+        />
+
+        <UserQuestionBlock
+          serviceSlug={service}
+          serviceName={trade.name}
+          villeName={villeData.name}
+          villeSlug={location}
+        />
+
+        <FreshnessSignal lastModified={dynamicLastMod} />
+      </div>
+      {/* --- end Vague 3 --- */}
 
       <InContentLinks
         serviceSlug={service}
