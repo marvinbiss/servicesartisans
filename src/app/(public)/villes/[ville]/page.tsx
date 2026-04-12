@@ -3,12 +3,38 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle, Leaf } from 'lucide-react'
+import {
+  MapPin,
+  Users,
+  Building2,
+  ArrowRight,
+  Shield,
+  Clock,
+  Wrench,
+  HelpCircle,
+  Thermometer,
+  Home,
+  TrendingUp,
+  AlertTriangle,
+  Leaf,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getEnrichedPlaceSchema, getCityServicesListSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getEnrichedPlaceSchema,
+  getCityServicesListSchema,
+} from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
+import {
+  villes,
+  getVilleBySlug,
+  services,
+  getRegionSlugByName,
+  getDepartementByCode,
+  getQuartiersByVille,
+} from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
@@ -22,15 +48,9 @@ import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
 
-const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
-  { ssr: false }
-)
+const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
 
-const CityMap = dynamic(
-  () => import('@/components/maps/CityMap'),
-  { ssr: false }
-)
+const CityMap = dynamic(() => import('@/components/maps/CityMap'), { ssr: false })
 
 // Pre-render top 10 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 10
@@ -58,7 +78,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityImage = getCityImage(villeSlug)
   const metaContent = generateVilleContent(ville)
 
-
   const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
   const titleTemplates = [
     `Artisans ${ville.name} (${ville.departementCode}) — Devis`,
@@ -83,15 +102,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     // Hub pages are always indexed — rich geographic content has value even with 0 providers
-    robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
     openGraph: {
       locale: 'fr_FR',
       title,
       description,
       type: 'website',
-      images: [cityImage
-        ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
-        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Artisans à ${ville.name}` }
+      images: [
+        cityImage
+          ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
+          : {
+              url: `${SITE_URL}/opengraph-image`,
+              width: 1200,
+              height: 630,
+              alt: `Artisans à ${ville.name}`,
+            },
       ],
     },
     twitter: {
@@ -137,7 +168,10 @@ export default async function VillePage({ params }: PageProps) {
     region: ville.region,
     department: ville.departement,
     departmentCode: ville.departementCode,
-    population: typeof ville.population === 'number' ? ville.population : parseInt(String(ville.population).replace(/\s/g, ''), 10) || undefined,
+    population:
+      typeof ville.population === 'number'
+        ? ville.population
+        : parseInt(String(ville.population).replace(/\s/g, ''), 10) || undefined,
     description: `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). ${services.length} corps de métier : plombiers, électriciens, serruriers et plus.`,
     image: cityImage?.src,
   })
@@ -153,7 +187,7 @@ export default async function VillePage({ params }: PageProps) {
   const servicesListSchema = getCityServicesListSchema({
     cityName: ville.name,
     citySlug: ville.slug,
-    services: orderedServices.slice(0, 20).map(s => ({ name: s.name, slug: s.slug })),
+    services: orderedServices.slice(0, 20).map((s) => ({ name: s.name, slug: s.slug })),
   })
 
   return (
@@ -164,26 +198,34 @@ export default async function VillePage({ params }: PageProps) {
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0">
-            {cityImage && (
-              <Image
-                src={cityImage.src}
-                alt={cityImage.alt}
-                fill
-                className="object-cover opacity-15"
-                sizes="100vw"
-                priority
-                placeholder="blur"
-                blurDataURL={BLUR_PLACEHOLDER}
-              />
-            )}
-            <div className="absolute inset-0 bg-charcoal-950/80" />
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.12) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          {cityImage && (
+            <Image
+              src={cityImage.src}
+              alt={cityImage.alt}
+              fill
+              className="object-cover opacity-15"
+              sizes="100vw"
+              priority
+              placeholder="blur"
+              blurDataURL={BLUR_PLACEHOLDER}
+            />
+          )}
+          <div className="absolute inset-0 bg-charcoal-950/80" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.12) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
 
@@ -193,7 +235,14 @@ export default async function VillePage({ params }: PageProps) {
             <Breadcrumb
               items={[
                 ...(regionSlug ? [{ label: ville.region, href: `/regions/${regionSlug}` }] : []),
-                ...(deptSlug ? [{ label: `${ville.departement} (${ville.departementCode})`, href: `/departements/${deptSlug}` }] : []),
+                ...(deptSlug
+                  ? [
+                      {
+                        label: `${ville.departement} (${ville.departementCode})`,
+                        href: `/departements/${deptSlug}`,
+                      },
+                    ]
+                  : []),
                 { label: ville.name },
               ]}
               className="text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
@@ -204,11 +253,15 @@ export default async function VillePage({ params }: PageProps) {
             <div className="flex flex-wrap gap-2 mb-5">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-400/15 backdrop-blur-sm rounded-full border border-primary-400/25">
                 <MapPin className="w-4 h-4 text-primary-400" />
-                <span className="text-sm font-medium text-primary-200">{content.profile.citySizeLabel}</span>
+                <span className="text-sm font-medium text-primary-200">
+                  {content.profile.citySizeLabel}
+                </span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500/15 backdrop-blur-sm rounded-full border border-accent-400/25">
                 <Thermometer className="w-4 h-4 text-accent-400" />
-                <span className="text-sm font-medium text-accent-200">{content.profile.climateLabel}</span>
+                <span className="text-sm font-medium text-accent-200">
+                  {content.profile.climateLabel}
+                </span>
               </div>
             </div>
 
@@ -239,7 +292,9 @@ export default async function VillePage({ params }: PageProps) {
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Building2 className="w-4 h-4 text-primary-400" />
-                <span>{ville.departement} ({ville.departementCode})</span>
+                <span>
+                  {ville.departement} ({ville.departementCode})
+                </span>
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Users className="w-4 h-4 text-primary-400" />
@@ -250,10 +305,12 @@ export default async function VillePage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -283,7 +340,8 @@ export default async function VillePage({ params }: PageProps) {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-emerald-900">
-                    {rgeCount} artisan{rgeCount > 1 ? 's' : ''} certifié{rgeCount > 1 ? 's' : ''} RGE à {ville.name}
+                    {rgeCount} artisan{rgeCount > 1 ? 's' : ''} certifié{rgeCount > 1 ? 's' : ''}{' '}
+                    RGE à {ville.name}
                   </div>
                   <div className="text-xs text-emerald-700">
                     Requis pour MaPrimeRénov&apos;, CEE et TVA 5,5 %
@@ -310,7 +368,9 @@ export default async function VillePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
                 Trouver un artisan à {ville.name}
               </h2>
-              <p className="text-sm text-charcoal-500">{services.length} corps de métier disponibles</p>
+              <p className="text-sm text-charcoal-500">
+                {services.length} corps de métier disponibles
+              </p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -321,9 +381,13 @@ export default async function VillePage({ params }: PageProps) {
                 className={`bg-white rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-accent-200' : 'border border-sand-200'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (
-                  <span className="inline-block text-[10px] font-bold text-accent-600 bg-accent-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
+                  <span className="inline-block text-[10px] font-bold text-accent-600 bg-accent-50 px-2 py-0.5 rounded-full mb-2">
+                    Prioritaire
+                  </span>
                 )}
-                <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">{service.name}</h3>
+                <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">
+                  {service.name}
+                </h3>
                 <p className="text-xs text-charcoal-400 mt-1.5">à {ville.name}</p>
               </Link>
             ))}
@@ -363,19 +427,24 @@ export default async function VillePage({ params }: PageProps) {
           </div>
           <div className="space-y-4">
             {orderedServices.slice(0, 5).map((service) => (
-              <div key={`intent-${service.slug}`} className="bg-white rounded-2xl border border-sand-200 p-5">
-                <h3 className="font-semibold text-charcoal-900 text-sm mb-3">{service.name} à {ville.name}</h3>
+              <div
+                key={`intent-${service.slug}`}
+                className="bg-white rounded-2xl border border-sand-200 p-5"
+              >
+                <h3 className="font-semibold text-charcoal-900 text-sm mb-3">
+                  {service.name} à {ville.name}
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   <Link
                     href={`/services/${service.slug}/${villeSlug}`}
-                    className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
                   >
                     <Users className="w-3.5 h-3.5" />
                     Artisans
                   </Link>
                   <Link
                     href={`/tarifs/${service.slug}/${villeSlug}`}
-                    className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
                   >
                     Tarifs
                   </Link>
@@ -414,13 +483,19 @@ export default async function VillePage({ params }: PageProps) {
                 <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
                   Quartiers desservis à {ville.name}
                 </h2>
-                <p className="text-sm text-charcoal-500">{ville.quartiers.length} quartiers couverts</p>
+                <p className="text-sm text-charcoal-500">
+                  {ville.quartiers.length} quartiers couverts
+                </p>
               </div>
             </div>
             <div className="bg-white rounded-2xl border border-sand-300 p-6">
               <div className="flex flex-wrap gap-2.5">
                 {getQuartiersByVille(villeSlug).map(({ name, slug }) => (
-                  <Link key={slug} href={`/villes/${villeSlug}/${slug}`} className="bg-sand-50 text-charcoal-700 px-4 py-2 rounded-full text-sm border border-sand-200 hover:bg-accent-50 hover:text-accent-700 hover:border-accent-200 transition-colors">
+                  <Link
+                    key={slug}
+                    href={`/villes/${villeSlug}/${slug}`}
+                    className="bg-sand-50 text-charcoal-700 px-4 py-2 rounded-full text-sm border border-sand-200 hover:bg-accent-50 hover:text-accent-700 hover:border-accent-200 transition-colors"
+                  >
                     {name}
                   </Link>
                 ))}
@@ -439,153 +514,209 @@ export default async function VillePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
                 Profil de {ville.name}
               </h2>
-              <p className="text-sm text-charcoal-500">{content.profile.citySizeLabel} · {content.profile.climateLabel}</p>
+              <p className="text-sm text-charcoal-500">
+                {content.profile.citySizeLabel} · {content.profile.climateLabel}
+              </p>
             </div>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-2xl border border-sand-300 p-5">
               <div className="flex items-center gap-2 mb-2">
                 <Thermometer className="w-4 h-4 text-primary-400" />
-                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Climat</span>
+                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                  Climat
+                </span>
               </div>
               <p className="font-bold text-charcoal-900">{content.profile.climateLabel}</p>
             </div>
             <div className="bg-white rounded-2xl border border-sand-300 p-5">
               <div className="flex items-center gap-2 mb-2">
                 <Home className="w-4 h-4 text-accent-500" />
-                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Habitat</span>
+                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                  Habitat
+                </span>
               </div>
               <p className="font-bold text-charcoal-900">{content.profile.citySizeLabel}</p>
             </div>
             <div className="bg-white rounded-2xl border border-sand-300 p-5">
               <div className="flex items-center gap-2 mb-2">
                 <Users className="w-4 h-4 text-violet-500" />
-                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Population</span>
+                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                  Population
+                </span>
               </div>
               <p className="font-bold text-charcoal-900">{ville.population} hab.</p>
             </div>
             <div className="bg-white rounded-2xl border border-sand-300 p-5">
               <div className="flex items-center gap-2 mb-2">
                 <Building2 className="w-4 h-4 text-amber-500" />
-                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Département</span>
+                <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                  Département
+                </span>
               </div>
-              <p className="font-bold text-charcoal-900">{ville.departement} ({ville.departementCode})</p>
+              <p className="font-bold text-charcoal-900">
+                {ville.departement} ({ville.departementCode})
+              </p>
             </div>
           </div>
 
           {/* Données enrichies — affichées uniquement si disponibles */}
-          {commune && (commune.nb_artisans_btp != null || commune.prix_m2_maison != null || commune.pct_passoires_dpe != null || commune.jours_gel_annuels != null || commune.nb_artisans_rge != null || commune.nb_maprimerenov_annuel != null) && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-              {commune.nb_artisans_btp != null && (
-                <div className="bg-white rounded-2xl border border-sand-300 p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Wrench className="w-4 h-4 text-teal-500" />
-                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Artisans BTP</span>
+          {commune &&
+            (commune.nb_artisans_btp != null ||
+              commune.prix_m2_maison != null ||
+              commune.pct_passoires_dpe != null ||
+              commune.jours_gel_annuels != null ||
+              commune.nb_artisans_rge != null ||
+              commune.nb_maprimerenov_annuel != null) && (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {commune.nb_artisans_btp != null && (
+                  <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Wrench className="w-4 h-4 text-teal-500" />
+                      <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                        Artisans BTP
+                      </span>
+                    </div>
+                    <p className="font-bold text-charcoal-900 text-lg">
+                      {commune.nb_artisans_btp.toLocaleString('fr-FR')}
+                    </p>
+                    <p className="text-xs text-charcoal-500 mt-1">entreprises actives (SIRENE)</p>
                   </div>
-                  <p className="font-bold text-charcoal-900 text-lg">{commune.nb_artisans_btp.toLocaleString('fr-FR')}</p>
-                  <p className="text-xs text-charcoal-500 mt-1">entreprises actives (SIRENE)</p>
-                </div>
-              )}
-              {commune.nb_artisans_rge != null && (
-                <div className="bg-white rounded-2xl border border-sand-300 p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Shield className="w-4 h-4 text-accent-500" />
-                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Certifiés RGE</span>
-                  </div>
-                  <p className="font-bold text-charcoal-900 text-lg">{commune.nb_artisans_rge.toLocaleString('fr-FR')}</p>
-                  <p className="text-xs text-charcoal-500 mt-1">artisans rénovation énergétique</p>
-                </div>
-              )}
-              {commune.prix_m2_maison != null && (
-                <div className="bg-white rounded-2xl border border-sand-300 p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Building2 className="w-4 h-4 text-primary-400" />
-                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Prix immobilier</span>
-                  </div>
-                  <p className="font-bold text-charcoal-900 text-lg">{commune.prix_m2_maison.toLocaleString('fr-FR')} €/m²</p>
-                  <p className="text-xs text-charcoal-500 mt-1">
-                    maison{commune.prix_m2_appartement != null ? ` · ${commune.prix_m2_appartement.toLocaleString('fr-FR')} €/m² appt` : ''}
-                  </p>
-                </div>
-              )}
-              {commune.pct_passoires_dpe != null && (
-                <div className="bg-white rounded-2xl border border-sand-300 p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-500" />
-                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Passoires énergétiques</span>
-                  </div>
-                  <p className="font-bold text-charcoal-900 text-lg">{commune.pct_passoires_dpe}%</p>
-                  <p className="text-xs text-charcoal-500 mt-1">des logements classés F ou G (DPE)</p>
-                </div>
-              )}
-              {commune.jours_gel_annuels != null && (
-                <div className="bg-white rounded-2xl border border-sand-300 p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Thermometer className="w-4 h-4 text-blue-500" />
-                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">Climat</span>
-                  </div>
-                  <p className="font-bold text-charcoal-900 text-lg">{commune.jours_gel_annuels} jours de gel/an</p>
-                  <p className="text-xs text-charcoal-500 mt-1">
-                    {commune.temperature_moyenne_hiver != null && commune.temperature_moyenne_ete != null
-                      ? `Hiver ${commune.temperature_moyenne_hiver.toFixed(1)}°C · Été ${commune.temperature_moyenne_ete.toFixed(1)}°C`
-                      : `${commune.precipitation_annuelle != null ? commune.precipitation_annuelle + ' mm/an' : ''}`
-                    }
-                  </p>
-                </div>
-              )}
-              {commune.nb_maprimerenov_annuel != null && (
-                <div className="bg-white rounded-2xl border border-sand-300 p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-500" />
-                    <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">MaPrimeRénov&apos;</span>
-                  </div>
-                  <p className="font-bold text-charcoal-900 text-lg">{commune.nb_maprimerenov_annuel.toLocaleString('fr-FR')}</p>
-                  <p className="text-xs text-charcoal-500 mt-1">dossiers/an dans le département</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Risques naturels — affichés uniquement si données géorisques disponibles */}
-          {commune && (commune.nb_catnat != null && commune.nb_catnat > 0 || commune.zone_sismique != null || commune.risque_argile != null) && (
-            <div className="bg-amber-50 rounded-2xl border border-amber-200 p-5 mb-6">
-              <h3 className="font-semibold text-charcoal-900 mb-3 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-500" />
-                Risques naturels à {ville.name}
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {commune.zone_sismique != null && (
-                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
-                    Zone sismique <strong className="ml-1">{commune.zone_sismique}/5</strong>
-                  </span>
                 )}
-                {commune.risque_argile != null && (
-                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
-                    Argile : <strong className="ml-1">{commune.risque_argile}</strong>
-                  </span>
+                {commune.nb_artisans_rge != null && (
+                  <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Shield className="w-4 h-4 text-accent-500" />
+                      <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                        Certifiés RGE
+                      </span>
+                    </div>
+                    <p className="font-bold text-charcoal-900 text-lg">
+                      {commune.nb_artisans_rge.toLocaleString('fr-FR')}
+                    </p>
+                    <p className="text-xs text-charcoal-500 mt-1">
+                      artisans rénovation énergétique
+                    </p>
+                  </div>
                 )}
-                {commune.risque_inondation === true && (
-                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
-                    Risque inondation
-                  </span>
+                {commune.prix_m2_maison != null && (
+                  <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Building2 className="w-4 h-4 text-primary-400" />
+                      <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                        Prix immobilier
+                      </span>
+                    </div>
+                    <p className="font-bold text-charcoal-900 text-lg">
+                      {commune.prix_m2_maison.toLocaleString('fr-FR')} €/m²
+                    </p>
+                    <p className="text-xs text-charcoal-500 mt-1">
+                      maison
+                      {commune.prix_m2_appartement != null
+                        ? ` · ${commune.prix_m2_appartement.toLocaleString('fr-FR')} €/m² appt`
+                        : ''}
+                    </p>
+                  </div>
                 )}
-                {commune.risque_radon != null && (
-                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
-                    Radon : <strong className="ml-1">niveau {commune.risque_radon}/3</strong>
-                  </span>
+                {commune.pct_passoires_dpe != null && (
+                  <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertTriangle className="w-4 h-4 text-amber-500" />
+                      <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                        Passoires énergétiques
+                      </span>
+                    </div>
+                    <p className="font-bold text-charcoal-900 text-lg">
+                      {commune.pct_passoires_dpe}%
+                    </p>
+                    <p className="text-xs text-charcoal-500 mt-1">
+                      des logements classés F ou G (DPE)
+                    </p>
+                  </div>
                 )}
-                {commune.nb_catnat != null && commune.nb_catnat > 0 && (
-                  <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
-                    <strong className="mr-1">{commune.nb_catnat}</strong> arrêtés CatNat
-                  </span>
+                {commune.jours_gel_annuels != null && (
+                  <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Thermometer className="w-4 h-4 text-primary-400" />
+                      <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                        Climat
+                      </span>
+                    </div>
+                    <p className="font-bold text-charcoal-900 text-lg">
+                      {commune.jours_gel_annuels} jours de gel/an
+                    </p>
+                    <p className="text-xs text-charcoal-500 mt-1">
+                      {commune.temperature_moyenne_hiver != null &&
+                      commune.temperature_moyenne_ete != null
+                        ? `Hiver ${commune.temperature_moyenne_hiver.toFixed(1)}°C · Été ${commune.temperature_moyenne_ete.toFixed(1)}°C`
+                        : `${commune.precipitation_annuelle != null ? commune.precipitation_annuelle + ' mm/an' : ''}`}
+                    </p>
+                  </div>
+                )}
+                {commune.nb_maprimerenov_annuel != null && (
+                  <div className="bg-white rounded-2xl border border-sand-300 p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrendingUp className="w-4 h-4 text-emerald-500" />
+                      <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+                        MaPrimeRénov&apos;
+                      </span>
+                    </div>
+                    <p className="font-bold text-charcoal-900 text-lg">
+                      {commune.nb_maprimerenov_annuel.toLocaleString('fr-FR')}
+                    </p>
+                    <p className="text-xs text-charcoal-500 mt-1">
+                      dossiers/an dans le département
+                    </p>
+                  </div>
                 )}
               </div>
-            </div>
-          )}
+            )}
+
+          {/* Risques naturels — affichés uniquement si données géorisques disponibles */}
+          {commune &&
+            ((commune.nb_catnat != null && commune.nb_catnat > 0) ||
+              commune.zone_sismique != null ||
+              commune.risque_argile != null) && (
+              <div className="bg-amber-50 rounded-2xl border border-amber-200 p-5 mb-6">
+                <h3 className="font-semibold text-charcoal-900 mb-3 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-500" />
+                  Risques naturels à {ville.name}
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {commune.zone_sismique != null && (
+                    <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                      Zone sismique <strong className="ml-1">{commune.zone_sismique}/5</strong>
+                    </span>
+                  )}
+                  {commune.risque_argile != null && (
+                    <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                      Argile : <strong className="ml-1">{commune.risque_argile}</strong>
+                    </span>
+                  )}
+                  {commune.risque_inondation === true && (
+                    <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                      Risque inondation
+                    </span>
+                  )}
+                  {commune.risque_radon != null && (
+                    <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                      Radon : <strong className="ml-1">niveau {commune.risque_radon}/3</strong>
+                    </span>
+                  )}
+                  {commune.nb_catnat != null && commune.nb_catnat > 0 && (
+                    <span className="inline-flex items-center px-3 py-1.5 bg-white rounded-lg text-sm text-charcoal-700 border border-amber-200">
+                      <strong className="mr-1">{commune.nb_catnat}</strong> arrêtés CatNat
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
 
           <div className="bg-white rounded-2xl border border-sand-300 p-6 mb-4">
             <h3 className="font-semibold text-charcoal-900 mb-3">Habitat à {ville.name}</h3>
-            <p className="text-sm text-charcoal-600 leading-relaxed">{content.profile.habitatDescription}</p>
+            <p className="text-sm text-charcoal-600 leading-relaxed">
+              {content.profile.habitatDescription}
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl border border-sand-300 p-6 mb-4">
@@ -595,7 +726,10 @@ export default async function VillePage({ params }: PageProps) {
 
           <div className="grid sm:grid-cols-2 gap-3">
             {content.profile.climaticIssues.slice(0, 4).map((issue, i) => (
-              <div key={i} className="flex items-start gap-2 bg-amber-50 rounded-lg border border-amber-100 p-3">
+              <div
+                key={i}
+                className="flex items-start gap-2 bg-amber-50 rounded-lg border border-amber-100 p-3"
+              >
                 <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-amber-800">{issue}</span>
               </div>
@@ -616,7 +750,9 @@ export default async function VillePage({ params }: PageProps) {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl border border-sand-300 p-6">
               <h3 className="font-semibold text-charcoal-900 mb-3">Services prioritaires</h3>
-              <p className="text-sm text-charcoal-600 leading-relaxed">{content.servicesPrioritaires}</p>
+              <p className="text-sm text-charcoal-600 leading-relaxed">
+                {content.servicesPrioritaires}
+              </p>
             </div>
             <div className="bg-white rounded-2xl border border-sand-300 p-6">
               <h3 className="font-semibold text-charcoal-900 mb-3">Conseils pour {ville.name}</h3>
@@ -652,9 +788,13 @@ export default async function VillePage({ params }: PageProps) {
 
       {/* ─── CTA ────────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
             Besoin d'un artisan à {ville.name} ?
@@ -663,10 +803,16 @@ export default async function VillePage({ params }: PageProps) {
             Décrivez votre projet et recevez des devis gratuits d'artisans qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-2xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-2xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
+            >
               Obtenir mon devis gratuit
             </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-charcoal-300 hove[r:text-white_a:hover]:text-primary-400 font-medium transition-colors">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 text-charcoal-300 hove[r:text-white_a:hover]:text-primary-400 font-medium transition-colors"
+            >
               Voir les services <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -684,7 +830,10 @@ export default async function VillePage({ params }: PageProps) {
 
       <InContentLinks
         serviceSlug={content.profile.topServiceSlugs[0] ?? 'plombier'}
-        serviceName={services.find(s => s.slug === (content.profile.topServiceSlugs[0] ?? 'plombier'))?.name ?? 'Plombier'}
+        serviceName={
+          services.find((s) => s.slug === (content.profile.topServiceSlugs[0] ?? 'plombier'))
+            ?.name ?? 'Plombier'
+        }
         villeSlug={villeSlug}
         villeName={ville.name}
         currentIntent="services"
@@ -696,17 +845,22 @@ export default async function VillePage({ params }: PageProps) {
 
       <OrphanRescueLinks currentPath={`/villes/${villeSlug}`} villeSlug={villeSlug} />
 
-        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-        <section className="mb-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-              <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
-              <p className="text-xs text-charcoal-500 leading-relaxed">
-                Les données de cette page sont issues de sources publiques (INSEE, base SIRENE). Les profils climatiques et économiques sont des estimations régionales. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations des artisans référencés.
-              </p>
-            </div>
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Méthodologie éditoriale
+            </h3>
+            <p className="text-xs text-charcoal-500 leading-relaxed">
+              Les données de cette page sont issues de sources publiques (INSEE, base SIRENE). Les
+              profils climatiques et économiques sont des estimations régionales. ServicesArtisans
+              est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas
+              les prestations des artisans référencés.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
       {/* Confiance & Sécurité links available in footer */}
 

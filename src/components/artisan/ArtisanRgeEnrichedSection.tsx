@@ -312,7 +312,7 @@ export function ArtisanRgeEnrichedSection({
       className="bg-white rounded-2xl shadow-soft border border-emerald-100 overflow-hidden"
     >
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-slate-900 text-white px-6 py-5">
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-charcoal-900 text-white px-6 py-5">
         <div className="flex items-start gap-3">
           <div className="rounded-full bg-white/15 border border-white/25 p-2">
             <ShieldCheck className="w-5 h-5 text-emerald-100" aria-hidden="true" />
@@ -356,13 +356,15 @@ export function ArtisanRgeEnrichedSection({
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="font-heading font-extrabold text-slate-900 text-base leading-tight">
+                    <div className="font-heading font-extrabold text-charcoal-900 text-base leading-tight">
                       {g.name}
                     </div>
                     <div className="text-xs text-emerald-700 font-semibold mt-0.5">
                       Délivrée par {g.organisme}
                     </div>
-                    <p className="text-sm text-slate-700 mt-2 leading-relaxed">{g.description}</p>
+                    <p className="text-sm text-charcoal-700 mt-2 leading-relaxed">
+                      {g.description}
+                    </p>
                   </div>
                   <ArrowRight
                     className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-1 group-hover:translate-x-0.5 transition-transform"
@@ -378,7 +380,7 @@ export function ArtisanRgeEnrichedSection({
       {/* Primes CEE débloquées */}
       {match.ceeOpCodes.length > 0 && (
         <div className="px-6 pt-6">
-          <h3 className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-bold text-primary-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
             Primes CEE mobilisables grâce à ces qualifications
           </h3>
@@ -389,15 +391,15 @@ export function ArtisanRgeEnrichedSection({
                 href={`/cee/${code}/guide`}
                 data-testid={`rge-cee-link-${code}`}
                 onClick={() => handleClick('cee', code)}
-                className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50/60 hover:border-blue-400 hover:bg-blue-50 transition px-3 py-2 text-sm"
+                className="inline-flex items-center gap-2 rounded-lg border border-primary-200 bg-primary-50/60 hover:border-primary-300 hover:bg-primary-50 transition px-3 py-2 text-sm"
               >
-                <span className="font-mono font-bold text-blue-800 text-xs">{code}</span>
-                <span className="text-slate-700">{CEE_SHORT_LABELS[code]}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-blue-600" aria-hidden="true" />
+                <span className="font-mono font-bold text-primary-800 text-xs">{code}</span>
+                <span className="text-charcoal-700">{CEE_SHORT_LABELS[code]}</span>
+                <ArrowRight className="w-3.5 h-3.5 text-primary-500" aria-hidden="true" />
               </Link>
             ))}
           </div>
-          <p className="text-xs text-slate-500 mt-3 leading-relaxed">
+          <p className="text-xs text-charcoal-900 mt-3 leading-relaxed">
             Les primes CEE sont cumulables avec MaPrimeRénov&rsquo;. Le montant exact dépend de vos
             revenus et de la performance des équipements posés.
           </p>
@@ -407,7 +409,7 @@ export function ArtisanRgeEnrichedSection({
       {/* Fallback universel — qualifs actives mais pas de guide interne disponible */}
       {fallback && (
         <div className="px-6 pt-6">
-          <p className="text-sm text-slate-700 leading-relaxed">
+          <p className="text-sm text-charcoal-700 leading-relaxed">
             Cet artisan est référencé dans l&rsquo;annuaire RGE officiel avec au moins une
             qualification active
             {validUntilLabel ? <> jusqu&rsquo;au {validUntilLabel}</> : null}. Son périmètre de
@@ -424,12 +426,12 @@ export function ArtisanRgeEnrichedSection({
       <div className="px-6 pt-6">
         <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <div className="flex-1 min-w-0">
-            <div className="font-heading font-extrabold text-slate-900 text-base leading-tight">
+            <div className="font-heading font-extrabold text-charcoal-900 text-base leading-tight">
               {fallback
                 ? 'Un projet de rénovation énergétique ?'
                 : 'Obtenez un devis pour ces travaux éligibles aux aides'}
             </div>
-            <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+            <p className="text-sm text-charcoal-600 mt-1 leading-relaxed">
               Devis gratuit, 100 % sans engagement. Les primes CEE et MaPrimeRénov&rsquo; sont
               cumulables.
             </p>
@@ -448,7 +450,7 @@ export function ArtisanRgeEnrichedSection({
       </div>
 
       {/* Footer — trust + cross-links */}
-      <div className="px-6 py-5 mt-6 bg-slate-50 border-t border-slate-100 text-sm text-slate-600">
+      <div className="px-6 py-5 mt-6 bg-sand-50 border-t border-charcoal-100 text-sm text-charcoal-600">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <Link
             href="/rge/sources"
@@ -477,7 +479,7 @@ export function ArtisanRgeEnrichedSection({
             Tous les guides CEE
           </Link>
         </div>
-        <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+        <p className="text-xs text-charcoal-900 mt-2 leading-relaxed">
           Données issues du dataset public <em>liste-des-entreprises-rge-2</em> (data.gouv.fr /
           ADEME) — Licence Ouverte Etalab 2.0. Synchronisation hebdomadaire. Vérifiez toujours la
           validité sur{' '}
@@ -485,7 +487,7 @@ export function ArtisanRgeEnrichedSection({
             href="https://france-renov.gouv.fr/annuaire-rge"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-slate-700"
+            className="underline hover:text-charcoal-700"
           >
             france-renov.gouv.fr
           </a>

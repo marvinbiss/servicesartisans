@@ -146,14 +146,14 @@ export default function AvisDonnesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -165,13 +165,13 @@ export default function AvisDonnesPage() {
             <div className="flex items-center gap-4">
               <Link
                 href="/espace-client/mes-demandes"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-charcoal-600 hover:text-charcoal-900"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Avis donnés</h1>
-                <p className="text-gray-600">Gérez vos avis sur les artisans</p>
+                <h1 className="text-2xl font-bold text-charcoal-900">Avis donnés</h1>
+                <p className="text-charcoal-600">Gérez vos avis sur les artisans</p>
               </div>
             </div>
           </div>
@@ -200,7 +200,7 @@ export default function AvisDonnesPage() {
             {/* En attente */}
             {avisEnAttente.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                <h2 className="text-lg font-semibold text-charcoal-900 mb-4">
                   Avis en attente ({avisEnAttente.length})
                 </h2>
                 <div className="space-y-4">
@@ -211,9 +211,9 @@ export default function AvisDonnesPage() {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium text-gray-900">{avis.artisan}</h3>
-                          <p className="text-sm text-gray-600">{avis.service}</p>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <h3 className="font-medium text-charcoal-900">{avis.artisan}</h3>
+                          <p className="text-sm text-charcoal-600">{avis.service}</p>
+                          <p className="text-sm text-charcoal-500 mt-1">
                             Intervention le {new Date(avis.date).toLocaleDateString('fr-FR')}
                           </p>
                         </div>
@@ -232,56 +232,56 @@ export default function AvisDonnesPage() {
 
             {/* Avis publiés */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <h2 className="text-lg font-semibold text-charcoal-900 mb-4">
                 Avis publiés ({avisPublies.length})
               </h2>
               {avisPublies.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">
+                <p className="text-charcoal-500 text-center py-8">
                   Vous n'avez pas encore publié d'avis.
                 </p>
               ) : (
                 <div className="space-y-4">
                   {avisPublies.map((avis) => (
-                    <div key={avis.id} className="border border-gray-200 rounded-lg p-4">
+                    <div key={avis.id} className="border border-sand-300 rounded-lg p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-medium text-gray-900">{avis.artisan}</h3>
+                            <h3 className="font-medium text-charcoal-900">{avis.artisan}</h3>
                             <div className="flex">
                               {[...Array(5)].map((_, i) => (
                                 <Star
                                   key={i}
                                   className={`w-4 h-4 ${
-                                    i < avis.note ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                    i < avis.note ? 'text-yellow-400 fill-current' : 'text-sand-500'
                                   }`}
                                 />
                               ))}
                             </div>
                           </div>
-                          <p className="text-sm text-gray-600 mb-2">{avis.service}</p>
-                          <p className="text-gray-700">{avis.commentaire}</p>
+                          <p className="text-sm text-charcoal-600 mb-2">{avis.service}</p>
+                          <p className="text-charcoal-700">{avis.commentaire}</p>
                           {avis.reponse && (
-                            <div className="mt-3 bg-gray-50 rounded-lg p-3">
-                              <p className="text-sm font-medium text-gray-700 mb-1">
+                            <div className="mt-3 bg-sand-50 rounded-lg p-3">
+                              <p className="text-sm font-medium text-charcoal-700 mb-1">
                                 Réponse de l'artisan :
                               </p>
-                              <p className="text-sm text-gray-600">{avis.reponse}</p>
+                              <p className="text-sm text-charcoal-600">{avis.reponse}</p>
                             </div>
                           )}
-                          <p className="text-sm text-gray-500 mt-2">
+                          <p className="text-sm text-charcoal-500 mt-2">
                             Publié le {new Date(avis.date).toLocaleDateString('fr-FR')}
                           </p>
                         </div>
                         <div className="flex gap-2">
                           <button
                             onClick={() => openEditModal(avis)}
-                            className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                            className="p-2 text-charcoal-400 hover:text-primary-500 transition-colors"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteAvis(avis.id)}
-                            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                            className="p-2 text-charcoal-400 hover:text-red-600 transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -300,19 +300,21 @@ export default function AvisDonnesPage() {
       {showModal && (selectedAvis || editingAvis) && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <h2 className="text-xl font-bold text-charcoal-900 mb-4">
               {editingAvis
                 ? 'Modifier votre avis'
                 : `Laisser un avis pour ${selectedAvis?.artisan}`}
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-charcoal-600 mb-6">
               Service : {editingAvis?.service || selectedAvis?.service}
             </p>
 
             <form onSubmit={handleSubmitAvis} className="space-y-6">
               {/* Note */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Votre note</label>
+                <label className="block text-sm font-medium text-charcoal-700 mb-2">
+                  Votre note
+                </label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((value) => (
                     <button
@@ -323,7 +325,7 @@ export default function AvisDonnesPage() {
                     >
                       <Star
                         className={`w-8 h-8 ${
-                          value <= note ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                          value <= note ? 'text-yellow-400 fill-current' : 'text-sand-500'
                         }`}
                       />
                     </button>
@@ -333,7 +335,7 @@ export default function AvisDonnesPage() {
 
               {/* Commentaire */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-charcoal-700 mb-2">
                   Votre commentaire
                 </label>
                 <textarea
@@ -341,7 +343,7 @@ export default function AvisDonnesPage() {
                   onChange={(e) => setCommentaire(e.target.value)}
                   rows={4}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400"
                   placeholder="Décrivez votre expérience avec cet artisan..."
                 />
               </div>
@@ -354,14 +356,14 @@ export default function AvisDonnesPage() {
                     setSelectedAvis(null)
                     setEditingAvis(null)
                   }}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border border-sand-400 rounded-lg font-medium hover:bg-sand-50 transition-colors"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   {editingAvis ? 'Mettre à jour' : "Publier l'avis"}

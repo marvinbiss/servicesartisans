@@ -125,9 +125,7 @@ END:VCALENDAR`
     if (navigator.share) {
       await navigator.share(shareData)
     } else {
-      await navigator.clipboard.writeText(
-        `${shareData.text}\n${shareData.url}`
-      )
+      await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`)
     }
     setShared(true)
     setTimeout(() => setShared(false), 2000)
@@ -143,13 +141,11 @@ END:VCALENDAR`
 
   if (error || !booking) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
-            Réservation non trouvée
-          </h1>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <h1 className="text-xl font-bold text-charcoal-900 mb-2">Réservation non trouvée</h1>
+          <p className="text-charcoal-600 mb-6">{error}</p>
           <Link
             href="/"
             className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
@@ -169,10 +165,8 @@ END:VCALENDAR`
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Rendez-vous confirmé !
-          </h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-charcoal-900 mb-2">Rendez-vous confirmé !</h1>
+          <p className="text-charcoal-600">
             Un email de confirmation a été envoyé à {booking.clientEmail}
           </p>
         </div>
@@ -180,7 +174,7 @@ END:VCALENDAR`
         {/* Booking details card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-6 text-white">
+          <div className="bg-gradient-to-r from-violet-600 to-primary-600 p-6 text-white">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur">
                 <User className="w-8 h-8" />
@@ -197,8 +191,8 @@ END:VCALENDAR`
             <div className="flex items-center gap-4 p-4 bg-violet-50 rounded-xl">
               <Calendar className="w-6 h-6 text-violet-600" />
               <div>
-                <p className="text-sm text-gray-500">Date</p>
-                <p className="font-semibold text-gray-900">
+                <p className="text-sm text-charcoal-500">Date</p>
+                <p className="font-semibold text-charcoal-900">
                   {new Date(booking.date).toLocaleDateString('fr-FR', {
                     weekday: 'long',
                     day: 'numeric',
@@ -209,11 +203,11 @@ END:VCALENDAR`
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
-              <Clock className="w-6 h-6 text-blue-600" />
+            <div className="flex items-center gap-4 p-4 bg-primary-50 rounded-xl">
+              <Clock className="w-6 h-6 text-primary-500" />
               <div>
-                <p className="text-sm text-gray-500">Horaire</p>
-                <p className="font-semibold text-gray-900">
+                <p className="text-sm text-charcoal-500">Horaire</p>
+                <p className="font-semibold text-charcoal-900">
                   {booking.startTime} - {booking.endTime}
                 </p>
               </div>
@@ -223,10 +217,8 @@ END:VCALENDAR`
               <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl">
                 <MapPin className="w-6 h-6 text-green-600" />
                 <div>
-                  <p className="text-sm text-gray-500">Adresse</p>
-                  <p className="font-semibold text-gray-900">
-                    {booking.artisanAddress}
-                  </p>
+                  <p className="text-sm text-charcoal-500">Adresse</p>
+                  <p className="font-semibold text-charcoal-900">{booking.artisanAddress}</p>
                 </div>
               </div>
             )}
@@ -235,10 +227,10 @@ END:VCALENDAR`
               <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-xl">
                 <Phone className="w-6 h-6 text-orange-600" />
                 <div>
-                  <p className="text-sm text-gray-500">Téléphone</p>
+                  <p className="text-sm text-charcoal-500">Téléphone</p>
                   <a
                     href={`tel:${booking.artisanPhone.replace(/[\s.\-()]/g, '')}`}
-                    className="font-semibold text-gray-900 hover:text-violet-600"
+                    className="font-semibold text-charcoal-900 hover:text-violet-600"
                   >
                     {booking.artisanPhone}
                   </a>
@@ -249,10 +241,10 @@ END:VCALENDAR`
 
           {/* Reference number */}
           <div className="px-6 pb-6">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+            <div className="flex items-center justify-between p-4 bg-sand-50 rounded-xl">
               <div>
-                <p className="text-sm text-gray-500">Numéro de réservation</p>
-                <p className="font-mono font-bold text-gray-900">
+                <p className="text-sm text-charcoal-500">Numéro de réservation</p>
+                <p className="font-mono font-bold text-charcoal-900">
                   {booking.id.slice(0, 8).toUpperCase()}
                 </p>
               </div>
@@ -275,7 +267,7 @@ END:VCALENDAR`
             className={`flex items-center justify-center gap-2 p-4 rounded-xl font-medium transition ${
               addedToCalendar
                 ? 'bg-green-100 text-green-700'
-                : 'bg-white text-gray-700 hover:bg-gray-50 shadow-sm'
+                : 'bg-white text-charcoal-700 hover:bg-sand-50 shadow-sm'
             }`}
           >
             {addedToCalendar ? (
@@ -296,7 +288,7 @@ END:VCALENDAR`
             className={`flex items-center justify-center gap-2 p-4 rounded-xl font-medium transition ${
               shared
                 ? 'bg-green-100 text-green-700'
-                : 'bg-white text-gray-700 hover:bg-gray-50 shadow-sm'
+                : 'bg-white text-charcoal-700 hover:bg-sand-50 shadow-sm'
             }`}
           >
             {shared ? (
@@ -332,20 +324,17 @@ END:VCALENDAR`
           className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition group"
         >
           <div>
-            <p className="font-medium text-gray-900">Gérer ma réservation</p>
-            <p className="text-sm text-gray-500">
+            <p className="font-medium text-charcoal-900">Gérer ma réservation</p>
+            <p className="text-sm text-charcoal-500">
               Modifier, annuler ou reporter le rendez-vous
             </p>
           </div>
-          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-violet-600 transition" />
+          <ChevronRight className="w-5 h-5 text-charcoal-400 group-hover:text-violet-600 transition" />
         </Link>
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <Link
-            href="/"
-            className="text-violet-600 hover:text-violet-700 font-medium"
-          >
+          <Link href="/" className="text-violet-600 hover:text-violet-700 font-medium">
             Retour à l'accueil
           </Link>
         </div>
@@ -353,7 +342,8 @@ END:VCALENDAR`
 
       <style jsx global>{`
         @keyframes bounce-slow {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {

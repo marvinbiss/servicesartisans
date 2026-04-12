@@ -39,9 +39,11 @@ export default function LeadRecommendations({ serviceName, city }: LeadRecommend
     // e.g., "Plombier" -> "plombier", "Peintre en batiment" -> "peintre"
     const serviceSlug = serviceName.toLowerCase().split(' ')[0]
 
-    fetch(`/api/recommendations?service=${encodeURIComponent(serviceSlug)}&city=${encodeURIComponent(city)}`)
-      .then(r => r.json())
-      .then(data => {
+    fetch(
+      `/api/recommendations?service=${encodeURIComponent(serviceSlug)}&city=${encodeURIComponent(city)}`
+    )
+      .then((r) => r.json())
+      .then((data) => {
         if (!cancelled && data.providers) {
           setProviders(data.providers.slice(0, 3))
         }
@@ -51,14 +53,16 @@ export default function LeadRecommendations({ serviceName, city }: LeadRecommend
         if (!cancelled) setLoading(false)
       })
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [serviceName, city])
 
   if (loading || providers.length === 0) return null
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-4 mt-2">
-      <p className="text-sm font-semibold text-gray-700 mb-3">
+    <div className="bg-white rounded-xl border border-sand-200 p-4 mt-2">
+      <p className="text-sm font-semibold text-charcoal-700 mb-3">
         Artisans recommand&eacute;s &agrave; {city}
       </p>
       <div className="space-y-2">
@@ -71,13 +75,10 @@ export default function LeadRecommendations({ serviceName, city }: LeadRecommend
           })
 
           return (
-            <div
-              key={provider.id}
-              className="flex items-center gap-3 p-2.5 bg-gray-50 rounded-lg"
-            >
+            <div key={provider.id} className="flex items-center gap-3 p-2.5 bg-sand-50 rounded-lg">
               {/* Avatar */}
-              <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-bold text-blue-600">
+              <div className="w-9 h-9 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-sm font-bold text-primary-500">
                   {(provider.name || 'A').charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -85,14 +86,14 @@ export default function LeadRecommendations({ serviceName, city }: LeadRecommend
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1">
-                  <span className="text-sm font-medium text-gray-900 truncate">
+                  <span className="text-sm font-medium text-charcoal-900 truncate">
                     {provider.name}
                   </span>
                   {provider.is_verified && (
                     <ShieldCheck className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
                   )}
                 </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-2 text-xs text-charcoal-500">
                   {provider.rating_average ? (
                     <span className="flex items-center gap-0.5">
                       <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
@@ -112,7 +113,7 @@ export default function LeadRecommendations({ serviceName, city }: LeadRecommend
               {/* CTA */}
               <Link
                 href={profileUrl}
-                className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium whitespace-nowrap"
+                className="flex items-center gap-1 text-xs text-primary-500 hover:text-primary-600 font-medium whitespace-nowrap"
                 onClick={(e) => e.stopPropagation()}
               >
                 Voir le profil

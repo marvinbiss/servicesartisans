@@ -38,14 +38,14 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
   // When no filter is active, the first 12 articles are already server-rendered above
   const isDefaultView = selectedCategory === 'Tous' && !activeTag
 
-  const categoryFiltered = selectedCategory === 'Tous'
-    ? articles
-    : articles.filter(a => a.category === selectedCategory)
+  const categoryFiltered =
+    selectedCategory === 'Tous' ? articles : articles.filter((a) => a.category === selectedCategory)
 
   const filteredArticles = activeTag
-    ? categoryFiltered.filter(a =>
-        a.tags?.some(t => t.toLowerCase() === activeTag.toLowerCase()) ||
-        a.category.toLowerCase() === activeTag.toLowerCase()
+    ? categoryFiltered.filter(
+        (a) =>
+          a.tags?.some((t) => t.toLowerCase() === activeTag.toLowerCase()) ||
+          a.category.toLowerCase() === activeTag.toLowerCase()
       )
     : categoryFiltered
 
@@ -90,19 +90,19 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'inscription')
+        throw new Error(data.error || "Erreur lors de l'inscription")
       }
 
       setIsSubscribed(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
+      setError(err instanceof Error ? err.message : "Erreur lors de l'inscription")
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-sand-50">
       {/* Categories — interactive filters */}
       <section className="py-8 bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -113,8 +113,8 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                 onClick={() => handleCategoryChange(cat)}
                 className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                   cat === selectedCategory
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
                 }`}
               >
                 {cat}
@@ -129,11 +129,13 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
         <div className="bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-500">Filtré par :</span>
-              <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">{activeTag}</span>
+              <span className="text-sm text-charcoal-900">Filtré par :</span>
+              <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">
+                {activeTag}
+              </span>
               <button
                 onClick={handleClearTag}
-                className="text-sm text-slate-400 hover:text-slate-600 transition-colors"
+                className="text-sm text-charcoal-400 hover:text-charcoal-600 transition-colors"
               >
                 &times; Effacer
               </button>
@@ -146,95 +148,105 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {!isDefaultView && (
-            <p className="text-sm text-gray-500 mb-6">
-              {filteredArticles.length} article{filteredArticles.length > 1 ? 's' : ''} trouvé{filteredArticles.length > 1 ? 's' : ''}
+            <p className="text-sm text-charcoal-500 mb-6">
+              {filteredArticles.length} article{filteredArticles.length > 1 ? 's' : ''} trouvé
+              {filteredArticles.length > 1 ? 's' : ''}
             </p>
           )}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(isDefaultView
-              ? visibleArticles.slice(ARTICLES_PER_PAGE)
-              : visibleArticles
-            ).map((article, index) => {
-              // Category color mapping for pill badges
-              const categoryColors: Record<string, string> = {
-                'Guides pratiques': 'bg-blue-100 text-blue-700',
-                'Tendances': 'bg-purple-100 text-purple-700',
-                'Rénovation': 'bg-emerald-100 text-emerald-700',
-                'Conseils': 'bg-amber-100 text-amber-700',
-                'Actualités': 'bg-rose-100 text-rose-700',
-                'Énergie': 'bg-green-100 text-green-700',
-                'Décoration': 'bg-pink-100 text-pink-700',
-                'Budget': 'bg-orange-100 text-orange-700',
-              }
-              const badgeColor = categoryColors[article.category] || 'bg-blue-100 text-blue-700'
-              const isFeatured = index === 0 && !isDefaultView && selectedCategory === 'Tous' && !activeTag
+            {(isDefaultView ? visibleArticles.slice(ARTICLES_PER_PAGE) : visibleArticles).map(
+              (article, index) => {
+                // Category color mapping for pill badges
+                const categoryColors: Record<string, string> = {
+                  'Guides pratiques': 'bg-primary-100 text-primary-600',
+                  Tendances: 'bg-purple-100 text-purple-700',
+                  Rénovation: 'bg-emerald-100 text-emerald-700',
+                  Conseils: 'bg-amber-100 text-amber-700',
+                  Actualités: 'bg-rose-100 text-rose-700',
+                  Énergie: 'bg-green-100 text-green-700',
+                  Décoration: 'bg-pink-100 text-pink-700',
+                  Budget: 'bg-orange-100 text-orange-700',
+                }
+                const badgeColor =
+                  categoryColors[article.category] || 'bg-primary-100 text-primary-600'
+                const isFeatured =
+                  index === 0 && !isDefaultView && selectedCategory === 'Tous' && !activeTag
 
-              return (
-                <Link
-                  key={article.slug}
-                  href={`/blog/${article.slug}`}
-                  className={`bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group ${
-                    isFeatured ? 'md:col-span-2 lg:col-span-3' : ''
-                  }`}
-                >
-                  {/* Image */}
-                  <div className={`relative overflow-hidden ${
-                    isFeatured ? 'h-64 md:h-80' : 'h-48'
-                  }`}>
-                    <Image
-                      src={getBlogImage(article.slug, article.category).src}
-                      alt={getBlogImage(article.slug, article.category).alt}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes={isFeatured
-                        ? '(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 100vw'
-                        : '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'}
-                      placeholder="blur"
-                      blurDataURL={BLUR_PLACEHOLDER}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    {/* Category badge overlay */}
-                    <span className={`absolute top-4 left-4 z-10 ${badgeColor} px-3 py-1 rounded-full text-xs font-semibold`}>
-                      {article.category}
-                    </span>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    <h2 className={`font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200 ${
-                      isFeatured ? 'text-2xl md:text-3xl font-heading' : 'text-lg'
-                    }`}>
-                      {article.title}
-                    </h2>
-                    <p className={`text-gray-600 mb-4 ${isFeatured ? 'text-base max-w-3xl' : 'text-sm'}`}>
-                      {article.excerpt}
-                    </p>
-
-                    {/* Bottom bar — date, read time, and CTA */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5" />
-                          {new Date(article.date).toLocaleDateString('fr-FR', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                          })}
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5" />
-                          {article.readTime}
-                        </span>
-                      </div>
-                      <span className="text-blue-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
-                        Lire
-                        <ArrowRight className="w-4 h-4" />
+                return (
+                  <Link
+                    key={article.slug}
+                    href={`/blog/${article.slug}`}
+                    className={`bg-white rounded-2xl border border-sand-300 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group ${
+                      isFeatured ? 'md:col-span-2 lg:col-span-3' : ''
+                    }`}
+                  >
+                    {/* Image */}
+                    <div
+                      className={`relative overflow-hidden ${isFeatured ? 'h-64 md:h-80' : 'h-48'}`}
+                    >
+                      <Image
+                        src={getBlogImage(article.slug, article.category).src}
+                        alt={getBlogImage(article.slug, article.category).alt}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes={
+                          isFeatured
+                            ? '(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 100vw'
+                            : '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                        }
+                        placeholder="blur"
+                        blurDataURL={BLUR_PLACEHOLDER}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                      {/* Category badge overlay */}
+                      <span
+                        className={`absolute top-4 left-4 z-10 ${badgeColor} px-3 py-1 rounded-full text-xs font-semibold`}
+                      >
+                        {article.category}
                       </span>
                     </div>
-                  </div>
-                </Link>
-              )
-            })}
+
+                    {/* Content */}
+                    <div className="p-6">
+                      <h2
+                        className={`font-bold text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors duration-200 ${
+                          isFeatured ? 'text-2xl md:text-3xl font-heading' : 'text-lg'
+                        }`}
+                      >
+                        {article.title}
+                      </h2>
+                      <p
+                        className={`text-charcoal-600 mb-4 ${isFeatured ? 'text-base max-w-3xl' : 'text-sm'}`}
+                      >
+                        {article.excerpt}
+                      </p>
+
+                      {/* Bottom bar — date, read time, and CTA */}
+                      <div className="flex items-center justify-between pt-4 border-t border-sand-200">
+                        <div className="flex items-center gap-4 text-sm text-charcoal-500">
+                          <span className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {new Date(article.date).toLocaleDateString('fr-FR', {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
+                            })}
+                          </span>
+                          <span className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5" />
+                            {article.readTime}
+                          </span>
+                        </div>
+                        <span className="text-primary-500 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+                          Lire
+                          <ArrowRight className="w-4 h-4" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              }
+            )}
           </div>
 
           {/* Load more */}
@@ -242,7 +254,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
             <div className="text-center mt-12">
               <button
                 onClick={handleLoadMore}
-                className="bg-white border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                className="bg-white border border-sand-400 text-charcoal-700 px-8 py-3 rounded-lg font-medium hover:bg-sand-50 transition-colors"
               >
                 Voir plus d&apos;articles ({filteredArticles.length - visibleCount} restants)
               </button>
@@ -252,12 +264,10 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
       </section>
 
       {/* Newsletter */}
-      <section className="py-16 bg-blue-600">
+      <section className="py-16 bg-primary-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Restez informé
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <h2 className="font-heading text-3xl font-bold text-white mb-4">Restez informé</h2>
+          <p className="text-xl text-primary-100 mb-8">
             Recevez nos derniers articles et conseils directement dans votre boîte mail
           </p>
           {isSubscribed ? (
@@ -275,18 +285,14 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Votre email"
                   required
-                  className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-300"
+                  className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-primary-200"
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full sm:w-auto bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto bg-white text-primary-500 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {isLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    "S'inscrire"
-                  )}
+                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "S'inscrire"}
                 </button>
               </div>
               <label className="flex items-start gap-2 mt-4 text-left">
@@ -294,13 +300,15 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                   type="checkbox"
                   checked={newsletterConsent}
                   onChange={(e) => setNewsletterConsent(e.target.checked)}
-                  className="mt-1 rounded border-blue-300 text-blue-600 focus:ring-blue-300"
+                  className="mt-1 rounded border-primary-300 text-primary-500 focus:ring-primary-200"
                 />
-                <span className="text-sm text-blue-100">
-                  J&apos;accepte que mes données soient utilisées pour recevoir la newsletter. Consultez notre{' '}
+                <span className="text-sm text-primary-100">
+                  J&apos;accepte que mes données soient utilisées pour recevoir la newsletter.
+                  Consultez notre{' '}
                   <Link href="/confidentialite" className="underline hover:text-white">
                     politique de confidentialité
-                  </Link>.
+                  </Link>
+                  .
                 </span>
               </label>
               {error && (

@@ -446,17 +446,17 @@ export default async function AvisServiceVillePage({
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <JsonLd data={[breadcrumbSchema, faqSchema, reviewSchema]} />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
           <div
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%)',
             }}
           />
           <div
@@ -467,7 +467,7 @@ export default async function AvisServiceVillePage({
               backgroundSize: '64px 64px',
             }}
           />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
@@ -476,7 +476,7 @@ export default async function AvisServiceVillePage({
               { label: `Avis ${tradeLower}`, href: `/avis/${service}` },
               { label: villeData.name },
             ]}
-            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
@@ -492,12 +492,15 @@ export default async function AvisServiceVillePage({
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+            <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
               Consultez les avis et recommandations pour choisir un {tradeLower} de confiance à{' '}
               {villeData.name} ({villeData.departement}). Prix local : {minPrice} à {maxPrice}{' '}
               {trade.priceRange.unit}.
             </p>
-            <LastUpdated label="Avis vérifiés le" className="justify-center text-slate-500 mb-4" />
+            <LastUpdated
+              label="Avis vérifiés le"
+              className="justify-center text-charcoal-900 mb-4"
+            />
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               {totalReviews > 0 && (
                 <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
@@ -536,33 +539,33 @@ export default async function AvisServiceVillePage({
               <div className="text-center">
                 <div className="flex items-center gap-2 justify-center mb-1">
                   <Star className="w-7 h-7 text-amber-500 fill-amber-500" />
-                  <span className="text-3xl font-bold text-gray-900">
+                  <span className="text-3xl font-bold text-charcoal-900">
                     {roundedRating.toFixed(1)}
                   </span>
                 </div>
-                <div className="text-sm text-gray-500">Note moyenne</div>
+                <div className="text-sm text-charcoal-500">Note moyenne</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-gray-900">{totalReviews}</div>
-                <div className="text-sm text-gray-500">Avis vérifiés</div>
+                <div className="text-3xl font-bold text-charcoal-900">{totalReviews}</div>
+                <div className="text-sm text-charcoal-500">Avis vérifiés</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-gray-900">{topProviders.length}</div>
-                <div className="text-sm text-gray-500">Artisans notés</div>
+                <div className="text-3xl font-bold text-charcoal-900">{topProviders.length}</div>
+                <div className="text-sm text-charcoal-500">Artisans notés</div>
               </div>
               {/* Rating distribution bars */}
               <div className="flex flex-col gap-1">
                 {ratingDistribution.map(({ stars, pct }) => (
                   <div key={stars} className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 w-3">{stars}</span>
+                    <span className="text-xs text-charcoal-500 w-3">{stars}</span>
                     <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                    <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="w-24 h-2 bg-sand-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-amber-400 rounded-full"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="text-xs text-gray-400 w-8">{pct}%</span>
+                    <span className="text-xs text-charcoal-400 w-8">{pct}%</span>
                   </div>
                 ))}
               </div>
@@ -578,13 +581,13 @@ export default async function AvisServiceVillePage({
             <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Star className="w-8 h-8 text-amber-500" />
             </div>
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-2">
+            <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-2">
               Aucun avis pour {tradeLower} à {villeData.name} pour le moment
             </h2>
-            <p className="text-gray-500 mb-6">Soyez le premier à partager votre expérience !</p>
+            <p className="text-charcoal-500 mb-6">Soyez le premier à partager votre expérience !</p>
             <Link
               href={`/services/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+              className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm"
             >
               Trouver un {tradeLower} à {villeData.name}
               <ArrowRight className="w-4 h-4" />
@@ -597,12 +600,12 @@ export default async function AvisServiceVillePage({
       {topProviders.length > 0 && (
         <section className="py-12 bg-white">
           <div className="max-w-5xl mx-auto px-4">
-            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
               {serviceProviders.length >= 2
                 ? `${trade.name}s les mieux notés à ${villeData.name}`
                 : `Artisans les mieux notés à ${villeData.name}`}
             </h2>
-            <p className="text-slate-500 text-center mb-8 max-w-lg mx-auto">
+            <p className="text-charcoal-900 text-center mb-8 max-w-lg mx-auto">
               Classement basé sur les avis clients vérifiés et la note moyenne.
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -610,15 +613,15 @@ export default async function AvisServiceVillePage({
                 <Link
                   key={provider.id}
                   href={`/services/${service}/${villeSlug}/${provider.stable_id}`}
-                  className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-5 transition-all group"
+                  className="bg-sand-50 hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-5 transition-all group"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                      <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 font-bold text-sm">
                         {provider.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                        <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
                           {provider.name}
                         </div>
                         {provider.is_verified && (
@@ -635,7 +638,7 @@ export default async function AvisServiceVillePage({
                           i === 0
                             ? 'bg-amber-100 text-amber-700'
                             : i === 1
-                              ? 'bg-gray-100 text-gray-600'
+                              ? 'bg-sand-100 text-charcoal-600'
                               : 'bg-orange-50 text-orange-600'
                         }`}
                       >
@@ -652,15 +655,17 @@ export default async function AvisServiceVillePage({
                             className={`w-4 h-4 ${
                               star <= Math.round(provider.rating_average ?? 0)
                                 ? 'text-amber-400 fill-amber-400'
-                                : 'text-gray-200'
+                                : 'text-sand-400'
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className="text-sm font-semibold text-charcoal-900">
                         {provider.rating_average.toFixed(1)}
                       </span>
-                      <span className="text-xs text-gray-500">({provider.review_count} avis)</span>
+                      <span className="text-xs text-charcoal-500">
+                        ({provider.review_count} avis)
+                      </span>
                     </div>
                   )}
                 </Link>
@@ -672,23 +677,23 @@ export default async function AvisServiceVillePage({
 
       {/* ─── DERNIERS AVIS CLIENTS ──────────────────────── */}
       {reviews.length > 0 && (
-        <section className="py-12 bg-gray-50">
+        <section className="py-12 bg-sand-50">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
               Derniers avis clients
             </h2>
-            <p className="text-slate-500 text-center mb-8">
+            <p className="text-charcoal-900 text-center mb-8">
               Avis authentiques de clients ayant fait appel à un {tradeLower} à {villeData.name}.
             </p>
             <div className="space-y-4">
               {reviews.slice(0, 5).map((review) => {
                 const provider = providerMap.get(review.provider_id)
                 return (
-                  <div key={review.id} className="bg-white rounded-xl border border-gray-100 p-5">
+                  <div key={review.id} className="bg-white rounded-xl border border-sand-200 p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold text-gray-900 text-sm">
+                          <span className="font-semibold text-charcoal-900 text-sm">
                             {review.author_name || 'Client vérifié'}
                           </span>
                           <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
@@ -697,7 +702,7 @@ export default async function AvisServiceVillePage({
                           </span>
                         </div>
                         {provider && (
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-charcoal-500">
                             {tradeLower} — {provider.name}
                           </div>
                         )}
@@ -709,20 +714,20 @@ export default async function AvisServiceVillePage({
                             className={`w-4 h-4 ${
                               star <= review.rating
                                 ? 'text-amber-400 fill-amber-400'
-                                : 'text-gray-200'
+                                : 'text-sand-400'
                             }`}
                           />
                         ))}
                       </div>
                     </div>
                     {review.content && (
-                      <p className="text-gray-700 text-sm leading-relaxed">
+                      <p className="text-charcoal-700 text-sm leading-relaxed">
                         {review.content.length > 300
                           ? review.content.slice(0, 300) + '…'
                           : review.content}
                       </p>
                     )}
-                    <div className="mt-3 text-xs text-gray-400">
+                    <div className="mt-3 text-xs text-charcoal-400">
                       {new Date(review.created_at).toLocaleDateString('fr-FR', {
                         year: 'numeric',
                         month: 'long',
@@ -737,7 +742,7 @@ export default async function AvisServiceVillePage({
               <div className="text-center mt-8">
                 <Link
                   href={`/services/${service}/${villeSlug}`}
-                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+                  className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm"
                 >
                   Voir tous les {tradeLower}s à {villeData.name}
                   <ArrowRight className="w-4 h-4" />
@@ -751,10 +756,10 @@ export default async function AvisServiceVillePage({
       {/* ─── REVIEW CRITERIA (localized) ──────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
             Comment choisir un {tradeLower} à {villeData.name}
           </h2>
-          <p className="text-gray-500 text-sm text-center mb-8">
+          <p className="text-charcoal-500 text-sm text-center mb-8">
             Les critères essentiels pour trouver un artisan de confiance à {villeData.name}.
           </p>
           <div className="space-y-4">
@@ -763,16 +768,18 @@ export default async function AvisServiceVillePage({
               return (
                 <div
                   key={criterion.title}
-                  className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5 hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                  className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5 hover:bg-primary-50 hover:border-primary-200 transition-colors"
                 >
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-primary-500" />
                   </div>
                   <div>
-                    <h3 className="font-heading font-semibold text-gray-900 mb-1">
+                    <h3 className="font-heading font-semibold text-charcoal-900 mb-1">
                       {criterion.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{criterion.description}</p>
+                    <p className="text-charcoal-600 text-sm leading-relaxed">
+                      {criterion.description}
+                    </p>
                   </div>
                 </div>
               )
@@ -782,23 +789,23 @@ export default async function AvisServiceVillePage({
       </section>
 
       {/* ─── LOCAL PRICING ────────────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Tarifs indicatifs {tradeLower} à {villeData.name}
           </h2>
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-8">
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-8 text-center mb-8">
             <div className="flex items-baseline justify-center gap-2">
-              <span className="text-5xl font-bold text-blue-600">
+              <span className="text-5xl font-bold text-primary-500">
                 {minPrice} — {maxPrice}
               </span>
-              <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
+              <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
             </div>
-            <p className="text-gray-500 text-sm mt-3">
+            <p className="text-charcoal-500 text-sm mt-3">
               Prix moyen constaté à {villeData.name} et ses alentours, main-d'&oelig;uvre incluse
             </p>
             {multiplier !== 1.0 && (
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
                   ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
                   : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
@@ -809,19 +816,19 @@ export default async function AvisServiceVillePage({
             {trade.commonTasks.slice(0, 6).map((task, i) => (
               <div
                 key={i}
-                className="flex items-start gap-3 bg-white rounded-xl border border-gray-200 p-4"
+                className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4"
               >
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Euro className="w-4 h-4 text-blue-600" />
+                <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Euro className="w-4 h-4 text-primary-500" />
                 </div>
-                <span className="text-gray-800 text-sm">{task}</span>
+                <span className="text-charcoal-800 text-sm">{task}</span>
               </div>
             ))}
           </div>
           <div className="text-center mt-6">
             <Link
               href={`/barometre/tarifs/${service}`}
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+              className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm"
             >
               Consulter le baromètre des prix {tradeLower}
               <ArrowRight className="w-4 h-4" />
@@ -833,10 +840,10 @@ export default async function AvisServiceVillePage({
       {/* ─── LOCAL FACTORS ────────────────────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
             Facteurs locaux à {villeData.name}
           </h2>
-          <p className="text-gray-500 text-sm text-center mb-8">
+          <p className="text-charcoal-500 text-sm text-center mb-8">
             Plusieurs facteurs locaux influencent le choix d'un {tradeLower}à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
@@ -861,8 +868,8 @@ export default async function AvisServiceVillePage({
 
             {/* Climate zone */}
             <LocalFactorCard
-              icon={<Thermometer className="w-5 h-5 text-blue-600" />}
-              bgColor="bg-blue-50"
+              icon={<Thermometer className="w-5 h-5 text-primary-500" />}
+              bgColor="bg-primary-50"
               title="Zone climatique"
               value={getClimatLabel(commune?.climat_zone ?? null)}
               description={`Les conditions climatiques à ${villeData.name} peuvent influencer le type d'interventions demandées et la disponibilité des ${tradeLower}s.`}
@@ -885,8 +892,8 @@ export default async function AvisServiceVillePage({
 
             {/* Population */}
             <LocalFactorCard
-              icon={<MapPin className="w-5 h-5 text-slate-600" />}
-              bgColor="bg-slate-50"
+              icon={<MapPin className="w-5 h-5 text-charcoal-600" />}
+              bgColor="bg-sand-50"
               title="Population"
               value={
                 commune?.population
@@ -908,26 +915,26 @@ export default async function AvisServiceVillePage({
           commune.revenu_median ||
           commune.nb_maprimerenov_annuel ||
           commune.nb_transactions_annuelles) && (
-          <section className="py-16 bg-gray-50">
+          <section className="py-16 bg-sand-50">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+              <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
                 Le marché à {villeData.name}
               </h2>
-              <p className="text-gray-500 text-sm text-center mb-8">
+              <p className="text-charcoal-500 text-sm text-center mb-8">
                 Données locales pour contextualiser votre recherche de {tradeLower} à{' '}
                 {villeData.name}.
               </p>
               <div className="grid sm:grid-cols-2 gap-6">
                 {/* Marché artisanal local */}
                 {commune.nb_entreprises_artisanales != null && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="bg-white rounded-xl border border-sand-300 p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Building2 className="w-5 h-5 text-amber-600" />
                       </div>
-                      <h3 className="font-semibold text-gray-900">Marché artisanal local</h3>
+                      <h3 className="font-semibold text-charcoal-900">Marché artisanal local</h3>
                     </div>
-                    <ul className="space-y-2 text-sm text-gray-700">
+                    <ul className="space-y-2 text-sm text-charcoal-700">
                       <li>
                         &Agrave; {villeData.name},{' '}
                         <span className="font-semibold">
@@ -954,7 +961,7 @@ export default async function AvisServiceVillePage({
                       )}
                     </ul>
                     {commune.population > 0 && (
-                      <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                      <p className="mt-3 text-xs text-charcoal-500 leading-relaxed">
                         {(() => {
                           const ratio = Math.round(
                             (commune.nb_entreprises_artisanales / commune.population) * 10000
@@ -969,14 +976,16 @@ export default async function AvisServiceVillePage({
 
                 {/* Qualité du parc immobilier */}
                 {(commune.pct_passoires_dpe != null || commune.part_maisons_pct != null) && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="bg-white rounded-xl border border-sand-300 p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Zap className="w-5 h-5 text-green-600" />
                       </div>
-                      <h3 className="font-semibold text-gray-900">Qualité du parc immobilier</h3>
+                      <h3 className="font-semibold text-charcoal-900">
+                        Qualité du parc immobilier
+                      </h3>
                     </div>
-                    <ul className="space-y-2 text-sm text-gray-700">
+                    <ul className="space-y-2 text-sm text-charcoal-700">
                       {commune.pct_passoires_dpe != null && (
                         <li>
                           <span className="font-semibold">{commune.pct_passoires_dpe}&nbsp;%</span>{' '}
@@ -997,7 +1006,7 @@ export default async function AvisServiceVillePage({
                       )}
                     </ul>
                     {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 15 && (
-                      <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                      <p className="mt-3 text-xs text-charcoal-500 leading-relaxed">
                         Un parc avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques
                         génère une forte demande en rénovation énergétique à {villeData.name}.
                       </p>
@@ -1007,14 +1016,14 @@ export default async function AvisServiceVillePage({
 
                 {/* Pouvoir d'achat et prix */}
                 {(commune.revenu_median != null || commune.prix_m2_moyen != null) && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="bg-white rounded-xl border border-sand-300 p-6">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Euro className="w-5 h-5 text-blue-600" />
+                      <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Euro className="w-5 h-5 text-primary-500" />
                       </div>
-                      <h3 className="font-semibold text-gray-900">Pouvoir d'achat et prix</h3>
+                      <h3 className="font-semibold text-charcoal-900">Pouvoir d'achat et prix</h3>
                     </div>
-                    <ul className="space-y-2 text-sm text-gray-700">
+                    <ul className="space-y-2 text-sm text-charcoal-700">
                       {commune.revenu_median != null && (
                         <li>
                           Revenu médian :{' '}
@@ -1035,7 +1044,7 @@ export default async function AvisServiceVillePage({
                       )}
                     </ul>
                     {commune.revenu_median != null && commune.prix_m2_moyen != null && (
-                      <p className="mt-3 text-xs text-gray-500 leading-relaxed">
+                      <p className="mt-3 text-xs text-charcoal-500 leading-relaxed">
                         {(() => {
                           const prixM2 = commune.prix_m2_moyen
                           const revenu = commune.revenu_median
@@ -1055,14 +1064,14 @@ export default async function AvisServiceVillePage({
                 {/* Indicateurs de satisfaction */}
                 {(commune.nb_maprimerenov_annuel != null ||
                   commune.nb_transactions_annuelles != null) && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="bg-white rounded-xl border border-sand-300 p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
                         <TrendingUp className="w-5 h-5 text-purple-600" />
                       </div>
-                      <h3 className="font-semibold text-gray-900">Indicateurs d'activité</h3>
+                      <h3 className="font-semibold text-charcoal-900">Indicateurs d'activité</h3>
                     </div>
-                    <ul className="space-y-2 text-sm text-gray-700">
+                    <ul className="space-y-2 text-sm text-charcoal-700">
                       {commune.nb_maprimerenov_annuel != null && (
                         <li>
                           <span className="font-semibold">
@@ -1088,21 +1097,21 @@ export default async function AvisServiceVillePage({
         )}
 
       {/* ─── TIPS ─────────────────────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Conseils pour choisir un {tradeLower} à {villeData.name}
           </h2>
           <div className="space-y-4">
             {selectedTips.map((tip, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-white rounded-xl border border-gray-200 p-5"
+                className="flex items-start gap-4 bg-white rounded-xl border border-sand-300 p-5"
               >
                 <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-amber-600" />
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
               </div>
             ))}
           </div>
@@ -1113,10 +1122,10 @@ export default async function AvisServiceVillePage({
       {trade.certifications.length > 0 && (
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
               Certifications à vérifier à {villeData.name}
             </h2>
-            <p className="text-gray-600 text-center mb-8">
+            <p className="text-charcoal-600 text-center mb-8">
               Vérifiez que votre {tradeLower} à {villeData.name} possède les certifications adaptées
               à votre projet.
             </p>
@@ -1124,7 +1133,7 @@ export default async function AvisServiceVillePage({
               {trade.certifications.map((cert) => (
                 <div
                   key={cert}
-                  className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-3 rounded-xl text-sm font-medium"
+                  className="flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-3 rounded-xl text-sm font-medium"
                 >
                   <Shield className="w-4 h-4 flex-shrink-0" />
                   {cert}
@@ -1136,19 +1145,23 @@ export default async function AvisServiceVillePage({
       )}
 
       {/* ─── FAQ ──────────────────────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fréquentes — Avis {trade.name} à {villeData.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
-              <details key={i} className="bg-white rounded-xl border border-gray-200 group">
+              <details key={i} className="bg-white rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
-                  <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">
+                    {item.question}
+                  </h3>
+                  <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">{item.answer}</div>
+                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
+                  {item.answer}
+                </div>
               </details>
             ))}
           </div>
@@ -1156,12 +1169,12 @@ export default async function AvisServiceVillePage({
       </section>
 
       {/* ─── CTA ──────────────────────────────────────────────── */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700">
+      <section className="py-20 bg-gradient-to-r from-primary-500 to-primary-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
             Trouver un {tradeLower} de confiance {'à'} {villeData.name}
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-xl text-primary-100 mb-8">
             Devis gratuit d'artisans bien not{'é'}s pr{'è'}s de chez vous {'—'} sans engagement.
           </p>
           <TarifsDevisCTA
@@ -1171,7 +1184,7 @@ export default async function AvisServiceVillePage({
             villeName={villeData.name}
             variant="banner"
           />
-          <p className="text-blue-200 text-sm mt-6">
+          <p className="text-primary-100 text-sm mt-6">
             Ou{' '}
             <Link
               href={`/services/${service}/${villeSlug}`}
@@ -1186,7 +1199,7 @@ export default async function AvisServiceVillePage({
       {/* ─── RELATED CITIES ───────────────────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
             Avis {tradeLower} dans d'autres villes
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
@@ -1194,9 +1207,9 @@ export default async function AvisServiceVillePage({
               <Link
                 key={v.slug}
                 href={`/avis/${service}/${v.slug}`}
-                className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
+                className="bg-sand-50 hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group text-center"
               >
-                <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
                   Avis {tradeLower} à {v.name}
                 </div>
               </Link>
@@ -1206,9 +1219,9 @@ export default async function AvisServiceVillePage({
       </section>
 
       {/* ─── RELATED SERVICES ─────────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
             Autres avis artisans à {villeData.name}
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -1220,12 +1233,12 @@ export default async function AvisServiceVillePage({
                 <Link
                   key={slug}
                   href={`/avis/${slug}/${villeSlug}`}
-                  className="bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group"
+                  className="bg-white hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group"
                 >
-                  <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                  <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
                     Avis {t.name.toLowerCase()} à {villeData.name}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-charcoal-500 mt-1">
                     {Math.round(t.priceRange.min * m)} — {Math.round(t.priceRange.max * m)}{' '}
                     {t.priceRange.unit}
                   </div>
@@ -1239,7 +1252,7 @@ export default async function AvisServiceVillePage({
       {/* ─── NEARBY CITIES ────────────────────────────────────── */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
+          <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4">
             Grandes villes à proximité
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -1247,7 +1260,7 @@ export default async function AvisServiceVillePage({
               <Link
                 key={v.slug}
                 href={`/avis/${service}/${v.slug}`}
-                className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                className="text-sm text-primary-500 hover:text-primary-800 hover:underline"
               >
                 {v.name}
               </Link>
@@ -1263,13 +1276,13 @@ export default async function AvisServiceVillePage({
         return (
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Problèmes courants</h2>
+              <h2 className="text-xl font-bold text-charcoal-900 mb-4">Problèmes courants</h2>
               <div className="flex flex-wrap gap-3">
                 {problems.map((p) => (
                   <Link
                     key={p.slug}
                     href={`/problemes/${p.slug}/${villeSlug}`}
-                    className="px-4 py-2.5 bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-orange-200 transition-all"
+                    className="px-4 py-2.5 bg-sand-50 hover:bg-orange-50 text-charcoal-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-sand-300 hover:border-orange-200 transition-all"
                   >
                     {p.name} à {villeData.name}
                   </Link>
@@ -1283,9 +1296,11 @@ export default async function AvisServiceVillePage({
       {/* ─── EDITORIAL CREDIBILITY ────────────────────────────── */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence éditoriale</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+          <div className="bg-sand-50 rounded-2xl border border-charcoal-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Transparence éditoriale
+            </h3>
+            <p className="text-xs text-charcoal-900 leading-relaxed">
               Les informations présentées pour {villeData.name} sont indicatives et destinées à vous
               aider dans le choix d'un {tradeLower}. Les prix affichés sont des fourchettes ajustées
               en fonction des données régionales ({villeData.region}). Seul un devis personnalisé
@@ -1363,7 +1378,7 @@ function LocalFactorCard({
   description: string
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-sand-300 p-6">
       <div className="flex items-center gap-3 mb-3">
         <div
           className={`w-10 h-10 ${bgColor} rounded-lg flex items-center justify-center flex-shrink-0`}
@@ -1371,11 +1386,11 @@ function LocalFactorCard({
           {icon}
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900 text-sm">{title}</h3>
-          {value && <p className="text-xs text-blue-600 font-medium">{value}</p>}
+          <h3 className="font-semibold text-charcoal-900 text-sm">{title}</h3>
+          {value && <p className="text-xs text-primary-500 font-medium">{value}</p>}
         </div>
       </div>
-      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+      <p className="text-charcoal-600 text-sm leading-relaxed">{description}</p>
     </div>
   )
 }

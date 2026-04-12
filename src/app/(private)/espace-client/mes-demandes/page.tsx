@@ -55,7 +55,7 @@ type StatusFilter = 'all' | 'en_attente' | 'en_traitement' | 'devis_recus' | 'te
 
 const STATUS_COLORS: Record<string, string> = {
   en_attente: 'bg-yellow-100 text-yellow-700',
-  en_traitement: 'bg-blue-100 text-blue-700',
+  en_traitement: 'bg-primary-100 text-primary-600',
   devis_recus: 'bg-green-100 text-green-700',
   accepte: 'bg-emerald-100 text-emerald-700',
   termine: 'bg-green-100 text-green-800',
@@ -141,22 +141,24 @@ export default function MesDemandesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <Link href="/espace-client" className="hover:text-gray-900">Espace Client</Link>
+              <div className="flex items-center gap-2 text-sm text-charcoal-500 mb-2">
+                <Link href="/espace-client" className="hover:text-charcoal-900">
+                  Espace Client
+                </Link>
                 <span>/</span>
-                <span className="text-gray-900 font-medium">Mes demandes</span>
+                <span className="text-charcoal-900 font-medium">Mes demandes</span>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Mes demandes de devis</h1>
+              <h1 className="text-2xl font-bold text-charcoal-900">Mes demandes de devis</h1>
             </div>
             <button
               onClick={fetchLeads}
-              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700"
+              className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-700"
             >
               <RefreshCw className="w-4 h-4" />
               Actualiser
@@ -208,17 +210,20 @@ export default function MesDemandesPage() {
                 <StatusTabs
                   tabs={tabs}
                   activeTab={statusFilter}
-                  onTabChange={(k) => { setStatusFilter(k as StatusFilter); setPage(1) }}
+                  onTabChange={(k) => {
+                    setStatusFilter(k as StatusFilter)
+                    setPage(1)
+                  }}
                 />
               </div>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
                 <input
                   type="text"
                   placeholder="Rechercher..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-sand-300 rounded-lg bg-white focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                 />
               </div>
             </div>
@@ -231,17 +236,17 @@ export default function MesDemandesPage() {
             )}
 
             {loading ? (
-              <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-                <p className="text-sm text-gray-500 mt-2">Chargement...</p>
+              <div className="bg-white rounded-xl border border-sand-300 p-12 text-center">
+                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto" />
+                <p className="text-sm text-charcoal-500 mt-2">Chargement...</p>
               </div>
             ) : filtered.length === 0 ? (
-              <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-7 h-7 text-gray-400" />
+              <div className="bg-white rounded-xl border border-sand-300 p-12 text-center">
+                <div className="w-14 h-14 bg-sand-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="w-7 h-7 text-charcoal-400" />
                 </div>
-                <p className="text-gray-500 font-medium text-lg">Aucune demande</p>
-                <p className="text-gray-400 text-sm mt-2">
+                <p className="text-charcoal-500 font-medium text-lg">Aucune demande</p>
+                <p className="text-charcoal-400 text-sm mt-2">
                   {searchQuery
                     ? 'Aucun résultat pour cette recherche.'
                     : 'Vos demandes de devis apparaîtront ici.'}
@@ -252,34 +257,39 @@ export default function MesDemandesPage() {
                 <div className="space-y-3">
                   {filtered.map((lead) => {
                     const urg = URGENCY_META[lead.urgency] || URGENCY_META.normal
-                    const statusColor = STATUS_COLORS[lead.derived_status] || 'bg-gray-100 text-gray-700'
+                    const statusColor =
+                      STATUS_COLORS[lead.derived_status] || 'bg-sand-100 text-charcoal-700'
 
                     return (
                       <div key={lead.id}>
                         <Link
                           href={`/espace-client/mes-demandes/${lead.id}`}
-                          className="block bg-white rounded-xl border border-gray-100 transition-all hover:shadow-md hover:border-blue-200 group"
+                          className="block bg-white rounded-xl border border-sand-200 transition-all hover:shadow-md hover:border-primary-200 group"
                         >
                           <div className="p-5">
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-2 flex-wrap">
-                                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                  <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
                                     {lead.service_name}
                                   </h3>
-                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                                  <span
+                                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}
+                                  >
                                     {urg.label}
                                   </span>
-                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor}`}>
+                                  <span
+                                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor}`}
+                                  >
                                     {lead.derived_status_label}
                                   </span>
                                 </div>
 
-                                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                                <p className="text-charcoal-600 text-sm mb-3 line-clamp-2">
                                   {lead.description}
                                 </p>
 
-                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
+                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-charcoal-500">
                                   <span className="flex items-center gap-1">
                                     <Clock className="w-3.5 h-3.5" />
                                     {formatRelative(lead.last_activity)}
@@ -291,24 +301,21 @@ export default function MesDemandesPage() {
                                     </span>
                                   )}
                                   {lead.event_count > 0 && (
-                                    <span className="text-gray-400">
+                                    <span className="text-charcoal-400">
                                       {lead.event_count} événement{lead.event_count > 1 ? 's' : ''}
                                     </span>
                                   )}
                                 </div>
                               </div>
 
-                              <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 flex-shrink-0 mt-1 transition-colors" />
+                              <ChevronRight className="w-5 h-5 text-sand-500 group-hover:text-primary-400 flex-shrink-0 mt-1 transition-colors" />
                             </div>
                           </div>
                         </Link>
 
                         {/* Recommended artisans for this lead's city + service */}
                         {lead.city && (
-                          <LeadRecommendations
-                            serviceName={lead.service_name}
-                            city={lead.city}
-                          />
+                          <LeadRecommendations serviceName={lead.service_name} city={lead.city} />
                         )}
                       </div>
                     )
@@ -316,7 +323,11 @@ export default function MesDemandesPage() {
                 </div>
 
                 {pagination && pagination.totalPages > 1 && (
-                  <Pagination page={page} totalPages={pagination.totalPages} onPageChange={setPage} />
+                  <Pagination
+                    page={page}
+                    totalPages={pagination.totalPages}
+                    onPageChange={setPage}
+                  />
                 )}
               </>
             )}

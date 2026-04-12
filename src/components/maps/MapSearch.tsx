@@ -302,7 +302,7 @@ export default function MapSearch() {
   }, [mapReady, filters])
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className="h-screen flex flex-col bg-sand-100">
       {/* Search Header */}
       <MapFilters
         searchQuery={searchQuery}
@@ -383,7 +383,7 @@ export default function MapSearch() {
                       <div className="p-2">
                         <div className="flex gap-3">
                           <div className="relative flex-shrink-0 rounded-xl">
-                            <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
+                            <div className="w-20 h-20 bg-gradient-to-br from-sand-300 to-sand-400 rounded-xl flex items-center justify-center overflow-hidden">
                               {provider.avatar_url ? (
                                 <NextImage
                                   src={provider.avatar_url}
@@ -394,7 +394,7 @@ export default function MapSearch() {
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <span className="text-3xl font-bold text-gray-400">
+                                <span className="text-3xl font-bold text-charcoal-400">
                                   {provider.name.charAt(0)}
                                 </span>
                               )}
@@ -405,7 +405,7 @@ export default function MapSearch() {
                           <div className="flex-1 min-w-0">
                             {/* Name and verification */}
                             <div className="flex items-start justify-between gap-2 mb-1">
-                              <h3 className="font-bold text-gray-900 text-base leading-tight">
+                              <h3 className="font-bold text-charcoal-900 text-base leading-tight">
                                 {provider.name}
                               </h3>
                               {provider.is_verified && (
@@ -416,7 +416,7 @@ export default function MapSearch() {
                             </div>
 
                             {/* Specialty */}
-                            <p className="text-sm text-blue-600 font-medium mb-2">
+                            <p className="text-sm text-primary-500 font-medium mb-2">
                               {provider.specialty || 'Artisan'}
                             </p>
 
@@ -424,18 +424,18 @@ export default function MapSearch() {
                             <div className="flex items-center gap-1.5">
                               <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
                                 <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                                <span className="font-bold text-gray-900 text-sm">
+                                <span className="font-bold text-charcoal-900 text-sm">
                                   {provider.rating_average?.toFixed(1)}
                                 </span>
                               </div>
-                              <span className="text-gray-500 text-sm">
+                              <span className="text-charcoal-500 text-sm">
                                 ({provider.review_count} avis)
                               </span>
                             </div>
 
                             {/* Location */}
-                            <p className="text-sm text-gray-600 mt-1.5 flex items-center gap-1">
-                              <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                            <p className="text-sm text-charcoal-600 mt-1.5 flex items-center gap-1">
+                              <MapPin className="w-3.5 h-3.5 text-charcoal-400" />
                               {provider.address_city}
                             </p>
                           </div>
@@ -450,7 +450,7 @@ export default function MapSearch() {
                               specialty: provider.specialty,
                               city: provider.address_city,
                             })}
-                            className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                            className="flex-1 text-center py-2.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-lg hover:from-primary-600 hover:to-primary-700 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                           >
                             Voir le profil
                           </Link>
@@ -513,15 +513,15 @@ export default function MapSearch() {
               onClick={getUserLocation}
               disabled={geolocation.loading}
               className={`p-3 bg-white rounded-xl shadow-lg transition-colors disabled:opacity-50 ${
-                geolocation.error ? 'border-2 border-red-400' : 'hover:bg-gray-50'
-              } ${userLocation ? 'bg-blue-50 border-2 border-blue-400' : ''}`}
+                geolocation.error ? 'border-2 border-red-400' : 'hover:bg-sand-50'
+              } ${userLocation ? 'bg-primary-50 border-2 border-primary-300' : ''}`}
               title={geolocation.error || (userLocation ? 'Position détectée' : 'Ma position')}
             >
               {geolocation.loading ? (
-                <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                <Loader2 className="w-5 h-5 animate-spin text-primary-500" />
               ) : (
                 <Navigation
-                  className={`w-5 h-5 ${userLocation ? 'text-blue-600' : 'text-gray-700'}`}
+                  className={`w-5 h-5 ${userLocation ? 'text-primary-500' : 'text-charcoal-700'}`}
                 />
               )}
             </button>
@@ -530,10 +530,10 @@ export default function MapSearch() {
             <div className="relative">
               <button
                 onClick={() => setShowStylePicker(!showStylePicker)}
-                className="p-3 bg-white rounded-xl shadow-lg hover:bg-gray-50 transition-colors"
+                className="p-3 bg-white rounded-xl shadow-lg hover:bg-sand-50 transition-colors"
                 title="Style de carte"
               >
-                <Layers className="w-5 h-5 text-gray-700" />
+                <Layers className="w-5 h-5 text-charcoal-700" />
               </button>
 
               <AnimatePresence>
@@ -552,7 +552,9 @@ export default function MapSearch() {
                           setShowStylePicker(false)
                         }}
                         className={`w-full px-3 py-2 text-left rounded-lg text-sm capitalize transition-colors ${
-                          mapStyle === style ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'
+                          mapStyle === style
+                            ? 'bg-primary-100 text-primary-600'
+                            : 'hover:bg-sand-100'
                         }`}
                       >
                         {style === 'street' ? 'Standard' : style === 'light' ? 'Clair' : 'Sombre'}
@@ -574,7 +576,7 @@ export default function MapSearch() {
                 className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
               >
                 <div className="bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                  <Loader2 className="w-4 h-4 animate-spin text-primary-500" />
                   <span className="text-sm font-medium">Recherche...</span>
                 </div>
               </motion.div>
@@ -592,14 +594,14 @@ export default function MapSearch() {
               >
                 <div className="bg-white rounded-2xl shadow-2xl p-4">
                   <div className="flex gap-3">
-                    <div className="w-16 h-16 bg-gray-200 rounded-xl flex items-center justify-center">
-                      <span className="text-2xl font-bold text-gray-400">
+                    <div className="w-16 h-16 bg-sand-300 rounded-xl flex items-center justify-center">
+                      <span className="text-2xl font-bold text-charcoal-400">
                         {hoveredProvider.name.charAt(0)}
                       </span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900">{hoveredProvider.name}</h3>
-                      <p className="text-sm text-blue-600">{hoveredProvider.specialty}</p>
+                      <h3 className="font-bold text-charcoal-900">{hoveredProvider.name}</h3>
+                      <p className="text-sm text-primary-500">{hoveredProvider.specialty}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                         <span className="font-medium">

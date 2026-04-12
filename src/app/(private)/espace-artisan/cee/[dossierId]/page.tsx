@@ -143,7 +143,7 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Breadcrumb */}
       <div className="border-b bg-white">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
@@ -158,11 +158,11 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
       </div>
 
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <header className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <Link
             href="/espace-artisan/cee"
-            className="mb-3 inline-flex items-center gap-1 text-sm text-blue-100 hover:text-white"
+            className="mb-3 inline-flex items-center gap-1 text-sm text-primary-100 hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Retour à la liste
@@ -184,20 +184,27 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
             {/* Infos engagement */}
             <section
               aria-label="Informations d'engagement"
-              className="rounded-xl border border-gray-200 bg-white p-6"
+              className="rounded-xl border border-sand-300 bg-white p-6"
             >
-              <h2 className="mb-4 text-lg font-semibold text-gray-900">Informations du dossier</h2>
+              <h2 className="mb-4 text-lg font-semibold text-charcoal-900">
+                Informations du dossier
+              </h2>
               <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {infoItems.map((item) => {
                   const Icon = item.icon
                   return (
                     <div key={item.label} className="flex items-start gap-3">
-                      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" />
+                      <Icon
+                        className="mt-0.5 h-4 w-4 shrink-0 text-charcoal-400"
+                        aria-hidden="true"
+                      />
                       <div>
-                        <dt className="text-xs uppercase tracking-wide text-gray-500">
+                        <dt className="text-xs uppercase tracking-wide text-charcoal-500">
                           {item.label}
                         </dt>
-                        <dd className="mt-0.5 text-sm font-semibold text-gray-900">{item.value}</dd>
+                        <dd className="mt-0.5 text-sm font-semibold text-charcoal-900">
+                          {item.value}
+                        </dd>
                       </div>
                     </div>
                   )
@@ -208,28 +215,30 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
             {/* Justificatifs fournis */}
             <section
               aria-label="Pièces justificatives fournies"
-              className="rounded-xl border border-gray-200 bg-white p-6"
+              className="rounded-xl border border-sand-300 bg-white p-6"
             >
               <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-                <h2 className="text-lg font-semibold text-gray-900">Pièces fournies</h2>
+                <h2 className="text-lg font-semibold text-charcoal-900">Pièces fournies</h2>
                 <JustificatifGapBadge gap={gap} />
               </div>
               {dossier.justificatifs.length === 0 ? (
-                <p className="text-sm text-gray-500">Aucune pièce enregistrée pour le moment.</p>
+                <p className="text-sm text-charcoal-500">
+                  Aucune pièce enregistrée pour le moment.
+                </p>
               ) : (
                 <ul className="space-y-2" role="list">
                   {dossier.justificatifs.map((j, idx) => (
                     <li
                       key={`${j.code}-${idx}`}
-                      className="flex items-start gap-3 rounded-lg border border-gray-100 bg-gray-50 p-3"
+                      className="flex items-start gap-3 rounded-lg border border-sand-200 bg-sand-50 p-3"
                     >
                       <FileCheck2
                         className="mt-0.5 h-4 w-4 shrink-0 text-green-600"
                         aria-hidden="true"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-gray-900">{j.label}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-sm font-medium text-charcoal-900">{j.label}</p>
+                        <p className="text-xs text-charcoal-500">
                           Déposée le {formatDate(j.uploaded_at)}
                           {j.verified_at && ' · vérifiée'}
                           {j.exif_geotag_verified && ' · EXIF validé'}
@@ -244,9 +253,9 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
             {/* Timeline */}
             <section
               aria-label="Chronologie du dossier"
-              className="rounded-xl border border-gray-200 bg-white p-6"
+              className="rounded-xl border border-sand-300 bg-white p-6"
             >
-              <h2 className="mb-4 text-lg font-semibold text-gray-900">Historique</h2>
+              <h2 className="mb-4 text-lg font-semibold text-charcoal-900">Historique</h2>
               <DossierTimeline events={events} />
             </section>
           </div>
@@ -254,7 +263,7 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
           {/* Colonne droite — upload */}
           <aside className="space-y-6" aria-label="Ajouter une pièce">
             <section>
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-600">
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-charcoal-600">
                 Envoyer une pièce
               </h2>
               <JustificatifUploadForm

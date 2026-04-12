@@ -24,7 +24,7 @@ export default function MapPerformanceIndicator({
   cacheStats,
   responseTime,
   resultsCount,
-  show = false
+  show = false,
 }: MapPerformanceIndicatorProps) {
   const [isVisible, setIsVisible] = useState(show)
 
@@ -49,23 +49,27 @@ export default function MapPerformanceIndicator({
           className="absolute top-20 right-4 z-20 bg-white rounded-xl shadow-lg p-3 min-w-[200px]"
         >
           <div className="flex items-center gap-2 mb-2">
-            <Zap className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-semibold text-gray-900">Performance</span>
+            <Zap className="w-4 h-4 text-primary-500" />
+            <span className="text-sm font-semibold text-charcoal-900">Performance</span>
           </div>
 
           <div className="space-y-2">
             {/* Response Time */}
             {responseTime !== undefined && (
               <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600 flex items-center gap-1">
+                <span className="text-charcoal-600 flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
                   Temps de réponse
                 </span>
-                <span className={`font-medium ${
-                  responseTime < 500 ? 'text-green-600' : 
-                  responseTime < 1000 ? 'text-yellow-600' : 
-                  'text-red-600'
-                }`}>
+                <span
+                  className={`font-medium ${
+                    responseTime < 500
+                      ? 'text-green-600'
+                      : responseTime < 1000
+                        ? 'text-yellow-600'
+                        : 'text-red-600'
+                  }`}
+                >
                   {responseTime}ms
                 </span>
               </div>
@@ -74,15 +78,19 @@ export default function MapPerformanceIndicator({
             {/* Cache Hit Rate */}
             {cacheStats && cacheStats.hits + cacheStats.misses > 0 && (
               <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600 flex items-center gap-1">
+                <span className="text-charcoal-600 flex items-center gap-1">
                   <Database className="w-3 h-3" />
                   Cache
                 </span>
-                <span className={`font-medium ${
-                  cacheStats.hitRate > 70 ? 'text-green-600' : 
-                  cacheStats.hitRate > 40 ? 'text-yellow-600' : 
-                  'text-red-600'
-                }`}>
+                <span
+                  className={`font-medium ${
+                    cacheStats.hitRate > 70
+                      ? 'text-green-600'
+                      : cacheStats.hitRate > 40
+                        ? 'text-yellow-600'
+                        : 'text-red-600'
+                  }`}
+                >
                   {cacheStats.hitRate.toFixed(0)}%
                 </span>
               </div>
@@ -91,25 +99,27 @@ export default function MapPerformanceIndicator({
             {/* Results Count */}
             {resultsCount !== undefined && (
               <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600">Résultats</span>
-                <span className="font-medium text-blue-600">{resultsCount}</span>
+                <span className="text-charcoal-600">Résultats</span>
+                <span className="font-medium text-primary-500">{resultsCount}</span>
               </div>
             )}
           </div>
 
           {/* Performance Bar */}
           {responseTime !== undefined && (
-            <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div className="mt-2 h-1 bg-sand-300 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ 
-                  width: `${Math.min(100, (1000 - responseTime) / 10)}%` 
+                animate={{
+                  width: `${Math.min(100, (1000 - responseTime) / 10)}%`,
                 }}
                 transition={{ duration: 0.5 }}
                 className={`h-full ${
-                  responseTime < 500 ? 'bg-green-500' : 
-                  responseTime < 1000 ? 'bg-yellow-500' : 
-                  'bg-red-500'
+                  responseTime < 500
+                    ? 'bg-green-500'
+                    : responseTime < 1000
+                      ? 'bg-yellow-500'
+                      : 'bg-red-500'
                 }`}
               />
             </div>

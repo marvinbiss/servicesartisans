@@ -3,8 +3,18 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import {
-  Mail, Phone, MapPin, Building,
-  CheckCircle, ArrowRight, ArrowLeft, Star, Users, TrendingUp, Loader2, AlertCircle
+  Mail,
+  Phone,
+  MapPin,
+  Building,
+  CheckCircle,
+  ArrowRight,
+  ArrowLeft,
+  Star,
+  Users,
+  TrendingUp,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
@@ -13,7 +23,11 @@ import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
 import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
 const benefits = [
-  { icon: Users, title: 'Nouveaux clients', description: 'Recevez des demandes de devis qualifiées' },
+  {
+    icon: Users,
+    title: 'Nouveaux clients',
+    description: 'Recevez des demandes de devis qualifiées',
+  },
   { icon: Star, title: 'Visibilité', description: 'Apparaissez dans les recherches locales' },
   { icon: TrendingUp, title: 'Croissance', description: 'Développez votre activité' },
 ]
@@ -57,7 +71,12 @@ export default function InscriptionArtisanPage() {
         }
         return true
       case 2:
-        if (!formData.prenom.trim() || !formData.nom.trim() || !formData.email.trim() || !formData.telephone.trim()) {
+        if (
+          !formData.prenom.trim() ||
+          !formData.nom.trim() ||
+          !formData.email.trim() ||
+          !formData.telephone.trim()
+        ) {
           setStepError('Veuillez remplir tous les champs obligatoires avant de continuer.')
           return false
         }
@@ -73,15 +92,15 @@ export default function InscriptionArtisanPage() {
     }
   }
 
-  const breadcrumbItems = [
-    { label: 'Inscription artisan' }
-  ]
+  const breadcrumbItems = [{ label: 'Inscription artisan' }]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     if (!consentRgpd) {
-      setError('Veuillez accepter la politique de confidentialité avant de finaliser votre inscription.')
+      setError(
+        'Veuillez accepter la politique de confidentialité avant de finaliser votre inscription.'
+      )
       return
     }
     setIsLoading(true)
@@ -99,12 +118,12 @@ export default function InscriptionArtisanPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'inscription')
+        throw new Error(data.error || "Erreur lors de l'inscription")
       }
 
       setIsSubmitted(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
+      setError(err instanceof Error ? err.message : "Erreur lors de l'inscription")
     } finally {
       setIsLoading(false)
     }
@@ -112,28 +131,26 @@ export default function InscriptionArtisanPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Inscription reçue !
-          </h1>
-          <p className="text-gray-600 mb-8">
-            Merci pour votre inscription. Notre équipe va vérifier vos informations et
-            vous recevrez un email de confirmation rapidement.
+          <h1 className="text-2xl font-bold text-charcoal-900 mb-4">Inscription reçue !</h1>
+          <p className="text-charcoal-600 mb-8">
+            Merci pour votre inscription. Notre équipe va vérifier vos informations et vous recevrez
+            un email de confirmation rapidement.
           </p>
           <div className="space-y-4">
             <Link
               href="/"
-              className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="block w-full bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
             >
               Retour à l'accueil
             </Link>
             <Link
               href="/services"
-              className="block w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+              className="block w-full bg-sand-100 text-charcoal-700 px-6 py-3 rounded-lg font-semibold hover:bg-sand-300 transition-colors"
             >
               Explorer les services
             </Link>
@@ -144,29 +161,40 @@ export default function InscriptionArtisanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Hero */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,107,75,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
-          <Breadcrumb items={breadcrumbItems} className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600 [&>span]:text-white" />
+          <Breadcrumb
+            items={breadcrumbItems}
+            className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600 [&>span]:text-white"
+          />
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
                 Rejoignez le réseau ServicesArtisans
               </h1>
-              <p className="text-xl text-slate-400 mb-8">
-                Inscription gratuite. Recevez des demandes de devis qualifiées et
-                développez votre activité.
+              <p className="text-xl text-charcoal-400 mb-8">
+                Inscription gratuite. Recevez des demandes de devis qualifiées et développez votre
+                activité.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                 {benefits.map((benefit) => {
@@ -177,7 +205,7 @@ export default function InscriptionArtisanPage() {
                         <Icon className="w-6 h-6 text-amber-400" />
                       </div>
                       <div className="font-semibold">{benefit.title}</div>
-                      <div className="text-sm text-slate-400">{benefit.description}</div>
+                      <div className="text-sm text-charcoal-400">{benefit.description}</div>
                     </div>
                   )
                 })}
@@ -185,21 +213,21 @@ export default function InscriptionArtisanPage() {
             </div>
 
             {/* Progress Card */}
-            <div className="bg-white rounded-2xl p-6 text-gray-900">
+            <div className="bg-white rounded-2xl p-6 text-charcoal-900">
               <div className="flex items-center justify-between mb-6">
                 {[1, 2, 3, 4].map((s) => (
                   <div key={s} className="flex items-center">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
-                        step >= s
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-500'
+                        step >= s ? 'bg-primary-500 text-white' : 'bg-sand-300 text-charcoal-500'
                       }`}
                     >
                       {step > s ? '✓' : s}
                     </div>
                     {s < 4 && (
-                      <div className={`w-8 h-1 mx-1 ${step > s ? 'bg-blue-600' : 'bg-gray-200'}`} />
+                      <div
+                        className={`w-8 h-1 mx-1 ${step > s ? 'bg-primary-500' : 'bg-sand-300'}`}
+                      />
                     )}
                   </div>
                 ))}
@@ -211,11 +239,11 @@ export default function InscriptionArtisanPage() {
                   <div className="space-y-4">
                     <h2 className="text-xl font-bold mb-4">Votre entreprise</h2>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Nom de l'entreprise *
                       </label>
                       <div className="relative">
-                        <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="text"
                           autoComplete="organization"
@@ -223,36 +251,38 @@ export default function InscriptionArtisanPage() {
                           onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
                           required
                           disabled={isLoading}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                           placeholder="Mon Entreprise"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Numéro SIRET *
                       </label>
                       <SiretAutocomplete
                         value={formData.siret}
                         onValidated={(siret, company) => {
-                          setFormData(prev => ({
+                          setFormData((prev) => ({
                             ...prev,
                             siret,
-                            entreprise: company?.name || prev.entreprise
+                            entreprise: company?.name || prev.entreprise,
                           }))
                         }}
-                        onClear={() => setFormData(prev => ({ ...prev, siret: '' }))}
+                        onClear={() => setFormData((prev) => ({ ...prev, siret: '' }))}
                         showCompanyPreview={true}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Métier principal *
                       </label>
                       <MetierAutocomplete
                         value={formData.metier}
-                        onSelect={(service) => setFormData(prev => ({ ...prev, metier: service.name }))}
-                        onClear={() => setFormData(prev => ({ ...prev, metier: '' }))}
+                        onSelect={(service) =>
+                          setFormData((prev) => ({ ...prev, metier: service.name }))
+                        }
+                        onClear={() => setFormData((prev) => ({ ...prev, metier: '' }))}
                         placeholder="Rechercher votre métier..."
                         showAllOnFocus={true}
                       />
@@ -266,7 +296,9 @@ export default function InscriptionArtisanPage() {
                     <h2 className="text-xl font-bold mb-4">Vos coordonnées</h2>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                        <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                          Prénom *
+                        </label>
                         <input
                           type="text"
                           autoComplete="given-name"
@@ -274,11 +306,13 @@ export default function InscriptionArtisanPage() {
                           onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
                           required
                           disabled={isLoading}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                        <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                          Nom *
+                        </label>
                         <input
                           type="text"
                           autoComplete="family-name"
@@ -286,14 +320,16 @@ export default function InscriptionArtisanPage() {
                           onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
                           required
                           disabled={isLoading}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                        Email *
+                      </label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="email"
                           autoComplete="email"
@@ -301,14 +337,16 @@ export default function InscriptionArtisanPage() {
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           required
                           disabled={isLoading}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                        Téléphone *
+                      </label>
                       <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="tel"
                           autoComplete="tel"
@@ -316,7 +354,7 @@ export default function InscriptionArtisanPage() {
                           onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
                           required
                           disabled={isLoading}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -328,9 +366,11 @@ export default function InscriptionArtisanPage() {
                   <div className="space-y-4">
                     <h2 className="text-xl font-bold mb-4">Zone d'intervention</h2>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Adresse *</label>
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                        Adresse *
+                      </label>
                       <div className="relative">
-                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="text"
                           autoComplete="street-address"
@@ -338,35 +378,41 @@ export default function InscriptionArtisanPage() {
                           onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
                           required
                           disabled={isLoading}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                        Ville *
+                      </label>
                       <VilleAutocomplete
                         value={formData.ville}
                         onSelect={(ville, codePostal, _coords) => {
-                          setFormData(prev => ({
+                          setFormData((prev) => ({
                             ...prev,
                             ville,
-                            codePostal
+                            codePostal,
                           }))
                         }}
-                        onClear={() => setFormData(prev => ({ ...prev, ville: '', codePostal: '' }))}
+                        onClear={() =>
+                          setFormData((prev) => ({ ...prev, ville: '', codePostal: '' }))
+                        }
                         showGeolocation={true}
                         placeholder="Rechercher votre ville..."
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Rayon d'intervention (km)
                       </label>
                       <select
                         value={formData.rayonIntervention}
-                        onChange={(e) => setFormData({ ...formData, rayonIntervention: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, rayonIntervention: e.target.value })
+                        }
                         disabled={isLoading}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                       >
                         <option value="10">10 km</option>
                         <option value="20">20 km</option>
@@ -383,7 +429,7 @@ export default function InscriptionArtisanPage() {
                   <div className="space-y-4">
                     <h2 className="text-xl font-bold mb-4">Présentez-vous</h2>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Description de votre activité
                       </label>
                       <textarea
@@ -391,12 +437,12 @@ export default function InscriptionArtisanPage() {
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         rows={3}
                         disabled={isLoading}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         placeholder="Décrivez vos services, spécialités..."
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Années d'expérience
                       </label>
                       <input
@@ -404,35 +450,47 @@ export default function InscriptionArtisanPage() {
                         value={formData.experience}
                         onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                         disabled={isLoading}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         placeholder="Ex: 15 ans"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-charcoal-700 mb-1">
                         Certifications / Labels
                       </label>
                       <input
                         type="text"
                         value={formData.certifications}
-                        onChange={(e) => setFormData({ ...formData, certifications: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, certifications: e.target.value })
+                        }
                         disabled={isLoading}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 disabled:opacity-50"
                         placeholder="RGE, Qualibat, etc."
                       />
                     </div>
-                    <label className="flex items-start gap-3 bg-blue-50 rounded-lg p-4 cursor-pointer">
+                    <label className="flex items-start gap-3 bg-primary-50 rounded-lg p-4 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={consentRgpd}
                         onChange={(e) => setConsentRgpd(e.target.checked)}
-                        className="mt-0.5 accent-blue-600"
+                        className="mt-0.5 accent-primary-500"
                       />
-                      <span className="text-sm text-blue-800">
+                      <span className="text-sm text-primary-800">
                         J'accepte les{' '}
-                        <Link href="/mentions-legales" className="underline text-blue-600 hover:text-blue-700">conditions d'utilisation</Link>
-                        {' '}et la{' '}
-                        <Link href="/confidentialite" className="underline text-blue-600 hover:text-blue-700">politique de confidentialité</Link>
+                        <Link
+                          href="/mentions-legales"
+                          className="underline text-primary-500 hover:text-primary-600"
+                        >
+                          conditions d'utilisation
+                        </Link>{' '}
+                        et la{' '}
+                        <Link
+                          href="/confidentialite"
+                          className="underline text-primary-500 hover:text-primary-600"
+                        >
+                          politique de confidentialité
+                        </Link>
                       </span>
                     </label>
                   </div>
@@ -460,7 +518,7 @@ export default function InscriptionArtisanPage() {
                     <button
                       type="button"
                       onClick={() => setStep(step - 1)}
-                      className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                      className="flex items-center gap-2 text-charcoal-600 hover:text-charcoal-900"
                     >
                       <ArrowLeft className="w-5 h-5" />
                       Retour
@@ -477,7 +535,7 @@ export default function InscriptionArtisanPage() {
                           setStep(step + 1)
                         }
                       }}
-                      className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
+                      className="flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600"
                     >
                       Continuer
                       <ArrowRight className="w-5 h-5" />
@@ -511,14 +569,29 @@ export default function InscriptionArtisanPage() {
       {/* Testimonials */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
+          <h2 className="text-2xl font-bold text-charcoal-900 text-center mb-12">
             Ils nous font confiance
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Pierre M.', job: 'Plombier à Lyon', jobLink: '/services/plombier/lyon', text: 'Grâce à ServicesArtisans, j\'ai doublé mon chiffre d\'affaires en un an.' },
-              { name: 'Sophie L.', job: 'Électricienne à Paris', jobLink: '/services/electricien/paris', text: 'Une vraie mine d\'or pour trouver de nouveaux clients qualifiés.' },
-              { name: 'Marc D.', job: 'Menuisier à Bordeaux', jobLink: '/services/menuisier/bordeaux', text: 'Le meilleur investissement pour mon entreprise. Je recommande !' },
+              {
+                name: 'Pierre M.',
+                job: 'Plombier à Lyon',
+                jobLink: '/services/plombier/lyon',
+                text: "Grâce à ServicesArtisans, j'ai doublé mon chiffre d'affaires en un an.",
+              },
+              {
+                name: 'Sophie L.',
+                job: 'Électricienne à Paris',
+                jobLink: '/services/electricien/paris',
+                text: "Une vraie mine d'or pour trouver de nouveaux clients qualifiés.",
+              },
+              {
+                name: 'Marc D.',
+                job: 'Menuisier à Bordeaux',
+                jobLink: '/services/menuisier/bordeaux',
+                text: 'Le meilleur investissement pour mon entreprise. Je recommande !',
+              },
             ].map((t) => (
               <div key={t.name} className="bg-white rounded-xl p-6 shadow-sm">
                 <div className="flex gap-1 mb-4">
@@ -526,9 +599,11 @@ export default function InscriptionArtisanPage() {
                     <Star key={s} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-600 mb-4">"{t.text}"</p>
-                <div className="font-semibold text-gray-900">{t.name}</div>
-                <Link href={t.jobLink} className="text-sm text-blue-600 hover:underline">{t.job}</Link>
+                <p className="text-charcoal-600 mb-4">"{t.text}"</p>
+                <div className="font-semibold text-charcoal-900">{t.name}</div>
+                <Link href={t.jobLink} className="text-sm text-primary-500 hover:underline">
+                  {t.job}
+                </Link>
               </div>
             ))}
           </div>
@@ -538,7 +613,7 @@ export default function InscriptionArtisanPage() {
       {/* Related links */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Explorer le réseau</h2>
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-8">Explorer le réseau</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />
             <PopularCitiesLinks />
@@ -547,24 +622,32 @@ export default function InscriptionArtisanPage() {
           <div className="mt-12 grid md:grid-cols-3 gap-6">
             <Link
               href="/tarifs"
-              className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
+              className="bg-sand-50 hover:bg-primary-50 rounded-xl p-6 transition-colors group"
             >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Nos tarifs</h3>
-              <p className="text-gray-600 text-sm">Découvrez nos offres adaptées à votre activité</p>
+              <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 mb-2">
+                Nos tarifs
+              </h3>
+              <p className="text-charcoal-600 text-sm">
+                Découvrez nos offres adaptées à votre activité
+              </p>
             </Link>
             <Link
               href="/avis"
-              className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
+              className="bg-sand-50 hover:bg-primary-50 rounded-xl p-6 transition-colors group"
             >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Avis clients</h3>
-              <p className="text-gray-600 text-sm">Ce que disent nos clients de nos artisans</p>
+              <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 mb-2">
+                Avis clients
+              </h3>
+              <p className="text-charcoal-600 text-sm">Ce que disent nos clients de nos artisans</p>
             </Link>
             <Link
               href="/comment-ca-marche"
-              className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
+              className="bg-sand-50 hover:bg-primary-50 rounded-xl p-6 transition-colors group"
             >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Comment ça marche</h3>
-              <p className="text-gray-600 text-sm">Tout savoir sur notre plateforme</p>
+              <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 mb-2">
+                Comment ça marche
+              </h3>
+              <p className="text-charcoal-600 text-sm">Tout savoir sur notre plateforme</p>
             </Link>
           </div>
         </div>

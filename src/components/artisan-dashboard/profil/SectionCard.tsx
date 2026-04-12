@@ -14,11 +14,20 @@ interface SectionCardProps {
   success: string | null
 }
 
-export function SectionCard({ title, icon: Icon, children, onSave, saving, isDirty, error, success }: SectionCardProps) {
+export function SectionCard({
+  title,
+  icon: Icon,
+  children,
+  onSave,
+  saving,
+  isDirty,
+  error,
+  success,
+}: SectionCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Icon className="w-5 h-5 text-blue-600" />
+      <h2 className="text-lg font-semibold text-charcoal-900 mb-6 flex items-center gap-2">
+        <Icon className="w-5 h-5 text-primary-500" />
         {title}
       </h2>
 
@@ -26,12 +35,20 @@ export function SectionCard({ title, icon: Icon, children, onSave, saving, isDir
 
       {/* Error/Success messages with accessibility */}
       {error && (
-        <div role="alert" aria-live="assertive" className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"
+        >
           {error}
         </div>
       )}
       {success && (
-        <div role="status" aria-live="polite" className="mt-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+        <div
+          role="status"
+          aria-live="polite"
+          className="mt-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm"
+        >
           {success}
         </div>
       )}
@@ -43,7 +60,7 @@ export function SectionCard({ title, icon: Icon, children, onSave, saving, isDir
           onClick={onSave}
           disabled={saving || !isDirty}
           aria-busy={saving}
-          className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="bg-primary-500 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {saving && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
           {saving ? 'Enregistrement...' : 'Enregistrer'}

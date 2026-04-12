@@ -34,8 +34,8 @@ function ReviewStars({ rating, size = 'w-4 h-4' }: { rating: number; size?: stri
               filled
                 ? 'text-amber-500 fill-amber-500'
                 : half
-                ? 'text-amber-400 fill-amber-200'
-                : 'text-sand-300 fill-sand-300'
+                  ? 'text-amber-400 fill-amber-200'
+                  : 'text-sand-300 fill-sand-300'
             }`}
             aria-hidden="true"
           />
@@ -61,7 +61,9 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-charcoal-800 text-sm truncate">{review.author}</span>
+            <span className="font-semibold text-charcoal-800 text-sm truncate">
+              {review.author}
+            </span>
             {review.verified && (
               <span
                 className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-700 bg-accent-50 border border-accent-200 px-2 py-0.5 rounded-full"
@@ -83,9 +85,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
       </div>
 
       {/* Comment - charcoal-700 */}
-      <p
-        className={`text-sm text-charcoal-700 leading-relaxed ${!expanded ? 'line-clamp-3' : ''}`}
-      >
+      <p className={`text-sm text-charcoal-700 leading-relaxed ${!expanded ? 'line-clamp-3' : ''}`}>
         {review.comment}
       </p>
       {review.comment.length > 180 && !expanded && (
@@ -109,8 +109,8 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
 
       {/* Artisan response — visible publicly for SEO and trust */}
       {review.artisan_response && (
-        <div className="mt-3 ml-4 pl-4 border-l-2 border-blue-200 bg-blue-50/50 rounded-r-lg py-2 pr-3">
-          <p className="text-xs font-medium text-blue-700 mb-1">Réponse de l&apos;artisan</p>
+        <div className="mt-3 ml-4 pl-4 border-l-2 border-primary-200 bg-primary-50/50 rounded-r-lg py-2 pr-3">
+          <p className="text-xs font-medium text-primary-600 mb-1">Réponse de l&apos;artisan</p>
           <p className="text-sm text-charcoal-700 leading-relaxed">{review.artisan_response}</p>
         </div>
       )}

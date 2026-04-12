@@ -53,13 +53,13 @@ export function PriceRangeFilter({
     }
   }
 
-  const handlePresetClick = (preset: typeof PRICE_PRESETS[0]) => {
+  const handlePresetClick = (preset: (typeof PRICE_PRESETS)[0]) => {
     setLocalMin(preset.min?.toString() || '')
     setLocalMax(preset.max?.toString() || '')
     onChange(preset.min, preset.max)
   }
 
-  const isPresetActive = (preset: typeof PRICE_PRESETS[0]) => {
+  const isPresetActive = (preset: (typeof PRICE_PRESETS)[0]) => {
     return minValue === preset.min && maxValue === preset.max
   }
 
@@ -75,7 +75,7 @@ export function PriceRangeFilter({
               'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
               isPresetActive(preset)
                 ? 'bg-green-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-sand-100 text-charcoal-600 hover:bg-sand-300'
             )}
           >
             {preset.label}
@@ -86,11 +86,9 @@ export function PriceRangeFilter({
       {/* Custom range inputs */}
       <div className="flex items-center gap-3">
         <div className="flex-1">
-          <label className="text-xs text-gray-500 mb-1 block">
-            Min (EUR/h)
-          </label>
+          <label className="text-xs text-charcoal-500 mb-1 block">Min (EUR/h)</label>
           <div className="relative">
-            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
             <input
               type="number"
               value={localMin}
@@ -98,19 +96,17 @@ export function PriceRangeFilter({
               placeholder="0"
               min={minLimit}
               max={maxLimit}
-              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm"
+              className="w-full pl-9 pr-3 py-2 border border-sand-400 rounded-lg bg-white text-charcoal-900 text-sm"
             />
           </div>
         </div>
 
-        <span className="text-gray-400 mt-6">—</span>
+        <span className="text-charcoal-400 mt-6">—</span>
 
         <div className="flex-1">
-          <label className="text-xs text-gray-500 mb-1 block">
-            Max (EUR/h)
-          </label>
+          <label className="text-xs text-charcoal-500 mb-1 block">Max (EUR/h)</label>
           <div className="relative">
-            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
             <input
               type="number"
               value={localMax}
@@ -118,14 +114,14 @@ export function PriceRangeFilter({
               placeholder="200"
               min={minLimit}
               max={maxLimit}
-              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm"
+              className="w-full pl-9 pr-3 py-2 border border-sand-400 rounded-lg bg-white text-charcoal-900 text-sm"
             />
           </div>
         </div>
       </div>
 
       {/* Visual indicator */}
-      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div className="h-2 bg-sand-300 rounded-full overflow-hidden">
         <div
           className="h-full bg-green-500 rounded-full"
           style={{

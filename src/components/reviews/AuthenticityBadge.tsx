@@ -30,16 +30,16 @@ const AUTHENTICITY_CONFIG = {
   medium: {
     icon: BadgeCheck,
     label: 'Probablement authentique',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200',
+    color: 'text-primary-500',
+    bgColor: 'bg-primary-50',
+    borderColor: 'border-primary-200',
   },
   low: {
     icon: HelpCircle,
     label: 'Non référencé',
-    color: 'text-gray-500',
-    bgColor: 'bg-gray-50',
-    borderColor: 'border-gray-200',
+    color: 'text-charcoal-500',
+    bgColor: 'bg-sand-50',
+    borderColor: 'border-sand-300',
   },
   suspicious: {
     icon: AlertTriangle,
@@ -115,9 +115,7 @@ export function AuthenticityBadge({
         {isVerifiedPurchase ? 'Achat confirmé' : config.label}
       </span>
       {showScore && !isVerifiedPurchase && (
-        <span className={cn(sizeConfig.text, 'text-gray-400')}>
-          ({effectiveScore}%)
-        </span>
+        <span className={cn(sizeConfig.text, 'text-charcoal-400')}>({effectiveScore}%)</span>
       )}
     </div>
   )
@@ -151,27 +149,27 @@ export function AuthenticityDetails({
   return (
     <div className={cn('p-4 rounded-lg border', className)}>
       <div className="flex items-center justify-between mb-3">
-        <h4 className="font-medium text-gray-900">
-          Authenticité de l'avis
-        </h4>
-        <AuthenticityBadge
-          score={score}
-          isVerifiedPurchase={isVerifiedPurchase}
-          size="sm"
-        />
+        <h4 className="font-medium text-charcoal-900">Authenticité de l'avis</h4>
+        <AuthenticityBadge score={score} isVerifiedPurchase={isVerifiedPurchase} size="sm" />
       </div>
 
       {/* Score bar */}
       <div className="mb-4">
         <div className="flex items-center justify-between text-sm mb-1">
-          <span className="text-gray-600">Score de confiance</span>
+          <span className="text-charcoal-600">Score de confiance</span>
           <span className="font-medium">{score}%</span>
         </div>
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2 bg-sand-100 rounded-full overflow-hidden">
           <div
             className={cn(
               'h-full rounded-full transition-all',
-              score >= 90 ? 'bg-green-500' : score >= 70 ? 'bg-blue-500' : score >= 50 ? 'bg-gray-400' : 'bg-yellow-500'
+              score >= 90
+                ? 'bg-green-500'
+                : score >= 70
+                  ? 'bg-primary-400'
+                  : score >= 50
+                    ? 'bg-charcoal-400'
+                    : 'bg-yellow-500'
             )}
             style={{ width: `${score}%` }}
           />
@@ -196,8 +194,8 @@ export function AuthenticityDetails({
       {/* Flags */}
       {flags && Object.values(flags).some(Boolean) && (
         <div className="space-y-1 mb-3">
-          <p className="text-sm font-medium text-gray-700">Signaux détectés:</p>
-          <ul className="text-sm text-gray-600 space-y-0.5">
+          <p className="text-sm font-medium text-charcoal-700">Signaux détectés:</p>
+          <ul className="text-sm text-charcoal-600 space-y-0.5">
             {flags.suspected_fake && (
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
@@ -212,7 +210,7 @@ export function AuthenticityDetails({
             )}
             {flags.ip_match && (
               <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
                 IP correspondant à d'autres avis
               </li>
             )}
@@ -229,8 +227,8 @@ export function AuthenticityDetails({
       {/* Risk factors */}
       {riskFactors.length > 0 && (
         <div className="space-y-1">
-          <p className="text-sm font-medium text-gray-700">Facteurs de risque:</p>
-          <ul className="text-sm text-gray-600 space-y-0.5">
+          <p className="text-sm font-medium text-charcoal-700">Facteurs de risque:</p>
+          <ul className="text-sm text-charcoal-600 space-y-0.5">
             {riskFactors.map((factor) => (
               <li key={factor} className="flex items-center gap-1.5">
                 <AlertTriangle className="w-3 h-3 text-yellow-500" />

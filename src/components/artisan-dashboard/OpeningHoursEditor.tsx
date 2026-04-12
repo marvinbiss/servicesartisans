@@ -89,7 +89,7 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
       }
       onChange(updated)
     },
-    [value, onChange],
+    [value, onChange]
   )
 
   const applyToWeekdays = useCallback(() => {
@@ -113,13 +113,13 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="block text-sm font-medium text-gray-700">
+        <span className="block text-sm font-medium text-charcoal-700">
           Horaires d&apos;ouverture
         </span>
         <button
           type="button"
           onClick={applyToWeekdays}
-          className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-primary-500 hover:text-primary-800 font-medium transition-colors"
           title="Copier les horaires du lundi sur mardi-vendredi"
         >
           <Copy className="w-3.5 h-3.5" aria-hidden="true" />
@@ -142,13 +142,13 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
             <div
               key={key}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
-                day.ouvert ? 'bg-white' : 'bg-gray-50'
+                day.ouvert ? 'bg-white' : 'bg-sand-50'
               }`}
             >
               {/* Day label */}
               <span
                 className={`w-24 text-sm font-medium shrink-0 ${
-                  day.ouvert ? 'text-gray-900' : 'text-gray-400'
+                  day.ouvert ? 'text-charcoal-900' : 'text-charcoal-400'
                 }`}
               >
                 {label}
@@ -162,7 +162,7 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
                 aria-label={`${label} ouvert`}
                 onClick={() => updateDay(key, 'ouvert', !day.ouvert)}
                 className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
-                  day.ouvert ? 'bg-blue-600' : 'bg-gray-300'
+                  day.ouvert ? 'bg-primary-500' : 'bg-sand-400'
                 }`}
               >
                 <span
@@ -182,8 +182,8 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
                     id={`oh-${key}-debut`}
                     value={day.debut}
                     onChange={(e) => updateDay(key, 'debut', e.target.value)}
-                    className={`px-2 py-1.5 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                      timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
+                    className={`px-2 py-1.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+                      timeError ? 'border-red-400 bg-red-50' : 'border-sand-400'
                     }`}
                   >
                     {TIME_SLOTS.map((slot) => (
@@ -193,7 +193,7 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
                     ))}
                   </select>
 
-                  <span className="text-gray-400 text-sm" aria-hidden="true">
+                  <span className="text-charcoal-400 text-sm" aria-hidden="true">
                     -
                   </span>
 
@@ -204,8 +204,8 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
                     id={`oh-${key}-fin`}
                     value={day.fin}
                     onChange={(e) => updateDay(key, 'fin', e.target.value)}
-                    className={`px-2 py-1.5 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                      timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
+                    className={`px-2 py-1.5 border rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+                      timeError ? 'border-red-400 bg-red-50' : 'border-sand-400'
                     }`}
                   >
                     {TIME_SLOTS.map((slot) => (
@@ -222,7 +222,7 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
                   )}
                 </div>
               ) : (
-                <span className="text-sm text-gray-400 italic">Fermé</span>
+                <span className="text-sm text-charcoal-400 italic">Fermé</span>
               )}
             </div>
           )
@@ -230,7 +230,10 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
       </div>
 
       {hasAnyError && (
-        <p className="text-xs text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg" role="alert">
+        <p
+          className="text-xs text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg"
+          role="alert"
+        >
           Corrigez les horaires invalides avant d&apos;enregistrer.
         </p>
       )}

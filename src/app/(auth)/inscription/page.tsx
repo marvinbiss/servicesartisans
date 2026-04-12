@@ -169,19 +169,19 @@ export default function InscriptionPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
           <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Inscription réussie !</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-2xl font-bold text-charcoal-900 mb-4">Inscription réussie !</h1>
+          <p className="text-charcoal-600 mb-8">
             Un email de confirmation a été envoyé à <strong>{formData.email}</strong>. Cliquez sur
             le lien pour activer votre compte.
           </p>
           <Link
             href={`/connexion${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-600 hover:to-primary-700 transition-all shadow-lg"
           >
             Se connecter
             <ArrowRight className="w-5 h-5" />
@@ -192,10 +192,10 @@ export default function InscriptionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex flex-col">
       <div className="flex flex-1">
         {/* Left - Image */}
-        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 items-center justify-center p-12 relative overflow-hidden">
+        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary-500 via-primary-600 to-indigo-800 items-center justify-center p-12 relative overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
@@ -206,7 +206,7 @@ export default function InscriptionPage() {
               <span className="text-4xl font-bold">SA</span>
             </div>
             <h2 className="text-4xl font-bold mb-6">Rejoignez ServicesArtisans</h2>
-            <p className="text-blue-100 text-lg mb-10">
+            <p className="text-primary-100 text-lg mb-10">
               Créez votre compte gratuitement et trouvez les meilleurs artisans pour vos projets.
             </p>
             <div className="space-y-4 text-left">
@@ -232,20 +232,20 @@ export default function InscriptionPage() {
             {/* Breadcrumb */}
             <Breadcrumb
               items={[{ label: 'Inscription' }]}
-              className="mb-6 text-gray-400 [&_a]:text-gray-400 [&_a:hover]:text-white [&_svg]:text-gray-500"
+              className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-500"
             />
 
             <div className="text-center mb-8">
               <Link href="/" className="inline-flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-xl">SA</span>
                 </div>
                 <span className="text-2xl font-bold text-white">
-                  Services<span className="text-blue-400">Artisans</span>
+                  Services<span className="text-primary-300">Artisans</span>
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">Créer un compte</h1>
-              <p className="text-gray-400">Inscrivez-vous gratuitement</p>
+              <p className="text-charcoal-400">Inscrivez-vous gratuitement</p>
             </div>
 
             {generalError && (
@@ -258,14 +258,14 @@ export default function InscriptionPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Prénom</label>
+                  <label className="block text-sm font-medium text-sand-500 mb-2">Prénom</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                     <input
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.firstName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                      className={`w-full pl-10 pr-4 py-3 bg-charcoal-800 border ${errors.firstName ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                       placeholder="Jean"
                     />
                   </div>
@@ -274,12 +274,12 @@ export default function InscriptionPage() {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Nom</label>
+                  <label className="block text-sm font-medium text-sand-500 mb-2">Nom</label>
                   <input
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className={`w-full px-4 py-3 bg-slate-800 border ${errors.lastName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                    className={`w-full px-4 py-3 bg-charcoal-800 border ${errors.lastName ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="Dupont"
                   />
                   {errors.lastName && (
@@ -289,14 +289,14 @@ export default function InscriptionPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                <label className="block text-sm font-medium text-sand-500 mb-2">Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-charcoal-800 border ${errors.email ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="jean.dupont@email.com"
                   />
                 </div>
@@ -304,20 +304,20 @@ export default function InscriptionPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
+                <label className="block text-sm font-medium text-sand-500 mb-2">Mot de passe</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className={`w-full pl-10 pr-12 py-3 bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-12 py-3 bg-charcoal-800 border ${errors.password ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="8 caractères minimum"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-500 hover:text-sand-500"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -328,11 +328,11 @@ export default function InscriptionPage() {
                       {[...Array(5)].map((_, i) => (
                         <div
                           key={i}
-                          className={`h-1 flex-1 rounded-full ${i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-slate-700'}`}
+                          className={`h-1 flex-1 rounded-full ${i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-charcoal-700'}`}
                         />
                       ))}
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-charcoal-500">
                       Force:{' '}
                       {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Très faible'}
                     </p>
@@ -342,16 +342,16 @@ export default function InscriptionPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-sand-500 mb-2">
                   Confirmer le mot de passe
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.confirmPassword ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-charcoal-800 border ${errors.confirmPassword ? 'border-red-500' : 'border-charcoal-700'} rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                     placeholder="Confirmez votre mot de passe"
                   />
                 </div>
@@ -365,15 +365,15 @@ export default function InscriptionPage() {
                   type="checkbox"
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="mt-1 rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-blue-500"
+                  className="mt-1 rounded bg-charcoal-800 border-charcoal-700 text-primary-500 focus:ring-primary-400"
                 />
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-charcoal-400">
                   J'accepte les{' '}
-                  <Link href="/cgv" className="text-blue-400 hover:underline">
+                  <Link href="/cgv" className="text-primary-300 hover:underline">
                     conditions générales
                   </Link>{' '}
                   et la{' '}
-                  <Link href="/confidentialite" className="text-blue-400 hover:underline">
+                  <Link href="/confidentialite" className="text-primary-300 hover:underline">
                     politique de confidentialité
                   </Link>
                 </span>
@@ -383,7 +383,7 @@ export default function InscriptionPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3.5 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-primary-500 to-primary-600 text-white py-3.5 rounded-xl font-semibold hover:from-primary-600 hover:to-primary-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -400,10 +400,10 @@ export default function InscriptionPage() {
             <div className="mt-8">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-700" />
+                  <div className="w-full border-t border-charcoal-700" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-slate-900 px-4 text-gray-500">Ou s'inscrire avec</span>
+                  <span className="bg-charcoal-900 px-4 text-charcoal-500">Ou s'inscrire avec</span>
                 </div>
               </div>
               <div className="mt-6">
@@ -411,7 +411,7 @@ export default function InscriptionPage() {
                   type="button"
                   onClick={handleGoogleLogin}
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 py-3 rounded-xl hover:bg-slate-700 transition-all text-white disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 bg-charcoal-800 border border-charcoal-700 py-3 rounded-xl hover:bg-charcoal-700 transition-all text-white disabled:opacity-50"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
@@ -437,35 +437,35 @@ export default function InscriptionPage() {
             </div>
 
             <div className="mt-8 text-center">
-              <p className="text-gray-400">
+              <p className="text-charcoal-400">
                 Déjà un compte ?{' '}
                 <Link
                   href={`/connexion${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-                  className="text-blue-400 hover:text-blue-300 font-medium"
+                  className="text-primary-300 hover:text-primary-200 font-medium"
                 >
                   Se connecter
                 </Link>
               </p>
             </div>
 
-            <p className="mt-6 text-center text-sm text-gray-500">
+            <p className="mt-6 text-center text-sm text-charcoal-500">
               Vous êtes artisan ?{' '}
-              <Link href="/inscription-artisan" className="text-blue-400 hover:underline">
+              <Link href="/inscription-artisan" className="text-primary-300 hover:underline">
                 Inscrivez votre entreprise
               </Link>
             </p>
 
             {/* Contextual Links */}
-            <div className="mt-8 pt-8 border-t border-slate-700">
-              <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
+            <div className="mt-8 pt-8 border-t border-charcoal-700">
+              <p className="text-charcoal-400 text-sm mb-3">Liens utiles :</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-                <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
+                <Link href="/comment-ca-marche" className="text-primary-300 hover:text-primary-200">
                   Comment ça marche ?
                 </Link>
-                <Link href="/faq" className="text-blue-400 hover:text-blue-300">
+                <Link href="/faq" className="text-primary-300 hover:text-primary-200">
                   Questions fréquentes
                 </Link>
-                <Link href="/devis" className="text-blue-400 hover:text-blue-300">
+                <Link href="/devis" className="text-primary-300 hover:text-primary-200">
                   Demander un devis
                 </Link>
               </div>
@@ -475,12 +475,12 @@ export default function InscriptionPage() {
       </div>
 
       {/* Related Links Section */}
-      <section className="bg-slate-800/50 py-10 border-t border-slate-700">
+      <section className="bg-charcoal-800/50 py-10 border-t border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-semibold text-white mb-6">Découvrez nos services</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
-            <PopularCitiesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
+            <PopularServicesLinks className="[&_h3]:text-sand-500 [&_a]:bg-charcoal-700 [&_a]:text-sand-500 [&_a:hover]:bg-primary-500 [&_a:hover]:text-white" />
+            <PopularCitiesLinks className="[&_h3]:text-sand-500 [&_a]:bg-charcoal-700 [&_a]:text-sand-500 [&_a:hover]:bg-primary-500 [&_a:hover]:text-white" />
           </div>
         </div>
       </section>

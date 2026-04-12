@@ -45,9 +45,7 @@ const PRERENDER_CITIES_COUNT = 20
 
 export function generateStaticParams() {
   const topCities = staticVilles.slice(0, PRERENDER_CITIES_COUNT)
-  return PRERENDER_SERVICES.flatMap((service) =>
-    topCities.map((v) => ({ service, ville: v.slug })),
-  )
+  return PRERENDER_SERVICES.flatMap((service) => topCities.map((v) => ({ service, ville: v.slug })))
 }
 
 interface PageProps {
@@ -97,7 +95,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const description = truncateTitle(
     `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE \u00e0 ${villeName}. \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Qualifications v\u00e9rifi\u00e9es ADEME \u00e0 jour.`,
-    158,
+    158
   )
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
@@ -107,7 +105,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     robots: isNoindex
       ? { index: false, follow: true }
-      : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+      : {
+          index: true,
+          follow: true,
+          'max-snippet': -1 as const,
+          'max-image-preview': 'large' as const,
+          'max-video-preview': -1 as const,
+        },
     openGraph: {
       title,
       description,
@@ -143,7 +147,9 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   const serviceName = service?.name || serviceSlug
   const villeName = location.name
 
-  const { providers, count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, { limit: 50 })
+  const { providers, count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, {
+    limit: 50,
+  })
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
   const pageUrl = `${SITE_URL}${path}`
@@ -190,7 +196,12 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
   const intro = buildIntroParagraph(serviceName, villeName, serviceSlug)
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
-  const hasGuide = ['pompe-a-chaleur', 'panneaux-solaires', 'isolation-thermique', 'renovation-energetique'].includes(serviceSlug)
+  const hasGuide = [
+    'pompe-a-chaleur',
+    'panneaux-solaires',
+    'isolation-thermique',
+    'renovation-energetique',
+  ].includes(serviceSlug)
 
   // Content enrichi (2-3 paragraphes spécifiques service x ville)
   const villeData = getVilleBySlug(villeSlug)
@@ -199,18 +210,14 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
     : []
 
   // FAQ contextualisée service + ville
-  const faqItems = villeData
-    ? buildServiceCityFaq(serviceSlug, serviceName, villeData, count)
-    : []
+  const faqItems = villeData ? buildServiceCityFaq(serviceSlug, serviceName, villeData, count) : []
   const faqSchema = faqItems.length > 0 ? buildFaqJsonLd(faqItems) : null
 
   // Cross-linking villes : top cities du service (exclut la ville courante)
   const serviceStats = isRgeAllowedService(serviceSlug)
     ? await getRgeServiceStats(serviceSlug)
     : { total: 0, topCities: [] }
-  const otherCities = serviceStats.topCities
-    .filter((c) => c.slug !== villeSlug)
-    .slice(0, 5)
+  const otherCities = serviceStats.topCities.filter((c) => c.slug !== villeSlug).slice(0, 5)
 
   return (
     <main className="min-h-screen bg-white">
@@ -244,15 +251,16 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         />
 
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 font-jakarta">
+          <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
             {serviceName} certifi&eacute; RGE &agrave; {villeName}
           </h1>
-          <p className="mt-3 text-gray-600">
-            {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} &agrave; {villeName}
+          <p className="mt-3 text-charcoal-600">
+            {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} &agrave;{' '}
+            {villeName}
           </p>
         </header>
 
-        <section className="mb-8 text-gray-700 leading-relaxed space-y-4">
+        <section className="mb-8 text-charcoal-700 leading-relaxed space-y-4">
           <p>{intro}</p>
           {enrichedParagraphs.map((para, i) => (
             <p key={i}>{para}</p>
@@ -260,8 +268,8 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-          <strong className="font-semibold">Source officielle&nbsp;:</strong>{' '}
-          Les donn&eacute;es de certification RGE affich&eacute;es sont sourc&eacute;es depuis{' '}
+          <strong className="font-semibold">Source officielle&nbsp;:</strong> Les donn&eacute;es de
+          certification RGE affich&eacute;es sont sourc&eacute;es depuis{' '}
           <a
             href="https://data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/"
             target="_blank"
@@ -273,20 +281,26 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           &mdash; ADEME / France R&eacute;nov&rsquo; (Licence Etalab 2.0).
           {qualif && (
             <>
-              {' '}Qualification de r&eacute;f&eacute;rence pour ce m&eacute;tier&nbsp;: <strong>{qualif.label}</strong> ({qualif.organisme}).
+              {' '}
+              Qualification de r&eacute;f&eacute;rence pour ce m&eacute;tier&nbsp;:{' '}
+              <strong>{qualif.label}</strong> ({qualif.organisme}).
             </>
           )}
         </section>
 
         <section className="mb-12">
           {count === 0 ? (
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-              <p className="text-gray-700">
-                Aucun {serviceName.toLowerCase()} RGE actif actuellement r&eacute;f&eacute;renc&eacute; &agrave; {villeName}.
+            <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
+              <p className="text-charcoal-700">
+                Aucun {serviceName.toLowerCase()} RGE actif actuellement
+                r&eacute;f&eacute;renc&eacute; &agrave; {villeName}.
               </p>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-charcoal-500">
                 Consultez{' '}
-                <Link href={`/services/${serviceSlug}/${villeSlug}`} className="text-clay-500 underline">
+                <Link
+                  href={`/services/${serviceSlug}/${villeSlug}`}
+                  className="text-clay-500 underline"
+                >
                   tous les {serviceName.toLowerCase()} &agrave; {villeName}
                 </Link>{' '}
                 ou{' '}
@@ -302,45 +316,57 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         </section>
 
         <section aria-labelledby="cross-links" className="mb-12">
-          <h2 id="cross-links" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+          <h2 id="cross-links" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
             Aller plus loin
           </h2>
           <ul className="grid gap-3 md:grid-cols-2">
             <li>
               <Link
                 href={`/artisans-rge/${villeSlug}`}
-                className="block rounded-lg border border-gray-200 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
               >
-                <div className="font-semibold text-gray-900">Tous les artisans RGE &agrave; {villeName}</div>
-                <div className="text-sm text-gray-500">Tous m&eacute;tiers &eacute;nerg&eacute;tiques confondus</div>
+                <div className="font-semibold text-charcoal-900">
+                  Tous les artisans RGE &agrave; {villeName}
+                </div>
+                <div className="text-sm text-charcoal-500">
+                  Tous m&eacute;tiers &eacute;nerg&eacute;tiques confondus
+                </div>
               </Link>
             </li>
             <li>
               <Link
                 href={`/services/${serviceSlug}/${villeSlug}`}
-                className="block rounded-lg border border-gray-200 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
               >
-                <div className="font-semibold text-gray-900">Tous les {serviceName.toLowerCase()} &agrave; {villeName}</div>
-                <div className="text-sm text-gray-500">RGE ou non, l&rsquo;annuaire complet du m&eacute;tier</div>
+                <div className="font-semibold text-charcoal-900">
+                  Tous les {serviceName.toLowerCase()} &agrave; {villeName}
+                </div>
+                <div className="text-sm text-charcoal-500">
+                  RGE ou non, l&rsquo;annuaire complet du m&eacute;tier
+                </div>
               </Link>
             </li>
             <li>
               <Link
                 href="/guides/artisan-rge"
-                className="block rounded-lg border border-gray-200 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
               >
-                <div className="font-semibold text-gray-900">Guide&nbsp;: comprendre la certification RGE</div>
-                <div className="text-sm text-gray-500">Aides, labels, v&eacute;rification</div>
+                <div className="font-semibold text-charcoal-900">
+                  Guide&nbsp;: comprendre la certification RGE
+                </div>
+                <div className="text-sm text-charcoal-500">Aides, labels, v&eacute;rification</div>
               </Link>
             </li>
             {hasGuide && (
               <li>
                 <Link
                   href={`/guides/${serviceSlug}`}
-                  className="block rounded-lg border border-gray-200 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                  className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
                 >
-                  <div className="font-semibold text-gray-900">Guide m&eacute;tier&nbsp;: {serviceName.toLowerCase()}</div>
-                  <div className="text-sm text-gray-500">Prix, aides, bonnes pratiques</div>
+                  <div className="font-semibold text-charcoal-900">
+                    Guide m&eacute;tier&nbsp;: {serviceName.toLowerCase()}
+                  </div>
+                  <div className="text-sm text-charcoal-500">Prix, aides, bonnes pratiques</div>
                 </Link>
               </li>
             )}
@@ -349,10 +375,10 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
         {otherCities.length > 0 && (
           <section aria-labelledby="other-cities" className="mb-12">
-            <h2 id="other-cities" className="text-xl font-bold text-gray-900 font-jakarta mb-2">
+            <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-jakarta mb-2">
               {serviceName} RGE dans d&rsquo;autres villes
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-charcoal-500 mb-4">
               Les villes o&ugrave; les {serviceName.toLowerCase()} RGE sont les plus nombreux.
             </p>
             <div className="flex flex-wrap gap-2">
@@ -360,7 +386,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 <Link
                   key={c.slug}
                   href={`/rge/${serviceSlug}/${c.slug}`}
-                  className="inline-flex items-center px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center px-4 py-2 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
                 >
                   {serviceName} RGE &agrave; {c.name}
                 </Link>
@@ -371,20 +397,25 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
         {faqItems.length > 0 && (
           <section aria-labelledby="faq" className="mb-12">
-            <h2 id="faq" className="text-xl md:text-2xl font-bold text-gray-900 font-jakarta mb-6">
+            <h2
+              id="faq"
+              className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-6"
+            >
               Questions fr&eacute;quentes : {serviceName.toLowerCase()} RGE &agrave; {villeName}
             </h2>
             <div className="space-y-3">
               {faqItems.map((item, i) => (
                 <details
                   key={i}
-                  className="group rounded-lg border border-gray-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                  className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
                 >
-                  <summary className="cursor-pointer list-none font-semibold text-gray-900 flex items-start justify-between gap-4">
+                  <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                     <span>{item.question}</span>
-                    <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">+</span>
+                    <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
+                      +
+                    </span>
                   </summary>
-                  <p className="mt-3 text-gray-600 leading-relaxed">{item.answer}</p>
+                  <p className="mt-3 text-charcoal-600 leading-relaxed">{item.answer}</p>
                 </details>
               ))}
             </div>
@@ -394,4 +425,3 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
     </main>
   )
 }
-

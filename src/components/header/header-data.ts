@@ -1,7 +1,20 @@
 import {
-  Clock, Wrench, Key, Zap, Flame, Wind, HardHat, Home, Hammer,
-  PaintBucket, Sparkles, Layers, ChefHat, Brush, TreeDeciduous,
-  type LucideIcon
+  Clock,
+  Wrench,
+  Key,
+  Zap,
+  Flame,
+  Wind,
+  HardHat,
+  Home,
+  Hammer,
+  PaintBucket,
+  Sparkles,
+  Layers,
+  ChefHat,
+  Brush,
+  TreeDeciduous,
+  type LucideIcon,
 } from 'lucide-react'
 
 // ── Types ──────────────────────────────────────────────
@@ -21,11 +34,29 @@ export interface ServiceCategory {
   services: ServiceItem[]
 }
 
-export interface CityMenuItem { name: string; slug: string; population: string }
-export interface RegionCities { region: string; cities: CityMenuItem[] }
-export interface PopularCity { name: string; slug: string }
-export interface MetroRegion { slug: string; name: string; departments: { name: string; code: string; slug: string }[] }
-export interface DomTomRegion { slug: string; name: string; departments?: { name: string; code: string; slug: string }[] }
+export interface CityMenuItem {
+  name: string
+  slug: string
+  population: string
+}
+export interface RegionCities {
+  region: string
+  cities: CityMenuItem[]
+}
+export interface PopularCity {
+  name: string
+  slug: string
+}
+export interface MetroRegion {
+  slug: string
+  name: string
+  departments: { name: string; code: string; slug: string }[]
+}
+export interface DomTomRegion {
+  slug: string
+  name: string
+  departments?: { name: string; code: string; slug: string }[]
+}
 
 export type MenuType = 'services' | 'villes' | 'regions' | 'plus' | null
 export type MobileAccordion = 'services' | 'villes' | 'regions' | null
@@ -38,19 +69,47 @@ export const serviceCategories: ServiceCategory[] = [
     color: 'red',
     icon: Clock,
     services: [
-      { name: 'Plombier', slug: 'plombier', icon: Wrench, description: 'Fuites, débouchage, installation', urgent: true },
-      { name: 'Serrurier', slug: 'serrurier', icon: Key, description: 'Ouverture de porte, serrure', urgent: true },
-      { name: 'Électricien', slug: 'electricien', icon: Zap, description: 'Panne, dépannage électrique', urgent: true },
-    ]
+      {
+        name: 'Plombier',
+        slug: 'plombier',
+        icon: Wrench,
+        description: 'Fuites, débouchage, installation',
+        urgent: true,
+      },
+      {
+        name: 'Serrurier',
+        slug: 'serrurier',
+        icon: Key,
+        description: 'Ouverture de porte, serrure',
+        urgent: true,
+      },
+      {
+        name: 'Électricien',
+        slug: 'electricien',
+        icon: Zap,
+        description: 'Panne, dépannage électrique',
+        urgent: true,
+      },
+    ],
   },
   {
     category: 'Chauffage & Clim',
     color: 'orange',
     icon: Flame,
     services: [
-      { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, description: 'Chaudière, pompe à chaleur' },
-      { name: 'Climaticien', slug: 'climaticien', icon: Wind, description: 'Installation, entretien clim' },
-    ]
+      {
+        name: 'Chauffagiste',
+        slug: 'chauffagiste',
+        icon: Flame,
+        description: 'Chaudière, pompe à chaleur',
+      },
+      {
+        name: 'Climaticien',
+        slug: 'climaticien',
+        icon: Wind,
+        description: 'Installation, entretien clim',
+      },
+    ],
   },
   {
     category: 'Bâtiment',
@@ -59,18 +118,28 @@ export const serviceCategories: ServiceCategory[] = [
     services: [
       { name: 'Maçon', slug: 'macon', icon: HardHat, description: 'Construction, rénovation' },
       { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, zinguerie' },
-      { name: 'Menuisier', slug: 'menuisier', icon: Hammer, description: 'Fenêtres, portes, escaliers' },
-    ]
+      {
+        name: 'Menuisier',
+        slug: 'menuisier',
+        icon: Hammer,
+        description: 'Fenêtres, portes, escaliers',
+      },
+    ],
   },
   {
     category: 'Finitions',
     color: 'green',
     icon: PaintBucket,
     services: [
-      { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, description: 'Peinture int. et ext.' },
+      {
+        name: 'Peintre',
+        slug: 'peintre-en-batiment',
+        icon: PaintBucket,
+        description: 'Peinture int. et ext.',
+      },
       { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, description: 'Carrelage, faïence' },
       { name: 'Solier', slug: 'solier', icon: Layers, description: 'Parquet, moquette, lino' },
-    ]
+    ],
   },
   {
     category: 'Aménagement',
@@ -79,15 +148,20 @@ export const serviceCategories: ServiceCategory[] = [
     services: [
       { name: 'Cuisiniste', slug: 'cuisiniste', icon: ChefHat, description: 'Cuisines sur mesure' },
       { name: 'Nettoyage', slug: 'nettoyage', icon: Brush, description: 'Ménage professionnel' },
-    ]
+    ],
   },
   {
     category: 'Extérieur',
     color: 'emerald',
     icon: TreeDeciduous,
     services: [
-      { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Jardin, aménagement' },
-    ]
+      {
+        name: 'Jardinier',
+        slug: 'jardinier',
+        icon: TreeDeciduous,
+        description: 'Jardin, aménagement',
+      },
+    ],
   },
 ]
 
@@ -95,12 +169,42 @@ export const serviceCategories: ServiceCategory[] = [
 
 export function getCategoryColors(color: string) {
   const map: Record<string, { text: string; hoverBg: string; iconBg: string; border: string }> = {
-    red: { text: 'text-red-700', hoverBg: 'hover:bg-red-50', iconBg: 'bg-red-100', border: 'border-red-200' },
-    orange: { text: 'text-orange-700', hoverBg: 'hover:bg-orange-50', iconBg: 'bg-orange-100', border: 'border-orange-200' },
-    blue: { text: 'text-blue-700', hoverBg: 'hover:bg-blue-50', iconBg: 'bg-blue-100', border: 'border-blue-200' },
-    green: { text: 'text-green-700', hoverBg: 'hover:bg-green-50', iconBg: 'bg-green-100', border: 'border-green-200' },
-    pink: { text: 'text-pink-700', hoverBg: 'hover:bg-pink-50', iconBg: 'bg-pink-100', border: 'border-pink-200' },
-    emerald: { text: 'text-emerald-700', hoverBg: 'hover:bg-emerald-50', iconBg: 'bg-emerald-100', border: 'border-emerald-200' },
+    red: {
+      text: 'text-red-700',
+      hoverBg: 'hover:bg-red-50',
+      iconBg: 'bg-red-100',
+      border: 'border-red-200',
+    },
+    orange: {
+      text: 'text-orange-700',
+      hoverBg: 'hover:bg-orange-50',
+      iconBg: 'bg-orange-100',
+      border: 'border-orange-200',
+    },
+    blue: {
+      text: 'text-primary-600',
+      hoverBg: 'hover:bg-primary-50',
+      iconBg: 'bg-primary-100',
+      border: 'border-primary-200',
+    },
+    green: {
+      text: 'text-green-700',
+      hoverBg: 'hover:bg-green-50',
+      iconBg: 'bg-green-100',
+      border: 'border-green-200',
+    },
+    pink: {
+      text: 'text-pink-700',
+      hoverBg: 'hover:bg-pink-50',
+      iconBg: 'bg-pink-100',
+      border: 'border-pink-200',
+    },
+    emerald: {
+      text: 'text-emerald-700',
+      hoverBg: 'hover:bg-emerald-50',
+      iconBg: 'bg-emerald-100',
+      border: 'border-emerald-200',
+    },
   }
   return map[color] || map.blue
 }

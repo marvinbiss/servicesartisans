@@ -29,26 +29,36 @@ export default function EnBrefBox({ summary, keyPoints, title = 'En bref' }: EnB
     >
       <div className="flex items-center gap-2 mb-3">
         <div className="w-6 h-6 rounded-md bg-emerald-100 flex items-center justify-center flex-shrink-0">
-          <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-3.5 h-3.5 text-emerald-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         </div>
-        <span className="text-sm font-bold text-emerald-800 uppercase tracking-wider">
-          {title}
-        </span>
+        <span className="text-sm font-bold text-emerald-800 uppercase tracking-wider">{title}</span>
       </div>
 
-      {summary && (
-        <p className="text-base leading-relaxed text-gray-800 mb-0">
-          {summary}
-        </p>
-      )}
+      {summary && <p className="text-base leading-relaxed text-charcoal-800 mb-0">{summary}</p>}
 
       {keyPoints && keyPoints.length > 0 && (
         <ul className={`space-y-1.5 ${summary ? 'mt-3' : ''}`}>
           {keyPoints.map((point, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-              <svg className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <li key={i} className="flex items-start gap-2 text-sm text-charcoal-700">
+              <svg
+                className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
               <span>{point}</span>

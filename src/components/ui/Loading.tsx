@@ -15,12 +15,17 @@ const sizes = {
 }
 
 const colors = {
-  primary: 'border-blue-600',
+  primary: 'border-primary-500',
   white: 'border-white',
-  gray: 'border-gray-600',
+  gray: 'border-charcoal-600',
 }
 
-export function Loading({ size = 'md', variant = 'spinner', className, color = 'primary' }: LoadingProps) {
+export function Loading({
+  size = 'md',
+  variant = 'spinner',
+  className,
+  color = 'primary',
+}: LoadingProps) {
   if (variant === 'dots') {
     const dotSizes = {
       sm: 'w-1.5 h-1.5',
@@ -29,15 +34,40 @@ export function Loading({ size = 'md', variant = 'spinner', className, color = '
       xl: 'w-4 h-4',
     }
     const dotColors = {
-      primary: 'bg-blue-600',
+      primary: 'bg-primary-500',
       white: 'bg-white',
-      gray: 'bg-gray-600',
+      gray: 'bg-charcoal-600',
     }
     return (
-      <div className={clsx('flex items-center gap-1', className)} role="status" aria-label="Chargement">
-        <span className={clsx(dotSizes[size], dotColors[color], 'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]')} style={{ animationDelay: '0ms' }} />
-        <span className={clsx(dotSizes[size], dotColors[color], 'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]')} style={{ animationDelay: '160ms' }} />
-        <span className={clsx(dotSizes[size], dotColors[color], 'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]')} style={{ animationDelay: '320ms' }} />
+      <div
+        className={clsx('flex items-center gap-1', className)}
+        role="status"
+        aria-label="Chargement"
+      >
+        <span
+          className={clsx(
+            dotSizes[size],
+            dotColors[color],
+            'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]'
+          )}
+          style={{ animationDelay: '0ms' }}
+        />
+        <span
+          className={clsx(
+            dotSizes[size],
+            dotColors[color],
+            'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]'
+          )}
+          style={{ animationDelay: '160ms' }}
+        />
+        <span
+          className={clsx(
+            dotSizes[size],
+            dotColors[color],
+            'rounded-full animate-[bounce_1.4s_ease-in-out_infinite]'
+          )}
+          style={{ animationDelay: '320ms' }}
+        />
         <span className="sr-only">Chargement...</span>
       </div>
     )
@@ -45,9 +75,13 @@ export function Loading({ size = 'md', variant = 'spinner', className, color = '
 
   if (variant === 'pulse') {
     return (
-      <div className={clsx(sizes[size], 'relative', className)} role="status" aria-label="Chargement">
-        <div className={clsx('absolute inset-0 rounded-full bg-blue-600/30 animate-ping')} />
-        <div className={clsx('absolute inset-2 rounded-full bg-blue-600')} />
+      <div
+        className={clsx(sizes[size], 'relative', className)}
+        role="status"
+        aria-label="Chargement"
+      >
+        <div className={clsx('absolute inset-0 rounded-full bg-primary-500/30 animate-ping')} />
+        <div className={clsx('absolute inset-2 rounded-full bg-primary-500')} />
         <span className="sr-only">Chargement...</span>
       </div>
     )
@@ -56,7 +90,7 @@ export function Loading({ size = 'md', variant = 'spinner', className, color = '
   return (
     <div
       className={clsx(
-        'rounded-full border-[3px] border-gray-200/60',
+        'rounded-full border-[3px] border-sand-300/60',
         colors[color].replace('border-', 'border-t-'),
         sizes[size],
         className
@@ -76,7 +110,7 @@ export function LoadingPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
       <Loading size="lg" />
-      <p className="text-gray-500 text-sm animate-pulse">Chargement en cours...</p>
+      <p className="text-charcoal-500 text-sm animate-pulse">Chargement en cours...</p>
     </div>
   )
 }
@@ -85,12 +119,10 @@ export function LoadingOverlay({ message }: { message?: string }) {
   return (
     <div className="fixed inset-0 bg-white/90 backdrop-blur-md z-50 flex flex-col items-center justify-center gap-4">
       <div className="relative">
-        <div className="absolute inset-0 rounded-full bg-blue-600/20 animate-ping" />
+        <div className="absolute inset-0 rounded-full bg-primary-500/20 animate-ping" />
         <Loading size="xl" />
       </div>
-      {message && (
-        <p className="text-gray-700 font-medium animate-pulse">{message}</p>
-      )}
+      {message && <p className="text-charcoal-700 font-medium animate-pulse">{message}</p>}
     </div>
   )
 }
@@ -101,7 +133,7 @@ export function LoadingButton() {
 
 export function LoadingInline({ text = 'Chargement...' }: { text?: string }) {
   return (
-    <div className="inline-flex items-center gap-2 text-gray-500">
+    <div className="inline-flex items-center gap-2 text-charcoal-500">
       <Loading size="sm" />
       <span className="text-sm">{text}</span>
     </div>
@@ -110,17 +142,17 @@ export function LoadingInline({ text = 'Chargement...' }: { text?: string }) {
 
 export function LoadingCard() {
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100 animate-pulse">
+    <div className="bg-white rounded-2xl p-6 border border-sand-200 animate-pulse">
       <div className="flex items-center gap-4 mb-4">
-        <div className="w-12 h-12 bg-gray-200 rounded-full" />
+        <div className="w-12 h-12 bg-sand-300 rounded-full" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-3/4" />
-          <div className="h-3 bg-gray-200 rounded w-1/2" />
+          <div className="h-4 bg-sand-300 rounded w-3/4" />
+          <div className="h-3 bg-sand-300 rounded w-1/2" />
         </div>
       </div>
       <div className="space-y-2">
-        <div className="h-3 bg-gray-200 rounded" />
-        <div className="h-3 bg-gray-200 rounded w-5/6" />
+        <div className="h-3 bg-sand-300 rounded" />
+        <div className="h-3 bg-sand-300 rounded w-5/6" />
       </div>
     </div>
   )

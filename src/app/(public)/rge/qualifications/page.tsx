@@ -74,7 +74,7 @@ export default async function RgeQualificationsHubPage() {
 
       <Breadcrumb items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Qualifications' }]} />
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
@@ -105,7 +105,7 @@ export default async function RgeQualificationsHubPage() {
               <Link
                 key={slug}
                 href={`/rge/qualifications/${slug}`}
-                className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+                className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
@@ -115,10 +115,10 @@ export default async function RgeQualificationsHubPage() {
                     <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide">
                       {g.organisme}
                     </div>
-                    <div className="font-bold text-slate-900 text-xl mt-1 group-hover:text-emerald-700 transition">
+                    <div className="font-bold text-charcoal-900 text-xl mt-1 group-hover:text-emerald-700 transition">
                       {g.name}
                     </div>
-                    <p className="text-sm text-slate-600 mt-2 leading-relaxed">{g.lede}</p>
+                    <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">{g.lede}</p>
                     <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                       Lire le guide <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </div>

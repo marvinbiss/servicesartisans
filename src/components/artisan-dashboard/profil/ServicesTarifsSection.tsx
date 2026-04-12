@@ -23,7 +23,10 @@ const MAX_SERVICE_PRICES = 20
 const FIELDS = ['services_offered', 'service_prices', 'free_quote'] as const
 
 export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSectionProps) {
-  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
+  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(
+    provider,
+    FIELDS
+  )
   const [newService, setNewService] = useState('')
 
   const onSave = async () => {
@@ -39,18 +42,24 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
     const trimmed = newService.trim()
     if (!trimmed || servicesOffered.length >= MAX_SERVICES) return
     // Case-insensitive duplicate check
-    if (servicesOffered.some(s => s.toLowerCase() === trimmed.toLowerCase())) return
+    if (servicesOffered.some((s) => s.toLowerCase() === trimmed.toLowerCase())) return
     setField('services_offered', [...servicesOffered, trimmed])
     setNewService('')
   }
 
   const removeService = (index: number) => {
-    setField('services_offered', servicesOffered.filter((_, i) => i !== index))
+    setField(
+      'services_offered',
+      servicesOffered.filter((_, i) => i !== index)
+    )
   }
 
   const addServicePrice = () => {
     if (servicePrices.length >= MAX_SERVICE_PRICES) return
-    setField('service_prices', [...servicePrices, { name: '', description: '', price: '', duration: '' }])
+    setField('service_prices', [
+      ...servicePrices,
+      { name: '', description: '', price: '', duration: '' },
+    ])
   }
 
   const updateServicePrice = (index: number, field: keyof ServicePrice, value: string) => {
@@ -61,7 +70,10 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
   }
 
   const removeServicePrice = (index: number) => {
-    setField('service_prices', servicePrices.filter((_, i) => i !== index))
+    setField(
+      'service_prices',
+      servicePrices.filter((_, i) => i !== index)
+    )
   }
 
   /** Check if a service price row has empty required fields (name or price) */
@@ -86,22 +98,24 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
         {/* Services offered */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label htmlFor="services-new" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="services-new" className="block text-sm font-medium text-charcoal-700">
               Services proposés
             </label>
-            <span className="text-xs text-gray-400">{servicesOffered.length}/{MAX_SERVICES}</span>
+            <span className="text-xs text-charcoal-400">
+              {servicesOffered.length}/{MAX_SERVICES}
+            </span>
           </div>
           <div className="flex flex-wrap gap-2 mb-3">
             {servicesOffered.map((service, index) => (
               <span
                 key={index}
-                className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                className="bg-primary-100 text-primary-600 px-3 py-1 rounded-full text-sm flex items-center gap-2"
               >
                 {service}
                 <button
                   type="button"
                   onClick={() => removeService(index)}
-                  className="hover:text-blue-900"
+                  className="hover:text-primary-800"
                   aria-label={`Supprimer ${service}`}
                 >
                   <X className="w-3.5 h-3.5" />
@@ -115,24 +129,31 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
               type="text"
               value={newService}
               onChange={(e) => setNewService(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addService() } }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  addService()
+                }
+              }}
               placeholder={servicesAtMax ? 'Limite atteinte' : 'Ajouter un service'}
               maxLength={100}
               disabled={servicesAtMax}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+              className="flex-1 px-4 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 disabled:bg-sand-100 disabled:text-charcoal-400"
             />
             <button
               type="button"
               onClick={addService}
               disabled={servicesAtMax}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50"
               aria-label="Ajouter un service"
             >
               <Plus className="w-5 h-5" />
             </button>
           </div>
           {servicesAtMax && (
-            <p className="text-xs text-amber-600 mt-1">Limite de {MAX_SERVICES} services atteinte.</p>
+            <p className="text-xs text-amber-600 mt-1">
+              Limite de {MAX_SERVICES} services atteinte.
+            </p>
           )}
         </div>
 
@@ -140,14 +161,16 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
         <div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <span className="block text-sm font-medium text-gray-700">Grille tarifaire</span>
-              <span className="text-xs text-gray-400">{servicePrices.length}/{MAX_SERVICE_PRICES}</span>
+              <span className="block text-sm font-medium text-charcoal-700">Grille tarifaire</span>
+              <span className="text-xs text-charcoal-400">
+                {servicePrices.length}/{MAX_SERVICE_PRICES}
+              </span>
             </div>
             <button
               type="button"
               onClick={addServicePrice}
               disabled={pricesAtMax}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 disabled:opacity-50"
+              className="text-sm text-primary-500 hover:text-primary-600 font-medium flex items-center gap-1 disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
               {pricesAtMax ? 'Limite atteinte' : 'Ajouter un tarif'}
@@ -155,7 +178,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
           </div>
 
           {servicePrices.length === 0 && (
-            <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-3 rounded-lg">
+            <p className="text-sm text-charcoal-500 italic bg-sand-50 px-4 py-3 rounded-lg">
               Vos tarifs actuels sont estimés. Ajoutez vos vrais prix pour les remplacer.
             </p>
           )}
@@ -164,18 +187,24 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
             {servicePrices.map((item, index) => {
               const incomplete = hasEmptyRequired(item)
               return (
-                <div key={index} className={`border rounded-lg p-4 relative ${incomplete ? 'border-amber-300 bg-amber-50/30' : 'border-gray-200'}`}>
+                <div
+                  key={index}
+                  className={`border rounded-lg p-4 relative ${incomplete ? 'border-amber-300 bg-amber-50/30' : 'border-sand-300'}`}
+                >
                   <button
                     type="button"
                     onClick={() => removeServicePrice(index)}
-                    className="absolute top-3 right-3 text-gray-400 hover:text-red-500"
+                    className="absolute top-3 right-3 text-charcoal-400 hover:text-red-500"
                     aria-label="Supprimer ce tarif"
                   >
                     <X className="w-4 h-4" />
                   </button>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor={`sp-name-${index}`} className="block text-xs text-gray-500 mb-1">
+                      <label
+                        htmlFor={`sp-name-${index}`}
+                        className="block text-xs text-charcoal-500 mb-1"
+                      >
                         Nom de la prestation *
                       </label>
                       <input
@@ -185,8 +214,10 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'name', e.target.value)}
                         maxLength={200}
                         placeholder="Ex: Débouchage canalisation"
-                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
-                          item.name.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
+                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm ${
+                          item.name.trim() === '' && servicePrices.length > 0
+                            ? 'border-amber-300'
+                            : 'border-sand-400'
                         }`}
                       />
                       {item.name.trim() === '' && (
@@ -194,7 +225,10 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                       )}
                     </div>
                     <div>
-                      <label htmlFor={`sp-price-${index}`} className="block text-xs text-gray-500 mb-1">
+                      <label
+                        htmlFor={`sp-price-${index}`}
+                        className="block text-xs text-charcoal-500 mb-1"
+                      >
                         Prix *
                       </label>
                       <input
@@ -204,8 +238,10 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'price', e.target.value)}
                         maxLength={100}
                         placeholder="Ex: 80 € ou À partir de 50 €"
-                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
-                          item.price.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
+                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm ${
+                          item.price.trim() === '' && servicePrices.length > 0
+                            ? 'border-amber-300'
+                            : 'border-sand-400'
                         }`}
                       />
                       {item.price.trim() === '' && (
@@ -213,7 +249,10 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                       )}
                     </div>
                     <div>
-                      <label htmlFor={`sp-desc-${index}`} className="block text-xs text-gray-500 mb-1">
+                      <label
+                        htmlFor={`sp-desc-${index}`}
+                        className="block text-xs text-charcoal-500 mb-1"
+                      >
                         Description
                       </label>
                       <input
@@ -223,11 +262,14 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'description', e.target.value)}
                         maxLength={500}
                         placeholder="Détails optionnels"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="w-full px-3 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
                       />
                     </div>
                     <div>
-                      <label htmlFor={`sp-duration-${index}`} className="block text-xs text-gray-500 mb-1">
+                      <label
+                        htmlFor={`sp-duration-${index}`}
+                        className="block text-xs text-charcoal-500 mb-1"
+                      >
                         Durée estimée
                       </label>
                       <input
@@ -237,7 +279,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'duration', e.target.value)}
                         maxLength={50}
                         placeholder="Ex: 1h, 2-3h"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="w-full px-3 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
                       />
                     </div>
                   </div>
@@ -249,7 +291,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
 
         {/* Free quote toggle */}
         <div className="flex items-center justify-between">
-          <label htmlFor="services-free-quote" className="text-sm font-medium text-gray-700">
+          <label htmlFor="services-free-quote" className="text-sm font-medium text-charcoal-700">
             Devis gratuit
           </label>
           <button
@@ -259,7 +301,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
             aria-checked={freeQuote}
             onClick={() => setField('free_quote', !freeQuote)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              freeQuote ? 'bg-blue-600' : 'bg-gray-300'
+              freeQuote ? 'bg-primary-500' : 'bg-sand-400'
             }`}
           >
             <span

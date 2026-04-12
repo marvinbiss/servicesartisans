@@ -20,15 +20,8 @@ import { Leaf, ShieldCheck, ArrowRight, MapPin } from 'lucide-react'
 import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
-import {
-  getRgeNationalStats,
-  getRgeServiceStats,
-  type RgeTopCity,
-} from '@/lib/rge/guide-stats'
-import {
-  RGE_QUALIFICATION_LABELS,
-  type RgeAllowedService,
-} from '@/lib/rge/service-city-listings'
+import { getRgeNationalStats, getRgeServiceStats, type RgeTopCity } from '@/lib/rge/guide-stats'
+import { RGE_QUALIFICATION_LABELS, type RgeAllowedService } from '@/lib/rge/service-city-listings'
 
 interface RgeGuideBlockProps {
   variant: 'generic' | 'service'
@@ -106,11 +99,11 @@ export default async function RgeGuideBlock({
             <Leaf className="w-6 h-6" aria-hidden="true" />
           </div>
           <div className="flex-1">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 font-heading mb-2">
+            <h2 className="text-xl md:text-2xl font-bold text-charcoal-900 font-heading mb-2">
               {headingText}
             </h2>
             {hasData ? (
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-charcoal-700 leading-relaxed">
                 {'Plus de '}
                 <strong className="text-emerald-700">{formatCount(totalActive)}</strong>
                 {variant === 'service' && qualificationLabel
@@ -128,7 +121,7 @@ export default async function RgeGuideBlock({
                 {' (ADEME). Éligibles à MaPrimeRénov&apos; et aux CEE.'}
               </p>
             ) : (
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-charcoal-700 leading-relaxed">
                 {
                   "Tous nos artisans partenaires RGE sont vérifiés via le référentiel officiel France Rénov' (ADEME). Leurs qualifications vous donnent accès à MaPrimeRénov' et aux aides CEE."
                 }
@@ -152,7 +145,7 @@ export default async function RgeGuideBlock({
                     surface="guide"
                     className="group flex items-center justify-between rounded-lg border border-emerald-200 bg-white px-3 py-2.5 hover:border-emerald-400 hover:bg-emerald-50 transition-colors"
                   >
-                    <span className="text-sm font-medium text-gray-900 truncate">
+                    <span className="text-sm font-medium text-charcoal-900 truncate">
                       {city.name}
                     </span>
                     <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full px-2 py-0.5 ml-2">

@@ -9,7 +9,10 @@ import { services, villesLight, type Ville } from '@/lib/data/france-light'
 let _allVilles: Ville[] | null = null
 function getAllVilles(): Promise<Ville[]> {
   if (_allVilles) return Promise.resolve(_allVilles)
-  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+  return import('@/lib/data/france').then((m) => {
+    _allVilles = m.villes
+    return _allVilles as Ville[]
+  })
 }
 
 interface SearchBarProps {
@@ -90,7 +93,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <>
       {before}
-      <span className="font-bold text-blue-600">{match}</span>
+      <span className="font-bold text-primary-500">{match}</span>
       {after}
     </>
   )
@@ -137,9 +140,9 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
   const filteredServices = useMemo(() => {
     if (!serviceFilter.trim()) return services
     const normalized = normalizeText(serviceFilter)
-    return services.filter(s =>
-      normalizeText(s.name).includes(normalized) ||
-      normalizeText(s.slug).includes(normalized)
+    return services.filter(
+      (s) =>
+        normalizeText(s.name).includes(normalized) || normalizeText(s.slug).includes(normalized)
     )
   }, [serviceFilter])
 
@@ -153,7 +156,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
     // Instant results from lightweight dataset
     setFilteredCities(searchCitiesFromList(cityQuery, villesLight, 6))
     // Async upgrade to full dataset
-    getAllVilles().then(full => {
+    getAllVilles().then((full) => {
       setFilteredCities(searchCitiesFromList(cityQuery, full, 6))
     })
   }, [cityQuery])
@@ -167,9 +170,22 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
     if (filteredCities.length > 0) return filteredCities
     if (!hasTypedCity) {
       // Return popular cities mapped to Ville objects from light dataset
-      return popularCities.map(pc => {
-        const match = villesLight.find(v => v.slug === pc.slug)
-        return match || { name: pc.name, slug: pc.slug, region: '', departement: '', departementCode: '', population: '', codePostal: '', description: '', quartiers: [] } as Ville
+      return popularCities.map((pc) => {
+        const match = villesLight.find((v) => v.slug === pc.slug)
+        return (
+          match ||
+          ({
+            name: pc.name,
+            slug: pc.slug,
+            region: '',
+            departement: '',
+            departementCode: '',
+            population: '',
+            codePostal: '',
+            description: '',
+            quartiers: [],
+          } as Ville)
+        )
       })
     }
     return []
@@ -205,7 +221,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleSelectService = useCallback((service: typeof services[0]) => {
+  const handleSelectService = useCallback((service: (typeof services)[0]) => {
     setSelectedService(service.name)
     setServiceSlug(service.slug)
     setShowServiceDropdown(false)
@@ -221,95 +237,104 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
     setHighlightedCityIndex(-1)
   }, [])
 
-  const handleSubmit = useCallback((e?: React.FormEvent) => {
-    e?.preventDefault()
-    if (!serviceSlug || !cityQuery.trim()) return
+  const handleSubmit = useCallback(
+    (e?: React.FormEvent) => {
+      e?.preventDefault()
+      if (!serviceSlug || !cityQuery.trim()) return
 
-    const cityMatch = (_allVilles || villesLight).find(
-      (v: Ville) => normalizeText(v.name) === normalizeText(cityQuery.trim())
-    )
-    const citySlugValue = cityMatch ? cityMatch.slug : cityQuery.trim().toLowerCase()
+      const cityMatch = (_allVilles || villesLight).find(
+        (v: Ville) => normalizeText(v.name) === normalizeText(cityQuery.trim())
+      )
+      const citySlugValue = cityMatch ? cityMatch.slug : cityQuery.trim().toLowerCase()
 
-    router.push(`/services/${serviceSlug}/${citySlugValue}`)
-    setShowServiceDropdown(false)
-    setShowCityDropdown(false)
-    setServiceFilter('')
-  }, [serviceSlug, cityQuery, router])
+      router.push(`/services/${serviceSlug}/${citySlugValue}`)
+      setShowServiceDropdown(false)
+      setShowCityDropdown(false)
+      setServiceFilter('')
+    },
+    [serviceSlug, cityQuery, router]
+  )
 
   // Keyboard navigation for service dropdown
-  const handleServiceKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!showServiceDropdown) {
-      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        setShowServiceDropdown(true)
+  const handleServiceKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!showServiceDropdown) {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          setShowServiceDropdown(true)
+          return
+        }
         return
       }
-      return
-    }
 
-    const items = filteredServices
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        setHighlightedServiceIndex(prev => prev < items.length - 1 ? prev + 1 : 0)
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        setHighlightedServiceIndex(prev => prev > 0 ? prev - 1 : items.length - 1)
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (highlightedServiceIndex >= 0 && items[highlightedServiceIndex]) {
-          handleSelectService(items[highlightedServiceIndex])
-        }
-        break
-      case 'Escape':
-        e.preventDefault()
-        setShowServiceDropdown(false)
-        setServiceFilter('')
-        serviceButtonRef.current?.focus()
-        break
-      case 'Tab':
-        setShowServiceDropdown(false)
-        setServiceFilter('')
-        break
-    }
-  }, [showServiceDropdown, filteredServices, highlightedServiceIndex, handleSelectService])
+      const items = filteredServices
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault()
+          setHighlightedServiceIndex((prev) => (prev < items.length - 1 ? prev + 1 : 0))
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          setHighlightedServiceIndex((prev) => (prev > 0 ? prev - 1 : items.length - 1))
+          break
+        case 'Enter':
+          e.preventDefault()
+          if (highlightedServiceIndex >= 0 && items[highlightedServiceIndex]) {
+            handleSelectService(items[highlightedServiceIndex])
+          }
+          break
+        case 'Escape':
+          e.preventDefault()
+          setShowServiceDropdown(false)
+          setServiceFilter('')
+          serviceButtonRef.current?.focus()
+          break
+        case 'Tab':
+          setShowServiceDropdown(false)
+          setServiceFilter('')
+          break
+      }
+    },
+    [showServiceDropdown, filteredServices, highlightedServiceIndex, handleSelectService]
+  )
 
   // Keyboard navigation for city dropdown
-  const handleCityKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!showCityDropdown || navigableCityItems.length === 0) {
-      if (e.key === 'Enter') {
-        e.preventDefault()
-        handleSubmit()
-      }
-      return
-    }
-
-    const items = navigableCityItems
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        setHighlightedCityIndex(prev => prev < items.length - 1 ? prev + 1 : 0)
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        setHighlightedCityIndex(prev => prev > 0 ? prev - 1 : items.length - 1)
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (highlightedCityIndex >= 0 && items[highlightedCityIndex]) {
-          handleSelectCity(items[highlightedCityIndex].name)
-        } else {
+  const handleCityKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!showCityDropdown || navigableCityItems.length === 0) {
+        if (e.key === 'Enter') {
+          e.preventDefault()
           handleSubmit()
         }
-        break
-      case 'Escape':
-        e.preventDefault()
-        setShowCityDropdown(false)
-        break
-    }
-  }, [showCityDropdown, navigableCityItems, highlightedCityIndex, handleSelectCity, handleSubmit])
+        return
+      }
+
+      const items = navigableCityItems
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault()
+          setHighlightedCityIndex((prev) => (prev < items.length - 1 ? prev + 1 : 0))
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          setHighlightedCityIndex((prev) => (prev > 0 ? prev - 1 : items.length - 1))
+          break
+        case 'Enter':
+          e.preventDefault()
+          if (highlightedCityIndex >= 0 && items[highlightedCityIndex]) {
+            handleSelectCity(items[highlightedCityIndex].name)
+          } else {
+            handleSubmit()
+          }
+          break
+        case 'Escape':
+          e.preventDefault()
+          setShowCityDropdown(false)
+          break
+      }
+    },
+    [showCityDropdown, navigableCityItems, highlightedCityIndex, handleSelectCity, handleSubmit]
+  )
 
   const isLarge = size === 'large'
 
@@ -319,9 +344,10 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
         <div
           className={`
             flex bg-white
-            ${isLarge
-              ? 'flex-col sm:flex-row rounded-2xl p-2 gap-2 shadow-lg'
-              : 'flex-row rounded-full p-1 gap-1 shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-300 focus-within:border-blue-400 focus-within:shadow-md focus-within:ring-2 focus-within:ring-blue-100 transition-all'
+            ${
+              isLarge
+                ? 'flex-col sm:flex-row rounded-2xl p-2 gap-2 shadow-lg'
+                : 'flex-row rounded-full p-1 gap-1 shadow-sm border border-sand-300 hover:shadow-md hover:border-sand-400 focus-within:border-primary-300 focus-within:shadow-md focus-within:ring-2 focus-within:ring-primary-100 transition-all'
             }
           `}
         >
@@ -340,24 +366,33 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
               aria-haspopup="listbox"
               className={`
                 w-full flex items-center gap-2 text-left transition-all
-                ${isLarge
-                  ? 'rounded-xl px-4 py-4 text-base border border-gray-200 bg-gray-50 hover:bg-gray-100'
-                  : 'rounded-l-full pl-4 pr-2 py-2 text-sm bg-transparent hover:bg-gray-50'
+                ${
+                  isLarge
+                    ? 'rounded-xl px-4 py-4 text-base border border-sand-300 bg-sand-50 hover:bg-sand-100'
+                    : 'rounded-l-full pl-4 pr-2 py-2 text-sm bg-transparent hover:bg-sand-50'
                 }
               `}
             >
-              <Search className={`text-gray-400 flex-shrink-0 ${isLarge ? 'w-5 h-5' : 'w-4 h-4'}`} />
-              <span className={`truncate ${selectedService ? 'text-gray-900 font-medium' : 'text-gray-400'} ${isLarge ? '' : 'text-sm'}`}>
+              <Search
+                className={`text-charcoal-400 flex-shrink-0 ${isLarge ? 'w-5 h-5' : 'w-4 h-4'}`}
+              />
+              <span
+                className={`truncate ${selectedService ? 'text-charcoal-900 font-medium' : 'text-charcoal-400'} ${isLarge ? '' : 'text-sm'}`}
+              >
                 {selectedService || 'Service ?'}
               </span>
-              <ChevronDown className={`ml-auto text-gray-400 flex-shrink-0 transition-transform duration-200 ${showServiceDropdown ? 'rotate-180' : ''} ${isLarge ? 'w-5 h-5' : 'w-3.5 h-3.5'}`} />
+              <ChevronDown
+                className={`ml-auto text-charcoal-400 flex-shrink-0 transition-transform duration-200 ${showServiceDropdown ? 'rotate-180' : ''} ${isLarge ? 'w-5 h-5' : 'w-3.5 h-3.5'}`}
+              />
             </button>
 
             {/* Service Dropdown List */}
             {showServiceDropdown && (
-              <div className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden ${
-                isLarge ? 'right-0 p-2' : 'w-64 p-1.5'
-              }`}>
+              <div
+                className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-sand-300 z-50 overflow-hidden ${
+                  isLarge ? 'right-0 p-2' : 'w-64 p-1.5'
+                }`}
+              >
                 {/* Inline filter */}
                 <div className={`px-2 pb-1.5 ${isLarge ? 'pt-1' : 'pt-0.5'}`}>
                   <input
@@ -368,14 +403,14 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                     onKeyDown={handleServiceKeyDown}
                     placeholder="Filtrer..."
                     autoComplete="off"
-                    className={`w-full bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 text-gray-900 placeholder:text-gray-400 ${
+                    className={`w-full bg-sand-50 border border-sand-300 rounded-lg focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-100 text-charcoal-900 placeholder:text-charcoal-400 ${
                       isLarge ? 'px-3 py-2 text-sm' : 'px-2.5 py-1.5 text-xs'
                     }`}
                   />
                 </div>
                 <div className={`max-h-56 overflow-y-auto ${isLarge ? '' : 'max-h-48'}`}>
                   {filteredServices.length === 0 && (
-                    <div className="px-3 py-4 text-center text-gray-400 text-xs">
+                    <div className="px-3 py-4 text-center text-charcoal-400 text-xs">
                       Aucun service trouvé
                     </div>
                   )}
@@ -389,11 +424,12 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                         onMouseEnter={() => setHighlightedServiceIndex(idx)}
                         className={`
                           w-full text-left rounded-lg transition-all duration-100
-                          ${isHighlighted
-                            ? 'bg-blue-50 text-blue-700 font-medium'
-                            : serviceSlug === service.slug
-                              ? 'bg-blue-50/50 text-blue-600'
-                              : 'text-gray-700 hover:bg-gray-50'
+                          ${
+                            isHighlighted
+                              ? 'bg-primary-50 text-primary-600 font-medium'
+                              : serviceSlug === service.slug
+                                ? 'bg-primary-50/50 text-primary-500'
+                                : 'text-charcoal-700 hover:bg-sand-50'
                           }
                           ${isLarge ? 'px-4 py-3 text-base' : 'px-3 py-2 text-sm'}
                         `}
@@ -408,14 +444,14 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
           </div>
 
           {/* Separator (compact mode only) */}
-          {!isLarge && (
-            <div className="w-px h-6 bg-gray-200 flex-shrink-0 self-center" />
-          )}
+          {!isLarge && <div className="w-px h-6 bg-sand-300 flex-shrink-0 self-center" />}
 
           {/* City Autocomplete */}
           <div className={`relative ${isLarge ? 'flex-1' : 'flex-1 min-w-0'}`}>
             <div className="relative">
-              <MapPin className={`absolute top-1/2 -translate-y-1/2 text-gray-400 ${isLarge ? 'left-4 w-5 h-5' : 'left-3 w-4 h-4'}`} />
+              <MapPin
+                className={`absolute top-1/2 -translate-y-1/2 text-charcoal-400 ${isLarge ? 'left-4 w-5 h-5' : 'left-3 w-4 h-4'}`}
+              />
               <input
                 ref={cityInputRef}
                 type="text"
@@ -434,10 +470,11 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 autoComplete="off"
                 aria-label="Ville ou code postal"
                 className={`
-                  w-full transition-all outline-none text-gray-900 placeholder:text-gray-400
-                  ${isLarge
-                    ? 'rounded-xl pl-11 pr-4 py-4 text-base border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100'
-                    : 'rounded-none pl-9 pr-3 py-2 text-sm bg-transparent'
+                  w-full transition-all outline-none text-charcoal-900 placeholder:text-charcoal-400
+                  ${
+                    isLarge
+                      ? 'rounded-xl pl-11 pr-4 py-4 text-base border border-sand-300 bg-sand-50 focus:bg-white focus:border-primary-300 focus:ring-2 focus:ring-primary-100'
+                      : 'rounded-none pl-9 pr-3 py-2 text-sm bg-transparent'
                   }
                 `}
               />
@@ -445,13 +482,17 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
 
             {/* City Suggestions Dropdown */}
             {showCityDropdown && (
-              <div className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 max-h-72 overflow-y-auto ${
-                isLarge ? 'right-0 p-2' : 'w-72 right-0 p-1.5'
-              }`}>
+              <div
+                className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-sand-300 z-50 max-h-72 overflow-y-auto ${
+                  isLarge ? 'right-0 p-2' : 'w-72 right-0 p-1.5'
+                }`}
+              >
                 {/* Popular cities (empty input state) */}
                 {!hasTypedCity && (
                   <>
-                    <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}>
+                    <div
+                      className={`text-charcoal-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}
+                    >
                       Villes populaires
                     </div>
                     {popularCities.map((city, idx) => {
@@ -464,19 +505,27 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           onMouseEnter={() => setHighlightedCityIndex(idx)}
                           className={`
                             w-full flex items-center justify-between rounded-lg transition-all duration-100
-                            ${isHighlighted ? 'bg-blue-50' : 'hover:bg-gray-50'}
+                            ${isHighlighted ? 'bg-primary-50' : 'hover:bg-sand-50'}
                             ${isLarge ? 'px-3 py-2.5' : 'px-2.5 py-2'}
                           `}
                         >
                           <div className="text-left">
-                            <span className={`font-medium transition-colors ${isHighlighted ? 'text-blue-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
+                            <span
+                              className={`font-medium transition-colors ${isHighlighted ? 'text-primary-600' : 'text-charcoal-900'} ${isLarge ? 'text-base' : 'text-sm'}`}
+                            >
                               {city.name}
                             </span>
-                            <div className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
+                            <div
+                              className={`text-charcoal-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}
+                            >
                               {city.departement}
                             </div>
                           </div>
-                          <span className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>{city.pop}</span>
+                          <span
+                            className={`text-charcoal-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}
+                          >
+                            {city.pop}
+                          </span>
                         </button>
                       )
                     })}
@@ -486,8 +535,11 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {/* Search results with text highlighting */}
                 {hasTypedCity && filteredCities.length > 0 && (
                   <>
-                    <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}>
-                      {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouv{filteredCities.length > 1 ? 'ées' : 'ée'}
+                    <div
+                      className={`text-charcoal-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}
+                    >
+                      {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouv
+                      {filteredCities.length > 1 ? 'ées' : 'ée'}
                     </div>
                     {filteredCities.map((city, idx) => {
                       const isHighlighted = idx === highlightedCityIndex
@@ -499,20 +551,30 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           onMouseEnter={() => setHighlightedCityIndex(idx)}
                           className={`
                             w-full flex items-center gap-2 rounded-lg transition-all duration-100
-                            ${isHighlighted ? 'bg-blue-50' : 'hover:bg-gray-50'}
+                            ${isHighlighted ? 'bg-primary-50' : 'hover:bg-sand-50'}
                             ${isLarge ? 'px-3 py-2.5' : 'px-2.5 py-2'}
                           `}
                         >
                           <div className="flex-1 text-left min-w-0">
-                            <div className={`font-medium transition-colors truncate ${isHighlighted ? 'text-blue-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
+                            <div
+                              className={`font-medium transition-colors truncate ${isHighlighted ? 'text-primary-600' : 'text-charcoal-900'} ${isLarge ? 'text-base' : 'text-sm'}`}
+                            >
                               <HighlightedText text={city.name} query={cityQuery} />
-                              <span className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-[11px]'} text-gray-400`}>({city.departementCode})</span>
+                              <span
+                                className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-[11px]'} text-charcoal-400`}
+                              >
+                                ({city.departementCode})
+                              </span>
                             </div>
-                            <div className={`text-gray-500 truncate ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
+                            <div
+                              className={`text-charcoal-500 truncate ${isLarge ? 'text-xs' : 'text-[11px]'}`}
+                            >
                               {city.departement} · {formatPopulation(city.population)}
                             </div>
                           </div>
-                          <span className={`text-gray-400 bg-gray-100 rounded-full flex-shrink-0 ${isLarge ? 'text-xs px-2 py-0.5' : 'text-[10px] px-1.5 py-0.5'}`}>
+                          <span
+                            className={`text-charcoal-400 bg-sand-100 rounded-full flex-shrink-0 ${isLarge ? 'text-xs px-2 py-0.5' : 'text-[10px] px-1.5 py-0.5'}`}
+                          >
                             {city.codePostal}
                           </span>
                         </button>
@@ -524,10 +586,15 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {/* No results fallback */}
                 {hasNoResults && (
                   <div className={`text-center ${isLarge ? 'py-4 px-3' : 'py-3 px-2.5'}`}>
-                    <div className={`text-gray-500 mb-1 ${isLarge ? 'text-sm' : 'text-xs'}`}>
-                      Aucune ville trouvée pour <span className="font-semibold text-gray-700">«&thinsp;{cityQuery}&thinsp;»</span>
+                    <div className={`text-charcoal-500 mb-1 ${isLarge ? 'text-sm' : 'text-xs'}`}>
+                      Aucune ville trouvée pour{' '}
+                      <span className="font-semibold text-charcoal-700">
+                        «&thinsp;{cityQuery}&thinsp;»
+                      </span>
                     </div>
-                    <div className={`text-gray-400 mb-3 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
+                    <div
+                      className={`text-charcoal-400 mb-3 ${isLarge ? 'text-xs' : 'text-[11px]'}`}
+                    >
                       Essayez une ville voisine :
                     </div>
                     <div className="flex flex-wrap items-center justify-center gap-1.5">
@@ -536,7 +603,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           key={fc.name}
                           type="button"
                           onClick={() => handleSelectCity(fc.name)}
-                          className={`inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-full transition-colors font-medium ${
+                          className={`inline-flex items-center gap-1 text-primary-500 hover:text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-full transition-colors font-medium ${
                             isLarge ? 'text-xs px-2.5 py-1' : 'text-[11px] px-2 py-0.5'
                           }`}
                         >
@@ -555,10 +622,11 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
           <button
             type="submit"
             className={`
-              bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all flex items-center justify-center gap-2 flex-shrink-0
-              ${isLarge
-                ? 'rounded-xl px-8 py-4 text-base shadow-md hover:shadow-lg'
-                : 'rounded-full w-9 h-9 m-0.5 shadow-sm hover:shadow-md hover:scale-105'
+              bg-primary-500 hover:bg-primary-600 text-white font-semibold transition-all flex items-center justify-center gap-2 flex-shrink-0
+              ${
+                isLarge
+                  ? 'rounded-xl px-8 py-4 text-base shadow-md hover:shadow-lg'
+                  : 'rounded-full w-9 h-9 m-0.5 shadow-sm hover:shadow-md hover:scale-105'
               }
             `}
           >

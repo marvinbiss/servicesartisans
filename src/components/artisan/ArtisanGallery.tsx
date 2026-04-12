@@ -79,9 +79,9 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.25 }}
-        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+        className="bg-white rounded-2xl shadow-sm border border-sand-200 p-6"
       >
-        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
           <Camera className="w-5 h-5 text-clay-400" />
           Réalisations ({photos.length})
           {stats.videos > 0 && (
@@ -186,7 +186,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => openLightbox(0)}
-            className="mt-4 w-full py-3 px-4 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+            className="mt-4 w-full py-3 px-4 rounded-xl border border-sand-300 text-charcoal-700 font-medium hover:bg-sand-50 transition-colors flex items-center justify-center gap-2"
           >
             <Camera className="w-5 h-5" />
             Voir toutes les réalisations

@@ -130,18 +130,18 @@ export default function NotFoundClient() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center">
           {/* 404 Illustration */}
           <div className="mb-8">
-            <div className="text-9xl font-bold text-blue-600 opacity-20">404</div>
+            <div className="text-9xl font-bold text-primary-500 opacity-20">404</div>
             <div className="text-6xl -mt-20 mb-4">🔧</div>
           </div>
 
-          <h1 className="font-heading text-3xl font-bold text-gray-900 mb-4 tracking-tight">
+          <h1 className="font-heading text-3xl font-bold text-charcoal-900 mb-4 tracking-tight">
             Page introuvable
           </h1>
-          <p className="text-gray-600 mb-8">
+          <p className="text-charcoal-600 mb-8">
             Oups ! Il semble que cette page n&apos;existe pas ou a été déplacée. Nos artisans sont
             peut-être en train de la réparer...
           </p>
@@ -150,14 +150,14 @@ export default function NotFoundClient() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/"
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
             >
               <Home className="w-5 h-5" />
               Retour à l&apos;accueil
             </Link>
             <Link
               href="/services"
-              className="inline-flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-white border border-sand-400 text-charcoal-700 px-6 py-3 rounded-lg font-semibold hover:bg-sand-50 transition-colors"
             >
               <Search className="w-5 h-5" />
               Trouver un artisan
@@ -171,17 +171,17 @@ export default function NotFoundClient() {
             className="mt-8 flex items-center gap-2 max-w-sm mx-auto"
           >
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
               <input
                 type="text"
                 name="q"
                 placeholder="Rechercher un service..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-sand-400 text-sm focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20"
               />
             </div>
             <button
               type="submit"
-              className="px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
             >
               Rechercher
             </button>
@@ -189,14 +189,16 @@ export default function NotFoundClient() {
 
           {/* Dynamic suggestions based on URL */}
           {dynamicSuggestions.length > 0 && (
-            <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <p className="text-sm font-semibold text-blue-800 mb-3">Peut-être cherchiez-vous :</p>
+            <div className="mt-8 p-4 bg-primary-50 rounded-xl border border-primary-100">
+              <p className="text-sm font-semibold text-primary-800 mb-3">
+                Peut-être cherchiez-vous :
+              </p>
               <div className="flex flex-wrap justify-center gap-2">
                 {dynamicSuggestions.map((s) => (
                   <Link
                     key={s.href}
                     href={s.href}
-                    className="text-sm bg-white hover:bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full transition-colors border border-blue-200 font-medium"
+                    className="text-sm bg-white hover:bg-primary-100 text-primary-600 px-3 py-1.5 rounded-full transition-colors border border-primary-200 font-medium"
                   >
                     {s.label}
                   </Link>
@@ -206,33 +208,33 @@ export default function NotFoundClient() {
           )}
 
           {/* Default suggestions */}
-          <div className="mt-8 pt-8 border-t border-gray-200">
-            <p className="text-sm text-gray-500 mb-4">Pages populaires :</p>
+          <div className="mt-8 pt-8 border-t border-sand-300">
+            <p className="text-sm text-charcoal-500 mb-4">Pages populaires :</p>
             <div className="flex flex-wrap justify-center gap-2">
               {defaultLinks.map((s) => (
                 <Link
                   key={s.href}
                   href={s.href}
-                  className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+                  className="text-sm bg-sand-100 hover:bg-primary-100 text-charcoal-700 hover:text-primary-600 px-3 py-1.5 rounded-full transition-colors"
                 >
                   {s.label}
                 </Link>
               ))}
               <Link
                 href="/services/plombier"
-                className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+                className="text-sm bg-sand-100 hover:bg-primary-100 text-charcoal-700 hover:text-primary-600 px-3 py-1.5 rounded-full transition-colors"
               >
                 Plombier
               </Link>
               <Link
                 href="/services/electricien"
-                className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+                className="text-sm bg-sand-100 hover:bg-primary-100 text-charcoal-700 hover:text-primary-600 px-3 py-1.5 rounded-full transition-colors"
               >
                 Électricien
               </Link>
               <Link
                 href="/services/serrurier"
-                className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+                className="text-sm bg-sand-100 hover:bg-primary-100 text-charcoal-700 hover:text-primary-600 px-3 py-1.5 rounded-full transition-colors"
               >
                 Serrurier
               </Link>
@@ -240,18 +242,18 @@ export default function NotFoundClient() {
           </div>
 
           {/* CTA Conversion */}
-          <div className="mt-10 p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-white">
+          <div className="mt-10 p-6 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl text-white">
             <FileText className="w-8 h-8 mx-auto mb-3 opacity-90" />
             <p className="font-heading font-bold text-lg mb-2">Vous cherchez un artisan ?</p>
-            <p className="text-blue-100 text-sm mb-4">Devis gratuit et sans engagement.</p>
+            <p className="text-primary-100 text-sm mb-4">Devis gratuit et sans engagement.</p>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center gap-2 bg-white text-primary-600 px-6 py-3 rounded-lg font-bold hover:bg-primary-50 transition-colors"
             >
               Demander un devis gratuit
               <span aria-hidden="true">&rarr;</span>
             </Link>
-            <p className="text-blue-200 text-sm mt-3 mb-2">Ou appelez-nous</p>
+            <p className="text-primary-100 text-sm mt-3 mb-2">Ou appelez-nous</p>
             <a
               href={PHONE_TEL}
               onClick={() => {

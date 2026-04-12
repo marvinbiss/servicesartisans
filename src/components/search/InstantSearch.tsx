@@ -119,9 +119,7 @@ export function InstantSearch({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setSelectedIndex((prev) =>
-          prev < suggestions.length - 1 ? prev + 1 : prev
-        )
+        setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev))
         break
       case 'ArrowUp':
         e.preventDefault()
@@ -178,7 +176,7 @@ export function InstantSearch({
     <div ref={containerRef} className={cn('relative', className)}>
       {/* Search input */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
         <input
           ref={inputRef}
           type="text"
@@ -187,25 +185,27 @@ export function InstantSearch({
           onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-12 pr-12 py-4 text-lg border border-gray-300 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-12 pr-12 py-4 text-lg border border-sand-400 rounded-xl bg-white text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent"
         />
         {isLoading ? (
-          <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 animate-spin" />
-        ) : query && (
-          <button
-            onClick={handleClear}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full"
-          >
-            <X className="w-5 h-5 text-gray-400" />
-          </button>
+          <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400 animate-spin" />
+        ) : (
+          query && (
+            <button
+              onClick={handleClear}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-sand-100 rounded-full"
+            >
+              <X className="w-5 h-5 text-charcoal-400" />
+            </button>
+          )
         )}
       </div>
 
       {/* Suggestions dropdown */}
       {isOpen && (query || suggestions.length > 0) && (
-        <div className="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden max-h-[70vh] overflow-y-auto">
+        <div className="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-sand-300 overflow-hidden max-h-[70vh] overflow-y-auto">
           {suggestions.length === 0 && query && !isLoading ? (
-            <div className="p-4 text-center text-gray-500">
+            <div className="p-4 text-center text-charcoal-500">
               Aucune suggestion pour "{query}"
             </div>
           ) : (
@@ -216,34 +216,30 @@ export function InstantSearch({
                     onClick={() => handleSuggestionClick(suggestion)}
                     className={cn(
                       'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
-                      index === selectedIndex
-                        ? 'bg-blue-50'
-                        : 'hover:bg-gray-50'
+                      index === selectedIndex ? 'bg-primary-50' : 'hover:bg-sand-50'
                     )}
                   >
                     <div
                       className={cn(
                         'w-8 h-8 rounded-full flex items-center justify-center',
-                        suggestion.type === 'service' && 'bg-blue-100 text-blue-600',
+                        suggestion.type === 'service' && 'bg-primary-100 text-primary-500',
                         suggestion.type === 'location' && 'bg-green-100 text-green-600',
                         suggestion.type === 'artisan' && 'bg-purple-100 text-purple-600',
-                        suggestion.type === 'recent' && 'bg-gray-100 text-gray-600'
+                        suggestion.type === 'recent' && 'bg-sand-100 text-charcoal-600'
                       )}
                     >
                       {getIcon(suggestion.type)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 truncate">
+                      <div className="font-medium text-charcoal-900 truncate">
                         {suggestion.text}
                       </div>
                       {suggestion.metadata && (
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-charcoal-500">
                           {suggestion.metadata.specialty && (
                             <span>{suggestion.metadata.specialty}</span>
                           )}
-                          {suggestion.metadata.city && (
-                            <span> · {suggestion.metadata.city}</span>
-                          )}
+                          {suggestion.metadata.city && <span> · {suggestion.metadata.city}</span>}
                           {suggestion.metadata.resultCount && (
                             <span> · {suggestion.metadata.resultCount} résultats</span>
                           )}
@@ -258,10 +254,10 @@ export function InstantSearch({
 
           {/* Search button */}
           {query && (
-            <div className="border-t border-gray-200 p-2">
+            <div className="border-t border-sand-300 p-2">
               <button
                 onClick={handleSubmit}
-                className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
               >
                 <Search className="w-4 h-4" />
                 Rechercher "{query}"

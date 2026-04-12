@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
-import JsonLd from "@/components/JsonLd"
-import { getFAQSchema } from "@/lib/seo/jsonld"
-import Breadcrumb from "@/components/Breadcrumb"
-import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import JsonLd from '@/components/JsonLd'
+import { getFAQSchema } from '@/lib/seo/jsonld'
+import Breadcrumb from '@/components/Breadcrumb'
+import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import {
   Wind,
   ShieldCheck,
@@ -16,7 +16,7 @@ import {
   Thermometer,
   Snowflake,
   Droplet,
-} from "lucide-react"
+} from 'lucide-react'
 
 const PAGE_URL = `${SITE_URL}/guides/pompe-a-chaleur-cee-maprimerenov-2026`
 
@@ -30,89 +30,92 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
     description:
-      "Toutes les aides 2026 pour financer votre pompe à chaleur : barèmes, cumul, exemple chiffré et artisan QualiPAC obligatoire.",
+      'Toutes les aides 2026 pour financer votre pompe à chaleur : barèmes, cumul, exemple chiffré et artisan QualiPAC obligatoire.',
     url: PAGE_URL,
-    type: "article",
+    type: 'article',
     siteName: SITE_NAME,
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     title: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
     description:
-      "Toutes les aides 2026 pour financer votre pompe à chaleur : barèmes, cumul, exemple chiffré et artisan QualiPAC obligatoire.",
+      'Toutes les aides 2026 pour financer votre pompe à chaleur : barèmes, cumul, exemple chiffré et artisan QualiPAC obligatoire.',
   },
 }
 
 const typesPac = [
   {
-    nom: "PAC air/eau",
+    nom: 'PAC air/eau',
     icon: Droplet,
     description:
       "La PAC air/eau capte les calories de l'air extérieur et les transmet à un circuit d'eau chauffée qui alimente radiateurs, plancher chauffant et ballon ECS. C'est la solution la plus courante pour remplacer une chaudière fioul ou gaz en maison individuelle.",
-    cop: "COP moyen 3,5 à 4,5",
+    cop: 'COP moyen 3,5 à 4,5',
     eligible: "Éligible MaPrimeRénov' + Coup de pouce CEE chauffage",
   },
   {
-    nom: "PAC géothermique",
+    nom: 'PAC géothermique',
     icon: Thermometer,
     description:
       "La géothermie capte les calories du sol via des capteurs horizontaux ou des sondes verticales. Plus chère à l'installation, elle offre les meilleurs COP du marché et une très grande stabilité de production même par grand froid.",
-    cop: "COP moyen 4 à 5,5",
+    cop: 'COP moyen 4 à 5,5',
     eligible: "Éligible MaPrimeRénov' (barème majoré) + CEE",
   },
   {
-    nom: "PAC hybride",
+    nom: 'PAC hybride',
     icon: Wind,
     description:
       "Associe une PAC air/eau à une chaudière gaz à condensation d'appoint. Le système bascule automatiquement sur la chaudière lorsque les températures extérieures rendent la PAC moins performante. Solution adaptée aux logements mal isolés en attente d'une rénovation globale.",
-    cop: "COP global 3 à 4",
+    cop: 'COP global 3 à 4',
     eligible: "Éligible CEE, non éligible MaPrimeRénov' en 2026 pour le bâti neuf",
   },
   {
-    nom: "PAC air/air",
+    nom: 'PAC air/air',
     icon: Snowflake,
     description:
       "La PAC air/air diffuse directement la chaleur (ou le froid en été) via des unités intérieures soufflantes. Très économique à l'achat, elle ne produit pas d'eau chaude sanitaire et n'est pas éligible à MaPrimeRénov', mais reste éligible aux CEE.",
-    cop: "COP moyen 3 à 4",
+    cop: 'COP moyen 3 à 4',
     eligible: "Éligible CEE uniquement — pas de MaPrimeRénov'",
   },
 ]
 
 const criteres = [
   "Coefficient de performance (COP) minimum exigé selon le type de PAC (souvent ≥ 3,5 pour l'air/eau).",
-  "Classe énergétique saisonnière (ETAS) supérieure à un seuil réglementaire.",
-  "Installation réalisée par un artisan titulaire de la mention RGE QualiPAC valide à la date du devis.",
+  'Classe énergétique saisonnière (ETAS) supérieure à un seuil réglementaire.',
+  'Installation réalisée par un artisan titulaire de la mention RGE QualiPAC valide à la date du devis.',
   "Logement achevé depuis au moins 15 ans (ou 2 ans si remplacement d'une chaudière fioul).",
   "Respect des règles de dimensionnement et présence d'un carnet d'intervention signé par l'installateur.",
 ]
 
 const exempleChiffre = [
-  { poste: "PAC air/eau 12 kW + ballon tampon + raccordements", montant: "≈ 15 000 € TTC" },
-  { poste: "TVA appliquée à 5,5 % au lieu de 20 % (économie immédiate)", montant: "− 2 000 € environ" },
+  { poste: 'PAC air/eau 12 kW + ballon tampon + raccordements', montant: '≈ 15 000 € TTC' },
+  {
+    poste: 'TVA appliquée à 5,5 % au lieu de 20 % (économie immédiate)',
+    montant: '− 2 000 € environ',
+  },
   { poste: "MaPrimeRénov' (profil modeste, barème 2026)", montant: "plusieurs milliers d'€" },
-  { poste: "Coup de pouce CEE Chauffage (remplacement fioul)", montant: "plusieurs milliers d'€" },
-  { poste: "Éco-PTZ sur le reste à charge (jusqu'à 50 000 € à 0 %)", montant: "financement 0 %" },
-  { poste: "Reste à charge après aides (profil modeste)", montant: "10 à 20 % du coût total" },
+  { poste: 'Coup de pouce CEE Chauffage (remplacement fioul)', montant: "plusieurs milliers d'€" },
+  { poste: "Éco-PTZ sur le reste à charge (jusqu'à 50 000 € à 0 %)", montant: 'financement 0 %' },
+  { poste: 'Reste à charge après aides (profil modeste)', montant: '10 à 20 % du coût total' },
 ]
 
 const faqItems = [
   {
-    question: "Quel type de pompe à chaleur est le plus aidé en 2026 ?",
+    question: 'Quel type de pompe à chaleur est le plus aidé en 2026 ?',
     answer:
       "La PAC air/eau est le système le plus financé en 2026 car il cumule MaPrimeRénov' et le Coup de pouce Chauffage CEE. La PAC géothermique bénéficie d'un barème MaPrimeRénov' majoré mais reste plus rare en raison du coût de forage. La PAC air/air, très populaire, est uniquement éligible aux CEE et non à MaPrimeRénov'.",
   },
   {
-    question: "Le QualiPAC est-il obligatoire ou juste recommandé ?",
+    question: 'Le QualiPAC est-il obligatoire ou juste recommandé ?',
     answer:
       "Obligatoire. Sans la mention QualiPAC valide à la date du devis, ni MaPrimeRénov', ni le Coup de pouce CEE, ni la TVA réduite ne peuvent être activés. C'est la seule qualification reconnue par l'État pour l'installation des pompes à chaleur.",
   },
   {
-    question: "Quel COP faut-il viser pour être éligible aux aides ?",
+    question: 'Quel COP faut-il viser pour être éligible aux aides ?',
     answer:
       "Pour MaPrimeRénov', la PAC air/eau doit afficher un ETAS supérieur à un seuil réglementaire (environ 126 % basse température ou 111 % moyenne température). Les équipements inscrits sur les catalogues des fabricants mentionnent explicitement « éligible MaPrimeRénov' ». Évitez les modèles d'entrée de gamme qui ne passent pas la grille.",
   },
   {
-    question: "Peut-on remplacer une PAC existante par une autre PAC avec les aides ?",
+    question: 'Peut-on remplacer une PAC existante par une autre PAC avec les aides ?',
     answer:
       "Non, pas au titre du Coup de pouce Chauffage qui cible le remplacement de chaudières fossiles (fioul, gaz, charbon). MaPrimeRénov' peut toutefois financer un remplacement PAC → PAC performante dans certaines conditions, notamment si l'ancienne PAC est obsolète ou hors service, avec un gain énergétique prouvé.",
   },
@@ -127,38 +130,43 @@ const faqItems = [
       "Pour une PAC air/eau en remplacement d'une chaudière existante, comptez 2 à 4 jours de travaux selon la complexité hydraulique. Une géothermie avec sondes verticales demande 1 à 2 semaines à cause du forage. Prévoir également 24 à 48 h de mise en service et de paramétrage avant utilisation optimale.",
   },
   {
-    question: "Quel entretien est obligatoire sur une pompe à chaleur ?",
+    question: 'Quel entretien est obligatoire sur une pompe à chaleur ?',
     answer:
       "Depuis le décret entretien PAC, un contrôle tous les 2 ans est obligatoire pour les PAC de plus de 4 kW. Il porte sur l'état du fluide frigorigène, le nettoyage des échangeurs, la vérification des pressions et la mesure du COP effectif. L'entretien doit être réalisé par un technicien titulaire de l'attestation de capacité fluides.",
   },
 ]
 
 const breadcrumbItems = [
-  { label: "Guides", href: "/guides" },
-  { label: "Pompe à chaleur 2026 : aides cumulables" },
+  { label: 'Guides', href: '/guides' },
+  { label: 'Pompe à chaleur 2026 : aides cumulables' },
 ]
 
 export default function PacAidesCumulablesPage() {
   const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Guides", item: `${SITE_URL}/guides` },
-      { "@type": "ListItem", position: 3, name: "Pompe à chaleur 2026 : aides cumulables", item: PAGE_URL },
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE_URL}/guides` },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Pompe à chaleur 2026 : aides cumulables',
+        item: PAGE_URL,
+      },
     ],
   }
 
   const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
+    '@context': 'https://schema.org',
+    '@type': 'Article',
     headline: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
     description:
       "Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE chauffage, cumul total, exemple chiffré et obligation QualiPAC.",
-    author: { "@type": "Organization", name: SITE_NAME },
-    publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
-    datePublished: "2026-04-09",
-    dateModified: "2026-04-09",
+    author: { '@type': 'Organization', name: SITE_NAME },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    datePublished: '2026-04-09',
+    dateModified: '2026-04-09',
     mainEntityOfPage: PAGE_URL,
   }
 
@@ -179,34 +187,43 @@ export default function PacAidesCumulablesPage() {
             <Wind className="w-4 h-4" />
             Guide PAC 2026
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 font-heading leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             Pompe à chaleur 2026 : aides CEE + MaPrimeRénov&apos; cumulables
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {"Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE, cumul total possible et exemple chiffré pour financer jusqu'à 80 % de votre projet avec un artisan QualiPAC."}
+          <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
+            {
+              "Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE, cumul total possible et exemple chiffré pour financer jusqu'à 80 % de votre projet avec un artisan QualiPAC."
+            }
           </p>
         </section>
 
         {/* Types de PAC */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
             Les 4 grandes familles de pompes à chaleur
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {typesPac.map((t) => {
               const Icon = t.icon
               return (
-                <div key={t.nom} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div
+                  key={t.nom}
+                  className="bg-white rounded-xl shadow-sm border border-sand-200 p-6"
+                >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                       <Icon className="w-5 h-5 text-green-700" />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">{t.nom}</h3>
+                    <h3 className="text-lg font-bold text-charcoal-900">{t.nom}</h3>
                   </div>
-                  <p className="text-gray-600 mb-3 leading-relaxed text-sm">{t.description}</p>
-                  <div className="text-xs text-gray-500 space-y-1">
-                    <div><strong>Performance :</strong> {t.cop}</div>
-                    <div><strong>Aides :</strong> {t.eligible}</div>
+                  <p className="text-charcoal-600 mb-3 leading-relaxed text-sm">{t.description}</p>
+                  <div className="text-xs text-charcoal-500 space-y-1">
+                    <div>
+                      <strong>Performance :</strong> {t.cop}
+                    </div>
+                    <div>
+                      <strong>Aides :</strong> {t.eligible}
+                    </div>
                   </div>
                 </div>
               )
@@ -216,19 +233,25 @@ export default function PacAidesCumulablesPage() {
 
         {/* Barèmes MaPrimeRénov */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
               MaPrimeRénov&apos; 2026 pour les PAC
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
+            <div className="prose prose-lg max-w-none text-charcoal-700">
               <p>
-                {"MaPrimeRénov' finance les PAC air/eau et géothermiques selon les barèmes 2026 en vigueur, avec une prime différenciée pour chaque profil de revenus (Bleu, Jaune, Violet, Rose). Plus le ménage est modeste, plus la prime par geste est élevée."}
+                {
+                  "MaPrimeRénov' finance les PAC air/eau et géothermiques selon les barèmes 2026 en vigueur, avec une prime différenciée pour chaque profil de revenus (Bleu, Jaune, Violet, Rose). Plus le ménage est modeste, plus la prime par geste est élevée."
+                }
               </p>
               <p>
-                {"Les PAC air/air sont exclues de MaPrimeRénov' depuis plusieurs années : elles ne chauffent pas l'eau sanitaire et sont jugées moins performantes pour la rénovation globale. Elles restent en revanche éligibles aux CEE."}
+                {
+                  "Les PAC air/air sont exclues de MaPrimeRénov' depuis plusieurs années : elles ne chauffent pas l'eau sanitaire et sont jugées moins performantes pour la rénovation globale. Elles restent en revanche éligibles aux CEE."
+                }
               </p>
               <p>
-                {"Depuis 2026, les chaudières gaz — même à très haute performance — ne sont plus éligibles à MaPrimeRénov'. L'État concentre désormais son effort sur les systèmes 100 % décarbonés : PAC, biomasse, solaire thermique, réseaux de chaleur."}
+                {
+                  "Depuis 2026, les chaudières gaz — même à très haute performance — ne sont plus éligibles à MaPrimeRénov'. L'État concentre désormais son effort sur les systèmes 100 % décarbonés : PAC, biomasse, solaire thermique, réseaux de chaleur."
+                }
               </p>
             </div>
           </div>
@@ -241,30 +264,45 @@ export default function PacAidesCumulablesPage() {
               Coup de pouce Chauffage CEE 2026
             </h2>
             <p className="text-green-50 leading-relaxed mb-4">
-              {"Le Coup de pouce Chauffage est une bonification des Certificats d'Économies d'Énergie (CEE) qui cible le remplacement d'une chaudière fioul, charbon ou gaz non condensation par un équipement décarboné performant. Il est versé directement par un obligé ou un délégataire (Effy, Sonergia, TotalEnergies, Engie…)."}
+              {
+                "Le Coup de pouce Chauffage est une bonification des Certificats d'Économies d'Énergie (CEE) qui cible le remplacement d'une chaudière fioul, charbon ou gaz non condensation par un équipement décarboné performant. Il est versé directement par un obligé ou un délégataire (Effy, Sonergia, TotalEnergies, Engie…)."
+              }
             </p>
             <p className="text-green-50 leading-relaxed mb-4">
-              {"Le montant dépend des revenus du ménage et du type de PAC installée. Pour les ménages très modestes, le cumul CEE + MaPrimeRénov' peut couvrir la quasi-totalité du chantier. Pour les profils supérieurs, la prime CEE reste un complément utile qui descend le reste à charge de plusieurs milliers d'euros."}
+              {
+                "Le montant dépend des revenus du ménage et du type de PAC installée. Pour les ménages très modestes, le cumul CEE + MaPrimeRénov' peut couvrir la quasi-totalité du chantier. Pour les profils supérieurs, la prime CEE reste un complément utile qui descend le reste à charge de plusieurs milliers d'euros."
+              }
             </p>
             <ul className="space-y-2 text-green-50">
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" /><span>Remplacement chaudière fioul, gaz, charbon → PAC air/eau, géothermique ou hybride</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" /><span>Artisan QualiPAC obligatoire</span></li>
-              <li className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" /><span>Lettre d&apos;engagement à signer AVANT le devis de l&apos;artisan</span></li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
+                <span>
+                  Remplacement chaudière fioul, gaz, charbon → PAC air/eau, géothermique ou hybride
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
+                <span>Artisan QualiPAC obligatoire</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
+                <span>Lettre d&apos;engagement à signer AVANT le devis de l&apos;artisan</span>
+              </li>
             </ul>
           </div>
         </section>
 
         {/* Critères d'éligibilité */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
             Les critères d&apos;éligibilité techniques
           </h2>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8">
             <ul className="space-y-3">
               {criteres.map((c, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-                  <span className="text-gray-700">{c}</span>
+                  <span className="text-charcoal-700">{c}</span>
                 </li>
               ))}
             </ul>
@@ -273,23 +311,23 @@ export default function PacAidesCumulablesPage() {
 
         {/* Exemple chiffré */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading flex items-center gap-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading flex items-center gap-3">
             <Calculator className="w-8 h-8 text-green-600" />
             Exemple chiffré : remplacer une chaudière fioul par une PAC
           </h2>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-sand-50">
                 <tr>
-                  <th className="text-left font-semibold text-gray-700 p-4">Poste</th>
-                  <th className="text-right font-semibold text-gray-700 p-4">Montant</th>
+                  <th className="text-left font-semibold text-charcoal-700 p-4">Poste</th>
+                  <th className="text-right font-semibold text-charcoal-700 p-4">Montant</th>
                 </tr>
               </thead>
               <tbody>
                 {exempleChiffre.map((e) => (
-                  <tr key={e.poste} className="border-t border-gray-100">
-                    <td className="p-4 text-gray-900">{e.poste}</td>
-                    <td className="p-4 text-right font-semibold text-gray-900">{e.montant}</td>
+                  <tr key={e.poste} className="border-t border-sand-200">
+                    <td className="p-4 text-charcoal-900">{e.poste}</td>
+                    <td className="p-4 text-right font-semibold text-charcoal-900">{e.montant}</td>
                   </tr>
                 ))}
               </tbody>
@@ -298,26 +336,34 @@ export default function PacAidesCumulablesPage() {
           <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5 flex gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-900">
-              {"Les montants exacts dépendent du profil de ressources, du délégataire CEE retenu, de la zone climatique et des caractéristiques techniques de l'équipement. Utilisez toujours le simulateur officiel MaPrimeRénov' avant de signer."}
+              {
+                "Les montants exacts dépendent du profil de ressources, du délégataire CEE retenu, de la zone climatique et des caractéristiques techniques de l'équipement. Utilisez toujours le simulateur officiel MaPrimeRénov' avant de signer."
+              }
             </p>
           </div>
         </section>
 
         {/* Choix artisan */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-heading flex items-center gap-3">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-4 font-heading flex items-center gap-3">
               <ShieldCheck className="w-8 h-8 text-green-600" />
               Choisir un artisan QualiPAC
             </h2>
-            <p className="text-gray-700 mb-4 leading-relaxed">
-              {"QualiPAC est la seule qualification RGE reconnue pour les pompes à chaleur. Elle est délivrée par Qualit'EnR après une formation de 21 heures, un examen théorique et un audit de chantier réalisé dans les 24 mois suivant la qualification. L'artisan doit la renouveler tous les 4 ans."}
+            <p className="text-charcoal-700 mb-4 leading-relaxed">
+              {
+                "QualiPAC est la seule qualification RGE reconnue pour les pompes à chaleur. Elle est délivrée par Qualit'EnR après une formation de 21 heures, un examen théorique et un audit de chantier réalisé dans les 24 mois suivant la qualification. L'artisan doit la renouveler tous les 4 ans."
+              }
             </p>
-            <p className="text-gray-700 mb-4 leading-relaxed">
-              {"Au-delà de la certification, vérifiez que votre installateur : (1) réalise une étude thermique de votre logement, (2) propose un dimensionnement chiffré et justifié (pas un abaque générique), (3) remet un carnet d'intervention complet, (4) fournit un contrat d'entretien pour les années à venir."}
+            <p className="text-charcoal-700 mb-4 leading-relaxed">
+              {
+                "Au-delà de la certification, vérifiez que votre installateur : (1) réalise une étude thermique de votre logement, (2) propose un dimensionnement chiffré et justifié (pas un abaque générique), (3) remet un carnet d'intervention complet, (4) fournit un contrat d'entretien pour les années à venir."
+              }
             </p>
-            <p className="text-gray-700 leading-relaxed">
-              {"Consultez notre guide dédié à la certification RGE et ses qualifications pour comprendre l'écosystème complet."}
+            <p className="text-charcoal-700 leading-relaxed">
+              {
+                "Consultez notre guide dédié à la certification RGE et ses qualifications pour comprendre l'écosystème complet."
+              }
             </p>
             <Link
               href="/guides/qualibat-qualipac-qualifelec-qui-choisir"
@@ -330,18 +376,23 @@ export default function PacAidesCumulablesPage() {
 
         {/* FAQ */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading flex items-center gap-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading flex items-center gap-3">
             <HelpCircle className="w-8 h-8 text-green-600" />
             Questions fréquentes PAC 2026
           </h2>
           <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <details key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 group">
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-gray-900 hover:text-green-700 transition-colors">
+              <details
+                key={index}
+                className="bg-white rounded-xl shadow-sm border border-sand-200 group"
+              >
+                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-charcoal-900 hover:text-green-700 transition-colors">
                   {item.question}
-                  <span className="ml-4 text-gray-400 group-open:rotate-45 transition-transform text-2xl">+</span>
+                  <span className="ml-4 text-charcoal-400 group-open:rotate-45 transition-transform text-2xl">
+                    +
+                  </span>
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                <div className="px-6 pb-6 text-charcoal-600 leading-relaxed border-t border-sand-100 pt-4">
                   {item.answer}
                 </div>
               </details>
@@ -358,7 +409,9 @@ export default function PacAidesCumulablesPage() {
               Devis gratuit pour votre pompe à chaleur
             </h2>
             <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
-              {"Obtenez rapidement un devis personnalisé d'un installateur QualiPAC près de chez vous."}
+              {
+                "Obtenez rapidement un devis personnalisé d'un installateur QualiPAC près de chez vous."
+              }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

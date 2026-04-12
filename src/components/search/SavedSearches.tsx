@@ -1,16 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  Bell,
-  BellOff,
-  Trash2,
-  MapPin,
-  Briefcase,
-  Plus,
-  Check,
-  Clock,
-} from 'lucide-react'
+import { Bell, BellOff, Trash2, MapPin, Briefcase, Plus, Check, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface SavedSearch {
@@ -69,15 +60,13 @@ export function SavedSearches({
   }
 
   return (
-    <div className={cn('bg-white rounded-xl shadow-sm border border-gray-200', className)}>
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <h3 className="font-semibold text-gray-900">
-          Recherches sauvegardées
-        </h3>
+    <div className={cn('bg-white rounded-xl shadow-sm border border-sand-300', className)}>
+      <div className="flex items-center justify-between p-4 border-b border-sand-300">
+        <h3 className="font-semibold text-charcoal-900">Recherches sauvegardées</h3>
         {onCreateNew && (
           <button
             onClick={onCreateNew}
-            className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
+            className="flex items-center gap-1 text-sm text-primary-500 hover:text-primary-600"
           >
             <Plus className="w-4 h-4" />
             Nouvelle alerte
@@ -87,21 +76,19 @@ export function SavedSearches({
 
       {searches.length === 0 ? (
         <div className="p-8 text-center">
-          <Bell className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 mb-4">
-            Aucune recherche sauvegardée
-          </p>
+          <Bell className="w-12 h-12 text-sand-500 mx-auto mb-3" />
+          <p className="text-charcoal-500 mb-4">Aucune recherche sauvegardée</p>
           {onCreateNew && (
             <button
               onClick={onCreateNew}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
             >
               Créer une alerte
             </button>
           )}
         </div>
       ) : (
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-sand-300">
           {searches.map((search) => {
             const FrequencyIcon = getFrequencyIcon(search.frequency)
             const isEditing = editingId === search.id
@@ -110,23 +97,18 @@ export function SavedSearches({
               <li key={search.id} className="p-4">
                 <div className="flex items-start gap-3">
                   {/* Click to search */}
-                  <button
-                    onClick={() => onSearch(search)}
-                    className="flex-1 text-left"
-                  >
+                  <button onClick={() => onSearch(search)} className="flex-1 text-left">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-gray-900">
-                        {search.name}
-                      </span>
+                      <span className="font-medium text-charcoal-900">{search.name}</span>
                       {search.newResultsCount > 0 && (
-                        <span className="px-1.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-600 rounded-full">
+                        <span className="px-1.5 py-0.5 text-xs font-medium bg-primary-100 text-primary-500 rounded-full">
                           +{search.newResultsCount}
                         </span>
                       )}
                     </div>
 
                     {/* Filters summary */}
-                    <div className="flex flex-wrap gap-2 text-sm text-gray-500">
+                    <div className="flex flex-wrap gap-2 text-sm text-charcoal-500">
                       {search.filters.service && (
                         <span className="flex items-center gap-1">
                           <Briefcase className="w-3 h-3" />
@@ -143,7 +125,7 @@ export function SavedSearches({
                     </div>
 
                     {/* Last checked */}
-                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
+                    <div className="flex items-center gap-1 mt-1 text-xs text-charcoal-400">
                       <Clock className="w-3 h-3" />
                       Vérifié le {formatDate(search.lastChecked)}
                     </div>
@@ -153,7 +135,7 @@ export function SavedSearches({
                   <div className="flex items-center gap-1">
                     {/* Frequency dropdown */}
                     {isEditing ? (
-                      <div className="flex flex-col gap-1 bg-gray-50 rounded-lg p-2">
+                      <div className="flex flex-col gap-1 bg-sand-50 rounded-lg p-2">
                         {FREQUENCY_OPTIONS.map((option) => (
                           <button
                             key={option.value}
@@ -164,19 +146,17 @@ export function SavedSearches({
                             className={cn(
                               'flex items-center gap-2 px-2 py-1 rounded text-sm',
                               search.frequency === option.value
-                                ? 'bg-blue-100 text-blue-700'
-                                : 'hover:bg-gray-100'
+                                ? 'bg-primary-100 text-primary-600'
+                                : 'hover:bg-sand-100'
                             )}
                           >
-                            {search.frequency === option.value && (
-                              <Check className="w-3 h-3" />
-                            )}
+                            {search.frequency === option.value && <Check className="w-3 h-3" />}
                             {option.label}
                           </button>
                         ))}
                         <button
                           onClick={() => setEditingId(null)}
-                          className="mt-1 text-xs text-gray-500 hover:text-gray-700"
+                          className="mt-1 text-xs text-charcoal-500 hover:text-charcoal-700"
                         >
                           Annuler
                         </button>
@@ -188,8 +168,8 @@ export function SavedSearches({
                           className={cn(
                             'p-2 rounded-lg transition-colors',
                             search.frequency !== 'never'
-                              ? 'text-blue-600 hover:bg-blue-50'
-                              : 'text-gray-400 hover:bg-gray-100'
+                              ? 'text-primary-500 hover:bg-primary-50'
+                              : 'text-charcoal-400 hover:bg-sand-100'
                           )}
                           title="Modifier les alertes"
                         >
@@ -197,7 +177,7 @@ export function SavedSearches({
                         </button>
                         <button
                           onClick={() => onDelete(search.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-2 text-charcoal-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                           title="Supprimer"
                         >
                           <Trash2 className="w-4 h-4" />

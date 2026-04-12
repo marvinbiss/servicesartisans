@@ -46,7 +46,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   let h2Counter = 0
 
   return (
-    <nav className="my-8 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+    <nav className="my-8 rounded-2xl border border-sand-300 bg-white shadow-sm overflow-hidden">
       {/* Header - clickable on mobile */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -56,12 +56,12 @@ export function TableOfContents({ items }: TableOfContentsProps) {
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 text-amber-600">
             <List className="w-4 h-4" />
           </div>
-          <span className="font-heading font-bold text-gray-900">Sommaire</span>
-          <span className="text-xs text-gray-400 font-medium hidden sm:inline">
+          <span className="font-heading font-bold text-charcoal-900">Sommaire</span>
+          <span className="text-xs text-charcoal-400 font-medium hidden sm:inline">
             {h2Items.length} sections
           </span>
         </div>
-        <span className="sm:hidden text-gray-400">
+        <span className="sm:hidden text-charcoal-400">
           {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
         </span>
       </button>
@@ -90,7 +90,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                 }${
                   activeId === item.id
                     ? 'bg-amber-50 text-amber-800 font-medium'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    : 'text-charcoal-600 hover:bg-sand-50 hover:text-charcoal-900'
                 }`}
               >
                 {isH3 ? (
@@ -98,7 +98,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                     className={`shrink-0 w-1.5 h-1.5 rounded-full mt-2 transition-colors ${
                       activeId === item.id
                         ? 'bg-amber-400'
-                        : 'bg-gray-300 group-hover:bg-gray-400'
+                        : 'bg-sand-400 group-hover:bg-charcoal-400'
                     }`}
                   />
                 ) : (
@@ -106,7 +106,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                     className={`shrink-0 flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold mt-px transition-colors ${
                       activeId === item.id
                         ? 'bg-amber-200 text-amber-900'
-                        : 'bg-gray-100 text-gray-400 group-hover:bg-gray-200 group-hover:text-gray-600'
+                        : 'bg-sand-100 text-charcoal-400 group-hover:bg-sand-300 group-hover:text-charcoal-600'
                     }`}
                   >
                     {h2Counter}

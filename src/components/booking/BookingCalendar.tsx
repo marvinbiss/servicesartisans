@@ -128,7 +128,7 @@ export function BookingCalendar({
   // Sélection heure
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time)
-    onSlotSelect?.(selectedDate!, time)
+    if (selectedDate) onSlotSelect?.(selectedDate, time)
   }
 
   // Confirmation
@@ -144,26 +144,24 @@ export function BookingCalendar({
   }
 
   // Séparer créneaux matin/après-midi
-  const morningSlots = selectedDaySlots?.filter(
-    (s) => parseInt(s.time.split(':')[0]) < 12
-  ) || []
-  const afternoonSlots = selectedDaySlots?.filter(
-    (s) => parseInt(s.time.split(':')[0]) >= 12
-  ) || []
+  const morningSlots = selectedDaySlots?.filter((s) => parseInt(s.time.split(':')[0]) < 12) || []
+  const afternoonSlots = selectedDaySlots?.filter((s) => parseInt(s.time.split(':')[0]) >= 12) || []
 
   return (
-    <div className={`bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden ${className}`}>
+    <div
+      className={`bg-white rounded-2xl shadow-xl border border-charcoal-200 overflow-hidden ${className}`}
+    >
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-5">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-5">
         <h3 className="text-lg font-bold mb-1">Réserver un créneau</h3>
-        <p className="text-blue-100 text-sm">
+        <p className="text-primary-100 text-sm">
           {serviceName} • {serviceDuration} min
           {servicePrice && ` • ${servicePrice}€`}
         </p>
       </div>
 
       {/* Progress Steps */}
-      <div className="flex border-b border-slate-200">
+      <div className="flex border-b border-charcoal-200">
         {['Date', 'Heure', 'Confirmation'].map((label, i) => {
           const stepNum = i + 1
           const isActive =
@@ -180,10 +178,10 @@ export function BookingCalendar({
               key={label}
               className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
                 isCurrent
-                  ? 'text-blue-600 bg-blue-50'
+                  ? 'text-primary-500 bg-primary-50'
                   : isActive
-                  ? 'text-green-600'
-                  : 'text-slate-400'
+                    ? 'text-green-600'
+                    : 'text-charcoal-400'
               }`}
             >
               <span
@@ -191,8 +189,8 @@ export function BookingCalendar({
                   isActive && !isCurrent
                     ? 'bg-green-500 text-white'
                     : isCurrent
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-200'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-charcoal-200'
                 }`}
               >
                 {isActive && !isCurrent ? <Check className="w-3.5 h-3.5" /> : stepNum}
@@ -220,22 +218,22 @@ export function BookingCalendar({
                   addWeeks(currentWeekStart, -1),
                   startOfWeek(new Date(), { weekStartsOn: 1 })
                 )}
-                className="p-2 hover:bg-slate-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-2 hover:bg-sand-200 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <div className="text-center">
-                <div className="font-semibold text-slate-900">
+                <div className="font-semibold text-charcoal-900">
                   {format(currentWeekStart, 'MMMM yyyy', { locale: fr })}
                 </div>
-                <div className="text-sm text-slate-500">
+                <div className="text-sm text-charcoal-900">
                   Semaine du {format(currentWeekStart, 'd', { locale: fr })} au{' '}
                   {format(addDays(currentWeekStart, 6), 'd MMMM', { locale: fr })}
                 </div>
               </div>
               <button
                 onClick={goToNextWeek}
-                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-sand-200 rounded-lg transition-colors"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -257,9 +255,9 @@ export function BookingCalendar({
                       relative p-3 rounded-xl text-center transition-all
                       ${isPast ? 'opacity-40 cursor-not-allowed' : ''}
                       ${!hasSlots && !isPast ? 'opacity-50 cursor-not-allowed' : ''}
-                      ${isSelected ? 'bg-blue-600 text-white shadow-lg' : ''}
-                      ${!isSelected && hasSlots && !isPast ? 'hover:bg-blue-50 cursor-pointer' : ''}
-                      ${isToday(date) && !isSelected ? 'ring-2 ring-blue-500' : ''}
+                      ${isSelected ? 'bg-primary-500 text-white shadow-lg' : ''}
+                      ${!isSelected && hasSlots && !isPast ? 'hover:bg-primary-50 cursor-pointer' : ''}
+                      ${isToday(date) && !isSelected ? 'ring-2 ring-primary-400' : ''}
                     `}
                   >
                     <div className="text-xs font-medium mb-1">
@@ -269,14 +267,14 @@ export function BookingCalendar({
                     {hasSlots && !isPast && (
                       <div
                         className={`text-xs mt-1 ${
-                          isSelected ? 'text-blue-100' : 'text-green-600'
+                          isSelected ? 'text-primary-100' : 'text-green-600'
                         }`}
                       >
                         {availableSlots} dispo
                       </div>
                     )}
                     {!hasSlots && !isPast && (
-                      <div className="text-xs mt-1 text-slate-400">Complet</div>
+                      <div className="text-xs mt-1 text-charcoal-400">Complet</div>
                     )}
                   </button>
                 )
@@ -292,7 +290,7 @@ export function BookingCalendar({
               >
                 <button
                   onClick={() => setStep('time')}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
+                  className="w-full bg-primary-500 hover:bg-primary-600 text-white py-3 rounded-xl font-semibold transition-colors"
                 >
                   Choisir l'heure →
                 </button>
@@ -313,24 +311,22 @@ export function BookingCalendar({
             <div className="flex items-center gap-3 mb-5">
               <button
                 onClick={() => setStep('date')}
-                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-sand-200 rounded-lg transition-colors"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <div>
-                <div className="font-semibold text-slate-900">
+                <div className="font-semibold text-charcoal-900">
                   {format(selectedDate, 'EEEE d MMMM', { locale: fr })}
                 </div>
-                <div className="text-sm text-slate-500">
-                  Choisissez votre créneau
-                </div>
+                <div className="text-sm text-charcoal-900">Choisissez votre créneau</div>
               </div>
             </div>
 
             {/* Morning Slots */}
             {morningSlots.length > 0 && (
               <div className="mb-5">
-                <div className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-charcoal-900 mb-3">
                   <Sun className="w-4 h-4" />
                   Matin
                 </div>
@@ -342,9 +338,9 @@ export function BookingCalendar({
                       disabled={!slot.available}
                       className={`
                         py-2.5 px-3 rounded-lg text-sm font-medium transition-all
-                        ${!slot.available ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : ''}
+                        ${!slot.available ? 'bg-sand-200 text-charcoal-400 cursor-not-allowed' : ''}
                         ${slot.available && selectedTime !== slot.time ? 'bg-green-50 text-green-700 hover:bg-green-100' : ''}
-                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-lg' : ''}
+                        ${selectedTime === slot.time ? 'bg-primary-500 text-white shadow-lg' : ''}
                       `}
                     >
                       {slot.time}
@@ -357,7 +353,7 @@ export function BookingCalendar({
             {/* Afternoon Slots */}
             {afternoonSlots.length > 0 && (
               <div className="mb-5">
-                <div className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-charcoal-900 mb-3">
                   <Moon className="w-4 h-4" />
                   Après-midi
                 </div>
@@ -369,9 +365,9 @@ export function BookingCalendar({
                       disabled={!slot.available}
                       className={`
                         py-2.5 px-3 rounded-lg text-sm font-medium transition-all
-                        ${!slot.available ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : ''}
+                        ${!slot.available ? 'bg-sand-200 text-charcoal-400 cursor-not-allowed' : ''}
                         ${slot.available && selectedTime !== slot.time ? 'bg-green-50 text-green-700 hover:bg-green-100' : ''}
-                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-lg' : ''}
+                        ${selectedTime === slot.time ? 'bg-primary-500 text-white shadow-lg' : ''}
                       `}
                     >
                       {slot.time}
@@ -383,14 +379,11 @@ export function BookingCalendar({
 
             {/* Confirm Button */}
             {selectedTime && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                 <button
                   onClick={handleConfirm}
                   disabled={isLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-primary-500 hover:bg-primary-600 disabled:bg-primary-300 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <>
@@ -419,21 +412,15 @@ export function BookingCalendar({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Check className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">
-              Réservation confirmée !
-            </h3>
-            <p className="text-slate-600 mb-4">
-              Votre rendez-vous avec {artisanName}
-            </p>
-            <div className="inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-lg mb-6">
-              <CalendarIcon className="w-5 h-5 text-slate-500" />
+            <h3 className="text-xl font-bold text-charcoal-900 mb-2">Réservation confirmée !</h3>
+            <p className="text-charcoal-600 mb-4">Votre rendez-vous avec {artisanName}</p>
+            <div className="inline-flex items-center gap-2 bg-sand-200 px-4 py-2 rounded-lg mb-6">
+              <CalendarIcon className="w-5 h-5 text-charcoal-900" />
               <span className="font-medium">
                 {format(selectedDate, 'EEEE d MMMM', { locale: fr })} à {selectedTime}
               </span>
             </div>
-            <p className="text-sm text-slate-500">
-              Un email de confirmation vous a été envoyé.
-            </p>
+            <p className="text-sm text-charcoal-900">Un email de confirmation vous a été envoyé.</p>
           </motion.div>
         )}
       </AnimatePresence>

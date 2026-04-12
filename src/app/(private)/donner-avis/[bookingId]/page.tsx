@@ -100,7 +100,7 @@ export default function ReviewPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
       </div>
     )
@@ -108,11 +108,11 @@ export default function ReviewPage() {
 
   if (error && !bookingInfo) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-gray-900 mb-2">Lien invalide</h1>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <h1 className="text-xl font-bold text-charcoal-900 mb-2">Lien invalide</h1>
+          <p className="text-charcoal-600 mb-6">{error}</p>
           <Link
             href="/"
             className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
@@ -126,13 +126,13 @@ export default function ReviewPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Merci pour votre avis !</h1>
-          <p className="text-gray-600 mb-6">
+          <h1 className="text-2xl font-bold text-charcoal-900 mb-2">Merci pour votre avis !</h1>
+          <p className="text-charcoal-600 mb-6">
             Votre retour aide {bookingInfo?.artisanName} à s'améliorer et aide d'autres clients à
             faire leur choix.
           </p>
@@ -148,12 +148,12 @@ export default function ReviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-sand-50 py-8 px-4">
       <div className="max-w-lg mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Donnez votre avis</h1>
-          <p className="text-gray-600">Comment s'est passé votre rendez-vous ?</p>
+          <h1 className="text-2xl font-bold text-charcoal-900 mb-2">Donnez votre avis</h1>
+          <p className="text-charcoal-600">Comment s'est passé votre rendez-vous ?</p>
         </div>
 
         {/* Booking info card */}
@@ -165,8 +165,8 @@ export default function ReviewPage() {
               </span>
             </div>
             <div>
-              <h2 className="font-semibold text-gray-900">{bookingInfo?.artisanName}</h2>
-              <p className="text-sm text-gray-500">
+              <h2 className="font-semibold text-charcoal-900">{bookingInfo?.artisanName}</h2>
+              <p className="text-sm text-charcoal-500">
                 {bookingInfo?.serviceName} • {bookingInfo?.date}
               </p>
             </div>
@@ -177,7 +177,9 @@ export default function ReviewPage() {
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-6">
           {/* Star rating */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">Note globale *</label>
+            <label className="block text-sm font-medium text-charcoal-700 mb-3">
+              Note globale *
+            </label>
             <div className="flex justify-center gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -192,14 +194,14 @@ export default function ReviewPage() {
                     className={`w-10 h-10 transition-colors ${
                       star <= (hoveredRating || rating)
                         ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-gray-300'
+                        : 'text-sand-500'
                     }`}
                   />
                 </button>
               ))}
             </div>
             {(hoveredRating || rating) > 0 && (
-              <p className="text-center text-sm text-gray-600 mt-2">
+              <p className="text-center text-sm text-charcoal-600 mt-2">
                 {ratingLabels[(hoveredRating || rating) - 1]}
               </p>
             )}
@@ -207,7 +209,7 @@ export default function ReviewPage() {
 
           {/* Would recommend */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-charcoal-700 mb-3">
               Recommanderiez-vous cet artisan ?
             </label>
             <div className="flex gap-3">
@@ -217,7 +219,7 @@ export default function ReviewPage() {
                 className={`flex-1 py-3 px-4 rounded-lg border-2 font-medium transition ${
                   wouldRecommend === true
                     ? 'border-green-500 bg-green-50 text-green-700'
-                    : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                    : 'border-sand-300 hover:border-sand-400 text-charcoal-600'
                 }`}
               >
                 👍 Oui
@@ -228,7 +230,7 @@ export default function ReviewPage() {
                 className={`flex-1 py-3 px-4 rounded-lg border-2 font-medium transition ${
                   wouldRecommend === false
                     ? 'border-red-500 bg-red-50 text-red-700'
-                    : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                    : 'border-sand-300 hover:border-sand-400 text-charcoal-600'
                 }`}
               >
                 👎 Non
@@ -238,7 +240,7 @@ export default function ReviewPage() {
 
           {/* Comment */}
           <div className="mb-6">
-            <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="comment" className="block text-sm font-medium text-charcoal-700 mb-2">
               Votre commentaire (optionnel)
             </label>
             <textarea
@@ -247,9 +249,9 @@ export default function ReviewPage() {
               onChange={(e) => setComment(e.target.value)}
               rows={4}
               placeholder="Partagez votre expérience..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
             />
-            <p className="text-xs text-gray-500 mt-1">{comment.length}/500 caractères</p>
+            <p className="text-xs text-charcoal-500 mt-1">{comment.length}/500 caractères</p>
           </div>
 
           {/* Error message */}
@@ -278,7 +280,7 @@ export default function ReviewPage() {
             )}
           </button>
 
-          <p className="text-xs text-gray-500 text-center mt-4">
+          <p className="text-xs text-charcoal-500 text-center mt-4">
             Votre avis sera visible publiquement sur le profil de l'artisan
           </p>
         </form>

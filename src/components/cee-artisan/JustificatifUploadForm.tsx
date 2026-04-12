@@ -111,11 +111,11 @@ export default function JustificatifUploadForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-xl border border-gray-200 bg-white p-5"
+      className="space-y-4 rounded-xl border border-sand-300 bg-white p-5"
       aria-label="Envoyer une pièce justificative"
     >
       <div>
-        <label htmlFor="cee-just-code" className="mb-1 block text-sm font-medium text-gray-900">
+        <label htmlFor="cee-just-code" className="mb-1 block text-sm font-medium text-charcoal-900">
           Type de pièce
         </label>
         <select
@@ -123,7 +123,7 @@ export default function JustificatifUploadForm({
           value={code}
           onChange={(e) => setCode(e.target.value)}
           disabled={submitting || requis.length === 0}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-sand-400 bg-white px-3 py-2 text-sm text-charcoal-900 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400"
           required
         >
           {requis.length === 0 && <option value="">Aucune pièce requise pour ce dossier</option>}
@@ -138,7 +138,7 @@ export default function JustificatifUploadForm({
       </div>
 
       <div>
-        <label htmlFor="cee-just-file" className="mb-1 block text-sm font-medium text-gray-900">
+        <label htmlFor="cee-just-file" className="mb-1 block text-sm font-medium text-charcoal-900">
           Fichier (JPG, PNG, HEIC, PDF — 25 Mo max)
         </label>
         <input
@@ -147,7 +147,7 @@ export default function JustificatifUploadForm({
           accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           disabled={submitting}
-          className="block w-full text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+          className="block w-full text-sm text-charcoal-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-600 hover:file:bg-primary-100"
           required
         />
       </div>
@@ -175,7 +175,7 @@ export default function JustificatifUploadForm({
       <button
         type="submit"
         disabled={submitting || !file || !code}
-        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-lg bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {submitting ? (
           <>

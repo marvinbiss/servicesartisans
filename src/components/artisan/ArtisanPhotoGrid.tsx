@@ -20,9 +20,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   const displayName = getDisplayName(artisan)
 
   // Only show real portfolio photos — no fake stock images
-  const photos = artisan.portfolio && artisan.portfolio.length > 0
-    ? artisan.portfolio
-    : []
+  const photos = artisan.portfolio && artisan.portfolio.length > 0 ? artisan.portfolio : []
 
   const openLightbox = useCallback((index: number) => {
     setCurrentIndex(index)
@@ -44,11 +42,14 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   }, [photos.length])
 
   // Keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') closeLightbox()
-    if (e.key === 'ArrowLeft') goToPrevious()
-    if (e.key === 'ArrowRight') goToNext()
-  }, [closeLightbox, goToPrevious, goToNext])
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowLeft') goToPrevious()
+      if (e.key === 'ArrowRight') goToNext()
+    },
+    [closeLightbox, goToPrevious, goToNext]
+  )
 
   if (photos.length === 0) return null
 
@@ -86,10 +87,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
 
           {/* Top right images */}
           {gridPhotos[1] && (
-            <div
-              className="relative overflow-hidden"
-              onClick={() => openLightbox(1)}
-            >
+            <div className="relative overflow-hidden" onClick={() => openLightbox(1)}>
               <Image
                 src={gridPhotos[1].imageUrl}
                 alt={`Réalisation de ${displayName}${gridPhotos[1].title ? ` - ${gridPhotos[1].title}` : ''}`}
@@ -127,10 +125,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
 
           {/* Bottom right images */}
           {gridPhotos[3] && (
-            <div
-              className="relative overflow-hidden"
-              onClick={() => openLightbox(3)}
-            >
+            <div className="relative overflow-hidden" onClick={() => openLightbox(3)}>
               <Image
                 src={gridPhotos[3].imageUrl}
                 alt={`Réalisation de ${displayName}${gridPhotos[3].title ? ` - ${gridPhotos[3].title}` : ''}`}
@@ -167,9 +162,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
               {/* Show more overlay */}
               {remainingCount > 0 && (
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <span className="text-white font-semibold text-lg">
-                    +{remainingCount}
-                  </span>
+                  <span className="text-white font-semibold text-lg">+{remainingCount}</span>
                 </div>
               )}
             </div>
@@ -181,7 +174,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => openLightbox(0)}
-          className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-gray-900 shadow-lg flex items-center gap-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
+          className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-charcoal-900 shadow-lg flex items-center gap-2 hover:bg-sand-50 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
           aria-label={`Voir les ${photos.length} photos en plein ecran`}
         >
           <Grid3X3 className="w-4 h-4" aria-hidden="true" />
@@ -216,7 +209,10 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             </motion.button>
 
             {/* Counter */}
-            <div className="absolute top-4 left-4 text-white text-sm font-medium bg-black/50 px-3 py-1.5 rounded-full" aria-live="polite">
+            <div
+              className="absolute top-4 left-4 text-white text-sm font-medium bg-black/50 px-3 py-1.5 rounded-full"
+              aria-live="polite"
+            >
               {currentIndex + 1} / {photos.length}
             </div>
 
@@ -225,7 +221,10 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
-              onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+              onClick={(e) => {
+                e.stopPropagation()
+                goToPrevious()
+              }}
               aria-label="Photo precedente"
             >
               <ChevronLeft className="w-8 h-8 text-white" aria-hidden="true" />
@@ -235,7 +234,10 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
-              onClick={(e) => { e.stopPropagation(); goToNext(); }}
+              onClick={(e) => {
+                e.stopPropagation()
+                goToNext()
+              }}
               aria-label="Photo suivante"
             >
               <ChevronRight className="w-8 h-8 text-white" aria-hidden="true" />
@@ -267,13 +269,9 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 animate={{ opacity: 1, y: 0 }}
                 className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent"
               >
-                <h3 className="text-white font-semibold text-lg">
-                  {photos[currentIndex].title}
-                </h3>
+                <h3 className="text-white font-semibold text-lg">{photos[currentIndex].title}</h3>
                 {photos[currentIndex].description && (
-                  <p className="text-white/70 text-sm mt-1">
-                    {photos[currentIndex].description}
-                  </p>
+                  <p className="text-white/70 text-sm mt-1">{photos[currentIndex].description}</p>
                 )}
               </motion.div>
             </motion.div>
@@ -290,7 +288,10 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                       ? 'ring-2 ring-white opacity-100'
                       : 'opacity-50 hover:opacity-75'
                   }`}
-                  onClick={(e) => { e.stopPropagation(); setCurrentIndex(index); }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setCurrentIndex(index)
+                  }}
                 >
                   <Image
                     src={photo.imageUrl}

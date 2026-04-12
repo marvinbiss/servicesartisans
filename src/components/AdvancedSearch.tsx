@@ -3,10 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
-import {
-  Search, X, MapPin, Star,
-  History, TrendingUp, Sliders
-} from 'lucide-react'
+import { Search, X, MapPin, Star, History, TrendingUp, Sliders } from 'lucide-react'
 import { useDebounce } from '@/hooks/useDebounce'
 import { logger } from '@/lib/logger'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -54,7 +51,7 @@ const serviceCategories = [
 const sortOptions = [
   { value: 'relevance', label: 'Pertinence' },
   { value: 'rating', label: 'Meilleures notes' },
-  { value: 'reviews', label: 'Plus d\'avis' },
+  { value: 'reviews', label: "Plus d'avis" },
   { value: 'price_asc', label: 'Prix croissant' },
   { value: 'price_desc', label: 'Prix décroissant' },
 ]
@@ -73,8 +70,12 @@ export default function AdvancedSearch({
   const [filters, setFilters] = useState<SearchFilters>({
     service: searchParams.get('service') || initialFilters.service,
     location: searchParams.get('location') || initialFilters.location,
-    minRating: searchParams.get('minRating') ? parseInt(searchParams.get('minRating')!) : initialFilters.minRating,
-    availability: (searchParams.get('availability') as SearchFilters['availability']) || initialFilters.availability,
+    minRating: searchParams.get('minRating')
+      ? parseInt(searchParams.get('minRating') ?? '0')
+      : initialFilters.minRating,
+    availability:
+      (searchParams.get('availability') as SearchFilters['availability']) ||
+      initialFilters.availability,
     sortBy: searchParams.get('sortBy') || initialFilters.sortBy || 'relevance',
     ...initialFilters,
   })
@@ -98,7 +99,9 @@ export default function AdvancedSearch({
       }
 
       try {
-        const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(debouncedQuery)}`)
+        const response = await fetch(
+          `/api/search/suggestions?q=${encodeURIComponent(debouncedQuery)}`
+        )
         if (response.ok) {
           const data = await response.json()
           setSuggestions(data.suggestions || [])
@@ -159,7 +162,9 @@ export default function AdvancedSearch({
     })
 
     // Track active filters
-    const activeFilters = Object.entries(filters).filter(([, v]) => v).map(([k]) => k)
+    const activeFilters = Object.entries(filters)
+      .filter(([, v]) => v)
+      .map(([k]) => k)
     if (activeFilters.length > 0) {
       trackEvent('filter_used', {
         filters: activeFilters.join(','),
@@ -206,21 +211,24 @@ export default function AdvancedSearch({
 
   const activeFiltersCount = Object.values(filters).filter((v) => v && v !== 'relevance').length
 
-  const containerClass = variant === 'hero'
-    ? 'w-full max-w-3xl mx-auto'
-    : variant === 'header'
-    ? 'w-full max-w-xl'
-    : 'w-full'
+  const containerClass =
+    variant === 'hero'
+      ? 'w-full max-w-3xl mx-auto'
+      : variant === 'header'
+        ? 'w-full max-w-xl'
+        : 'w-full'
 
   return (
     <div className={containerClass}>
       {/* Search Input */}
       <div className="relative">
-        <div className={`flex flex-col md:flex-row items-stretch md:items-center gap-0 bg-white rounded-xl shadow-lg border border-gray-200 ${
-          variant === 'hero' ? 'p-2' : 'p-1'
-        }`}>
+        <div
+          className={`flex flex-col md:flex-row items-stretch md:items-center gap-0 bg-white rounded-xl shadow-lg border border-sand-300 ${
+            variant === 'hero' ? 'p-2' : 'p-1'
+          }`}
+        >
           <div className="flex-1 flex items-center gap-3 px-4">
-            <Search className="w-5 h-5 text-gray-400" />
+            <Search className="w-5 h-5 text-charcoal-400" />
             <input
               ref={inputRef}
               type="text"
@@ -229,30 +237,30 @@ export default function AdvancedSearch({
               onFocus={() => setShowSuggestions(true)}
               onKeyDown={handleKeyDown}
               placeholder="Rechercher un artisan, un service..."
-              className={`w-full outline-none text-gray-900 placeholder-gray-400 ${
+              className={`w-full outline-none text-charcoal-900 placeholder-charcoal-400 ${
                 variant === 'hero' ? 'py-3 text-lg' : 'py-2'
               }`}
             />
             {query && (
               <button
                 onClick={() => setQuery('')}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 rounded-full"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-sand-100 rounded-full"
                 aria-label="Effacer la recherche"
               >
-                <X className="w-4 h-4 text-gray-400" />
+                <X className="w-4 h-4 text-charcoal-400" />
               </button>
             )}
           </div>
 
           {/* Location Input */}
-          <div className="flex items-center gap-2 px-4 border-t md:border-t-0 md:border-l border-gray-200">
-            <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
+          <div className="flex items-center gap-2 px-4 border-t md:border-t-0 md:border-l border-sand-300">
+            <MapPin className="w-5 h-5 text-charcoal-400 flex-shrink-0" />
             <input
               type="text"
               value={filters.location || ''}
               onChange={(e) => setFilters({ ...filters, location: e.target.value })}
               placeholder="Ville ou code postal"
-              className={`w-full md:w-40 outline-none text-gray-900 placeholder-gray-400 ${
+              className={`w-full md:w-40 outline-none text-charcoal-900 placeholder-charcoal-400 ${
                 variant === 'hero' ? 'py-3' : 'py-2'
               }`}
             />
@@ -264,12 +272,14 @@ export default function AdvancedSearch({
               <button
                 onClick={() => setShowFilterPanel(!showFilterPanel)}
                 className={`relative p-3 rounded-lg transition-colors ${
-                  showFilterPanel ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100 text-gray-600'
+                  showFilterPanel
+                    ? 'bg-primary-100 text-primary-500'
+                    : 'hover:bg-sand-100 text-charcoal-600'
                 }`}
               >
                 <Sliders className="w-5 h-5" />
                 {activeFiltersCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-500 text-white text-xs rounded-full flex items-center justify-center">
                     {activeFiltersCount}
                   </span>
                 )}
@@ -279,7 +289,7 @@ export default function AdvancedSearch({
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className={`flex-1 md:flex-none bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors ${
+              className={`flex-1 md:flex-none bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors ${
                 variant === 'hero' ? 'px-8 py-3' : 'px-6 py-2'
               }`}
             >
@@ -296,12 +306,12 @@ export default function AdvancedSearch({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50 max-h-[70vh] overflow-y-auto"
+              className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-sand-300 overflow-hidden z-50 max-h-[70vh] overflow-y-auto"
             >
               {/* Recent searches */}
               {recentSearches.length > 0 && (
-                <div className="p-3 border-b border-gray-100">
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                <div className="p-3 border-b border-sand-200">
+                  <div className="flex items-center gap-2 text-sm text-charcoal-500 mb-2">
                     <History className="w-4 h-4" />
                     Recherches récentes
                   </div>
@@ -313,7 +323,7 @@ export default function AdvancedSearch({
                           setQuery(search)
                           handleSearch()
                         }}
-                        className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700"
+                        className="px-3 py-1 bg-sand-100 hover:bg-sand-300 rounded-full text-sm text-charcoal-700"
                       >
                         {search}
                       </button>
@@ -329,30 +339,33 @@ export default function AdvancedSearch({
                     <button
                       key={i}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 text-left"
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-sand-50 text-left"
                     >
                       {suggestion.type === 'service' && (
-                        <TrendingUp className="w-4 h-4 text-gray-400" />
+                        <TrendingUp className="w-4 h-4 text-charcoal-400" />
                       )}
                       {suggestion.type === 'artisan' && (
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-blue-600 font-medium text-sm">
+                        <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                          <span className="text-primary-500 font-medium text-sm">
                             {suggestion.text.charAt(0)}
                           </span>
                         </div>
                       )}
                       {suggestion.type === 'location' && (
-                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <MapPin className="w-4 h-4 text-charcoal-400" />
                       )}
                       <div className="flex-1">
-                        <div className="text-gray-900">{suggestion.text}</div>
+                        <div className="text-charcoal-900">{suggestion.text}</div>
                         {suggestion.subtitle && (
-                          <div className="text-sm text-gray-500">{suggestion.subtitle}</div>
+                          <div className="text-sm text-charcoal-500">{suggestion.subtitle}</div>
                         )}
                       </div>
-                      <span className="text-xs text-gray-400 capitalize">
-                        {suggestion.type === 'service' ? 'Service' :
-                         suggestion.type === 'artisan' ? 'Artisan' : 'Ville'}
+                      <span className="text-xs text-charcoal-400 capitalize">
+                        {suggestion.type === 'service'
+                          ? 'Service'
+                          : suggestion.type === 'artisan'
+                            ? 'Artisan'
+                            : 'Ville'}
                       </span>
                     </button>
                   ))}
@@ -370,12 +383,12 @@ export default function AdvancedSearch({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mt-4 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+            className="mt-4 bg-white rounded-xl shadow-lg border border-sand-300 overflow-hidden"
           >
             <div className="p-4 space-y-4">
               {/* Service Category */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-charcoal-700 mb-2">
                   Catégorie de service
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -390,8 +403,8 @@ export default function AdvancedSearch({
                       }
                       className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                         filters.service === service
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
                       }`}
                     >
                       {service}
@@ -403,7 +416,7 @@ export default function AdvancedSearch({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Rating Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-2">
                     Note minimum
                   </label>
                   <div className="flex gap-1">
@@ -419,12 +432,16 @@ export default function AdvancedSearch({
                         className={`p-2 rounded-lg transition-colors ${
                           filters.minRating && filters.minRating <= rating
                             ? 'text-yellow-500'
-                            : 'text-gray-300 hover:text-yellow-400'
+                            : 'text-sand-500 hover:text-yellow-400'
                         }`}
                       >
                         <Star
                           className="w-5 h-5"
-                          fill={filters.minRating && filters.minRating <= rating ? 'currentColor' : 'none'}
+                          fill={
+                            filters.minRating && filters.minRating <= rating
+                              ? 'currentColor'
+                              : 'none'
+                          }
                         />
                       </button>
                     ))}
@@ -433,7 +450,7 @@ export default function AdvancedSearch({
 
                 {/* Availability Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-2">
                     Disponibilité
                   </label>
                   <select
@@ -441,10 +458,11 @@ export default function AdvancedSearch({
                     onChange={(e) =>
                       setFilters({
                         ...filters,
-                        availability: (e.target.value as SearchFilters['availability']) || undefined,
+                        availability:
+                          (e.target.value as SearchFilters['availability']) || undefined,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400"
                   >
                     <option value="">Toutes</option>
                     <option value="today">Aujourd'hui</option>
@@ -454,13 +472,13 @@ export default function AdvancedSearch({
 
                 {/* Sort By */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-2">
                     Trier par
                   </label>
                   <select
                     value={filters.sortBy || 'relevance'}
                     onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400"
                   >
                     {sortOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -472,10 +490,10 @@ export default function AdvancedSearch({
               </div>
 
               {/* Filter Actions */}
-              <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+              <div className="flex items-center justify-between pt-2 border-t border-sand-200">
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-gray-600 hover:text-gray-900"
+                  className="text-sm text-charcoal-600 hover:text-charcoal-900"
                 >
                   Effacer les filtres
                 </button>
@@ -484,7 +502,7 @@ export default function AdvancedSearch({
                     setShowFilterPanel(false)
                     handleSearch()
                   }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
+                  className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 text-sm font-medium"
                 >
                   Appliquer
                 </button>

@@ -3,7 +3,16 @@
 import { Shield, Award, Star, Clock, Leaf } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-type BadgeType = 'none' | 'bronze' | 'silver' | 'gold' | 'platinum' | 'top_rated' | 'quick_responder' | 'verified_expert' | 'eco_friendly'
+type BadgeType =
+  | 'none'
+  | 'bronze'
+  | 'silver'
+  | 'gold'
+  | 'platinum'
+  | 'top_rated'
+  | 'quick_responder'
+  | 'verified_expert'
+  | 'eco_friendly'
 
 interface TrustBadgeProps {
   badge: BadgeType
@@ -12,22 +21,25 @@ interface TrustBadgeProps {
   className?: string
 }
 
-const BADGE_CONFIG: Record<BadgeType, {
-  icon: React.ElementType
-  label: string
-  labelFr: string
-  color: string
-  bgColor: string
-  borderColor: string
-  description: string
-}> = {
+const BADGE_CONFIG: Record<
+  BadgeType,
+  {
+    icon: React.ElementType
+    label: string
+    labelFr: string
+    color: string
+    bgColor: string
+    borderColor: string
+    description: string
+  }
+> = {
   none: {
     icon: Shield,
     label: 'None',
     labelFr: 'Aucun',
-    color: 'text-gray-400',
-    bgColor: 'bg-gray-100',
-    borderColor: 'border-gray-200',
+    color: 'text-charcoal-400',
+    bgColor: 'bg-sand-100',
+    borderColor: 'border-sand-300',
     description: '',
   },
   bronze: {
@@ -43,9 +55,9 @@ const BADGE_CONFIG: Record<BadgeType, {
     icon: Shield,
     label: 'Silver',
     labelFr: 'Argent',
-    color: 'text-gray-500',
-    bgColor: 'bg-gray-100',
-    borderColor: 'border-gray-300',
+    color: 'text-charcoal-500',
+    bgColor: 'bg-sand-100',
+    borderColor: 'border-sand-400',
     description: '25+ avis, 4.0+ note, 90%+ réponse, 1+ an sur la plateforme',
   },
   gold: {
@@ -79,10 +91,10 @@ const BADGE_CONFIG: Record<BadgeType, {
     icon: Clock,
     label: 'Quick Responder',
     labelFr: 'Réponse Rapide',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-300',
-    description: 'Répond en moins d\'1h',
+    color: 'text-primary-500',
+    bgColor: 'bg-primary-50',
+    borderColor: 'border-primary-300',
+    description: "Répond en moins d'1h",
   },
   verified_expert: {
     icon: Shield,
@@ -122,12 +134,7 @@ const SIZE_CONFIG = {
   },
 }
 
-export function TrustBadge({
-  badge,
-  size = 'md',
-  showLabel = true,
-  className,
-}: TrustBadgeProps) {
+export function TrustBadge({ badge, size = 'md', showLabel = true, className }: TrustBadgeProps) {
   if (badge === 'none') return null
 
   const config = BADGE_CONFIG[badge]
@@ -146,11 +153,7 @@ export function TrustBadge({
       title={config.description}
     >
       <Icon className={cn(sizeConfig.icon, config.color)} />
-      {showLabel && (
-        <span className={cn(sizeConfig.text, config.color)}>
-          {config.labelFr}
-        </span>
-      )}
+      {showLabel && <span className={cn(sizeConfig.text, config.color)}>{config.labelFr}</span>}
     </div>
   )
 }
@@ -171,7 +174,7 @@ export function TrustBadges({
   maxDisplay = 3,
   className,
 }: TrustBadgesProps) {
-  const filteredBadges = badges.filter(b => b !== 'none')
+  const filteredBadges = badges.filter((b) => b !== 'none')
   const displayBadges = filteredBadges.slice(0, maxDisplay)
   const remaining = filteredBadges.length - maxDisplay
 
@@ -180,18 +183,15 @@ export function TrustBadges({
   return (
     <div className={cn('flex flex-wrap gap-1', className)}>
       {displayBadges.map((badge) => (
-        <TrustBadge
-          key={badge}
-          badge={badge}
-          size={size}
-          showLabel={showLabels}
-        />
+        <TrustBadge key={badge} badge={badge} size={size} showLabel={showLabels} />
       ))}
       {remaining > 0 && (
-        <span className={cn(
-          'inline-flex items-center px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600',
-          SIZE_CONFIG[size].text
-        )}>
+        <span
+          className={cn(
+            'inline-flex items-center px-1.5 py-0.5 rounded-full bg-sand-100 text-charcoal-600',
+            SIZE_CONFIG[size].text
+          )}
+        >
           +{remaining}
         </span>
       )}

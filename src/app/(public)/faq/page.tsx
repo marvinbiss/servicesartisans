@@ -15,7 +15,8 @@ const faqTitle = 'FAQ — Questions Artisans et Travaux | ServicesArtisans'
 
 export const metadata: Metadata = {
   title: faqTitle,
-  description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
+  description:
+    "Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l'annuaire d'artisans.",
   alternates: {
     canonical: `${SITE_URL}/faq`,
   },
@@ -24,7 +25,14 @@ export const metadata: Metadata = {
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
     url: `${SITE_URL}/faq`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — FAQ' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — FAQ',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -47,7 +55,8 @@ const faqWebPageSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Questions fréquentes (FAQ)',
-  description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
+  description:
+    "Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l'annuaire d'artisans.",
   url: `${SITE_URL}/faq`,
   isPartOf: {
     '@type': 'WebSite',
@@ -65,14 +74,12 @@ export default async function FAQPage() {
 
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <JsonLd data={[faqWebPageSchema, faqPageSchema, breadcrumbSchema]} />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'FAQ' }]} className="mb-4" />
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">

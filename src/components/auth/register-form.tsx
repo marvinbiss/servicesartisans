@@ -35,7 +35,7 @@ export function RegisterForm() {
     }
 
     if (!formData.acceptTerms) {
-      setError('Vous devez accepter les conditions d\'utilisation')
+      setError("Vous devez accepter les conditions d'utilisation")
       setIsLoading(false)
       return
     }
@@ -56,7 +56,7 @@ export function RegisterForm() {
       }
 
       setSuccess(true)
-    } catch (_err) {
+    } catch {
       setError('Une erreur est survenue')
     } finally {
       setIsLoading(false)
@@ -67,10 +67,8 @@ export function RegisterForm() {
     return (
       <div className="text-center py-8">
         <div className="text-4xl mb-4">📧</div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          Vérifiez votre email
-        </h3>
-        <p className="text-gray-600">
+        <h3 className="text-lg font-semibold text-charcoal-900 mb-2">Vérifiez votre email</h3>
+        <p className="text-charcoal-600">
           Un lien de confirmation a été envoyé à <strong>{formData.email}</strong>
         </p>
       </div>
@@ -86,7 +84,7 @@ export function RegisterForm() {
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-charcoal-700 mb-1">
           Email professionnel
         </label>
         <Input
@@ -99,9 +97,7 @@ export function RegisterForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Mot de passe
-        </label>
+        <label className="block text-sm font-medium text-charcoal-700 mb-1">Mot de passe</label>
         <Input
           type="password"
           value={formData.password}
@@ -109,13 +105,11 @@ export function RegisterForm() {
           placeholder="8 caractères minimum"
           required
         />
-        <p className="text-xs text-gray-500 mt-1">
-          Au moins 8 caractères
-        </p>
+        <p className="text-xs text-charcoal-500 mt-1">Au moins 8 caractères</p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-charcoal-700 mb-1">
           Confirmer le mot de passe
         </label>
         <Input
@@ -132,15 +126,15 @@ export function RegisterForm() {
           type="checkbox"
           checked={formData.acceptTerms}
           onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
-          className="rounded border-gray-300 mt-1"
+          className="rounded border-sand-400 mt-1"
         />
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-charcoal-600">
           J'accepte les{' '}
-          <Link href="/cgv" className="text-blue-600 underline">
+          <Link href="/cgv" className="text-primary-500 underline">
             conditions générales d'utilisation
           </Link>{' '}
           et la{' '}
-          <Link href="/confidentialite" className="text-blue-600 underline">
+          <Link href="/confidentialite" className="text-primary-500 underline">
             politique de confidentialité
           </Link>
         </span>

@@ -21,32 +21,35 @@ interface CompletionChecklistProps {
 
 export function CompletionChecklist({ provider }: CompletionChecklistProps) {
   const checks = [
-    { label: 'Nom de l\'entreprise', done: !!provider.name },
+    { label: "Nom de l'entreprise", done: !!provider.name },
     { label: 'Description (50+ car.)', done: (provider.description?.length || 0) >= 50 },
     { label: 'Téléphone', done: !!provider.phone },
     { label: 'Email', done: !!provider.email },
-    { label: 'Adresse complète', done: !!provider.address_street && !!provider.address_city && !!provider.address_postal_code },
+    {
+      label: 'Adresse complète',
+      done: !!provider.address_street && !!provider.address_city && !!provider.address_postal_code,
+    },
     { label: 'Logo', done: !!provider.logo },
   ]
 
-  const completedCount = checks.filter(c => c.done).length
+  const completedCount = checks.filter((c) => c.done).length
   const percentage = Math.round((completedCount / checks.length) * 100)
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">Complétion du profil</h3>
+    <div className="bg-white rounded-xl border border-sand-300 p-6">
+      <h3 className="font-semibold text-charcoal-900 mb-4">Complétion du profil</h3>
 
       {/* Progress bar */}
       <div className="mb-4">
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-gray-500">Progression</span>
+          <span className="text-charcoal-500">Progression</span>
           <span className="font-medium">{percentage}%</span>
         </div>
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2 bg-sand-100 rounded-full overflow-hidden">
           <div
             className={clsx(
               'h-full rounded-full transition-all duration-500',
-              percentage === 100 ? 'bg-green-500' : 'bg-blue-500'
+              percentage === 100 ? 'bg-green-500' : 'bg-primary-400'
             )}
             style={{ width: `${percentage}%` }}
           />
@@ -60,9 +63,9 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
             {check.done ? (
               <CheckCircle className="w-4 h-4 text-green-500" />
             ) : (
-              <Circle className="w-4 h-4 text-gray-300" />
+              <Circle className="w-4 h-4 text-sand-500" />
             )}
-            <span className={check.done ? 'text-gray-700' : 'text-gray-400'}>
+            <span className={check.done ? 'text-charcoal-700' : 'text-charcoal-400'}>
               {check.label}
             </span>
           </li>
@@ -71,15 +74,13 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
 
       {percentage === 100 && (
         <div className="mt-4 p-3 bg-green-50 rounded-lg text-center">
-          <p className="text-sm text-green-700 font-medium">
-            ✓ Profil complet !
-          </p>
+          <p className="text-sm text-green-700 font-medium">✓ Profil complet !</p>
         </div>
       )}
 
       {!provider.is_verified && percentage >= 80 && (
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg text-center">
-          <p className="text-sm text-blue-700">
+        <div className="mt-4 p-3 bg-primary-50 rounded-lg text-center">
+          <p className="text-sm text-primary-600">
             Demandez la vérification de votre profil pour obtenir le badge ✓
           </p>
         </div>

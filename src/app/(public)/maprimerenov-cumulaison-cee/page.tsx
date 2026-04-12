@@ -317,7 +317,7 @@ export default function MaprimeRenovCumulCeePage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Landmark className="w-4 h-4 text-emerald-300" />
@@ -354,9 +354,9 @@ export default function MaprimeRenovCumulCeePage() {
       </section>
 
       {/* Sommaire */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">
+          <h2 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
             Sommaire
           </h2>
           <ol className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
@@ -380,10 +380,10 @@ export default function MaprimeRenovCumulCeePage() {
 
       {/* 1. Principe */}
       <section id="principe" className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
           1. Principe du cumul en 2026
         </h2>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           MaPrimeRénov&rsquo; et les Certificats d&rsquo;Économies d&rsquo;Énergie (CEE) sont deux
           dispositifs d&rsquo;aide à la rénovation énergétique distincts, qui coexistent depuis la
           fusion du crédit d&rsquo;impôt transition énergétique dans MaPrimeRénov&rsquo; en 2020
@@ -391,13 +391,13 @@ export default function MaprimeRenovCumulCeePage() {
           14 janvier 2020 modifié et l&rsquo;arrêté du 22 décembre 2014 modifié pour les CEE,
           prévoient explicitement leur cumul. C&rsquo;est la règle, et non l&rsquo;exception.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           MaPrimeRénov&rsquo; est une aide publique, financée par l&rsquo;État et versée par
           l&rsquo;Agence nationale de l&rsquo;habitat (Anah). Elle s&rsquo;adresse aux propriétaires
           occupants, aux bailleurs et aux copropriétés. Son barème est segmenté en quatre profils de
           revenus, identifiés par un code couleur officiel&nbsp;:
         </p>
-        <ul className="list-disc pl-6 text-slate-700 leading-relaxed mb-4 space-y-1">
+        <ul className="list-disc pl-6 text-charcoal-700 leading-relaxed mb-4 space-y-1">
           <li>
             <strong>Bleu</strong> &mdash; ménages très modestes (forfaits les plus élevés)&nbsp;;
           </li>
@@ -412,14 +412,14 @@ export default function MaprimeRenovCumulCeePage() {
             essentiellement ouverts au Parcours Accompagné et à l&rsquo;isolation).
           </li>
         </ul>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           Les plafonds de revenu fiscal de référence sont publiés chaque année sur{' '}
           <strong>maprimerenov.gouv.fr</strong> et varient selon la composition du foyer et la zone
           géographique (Île-de-France ou reste du territoire). Le dispositif est piloté par France
           Rénov&rsquo; et non plus «&nbsp;directement par l&rsquo;Anah&nbsp;» comme c&rsquo;était le
           cas en 2020.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           Les CEE sont un dispositif distinct, privé dans leur financement mais encadré par
           l&rsquo;État. Les vendeurs d&rsquo;énergie (EDF, Engie, TotalEnergies, Auchan, Leclerc,
           BP&hellip;) sont dits «&nbsp;obligés&nbsp;» par la loi POPE de 2005&nbsp;: ils doivent
@@ -429,7 +429,7 @@ export default function MaprimeRenovCumulCeePage() {
           le 1er janvier 2026 avec une obligation annuelle de 1&nbsp;050 TWhc, dont 280 TWhc
           réservés au segment précarité énergétique.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           Les deux aides ne se parlent pas directement dans le calcul, mais elles
           s&rsquo;additionnent sur le plan de financement du ménage. Sur une pompe à chaleur air/eau
           de 14&nbsp;000&nbsp;€ TTC, un ménage du profil bleu peut par exemple toucher une part
@@ -462,56 +462,56 @@ export default function MaprimeRenovCumulCeePage() {
       </section>
 
       {/* 2. Parcours */}
-      <section id="parcours" className="bg-slate-50 border-y border-slate-100">
+      <section id="parcours" className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
             2. Les deux voies MaPrimeRénov&rsquo; 2026
           </h2>
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <p className="text-charcoal-700 leading-relaxed mb-6">
             Depuis la réforme de 2024, MaPrimeRénov&rsquo; distingue deux parcours distincts, qui ne
             cumulent pas leurs forfaits sur les mêmes travaux. Il faut choisir l&rsquo;un ou
             l&rsquo;autre au moment du dépôt du dossier. Dans les deux cas, le cumul avec la prime
             CEE est possible et même recommandé.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <div className="bg-white rounded-2xl border border-charcoal-200 p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
                   <FileCheck2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
                 </div>
-                <h3 className="font-heading text-xl font-bold text-slate-900">
+                <h3 className="font-heading text-xl font-bold text-charcoal-900">
                   Parcours par geste
                 </h3>
               </div>
-              <p className="text-sm text-slate-700 leading-relaxed mb-3">
+              <p className="text-sm text-charcoal-700 leading-relaxed mb-3">
                 L&rsquo;aide est calculée geste par geste&nbsp;: isolation de combles, remplacement
                 d&rsquo;une chaudière par une pompe à chaleur, installation d&rsquo;un chauffe-eau
                 thermodynamique, etc. Chaque geste a son forfait MaPrimeRénov&rsquo; propre, lu dans
                 le tableau de l&rsquo;arrêté du 14 janvier 2020 modifié.
               </p>
-              <ul className="text-sm text-slate-700 space-y-1 list-disc pl-5">
+              <ul className="text-sm text-charcoal-700 space-y-1 list-disc pl-5">
                 <li>Un seul geste possible (pas de bouquet obligatoire)</li>
                 <li>Recommandé pour les chantiers simples (PAC, poêle, isolation combles)</li>
                 <li>Pas d&rsquo;accompagnateur Rénov&rsquo; obligatoire</li>
                 <li>Cumulable prime CEE en direct</li>
               </ul>
             </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <div className="bg-white rounded-2xl border border-charcoal-200 p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
                   <ClipboardList className="w-5 h-5 text-emerald-700" aria-hidden="true" />
                 </div>
-                <h3 className="font-heading text-xl font-bold text-slate-900">
+                <h3 className="font-heading text-xl font-bold text-charcoal-900">
                   Parcours Accompagné
                 </h3>
               </div>
-              <p className="text-sm text-slate-700 leading-relaxed mb-3">
+              <p className="text-sm text-charcoal-700 leading-relaxed mb-3">
                 Successeur direct de MaPrimeRénov&rsquo; Sérénité. Il finance un bouquet de travaux
                 d&rsquo;au moins deux gestes permettant un gain énergétique minimum de 35&nbsp;%
                 (saut de deux classes DPE minimum dans la majorité des cas). Mon Accompagnateur
                 Rénov&rsquo; est <strong>obligatoire</strong>.
               </p>
-              <ul className="text-sm text-slate-700 space-y-1 list-disc pl-5">
+              <ul className="text-sm text-charcoal-700 space-y-1 list-disc pl-5">
                 <li>Bouquet &ge; 2 gestes, gain énergétique &ge; 35 %</li>
                 <li>Mon Accompagnateur Rénov&rsquo; obligatoire (décret 2022-1035)</li>
                 <li>Bonus sortie de passoire (F ou G)</li>
@@ -524,7 +524,7 @@ export default function MaprimeRenovCumulCeePage() {
               </ul>
             </div>
           </div>
-          <p className="text-slate-700 leading-relaxed mt-6">
+          <p className="text-charcoal-700 leading-relaxed mt-6">
             Pour un particulier qui veut rénover complètement son logement, le Parcours Accompagné
             sera presque toujours plus avantageux car les forfaits MaPrimeRénov&rsquo; et le
             coefficient CEE BAR-TH-174 (rénovation d&rsquo;ampleur, qui remplace depuis 2024
@@ -537,31 +537,31 @@ export default function MaprimeRenovCumulCeePage() {
 
       {/* 3. Tableau familles */}
       <section id="tableau" className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-4">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-4">
           3. Règles de cumul par famille de travaux
         </h2>
-        <p className="text-slate-700 leading-relaxed mb-8 max-w-3xl">
+        <p className="text-charcoal-700 leading-relaxed mb-8 max-w-3xl">
           Le tableau ci-dessous synthétise la compatibilité des deux aides pour les 14 familles de
           travaux les plus courantes en résidentiel. La colonne «&nbsp;Coup de pouce&nbsp;» indique
           si une charte CEE bonifiée (Coup de pouce Chauffage, Isolation, Rénovation performante)
           peut s&rsquo;ajouter à la prime CEE standard.
         </p>
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-2xl border border-charcoal-200 bg-white">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-sand-50 border-b border-charcoal-200">
               <tr className="text-left">
-                <th className="px-4 py-3 font-semibold text-slate-700">Famille de travaux</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">Fiche CEE</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">MPR</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">CEE</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">Coup de pouce</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">Note</th>
+                <th className="px-4 py-3 font-semibold text-charcoal-700">Famille de travaux</th>
+                <th className="px-4 py-3 font-semibold text-charcoal-700">Fiche CEE</th>
+                <th className="px-4 py-3 font-semibold text-charcoal-700">MPR</th>
+                <th className="px-4 py-3 font-semibold text-charcoal-700">CEE</th>
+                <th className="px-4 py-3 font-semibold text-charcoal-700">Coup de pouce</th>
+                <th className="px-4 py-3 font-semibold text-charcoal-700">Note</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-charcoal-100">
               {FAMILLES.map((row) => (
                 <tr key={row.code} className="align-top">
-                  <td className="px-4 py-3 font-semibold text-slate-900">{row.famille}</td>
+                  <td className="px-4 py-3 font-semibold text-charcoal-900">{row.famille}</td>
                   <td className="px-4 py-3">
                     <Link
                       href={row.href}
@@ -582,16 +582,18 @@ export default function MaprimeRenovCumulCeePage() {
                         Oui
                       </span>
                     ) : (
-                      <span className="text-xs text-slate-400">&mdash;</span>
+                      <span className="text-xs text-charcoal-400">&mdash;</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-slate-600 leading-relaxed max-w-xs">{row.note}</td>
+                  <td className="px-4 py-3 text-charcoal-600 leading-relaxed max-w-xs">
+                    {row.note}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-slate-500 mt-4 leading-relaxed">
+        <p className="text-xs text-charcoal-900 mt-4 leading-relaxed">
           Sources&nbsp;: arrêté du 14 janvier 2020 modifié (MaPrimeRénov&rsquo;), arrêté du 22
           décembre 2014 modifié (opérations standardisées CEE), décret n&deg;&nbsp;2022-1649
           (exclusion fossiles), chartes Coup de pouce en vigueur. Les éligibilités exactes dépendent
@@ -601,63 +603,63 @@ export default function MaprimeRenovCumulCeePage() {
       </section>
 
       {/* 4. Plafonds */}
-      <section id="plafonds" className="bg-slate-50 border-y border-slate-100">
+      <section id="plafonds" className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
             4. Plafonds de cumul et reste à charge minimum
           </h2>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Le cumul MaPrimeRénov&rsquo; + CEE n&rsquo;est pas illimité. Deux plafonds se
             combinent&nbsp;: un plafond propre à MaPrimeRénov&rsquo; (dépense éligible par logement,
             sur une période de cinq ans) et un plafond global d&rsquo;écrêtement exprimé en taux
             d&rsquo;aide maximum du coût TTC du chantier. L&rsquo;arrêté du 14 janvier 2020 modifié
             fixe un taux d&rsquo;aide cumulé maximum par profil&nbsp;:
           </p>
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-6">
+          <div className="bg-white rounded-2xl border border-charcoal-200 overflow-hidden mb-6">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 border-b border-slate-200">
+              <thead className="bg-sand-50 border-b border-charcoal-200">
                 <tr className="text-left">
-                  <th className="px-4 py-3 font-semibold text-slate-700">Profil</th>
-                  <th className="px-4 py-3 font-semibold text-slate-700">Tranche</th>
-                  <th className="px-4 py-3 font-semibold text-slate-700">
+                  <th className="px-4 py-3 font-semibold text-charcoal-700">Profil</th>
+                  <th className="px-4 py-3 font-semibold text-charcoal-700">Tranche</th>
+                  <th className="px-4 py-3 font-semibold text-charcoal-700">
                     Taux d&rsquo;aide max (toutes aides publiques cumulées)
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-charcoal-100">
                 <tr>
-                  <td className="px-4 py-3 font-semibold text-blue-700">Bleu</td>
-                  <td className="px-4 py-3 text-slate-700">Très modestes</td>
-                  <td className="px-4 py-3 text-slate-700">Jusqu&rsquo;à 90 %</td>
+                  <td className="px-4 py-3 font-semibold text-primary-600">Bleu</td>
+                  <td className="px-4 py-3 text-charcoal-700">Très modestes</td>
+                  <td className="px-4 py-3 text-charcoal-700">Jusqu&rsquo;à 90 %</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-amber-600">Jaune</td>
-                  <td className="px-4 py-3 text-slate-700">Modestes</td>
-                  <td className="px-4 py-3 text-slate-700">Jusqu&rsquo;à 75 %</td>
+                  <td className="px-4 py-3 text-charcoal-700">Modestes</td>
+                  <td className="px-4 py-3 text-charcoal-700">Jusqu&rsquo;à 75 %</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-purple-700">Violet</td>
-                  <td className="px-4 py-3 text-slate-700">Intermédiaires</td>
-                  <td className="px-4 py-3 text-slate-700">Jusqu&rsquo;à 60 %</td>
+                  <td className="px-4 py-3 text-charcoal-700">Intermédiaires</td>
+                  <td className="px-4 py-3 text-charcoal-700">Jusqu&rsquo;à 60 %</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-rose-700">Rose</td>
-                  <td className="px-4 py-3 text-slate-700">Supérieurs</td>
-                  <td className="px-4 py-3 text-slate-700">Jusqu&rsquo;à 40 %</td>
+                  <td className="px-4 py-3 text-charcoal-700">Supérieurs</td>
+                  <td className="px-4 py-3 text-charcoal-700">Jusqu&rsquo;à 40 %</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-slate-500 mb-6">
+          <p className="text-xs text-charcoal-900 mb-6">
             Valeurs de référence indicatives pour la configuration la plus courante (Parcours
             Accompagné, hors bonifications exceptionnelles). Les chiffres exacts varient selon le
             type de travaux et les éventuels bonus. Consultez toujours le simulateur officiel sur
             maprimerenov.gouv.fr pour votre situation.
           </p>
-          <h3 className="font-heading text-xl font-bold text-slate-900 mb-3">
+          <h3 className="font-heading text-xl font-bold text-charcoal-900 mb-3">
             La règle du reste à charge minimum
           </h3>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Quelle que soit la combinaison d&rsquo;aides, le ménage conserve
             <strong> toujours un reste à charge minimum</strong>. C&rsquo;est une règle cardinale,
             inscrite depuis 2020 dans les textes MPR et renforcée par la loi Climat et Résilience.
@@ -666,10 +668,10 @@ export default function MaprimeRenovCumulCeePage() {
             devis dont toutes les aides couvriraient 100&nbsp;% du coût TTC serait automatiquement
             rejeté.
           </p>
-          <h3 className="font-heading text-xl font-bold text-slate-900 mb-3 mt-6">
+          <h3 className="font-heading text-xl font-bold text-charcoal-900 mb-3 mt-6">
             Bonus sortie passoire et bonus BBC
           </h3>
-          <p className="text-slate-700 leading-relaxed">
+          <p className="text-charcoal-700 leading-relaxed">
             Deux bonus MaPrimeRénov&rsquo; restent mobilisables en Parcours Accompagné en
             2026&nbsp;: le bonus «&nbsp;sortie de passoire thermique&nbsp;» lorsque les travaux
             permettent à un logement classé F ou G de sortir de ces étiquettes, et le bonus
@@ -683,10 +685,10 @@ export default function MaprimeRenovCumulCeePage() {
 
       {/* 5. Procédure */}
       <section id="procedure" className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
           5. Comment demander le cumul concrètement&nbsp;?
         </h2>
-        <p className="text-slate-700 leading-relaxed mb-8">
+        <p className="text-charcoal-700 leading-relaxed mb-8">
           L&rsquo;ordre chronologique des étapes est déterminant. Une inversion (signature de devis
           avant accord MPR, dépôt CEE antérieur à la date d&rsquo;engagement, etc.) suffit à rendre
           le dossier
@@ -731,8 +733,8 @@ export default function MaprimeRenovCumulCeePage() {
                 {step.n}
               </div>
               <div>
-                <div className="font-bold text-slate-900">{step.title}</div>
-                <p className="text-slate-700 leading-relaxed mt-1">{step.text}</p>
+                <div className="font-bold text-charcoal-900">{step.title}</div>
+                <p className="text-charcoal-700 leading-relaxed mt-1">{step.text}</p>
               </div>
             </li>
           ))}
@@ -786,24 +788,24 @@ export default function MaprimeRenovCumulCeePage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="bg-slate-50 border-t border-slate-100">
+      <section id="faq" className="bg-sand-50 border-t border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-10">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
             6. Questions fréquentes
           </h2>
           <div className="space-y-4">
             {FAQ.map((item, idx) => (
               <details
                 key={idx}
-                className="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 transition p-6"
+                className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
               >
-                <summary className="font-heading font-bold text-lg text-slate-900 cursor-pointer list-none flex items-start justify-between gap-4">
+                <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                     +
                   </span>
                 </summary>
-                <p className="text-slate-700 mt-4 leading-relaxed">{item.answer}</p>
+                <p className="text-charcoal-700 mt-4 leading-relaxed">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -812,10 +814,10 @@ export default function MaprimeRenovCumulCeePage() {
 
       {/* Références réglementaires */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="font-heading text-xl font-bold text-slate-900 mb-4">
+        <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4">
           Références réglementaires
         </h2>
-        <ul className="text-sm text-slate-600 space-y-2 list-disc pl-5 leading-relaxed">
+        <ul className="text-sm text-charcoal-600 space-y-2 list-disc pl-5 leading-relaxed">
           <li>Code de l&rsquo;énergie, articles L.&nbsp;221-1 et suivants (CEE)</li>
           <li>
             Code de la construction et de l&rsquo;habitation, articles R.&nbsp;321-1 et suivants

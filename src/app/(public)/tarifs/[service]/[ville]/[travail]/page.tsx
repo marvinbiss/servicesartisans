@@ -4,7 +4,12 @@ import { notFound } from 'next/navigation'
 import { Euro, ChevronDown, MapPin, ArrowLeft, Users } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getServicePricingSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getServicePricingSchema,
+  getSpeakableSchema,
+} from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTasksForService } from '@/lib/data/trade-content'
 import { getVilleBySlug, getNearbyCities } from '@/lib/data/france'
@@ -15,9 +20,15 @@ import { getDefaultAuthor } from '@/lib/data/team'
 import { getServiceImage } from '@/lib/data/images'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
-const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
+const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), {
+  ssr: false,
+})
 
 // ---------------------------------------------------------------------------
 // Static params: return a minimal seed set (NOT empty — empty array in a
@@ -42,18 +53,18 @@ function getRegionalMultiplier(region: string): number {
   const multipliers: Record<string, number> = {
     'Ile-de-France': 1.25,
     'Île-de-France': 1.25,
-    "Provence-Alpes-Côte d'Azur": 1.10,
-    'Auvergne-Rhône-Alpes': 1.10,
-    'Occitanie': 1.05,
-    'Nouvelle-Aquitaine': 1.00,
+    "Provence-Alpes-Côte d'Azur": 1.1,
+    'Auvergne-Rhône-Alpes': 1.1,
+    Occitanie: 1.05,
+    'Nouvelle-Aquitaine': 1.0,
     'Hauts-de-France': 0.95,
     'Grand Est': 0.95,
-    'Bretagne': 1.00,
-    'Pays de la Loire': 1.00,
-    'Normandie': 0.95,
+    Bretagne: 1.0,
+    'Pays de la Loire': 1.0,
+    Normandie: 0.95,
     'Centre-Val de Loire': 0.95,
     'Bourgogne-Franche-Comté': 0.95,
-    'Corse': 1.10,
+    Corse: 1.1,
   }
   return multipliers[region] ?? 1.0
 }
@@ -63,7 +74,10 @@ function formatNumber(n: number): string {
 }
 
 /** Extract numeric price range from a priceText like "80 a 250 EUR selon la complexite" */
-function extractPriceRange(priceText: string, multiplier: number): { low: number; high: number } | null {
+function extractPriceRange(
+  priceText: string,
+  multiplier: number
+): { low: number; high: number } | null {
   const numbers = priceText.match(/\d[\d\s]*/g)
   if (!numbers || numbers.length < 1) return null
   const parsed = numbers.map((n) => parseInt(n.replace(/\s/g, ''), 10)).filter((n) => !isNaN(n))
@@ -111,9 +125,11 @@ export async function generateMetadata({
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
 
   const taskLower = currentTask.name.toLowerCase()
-  const title = truncateTitle(priceRange
-    ? `${currentTask.name} ${villeData.name} : ${priceRange.low}–${priceRange.high}€ (2026)`
-    : `Prix ${taskLower} à ${villeData.name} — Tarifs 2026`)
+  const title = truncateTitle(
+    priceRange
+      ? `${currentTask.name} ${villeData.name} : ${priceRange.low}–${priceRange.high}€ (2026)`
+      : `Prix ${taskLower} à ${villeData.name} — Tarifs 2026`
+  )
   const description = priceRange
     ? `${currentTask.name} à ${villeData.name} en 2026 : ${priceRange.low} à ${priceRange.high} €. Tarif local ajusté + devis gratuit ${trade.name.toLowerCase()} en 2 min.`
     : `Prix ${taskLower} à ${villeData.name} en 2026. Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié. Devis gratuit.`
@@ -233,20 +249,32 @@ export default async function TarifsServiceTravailVillePage({
   const relatedCities = getNearbyCities(villeSlug, 6)
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, pricingSchema, speakableSchema, webPageSchema].filter(Boolean)} />
+    <div className="min-h-screen bg-sand-50">
+      <JsonLd
+        data={[breadcrumbSchema, faqSchema, pricingSchema, speakableSchema, webPageSchema].filter(
+          Boolean
+        )}
+      />
 
       {/* Hero */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
@@ -256,19 +284,22 @@ export default async function TarifsServiceTravailVillePage({
               { label: currentTask.name, href: `/tarifs/${service}/${villeSlug}` },
               { label: villeData.name },
             ]}
-            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
               Prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}
             </h1>
             {priceRange && (
-              <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+              <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
                 {adjustedPriceText}
               </p>
             )}
-            <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-slate-500 mb-4" />
-            <p className="text-sm text-slate-500">
+            <LastUpdated
+              label="Tarifs vérifiés et mis à jour le"
+              className="justify-center text-charcoal-900 mb-4"
+            />
+            <p className="text-sm text-charcoal-900">
               Tarifs v{'é'}rifi{'é'}s par{' '}
               <Link href="/a-propos" className="underline hover:text-white transition-colors">
                 {author.name}
@@ -279,12 +310,16 @@ export default async function TarifsServiceTravailVillePage({
               {priceRange && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <Euro className="w-4 h-4 text-amber-400" />
-                  <span>{priceRange.low} {'–'} {priceRange.high} {'€'}</span>
+                  <span>
+                    {priceRange.low} {'–'} {priceRange.high} {'€'}
+                  </span>
                 </div>
               )}
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <MapPin className="w-4 h-4 text-amber-400" />
-                <span>{villeData.name} ({villeData.departementCode})</span>
+                <span>
+                  {villeData.name} ({villeData.departementCode})
+                </span>
               </div>
               {commune?.nb_entreprises_artisanales && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -301,20 +336,39 @@ export default async function TarifsServiceTravailVillePage({
       <section className="py-6 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="snippet-answer" data-speakable="true">
-            <p className="text-base text-gray-700 leading-relaxed">
+            <p className="text-base text-charcoal-700 leading-relaxed">
               {priceRange ? (
-                <>Le <strong>prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}</strong> est de{' '}
-                <strong>{priceRange.low} {'à'} {priceRange.high} {'€'}</strong> en 2026.
-                {' '}Ce tarif varie selon la complexit{'é'} de l&apos;intervention, l&apos;accessibilit{'é'} du chantier et les mat{'é'}riaux utilis{'é'}s.
-                {multiplier !== 1.0 && (
-                  <> Les tarifs en {villeData.region} sont{' '}
-                  {multiplier > 1.0
-                    ? `${Math.round((multiplier - 1) * 100)} % supérieurs`
-                    : `${Math.round((1 - multiplier) * 100)} % inférieurs`}
-                  {' '}{'à'} la moyenne nationale.</>
-                )}</>
+                <>
+                  Le{' '}
+                  <strong>
+                    prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}
+                  </strong>{' '}
+                  est de{' '}
+                  <strong>
+                    {priceRange.low} {'à'} {priceRange.high} {'€'}
+                  </strong>{' '}
+                  en 2026. Ce tarif varie selon la complexit{'é'} de l&apos;intervention,
+                  l&apos;accessibilit{'é'} du chantier et les mat{'é'}riaux utilis{'é'}s.
+                  {multiplier !== 1.0 && (
+                    <>
+                      {' '}
+                      Les tarifs en {villeData.region} sont{' '}
+                      {multiplier > 1.0
+                        ? `${Math.round((multiplier - 1) * 100)} % supérieurs`
+                        : `${Math.round((1 - multiplier) * 100)} % inférieurs`}{' '}
+                      {'à'} la moyenne nationale.
+                    </>
+                  )}
+                </>
               ) : (
-                <>Le <strong>prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}</strong> varie selon la complexit{'é'} du chantier. Demandez un devis gratuit pour obtenir un prix pr{'é'}cis.</>
+                <>
+                  Le{' '}
+                  <strong>
+                    prix {currentTask.name.toLowerCase()} {'à'} {villeData.name}
+                  </strong>{' '}
+                  varie selon la complexit{'é'} du chantier. Demandez un devis gratuit pour obtenir
+                  un prix pr{'é'}cis.
+                </>
               )}
             </p>
           </div>
@@ -324,24 +378,25 @@ export default async function TarifsServiceTravailVillePage({
       {/* Task price detail */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-12">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-8 text-center mb-12">
+            <h2 className="text-lg font-semibold text-charcoal-700 mb-2">
               {currentTask.name} {'à'} {villeData.name}
             </h2>
             {priceRange ? (
               <div className="flex items-baseline justify-center gap-2">
-                <span className="text-5xl font-bold text-blue-600">
+                <span className="text-5xl font-bold text-primary-500">
                   {priceRange.low} {'—'} {priceRange.high}
                 </span>
-                <span className="text-gray-600 text-lg">{'€'}</span>
+                <span className="text-charcoal-600 text-lg">{'€'}</span>
               </div>
             ) : (
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-2xl font-bold text-primary-500">
                 {adjustedPriceText || 'Sur devis'}
               </div>
             )}
-            <p className="text-gray-500 text-sm mt-3">
-              Ce tarif peut varier selon la complexit{'é'}, l'accessibilit{'é'} et les mat{'é'}riaux utilis{'é'}s.
+            <p className="text-charcoal-500 text-sm mt-3">
+              Ce tarif peut varier selon la complexit{'é'}, l'accessibilit{'é'} et les mat{'é'}riaux
+              utilis{'é'}s.
             </p>
             <div className="mt-6">
               <TarifsDevisCTA
@@ -354,7 +409,7 @@ export default async function TarifsServiceTravailVillePage({
               />
             </div>
             {multiplier !== 1.0 && (
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
                   ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
                   : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
@@ -366,46 +421,55 @@ export default async function TarifsServiceTravailVillePage({
           {commune && (commune.population || commune.revenu_median) && (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
               {commune.population > 0 && (
-                <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.population)}</div>
-                  <div className="text-sm text-gray-500 mt-1">Habitants</div>
+                <div className="bg-sand-50 rounded-xl border border-sand-300 p-4 text-center">
+                  <div className="text-2xl font-bold text-charcoal-900">
+                    {formatNumber(commune.population)}
+                  </div>
+                  <div className="text-sm text-charcoal-500 mt-1">Habitants</div>
                 </div>
               )}
               {commune.revenu_median && (
-                <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.revenu_median)} {'€'}/an</div>
-                  <div className="text-sm text-gray-500 mt-1">Revenu m{'é'}dian</div>
+                <div className="bg-sand-50 rounded-xl border border-sand-300 p-4 text-center">
+                  <div className="text-2xl font-bold text-charcoal-900">
+                    {formatNumber(commune.revenu_median)} {'€'}/an
+                  </div>
+                  <div className="text-sm text-charcoal-500 mt-1">Revenu m{'é'}dian</div>
                 </div>
               )}
               {commune.nb_entreprises_artisanales && (
-                <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.nb_entreprises_artisanales)}</div>
-                  <div className="text-sm text-gray-500 mt-1">Entreprises artisanales</div>
+                <div className="bg-sand-50 rounded-xl border border-sand-300 p-4 text-center">
+                  <div className="text-2xl font-bold text-charcoal-900">
+                    {formatNumber(commune.nb_entreprises_artisanales)}
+                  </div>
+                  <div className="text-sm text-charcoal-500 mt-1">Entreprises artisanales</div>
                 </div>
               )}
             </div>
           )}
 
           {/* All tasks table with highlight */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
             Tous les tarifs {tradeLower} {'à'} {villeData.name}
           </h2>
-          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mb-4">
+          <div className="overflow-x-auto rounded-xl border border-sand-300 shadow-sm mb-4">
             <table className="w-full text-left">
-              <caption className="px-5 py-3 text-left text-base font-semibold text-gray-900 bg-white border-b border-gray-100">
+              <caption className="px-5 py-3 text-left text-base font-semibold text-charcoal-900 bg-white border-b border-sand-200">
                 Tarifs {tradeLower} {villeData.name} {'—'} 2026
                 {trade.priceRange.unit && (
-                  <span className="ml-2 text-sm font-normal text-gray-500">
+                  <span className="ml-2 text-sm font-normal text-charcoal-500">
                     ({trade.priceRange.unit} TTC)
                   </span>
                 )}
               </caption>
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700">
+                <tr className="bg-sand-50 border-b border-sand-300">
+                  <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700">
                     Prestation
                   </th>
-                  <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">
+                  <th
+                    scope="col"
+                    className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right"
+                  >
                     Prix indicatif
                   </th>
                 </tr>
@@ -428,23 +492,27 @@ export default async function TarifsServiceTravailVillePage({
                       key={i}
                       className={
                         isHighlighted
-                          ? 'bg-blue-50 border-l-4 border-l-blue-500 font-semibold'
-                          : `hover:bg-blue-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`
+                          ? 'bg-primary-50 border-l-4 border-l-primary-400 font-semibold'
+                          : `hover:bg-primary-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-sand-50/50'}`
                       }
                     >
-                      <td className={`px-5 py-4 text-sm border-t border-gray-100 ${isHighlighted ? 'text-blue-900' : 'text-gray-800'}`}>
+                      <td
+                        className={`px-5 py-4 text-sm border-t border-sand-200 ${isHighlighted ? 'text-primary-800' : 'text-charcoal-800'}`}
+                      >
                         {isHighlighted ? (
                           <span>{name}</span>
                         ) : (
                           <Link
                             href={`/tarifs/${service}/${villeSlug}/${tasks[i].slug}`}
-                            className="hover:text-blue-600 transition-colors"
+                            className="hover:text-primary-500 transition-colors"
                           >
                             {name}
                           </Link>
                         )}
                       </td>
-                      <td className={`px-5 py-4 text-sm font-medium border-t border-gray-100 text-right whitespace-nowrap ${isHighlighted ? 'text-blue-900' : 'text-gray-900'}`}>
+                      <td
+                        className={`px-5 py-4 text-sm font-medium border-t border-sand-200 text-right whitespace-nowrap ${isHighlighted ? 'text-primary-800' : 'text-charcoal-900'}`}
+                      >
                         {priceStr || 'Sur devis'}
                       </td>
                     </tr>
@@ -452,12 +520,14 @@ export default async function TarifsServiceTravailVillePage({
                 })}
               </tbody>
               <tfoot>
-                <tr className="bg-gray-50/80 border-t border-gray-200">
-                  <td colSpan={2} className="px-5 py-3 text-xs text-gray-500 italic">
-                    Prix indicatifs, peuvent varier selon la complexit{'é'} des travaux, la r{'é'}gion et le professionnel.
+                <tr className="bg-sand-50/80 border-t border-sand-300">
+                  <td colSpan={2} className="px-5 py-3 text-xs text-charcoal-500 italic">
+                    Prix indicatifs, peuvent varier selon la complexit{'é'} des travaux, la r{'é'}
+                    gion et le professionnel.
                     {multiplier !== 1 && (
                       <span className="ml-1">
-                        Tarifs ajust{'é'}s pour {villeData.name} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}{' '}% vs moyenne nationale).
+                        Tarifs ajust{'é'}s pour {villeData.name} ({multiplier > 1 ? '+' : ''}
+                        {Math.round((multiplier - 1) * 100)} % vs moyenne nationale).
                       </span>
                     )}
                   </td>
@@ -469,19 +539,21 @@ export default async function TarifsServiceTravailVillePage({
       </section>
 
       {/* FAQ */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fr{'é'}quentes {'—'} {currentTask.name} {'à'} {villeData.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
-              <details key={i} className="bg-white rounded-xl border border-gray-200 group">
+              <details key={i} className="bg-white rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
-                  <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">
+                    {item.question}
+                  </h3>
+                  <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">
+                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
                   {item.answer}
                 </div>
               </details>
@@ -491,13 +563,14 @@ export default async function TarifsServiceTravailVillePage({
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-blue-600">
+      <section className="py-20 bg-primary-500">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Obtenez un prix exact pour {currentTask.name.toLowerCase()} {'à'} {villeData.name}
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Ces tarifs sont indicatifs. Obtenez un devis personnalis{'é'} d'artisans v{'é'}rifi{'é'}s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
+          <p className="text-xl text-primary-100 mb-8">
+            Ces tarifs sont indicatifs. Obtenez un devis personnalis{'é'} d'artisans v{'é'}rifi{'é'}
+            s pr{'è'}s de chez vous {'—'} gratuit et sans engagement.
           </p>
           <TarifsDevisCTA
             service={service}
@@ -507,9 +580,12 @@ export default async function TarifsServiceTravailVillePage({
             variant="banner"
             taskName={currentTask.name}
           />
-          <p className="text-blue-200 text-sm mt-6">
+          <p className="text-primary-100 text-sm mt-6">
             Ou{' '}
-            <Link href={`/services/${service}/${villeSlug}`} className="underline hover:text-white transition-colors">
+            <Link
+              href={`/services/${service}/${villeSlug}`}
+              className="underline hover:text-white transition-colors"
+            >
               voir les {tradeLower}s {'à'} {villeData.name}
             </Link>
           </p>
@@ -520,7 +596,7 @@ export default async function TarifsServiceTravailVillePage({
       {relatedCities.length > 0 && (
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
               Prix {currentTask.name.toLowerCase()} dans d'autres villes
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
@@ -531,13 +607,13 @@ export default async function TarifsServiceTravailVillePage({
                   <Link
                     key={v.slug}
                     href={`/tarifs/${service}/${v.slug}/${travail}`}
-                    className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
+                    className="bg-sand-50 hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group text-center"
                   >
-                    <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                    <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
                       {currentTask.name} {'à'} {v.name}
                     </div>
                     {range && (
-                      <div className="text-xs text-gray-500 mt-1">
+                      <div className="text-xs text-charcoal-500 mt-1">
                         {range.low} {'–'} {range.high} {'€'}
                       </div>
                     )}
@@ -550,11 +626,11 @@ export default async function TarifsServiceTravailVillePage({
       )}
 
       {/* Back link */}
-      <section className="py-8 bg-gray-50 border-t">
+      <section className="py-8 bg-sand-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href={`/tarifs/${service}/${villeSlug}`}
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
+            className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-800 font-medium transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Tous les tarifs {tradeLower} {'à'} {villeData.name}
@@ -574,16 +650,27 @@ export default async function TarifsServiceTravailVillePage({
       {/* Methodology */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">M{'é'}thodologie tarifaire</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affich{'é'}s pour {currentTask.name.toLowerCase()} {'à'} {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l'urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
+          <div className="bg-sand-50 rounded-2xl border border-charcoal-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              M{'é'}thodologie tarifaire
+            </h3>
+            <p className="text-xs text-charcoal-900 leading-relaxed">
+              Les prix affich{'é'}s pour {currentTask.name.toLowerCase()} {'à'} {villeData.name}{' '}
+              sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}
+              gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les
+              mat{'é'}riaux et l'urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est
+              un annuaire ind{'é'}pendant.
             </p>
           </div>
         </div>
       </section>
 
-      <StickyMobileCTA serviceSlug={service} cityName={villeData.name} citySlug={villeSlug} ctaText="Comparer les prix gratuitement" />
+      <StickyMobileCTA
+        serviceSlug={service}
+        cityName={villeData.name}
+        citySlug={villeSlug}
+        ctaText="Comparer les prix gratuitement"
+      />
       <ExitIntentPopup />
     </div>
   )

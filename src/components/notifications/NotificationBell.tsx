@@ -8,7 +8,13 @@ import { fr } from 'date-fns/locale'
 
 interface Notification {
   id: string
-  type: 'lead_created' | 'lead_dispatched' | 'lead_viewed' | 'quote_received' | 'lead_closed' | 'system'
+  type:
+    | 'lead_created'
+    | 'lead_dispatched'
+    | 'lead_viewed'
+    | 'quote_received'
+    | 'lead_closed'
+    | 'system'
   title: string
   message: string
   read: boolean
@@ -32,6 +38,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
     if (userId) {
       fetchNotifications()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   const fetchNotifications = async () => {
@@ -122,22 +129,14 @@ export function NotificationBell({ userId }: NotificationBellProps) {
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
 
           {/* Dropdown */}
-          <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-sand-300 z-50 max-h-96 overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-sand-300">
               <h3 className="font-semibold">Notifications</h3>
               {unreadCount > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={markAllAsRead}
-                  className="text-xs"
-                >
+                <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs">
                   <Check className="h-3 w-3 mr-1" />
                   Tout marquer lu
                 </Button>
@@ -146,23 +145,17 @@ export function NotificationBell({ userId }: NotificationBellProps) {
 
             <div className="overflow-y-auto max-h-80">
               {loading ? (
-                <div className="p-4 text-center text-gray-500">
-                  Chargement...
-                </div>
+                <div className="p-4 text-center text-charcoal-500">Chargement...</div>
               ) : notifications.length === 0 ? (
-                <div className="p-4 text-center text-gray-500">
-                  Aucune notification
-                </div>
+                <div className="p-4 text-center text-charcoal-500">Aucune notification</div>
               ) : (
                 notifications.map((notification) => (
                   <div
                     key={notification.id}
                     role="button"
                     tabIndex={0}
-                    className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${
-                      !notification.read
-                        ? 'bg-blue-50'
-                        : ''
+                    className={`p-4 border-b border-sand-200 hover:bg-sand-50 cursor-pointer ${
+                      !notification.read ? 'bg-primary-50' : ''
                     }`}
                     onClick={() => {
                       markAsRead(notification.id)
@@ -181,28 +174,21 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                     }}
                   >
                     <div className="flex items-start gap-3">
-                      <span className="text-xl">
-                        {getNotificationIcon(notification.type)}
-                      </span>
+                      <span className="text-xl">{getNotificationIcon(notification.type)}</span>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">
-                          {notification.title}
-                        </p>
-                        <p className="text-sm text-gray-600 line-clamp-2">
+                        <p className="font-medium text-sm truncate">{notification.title}</p>
+                        <p className="text-sm text-charcoal-600 line-clamp-2">
                           {notification.message}
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          {formatDistanceToNow(
-                            new Date(notification.created_at),
-                            {
-                              addSuffix: true,
-                              locale: fr,
-                            }
-                          )}
+                        <p className="text-xs text-charcoal-400 mt-1">
+                          {formatDistanceToNow(new Date(notification.created_at), {
+                            addSuffix: true,
+                            locale: fr,
+                          })}
                         </p>
                       </div>
                       {!notification.read && (
-                        <span className="h-2 w-2 rounded-full bg-blue-500 flex-shrink-0" />
+                        <span className="h-2 w-2 rounded-full bg-primary-400 flex-shrink-0" />
                       )}
                     </div>
                   </div>
@@ -211,7 +197,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
             </div>
 
             {notifications.length > 0 && (
-              <div className="p-2 border-t border-gray-200">
+              <div className="p-2 border-t border-sand-300">
                 <Button
                   variant="ghost"
                   className="w-full text-sm"

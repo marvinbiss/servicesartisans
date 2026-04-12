@@ -9,8 +9,9 @@ export function Skeleton({ className, shimmer = true }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'rounded-md bg-gray-200 relative overflow-hidden',
-        shimmer && 'after:absolute after:inset-0 after:translate-x-[-100%] after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-white/60 after:to-transparent',
+        'rounded-md bg-sand-300 relative overflow-hidden',
+        shimmer &&
+          'after:absolute after:inset-0 after:translate-x-[-100%] after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-white/60 after:to-transparent',
         className
       )}
     />
@@ -20,7 +21,7 @@ export function Skeleton({ className, shimmer = true }: SkeletonProps) {
 // Card skeleton for artisan/service cards
 export function CardSkeleton() {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-sand-300 p-6">
       <div className="flex items-center gap-4 mb-4">
         <Skeleton className="w-14 h-14 rounded-full" />
         <div className="flex-1">
@@ -43,7 +44,7 @@ export function ListSkeleton({ count = 5 }: { count?: number }) {
   return (
     <div className="space-y-4">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-white rounded-xl p-4 border border-gray-200">
+        <div key={i} className="bg-white rounded-xl p-4 border border-sand-300">
           <div className="flex items-center gap-4">
             <Skeleton className="w-12 h-12 rounded-lg" />
             <div className="flex-1">
@@ -74,10 +75,10 @@ export function PageSkeleton() {
   return (
     <div className="min-h-screen">
       {/* Hero skeleton */}
-      <div className="bg-gradient-to-r from-gray-200 to-gray-300 py-16">
+      <div className="bg-gradient-to-r from-sand-300 to-sand-400 py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <Skeleton className="h-10 w-96 mb-4 bg-gray-300" />
-          <Skeleton className="h-6 w-72 bg-gray-300" />
+          <Skeleton className="h-10 w-96 mb-4 bg-sand-400" />
+          <Skeleton className="h-6 w-72 bg-sand-400" />
         </div>
       </div>
 
@@ -115,7 +116,7 @@ export function FormSkeleton() {
 export function ProviderCardSkeleton() {
   return (
     <div
-      className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm"
+      className="bg-white rounded-2xl border border-sand-300 p-4 shadow-sm"
       role="article"
       aria-busy="true"
       aria-label="Chargement d'un artisan"
@@ -139,7 +140,7 @@ export function ProviderCardSkeleton() {
       </div>
 
       {/* Contact */}
-      <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
+      <div className="flex gap-4 mt-3 pt-3 border-t border-sand-200">
         <Skeleton className="h-5 w-28" />
         <Skeleton className="h-5 w-20" />
       </div>

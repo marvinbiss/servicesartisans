@@ -429,7 +429,7 @@ function getInsightColors(severity: 'high' | 'medium' | 'low') {
     case 'medium':
       return { bg: 'bg-amber-100', text: 'text-amber-700', dot: 'bg-amber-500' }
     case 'low':
-      return { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-500' }
+      return { bg: 'bg-primary-100', text: 'text-primary-600', dot: 'bg-primary-400' }
   }
 }
 
@@ -597,7 +597,7 @@ export default async function ProblemeVillePage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, howToSchema]} />
 
       {/* Breadcrumb */}
@@ -652,7 +652,7 @@ export default async function ProblemeVillePage({
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href={`/devis/${problem.primaryService}/${ville}`}
-              className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+              className="inline-flex items-center justify-center gap-3 bg-white text-charcoal-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
               Devis gratuit à {villeData.name}
               <ArrowRight className="w-5 h-5" />
@@ -682,10 +682,10 @@ export default async function ProblemeVillePage({
               <Eye className="w-4 h-4" />
               Symptômes
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            <h2 className="text-3xl font-bold text-charcoal-900 mb-3">
               Comment reconnaître ce problème ?
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-charcoal-600 max-w-2xl mx-auto">
               À {villeData.name}, voici les signes qui indiquent un problème de{' '}
               {problem.name.toLowerCase()}.
             </p>
@@ -694,10 +694,10 @@ export default async function ProblemeVillePage({
             {problem.symptoms.map((symptom, i) => (
               <div
                 key={i}
-                className="flex items-start gap-3 bg-gray-50 rounded-xl border border-gray-200 p-5"
+                className="flex items-start gap-3 bg-sand-50 rounded-xl border border-sand-300 p-5"
               >
                 <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 text-sm">{symptom}</span>
+                <span className="text-charcoal-700 text-sm">{symptom}</span>
               </div>
             ))}
           </div>
@@ -705,25 +705,25 @@ export default async function ProblemeVillePage({
       </section>
 
       {/* Immediate actions */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
               <ListChecks className="w-4 h-4" />
               Actions immédiates
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Que faire en urgence ?</h2>
+            <h2 className="text-3xl font-bold text-charcoal-900 mb-3">Que faire en urgence ?</h2>
           </div>
           <div className="space-y-4">
             {problem.immediateActions.map((action, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-white rounded-xl border border-gray-200 p-5"
+                className="flex items-start gap-4 bg-white rounded-xl border border-sand-300 p-5"
               >
                 <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <span className="text-red-600 font-bold">{i + 1}</span>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{action}</p>
+                <p className="text-charcoal-700 leading-relaxed">{action}</p>
               </div>
             ))}
           </div>
@@ -733,24 +733,24 @@ export default async function ProblemeVillePage({
       {/* Local pricing */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-3xl font-bold text-charcoal-900 mb-6 text-center">
             Coût à {villeData.name}
           </h2>
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-8">
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-8 text-center mb-8">
+            <h3 className="text-lg font-semibold text-charcoal-700 mb-2">
               Fourchette de prix à {villeData.name}
             </h3>
             <div className="flex items-baseline justify-center gap-2">
-              <span className="text-5xl font-bold text-blue-600">
+              <span className="text-5xl font-bold text-primary-500">
                 {minPrice} — {maxPrice}
               </span>
-              <span className="text-gray-600 text-lg">€</span>
+              <span className="text-charcoal-600 text-lg">€</span>
             </div>
-            <p className="text-gray-500 text-sm mt-3">
+            <p className="text-charcoal-500 text-sm mt-3">
               Prix indicatif pour {problem.name.toLowerCase()} à {villeData.name} et ses alentours
             </p>
             {multiplier !== 1.0 && (
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
                   ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
                   : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
@@ -761,17 +761,17 @@ export default async function ProblemeVillePage({
       </section>
 
       {/* Local context — 4 stat cards */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-2 text-center">
             Contexte local — {villeData.name}
           </h2>
-          <p className="text-gray-500 text-sm text-center mb-8">
+          <p className="text-charcoal-500 text-sm text-center mb-8">
             Données locales qui influencent le coût et la disponibilité des artisans.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             <LocalFactorCard
-              icon={<Users className="w-5 h-5 text-blue-600" />}
+              icon={<Users className="w-5 h-5 text-primary-500" />}
               title="Artisans locaux"
               value={
                 commune?.nb_entreprises_artisanales
@@ -828,18 +828,20 @@ export default async function ProblemeVillePage({
               <Shield className="w-4 h-4" />
               Prévention
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Prévention à {villeData.name}</h2>
+            <h2 className="text-3xl font-bold text-charcoal-900 mb-3">
+              Prévention à {villeData.name}
+            </h2>
           </div>
           <div className="space-y-4">
             {problem.preventiveTips.map((tip, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5"
+                className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5"
               >
                 <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Lightbulb className="w-4 h-4 text-green-600" />
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
               </div>
             ))}
           </div>
@@ -856,17 +858,17 @@ export default async function ProblemeVillePage({
         if (insights.length === 0 && !hasLocalResources) return null
 
         return (
-          <section className="py-16 bg-blue-50/60">
+          <section className="py-16 bg-primary-50/60">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-10">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-100 text-primary-600 rounded-full text-sm font-medium mb-4">
                   <MapPin className="w-4 h-4" />
                   Analyse locale
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                <h2 className="text-3xl font-bold text-charcoal-900 mb-3">
                   Pourquoi ce problème est fréquent à {villeData.name}
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto text-sm">
+                <p className="text-charcoal-600 max-w-2xl mx-auto text-sm">
                   Les caractéristiques climatiques, démographiques et immobilières de{' '}
                   {villeData.name} influencent directement la fréquence des problèmes de{' '}
                   {problem.name.toLowerCase()}.
@@ -880,7 +882,7 @@ export default async function ProblemeVillePage({
                     return (
                       <div
                         key={i}
-                        className="bg-white rounded-xl border-l-4 border-blue-500 shadow-sm p-5 flex items-start gap-4"
+                        className="bg-white rounded-xl border-l-4 border-primary-400 shadow-sm p-5 flex items-start gap-4"
                       >
                         <div
                           className={`w-8 h-8 ${colors.bg} rounded-lg flex items-center justify-center flex-shrink-0`}
@@ -889,7 +891,7 @@ export default async function ProblemeVillePage({
                             {getInsightIcon(insight.severity)}
                           </span>
                         </div>
-                        <p className="text-gray-700 text-sm leading-relaxed">{insight.text}</p>
+                        <p className="text-charcoal-700 text-sm leading-relaxed">{insight.text}</p>
                       </div>
                     )
                   })}
@@ -898,22 +900,22 @@ export default async function ProblemeVillePage({
 
               {/* Ressources locales */}
               {hasLocalResources && (
-                <div className="bg-white rounded-2xl border border-blue-200 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <Users className="w-5 h-5 text-blue-600" />
+                <div className="bg-white rounded-2xl border border-primary-200 p-6">
+                  <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                    <Users className="w-5 h-5 text-primary-500" />
                     Ressources locales à {villeData.name}
                   </h3>
                   <div className="grid sm:grid-cols-2 gap-4 mb-5">
                     {commune?.nb_artisans_btp != null && (
-                      <div className="flex items-center gap-3 bg-blue-50 rounded-lg p-4">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <Building2 className="w-5 h-5 text-blue-600" />
+                      <div className="flex items-center gap-3 bg-primary-50 rounded-lg p-4">
+                        <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Building2 className="w-5 h-5 text-primary-500" />
                         </div>
                         <div>
-                          <p className="text-lg font-bold text-gray-900">
+                          <p className="text-lg font-bold text-charcoal-900">
                             {formatNumber(commune.nb_artisans_btp)}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-charcoal-500">
                             artisans du bâtiment à {villeData.name}
                           </p>
                         </div>
@@ -925,17 +927,17 @@ export default async function ProblemeVillePage({
                           <Shield className="w-5 h-5 text-green-600" />
                         </div>
                         <div>
-                          <p className="text-lg font-bold text-gray-900">
+                          <p className="text-lg font-bold text-charcoal-900">
                             {formatNumber(commune.nb_artisans_rge)}
                           </p>
-                          <p className="text-xs text-gray-500">artisans certifiés RGE</p>
+                          <p className="text-xs text-charcoal-500">artisans certifiés RGE</p>
                         </div>
                       </div>
                     )}
                   </div>
                   <Link
                     href={`/services/${problem.primaryService}/${ville}`}
-                    className="inline-flex items-center gap-2 text-blue-600 font-medium text-sm hover:text-blue-800 transition-colors"
+                    className="inline-flex items-center gap-2 text-primary-500 font-medium text-sm hover:text-primary-800 transition-colors"
                   >
                     Voir les {tradeName.toLowerCase()}s à {villeData.name}
                     <ArrowRight className="w-4 h-4" />
@@ -948,19 +950,23 @@ export default async function ProblemeVillePage({
       })()}
 
       {/* FAQ */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fréquentes — {problem.name} à {villeData.name}
           </h2>
           <div className="space-y-4">
             {allFaq.map((item, i) => (
-              <details key={i} className="bg-white rounded-xl border border-gray-200 group">
+              <details key={i} className="bg-white rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
-                  <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">
+                    {item.question}
+                  </h3>
+                  <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed">{item.answer}</div>
+                <div className="px-5 pb-5 text-charcoal-600 text-sm leading-relaxed">
+                  {item.answer}
+                </div>
               </details>
             ))}
           </div>
@@ -1020,11 +1026,11 @@ export default async function ProblemeVillePage({
           <section className="py-16 bg-white">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-4">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-50 text-primary-500 rounded-full text-sm font-medium mb-4">
                   <BookOpen className="w-4 h-4" />
                   Articles utiles
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-bold text-charcoal-900">
                   Nos conseils sur {problem.name.toLowerCase()}
                 </h2>
               </div>
@@ -1033,25 +1039,25 @@ export default async function ProblemeVillePage({
                   <Link
                     key={article.slug}
                     href={`/blog/${article.slug}`}
-                    className="flex items-start gap-4 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-200 hover:border-blue-200 p-5 transition-all group"
+                    className="flex items-start gap-4 bg-sand-50 hover:bg-primary-50 rounded-xl border border-sand-300 hover:border-primary-200 p-5 transition-all group"
                   >
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm mb-1">
+                      <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm mb-1">
                         {article.title}
                       </h3>
-                      <p className="text-xs text-gray-500 line-clamp-2">{article.excerpt}</p>
-                      <span className="inline-block mt-2 text-xs text-blue-600 font-medium">
+                      <p className="text-xs text-charcoal-500 line-clamp-2">{article.excerpt}</p>
+                      <span className="inline-block mt-2 text-xs text-primary-500 font-medium">
                         {article.readTime}
                       </span>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 flex-shrink-0 mt-1 transition-colors" />
+                    <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 flex-shrink-0 mt-1 transition-colors" />
                   </Link>
                 ))}
               </div>
               <div className="text-center mt-6">
                 <Link
                   href="/blog"
-                  className="inline-flex items-center gap-2 text-blue-600 font-medium text-sm hover:text-blue-800 transition-colors"
+                  className="inline-flex items-center gap-2 text-primary-500 font-medium text-sm hover:text-primary-800 transition-colors"
                 >
                   Tous nos articles
                   <ArrowRight className="w-4 h-4" />
@@ -1066,7 +1072,7 @@ export default async function ProblemeVillePage({
       {nearbyCities.length > 0 && (
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
               {problem.name} dans d'autres villes
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
@@ -1074,9 +1080,9 @@ export default async function ProblemeVillePage({
                 <Link
                   key={v.slug}
                   href={`/problemes/${probleme}/${v.slug}`}
-                  className="bg-gray-50 hover:bg-amber-50 border border-gray-200 hover:border-amber-300 rounded-xl p-4 transition-all group text-center"
+                  className="bg-sand-50 hover:bg-amber-50 border border-sand-300 hover:border-amber-300 rounded-xl p-4 transition-all group text-center"
                 >
-                  <div className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                  <div className="font-semibold text-charcoal-900 group-hover:text-amber-600 transition-colors text-sm">
                     {problem.name} à {v.name}
                   </div>
                 </Link>
@@ -1088,9 +1094,9 @@ export default async function ProblemeVillePage({
 
       {/* Other problems */}
       {relatedProblems.length > 0 && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-sand-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
               Autres problèmes à {villeData.name}
             </h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -1098,12 +1104,12 @@ export default async function ProblemeVillePage({
                 <Link
                   key={rp.slug}
                   href={`/problemes/${rp.slug}/${ville}`}
-                  className="bg-white hover:bg-amber-50 border border-gray-200 hover:border-amber-300 rounded-xl p-4 transition-all group"
+                  className="bg-white hover:bg-amber-50 border border-sand-300 hover:border-amber-300 rounded-xl p-4 transition-all group"
                 >
-                  <div className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                  <div className="font-semibold text-charcoal-900 group-hover:text-amber-600 transition-colors text-sm">
                     {rp.name} à {villeData.name}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-charcoal-500 mt-1">
                     {Math.round(rp.estimatedCost.min * multiplier)} –{' '}
                     {Math.round(rp.estimatedCost.max * multiplier)} €
                   </div>
@@ -1117,55 +1123,55 @@ export default async function ProblemeVillePage({
       {/* Voir aussi */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="text-xl font-bold text-charcoal-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Ce problème</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Ce problème</h3>
               <div className="space-y-2">
                 <Link
                   href={`/problemes/${probleme}`}
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   {problem.name} en France
                 </Link>
                 <Link
                   href={`/devis/${problem.primaryService}/${ville}`}
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Devis {tradeName.toLowerCase()} à {villeData.name}
                 </Link>
                 <Link
                   href={`/services/${problem.primaryService}/${ville}`}
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   {tradeName} à {villeData.name}
                 </Link>
                 <Link
                   href={`/urgence/${problem.primaryService}/${ville}`}
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   {tradeName} urgence à {villeData.name}
                 </Link>
                 <Link
                   href={`/tarifs/${problem.primaryService}/${ville}`}
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Tarifs {tradeName.toLowerCase()} à {villeData.name}
                 </Link>
                 <Link
                   href={`/avis/${problem.primaryService}/${ville}`}
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Avis {tradeName.toLowerCase()} à {villeData.name}
                 </Link>
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">À {villeData.name}</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">À {villeData.name}</h3>
               <div className="space-y-2">
                 <Link
                   href={`/villes/${ville}`}
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Artisans à {villeData.name}
                 </Link>
@@ -1173,7 +1179,7 @@ export default async function ProblemeVillePage({
                   <Link
                     key={rp.slug}
                     href={`/problemes/${rp.slug}/${ville}`}
-                    className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                    className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                   >
                     {rp.name} à {villeData.name}
                   </Link>
@@ -1181,27 +1187,30 @@ export default async function ProblemeVillePage({
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
                 <Link
                   href="/problemes"
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Tous les problèmes
                 </Link>
                 <Link
                   href="/urgence"
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Urgence artisan 24h/24
                 </Link>
                 <Link
                   href="/tarifs"
-                  className="block text-sm text-gray-600 hover:text-amber-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Guide des tarifs
                 </Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
+                >
                   FAQ
                 </Link>
               </div>
@@ -1232,9 +1241,9 @@ export default async function ProblemeVillePage({
       {/* Editorial credibility */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence tarifaire</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+          <div className="bg-sand-50 rounded-2xl border border-charcoal-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Transparence tarifaire</h3>
+            <p className="text-xs text-charcoal-900 leading-relaxed">
               Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en
               fonction des données régionales ({villeData.region}). Ils varient selon la complexité
               du problème et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un
@@ -1272,17 +1281,17 @@ function LocalFactorCard({
   description: string
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-sand-300 p-6">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 bg-sand-100 rounded-lg flex items-center justify-center flex-shrink-0">
           {icon}
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900 text-sm">{title}</h3>
-          {value && <p className="text-xs text-blue-600 font-medium">{value}</p>}
+          <h3 className="font-semibold text-charcoal-900 text-sm">{title}</h3>
+          {value && <p className="text-xs text-primary-500 font-medium">{value}</p>}
         </div>
       </div>
-      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+      <p className="text-charcoal-600 text-sm leading-relaxed">{description}</p>
     </div>
   )
 }

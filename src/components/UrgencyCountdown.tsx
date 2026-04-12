@@ -31,25 +31,30 @@ export default function UrgencyCountdown({ serviceName, cityName }: UrgencyCount
       const cached = sessionStorage.getItem(cacheKey)
       if (cached) {
         const parsed = JSON.parse(cached)
-        if (Date.now() - parsed.ts < 300_000) { // 5 min cache
+        if (Date.now() - parsed.ts < 300_000) {
+          // 5 min cache
           setStats(parsed.data)
           setLoaded(true)
           return
         }
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
 
     const params = new URLSearchParams()
     if (serviceName) params.set('service', serviceName)
     if (cityName) params.set('city', cityName)
 
     fetch(`/api/stats/demand?${params}`)
-      .then(r => r.json())
+      .then((r) => r.json())
       .then((data: DemandStats) => {
         setStats(data)
         try {
           sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }))
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       })
       .catch(() => {
         // Deterministic fallback
@@ -83,7 +88,9 @@ export default function UrgencyCountdown({ serviceName, cityName }: UrgencyCount
           )}
         </div>
         <span className="text-sm font-bold text-red-900">
-          {cityName ? `Forte demande en ${displayName} à ${cityName}` : `Forte demande en ${displayName}`}
+          {cityName
+            ? `Forte demande en ${displayName} à ${cityName}`
+            : `Forte demande en ${displayName}`}
         </span>
       </div>
 
@@ -93,14 +100,14 @@ export default function UrgencyCountdown({ serviceName, cityName }: UrgencyCount
             <Clock className="w-4 h-4 text-red-600" />
             <span className="text-2xl font-bold text-red-700">{weeklyRequests}</span>
           </div>
-          <p className="text-xs text-gray-600">Demandes cette semaine</p>
+          <p className="text-xs text-charcoal-600">Demandes cette semaine</p>
         </div>
         <div className="bg-white/80 rounded-lg p-3 text-center">
           <div className="flex items-center justify-center gap-1.5 mb-1">
             <Zap className="w-4 h-4 text-amber-600" />
             <span className="text-2xl font-bold text-amber-700">{providers}</span>
           </div>
-          <p className="text-xs text-gray-600">Artisans disponibles</p>
+          <p className="text-xs text-charcoal-600">Artisans disponibles</p>
         </div>
       </div>
 

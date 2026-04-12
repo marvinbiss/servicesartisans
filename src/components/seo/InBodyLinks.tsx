@@ -37,13 +37,13 @@ function generateContextualLinks(
   serviceSlug: string,
   villeSlug: string,
   villeName: string,
-  serviceName: string,
+  serviceName: string
 ): ContextualLink[] {
   const links: ContextualLink[] = []
   const seed = hashCode(`${serviceSlug}::${villeSlug}`)
 
   // 1. Money page link — nearby top city
-  const topCitySlugs = TOP_CITIES.map(c => c.slug).filter(s => s !== villeSlug)
+  const topCitySlugs = TOP_CITIES.map((c) => c.slug).filter((s) => s !== villeSlug)
   if (topCitySlugs.length > 0) {
     const citySlug = topCitySlugs[seed % topCitySlugs.length]
     const cityData = getVilleBySlug(citySlug)
@@ -67,7 +67,7 @@ function generateContextualLinks(
   const related = relatedServices[serviceSlug] || []
   if (related.length > 0) {
     const relSlug = related[(seed + 1) % related.length]
-    const relService = services.find(s => s.slug === relSlug)
+    const relService = services.find((s) => s.slug === relSlug)
     if (relService) {
       const prefixes = [
         `Pour des travaux complémentaires, consultez nos`,
@@ -93,7 +93,7 @@ function generateContextualLinks(
 
   // 4. Nearby city link (if not a money page, boost one)
   const nearby = getNearbyCities(villeSlug, 5, getCityScore)
-  const moneyNearby = nearby.find(v => isMoneyPage(serviceSlug, v.slug))
+  const moneyNearby = nearby.find((v) => isMoneyPage(serviceSlug, v.slug))
   if (moneyNearby) {
     links.push({
       href: `/services/${serviceSlug}/${moneyNearby.slug}`,
@@ -126,7 +126,7 @@ export default function InBodyLinks({
           {link.prefix}{' '}
           <Link
             href={link.href}
-            className="text-blue-700 hover:text-blue-900 underline decoration-blue-300 hover:decoration-blue-500 transition-colors"
+            className="text-primary-600 hover:text-primary-800 underline decoration-primary-200 hover:decoration-primary-400 transition-colors"
             prefetch={false}
           >
             {link.anchor}

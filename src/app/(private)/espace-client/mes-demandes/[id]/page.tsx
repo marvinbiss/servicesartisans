@@ -74,7 +74,7 @@ interface LeadStats {
 }
 
 const QUOTE_STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
-  pending: { label: 'En attente', cls: 'bg-blue-100 text-blue-700' },
+  pending: { label: 'En attente', cls: 'bg-primary-100 text-primary-600' },
   accepted: { label: 'Accepté', cls: 'bg-emerald-100 text-emerald-700' },
   refused: { label: 'Refusé', cls: 'bg-red-100 text-red-700' },
   expired: { label: 'Expiré', cls: 'bg-orange-100 text-orange-700' },
@@ -153,10 +153,10 @@ export default function LeadDetailPage() {
       })
       const data = await res.json()
       if (res.ok) {
-        setActionSuccess('Devis accepté avec succès. L\'artisan va vous contacter.')
+        setActionSuccess("Devis accepté avec succès. L'artisan va vous contacter.")
         await fetchData()
       } else {
-        setActionError(data.error || 'Erreur lors de l\'acceptation')
+        setActionError(data.error || "Erreur lors de l'acceptation")
       }
     } catch {
       setActionError('Erreur de connexion')
@@ -191,10 +191,10 @@ export default function LeadDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="text-sm text-gray-500 mt-2">Chargement...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto" />
+          <p className="text-sm text-charcoal-500 mt-2">Chargement...</p>
         </div>
       </div>
     )
@@ -202,11 +202,14 @@ export default function LeadDetailPage() {
 
   if (error && !lead) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
           <p className="text-red-700 font-medium">{error}</p>
-          <Link href="/espace-client/mes-demandes" className="text-blue-600 hover:underline text-sm mt-4 block">
+          <Link
+            href="/espace-client/mes-demandes"
+            className="text-primary-500 hover:underline text-sm mt-4 block"
+          >
             Retour à mes demandes
           </Link>
         </div>
@@ -217,20 +220,26 @@ export default function LeadDetailPage() {
   if (!lead) return null
 
   const urg = URGENCY_META[lead.urgency] || URGENCY_META.normal
-  const pendingQuotes = quotes.filter(q => q.status === 'pending')
-  const hasAcceptedQuote = quotes.some(q => q.status === 'accepted')
+  const pendingQuotes = quotes.filter((q) => q.status === 'pending')
+  const hasAcceptedQuote = quotes.some((q) => q.status === 'accepted')
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header / Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/espace-client" className="hover:text-gray-900">Espace Client</Link>
+          <div className="flex items-center gap-2 text-sm text-charcoal-500">
+            <Link href="/espace-client" className="hover:text-charcoal-900">
+              Espace Client
+            </Link>
             <span>/</span>
-            <Link href="/espace-client/mes-demandes" className="hover:text-gray-900">Mes demandes</Link>
+            <Link href="/espace-client/mes-demandes" className="hover:text-charcoal-900">
+              Mes demandes
+            </Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium truncate max-w-xs">{lead.service_name}</span>
+            <span className="text-charcoal-900 font-medium truncate max-w-xs">
+              {lead.service_name}
+            </span>
           </div>
         </div>
       </div>
@@ -244,7 +253,7 @@ export default function LeadDetailPage() {
           <div className="lg:col-span-3">
             <Link
               href="/espace-client/mes-demandes"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-900 mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Retour à mes demandes
@@ -274,10 +283,10 @@ export default function LeadDetailPage() {
               {/* Left column: lead details + quotes */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Lead header card */}
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                  <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
+                <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
+                  <div className="px-6 py-4 bg-sand-50 border-b border-sand-200">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h1 className="text-xl font-bold text-gray-900">{lead.service_name}</h1>
+                      <h1 className="text-xl font-bold text-charcoal-900">{lead.service_name}</h1>
                       <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
                         {urg.label}
                       </span>
@@ -285,34 +294,39 @@ export default function LeadDetailPage() {
                   </div>
 
                   <div className="p-6">
-                    <p className="text-gray-700 leading-relaxed mb-6">{lead.description}</p>
+                    <p className="text-charcoal-700 leading-relaxed mb-6">{lead.description}</p>
 
                     {lead.budget && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 p-3 bg-green-50 rounded-lg border border-green-100">
+                      <div className="flex items-center gap-2 text-sm text-charcoal-600 mb-4 p-3 bg-green-50 rounded-lg border border-green-100">
                         <Euro className="w-4 h-4 text-green-600" />
-                        <span><strong>Budget indicatif :</strong> {lead.budget}</span>
+                        <span>
+                          <strong>Budget indicatif :</strong> {lead.budget}
+                        </span>
                       </div>
                     )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                        <Calendar className="w-4 h-4 text-gray-400" />
+                      <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
+                        <Calendar className="w-4 h-4 text-charcoal-400" />
                         <div>
-                          <p className="text-xs text-gray-400">Créée le</p>
-                          <p className="text-sm text-gray-700">
+                          <p className="text-xs text-charcoal-400">Créée le</p>
+                          <p className="text-sm text-charcoal-700">
                             {new Date(lead.created_at).toLocaleDateString('fr-FR', {
-                              day: 'numeric', month: 'long', year: 'numeric',
-                              hour: '2-digit', minute: '2-digit',
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
                             })}
                           </p>
                         </div>
                       </div>
                       {lead.city && (
-                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                          <MapPin className="w-4 h-4 text-gray-400" />
+                        <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
+                          <MapPin className="w-4 h-4 text-charcoal-400" />
                           <div>
-                            <p className="text-xs text-gray-400">Localisation</p>
-                            <p className="text-sm text-gray-700">
+                            <p className="text-xs text-charcoal-400">Localisation</p>
+                            <p className="text-sm text-charcoal-700">
                               {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                             </p>
                           </div>
@@ -324,40 +338,44 @@ export default function LeadDetailPage() {
 
                 {/* Stats bar */}
                 {stats && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                  <div className="bg-white rounded-xl border border-sand-300 p-4">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
                       <div>
-                        <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
+                        <div className="flex items-center justify-center gap-1.5 text-charcoal-400 mb-1">
                           <Users className="w-4 h-4" />
                           <span className="text-xs">Contactés</span>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900">{stats.artisans_notified}</p>
+                        <p className="text-2xl font-bold text-charcoal-900">
+                          {stats.artisans_notified}
+                        </p>
                       </div>
                       <div>
-                        <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
+                        <div className="flex items-center justify-center gap-1.5 text-charcoal-400 mb-1">
                           <Eye className="w-4 h-4" />
                           <span className="text-xs">Intéressés</span>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900">{stats.artisans_viewed}</p>
+                        <p className="text-2xl font-bold text-charcoal-900">
+                          {stats.artisans_viewed}
+                        </p>
                       </div>
                       <div>
-                        <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
+                        <div className="flex items-center justify-center gap-1.5 text-charcoal-400 mb-1">
                           <FileText className="w-4 h-4" />
                           <span className="text-xs">Devis reçus</span>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900">{stats.quotes_count}</p>
+                        <p className="text-2xl font-bold text-charcoal-900">{stats.quotes_count}</p>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {/* Quotes section */}
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-gray-400" />
-                    <h2 className="font-semibold text-gray-900">Devis reçus</h2>
+                <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
+                  <div className="px-6 py-4 border-b border-sand-200 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-charcoal-400" />
+                    <h2 className="font-semibold text-charcoal-900">Devis reçus</h2>
                     {quotes.length > 0 && (
-                      <span className="ml-auto bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                      <span className="ml-auto bg-primary-100 text-primary-600 text-xs font-medium px-2 py-0.5 rounded-full">
                         {quotes.length}
                       </span>
                     )}
@@ -365,18 +383,21 @@ export default function LeadDetailPage() {
 
                   {quotes.length === 0 ? (
                     <div className="p-10 text-center">
-                      <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <Clock className="w-6 h-6 text-gray-400" />
+                      <div className="w-12 h-12 bg-sand-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Clock className="w-6 h-6 text-charcoal-400" />
                       </div>
-                      <p className="font-medium text-gray-600">En attente de devis des artisans</p>
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="font-medium text-charcoal-600">
+                        En attente de devis des artisans
+                      </p>
+                      <p className="text-sm text-charcoal-400 mt-1">
                         Les artisans intéressés vous enverront leur proposition rapidement.
                       </p>
                     </div>
                   ) : (
-                    <div className="divide-y divide-gray-100">
+                    <div className="divide-y divide-sand-200">
                       {quotes.map((quote) => {
-                        const statusCfg = QUOTE_STATUS_CONFIG[quote.status] || QUOTE_STATUS_CONFIG.pending
+                        const statusCfg =
+                          QUOTE_STATUS_CONFIG[quote.status] || QUOTE_STATUS_CONFIG.pending
                         const isAccepting = actionLoading === quote.id
                         const isRefusing = actionLoading === `refuse-${quote.id}`
                         const anyLoading = actionLoading !== null
@@ -392,45 +413,49 @@ export default function LeadDetailPage() {
                             <div className="flex items-start justify-between gap-4 mb-4">
                               <div>
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="text-2xl font-bold text-gray-900">
+                                  <span className="text-2xl font-bold text-charcoal-900">
                                     {Number(quote.amount).toLocaleString('fr-FR', {
                                       style: 'currency',
                                       currency: 'EUR',
                                     })}
                                   </span>
-                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusCfg.cls}`}>
+                                  <span
+                                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusCfg.cls}`}
+                                  >
                                     {statusCfg.label}
                                   </span>
                                 </div>
                                 {quote.valid_until && (
-                                  <p className="text-xs text-gray-400 mt-1">
+                                  <p className="text-xs text-charcoal-400 mt-1">
                                     Valable jusqu'au {formatDate(quote.valid_until)}
                                   </p>
                                 )}
                               </div>
-                              <p className="text-xs text-gray-400 whitespace-nowrap">
+                              <p className="text-xs text-charcoal-400 whitespace-nowrap">
                                 {formatDate(quote.created_at)}
                               </p>
                             </div>
 
                             {/* Provider info */}
                             {quote.provider && (
-                              <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
-                                <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                  <span className="text-blue-700 font-bold text-sm">
+                              <div className="flex items-center gap-3 mb-4 p-3 bg-sand-50 rounded-lg">
+                                <div className="w-9 h-9 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
+                                  <span className="text-primary-600 font-bold text-sm">
                                     {quote.provider.name.charAt(0).toUpperCase()}
                                   </span>
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <p className="font-medium text-gray-900 text-sm truncate">
+                                  <p className="font-medium text-charcoal-900 text-sm truncate">
                                     {quote.provider.name}
                                   </p>
                                   <div className="flex items-center gap-3 flex-wrap">
                                     {quote.provider.specialty && (
-                                      <span className="text-xs text-gray-500">{quote.provider.specialty}</span>
+                                      <span className="text-xs text-charcoal-500">
+                                        {quote.provider.specialty}
+                                      </span>
                                     )}
                                     {quote.provider.city && (
-                                      <span className="flex items-center gap-0.5 text-xs text-gray-500">
+                                      <span className="flex items-center gap-0.5 text-xs text-charcoal-500">
                                         <MapPin className="w-3 h-3" />
                                         {quote.provider.city}
                                       </span>
@@ -443,7 +468,7 @@ export default function LeadDetailPage() {
 
                             {/* Quote description */}
                             {quote.description && (
-                              <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                              <p className="text-sm text-charcoal-600 leading-relaxed mb-4">
                                 {quote.description}
                               </p>
                             )}
@@ -466,7 +491,7 @@ export default function LeadDetailPage() {
                                 <button
                                   onClick={() => handleRefuse(quote.id)}
                                   disabled={anyLoading}
-                                  className="flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                  className="flex items-center gap-2 px-4 py-2.5 border border-sand-400 text-charcoal-700 rounded-lg text-sm font-medium hover:bg-sand-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                   {isRefusing ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -493,17 +518,17 @@ export default function LeadDetailPage() {
                 </div>
 
                 {/* Contact CTA */}
-                <div className="bg-blue-50 rounded-xl border border-blue-100 p-6">
-                  <h2 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-blue-500" />
+                <div className="bg-primary-50 rounded-xl border border-primary-100 p-6">
+                  <h2 className="font-semibold text-charcoal-900 mb-2 flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5 text-primary-400" />
                     Besoin d'aide ?
                   </h2>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-charcoal-600 mb-4">
                     Si vous avez des questions sur cette demande, contactez-nous via la messagerie.
                   </p>
                   <Link
                     href="/espace-client/messages"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
                   >
                     <MessageSquare className="w-4 h-4" />
                     Ouvrir la messagerie
@@ -514,55 +539,55 @@ export default function LeadDetailPage() {
               {/* Right column: Timeline + info */}
               <div className="space-y-6">
                 {/* Event timeline */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <History className="w-5 h-5 text-gray-400" />
+                <div className="bg-white rounded-xl border border-sand-300 p-6">
+                  <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                    <History className="w-5 h-5 text-charcoal-400" />
                     Suivi de la demande
                   </h3>
                   <EventTimeline events={events} compact />
                 </div>
 
                 {/* Info card */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <h3 className="font-semibold text-gray-900 mb-3 text-sm flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-gray-400" />
+                <div className="bg-white rounded-xl border border-sand-300 p-6">
+                  <h3 className="font-semibold text-charcoal-900 mb-3 text-sm flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-charcoal-400" />
                     Informations
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Référence</span>
-                      <span className="text-gray-700 font-mono text-xs">{id.slice(0, 8)}</span>
+                      <span className="text-charcoal-500">Référence</span>
+                      <span className="text-charcoal-700 font-mono text-xs">{id.slice(0, 8)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Urgence</span>
+                      <span className="text-charcoal-500">Urgence</span>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
                         {urg.label}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Événements</span>
-                      <span className="text-gray-700">{events.length}</span>
+                      <span className="text-charcoal-500">Événements</span>
+                      <span className="text-charcoal-700">{events.length}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Devis reçus</span>
-                      <span className="text-gray-700">{quotes.length}</span>
+                      <span className="text-charcoal-500">Devis reçus</span>
+                      <span className="text-charcoal-700">{quotes.length}</span>
                     </div>
                     {pendingQuotes.length > 0 && !hasAcceptedQuote && (
                       <div className="flex justify-between">
-                        <span className="text-gray-500">En attente</span>
-                        <span className="text-blue-700 font-medium">{pendingQuotes.length}</span>
+                        <span className="text-charcoal-500">En attente</span>
+                        <span className="text-primary-600 font-medium">{pendingQuotes.length}</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Read-only notice */}
-                <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
+                <div className="bg-sand-50 rounded-lg border border-sand-300 p-4">
                   <div className="flex items-start gap-2">
-                    <Clock className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-gray-500 leading-relaxed">
-                      Le suivi est mis à jour automatiquement. Les artisans répondent
-                      généralement rapidement.
+                    <Clock className="w-4 h-4 text-charcoal-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-charcoal-500 leading-relaxed">
+                      Le suivi est mis à jour automatiquement. Les artisans répondent généralement
+                      rapidement.
                     </p>
                   </div>
                 </div>

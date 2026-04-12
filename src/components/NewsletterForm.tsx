@@ -36,13 +36,13 @@ export default function NewsletterForm() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'inscription')
+        throw new Error(data.error || "Erreur lors de l'inscription")
       }
 
       setIsSubmitted(true)
       setEmail('')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
+      setError(err instanceof Error ? err.message : "Erreur lors de l'inscription")
     } finally {
       setIsLoading(false)
     }
@@ -70,7 +70,7 @@ export default function NewsletterForm() {
             aria-label="Adresse email pour la newsletter"
             required
             disabled={isLoading}
-            className="w-full px-5 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-50"
+            className="w-full px-5 py-3.5 bg-charcoal-800/50 border border-charcoal-700 rounded-xl text-white placeholder:text-charcoal-500 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20 transition-all disabled:opacity-50"
           />
           {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
         </div>
@@ -78,13 +78,9 @@ export default function NewsletterForm() {
           type="submit"
           disabled={isLoading}
           aria-label="S'inscrire à la newsletter"
-          className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-primary-500 to-primary-400 text-white font-semibold rounded-xl hover:from-primary-400 hover:to-primary-300 transition-all duration-300 shadow-lg shadow-primary-400/25 hover:shadow-xl hover:shadow-primary-400/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
-          {isLoading ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : (
-            "S'inscrire"
-          )}
+          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "S'inscrire"}
         </button>
       </div>
       <label className="flex items-start gap-2 mt-4 text-left cursor-pointer">
@@ -92,13 +88,15 @@ export default function NewsletterForm() {
           type="checkbox"
           checked={consentRgpd}
           onChange={(e) => setConsentRgpd(e.target.checked)}
-          className="mt-1 rounded border-slate-600 text-blue-600 focus:ring-blue-500 bg-slate-800/50 flex-shrink-0"
+          className="mt-1 rounded border-charcoal-600 text-primary-500 focus:ring-primary-400 bg-charcoal-800/50 flex-shrink-0"
         />
-        <span className="text-sm text-gray-400 leading-relaxed">
-          J&apos;accepte que mes données soient utilisées pour recevoir la newsletter. Consultez notre{' '}
-          <Link href="/confidentialite" className="underline hover:text-white text-gray-300">
+        <span className="text-sm text-charcoal-400 leading-relaxed">
+          J&apos;accepte que mes données soient utilisées pour recevoir la newsletter. Consultez
+          notre{' '}
+          <Link href="/confidentialite" className="underline hover:text-white text-sand-500">
             politique de confidentialité
-          </Link>.
+          </Link>
+          .
         </span>
       </label>
       <p className="text-white/50 text-xs mt-2">

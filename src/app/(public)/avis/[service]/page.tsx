@@ -396,17 +396,17 @@ export default async function AvisServicePage({
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <JsonLd data={[breadcrumbSchema, faqSchema, ...serviceSchema]} />
 
       {/* Hero */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
           <div
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%)',
             }}
           />
           <div
@@ -417,12 +417,12 @@ export default async function AvisServicePage({
               backgroundSize: '64px 64px',
             }}
           />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
             items={[{ label: 'Avis', href: '/avis' }, { label: `Avis ${tradeLower}` }]}
-            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
@@ -438,7 +438,7 @@ export default async function AvisServicePage({
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+            <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
               Consultez les avis et recommandations pour bien choisir votre {tradeLower}. Prix
               indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
             </p>
@@ -467,23 +467,23 @@ export default async function AvisServicePage({
       </section>
 
       {/* Editorial content — SEO (~300+ words unique per service) */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-gray max-w-none">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">
               Pourquoi consulter les avis avant de choisir un {tradeLower} ?
             </h2>
-            <p className="text-gray-700 leading-relaxed mb-6">{editorialIntro}</p>
+            <p className="text-charcoal-700 leading-relaxed mb-6">{editorialIntro}</p>
 
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-3 mt-8">
+            <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-3 mt-8">
               Ce que les clients regardent chez un {tradeLower}
             </h2>
-            <p className="text-gray-700 leading-relaxed mb-6">{editorialAnalysis}</p>
+            <p className="text-charcoal-700 leading-relaxed mb-6">{editorialAnalysis}</p>
 
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-3 mt-8">
+            <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-3 mt-8">
               Nos conseils pour bien choisir votre {tradeLower}
             </h2>
-            <p className="text-gray-700 leading-relaxed">{editorialConseil}</p>
+            <p className="text-charcoal-700 leading-relaxed">{editorialConseil}</p>
           </div>
         </div>
       </section>
@@ -491,10 +491,10 @@ export default async function AvisServicePage({
       {/* Review criteria */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
             Ce qu'il faut vérifier
           </h2>
-          <p className="text-gray-500 text-sm text-center mb-8">
+          <p className="text-charcoal-500 text-sm text-center mb-8">
             Les critères essentiels pour choisir un {tradeLower} de confiance.
           </p>
           <div className="space-y-4">
@@ -503,16 +503,18 @@ export default async function AvisServicePage({
               return (
                 <div
                   key={criterion.title}
-                  className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5 hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                  className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5 hover:bg-primary-50 hover:border-primary-200 transition-colors"
                 >
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-primary-500" />
                   </div>
                   <div>
-                    <h3 className="font-heading font-semibold text-gray-900 mb-1">
+                    <h3 className="font-heading font-semibold text-charcoal-900 mb-1">
                       {criterion.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{criterion.description}</p>
+                    <p className="text-charcoal-600 text-sm leading-relaxed">
+                      {criterion.description}
+                    </p>
                   </div>
                 </div>
               )
@@ -523,25 +525,27 @@ export default async function AvisServicePage({
 
       {/* ─── TOP ARTISANS ─────────────────────────────── */}
       {serviceStats.providers.length > 0 && (
-        <section className="py-12 bg-gray-50">
+        <section className="py-12 bg-sand-50">
           <div className="max-w-5xl mx-auto px-4">
-            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
               {trade.name}s les mieux notés en France
             </h2>
-            <p className="text-slate-500 text-center mb-8 max-w-lg mx-auto">
+            <p className="text-charcoal-900 text-center mb-8 max-w-lg mx-auto">
               Classement basé sur les avis clients vérifiés.
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {serviceStats.providers.map((provider, i) => (
-                <div key={provider.id} className="bg-white border border-gray-200 rounded-xl p-5">
+                <div key={provider.id} className="bg-white border border-sand-300 rounded-xl p-5">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                      <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 font-bold text-sm">
                         {provider.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900 text-sm">{provider.name}</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="font-semibold text-charcoal-900 text-sm">
+                          {provider.name}
+                        </div>
+                        <div className="text-xs text-charcoal-500">
                           {provider.address_city || 'France'}
                         </div>
                       </div>
@@ -552,7 +556,7 @@ export default async function AvisServicePage({
                           i === 0
                             ? 'bg-amber-100 text-amber-700'
                             : i === 1
-                              ? 'bg-gray-100 text-gray-600'
+                              ? 'bg-sand-100 text-charcoal-600'
                               : 'bg-orange-50 text-orange-600'
                         }`}
                       >
@@ -569,15 +573,17 @@ export default async function AvisServicePage({
                             className={`w-4 h-4 ${
                               star <= Math.round(provider.rating_average ?? 0)
                                 ? 'text-amber-400 fill-amber-400'
-                                : 'text-gray-200'
+                                : 'text-sand-400'
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className="text-sm font-semibold text-charcoal-900">
                         {provider.rating_average.toFixed(1)}
                       </span>
-                      <span className="text-xs text-gray-500">({provider.review_count} avis)</span>
+                      <span className="text-xs text-charcoal-500">
+                        ({provider.review_count} avis)
+                      </span>
                     </div>
                   )}
                   {provider.is_verified && (
@@ -597,18 +603,18 @@ export default async function AvisServicePage({
       {serviceStats.reviews.length > 0 && (
         <section className="py-12 bg-white border-t">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
               Derniers avis clients — {trade.name}
             </h2>
-            <p className="text-slate-500 text-center mb-8">
+            <p className="text-charcoal-900 text-center mb-8">
               Retours d'expérience vérifiés de clients.
             </p>
             <div className="space-y-4">
               {serviceStats.reviews.map((review) => (
-                <div key={review.id} className="bg-gray-50 rounded-xl border border-gray-100 p-5">
+                <div key={review.id} className="bg-sand-50 rounded-xl border border-sand-200 p-5">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-gray-900 text-sm">
+                      <span className="font-semibold text-charcoal-900 text-sm">
                         {review.author_name || 'Client vérifié'}
                       </span>
                       <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
@@ -623,20 +629,20 @@ export default async function AvisServicePage({
                           className={`w-4 h-4 ${
                             star <= review.rating
                               ? 'text-amber-400 fill-amber-400'
-                              : 'text-gray-200'
+                              : 'text-sand-400'
                           }`}
                         />
                       ))}
                     </div>
                   </div>
                   {review.content && (
-                    <p className="text-gray-700 text-sm leading-relaxed">
+                    <p className="text-charcoal-700 text-sm leading-relaxed">
                       {review.content.length > 300
                         ? review.content.slice(0, 300) + '…'
                         : review.content}
                     </p>
                   )}
-                  <div className="mt-3 text-xs text-gray-400">
+                  <div className="mt-3 text-xs text-charcoal-400">
                     {new Date(review.created_at).toLocaleDateString('fr-FR', {
                       year: 'numeric',
                       month: 'long',
@@ -651,19 +657,19 @@ export default async function AvisServicePage({
       )}
 
       {/* Pricing expectations */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Tarifs indicatifs {tradeLower}
           </h2>
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-8">
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-8 text-center mb-8">
             <div className="flex items-baseline justify-center gap-2">
-              <span className="text-5xl font-bold text-blue-600">
+              <span className="text-5xl font-bold text-primary-500">
                 {trade.priceRange.min} — {trade.priceRange.max}
               </span>
-              <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
+              <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
             </div>
-            <p className="text-gray-500 text-sm mt-3">
+            <p className="text-charcoal-500 text-sm mt-3">
               Prix moyen constaté en France métropolitaine, main-d'&oelig;uvre incluse
             </p>
           </div>
@@ -671,12 +677,12 @@ export default async function AvisServicePage({
             {trade.commonTasks.slice(0, 6).map((task, i) => (
               <div
                 key={i}
-                className="flex items-start gap-3 bg-white rounded-xl border border-gray-200 p-4"
+                className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4"
               >
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Euro className="w-4 h-4 text-blue-600" />
+                <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Euro className="w-4 h-4 text-primary-500" />
                 </div>
-                <span className="text-gray-800 text-sm">{task}</span>
+                <span className="text-charcoal-800 text-sm">{task}</span>
               </div>
             ))}
           </div>
@@ -687,17 +693,17 @@ export default async function AvisServicePage({
       {trade.certifications.length > 0 && (
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
               Certifications à vérifier
             </h2>
-            <p className="text-gray-600 text-center mb-8">
+            <p className="text-charcoal-600 text-center mb-8">
               Vérifiez que votre {tradeLower} possède les certifications adaptées à votre projet.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
                 <div
                   key={cert}
-                  className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-3 rounded-xl text-sm font-medium"
+                  className="flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-3 rounded-xl text-sm font-medium"
                 >
                   <Shield className="w-4 h-4 flex-shrink-0" />
                   {cert}
@@ -709,21 +715,21 @@ export default async function AvisServicePage({
       )}
 
       {/* Tips */}
-      <section className={`py-16 ${trade.certifications.length > 0 ? 'bg-gray-50' : 'bg-white'}`}>
+      <section className={`py-16 ${trade.certifications.length > 0 ? 'bg-sand-50' : 'bg-white'}`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Conseils pour choisir un {tradeLower}
           </h2>
           <div className="space-y-4">
             {selectedTips.map((tip, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-white rounded-xl border border-gray-200 p-5"
+                className="flex items-start gap-4 bg-white rounded-xl border border-sand-300 p-5"
               >
                 <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-amber-600" />
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
               </div>
             ))}
           </div>
@@ -731,9 +737,9 @@ export default async function AvisServicePage({
       </section>
 
       {/* Top cities */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Avis {tradeLower} par ville
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
@@ -741,9 +747,9 @@ export default async function AvisServicePage({
               <Link
                 key={ville.slug}
                 href={`/avis/${service}/${ville.slug}`}
-                className="bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
+                className="bg-white hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group text-center"
               >
-                <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
                   Avis {tradeLower} à {ville.name}
                 </div>
               </Link>
@@ -752,7 +758,7 @@ export default async function AvisServicePage({
           <div className="text-center mt-6">
             <Link
               href="/villes"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+              className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm"
             >
               Voir les avis {tradeLower} dans toutes les villes ({villes.length})
               <ArrowRight className="w-4 h-4" />
@@ -764,17 +770,21 @@ export default async function AvisServicePage({
       {/* FAQ */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fréquentes — Avis {trade.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
-              <details key={i} className="bg-gray-50 rounded-xl border border-gray-200 group">
+              <details key={i} className="bg-sand-50 rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
-                  <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">
+                    {item.question}
+                  </h3>
+                  <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">{item.answer}</div>
+                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
+                  {item.answer}
+                </div>
               </details>
             ))}
           </div>
@@ -782,25 +792,25 @@ export default async function AvisServicePage({
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-blue-600">
+      <section className="py-20 bg-primary-500">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
             Prêt à trouver votre {tradeLower}&nbsp;?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-xl text-primary-100 mb-8">
             Demandez un devis gratuit et comparez les artisans près de chez vous.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href={`/devis/${service}`}
-              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+              className="inline-flex items-center gap-2 bg-white text-primary-500 px-8 py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors text-lg"
             >
               Obtenir mon devis gratuit
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href={`/services/${service}`}
-              className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
+              className="inline-flex items-center gap-2 bg-primary-400 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-300 transition-colors text-lg border border-primary-300"
             >
               Trouver un {tradeLower}
               <ArrowRight className="w-5 h-5" />
@@ -810,9 +820,9 @@ export default async function AvisServicePage({
       </section>
 
       {/* Related services */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
             Avis pour d'autres métiers
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -823,12 +833,12 @@ export default async function AvisServicePage({
                 <Link
                   key={slug}
                   href={`/avis/${slug}`}
-                  className="bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group"
+                  className="bg-white hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group"
                 >
-                  <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                  <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
                     Avis {t.name.toLowerCase()}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-charcoal-500 mt-1">
                     {t.priceRange.min} — {t.priceRange.max} {t.priceRange.unit}
                   </div>
                 </Link>
@@ -841,33 +851,33 @@ export default async function AvisServicePage({
       {/* Voir aussi */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Ce service</h3>
               <div className="space-y-2">
                 <Link
                   href={`/services/${service}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   {trade.name} — tous les artisans
                 </Link>
                 <Link
                   href={`/devis/${service}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Devis {tradeLower}
                 </Link>
                 <Link
                   href={`/tarifs/${service}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Tarifs {tradeLower}
                 </Link>
                 {trade.emergencyInfo && (
                   <Link
                     href={`/urgence/${service}`}
-                    className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                   >
                     {trade.name} urgence
                   </Link>
@@ -876,7 +886,7 @@ export default async function AvisServicePage({
                   <Link
                     key={v.slug}
                     href={`/avis/${service}/${v.slug}`}
-                    className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                   >
                     Avis {tradeLower} à {v.name}
                   </Link>
@@ -884,7 +894,7 @@ export default async function AvisServicePage({
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Avis associés</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Avis associés</h3>
               <div className="space-y-2">
                 {otherTrades.slice(0, 4).map((slug) => {
                   const t = tradeContent[slug]
@@ -893,7 +903,7 @@ export default async function AvisServicePage({
                     <Link
                       key={slug}
                       href={`/avis/${slug}`}
-                      className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                      className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                     >
                       Avis {t.name.toLowerCase()}
                     </Link>
@@ -902,30 +912,36 @@ export default async function AvisServicePage({
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/avis" className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href="/avis"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   Tous les avis artisans
                 </Link>
                 <Link
                   href="/devis"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Demander un devis
                 </Link>
                 <Link
                   href="/tarifs"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Guide complet des tarifs
                 </Link>
                 <Link
                   href="/comment-ca-marche"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Comment ça marche
                 </Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   FAQ
                 </Link>
               </div>
@@ -937,20 +953,20 @@ export default async function AvisServicePage({
       {/* Trust & Safety Links (E-E-A-T) */}
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link
               href="/notre-processus-de-verification"
-              className="text-blue-600 hover:text-blue-800"
+              className="text-primary-500 hover:text-primary-800"
             >
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+            <Link href="/politique-avis" className="text-primary-500 hover:text-primary-800">
               Notre politique des avis
             </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+            <Link href="/mediation" className="text-primary-500 hover:text-primary-800">
               Service de médiation
             </Link>
           </nav>
@@ -961,17 +977,17 @@ export default async function AvisServicePage({
       {BAROMETRE_METIERS.some((m) => m.slug === service) && (
         <section className="py-12 bg-white border-t">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
+            <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4">
               Baromètre {trade.name}
             </h2>
-            <p className="text-gray-600 text-sm mb-6">
+            <p className="text-charcoal-600 text-sm mb-6">
               Consultez les statistiques détaillées des {trade.name.toLowerCase()}s en France :
               nombre d'artisans, note moyenne, taux de vérification par département.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
                 href={`/barometre/tarifs/${service}`}
-                className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 hover:bg-blue-100 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors border border-blue-100 hover:border-blue-200"
+                className="inline-flex items-center gap-2 bg-primary-50 text-primary-600 hover:bg-primary-100 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors border border-primary-100 hover:border-primary-200"
               >
                 <Star className="w-4 h-4" />
                 Statistiques {trade.name.toLowerCase()} en France
@@ -980,7 +996,7 @@ export default async function AvisServicePage({
                 <Link
                   key={dept.slug}
                   href={`/departements/${dept.slug}/${service}`}
-                  className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-50 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-gray-200 hover:border-blue-200"
+                  className="inline-flex items-center gap-1.5 text-sm text-charcoal-600 hover:text-primary-500 bg-sand-50 hover:bg-primary-50 px-3 py-1.5 rounded-lg transition-colors border border-sand-300 hover:border-primary-200"
                 >
                   {trade.name} dans le {dept.code}
                 </Link>
@@ -1003,9 +1019,11 @@ export default async function AvisServicePage({
       {/* Editorial credibility */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence éditoriale</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+          <div className="bg-sand-50 rounded-2xl border border-charcoal-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Transparence éditoriale
+            </h3>
+            <p className="text-xs text-charcoal-900 leading-relaxed">
               Les informations présentées sur cette page sont indicatives et destinées à vous aider
               dans le choix d'un artisan. Les prix affichés sont des fourchettes basées sur des
               moyennes constatées en France. Seul un devis personnalisé fait foi. ServicesArtisans

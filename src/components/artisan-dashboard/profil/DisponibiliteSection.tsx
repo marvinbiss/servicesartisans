@@ -24,7 +24,10 @@ interface OpeningHoursValue {
 const FIELDS = ['opening_hours', 'available_24h', 'accepts_new_clients'] as const
 
 export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSectionProps) {
-  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
+  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(
+    provider,
+    FIELDS
+  )
 
   const onSave = async () => {
     const updated = await handleSave()
@@ -57,7 +60,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
         {/* Toggle switches */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <label htmlFor="dispo-24h" className="text-sm font-medium text-gray-700">
+            <label htmlFor="dispo-24h" className="text-sm font-medium text-charcoal-700">
               Disponible 24h/24
             </label>
             <button
@@ -67,7 +70,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
               aria-checked={available24h}
               onClick={() => setField('available_24h', !available24h)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                available24h ? 'bg-blue-600' : 'bg-gray-300'
+                available24h ? 'bg-primary-500' : 'bg-sand-400'
               }`}
             >
               <span
@@ -79,7 +82,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
           </div>
 
           <div className="flex items-center justify-between">
-            <label htmlFor="dispo-new-clients" className="text-sm font-medium text-gray-700">
+            <label htmlFor="dispo-new-clients" className="text-sm font-medium text-charcoal-700">
               Accepte de nouveaux clients
             </label>
             <button
@@ -89,7 +92,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
               aria-checked={acceptsNewClients}
               onClick={() => setField('accepts_new_clients', !acceptsNewClients)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                acceptsNewClients ? 'bg-blue-600' : 'bg-gray-300'
+                acceptsNewClients ? 'bg-primary-500' : 'bg-sand-400'
               }`}
             >
               <span
@@ -102,7 +105,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
         </div>
 
         {/* Separator */}
-        <div className="border-t border-gray-200 pt-6">
+        <div className="border-t border-sand-300 pt-6">
           <AvailabilityManager />
         </div>
       </div>

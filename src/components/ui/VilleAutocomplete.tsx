@@ -21,17 +21,21 @@ async function searchCities(query: string): Promise<CitySuggestion[]> {
     const response = await fetch(url)
     if (!response.ok) return []
     const data = await response.json()
-    return data.features?.map((f: {
-      properties: { id: string; city: string; context: string; label: string; postcode: string }
-      geometry: { coordinates: [number, number] }
-    }) => ({
-      id: f.properties.id,
-      city: f.properties.city || f.properties.label,
-      context: f.properties.context,
-      label: f.properties.label,
-      postcode: f.properties.postcode,
-      coordinates: f.geometry.coordinates
-    })) || []
+    return (
+      data.features?.map(
+        (f: {
+          properties: { id: string; city: string; context: string; label: string; postcode: string }
+          geometry: { coordinates: [number, number] }
+        }) => ({
+          id: f.properties.id,
+          city: f.properties.city || f.properties.label,
+          context: f.properties.context,
+          label: f.properties.label,
+          postcode: f.properties.postcode,
+          coordinates: f.geometry.coordinates,
+        })
+      ) || []
+    )
   } catch {
     return []
   }
@@ -51,7 +55,7 @@ async function getLocationFromCoords(lon: number, lat: number): Promise<CitySugg
       context: f.properties.context,
       label: f.properties.label,
       postcode: f.properties.postcode,
-      coordinates: f.geometry.coordinates
+      coordinates: f.geometry.coordinates,
     }
   } catch {
     return null
@@ -77,7 +81,7 @@ export function VilleAutocomplete({
   showGeolocation = true,
   className = '',
   inputClassName = '',
-  disabled = false
+  disabled = false,
 }: VilleAutocompleteProps) {
   const [query, setQuery] = useState(value)
   const [suggestions, setSuggestions] = useState<CitySuggestion[]>([])
@@ -125,12 +129,15 @@ export function VilleAutocomplete({
   }, [query])
 
   // Handle selection
-  const handleSelect = useCallback((suggestion: CitySuggestion) => {
-    setQuery(suggestion.city)
-    setIsOpen(false)
-    setSuggestions([])
-    onSelect(suggestion.city, suggestion.postcode, suggestion.coordinates)
-  }, [onSelect])
+  const handleSelect = useCallback(
+    (suggestion: CitySuggestion) => {
+      setQuery(suggestion.city)
+      setIsOpen(false)
+      setSuggestions([])
+      onSelect(suggestion.city, suggestion.postcode, suggestion.coordinates)
+    },
+    [onSelect]
+  )
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -139,15 +146,11 @@ export function VilleAutocomplete({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        )
+        setHighlightedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0))
         break
       case 'ArrowUp':
         e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        )
+        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1))
         break
       case 'Enter':
         e.preventDefault()
@@ -164,7 +167,7 @@ export function VilleAutocomplete({
   // Geolocation
   const handleGeolocation = async () => {
     if (!navigator.geolocation) {
-      alert('La geolocalisation n\'est pas supportee par votre navigateur')
+      alert("La geolocalisation n'est pas supportee par votre navigateur")
       return
     }
 
@@ -190,7 +193,7 @@ export function VilleAutocomplete({
       },
       () => {
         setIsLocating(false)
-        alert('Impossible d\'obtenir votre position')
+        alert("Impossible d'obtenir votre position")
       },
       { timeout: 10000, enableHighAccuracy: true }
     )
@@ -233,10 +236,10 @@ export function VilleAutocomplete({
           disabled={disabled || isLocating}
           className={`
             w-full pl-10 pr-20 py-3
-            bg-white border border-gray-200 rounded-xl
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
-            placeholder:text-gray-400 text-gray-900
-            disabled:bg-gray-100 disabled:cursor-not-allowed
+            bg-white border border-sand-300 rounded-xl
+            focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20
+            placeholder:text-charcoal-400 text-charcoal-900
+            disabled:bg-sand-100 disabled:cursor-not-allowed
             transition-all
             ${inputClassName}
           `}
@@ -244,24 +247,22 @@ export function VilleAutocomplete({
         />
 
         {/* Left icon */}
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
 
         {/* Right actions */}
         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
           {/* Loading indicator */}
-          {isLoading && (
-            <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
-          )}
+          {isLoading && <Loader2 className="w-4 h-4 text-charcoal-400 animate-spin" />}
 
           {/* Clear button */}
           {query && !isLoading && (
             <button
               type="button"
               onClick={handleClear}
-              className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-sand-100 rounded-lg transition-colors"
               aria-label="Effacer"
             >
-              <X className="w-4 h-4 text-gray-400" />
+              <X className="w-4 h-4 text-charcoal-400" />
             </button>
           )}
 
@@ -271,14 +272,14 @@ export function VilleAutocomplete({
               type="button"
               onClick={handleGeolocation}
               disabled={isLocating || disabled}
-              className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+              className="p-1.5 hover:bg-primary-50 rounded-lg transition-colors disabled:opacity-50"
               aria-label="Utiliser ma position"
               title="Utiliser ma position"
             >
               {isLocating ? (
-                <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+                <Loader2 className="w-4 h-4 text-primary-500 animate-spin" />
               ) : (
-                <Navigation className="w-4 h-4 text-blue-600" />
+                <Navigation className="w-4 h-4 text-primary-500" />
               )}
             </button>
           )}
@@ -290,7 +291,7 @@ export function VilleAutocomplete({
         <ul
           className="
             absolute z-50 w-full mt-1
-            bg-white border border-gray-200 rounded-xl
+            bg-white border border-sand-300 rounded-xl
             shadow-lg max-h-64 overflow-y-auto
           "
           role="listbox"
@@ -305,9 +306,10 @@ export function VilleAutocomplete({
                   px-4 py-3 cursor-pointer
                   flex items-center gap-3
                   transition-colors
-                  ${index === highlightedIndex
-                    ? 'bg-blue-50 text-blue-900'
-                    : 'hover:bg-gray-50 text-gray-900'
+                  ${
+                    index === highlightedIndex
+                      ? 'bg-primary-50 text-primary-800'
+                      : 'hover:bg-sand-50 text-charcoal-900'
                   }
                   ${index === 0 ? 'rounded-t-xl' : ''}
                   ${index === suggestions.length - 1 ? 'rounded-b-xl' : ''}
@@ -315,14 +317,14 @@ export function VilleAutocomplete({
                 role="option"
                 aria-selected={index === highlightedIndex}
               >
-                <MapPin className={`w-4 h-4 flex-shrink-0 ${
-                  index === highlightedIndex ? 'text-blue-600' : 'text-gray-400'
-                }`} />
+                <MapPin
+                  className={`w-4 h-4 flex-shrink-0 ${
+                    index === highlightedIndex ? 'text-primary-500' : 'text-charcoal-400'
+                  }`}
+                />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium truncate">
-                    {suggestion.city}
-                  </div>
-                  <div className="text-sm text-gray-500 truncate">
+                  <div className="font-medium truncate">{suggestion.city}</div>
+                  <div className="text-sm text-charcoal-500 truncate">
                     {suggestion.postcode} - {suggestion.context}
                   </div>
                 </div>
@@ -330,7 +332,7 @@ export function VilleAutocomplete({
             ))
           ) : (
             <div className="p-3">
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+              <div className="text-xs font-semibold text-charcoal-400 uppercase tracking-wide mb-2">
                 Villes populaires
               </div>
               <div className="grid grid-cols-2 gap-1">
@@ -343,10 +345,10 @@ export function VilleAutocomplete({
                       setIsOpen(false)
                       onSelect(city.name, city.postcode)
                     }}
-                    className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg text-left transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-primary-50 rounded-lg text-left transition-colors"
                   >
-                    <MapPin className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-gray-700">{city.name}</span>
+                    <MapPin className="w-4 h-4 text-primary-500" />
+                    <span className="text-sm text-charcoal-700">{city.name}</span>
                   </button>
                 ))}
               </div>

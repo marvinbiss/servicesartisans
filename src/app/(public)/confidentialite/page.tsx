@@ -42,7 +42,7 @@ export default async function ConfidentialitePage() {
 
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <JsonLd
           data={getBreadcrumbSchema([
             { name: 'Accueil', url: '/' },
@@ -52,7 +52,7 @@ export default async function ConfidentialitePage() {
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'Confidentialité' }]} className="mb-4" />
-            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -67,7 +67,7 @@ export default async function ConfidentialitePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <JsonLd
         data={getBreadcrumbSchema([
           { name: 'Accueil', url: '/' },
@@ -78,10 +78,10 @@ export default async function ConfidentialitePage() {
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <Breadcrumb items={[{ label: 'Confidentialité' }]} className="mb-4" />
-          <h1 className="font-heading text-3xl font-bold text-gray-900">
+          <h1 className="font-heading text-3xl font-bold text-charcoal-900">
             Politique de confidentialité
           </h1>
-          <p className="text-gray-600 mt-2">Dernière mise à jour : Avril 2026</p>
+          <p className="text-charcoal-600 mt-2">Dernière mise à jour : Avril 2026</p>
         </div>
       </section>
 
@@ -160,65 +160,69 @@ export default async function ConfidentialitePage() {
 
             <h3>Liste des sous-traitants</h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full text-sm border border-gray-200 rounded-lg">
-                <thead className="bg-gray-50">
+              <table className="min-w-full text-sm border border-sand-300 rounded-lg">
+                <thead className="bg-sand-50">
                   <tr>
-                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">
+                    <th className="px-4 py-3 text-left font-semibold text-charcoal-700 border-b">
                       Sous-traitant
                     </th>
-                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">
+                    <th className="px-4 py-3 text-left font-semibold text-charcoal-700 border-b">
                       Finalité
                     </th>
-                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">
+                    <th className="px-4 py-3 text-left font-semibold text-charcoal-700 border-b">
                       Pays
                     </th>
-                    <th className="px-4 py-3 text-left font-semibold text-gray-700 border-b">
+                    <th className="px-4 py-3 text-left font-semibold text-charcoal-700 border-b">
                       Garanties
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-sand-200">
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Vercel Inc.</td>
-                    <td className="px-4 py-3 text-gray-600">Hébergement, CDN, edge computing</td>
-                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
-                    <td className="px-4 py-3 text-gray-600">Data Privacy Framework, SCCs</td>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Vercel Inc.</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Hébergement, CDN, edge computing
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">Data Privacy Framework, SCCs</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Supabase Inc.</td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Supabase Inc.</td>
+                    <td className="px-4 py-3 text-charcoal-600">
                       Base de données, authentification, stockage
                     </td>
-                    <td className="px-4 py-3 text-gray-600">États-Unis (AWS eu-west)</td>
-                    <td className="px-4 py-3 text-gray-600">SOC2 Type II, SCCs</td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis (AWS eu-west)</td>
+                    <td className="px-4 py-3 text-charcoal-600">SOC2 Type II, SCCs</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Stripe Inc.</td>
-                    <td className="px-4 py-3 text-gray-600">Traitement des paiements</td>
-                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Stripe Inc.</td>
+                    <td className="px-4 py-3 text-charcoal-600">Traitement des paiements</td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">
                       PCI DSS Level 1, Data Privacy Framework
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Resend Inc.</td>
-                    <td className="px-4 py-3 text-gray-600">Envoi d'emails transactionnels</td>
-                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
-                    <td className="px-4 py-3 text-gray-600">SCCs</td>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Resend Inc.</td>
+                    <td className="px-4 py-3 text-charcoal-600">Envoi d'emails transactionnels</td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">SCCs</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Google LLC</td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Google LLC</td>
+                    <td className="px-4 py-3 text-charcoal-600">
                       Analytics (Google Analytics 4, Tag Manager)
                     </td>
-                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
-                    <td className="px-4 py-3 text-gray-600">Data Privacy Framework</td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">Data Privacy Framework</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Microsoft Corp.</td>
-                    <td className="px-4 py-3 text-gray-600">Analytics comportemental (Clarity)</td>
-                    <td className="px-4 py-3 text-gray-600">États-Unis</td>
-                    <td className="px-4 py-3 text-gray-600">Data Privacy Framework, SCCs</td>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Microsoft Corp.</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Analytics comportemental (Clarity)
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">Data Privacy Framework, SCCs</td>
                   </tr>
                 </tbody>
               </table>
@@ -262,14 +266,14 @@ export default async function ConfidentialitePage() {
             <ul>
               <li>
                 <strong>Droit d'accès :</strong> obtenir une copie de vos données (
-                <a href="/droit-acces" className="text-blue-600 hover:underline">
+                <a href="/droit-acces" className="text-primary-500 hover:underline">
                   exercer ce droit
                 </a>
                 )
               </li>
               <li>
                 <strong>Droit de rectification :</strong> corriger vos données inexactes (
-                <a href="/droit-acces" className="text-blue-600 hover:underline">
+                <a href="/droit-acces" className="text-primary-500 hover:underline">
                   exercer ce droit
                 </a>
                 )
@@ -283,7 +287,7 @@ export default async function ConfidentialitePage() {
               </li>
               <li>
                 <strong>Droit d'opposition :</strong> vous opposer à certains traitements (
-                <a href="/droit-opposition" className="text-blue-600 hover:underline">
+                <a href="/droit-opposition" className="text-primary-500 hover:underline">
                   en savoir plus
                 </a>
                 )
@@ -294,7 +298,7 @@ export default async function ConfidentialitePage() {
             </ul>
             <p>
               Pour exercer ces droits, contactez-nous à :{' '}
-              <a href="mailto:dpo@servicesartisans.fr" className="text-blue-600 hover:underline">
+              <a href="mailto:dpo@servicesartisans.fr" className="text-primary-500 hover:underline">
                 <strong>dpo@servicesartisans.fr</strong>
               </a>
             </p>
@@ -326,7 +330,7 @@ export default async function ConfidentialitePage() {
             <p>
               En cas de violation de données, nous appliquons une procédure stricte de notification
               conformément aux articles 33 et 34 du RGPD (
-              <a href="/violation-donnees" className="text-blue-600 hover:underline">
+              <a href="/violation-donnees" className="text-primary-500 hover:underline">
                 en savoir plus
               </a>
               ).
@@ -405,7 +409,7 @@ export default async function ConfidentialitePage() {
                 href="https://www.data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-primary-500 hover:underline"
               >
                 data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2
               </a>
@@ -465,18 +469,21 @@ export default async function ConfidentialitePage() {
               </li>
               <li>
                 <strong>Email :</strong>{' '}
-                <a href="mailto:dpo@servicesartisans.fr" className="text-blue-600 hover:underline">
+                <a
+                  href="mailto:dpo@servicesartisans.fr"
+                  className="text-primary-500 hover:underline"
+                >
                   <strong>dpo@servicesartisans.fr</strong>
                 </a>{' '}
                 — réponse sous un délai maximal d&apos;un mois (article 12.3 du RGPD).
               </li>
               <li>
                 <strong>Formulaires dédiés :</strong>{' '}
-                <a href="/droit-opposition" className="text-blue-600 hover:underline">
+                <a href="/droit-opposition" className="text-primary-500 hover:underline">
                   droit d&apos;opposition
                 </a>{' '}
                 et{' '}
-                <a href="/droit-acces" className="text-blue-600 hover:underline">
+                <a href="/droit-acces" className="text-primary-500 hover:underline">
                   droit d&apos;accès
                 </a>
                 .
@@ -489,7 +496,7 @@ export default async function ConfidentialitePage() {
                 href="https://www.cnil.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-primary-500 hover:underline"
               >
                 www.cnil.fr
               </a>
@@ -516,7 +523,10 @@ export default async function ConfidentialitePage() {
             <ul>
               <li>
                 <strong>Email :</strong>{' '}
-                <a href="mailto:dpo@servicesartisans.fr" className="text-blue-600 hover:underline">
+                <a
+                  href="mailto:dpo@servicesartisans.fr"
+                  className="text-primary-500 hover:underline"
+                >
                   dpo@servicesartisans.fr
                 </a>
               </li>
@@ -531,7 +541,7 @@ export default async function ConfidentialitePage() {
                 href="https://www.cnil.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-primary-500 hover:underline"
               >
                 www.cnil.fr
               </a>

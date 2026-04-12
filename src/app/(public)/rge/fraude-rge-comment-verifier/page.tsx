@@ -243,7 +243,7 @@ export default function FraudeRgeVerifierPage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldAlert className="w-4 h-4 text-amber-200" />
@@ -279,7 +279,7 @@ export default function FraudeRgeVerifierPage() {
 
       {/* Intro éditoriale */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <p className="text-slate-700 leading-relaxed text-lg mb-4">
+        <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
           La fraude aux aides &agrave; la r&eacute;novation &eacute;nerg&eacute;tique n&rsquo;est ni
           marginale, ni nouvelle. Chaque ann&eacute;e, la
           <strong> DGCCRF</strong> publie dans son rapport d&rsquo;activit&eacute; un bilan des
@@ -290,7 +290,7 @@ export default function FraudeRgeVerifierPage() {
           l&rsquo;administration elle-m&ecirc;me&nbsp;: nous renvoyons aux rapports officiels
           plut&ocirc;t que d&rsquo;avancer des chiffres reconstitu&eacute;s.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           L&rsquo;objectif de ce guide est simple&nbsp;: donner &agrave; un particulier tous les
           outils pour v&eacute;rifier en quelques minutes qu&rsquo;un artisan est bien reconnu
           &laquo;&nbsp;Reconnu garant de l&rsquo;environnement&nbsp;&raquo; (RGE), rep&eacute;rer
@@ -298,7 +298,7 @@ export default function FraudeRgeVerifierPage() {
           douteux, et savoir r&eacute;agir si un dossier a d&eacute;j&agrave; &eacute;t&eacute;
           sign&eacute; dans la pr&eacute;cipitation.
         </p>
-        <p className="text-slate-700 leading-relaxed">
+        <p className="text-charcoal-700 leading-relaxed">
           Le label RGE lui-m&ecirc;me est encadr&eacute; par l&rsquo;arr&ecirc;t&eacute; du 1er
           d&eacute;cembre 2015 modifi&eacute;, qui fixe les crit&egrave;res de qualification et la
           liste des organismes accr&eacute;dit&eacute;s par le Cofrac. Les aides auxquelles il
@@ -310,17 +310,17 @@ export default function FraudeRgeVerifierPage() {
       </section>
 
       {/* L'ampleur du problème */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
           <div className="flex items-start gap-3 mb-4">
             <div className="w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
               <AlertTriangle className="w-5 h-5 text-amber-700" />
             </div>
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               L&rsquo;ampleur du probl&egrave;me
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             La r&eacute;novation &eacute;nerg&eacute;tique figure depuis plusieurs exercices parmi
             les <strong>priorit&eacute;s d&rsquo;enqu&ecirc;te de la DGCCRF</strong>.
             L&rsquo;administration a multipli&eacute; les proc&eacute;dures &mdash; avertissements,
@@ -329,7 +329,7 @@ export default function FraudeRgeVerifierPage() {
             d&eacute;marchant ill&eacute;galement par t&eacute;l&eacute;phone ou usurpant les logos
             officiels de MaPrimeR&eacute;nov&rsquo;.
           </p>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Les signalements d&eacute;pos&eacute;s sur <strong>Signal Conso</strong>,
             t&eacute;l&eacute;service officiel de la DGCCRF, progressent &eacute;galement
             d&rsquo;ann&eacute;e en ann&eacute;e pour cette cat&eacute;gorie. Le m&ecirc;me constat
@@ -337,7 +337,7 @@ export default function FraudeRgeVerifierPage() {
             alertes publi&eacute;es par les associations de consommateurs (UFC Que Choisir, CLCV,
             Familles Rurales).
           </p>
-          <p className="text-slate-700 leading-relaxed">
+          <p className="text-charcoal-700 leading-relaxed">
             Pour les chiffres pr&eacute;cis et actualis&eacute;s, la r&eacute;f&eacute;rence reste
             le <strong>rapport annuel de la DGCCRF</strong>, publi&eacute; sur economie.gouv.fr,
             ainsi que les communications officielles du service public{' '}
@@ -350,10 +350,10 @@ export default function FraudeRgeVerifierPage() {
 
       {/* 5 méthodes de vérification */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
           Les 5 m&eacute;thodes pour v&eacute;rifier qu&rsquo;un artisan est vraiment RGE
         </h2>
-        <p className="text-slate-600 max-w-3xl mb-10 leading-relaxed">
+        <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
           Ces cinq v&eacute;rifications sont cumulatives&nbsp;: chacune filtre un type
           d&rsquo;arnaque diff&eacute;rent. Compter moins de quinze minutes pour les r&eacute;aliser
           toutes.
@@ -362,18 +362,18 @@ export default function FraudeRgeVerifierPage() {
           {METHODS.map((m) => (
             <article
               key={m.n}
-              className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col"
+              className="bg-white rounded-2xl border border-charcoal-200 p-6 flex flex-col"
             >
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0 font-heading font-extrabold text-emerald-700">
                   {m.n}
                 </div>
                 <div>
-                  <h3 className="font-heading text-xl font-bold text-slate-900">{m.title}</h3>
+                  <h3 className="font-heading text-xl font-bold text-charcoal-900">{m.title}</h3>
                   <p className="text-sm text-emerald-700 font-medium mt-0.5">{m.lede}</p>
                 </div>
               </div>
-              <p className="text-sm text-slate-700 leading-relaxed">{m.body}</p>
+              <p className="text-sm text-charcoal-700 leading-relaxed">{m.body}</p>
               {m.link && (
                 <a
                   href={m.link.href}
@@ -391,17 +391,17 @@ export default function FraudeRgeVerifierPage() {
       </section>
 
       {/* 7 drapeaux rouges */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <div className="flex items-start gap-3 mb-4">
             <div className="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center flex-shrink-0">
               <Flag className="w-5 h-5 text-red-700" />
             </div>
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Les 7 drapeaux rouges &agrave; rep&eacute;rer
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-8">
+          <p className="text-charcoal-700 leading-relaxed mb-8">
             Un seul de ces signaux ne suffit pas toujours &agrave; qualifier une arnaque, mais leur
             cumul, lui, est sans ambigu&iuml;t&eacute;.
           </p>
@@ -409,14 +409,14 @@ export default function FraudeRgeVerifierPage() {
             {RED_FLAGS.map((f, i) => (
               <li
                 key={i}
-                className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 p-4"
+                className="flex items-start gap-3 bg-white rounded-xl border border-charcoal-200 p-4"
               >
                 <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 font-heading font-extrabold text-red-700 text-sm">
                   {i + 1}
                 </div>
                 <div>
-                  <div className="font-semibold text-slate-900 mb-1">{f.title}</div>
-                  <p className="text-sm text-slate-700 leading-relaxed">{f.text}</p>
+                  <div className="font-semibold text-charcoal-900 mb-1">{f.title}</div>
+                  <p className="text-sm text-charcoal-700 leading-relaxed">{f.text}</p>
                 </div>
               </li>
             ))}
@@ -427,14 +427,14 @@ export default function FraudeRgeVerifierPage() {
       {/* Que faire si victime */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <Search className="w-5 h-5 text-blue-700" />
+          <div className="w-11 h-11 rounded-xl bg-primary-100 flex items-center justify-center flex-shrink-0">
+            <Search className="w-5 h-5 text-primary-600" />
           </div>
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Que faire si vous pensez &ecirc;tre victime d&rsquo;une arnaque RGE&nbsp;?
           </h2>
         </div>
-        <p className="text-slate-700 leading-relaxed mb-6">
+        <p className="text-charcoal-700 leading-relaxed mb-6">
           La pire des r&eacute;actions est l&rsquo;inaction. Les d&eacute;lais comptent&nbsp;:
           r&eacute;tractation, prescription p&eacute;nale, suspension d&rsquo;un dossier
           MaPrimeR&eacute;nov&rsquo; en cours d&rsquo;instruction. Voici la s&eacute;quence
@@ -470,18 +470,18 @@ export default function FraudeRgeVerifierPage() {
           ].map((s, i) => (
             <li
               key={i}
-              className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 p-4"
+              className="flex items-start gap-3 bg-white rounded-xl border border-charcoal-200 p-4"
             >
-              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0 font-heading font-extrabold text-blue-700 text-sm">
+              <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0 font-heading font-extrabold text-primary-600 text-sm">
                 {i + 1}
               </div>
               <div>
                 <div
-                  className="font-semibold text-slate-900 mb-1"
+                  className="font-semibold text-charcoal-900 mb-1"
                   dangerouslySetInnerHTML={{ __html: s.title }}
                 />
                 <p
-                  className="text-sm text-slate-700 leading-relaxed"
+                  className="text-sm text-charcoal-700 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: s.text }}
                 />
               </div>
@@ -515,17 +515,17 @@ export default function FraudeRgeVerifierPage() {
       </section>
 
       {/* Rôle de ServicesArtisans */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
           <div className="flex items-start gap-3 mb-4">
             <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
               <Building2 className="w-5 h-5 text-emerald-700" />
             </div>
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Le r&ocirc;le de ServicesArtisans
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             ServicesArtisans diffuse environ 50&nbsp;000 fiches d&rsquo;artisans titulaires
             d&rsquo;une qualification RGE. Ces fiches sont int&eacute;gralement sourc&eacute;es du{' '}
             <strong>
@@ -535,7 +535,7 @@ export default function FraudeRgeVerifierPage() {
             synchronis&eacute;es de fa&ccedil;on hebdomadaire pour refl&eacute;ter les
             entr&eacute;es, sorties et renouvellements.
           </p>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Nous ne sommes pas un organisme certificateur&nbsp;: nous ne d&eacute;livrons aucune
             qualification, nous ne contr&ocirc;lons pas les chantiers et nous ne nous substituons
             pas &agrave; France R&eacute;nov&rsquo; ni &agrave; la DGCCRF. Notre r&ocirc;le se
@@ -543,7 +543,7 @@ export default function FraudeRgeVerifierPage() {
             m&eacute;tier, par ville, par d&eacute;partement &mdash; et &agrave; renvoyer
             syst&eacute;matiquement aux sources officielles.
           </p>
-          <p className="text-slate-700 leading-relaxed">
+          <p className="text-charcoal-700 leading-relaxed">
             En cas de doute sur un artisan de notre annuaire, la v&eacute;rification finale se fait
             toujours sur <em>france-renov.gouv.fr/annuaire-rge</em>&nbsp;: c&rsquo;est la source de
             v&eacute;rit&eacute; &agrave; l&rsquo;instant T. Nos pages d&eacute;taillent notre
@@ -563,34 +563,34 @@ export default function FraudeRgeVerifierPage() {
 
       {/* FAQ */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-10">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
           Questions fr&eacute;quentes
         </h2>
         <div className="space-y-4">
           {FAQ.map((item, idx) => (
             <details
               key={idx}
-              className="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 transition p-6"
+              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
             >
-              <summary className="font-heading font-bold text-lg text-slate-900 cursor-pointer list-none flex items-start justify-between gap-4">
+              <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                 <span>{item.question}</span>
                 <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
-              <p className="text-slate-700 mt-4 leading-relaxed">{item.answer}</p>
+              <p className="text-charcoal-700 mt-4 leading-relaxed">{item.answer}</p>
             </details>
           ))}
         </div>
       </section>
 
       {/* Sources officielles */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-xl md:text-2xl font-extrabold text-slate-900 mb-4">
+          <h2 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 mb-4">
             Sources r&eacute;glementaires et officielles
           </h2>
-          <ul className="space-y-3 text-sm text-slate-700">
+          <ul className="space-y-3 text-sm text-charcoal-700">
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>

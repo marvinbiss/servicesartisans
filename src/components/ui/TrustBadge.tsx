@@ -1,6 +1,15 @@
 'use client'
 
-import { Shield, Award, CheckCircle, AlertTriangle, Building2, Calendar, TrendingUp, Users } from 'lucide-react'
+import {
+  Shield,
+  Award,
+  CheckCircle,
+  AlertTriangle,
+  Building2,
+  Calendar,
+  TrendingUp,
+  Users,
+} from 'lucide-react'
 import type { EntrepriseComplete } from '@/lib/api/pappers'
 
 interface TrustBadgeProps {
@@ -16,18 +25,18 @@ export function TrustBadge({
   label,
   description,
   size = 'md',
-  showTooltip = true
+  showTooltip = true,
 }: TrustBadgeProps) {
   const sizeClasses = {
     sm: 'px-2 py-0.5 text-xs gap-1',
     md: 'px-3 py-1 text-sm gap-1.5',
-    lg: 'px-4 py-2 text-base gap-2'
+    lg: 'px-4 py-2 text-base gap-2',
   }
 
   const iconSizes = {
     sm: 'w-3 h-3',
     md: 'w-4 h-4',
-    lg: 'w-5 h-5'
+    lg: 'w-5 h-5',
   }
 
   const styles = {
@@ -35,30 +44,37 @@ export function TrustBadge({
       bg: 'bg-gradient-to-r from-amber-100 to-yellow-100',
       border: 'border-amber-300',
       text: 'text-amber-800',
-      icon: 'text-amber-600'
+      icon: 'text-amber-600',
     },
     silver: {
-      bg: 'bg-gradient-to-r from-slate-100 to-gray-100',
-      border: 'border-slate-300',
-      text: 'text-slate-700',
-      icon: 'text-slate-500'
+      bg: 'bg-gradient-to-r from-charcoal-100 to-sand-100',
+      border: 'border-charcoal-300',
+      text: 'text-charcoal-700',
+      icon: 'text-charcoal-900',
     },
     bronze: {
       bg: 'bg-gradient-to-r from-orange-50 to-amber-50',
       border: 'border-orange-200',
       text: 'text-orange-700',
-      icon: 'text-orange-500'
+      icon: 'text-orange-500',
     },
     none: {
-      bg: 'bg-gray-50',
-      border: 'border-gray-200',
-      text: 'text-gray-500',
-      icon: 'text-gray-400'
-    }
+      bg: 'bg-sand-50',
+      border: 'border-sand-300',
+      text: 'text-charcoal-500',
+      icon: 'text-charcoal-400',
+    },
   }
 
   const style = styles[niveau]
-  const Icon = niveau === 'gold' ? Award : niveau === 'silver' ? Shield : niveau === 'bronze' ? CheckCircle : AlertTriangle
+  const Icon =
+    niveau === 'gold'
+      ? Award
+      : niveau === 'silver'
+        ? Shield
+        : niveau === 'bronze'
+          ? CheckCircle
+          : AlertTriangle
 
   return (
     <div className="relative group">
@@ -76,15 +92,17 @@ export function TrustBadge({
       </div>
 
       {showTooltip && description && (
-        <div className="
+        <div
+          className="
           absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-          px-3 py-2 bg-gray-900 text-white text-xs rounded-lg
+          px-3 py-2 bg-charcoal-900 text-white text-xs rounded-lg
           opacity-0 group-hover:opacity-100 pointer-events-none
           transition-opacity whitespace-nowrap z-50
-        ">
+        "
+        >
           {description}
           <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1">
-            <div className="border-4 border-transparent border-t-gray-900" />
+            <div className="border-4 border-transparent border-t-charcoal-900" />
           </div>
         </div>
       )}
@@ -99,7 +117,9 @@ interface EntrepriseInfoCardProps {
 
 export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseInfoCardProps) {
   const anciennete = entreprise.dateCreation
-    ? Math.floor((Date.now() - new Date(entreprise.dateCreation).getTime()) / (1000 * 60 * 60 * 24 * 365))
+    ? Math.floor(
+        (Date.now() - new Date(entreprise.dateCreation).getTime()) / (1000 * 60 * 60 * 24 * 365)
+      )
     : null
 
   const formatMontant = (montant: number | null) => {
@@ -107,7 +127,7 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(montant)
   }
 
@@ -121,13 +141,13 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
           </span>
         )}
         {anciennete !== null && anciennete > 0 && (
-          <span className="inline-flex items-center gap-1 text-gray-600">
+          <span className="inline-flex items-center gap-1 text-charcoal-600">
             <Calendar className="w-4 h-4" />
             {anciennete} an{anciennete > 1 ? 's' : ''}
           </span>
         )}
         {entreprise.effectif && (
-          <span className="inline-flex items-center gap-1 text-gray-600">
+          <span className="inline-flex items-center gap-1 text-charcoal-600">
             <Users className="w-4 h-4" />
             {entreprise.effectif}
           </span>
@@ -137,12 +157,12 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-4">
+    <div className="bg-white border border-sand-300 rounded-xl p-4 space-y-4">
       {/* En-tête */}
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-semibold text-gray-900">{entreprise.nom}</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="font-semibold text-charcoal-900">{entreprise.nom}</h3>
+          <p className="text-sm text-charcoal-500">
             SIRET: {entreprise.siret} • {entreprise.formeJuridique}
           </p>
         </div>
@@ -153,15 +173,15 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
               entreprise.badges.plusDe5Ans && entreprise.badges.caSuperieur100k
                 ? 'gold'
                 : entreprise.badges.plusDe5Ans
-                ? 'silver'
-                : 'bronze'
+                  ? 'silver'
+                  : 'bronze'
             }
             label={
               entreprise.badges.plusDe5Ans && entreprise.badges.caSuperieur100k
                 ? 'Établie'
                 : entreprise.badges.plusDe5Ans
-                ? 'Confirmée'
-                : 'Vérifiée'
+                  ? 'Confirmée'
+                  : 'Vérifiée'
             }
           />
         ) : (
@@ -174,28 +194,30 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
 
       {/* Infos principales */}
       <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="flex items-center gap-2 text-gray-600">
-          <Building2 className="w-4 h-4 text-gray-400" />
+        <div className="flex items-center gap-2 text-charcoal-600">
+          <Building2 className="w-4 h-4 text-charcoal-400" />
           <span>{entreprise.libelleNAF}</span>
         </div>
 
         {anciennete !== null && (
-          <div className="flex items-center gap-2 text-gray-600">
-            <Calendar className="w-4 h-4 text-gray-400" />
-            <span>Créée en {entreprise.dateCreationFormate} ({anciennete} an{anciennete > 1 ? 's' : ''})</span>
+          <div className="flex items-center gap-2 text-charcoal-600">
+            <Calendar className="w-4 h-4 text-charcoal-400" />
+            <span>
+              Créée en {entreprise.dateCreationFormate} ({anciennete} an{anciennete > 1 ? 's' : ''})
+            </span>
           </div>
         )}
 
         {entreprise.dernierCA !== null && (
-          <div className="flex items-center gap-2 text-gray-600">
-            <TrendingUp className="w-4 h-4 text-gray-400" />
+          <div className="flex items-center gap-2 text-charcoal-600">
+            <TrendingUp className="w-4 h-4 text-charcoal-400" />
             <span>CA: {formatMontant(entreprise.dernierCA)}</span>
           </div>
         )}
 
         {entreprise.effectif && (
-          <div className="flex items-center gap-2 text-gray-600">
-            <Users className="w-4 h-4 text-gray-400" />
+          <div className="flex items-center gap-2 text-charcoal-600">
+            <Users className="w-4 h-4 text-charcoal-400" />
             <span>Effectif: {entreprise.effectif}</span>
           </div>
         )}
@@ -203,13 +225,15 @@ export function EntrepriseInfoCard({ entreprise, compact = false }: EntrepriseIn
 
       {/* Dirigeants */}
       {entreprise.dirigeants.length > 0 && (
-        <div className="pt-3 border-t border-gray-100">
-          <p className="text-xs text-gray-500 mb-1">Dirigeant{entreprise.dirigeants.length > 1 ? 's' : ''}</p>
+        <div className="pt-3 border-t border-sand-200">
+          <p className="text-xs text-charcoal-500 mb-1">
+            Dirigeant{entreprise.dirigeants.length > 1 ? 's' : ''}
+          </p>
           <div className="flex flex-wrap gap-2">
             {entreprise.dirigeants.slice(0, 2).map((d, i) => (
-              <span key={i} className="text-sm text-gray-700">
+              <span key={i} className="text-sm text-charcoal-700">
                 {d.prenom} {d.nom}
-                <span className="text-gray-400 ml-1">({d.fonction})</span>
+                <span className="text-charcoal-400 ml-1">({d.fonction})</span>
               </span>
             ))}
           </div>
@@ -236,20 +260,18 @@ interface SiretVerificationStatusProps {
 export function SiretVerificationStatus({
   verified,
   verifiedAt,
-  badgeNiveau = 'none'
+  badgeNiveau = 'none',
 }: SiretVerificationStatusProps) {
   if (!verified) {
     return (
-      <span className="inline-flex items-center gap-1 text-gray-500 text-sm">
+      <span className="inline-flex items-center gap-1 text-charcoal-500 text-sm">
         <AlertTriangle className="w-4 h-4" />
         SIRET non contrôlé
       </span>
     )
   }
 
-  const dateVerif = verifiedAt
-    ? new Date(verifiedAt).toLocaleDateString('fr-FR')
-    : null
+  const dateVerif = verifiedAt ? new Date(verifiedAt).toLocaleDateString('fr-FR') : null
 
   return (
     <div className="flex items-center gap-2">
@@ -257,18 +279,12 @@ export function SiretVerificationStatus({
         <CheckCircle className="w-4 h-4" />
         SIRET contrôlé
       </span>
-      {dateVerif && (
-        <span className="text-xs text-gray-400">le {dateVerif}</span>
-      )}
+      {dateVerif && <span className="text-xs text-charcoal-400">le {dateVerif}</span>}
       {badgeNiveau !== 'none' && (
         <TrustBadge
           niveau={badgeNiveau}
           label={
-            badgeNiveau === 'gold'
-              ? 'Établie'
-              : badgeNiveau === 'silver'
-              ? 'Confirmée'
-              : 'Vérifiée'
+            badgeNiveau === 'gold' ? 'Établie' : badgeNiveau === 'silver' ? 'Confirmée' : 'Vérifiée'
           }
           size="sm"
         />

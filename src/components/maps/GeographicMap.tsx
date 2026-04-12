@@ -46,7 +46,7 @@ export default function GeographicMap({
   height = '400px',
   className = '',
   onMarkerHover,
-  onSearchArea
+  onSearchArea,
 }: GeographicMapProps) {
   const [mapReady, setMapReady] = useState(false)
   const [_L, setL] = useState<typeof import('leaflet') | null>(null)
@@ -67,7 +67,9 @@ export default function GeographicMap({
 
   // Stable refs for callbacks — avoids them being effect dependencies
   const onMarkerHoverRef = useRef(onMarkerHover)
-  useEffect(() => { onMarkerHoverRef.current = onMarkerHover }, [onMarkerHover])
+  useEffect(() => {
+    onMarkerHoverRef.current = onMarkerHover
+  }, [onMarkerHover])
 
   // Marker icon cache
   const markerIconCache = useRef(new Map<string, import('leaflet').DivIcon>())
@@ -102,7 +104,9 @@ export default function GeographicMap({
       setMapMoved(true)
     }
     map.on('moveend', handler)
-    return () => { map.off('moveend', handler) }
+    return () => {
+      map.off('moveend', handler)
+    }
   }, [mapReady, mapInstance])
 
   // Pan to highlighted provider when it changes
@@ -118,19 +122,20 @@ export default function GeographicMap({
   }, [highlightedProviderId, providers, zoom])
 
   // Memoized marker icon factory
-  const createMarkerIcon = useCallback((isVerified: boolean, isHighlighted: boolean) => {
-    if (!_L) return undefined
+  const createMarkerIcon = useCallback(
+    (isVerified: boolean, isHighlighted: boolean) => {
+      if (!_L) return undefined
 
-    const size = isHighlighted ? 40 : 32
-    const color = isHighlighted
-      ? '#C4533A'  // clay-600
-      : isVerified
-        ? '#E86B4B'  // clay-400
-        : '#78716c'  // stone-500
+      const size = isHighlighted ? 40 : 32
+      const color = isHighlighted
+        ? '#C4533A' // clay-600
+        : isVerified
+          ? '#E86B4B' // clay-400
+          : '#78716c' // stone-500
 
-    return _L.divIcon({
-      className: 'custom-marker',
-      html: `
+      return _L.divIcon({
+        className: 'custom-marker',
+        html: `
         <div style="
           width: ${size}px;
           height: ${size}px;
@@ -149,23 +154,28 @@ export default function GeographicMap({
           }
         </div>
       `,
-      iconSize: [size, size],
-      iconAnchor: [size / 2, size],
-      popupAnchor: [0, -size],
-    })
-  }, [_L])
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size],
+        popupAnchor: [0, -size],
+      })
+    },
+    [_L]
+  )
 
   // Get cached marker icon
-  const getMarkerIcon = useCallback((isVerified: boolean, isHighlighted: boolean) => {
-    const key = `${isVerified}-${isHighlighted}`
-    if (!markerIconCache.current.has(key)) {
-      const icon = createMarkerIcon(isVerified, isHighlighted)
-      if (icon) {
-        markerIconCache.current.set(key, icon)
+  const getMarkerIcon = useCallback(
+    (isVerified: boolean, isHighlighted: boolean) => {
+      const key = `${isVerified}-${isHighlighted}`
+      if (!markerIconCache.current.has(key)) {
+        const icon = createMarkerIcon(isVerified, isHighlighted)
+        if (icon) {
+          markerIconCache.current.set(key, icon)
+        }
       }
-    }
-    return markerIconCache.current.get(key)
-  }, [createMarkerIcon])
+      return markerIconCache.current.get(key)
+    },
+    [createMarkerIcon]
+  )
 
   // Clear icon cache when _L changes
   useEffect(() => {
@@ -173,13 +183,19 @@ export default function GeographicMap({
   }, [_L])
 
   // Stable provider list for marker effect (avoids re-creating cluster on every render)
-  const validProviders = useMemo(() =>
-    providers.filter(p =>
-      p.latitude && p.longitude &&
-      !isNaN(p.latitude) && !isNaN(p.longitude) &&
-      p.latitude >= -90 && p.latitude <= 90 &&
-      p.longitude >= -180 && p.longitude <= 180
-    ),
+  const validProviders = useMemo(
+    () =>
+      providers.filter(
+        (p) =>
+          p.latitude &&
+          p.longitude &&
+          !isNaN(p.latitude) &&
+          !isNaN(p.longitude) &&
+          p.latitude >= -90 &&
+          p.latitude <= 90 &&
+          p.longitude >= -180 &&
+          p.longitude <= 180
+      ),
     [providers]
   )
 
@@ -236,23 +252,33 @@ export default function GeographicMap({
       marker.on('mouseout', () => onMarkerHoverRef.current?.(null))
 
       // Popup content
-      const ratingHtml = (provider.rating_average && provider.rating_average > 0 && provider.review_count && provider.review_count > 0)
-        ? `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      const ratingHtml =
+        provider.rating_average &&
+        provider.rating_average > 0 &&
+        provider.review_count &&
+        provider.review_count > 0
+          ? `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
             <div style="display:flex;align-items:center;gap:4px">
               <svg width="16" height="16" viewBox="0 0 20 20" fill="#f59e0b"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
               <span style="font-weight:700;color:#111827;font-size:14px">${provider.rating_average.toFixed(1)}</span>
             </div>
             <span style="font-size:12px;color:#6b7280">${provider.review_count} avis</span>
           </div>`
-        : ''
+          : ''
 
       const addressText = provider.address_street
-        ? (provider.address_postal_code && provider.address_street.includes(provider.address_postal_code)
+        ? provider.address_postal_code &&
+          provider.address_street.includes(provider.address_postal_code)
           ? provider.address_street
-          : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim())
+          : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
         : `${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
 
-      const profileUrl = getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
+      const profileUrl = getArtisanUrl({
+        stable_id: provider.stable_id,
+        slug: provider.slug,
+        specialty: provider.specialty,
+        city: provider.address_city,
+      })
 
       const popupHtml = `
         <div style="padding:16px">
@@ -277,12 +303,13 @@ export default function GeographicMap({
     map.addLayer(clusterGroup)
     clusterGroupRef.current = clusterGroup
 
+    const currentMarkersMap = markersMapRef.current
     return () => {
       if (clusterGroupRef.current) {
         map.removeLayer(clusterGroupRef.current)
         clusterGroupRef.current = null
       }
-      markersMapRef.current.clear()
+      currentMarkersMap.clear()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_L, validProviders, mapInstance])
@@ -291,7 +318,7 @@ export default function GeographicMap({
   useEffect(() => {
     if (!_L) return
     markersMapRef.current.forEach((marker, id) => {
-      const provider = validProviders.find(p => p.id === id)
+      const provider = validProviders.find((p) => p.id === id)
       if (!provider) return
       const isVerified = provider.is_verified ?? false
       const isHighlighted = id === highlightedProviderId
@@ -311,10 +338,10 @@ export default function GeographicMap({
   if (!mapReady) {
     return (
       <div
-        className={`bg-gray-100 rounded-xl flex items-center justify-center ${className}`}
+        className={`bg-sand-100 rounded-xl flex items-center justify-center ${className}`}
         style={{ height }}
       >
-        <div className="text-center text-gray-500">
+        <div className="text-center text-charcoal-500">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-clay-400" />
           <p>Chargement de la carte...</p>
         </div>
@@ -323,7 +350,10 @@ export default function GeographicMap({
   }
 
   return (
-    <div className={`relative rounded-xl overflow-hidden map-embedded ${className}`} style={{ height }}>
+    <div
+      className={`relative rounded-xl overflow-hidden map-embedded ${className}`}
+      style={{ height }}
+    >
       <MapContainer
         ref={mapCallbackRef}
         center={[centerLat, centerLng]}

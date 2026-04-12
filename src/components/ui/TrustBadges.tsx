@@ -9,14 +9,14 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
     {
       icon: Database,
       label: 'Données SIREN officielles',
-      description: 'Chaque artisan référencé via les registres officiels de l\'État',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      description: "Chaque artisan référencé via les registres officiels de l'État",
+      color: 'text-primary-500',
+      bgColor: 'bg-primary-50',
     },
     {
       icon: Shield,
       label: 'Artisans référencés SIREN',
-      description: 'Base d\'artisans référencés via les données officielles de France',
+      description: "Base d'artisans référencés via les données officielles de France",
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },
@@ -48,7 +48,7 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
             className="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm"
           >
             <badge.icon className={`w-4 h-4 ${badge.color}`} />
-            <span className="text-sm font-medium text-slate-700">{badge.label}</span>
+            <span className="text-sm font-medium text-charcoal-700">{badge.label}</span>
           </motion.div>
         ))}
       </div>
@@ -85,11 +85,13 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
           transition={{ delay: i * 0.1 }}
           className={`${badge.bgColor} rounded-xl p-4 text-center hover:shadow-md transition-shadow`}
         >
-          <div className={`w-12 h-12 ${badge.bgColor} rounded-full flex items-center justify-center mx-auto mb-3`}>
+          <div
+            className={`w-12 h-12 ${badge.bgColor} rounded-full flex items-center justify-center mx-auto mb-3`}
+          >
             <badge.icon className={`w-6 h-6 ${badge.color}`} />
           </div>
-          <h3 className="font-semibold text-slate-900 mb-1">{badge.label}</h3>
-          <p className="text-sm text-slate-600">{badge.description}</p>
+          <h3 className="font-semibold text-charcoal-900 mb-1">{badge.label}</h3>
+          <p className="text-sm text-charcoal-600">{badge.description}</p>
         </motion.div>
       ))}
     </div>
@@ -120,7 +122,7 @@ export function SocialProofCounter({
   value,
   label,
   icon: Icon,
-  suffix = ''
+  suffix = '',
 }: {
   value: number
   label: string
@@ -134,18 +136,19 @@ export function SocialProofCounter({
       viewport={{ once: true }}
       className="text-center"
     >
-      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-4 shadow-lg shadow-blue-500/30">
+      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-500 rounded-2xl mb-4 shadow-lg shadow-primary-400/30">
         <Icon className="w-7 h-7 text-white" />
       </div>
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="text-3xl md:text-4xl font-bold text-slate-900 mb-1"
+        className="text-3xl md:text-4xl font-bold text-charcoal-900 mb-1"
       >
-        {value.toLocaleString('fr-FR')}{suffix}
+        {value.toLocaleString('fr-FR')}
+        {suffix}
       </motion.div>
-      <div className="text-slate-500">{label}</div>
+      <div className="text-charcoal-900">{label}</div>
     </motion.div>
   )
 }
@@ -163,7 +166,9 @@ export function AvailabilityBadge({ count = 0 }: { count?: number }) {
         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
       </span>
       <span className="text-sm text-white/80 font-medium">
-        {count > 0 ? `${count.toLocaleString('fr-FR')}+ artisans référencés dans toute la France` : 'Artisans référencés via données SIREN officielles'}
+        {count > 0
+          ? `${count.toLocaleString('fr-FR')}+ artisans référencés dans toute la France`
+          : 'Artisans référencés via données SIREN officielles'}
       </span>
     </motion.div>
   )
@@ -179,7 +184,7 @@ export function VerifiedBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 
   return (
     <div className="inline-flex items-center gap-1" title="Profil référencé">
-      <BadgeCheck className={`${sizes[size]} text-blue-500`} />
+      <BadgeCheck className={`${sizes[size]} text-primary-400`} />
     </div>
   )
 }
@@ -189,7 +194,7 @@ export function RatingStars({
   rating,
   reviewCount,
   showCount = true,
-  size = 'md'
+  size = 'md',
 }: {
   rating: number
   reviewCount?: number
@@ -205,11 +210,11 @@ export function RatingStars({
   return (
     <div className="inline-flex items-center gap-1">
       <Star className={`${sizes[size].star} text-amber-400 fill-amber-400`} />
-      <span className={`font-semibold text-slate-900 ${sizes[size].text}`}>
+      <span className={`font-semibold text-charcoal-900 ${sizes[size].text}`}>
         {rating.toFixed(1)}
       </span>
       {showCount && reviewCount !== undefined && (
-        <span className={`text-slate-500 ${sizes[size].text}`}>
+        <span className={`text-charcoal-900 ${sizes[size].text}`}>
           ({reviewCount.toLocaleString('fr-FR')} avis)
         </span>
       )}

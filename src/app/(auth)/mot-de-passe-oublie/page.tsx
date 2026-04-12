@@ -25,12 +25,12 @@ export default function MotDePasseOubliePage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de l\'envoi')
+        throw new Error(data.error || "Erreur lors de l'envoi")
       }
 
       setIsSubmitted(true)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'envoi')
+      setError(err instanceof Error ? err.message : "Erreur lors de l'envoi")
     } finally {
       setIsLoading(false)
     }
@@ -38,24 +38,22 @@ export default function MotDePasseOubliePage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Email envoyé !
-          </h1>
-          <p className="text-gray-600 mb-8">
-            Si un compte existe avec l'adresse <strong>{email}</strong>,
-            vous recevrez un email avec les instructions pour réinitialiser votre mot de passe.
+          <h1 className="text-2xl font-bold text-charcoal-900 mb-4">Email envoyé !</h1>
+          <p className="text-charcoal-600 mb-8">
+            Si un compte existe avec l'adresse <strong>{email}</strong>, vous recevrez un email avec
+            les instructions pour réinitialiser votre mot de passe.
           </p>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-charcoal-500 mb-6">
             Vérifiez également votre dossier spam si vous ne voyez pas l'email.
           </p>
           <Link
             href="/connexion"
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Retour à la connexion
@@ -66,22 +64,20 @@ export default function MotDePasseOubliePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">SA</span>
               </div>
-              <span className="text-2xl font-bold text-gray-900">
-                Services<span className="text-blue-600">Artisans</span>
+              <span className="text-2xl font-bold text-charcoal-900">
+                Services<span className="text-primary-500">Artisans</span>
               </span>
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Mot de passe oublié ?
-            </h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold text-charcoal-900 mb-2">Mot de passe oublié ?</h1>
+            <p className="text-charcoal-600">
               Entrez votre email pour recevoir un lien de réinitialisation
             </p>
           </div>
@@ -95,18 +91,18 @@ export default function MotDePasseOubliePage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-charcoal-700 mb-2">
                 Adresse email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                  className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent disabled:opacity-50"
                   placeholder="votre@email.com"
                 />
               </div>
@@ -115,7 +111,7 @@ export default function MotDePasseOubliePage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary-500 text-white py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>
@@ -134,7 +130,7 @@ export default function MotDePasseOubliePage() {
           <div className="mt-8 text-center">
             <Link
               href="/connexion"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center gap-2 text-charcoal-600 hover:text-charcoal-900"
             >
               <ArrowLeft className="w-4 h-4" />
               Retour à la connexion
@@ -142,9 +138,9 @@ export default function MotDePasseOubliePage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="mt-6 text-center text-sm text-charcoal-500">
           Vous n'avez pas de compte ?{' '}
-          <Link href="/inscription" className="text-blue-600 hover:underline">
+          <Link href="/inscription" className="text-primary-500 hover:underline">
             Créer un compte
           </Link>
         </p>

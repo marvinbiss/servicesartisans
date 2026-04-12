@@ -21,14 +21,14 @@ const styles: Record<ToastTypeEnum, string> = {
   success: 'bg-green-50 border-green-200 text-green-800',
   error: 'bg-red-50 border-red-200 text-red-800',
   warning: 'bg-amber-50 border-amber-200 text-amber-800',
-  info: 'bg-blue-50 border-blue-200 text-blue-800',
+  info: 'bg-primary-50 border-primary-200 text-primary-800',
 }
 
 const iconStyles: Record<ToastTypeEnum, string> = {
   success: 'text-green-500',
   error: 'text-red-500',
   warning: 'text-amber-500',
-  info: 'text-blue-500',
+  info: 'text-primary-400',
 }
 
 export function Toast({ toast, onDismiss }: ToastProps) {
@@ -61,9 +61,7 @@ export function Toast({ toast, onDismiss }: ToastProps) {
       <Icon className={clsx('w-5 h-5 flex-shrink-0 mt-0.5', iconStyles[toast.type])} />
       <div className="flex-1 min-w-0">
         <p className="font-medium">{toast.title}</p>
-        {toast.message && (
-          <p className="mt-1 text-sm opacity-90">{toast.message}</p>
-        )}
+        {toast.message && <p className="mt-1 text-sm opacity-90">{toast.message}</p>}
         {toast.action && (
           <button
             onClick={toast.action.onClick}

@@ -183,7 +183,7 @@ export default function TarifsAuditEnergetiquePage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Landmark className="w-4 h-4 text-emerald-300" />
@@ -221,12 +221,12 @@ export default function TarifsAuditEnergetiquePage() {
       </section>
 
       {/* Sommaire rapide */}
-      <section className="bg-slate-50 border-y border-slate-200">
+      <section className="bg-sand-50 border-y border-charcoal-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+          <h2 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wide mb-3">
             Sur cette page
           </h2>
-          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-slate-700 text-sm">
+          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-charcoal-700 text-sm">
             <li>• Qu&rsquo;est-ce qu&rsquo;un audit énergétique réglementaire</li>
             <li>• Qui peut le réaliser</li>
             <li>• Fourchettes de prix 2026</li>
@@ -243,11 +243,11 @@ export default function TarifsAuditEnergetiquePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
             <FileCheck2 className="w-7 h-7 text-emerald-700" />
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Qu&rsquo;est-ce qu&rsquo;un audit énergétique réglementaire&nbsp;?
             </h2>
           </div>
-          <div className="prose prose-slate max-w-none prose-p:leading-relaxed prose-p:text-slate-700">
+          <div className="prose prose-slate max-w-none prose-p:leading-relaxed prose-p:text-charcoal-700">
             <p>
               L&rsquo;audit énergétique réglementaire est un bilan complet de la performance
               énergétique d&rsquo;un logement. À la différence d&rsquo;un simple diagnostic, il ne
@@ -286,19 +286,19 @@ export default function TarifsAuditEnergetiquePage() {
       </section>
 
       {/* Section 2 — Qui peut le réaliser */}
-      <section className="bg-slate-50 py-16 md:py-20 border-y border-slate-200">
+      <section className="bg-sand-50 py-16 md:py-20 border-y border-charcoal-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
             <ShieldCheck className="w-7 h-7 text-emerald-700" />
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Qui peut réaliser un audit énergétique réglementaire&nbsp;?
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <p className="text-charcoal-700 leading-relaxed mb-6">
             Seuls quatre types de professionnels sont habilités à réaliser un audit énergétique
             réglementaire en maison individuelle, selon le décret n°&nbsp;2022-780 du 4 mai 2022 :
           </p>
-          <ul className="space-y-4 text-slate-700">
+          <ul className="space-y-4 text-charcoal-700">
             <li className="flex gap-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
               <span>
@@ -343,7 +343,7 @@ export default function TarifsAuditEnergetiquePage() {
             </div>
           </div>
 
-          <p className="mt-6 text-slate-700 leading-relaxed">
+          <p className="mt-6 text-charcoal-700 leading-relaxed">
             Pour comprendre en détail le fonctionnement des qualifications et vérifier un
             professionnel, consultez notre guide dédié :{' '}
             <Link
@@ -362,11 +362,11 @@ export default function TarifsAuditEnergetiquePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
             <Euro className="w-7 h-7 text-emerald-700" />
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Combien coûte un audit énergétique en 2026&nbsp;?
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Il n&rsquo;existe pas de tarif officiel unique pour l&rsquo;audit énergétique
             réglementaire : le prix est libre et dépend de la surface, de la complexité du bâti, de
             l&rsquo;ancienneté du logement, de la région, du nombre de scénarios demandés et des
@@ -375,23 +375,23 @@ export default function TarifsAuditEnergetiquePage() {
             à valider systématiquement par un devis.
           </p>
 
-          <div className="mt-8 overflow-x-auto border border-slate-200 rounded-xl">
+          <div className="mt-8 overflow-x-auto border border-charcoal-200 rounded-xl">
             <table className="w-full text-left">
-              <thead className="bg-slate-100 text-slate-700 text-sm uppercase tracking-wide">
+              <thead className="bg-sand-200 text-charcoal-700 text-sm uppercase tracking-wide">
                 <tr>
                   <th className="px-4 py-3">Profil de logement</th>
                   <th className="px-4 py-3">Fourchette indicative</th>
                   <th className="px-4 py-3">Détails</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-sm">
+              <tbody className="divide-y divide-charcoal-200 text-sm">
                 {PRICE_RANGES.map((row) => (
                   <tr key={row.profil} className="align-top">
-                    <td className="px-4 py-4 font-semibold text-slate-900">{row.profil}</td>
+                    <td className="px-4 py-4 font-semibold text-charcoal-900">{row.profil}</td>
                     <td className="px-4 py-4 font-semibold text-emerald-700 whitespace-nowrap">
                       {row.fourchette}
                     </td>
-                    <td className="px-4 py-4 text-slate-600 leading-relaxed">{row.details}</td>
+                    <td className="px-4 py-4 text-charcoal-600 leading-relaxed">{row.details}</td>
                   </tr>
                 ))}
               </tbody>
@@ -432,23 +432,23 @@ export default function TarifsAuditEnergetiquePage() {
       </section>
 
       {/* Section 4 — Aides */}
-      <section className="bg-slate-50 py-16 md:py-20 border-y border-slate-200">
+      <section className="bg-sand-50 py-16 md:py-20 border-y border-charcoal-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
             <Wallet className="w-7 h-7 text-emerald-700" />
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Les aides pour financer l&rsquo;audit énergétique
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <p className="text-charcoal-700 leading-relaxed mb-6">
             L&rsquo;audit énergétique est, dans la plupart des cas, partiellement pris en charge par
             des aides publiques. Trois dispositifs existent en 2026.
           </p>
 
-          <h3 className="font-heading text-xl font-bold text-slate-900 mt-6 mb-2">
+          <h3 className="font-heading text-xl font-bold text-charcoal-900 mt-6 mb-2">
             1. Forfait MaPrimeRénov&rsquo; audit
           </h3>
-          <p className="text-slate-700 leading-relaxed mb-3">
+          <p className="text-charcoal-700 leading-relaxed mb-3">
             L&rsquo;Anah verse un <strong>forfait MaPrimeRénov&rsquo; audit</strong> aux
             propriétaires qui font réaliser un audit énergétique en amont d&rsquo;un projet de
             rénovation. Le montant dépend du profil de revenus du ménage (couleurs bleu, jaune,
@@ -467,10 +467,10 @@ export default function TarifsAuditEnergetiquePage() {
             l&rsquo;audit doit impérativement être réalisé par un professionnel qualifié RGE audit.
           </p>
 
-          <h3 className="font-heading text-xl font-bold text-slate-900 mt-6 mb-2">
+          <h3 className="font-heading text-xl font-bold text-charcoal-900 mt-6 mb-2">
             2. Mon Accompagnateur Rénov&rsquo;
           </h3>
-          <p className="text-slate-700 leading-relaxed mb-3">
+          <p className="text-charcoal-700 leading-relaxed mb-3">
             Créé par le décret n°&nbsp;2022-1035 du 22 juillet 2022, Mon Accompagnateur Rénov&rsquo;
             (MAR) est un tiers agréé par l&rsquo;État qui accompagne le ménage dans toutes les
             étapes de la rénovation, audit compris. Son intervention est{' '}
@@ -482,10 +482,10 @@ export default function TarifsAuditEnergetiquePage() {
             forfait audit.
           </p>
 
-          <h3 className="font-heading text-xl font-bold text-slate-900 mt-6 mb-2">
+          <h3 className="font-heading text-xl font-bold text-charcoal-900 mt-6 mb-2">
             3. Éco-prêt à taux zéro (Éco-PTZ)
           </h3>
-          <p className="text-slate-700 leading-relaxed mb-3">
+          <p className="text-charcoal-700 leading-relaxed mb-3">
             L&rsquo;Éco-PTZ n&rsquo;est pas une aide mais un crédit à taux zéro (jusqu&rsquo;à 50
             000 € sur 20 ans), qui peut financer l&rsquo;audit énergétique lorsqu&rsquo;il est
             intégré à un projet de travaux éligible. Il permet d&rsquo;étaler le reste à charge sans
@@ -521,21 +521,21 @@ export default function TarifsAuditEnergetiquePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
             <Scale className="w-7 h-7 text-emerald-700" />
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Est-ce rentable&nbsp;? Analyse honnête
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             La question du retour sur investissement d&rsquo;un audit énergétique mérite une réponse
             précise. Le coût net réel, après déduction du forfait MaPrimeRénov&rsquo; audit, se
             situe généralement dans une fourchette de <strong>200 € à 1 000 €</strong> pour la
             majorité des maisons individuelles. La rentabilité s&rsquo;apprécie sur trois plans.
           </p>
 
-          <h3 className="font-heading text-lg font-bold text-slate-900 mt-6 mb-2">
+          <h3 className="font-heading text-lg font-bold text-charcoal-900 mt-6 mb-2">
             1. L&rsquo;audit débloque des aides très supérieures à son coût
           </h3>
-          <p className="text-slate-700 leading-relaxed mb-3">
+          <p className="text-charcoal-700 leading-relaxed mb-3">
             Sans audit, pas d&rsquo;accès au Parcours Accompagné MaPrimeRénov&rsquo;. Or le Parcours
             Accompagné plafonne les aides publiques de <strong>40 000 € à 70 000 €</strong> selon le
             nombre de classes DPE gagnées, contre 7 000 à 20 000 € en MPR par geste. Sur un projet
@@ -544,10 +544,10 @@ export default function TarifsAuditEnergetiquePage() {
             effets de levier du dispositif.
           </p>
 
-          <h3 className="font-heading text-lg font-bold text-slate-900 mt-6 mb-2">
+          <h3 className="font-heading text-lg font-bold text-charcoal-900 mt-6 mb-2">
             2. L&rsquo;audit évite les erreurs d&rsquo;ordre des travaux
           </h3>
-          <p className="text-slate-700 leading-relaxed mb-3">
+          <p className="text-charcoal-700 leading-relaxed mb-3">
             Une erreur courante consiste à remplacer le chauffage avant d&rsquo;isoler : la nouvelle
             installation est alors surdimensionnée pour un bâti qui sera ensuite isolé, ce qui
             dégrade son rendement et peut provoquer des courts cycles. Un audit sérieux séquence les
@@ -556,7 +556,7 @@ export default function TarifsAuditEnergetiquePage() {
             À lui seul, ce bénéfice rentabilise fréquemment le coût de l&rsquo;audit.
           </p>
 
-          <h3 className="font-heading text-lg font-bold text-slate-900 mt-6 mb-2">
+          <h3 className="font-heading text-lg font-bold text-charcoal-900 mt-6 mb-2">
             3. Scénario réaliste chiffré
           </h3>
           <div className="mt-2 p-5 rounded-xl bg-emerald-50 border border-emerald-200">
@@ -572,7 +572,7 @@ export default function TarifsAuditEnergetiquePage() {
             </p>
           </div>
 
-          <p className="mt-6 text-slate-700 leading-relaxed">
+          <p className="mt-6 text-charcoal-700 leading-relaxed">
             En résumé : pour un propriétaire qui envisage une rénovation d&rsquo;ampleur,
             l&rsquo;audit est quasi systématiquement rentable. Pour un propriétaire qui veut
             seulement vendre une passoire thermique, l&rsquo;audit est une obligation légale : la
@@ -582,18 +582,18 @@ export default function TarifsAuditEnergetiquePage() {
       </section>
 
       {/* Section 6 — Comment choisir */}
-      <section className="bg-slate-50 py-16 md:py-20 border-y border-slate-200">
+      <section className="bg-sand-50 py-16 md:py-20 border-y border-charcoal-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
             <ClipboardList className="w-7 h-7 text-emerald-700" />
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Comment choisir son auditeur&nbsp;?
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <p className="text-charcoal-700 leading-relaxed mb-6">
             Six règles simples permettent d&rsquo;éviter la majorité des mauvaises surprises.
           </p>
-          <ol className="space-y-4 text-slate-700">
+          <ol className="space-y-4 text-charcoal-700">
             <li className="flex gap-3">
               <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-700 text-white text-sm font-bold flex items-center justify-center">
                 1
@@ -676,25 +676,25 @@ export default function TarifsAuditEnergetiquePage() {
       {/* FAQ */}
       <section className="py-16 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-8">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 mb-8">
             Questions fréquentes
           </h2>
           <div className="space-y-4">
             {FAQ.map((item) => (
               <details
                 key={item.question}
-                className="group border border-slate-200 rounded-xl p-5 bg-white hover:border-emerald-300 transition"
+                className="group border border-charcoal-200 rounded-xl p-5 bg-white hover:border-emerald-300 transition"
               >
-                <summary className="cursor-pointer font-semibold text-slate-900 list-none flex items-start justify-between gap-4">
+                <summary className="cursor-pointer font-semibold text-charcoal-900 list-none flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span
                     aria-hidden="true"
-                    className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-open:bg-emerald-600 group-open:text-white transition text-sm font-bold"
+                    className="flex-shrink-0 w-6 h-6 rounded-full bg-sand-200 text-charcoal-600 flex items-center justify-center group-open:bg-emerald-600 group-open:text-white transition text-sm font-bold"
                   >
                     +
                   </span>
                 </summary>
-                <p className="mt-4 text-slate-700 leading-relaxed">{item.answer}</p>
+                <p className="mt-4 text-charcoal-700 leading-relaxed">{item.answer}</p>
               </details>
             ))}
           </div>

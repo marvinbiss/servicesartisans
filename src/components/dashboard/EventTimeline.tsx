@@ -1,7 +1,16 @@
 'use client'
 
 import {
-  Plus, Send, Eye, FileText, X, Check, XCircle, CheckCircle, Clock, RefreshCw,
+  Plus,
+  Send,
+  Eye,
+  FileText,
+  X,
+  Check,
+  XCircle,
+  CheckCircle,
+  Clock,
+  RefreshCw,
 } from 'lucide-react'
 import type { LeadEventType } from '@/types/leads'
 
@@ -31,11 +40,11 @@ const iconMap: Record<LeadEventType, React.ReactNode> = {
 }
 
 const colorMap: Record<LeadEventType, string> = {
-  created: 'bg-blue-100 text-blue-600 ring-blue-200',
+  created: 'bg-primary-100 text-primary-500 ring-primary-100',
   dispatched: 'bg-indigo-100 text-indigo-600 ring-indigo-200',
   viewed: 'bg-yellow-100 text-yellow-600 ring-yellow-200',
   quoted: 'bg-green-100 text-green-600 ring-green-200',
-  declined: 'bg-gray-100 text-gray-500 ring-gray-200',
+  declined: 'bg-sand-100 text-charcoal-500 ring-sand-300',
   accepted: 'bg-emerald-100 text-emerald-600 ring-emerald-200',
   refused: 'bg-red-100 text-red-600 ring-red-200',
   completed: 'bg-green-100 text-green-700 ring-green-200',
@@ -80,7 +89,7 @@ function renderMetadata(meta: Record<string, unknown>, eventType: LeadEventType)
 export function EventTimeline({ events, compact = false }: EventTimelineProps) {
   if (events.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-400">
+      <div className="text-center py-8 text-charcoal-400">
         <Clock className="w-8 h-8 mx-auto mb-2 opacity-50" />
         <p className="text-sm">Aucun événement</p>
       </div>
@@ -90,7 +99,7 @@ export function EventTimeline({ events, compact = false }: EventTimelineProps) {
   return (
     <div className="relative">
       {/* Timeline line */}
-      <div className="absolute left-5 top-0 bottom-0 w-px bg-gray-200" />
+      <div className="absolute left-5 top-0 bottom-0 w-px bg-sand-300" />
 
       <div className={compact ? 'space-y-3' : 'space-y-4'}>
         {events.map((event, idx) => {
@@ -109,16 +118,16 @@ export function EventTimeline({ events, compact = false }: EventTimelineProps) {
               {/* Content */}
               <div className={`flex-1 ${compact ? 'pb-2' : 'pb-3'} ${isLast ? '' : ''}`}>
                 <div className="flex items-baseline justify-between gap-2">
-                  <p className={`font-medium text-gray-900 ${compact ? 'text-sm' : 'text-base'}`}>
+                  <p
+                    className={`font-medium text-charcoal-900 ${compact ? 'text-sm' : 'text-base'}`}
+                  >
                     {labelMap[event.event_type]}
                   </p>
-                  <time className="text-xs text-gray-400 whitespace-nowrap">
+                  <time className="text-xs text-charcoal-400 whitespace-nowrap">
                     {formatDate(event.created_at)}
                   </time>
                 </div>
-                {metaText && (
-                  <p className="text-sm text-gray-500 mt-0.5">{metaText}</p>
-                )}
+                {metaText && <p className="text-sm text-charcoal-500 mt-0.5">{metaText}</p>}
               </div>
             </div>
           )

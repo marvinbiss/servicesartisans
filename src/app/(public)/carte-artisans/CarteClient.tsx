@@ -3,36 +3,32 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Loader2, MapPin, Filter, Users, ChevronDown, X, List, Map as MapIcon, AlertTriangle } from 'lucide-react'
 import {
-  cityMarkers,
-  mapRegions,
-  getMarkerColor,
-  getMarkerRadius,
-} from '@/lib/data/map-coverage'
+  Loader2,
+  MapPin,
+  Filter,
+  Users,
+  ChevronDown,
+  X,
+  List,
+  Map as MapIcon,
+  AlertTriangle,
+} from 'lucide-react'
+import { cityMarkers, mapRegions, getMarkerColor, getMarkerRadius } from '@/lib/data/map-coverage'
 import { services } from '@/lib/data/france-light'
 
 // Dynamic imports for Leaflet (SSR-incompatible)
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-)
-const CircleMarker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.CircleMarker),
-  { ssr: false }
-)
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
-)
-const Tooltip = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Tooltip),
-  { ssr: false }
-)
+const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
+  ssr: false,
+})
+const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), {
+  ssr: false,
+})
+const CircleMarker = dynamic(() => import('react-leaflet').then((mod) => mod.CircleMarker), {
+  ssr: false,
+})
+const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), { ssr: false })
+const Tooltip = dynamic(() => import('react-leaflet').then((mod) => mod.Tooltip), { ssr: false })
 
 // France metropolitan center
 const FRANCE_CENTER: [number, number] = [46.603354, 1.888334]
@@ -56,19 +52,19 @@ function CityListFallback({
   }, [markers, sortBy])
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+    <div className="bg-white border border-sand-300 rounded-xl overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
-        <p className="text-sm font-medium text-gray-700">
-          {markers.length} villes
-        </p>
+      <div className="flex items-center justify-between px-4 py-3 bg-sand-50 border-b border-sand-300">
+        <p className="text-sm font-medium text-charcoal-700">{markers.length} villes</p>
         <div className="flex items-center gap-2">
-          <label htmlFor="sort-select" className="text-xs text-gray-500">Trier par</label>
+          <label htmlFor="sort-select" className="text-xs text-charcoal-500">
+            Trier par
+          </label>
           <select
             id="sort-select"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'name' | 'count')}
-            className="text-xs border border-gray-300 rounded px-2 py-1"
+            className="text-xs border border-sand-400 rounded px-2 py-1"
           >
             <option value="count">Nombre d'artisans</option>
             <option value="name">Nom de ville</option>
@@ -77,12 +73,14 @@ function CityListFallback({
       </div>
 
       {/* List */}
-      <div className="max-h-[540px] overflow-y-auto divide-y divide-gray-100">
+      <div className="max-h-[540px] overflow-y-auto divide-y divide-sand-200">
         {sorted.map((city) => (
           <Link
             key={city.slug}
-            href={selectedService ? `/services/${selectedService}/${city.slug}` : `/villes/${city.slug}`}
-            className="flex items-center justify-between px-4 py-3 hover:bg-blue-50 transition-colors group"
+            href={
+              selectedService ? `/services/${selectedService}/${city.slug}` : `/villes/${city.slug}`
+            }
+            className="flex items-center justify-between px-4 py-3 hover:bg-primary-50 transition-colors group"
           >
             <div className="flex items-center gap-3 min-w-0">
               <div
@@ -90,20 +88,20 @@ function CityListFallback({
                 style={{ backgroundColor: getMarkerColor(city.providerCount) }}
               />
               <div className="min-w-0">
-                <p className="font-medium text-gray-900 group-hover:text-blue-700 truncate">
+                <p className="font-medium text-charcoal-900 group-hover:text-primary-600 truncate">
                   {city.name}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-charcoal-500">
                   {city.departement} · {city.region}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0 ml-3">
-              <span className="text-sm font-semibold text-gray-700">
+              <span className="text-sm font-semibold text-charcoal-700">
                 {city.providerCount.toLocaleString('fr-FR')}
               </span>
-              <span className="text-xs text-gray-400">artisans</span>
-              <MapPin className="w-4 h-4 text-gray-300 group-hover:text-blue-500" />
+              <span className="text-xs text-charcoal-400">artisans</span>
+              <MapPin className="w-4 h-4 text-sand-500 group-hover:text-primary-400" />
             </div>
           </Link>
         ))}
@@ -208,25 +206,21 @@ export default function CarteClient() {
       {/* Sidebar */}
       <div className="w-full lg:w-80 flex-shrink-0 order-2 lg:order-1">
         {/* Stats card */}
-        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-xl p-5 mb-4">
+        <div className="bg-gradient-to-br from-primary-500 to-indigo-700 text-white rounded-xl p-5 mb-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-sm text-blue-100">
+              <p className="text-sm text-primary-100">
                 {selectedRegion ? `Artisans en ${selectedRegion}` : 'Total artisans référencés'}
               </p>
               <p className="text-2xl font-bold">
-                {selectedRegion
-                  ? totalArtisans.toLocaleString('fr-FR')
-                  : '350 000+'}
+                {selectedRegion ? totalArtisans.toLocaleString('fr-FR') : '350 000+'}
               </p>
             </div>
           </div>
-          <p className="text-sm text-blue-200">
-            {filteredMarkers.length} villes affichées
-          </p>
+          <p className="text-sm text-primary-100">{filteredMarkers.length} villes affichées</p>
         </div>
 
         {/* View mode toggle */}
@@ -236,8 +230,8 @@ export default function CarteClient() {
             disabled={mapError}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
               viewMode === 'map'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white border border-sand-300 text-charcoal-700 hover:bg-sand-50'
             } ${mapError ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <MapIcon className="w-4 h-4" />
@@ -247,8 +241,8 @@ export default function CarteClient() {
             onClick={() => setViewMode('list')}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
               viewMode === 'list'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white border border-sand-300 text-charcoal-700 hover:bg-sand-50'
             }`}
           >
             <List className="w-4 h-4" />
@@ -259,27 +253,32 @@ export default function CarteClient() {
         {/* Mobile filter toggle */}
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="lg:hidden w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-xl mb-4"
+          className="lg:hidden w-full flex items-center justify-between px-4 py-3 bg-white border border-sand-300 rounded-xl mb-4"
         >
-          <span className="flex items-center gap-2 font-medium text-gray-700">
+          <span className="flex items-center gap-2 font-medium text-charcoal-700">
             <Filter className="w-4 h-4" />
             Filtres
           </span>
-          <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+          <ChevronDown
+            className={`w-4 h-4 text-charcoal-500 transition-transform ${showFilters ? 'rotate-180' : ''}`}
+          />
         </button>
 
         {/* Filters */}
         <div className={`space-y-4 ${showFilters ? 'block' : 'hidden lg:block'}`}>
           {/* Region filter */}
-          <div className="bg-white border border-gray-200 rounded-xl p-4">
-            <label htmlFor="region-filter" className="block text-sm font-semibold text-gray-700 mb-2">
+          <div className="bg-white border border-sand-300 rounded-xl p-4">
+            <label
+              htmlFor="region-filter"
+              className="block text-sm font-semibold text-charcoal-700 mb-2"
+            >
               Filtrer par région
             </label>
             <select
               id="region-filter"
               value={selectedRegion}
               onChange={(e) => handleRegionChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none"
             >
               <option value="">Toute la France</option>
               {mapRegions.map((region) => (
@@ -291,15 +290,18 @@ export default function CarteClient() {
           </div>
 
           {/* Service filter */}
-          <div className="bg-white border border-gray-200 rounded-xl p-4">
-            <label htmlFor="service-filter" className="block text-sm font-semibold text-gray-700 mb-2">
+          <div className="bg-white border border-sand-300 rounded-xl p-4">
+            <label
+              htmlFor="service-filter"
+              className="block text-sm font-semibold text-charcoal-700 mb-2"
+            >
               Filtrer par métier
             </label>
             <select
               id="service-filter"
               value={selectedService}
               onChange={(e) => setSelectedService(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none"
             >
               <option value="">Tous les métiers</option>
               {services.map((service) => (
@@ -314,7 +316,7 @@ export default function CarteClient() {
           {(selectedRegion || selectedService) && (
             <button
               onClick={clearFilters}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-charcoal-600 bg-sand-50 border border-sand-300 rounded-xl hover:bg-sand-100 transition-colors"
             >
               <X className="w-4 h-4" />
               Réinitialiser les filtres
@@ -323,20 +325,24 @@ export default function CarteClient() {
 
           {/* Legend (only in map mode) */}
           {showMap && (
-            <div className="bg-white border border-gray-200 rounded-xl p-4">
-              <p className="text-sm font-semibold text-gray-700 mb-3">Légende</p>
+            <div className="bg-white border border-sand-300 rounded-xl p-4">
+              <p className="text-sm font-semibold text-charcoal-700 mb-3">Légende</p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-green-600" />
-                  <span className="text-sm text-gray-600">Forte couverture (3&nbsp;000+)</span>
+                  <span className="text-sm text-charcoal-600">Forte couverture (3&nbsp;000+)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-amber-500" />
-                  <span className="text-sm text-gray-600">Couverture moyenne (1&nbsp;000-3&nbsp;000)</span>
+                  <span className="text-sm text-charcoal-600">
+                    Couverture moyenne (1&nbsp;000-3&nbsp;000)
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-red-500" />
-                  <span className="text-sm text-gray-600">Couverture limitée (&lt; 1&nbsp;000)</span>
+                  <span className="text-sm text-charcoal-600">
+                    Couverture limitée (&lt; 1&nbsp;000)
+                  </span>
                 </div>
               </div>
             </div>
@@ -348,7 +354,10 @@ export default function CarteClient() {
       <div className="flex-1 order-1 lg:order-2">
         {/* Map view */}
         {showMap && (
-          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm" style={{ height: '600px' }}>
+          <div
+            className="rounded-xl overflow-hidden border border-sand-300 shadow-sm"
+            style={{ height: '600px' }}
+          >
             <MapContainer
               ref={mapRef}
               center={FRANCE_CENTER}
@@ -383,20 +392,28 @@ export default function CarteClient() {
                     <Tooltip direction="top" offset={[0, -radius]}>
                       <span className="font-medium">{city.name}</span>
                       <br />
-                      <span className="text-xs">{city.providerCount.toLocaleString('fr-FR')} artisans</span>
+                      <span className="text-xs">
+                        {city.providerCount.toLocaleString('fr-FR')} artisans
+                      </span>
                     </Tooltip>
                     <Popup maxWidth={280}>
                       <div className="p-3">
-                        <h3 className="font-bold text-gray-900 text-base mb-1">{city.name}</h3>
-                        <p className="text-sm text-gray-600 mb-1">{city.departement} · {city.region}</p>
-                        <p className="text-sm font-medium text-blue-700 mb-3">
+                        <h3 className="font-bold text-charcoal-900 text-base mb-1">{city.name}</h3>
+                        <p className="text-sm text-charcoal-600 mb-1">
+                          {city.departement} · {city.region}
+                        </p>
+                        <p className="text-sm font-medium text-primary-600 mb-3">
                           {city.providerCount.toLocaleString('fr-FR')} artisans référencés
                         </p>
 
                         <div className="flex gap-2">
                           <Link
-                            href={selectedService ? `/services/${selectedService}/${city.slug}` : `/villes/${city.slug}`}
-                            className="flex-1 text-center px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                            href={
+                              selectedService
+                                ? `/services/${selectedService}/${city.slug}`
+                                : `/villes/${city.slug}`
+                            }
+                            className="flex-1 text-center px-3 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
                           >
                             <span className="flex items-center justify-center gap-1.5">
                               <MapPin className="w-3.5 h-3.5" />
@@ -415,13 +432,16 @@ export default function CarteClient() {
 
         {/* Loading state (map mode, not yet ready) */}
         {viewMode === 'map' && !mapReady && !mapError && (
-          <div className="bg-gray-100 rounded-xl flex items-center justify-center" style={{ height: '600px' }}>
-            <div className="text-center text-gray-500">
+          <div
+            className="bg-sand-100 rounded-xl flex items-center justify-center"
+            style={{ height: '600px' }}
+          >
+            <div className="text-center text-charcoal-500">
               <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2" />
               <p>Chargement de la carte...</p>
               <button
                 onClick={() => setViewMode('list')}
-                className="mt-3 text-sm text-blue-600 hover:text-blue-700 underline"
+                className="mt-3 text-sm text-primary-500 hover:text-primary-600 underline"
               >
                 Voir en liste
               </button>
@@ -431,16 +451,19 @@ export default function CarteClient() {
 
         {/* Error state (map failed) */}
         {viewMode === 'map' && mapError && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-center" style={{ height: '300px' }}>
+          <div
+            className="bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-center"
+            style={{ height: '300px' }}
+          >
             <div className="text-center px-6">
               <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-              <p className="font-medium text-gray-900 mb-1">La carte n'a pas pu se charger</p>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="font-medium text-charcoal-900 mb-1">La carte n'a pas pu se charger</p>
+              <p className="text-sm text-charcoal-600 mb-4">
                 Utilisez la vue liste ci-dessous pour parcourir les villes.
               </p>
               <button
                 onClick={() => setViewMode('list')}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
               >
                 <List className="w-4 h-4" />
                 Voir en liste

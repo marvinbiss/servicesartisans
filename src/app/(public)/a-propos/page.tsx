@@ -16,8 +16,9 @@ import dynamic from 'next/dynamic'
 const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 export const metadata: Metadata = {
-  title: 'À propos de ServicesArtisans — Annuaire d\'artisans gratuit',
-  description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable pour trouver un artisan.',
+  title: "À propos de ServicesArtisans — Annuaire d'artisans gratuit",
+  description:
+    "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable pour trouver un artisan.",
   alternates: {
     canonical: `${SITE_URL}/a-propos`,
   },
@@ -29,16 +30,25 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'À propos — Annuaire d\'artisans en France',
-    description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+    title: "À propos — Annuaire d'artisans en France",
+    description:
+      "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.",
     url: `${SITE_URL}/a-propos`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Annuaire des artisans en France',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'À propos — Annuaire d\'artisans en France',
-    description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement.',
+    title: "À propos — Annuaire d'artisans en France",
+    description:
+      "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -81,9 +91,16 @@ async function getStats() {
     // Fallback: legacy 3-query approach if MV doesn't exist yet
     const result = await Promise.race([
       Promise.all([
-        supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
-        supabase.from('providers').select('review_count').eq('is_active', true).gt('review_count', 0),
-        supabase.from('providers').select('address_city').eq('is_active', true)
+        supabase
+          .from('providers')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true),
+        supabase
+          .from('providers')
+          .select('review_count')
+          .eq('is_active', true)
+          .gt('review_count', 0),
+        supabase.from('providers').select('address_city').eq('is_active', true),
       ]),
       new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error('getStats timeout')), 6_000)
@@ -93,7 +110,7 @@ async function getStats() {
     const [{ count: artisanCount }, { data: providerStats }, { data: cities }] = result
 
     const totalReviews = providerStats?.reduce((sum, p) => sum + (p.review_count || 0), 0) || 0
-    const uniqueCities = new Set(cities?.map(c => c.address_city).filter(Boolean)).size
+    const uniqueCities = new Set(cities?.map((c) => c.address_city).filter(Boolean)).size
 
     return {
       artisanCount: artisanCount || FALLBACK_STATS.artisanCount,
@@ -109,37 +126,51 @@ const verificationSteps = [
   {
     icon: Database,
     title: 'Données SIREN officielles',
-    description: 'Chaque artisan provient de l\'API Annuaire des Entreprises du gouvernement. Numéro SIREN, activité et adresse sont issus des données publiques officielles.',
+    description:
+      "Chaque artisan provient de l'API Annuaire des Entreprises du gouvernement. Numéro SIREN, activité et adresse sont issus des données publiques officielles.",
   },
   {
     icon: Shield,
     title: 'Assurance RC professionnelle',
-    description: 'Nous demandons une attestation d\'assurance responsabilité civile professionnelle en cours de validité.',
+    description:
+      "Nous demandons une attestation d'assurance responsabilité civile professionnelle en cours de validité.",
   },
   {
     icon: Lock,
     title: 'Garantie décennale',
-    description: 'Pour les métiers du bâtiment concernés, la garantie décennale est contrôlée avant toute mise en ligne.',
+    description:
+      'Pour les métiers du bâtiment concernés, la garantie décennale est contrôlée avant toute mise en ligne.',
   },
   {
     icon: Eye,
     title: 'Avis authentiques',
-    description: 'Seuls les clients ayant fait appel à un artisan via la plateforme peuvent laisser un avis.',
+    description:
+      'Seuls les clients ayant fait appel à un artisan via la plateforme peuvent laisser un avis.',
   },
 ]
 
 const commitments = [
   {
     title: 'Zéro information inventée',
-    description: 'Toutes les données proviennent des registres officiels SIREN. Aucun profil inventé sur la plateforme.',
+    description:
+      'Toutes les données proviennent des registres officiels SIREN. Aucun profil inventé sur la plateforme.',
   },
   {
     title: 'Données protégées',
-    description: <>Conformité RGPD, données hébergées en Europe, DPO joignable à <a href="mailto:dpo@servicesartisans.fr" className="text-blue-600 hover:underline">dpo@servicesartisans.fr</a>.</>,
+    description: (
+      <>
+        Conformité RGPD, données hébergées en Europe, DPO joignable à{' '}
+        <a href="mailto:dpo@servicesartisans.fr" className="text-primary-500 hover:underline">
+          dpo@servicesartisans.fr
+        </a>
+        .
+      </>
+    ),
   },
   {
     title: 'Transparence tarifaire',
-    description: 'Service entièrement gratuit pour tous les utilisateurs, particuliers comme artisans.',
+    description:
+      'Service entièrement gratuit pour tous les utilisateurs, particuliers comme artisans.',
   },
   {
     title: 'Pas de revente de données',
@@ -152,17 +183,17 @@ export default async function AProposPage() {
 
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <JsonLd data={getBreadcrumbSchema([
-          { name: 'Accueil', url: '/' },
-          { name: 'À propos', url: '/a-propos' },
-        ])} />
+      <div className="min-h-screen bg-sand-50">
+        <JsonLd
+          data={getBreadcrumbSchema([
+            { name: 'Accueil', url: '/' },
+            { name: 'À propos', url: '/a-propos' },
+          ])}
+        />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'À propos' }]} className="mb-4" />
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -175,24 +206,25 @@ export default async function AProposPage() {
         {/* Notre équipe — E-E-A-T (also in CMS branch) */}
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">
-              Notre équipe
-            </h2>
+            <h2 className="text-2xl font-heading font-bold text-charcoal-900 mb-6">Notre équipe</h2>
             {(() => {
               const editorial = teamMembers[0]
               return (
-                <div className="bg-gray-50 rounded-xl shadow-sm p-8 border border-gray-100">
+                <div className="bg-sand-50 rounded-xl shadow-sm p-8 border border-sand-200">
                   <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Users className="h-8 w-8 text-blue-600" />
+                    <div className="flex-shrink-0 w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+                      <Users className="h-8 w-8 text-primary-500" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{editorial.name}</h3>
-                      <p className="text-sm text-blue-600 mb-2">{editorial.role}</p>
-                      <p className="text-gray-700 leading-relaxed">{editorial.bio}</p>
+                      <h3 className="text-lg font-semibold text-charcoal-900">{editorial.name}</h3>
+                      <p className="text-sm text-primary-500 mb-2">{editorial.role}</p>
+                      <p className="text-charcoal-700 leading-relaxed">{editorial.bio}</p>
                       <div className="flex flex-wrap gap-2 mt-3">
-                        {editorial.expertise.map(e => (
-                          <span key={e} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">
+                        {editorial.expertise.map((e) => (
+                          <span
+                            key={e}
+                            className="text-xs bg-primary-50 text-primary-600 px-2.5 py-1 rounded-full font-medium"
+                          >
                             {e}
                           </span>
                         ))}
@@ -219,35 +251,46 @@ export default async function AProposPage() {
   ])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <JsonLd data={[orgSchema, breadcrumbSchema]} />
 
       {/* Hero */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,107,75,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
             items={[{ label: 'À propos' }]}
-            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-            À propos de ServicesArtisans
-          </h1>
-          <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            ServicesArtisans est l&apos;annuaire gratuit des artisans en France,
-            construit à partir des données ouvertes du gouvernement.
-            {stats.artisanCount > 0 ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels référencés,` : ' Des milliers de professionnels référencés,'} accessibles gratuitement.
-          </p>
+            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+              À propos de ServicesArtisans
+            </h1>
+            <p className="text-xl text-charcoal-400 max-w-3xl mx-auto">
+              ServicesArtisans est l&apos;annuaire gratuit des artisans en France, construit à
+              partir des données ouvertes du gouvernement.
+              {stats.artisanCount > 0
+                ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels référencés,`
+                : ' Des milliers de professionnels référencés,'}{' '}
+              accessibles gratuitement.
+            </p>
           </div>
         </div>
       </section>
@@ -255,32 +298,54 @@ export default async function AProposPage() {
       {/* Mission & valeurs — server-rendered for SEO */}
       <section className="py-16 bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Notre mission</h2>
-          <div className="prose prose-lg text-gray-700 max-w-none space-y-4">
+          <h2 className="text-3xl font-bold text-charcoal-900 mb-6">Notre mission</h2>
+          <div className="prose prose-lg text-charcoal-700 max-w-none space-y-4">
             <p>
-              ServicesArtisans a pour mission de faciliter la mise en relation entre particuliers et artisans qualifiés partout en France. Notre annuaire référence des milliers de professionnels du bâtiment, de la rénovation et des services, en s&apos;appuyant exclusivement sur les données officielles du registre SIREN via l&apos;API Annuaire des Entreprises du gouvernement.
+              ServicesArtisans a pour mission de faciliter la mise en relation entre particuliers et
+              artisans qualifiés partout en France. Notre annuaire référence des milliers de
+              professionnels du bâtiment, de la rénovation et des services, en s&apos;appuyant
+              exclusivement sur les données officielles du registre SIREN via l&apos;API Annuaire
+              des Entreprises du gouvernement.
             </p>
             <p>
-              Nous croyons que trouver un artisan de confiance ne devrait pas être compliqué. C&apos;est pourquoi notre plateforme est entièrement gratuite, aussi bien pour les particuliers que pour les artisans. Pas de commissions cachées, pas de revente de données personnelles.
+              Nous croyons que trouver un artisan de confiance ne devrait pas être compliqué.
+              C&apos;est pourquoi notre plateforme est entièrement gratuite, aussi bien pour les
+              particuliers que pour les artisans. Pas de commissions cachées, pas de revente de
+              données personnelles.
             </p>
             <p>
-              Chaque professionnel référencé sur ServicesArtisans est issu des registres officiels. Nous vérifions les numéros SIRET, demandons les attestations d&apos;assurance RC professionnelle et de garantie décennale pour les métiers du bâtiment, et ne publions que des avis authentiques de clients ayant réellement fait appel à un artisan via la plateforme.
+              Chaque professionnel référencé sur ServicesArtisans est issu des registres officiels.
+              Nous vérifions les numéros SIRET, demandons les attestations d&apos;assurance RC
+              professionnelle et de garantie décennale pour les métiers du bâtiment, et ne publions
+              que des avis authentiques de clients ayant réellement fait appel à un artisan via la
+              plateforme.
             </p>
           </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mt-12 mb-6">Nos valeurs</h2>
+          <h2 className="text-3xl font-bold text-charcoal-900 mt-12 mb-6">Nos valeurs</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Transparence</h3>
-              <p className="text-gray-600 text-sm">Toutes nos données proviennent de sources publiques officielles. Aucune information n&apos;est inventée ou embellie.</p>
+            <div className="bg-sand-50 rounded-xl p-6 border border-sand-200">
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-2">Transparence</h3>
+              <p className="text-charcoal-600 text-sm">
+                Toutes nos données proviennent de sources publiques officielles. Aucune information
+                n&apos;est inventée ou embellie.
+              </p>
             </div>
-            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Gratuité</h3>
-              <p className="text-gray-600 text-sm">La recherche d&apos;artisans, les demandes de devis et l&apos;inscription sont 100 % gratuites pour tous les utilisateurs.</p>
+            <div className="bg-sand-50 rounded-xl p-6 border border-sand-200">
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-2">Gratuité</h3>
+              <p className="text-charcoal-600 text-sm">
+                La recherche d&apos;artisans, les demandes de devis et l&apos;inscription sont 100 %
+                gratuites pour tous les utilisateurs.
+              </p>
             </div>
-            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Protection des données</h3>
-              <p className="text-gray-600 text-sm">Conformité RGPD, hébergement en Europe, aucune revente de données personnelles. Votre vie privée est respectée.</p>
+            <div className="bg-sand-50 rounded-xl p-6 border border-sand-200">
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-2">
+                Protection des données
+              </h3>
+              <p className="text-charcoal-600 text-sm">
+                Conformité RGPD, hébergement en Europe, aucune revente de données personnelles.
+                Votre vie privée est respectée.
+              </p>
             </div>
           </div>
         </div>
@@ -290,12 +355,12 @@ export default async function AProposPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-charcoal-900 mb-4">
               Comment nous référençons les artisans
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Chaque artisan référencé sur la plateforme passe par un processus
-              de vérification en plusieurs étapes.
+            <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
+              Chaque artisan référencé sur la plateforme passe par un processus de vérification en
+              plusieurs étapes.
             </p>
           </div>
 
@@ -304,11 +369,11 @@ export default async function AProposPage() {
               const Icon = step.icon
               return (
                 <div key={step.title} className="text-center">
-                  <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-7 h-7 text-blue-600" />
+                  <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Icon className="w-7 h-7 text-primary-500" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h3>
-                  <p className="text-gray-600 text-sm">{step.description}</p>
+                  <h3 className="text-lg font-semibold text-charcoal-900 mb-2">{step.title}</h3>
+                  <p className="text-charcoal-600 text-sm">{step.description}</p>
                 </div>
               )
             })}
@@ -334,44 +399,56 @@ export default async function AProposPage() {
                 />
               </div>
               <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Notre technologie</h2>
-              <div className="space-y-4 text-gray-600">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">1</span>
+                <h2 className="text-2xl font-bold text-charcoal-900 mb-6">Notre technologie</h2>
+                <div className="space-y-4 text-charcoal-600">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-primary-500 text-xs font-bold">1</span>
+                    </div>
+                    <p>
+                      Données artisans issues de l'<strong>API Annuaire des Entreprises</strong> du
+                      gouvernement (données ouvertes SIREN).
+                    </p>
                   </div>
-                  <p>Données artisans issues de l'<strong>API Annuaire des Entreprises</strong> du gouvernement (données ouvertes SIREN).</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">2</span>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-primary-500 text-xs font-bold">2</span>
+                    </div>
+                    <p>
+                      Plateforme construite avec <strong>Next.js</strong> pour des performances
+                      optimales et un référencement naturel de qualité.
+                    </p>
                   </div>
-                  <p>Plateforme construite avec <strong>Next.js</strong> pour des performances optimales et un référencement naturel de qualité.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">3</span>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-primary-500 text-xs font-bold">3</span>
+                    </div>
+                    <p>
+                      Données hébergées en Europe via <strong>Supabase</strong> (PostgreSQL).
+                    </p>
                   </div>
-                  <p>Données hébergées en Europe via <strong>Supabase</strong> (PostgreSQL).</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">4</span>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-primary-500 text-xs font-bold">4</span>
+                    </div>
+                    <p>
+                      Paiements sécurisés via <strong>Stripe</strong>, certifié PCI-DSS.
+                    </p>
                   </div>
-                  <p>Paiements sécurisés via <strong>Stripe</strong>, certifié PCI-DSS.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-xs font-bold">5</span>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-primary-500 text-xs font-bold">5</span>
+                    </div>
+                    <p>
+                      Monitoring et gestion des erreurs via <strong>Sentry</strong>.
+                    </p>
                   </div>
-                  <p>Monitoring et gestion des erreurs via <strong>Sentry</strong>.</p>
                 </div>
-              </div>
               </div>
             </div>
 
             {/* Modèle économique */}
-            <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl overflow-hidden text-white">
+            <div className="bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl overflow-hidden text-white">
               <div className="relative h-48 w-full">
                 <Image
                   src={pageImages.about[1].src}
@@ -382,33 +459,40 @@ export default async function AProposPage() {
                   placeholder="blur"
                   blurDataURL={BLUR_PLACEHOLDER}
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-blue-600/60 to-blue-700/90" />
+                <div className="absolute inset-0 bg-gradient-to-b from-primary-500/60 to-primary-600/90" />
               </div>
               <div className="p-8">
-              <h2 className="text-2xl font-bold mb-6">Notre modèle économique</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Search className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold">Gratuit pour les particuliers</p>
-                    <p className="text-blue-100 text-sm">Recherche d'artisans, demandes de devis, comparaison : tout est gratuit.</p>
+                <h2 className="text-2xl font-bold mb-6">Notre modèle économique</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <Search className="w-5 h-5 text-primary-100 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold">Gratuit pour les particuliers</p>
+                      <p className="text-primary-100 text-sm">
+                        Recherche d'artisans, demandes de devis, comparaison : tout est gratuit.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Search className="w-5 h-5 text-primary-100 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold">Gratuit pour les artisans</p>
+                      <p className="text-primary-100 text-sm">
+                        Les artisans peuvent créer leur profil et recevoir des demandes de devis
+                        gratuitement.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Lock className="w-5 h-5 text-primary-100 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold">Aucune revente de données</p>
+                      <p className="text-primary-100 text-sm">
+                        Vos données personnelles ne sont jamais vendues à des tiers.
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Search className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold">Gratuit pour les artisans</p>
-                    <p className="text-blue-100 text-sm">Les artisans peuvent créer leur profil et recevoir des demandes de devis gratuitement.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Lock className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold">Aucune revente de données</p>
-                    <p className="text-blue-100 text-sm">Vos données personnelles ne sont jamais vendues à des tiers.</p>
-                  </div>
-                </div>
-              </div>
               </div>
             </div>
           </div>
@@ -420,46 +504,42 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {hasArtisans ? (
             <>
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                L'annuaire en chiffres
-              </h2>
+              <h2 className="text-3xl font-bold text-charcoal-900 mb-8">L'annuaire en chiffres</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto">
                 <div>
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div className="text-3xl font-bold text-primary-500">
                     {stats.artisanCount.toLocaleString('fr-FR')}
                   </div>
-                  <div className="text-gray-600 mt-1">Artisans référencés</div>
+                  <div className="text-charcoal-600 mt-1">Artisans référencés</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-blue-600">
-                    {stats.cityCount}
-                  </div>
-                  <div className="text-gray-600 mt-1">Villes couvertes</div>
+                  <div className="text-3xl font-bold text-primary-500">{stats.cityCount}</div>
+                  <div className="text-charcoal-600 mt-1">Villes couvertes</div>
                 </div>
                 {stats.reviewCount > 0 && (
                   <div>
-                    <div className="text-3xl font-bold text-blue-600">
+                    <div className="text-3xl font-bold text-primary-500">
                       {stats.reviewCount.toLocaleString('fr-FR')}
                     </div>
-                    <div className="text-gray-600 mt-1">Avis authentiques</div>
+                    <div className="text-charcoal-600 mt-1">Avis authentiques</div>
                   </div>
                 )}
               </div>
             </>
           ) : (
             <div className="max-w-xl mx-auto">
-              <div className="bg-blue-50 border border-blue-200 rounded-2xl p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              <div className="bg-primary-50 border border-primary-200 rounded-2xl p-8">
+                <h2 className="text-2xl font-bold text-charcoal-900 mb-3">
                   Annuaire en cours de constitution
                 </h2>
-                <p className="text-gray-600 mb-6">
-                  Nous importons les données de l'API Annuaire des Entreprises pour constituer
-                  le plus grand répertoire d'artisans de France. Les premiers professionnels
-                  référencés seront bientôt accessibles.
+                <p className="text-charcoal-600 mb-6">
+                  Nous importons les données de l'API Annuaire des Entreprises pour constituer le
+                  plus grand répertoire d'artisans de France. Les premiers professionnels référencés
+                  seront bientôt accessibles.
                 </p>
                 <Link
                   href="/inscription-artisan"
-                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  className="inline-flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                 >
                   Devenir artisan partenaire
                   <ArrowRight className="w-5 h-5" />
@@ -474,19 +554,20 @@ export default async function AProposPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Nos engagements
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-charcoal-900 mb-4">Nos engagements</h2>
+            <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
               Des engagements concrets et vérifiables.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {commitments.map((commitment) => (
-              <div key={commitment.title} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{commitment.title}</h3>
-                <p className="text-gray-600 text-sm">{commitment.description}</p>
+              <div
+                key={commitment.title}
+                className="bg-white rounded-xl shadow-sm p-6 border border-sand-200"
+              >
+                <h3 className="text-lg font-semibold text-charcoal-900 mb-2">{commitment.title}</h3>
+                <p className="text-charcoal-600 text-sm">{commitment.description}</p>
               </div>
             ))}
           </div>
@@ -497,64 +578,62 @@ export default async function AProposPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-6 text-center">
               En savoir plus sur nos engagements
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <Link
                 href="/notre-processus-de-verification"
-                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+                className="bg-sand-50 rounded-xl p-6 border border-sand-200 hover:shadow-md transition-shadow group"
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-semibold text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors">
                   Processus de vérification
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-charcoal-600 text-sm">
                   Détails sur la vérification SIRET, assurances et suivi continu des artisans.
                 </p>
               </Link>
               <Link
                 href="/politique-avis"
-                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+                className="bg-sand-50 rounded-xl p-6 border border-sand-200 hover:shadow-md transition-shadow group"
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-semibold text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors">
                   Politique d'avis
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-charcoal-600 text-sm">
                   Notre politique de collecte, modération et publication des avis clients.
                 </p>
               </Link>
               <Link
                 href="/mediation"
-                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+                className="bg-sand-50 rounded-xl p-6 border border-sand-200 hover:shadow-md transition-shadow group"
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-semibold text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors">
                   Résolution des litiges
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-charcoal-600 text-sm">
                   Processus de réclamation et médiation en cas de différend.
                 </p>
               </Link>
               <Link
                 href="/mentions-legales"
-                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+                className="bg-sand-50 rounded-xl p-6 border border-sand-200 hover:shadow-md transition-shadow group"
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-semibold text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors">
                   Mentions légales
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-charcoal-600 text-sm">
                   Informations juridiques, éditeur et hébergeur du site.
                 </p>
               </Link>
               <Link
                 href="/contact"
-                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+                className="bg-sand-50 rounded-xl p-6 border border-sand-200 hover:shadow-md transition-shadow group"
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg font-semibold text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors">
                   Contact
                 </h3>
-                <p className="text-gray-600 text-sm">
-                  Une question ? Contactez notre équipe.
-                </p>
+                <p className="text-charcoal-600 text-sm">Une question ? Contactez notre équipe.</p>
               </Link>
             </div>
           </div>
@@ -565,10 +644,8 @@ export default async function AProposPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Notre équipe
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-charcoal-900 mb-4">Notre équipe</h2>
+            <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
               Les experts derrière nos contenus et notre plateforme.
             </p>
           </div>
@@ -577,18 +654,21 @@ export default async function AProposPage() {
           {(() => {
             const editorial = teamMembers[0]
             return (
-              <div className="bg-gray-50 rounded-xl shadow-sm p-8 mb-10 max-w-4xl mx-auto border border-gray-100">
+              <div className="bg-sand-50 rounded-xl shadow-sm p-8 mb-10 max-w-4xl mx-auto border border-sand-200">
                 <div className="flex items-start gap-6">
-                  <div className="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Users className="h-8 w-8 text-blue-600" />
+                  <div className="flex-shrink-0 w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+                    <Users className="h-8 w-8 text-primary-500" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{editorial.name}</h3>
-                    <p className="text-sm text-blue-600 mb-2">{editorial.role}</p>
-                    <p className="text-gray-700 leading-relaxed">{editorial.bio}</p>
+                    <h3 className="text-lg font-semibold text-charcoal-900">{editorial.name}</h3>
+                    <p className="text-sm text-primary-500 mb-2">{editorial.role}</p>
+                    <p className="text-charcoal-700 leading-relaxed">{editorial.bio}</p>
                     <div className="flex flex-wrap gap-2 mt-3">
-                      {editorial.expertise.map(e => (
-                        <span key={e} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">
+                      {editorial.expertise.map((e) => (
+                        <span
+                          key={e}
+                          className="text-xs bg-primary-50 text-primary-600 px-2.5 py-1 rounded-full font-medium"
+                        >
                           {e}
                         </span>
                       ))}
@@ -602,34 +682,48 @@ export default async function AProposPage() {
           {/* Auteurs individuels */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {getAllAuthors().map((author) => {
-              const initials = author.name.split(' ').map(n => n[0]).join('')
+              const initials = author.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
               return (
-                <div key={author.slug} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div
+                  key={author.slug}
+                  className="bg-white rounded-xl shadow-sm p-6 border border-sand-200"
+                >
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
                       {initials}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{author.name}</h3>
-                      <p className="text-sm text-blue-600">{author.role}</p>
+                      <h3 className="font-semibold text-charcoal-900">{author.name}</h3>
+                      <p className="text-sm text-primary-500">{author.role}</p>
                     </div>
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-3">{author.bio}</p>
+                  <p className="text-charcoal-600 text-sm leading-relaxed mb-3">{author.bio}</p>
                   <div className="flex flex-wrap gap-1.5 mb-2">
-                    {author.expertise.map(exp => (
-                      <span key={exp} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                    {author.expertise.map((exp) => (
+                      <span
+                        key={exp}
+                        className="text-xs bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full font-medium"
+                      >
                         {exp}
                       </span>
                     ))}
                   </div>
                   <div className="flex flex-wrap gap-1.5">
-                    {author.certifications.map(cert => (
-                      <span key={cert} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
+                    {author.certifications.map((cert) => (
+                      <span
+                        key={cert}
+                        className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium"
+                      >
                         {cert}
                       </span>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-400 mt-2">{author.yearsExperience} ans d'expérience</p>
+                  <p className="text-xs text-charcoal-400 mt-2">
+                    {author.yearsExperience} ans d'expérience
+                  </p>
                 </div>
               )
             })}
@@ -638,17 +732,19 @@ export default async function AProposPage() {
       </section>
 
       {/* Contact */}
-      <section className="py-16 bg-blue-600">
+      <section className="py-16 bg-primary-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Une question ?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Contactez-nous à <a href={`mailto:${companyIdentity.email}`} className="text-white hover:underline"><strong>{companyIdentity.email}</strong></a> ou via notre page de contact.
+          <h2 className="text-3xl font-bold text-white mb-4">Une question ?</h2>
+          <p className="text-xl text-primary-100 mb-8">
+            Contactez-nous à{' '}
+            <a href={`mailto:${companyIdentity.email}`} className="text-white hover:underline">
+              <strong>{companyIdentity.email}</strong>
+            </a>{' '}
+            ou via notre page de contact.
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-white text-primary-500 px-8 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors"
           >
             Nous contacter
             <ArrowRight className="w-5 h-5" />

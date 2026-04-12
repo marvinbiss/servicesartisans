@@ -75,10 +75,7 @@ const diagnosticFAQs = [
 ]
 
 export default function DiagnosticPage() {
-  const breadcrumbItems = [
-    { label: 'Outils', href: '/outils' },
-    { label: 'Diagnostic' },
-  ]
+  const breadcrumbItems = [{ label: 'Outils', href: '/outils' }, { label: 'Diagnostic' }]
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -97,16 +94,20 @@ export default function DiagnosticPage() {
     <>
       <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-gradient-to-b from-sand-50 to-white">
         {/* Header section */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+        <div className="bg-gradient-to-r from-primary-500 to-indigo-700 text-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-            <Breadcrumb items={breadcrumbItems} className="mb-4 text-blue-200 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300 [&>ol>li:last-child_span]:text-white" />
+            <Breadcrumb
+              items={breadcrumbItems}
+              className="mb-4 text-primary-100 [&_a]:text-primary-100 [&_a:hover]:text-white [&_svg]:text-primary-200 [&>ol>li:last-child_span]:text-white"
+            />
             <h1 className="text-3xl sm:text-4xl font-extrabold font-heading mb-3">
               Quel artisan vous faut-il ?
             </h1>
-            <p className="text-blue-100 text-lg max-w-2xl">
-              Répondez à 3 questions simples et découvrez le professionnel idéal pour votre problème. Gratuit et en 30 secondes.
+            <p className="text-primary-100 text-lg max-w-2xl">
+              Répondez à 3 questions simples et découvrez le professionnel idéal pour votre
+              problème. Gratuit et en 30 secondes.
             </p>
           </div>
         </div>
@@ -117,16 +118,16 @@ export default function DiagnosticPage() {
         </div>
 
         {/* FAQ section */}
-        <div className="bg-white border-t border-gray-100">
+        <div className="bg-white border-t border-sand-200">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-            <h2 className="text-2xl font-bold text-gray-900 font-heading mb-8 text-center">
+            <h2 className="text-2xl font-bold text-charcoal-900 font-heading mb-8 text-center">
               Questions fréquentes
             </h2>
             <div className="space-y-6">
               {diagnosticFAQs.map((faq, index) => (
-                <div key={index} className="border-b border-gray-100 pb-6 last:border-0">
-                  <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
+                <div key={index} className="border-b border-sand-200 pb-6 last:border-0">
+                  <h3 className="font-semibold text-charcoal-900 mb-2">{faq.question}</h3>
+                  <p className="text-charcoal-600 text-sm leading-relaxed">{faq.answer}</p>
                 </div>
               ))}
             </div>

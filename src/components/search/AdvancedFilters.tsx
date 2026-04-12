@@ -1,16 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  Filter,
-  Star,
-  MapPin,
-  Euro,
-  Clock,
-  ChevronDown,
-  ChevronUp,
-  RotateCcw,
-} from 'lucide-react'
+import { Filter, Star, MapPin, Euro, Clock, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import RadiusSlider from './RadiusSlider'
 import PriceRangeFilter from './PriceRangeFilter'
@@ -63,47 +54,45 @@ export function AdvancedFilters({
   ).length
 
   return (
-    <div className={cn('bg-white rounded-xl shadow-sm border border-gray-200', className)}>
+    <div className={cn('bg-white rounded-xl shadow-sm border border-sand-300', className)}>
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between p-4"
       >
         <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-gray-500" />
-          <span className="font-medium text-gray-900">
-            Filtres avancés
-          </span>
+          <Filter className="w-5 h-5 text-charcoal-500" />
+          <span className="font-medium text-charcoal-900">Filtres avancés</span>
           {activeFiltersCount > 0 && (
-            <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-600 rounded-full">
+            <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-500 rounded-full">
               {activeFiltersCount}
             </span>
           )}
         </div>
         {isExpanded ? (
-          <ChevronUp className="w-5 h-5 text-gray-400" />
+          <ChevronUp className="w-5 h-5 text-charcoal-400" />
         ) : (
-          <ChevronDown className="w-5 h-5 text-gray-400" />
+          <ChevronDown className="w-5 h-5 text-charcoal-400" />
         )}
       </button>
 
       {/* Filters */}
       {isExpanded && (
-        <div className="border-t border-gray-200">
+        <div className="border-t border-sand-300">
           {/* Rating filter */}
-          <div className="border-b border-gray-200">
+          <div className="border-b border-sand-300">
             <button
               onClick={() => toggleSection('rating')}
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
                 <Star className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm font-medium text-gray-700">Note minimum</span>
+                <span className="text-sm font-medium text-charcoal-700">Note minimum</span>
               </div>
               {expandedSections.has('rating') ? (
-                <ChevronUp className="w-4 h-4 text-gray-400" />
+                <ChevronUp className="w-4 h-4 text-charcoal-400" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-gray-400" />
+                <ChevronDown className="w-4 h-4 text-charcoal-400" />
               )}
             </button>
             {expandedSections.has('rating') && (
@@ -117,7 +106,7 @@ export function AdvancedFilters({
                         'flex items-center gap-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px]',
                         (values.minRating || 0) === rating
                           ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          : 'bg-sand-100 text-charcoal-600 hover:bg-sand-300'
                       )}
                     >
                       {rating === 0 ? (
@@ -137,21 +126,21 @@ export function AdvancedFilters({
 
           {/* Distance filter */}
           {userLocation && (
-            <div className="border-b border-gray-200">
+            <div className="border-b border-sand-300">
               <button
                 onClick={() => toggleSection('distance')}
                 className="w-full flex items-center justify-between p-4"
               >
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-700">
+                  <MapPin className="w-4 h-4 text-primary-400" />
+                  <span className="text-sm font-medium text-charcoal-700">
                     Distance ({values.radius || 25} km)
                   </span>
                 </div>
                 {expandedSections.has('distance') ? (
-                  <ChevronUp className="w-4 h-4 text-gray-400" />
+                  <ChevronUp className="w-4 h-4 text-charcoal-400" />
                 ) : (
-                  <ChevronDown className="w-4 h-4 text-gray-400" />
+                  <ChevronDown className="w-4 h-4 text-charcoal-400" />
                 )}
               </button>
               {expandedSections.has('distance') && (
@@ -168,19 +157,19 @@ export function AdvancedFilters({
           )}
 
           {/* Price filter */}
-          <div className="border-b border-gray-200">
+          <div className="border-b border-sand-300">
             <button
               onClick={() => toggleSection('price')}
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
                 <Euro className="w-4 h-4 text-green-500" />
-                <span className="text-sm font-medium text-gray-700">Tarif horaire</span>
+                <span className="text-sm font-medium text-charcoal-700">Tarif horaire</span>
               </div>
               {expandedSections.has('price') ? (
-                <ChevronUp className="w-4 h-4 text-gray-400" />
+                <ChevronUp className="w-4 h-4 text-charcoal-400" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-gray-400" />
+                <ChevronDown className="w-4 h-4 text-charcoal-400" />
               )}
             </button>
             {expandedSections.has('price') && (
@@ -198,26 +187,28 @@ export function AdvancedFilters({
           </div>
 
           {/* Availability filter */}
-          <div className="border-b border-gray-200">
+          <div className="border-b border-sand-300">
             <button
               onClick={() => toggleSection('availability')}
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-purple-500" />
-                <span className="text-sm font-medium text-gray-700">Disponibilité</span>
+                <span className="text-sm font-medium text-charcoal-700">Disponibilité</span>
               </div>
               {expandedSections.has('availability') ? (
-                <ChevronUp className="w-4 h-4 text-gray-400" />
+                <ChevronUp className="w-4 h-4 text-charcoal-400" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-gray-400" />
+                <ChevronDown className="w-4 h-4 text-charcoal-400" />
               )}
             </button>
             {expandedSections.has('availability') && (
               <div className="px-4 pb-4">
                 <AvailabilityFilter
                   value={values.availability || 'any'}
-                  onChange={(availability) => handleChange('availability', availability === 'any' ? undefined : availability)}
+                  onChange={(availability) =>
+                    handleChange('availability', availability === 'any' ? undefined : availability)
+                  }
                 />
               </div>
             )}
@@ -225,7 +216,7 @@ export function AdvancedFilters({
 
           {/* Verified only toggle */}
           <div className="p-4 flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-charcoal-700">
               Artisans référencés uniquement
             </span>
             <button
@@ -237,7 +228,7 @@ export function AdvancedFilters({
               <span
                 className={cn(
                   'relative w-11 h-6 rounded-full transition-colors inline-block',
-                  values.verified ? 'bg-blue-600' : 'bg-gray-300'
+                  values.verified ? 'bg-primary-500' : 'bg-sand-400'
                 )}
               >
                 <span
@@ -251,14 +242,12 @@ export function AdvancedFilters({
           </div>
 
           {/* Sort by */}
-          <div className="p-4 border-t border-gray-200">
-            <label className="text-sm font-medium text-gray-700 mb-2 block">
-              Trier par
-            </label>
+          <div className="p-4 border-t border-sand-300">
+            <label className="text-sm font-medium text-charcoal-700 mb-2 block">Trier par</label>
             <select
               value={values.sortBy || 'relevance'}
               onChange={(e) => handleChange('sortBy', e.target.value as FilterValues['sortBy'])}
-              className="w-full p-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm"
+              className="w-full p-2 border border-sand-400 rounded-lg bg-white text-charcoal-900 text-sm"
             >
               <option value="relevance">Pertinence</option>
               <option value="rating">Meilleures notes</option>
@@ -269,10 +258,10 @@ export function AdvancedFilters({
           </div>
 
           {/* Reset button */}
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-sand-300">
             <button
               onClick={onReset}
-              className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 min-h-[44px]"
+              className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-charcoal-600 hover:text-charcoal-900 min-h-[44px]"
             >
               <RotateCcw className="w-4 h-4" />
               Réinitialiser les filtres

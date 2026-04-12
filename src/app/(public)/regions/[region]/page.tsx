@@ -1,12 +1,29 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, ArrowRight, Shield, Clock, Building2, ChevronRight, Wrench, HelpCircle, Globe } from 'lucide-react'
+import {
+  MapPin,
+  Users,
+  ArrowRight,
+  Shield,
+  Clock,
+  Building2,
+  ChevronRight,
+  Wrench,
+  HelpCircle,
+  Globe,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { regions, getRegionBySlug, services as allServices, getVillesByDepartement, parsePopulation } from '@/lib/data/france'
+import {
+  regions,
+  getRegionBySlug,
+  services as allServices,
+  getVillesByDepartement,
+  parsePopulation,
+} from '@/lib/data/france'
 import { getProviderCountByRegion, formatProviderCount } from '@/lib/data/stats'
 import { getRegionImage } from '@/lib/data/images'
 import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
@@ -39,7 +56,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const metaContent = generateRegionContent(region)
   const deptCount = region.departments.length
-  const cityCount = region.departments.reduce((acc, d) => acc + getVillesByDepartement(d.code).length, 0)
+  const cityCount = region.departments.reduce(
+    (acc, d) => acc + getVillesByDepartement(d.code).length,
+    0
+  )
   const artisanCount = await getProviderCountByRegion(region.name)
 
   const titleHash = Math.abs(hashCode(`title-region-${region.slug}`))
@@ -77,7 +97,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       url: `${SITE_URL}/regions/${regionSlug}`,
-      images: [{ url: regionImage.src, width: 1200, height: 630, alt: `Artisans en ${region.name}` }],
+      images: [
+        { url: regionImage.src, width: 1200, height: 630, alt: `Artisans en ${region.name}` },
+      ],
     },
     twitter: {
       card: 'summary_large_image' as const,
@@ -95,9 +117,10 @@ export default async function RegionPage({ params }: PageProps) {
 
   const deptCount = region.departments.length
   const deptCitiesMap = Object.fromEntries(
-    region.departments.map(dept => [dept.code, getVillesByDepartement(dept.code)])
+    region.departments.map((dept) => [dept.code, getVillesByDepartement(dept.code)])
   )
-  const allCities = region.departments.flatMap(dept => deptCitiesMap[dept.code])
+  const allCities = region.departments
+    .flatMap((dept) => deptCitiesMap[dept.code])
     .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
   const cityCount = allCities.length
   const content = generateRegionContent(region, cityCount)
@@ -112,7 +135,7 @@ export default async function RegionPage({ params }: PageProps) {
   })
 
   // Other regions
-  const otherRegions = regions.filter(r => r.slug !== regionSlug)
+  const otherRegions = regions.filter((r) => r.slug !== regionSlug)
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -137,13 +160,21 @@ export default async function RegionPage({ params }: PageProps) {
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.20) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.20) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
 
@@ -151,27 +182,28 @@ export default async function RegionPage({ params }: PageProps) {
           {/* Breadcrumb */}
           <div className="mb-10">
             <Breadcrumb
-              items={[
-                { label: 'Régions', href: '/regions' },
-                { label: region.name },
-              ]}
+              items={[{ label: 'Régions', href: '/regions' }, { label: region.name }]}
               className="text-charcoal-400 [[&_a]:text-charcoal-400_a]:text-charcoal-400 [[&_a:hover]:text-white_a:hover]:text-primary-400 [[&_svg]:text-charcoal-600_svg]:text-charcoal-600"
             />
           </div>
 
           <div className="max-w-3xl">
             <div className="flex flex-wrap gap-3 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-sand-1000/15 backdrop-blur-sm rounded-full border border-charcoal-400/25">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal-900/15 backdrop-blur-sm rounded-full border border-charcoal-400/25">
                 <Globe className="w-4 h-4 text-charcoal-300" />
                 <span className="text-sm font-medium text-charcoal-200">Région</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
                 <Thermometer className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-medium text-cyan-200">{content.profile.climateLabel}</span>
+                <span className="text-sm font-medium text-cyan-200">
+                  {content.profile.climateLabel}
+                </span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500/15 backdrop-blur-sm rounded-full border border-accent-400/25">
                 <Mountain className="w-4 h-4 text-accent-400" />
-                <span className="text-sm font-medium text-accent-200">{content.profile.geoLabel}</span>
+                <span className="text-sm font-medium text-accent-200">
+                  {content.profile.geoLabel}
+                </span>
               </div>
             </div>
 
@@ -191,7 +223,9 @@ export default async function RegionPage({ params }: PageProps) {
               )
             })()}
             <p className="text-lg text-charcoal-400 max-w-2xl leading-relaxed mb-8">
-              {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()}, {content.profile.economyLabel.toLowerCase()}. {allServices.length} corps de métier disponibles.
+              {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()},{' '}
+              {content.profile.economyLabel.toLowerCase()}. {allServices.length} corps de métier
+              disponibles.
             </p>
 
             {/* Stats badges */}
@@ -199,16 +233,23 @@ export default async function RegionPage({ params }: PageProps) {
               {regionArtisanCount > 0 && (
                 <div className="flex items-center gap-2 text-charcoal-300">
                   <Users className="w-4 h-4 text-amber-400" />
-                  <span>{formatProviderCount(regionArtisanCount)} artisan{regionArtisanCount > 1 ? 's' : ''}</span>
+                  <span>
+                    {formatProviderCount(regionArtisanCount)} artisan
+                    {regionArtisanCount > 1 ? 's' : ''}
+                  </span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Building2 className="w-4 h-4 text-charcoal-400" />
-                <span>{deptCount} département{deptCount > 1 ? 's' : ''}</span>
+                <span>
+                  {deptCount} département{deptCount > 1 ? 's' : ''}
+                </span>
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <MapPin className="w-4 h-4 text-charcoal-400" />
-                <span>{cityCount} ville{cityCount > 1 ? 's' : ''} couvertes</span>
+                <span>
+                  {cityCount} ville{cityCount > 1 ? 's' : ''} couvertes
+                </span>
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Users className="w-4 h-4 text-charcoal-400" />
@@ -219,10 +260,12 @@ export default async function RegionPage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -264,28 +307,47 @@ export default async function RegionPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Profil de la région {region.name}
               </h2>
-              <p className="text-sm text-charcoal-500">{content.profile.climateLabel} · {content.profile.geoLabel}</p>
+              <p className="text-sm text-charcoal-500">
+                {content.profile.climateLabel} · {content.profile.geoLabel}
+              </p>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-sand-300 p-8">
             <p className="text-charcoal-700 leading-relaxed mb-6">{content.intro}</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <div className="bg-cyan-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climat</div>
-                <div className="text-sm text-charcoal-800 font-medium">{content.profile.climateLabel}</div>
+                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">
+                  Climat
+                </div>
+                <div className="text-sm text-charcoal-800 font-medium">
+                  {content.profile.climateLabel}
+                </div>
               </div>
               <div className="bg-accent-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-accent-700 uppercase tracking-wider mb-1">Géographie</div>
-                <div className="text-sm text-charcoal-800 font-medium">{content.profile.geoLabel}</div>
+                <div className="text-xs font-semibold text-accent-700 uppercase tracking-wider mb-1">
+                  Géographie
+                </div>
+                <div className="text-sm text-charcoal-800 font-medium">
+                  {content.profile.geoLabel}
+                </div>
               </div>
               <div className="bg-violet-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
-                <div className="text-sm text-charcoal-800 font-medium">{content.profile.economyLabel}</div>
+                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">
+                  Économie
+                </div>
+                <div className="text-sm text-charcoal-800 font-medium">
+                  {content.profile.economyLabel}
+                </div>
               </div>
               <div className="bg-amber-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Couverture</div>
+                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">
+                  Couverture
+                </div>
                 <div className="text-sm text-charcoal-800 font-medium">
-                  {regionArtisanCount > 0 ? `${formatProviderCount(regionArtisanCount)} artisans · ` : ''}{deptCount} dép. · {cityCount} villes
+                  {regionArtisanCount > 0
+                    ? `${formatProviderCount(regionArtisanCount)} artisans · `
+                    : ''}
+                  {deptCount} dép. · {cityCount} villes
                 </div>
               </div>
             </div>
@@ -319,11 +381,15 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-sand-300 p-8">
-              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">Services prioritaires</h3>
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">
+                Services prioritaires
+              </h3>
               <p className="text-charcoal-700 leading-relaxed">{content.servicesPrioritaires}</p>
             </div>
             <div className="bg-white rounded-2xl border border-sand-300 p-8">
-              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">Conseils pour vos travaux</h3>
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">
+                Conseils pour vos travaux
+              </h3>
               <p className="text-charcoal-700 leading-relaxed">{content.conseilsRegion}</p>
             </div>
           </div>
@@ -339,7 +405,9 @@ export default async function RegionPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Départements de la région {region.name}
               </h2>
-              <p className="text-sm text-charcoal-500">{deptCount} département{deptCount > 1 ? 's' : ''}</p>
+              <p className="text-sm text-charcoal-500">
+                {deptCount} département{deptCount > 1 ? 's' : ''}
+              </p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -351,24 +419,34 @@ export default async function RegionPage({ params }: PageProps) {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center group-hover:from-slate-100 group-hover:to-slate-200 transition-colors">
+                    <div className="w-11 h-11 bg-gradient-to-br from-charcoal-50 to-charcoal-100 rounded-xl flex items-center justify-center group-hover:from-charcoal-100 group-hover:to-charcoal-200 transition-colors">
                       <span className="text-charcoal-700 font-bold text-sm">{dept.code}</span>
                     </div>
                     <div>
-                      <h3 className="font-heading text-base font-bold text-charcoal-900 group-hover:text-primary-400 transition-colors">{dept.name}</h3>
-                      <span className="text-xs text-charcoal-400">{deptCitiesMap[dept.code].length} ville{deptCitiesMap[dept.code].length > 1 ? 's' : ''}</span>
+                      <h3 className="font-heading text-base font-bold text-charcoal-900 group-hover:text-primary-400 transition-colors">
+                        {dept.name}
+                      </h3>
+                      <span className="text-xs text-charcoal-400">
+                        {deptCitiesMap[dept.code].length} ville
+                        {deptCitiesMap[dept.code].length > 1 ? 's' : ''}
+                      </span>
                     </div>
                   </div>
                   <ArrowRight className="w-5 h-5 text-charcoal-300 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {deptCitiesMap[dept.code].slice(0, 4).map((city) => (
-                    <span key={city.slug} className="text-xs bg-sand-50 text-charcoal-500 px-2.5 py-1 rounded-full group-hover:bg-sand-100 group-hover:text-primary-400 transition-colors">
+                    <span
+                      key={city.slug}
+                      className="text-xs bg-sand-50 text-charcoal-500 px-2.5 py-1 rounded-full group-hover:bg-sand-100 group-hover:text-primary-400 transition-colors"
+                    >
                       {city.name}
                     </span>
                   ))}
                   {deptCitiesMap[dept.code].length > 4 && (
-                    <span className="text-xs text-charcoal-400 px-2 py-1">+{deptCitiesMap[dept.code].length - 4}</span>
+                    <span className="text-xs text-charcoal-400 px-2 py-1">
+                      +{deptCitiesMap[dept.code].length - 4}
+                    </span>
                   )}
                 </div>
               </Link>
@@ -386,13 +464,17 @@ export default async function RegionPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Services par ville en {region.name}
               </h2>
-              <p className="text-sm text-charcoal-500">Top {Math.min(3, allCities.length)} villes · {allServices.length} corps de métier</p>
+              <p className="text-sm text-charcoal-500">
+                Top {Math.min(3, allCities.length)} villes · {allServices.length} corps de métier
+              </p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {allCities.slice(0, 3).map((city) => (
               <div key={city.slug} className="bg-white rounded-2xl border border-sand-300 p-6">
-                <h3 className="font-heading font-semibold text-charcoal-900 mb-4">Artisans à {city.name}</h3>
+                <h3 className="font-heading font-semibold text-charcoal-900 mb-4">
+                  Artisans à {city.name}
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {allServices.map((service) => (
                     <Link
@@ -404,7 +486,10 @@ export default async function RegionPage({ params }: PageProps) {
                     </Link>
                   ))}
                 </div>
-                <Link href={`/villes/${city.slug}`} className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-4">
+                <Link
+                  href={`/villes/${city.slug}`}
+                  className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-4"
+                >
                   Tous les artisans <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -435,7 +520,9 @@ export default async function RegionPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Principales villes de {region.name}
               </h2>
-              <p className="text-sm text-charcoal-500">{Math.min(30, allCities.length)} villes par population</p>
+              <p className="text-sm text-charcoal-500">
+                {Math.min(30, allCities.length)} villes par population
+              </p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -445,7 +532,9 @@ export default async function RegionPage({ params }: PageProps) {
                 href={`/villes/${city.slug}`}
                 className="bg-white rounded-xl border border-sand-300 p-3 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group text-center"
               >
-                <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">{city.name}</div>
+                <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">
+                  {city.name}
+                </div>
                 <div className="text-xs text-charcoal-400 mt-0.5">{city.population} hab.</div>
               </Link>
             ))}
@@ -477,7 +566,9 @@ export default async function RegionPage({ params }: PageProps) {
                 href={`/regions/${regionSlug}/${service.slug}`}
                 className="bg-white rounded-xl border border-sand-300 p-3 hover:shadow-card-hover hover:border-accent-200 hover:-translate-y-0.5 transition-all group"
               >
-                <span className="font-semibold text-charcoal-800 group-hover:text-accent-700 transition-colors text-sm">{service.name}</span>
+                <span className="font-semibold text-charcoal-800 group-hover:text-accent-700 transition-colors text-sm">
+                  {service.name}
+                </span>
                 <span className="block text-xs text-charcoal-400 mt-0.5">en {region.name}</span>
               </Link>
             ))}
@@ -501,21 +592,30 @@ export default async function RegionPage({ params }: PageProps) {
             <table className="w-full bg-white rounded-2xl border border-sand-300 overflow-hidden">
               <thead>
                 <tr className="bg-sand-100">
-                  <th className="text-left text-xs font-semibold text-charcoal-700 uppercase tracking-wider px-4 py-3">Service</th>
+                  <th className="text-left text-xs font-semibold text-charcoal-700 uppercase tracking-wider px-4 py-3">
+                    Service
+                  </th>
                   {allCities.slice(0, 5).map((city) => (
-                    <th key={city.slug} className="text-left text-xs font-semibold text-charcoal-700 uppercase tracking-wider px-4 py-3">{city.name}</th>
+                    <th
+                      key={city.slug}
+                      className="text-left text-xs font-semibold text-charcoal-700 uppercase tracking-wider px-4 py-3"
+                    >
+                      {city.name}
+                    </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {orderedServices.slice(0, 5).map((service, i) => (
                   <tr key={service.slug} className={i % 2 === 0 ? 'bg-white' : 'bg-sand-50'}>
-                    <td className="px-4 py-2.5 text-sm font-medium text-charcoal-900">{service.name}</td>
+                    <td className="px-4 py-2.5 text-sm font-medium text-charcoal-900">
+                      {service.name}
+                    </td>
                     {allCities.slice(0, 5).map((city) => (
                       <td key={`${service.slug}-${city.slug}`} className="px-4 py-2.5">
                         <Link
                           href={`/services/${service.slug}/${city.slug}`}
-                          className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                          className="text-sm text-primary-500 hover:text-primary-800 transition-colors"
                         >
                           Voir
                         </Link>
@@ -540,7 +640,11 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
           <div className="flex flex-wrap gap-3">
             {otherRegions.map((r) => (
-              <Link key={r.slug} href={`/regions/${r.slug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+              <Link
+                key={r.slug}
+                href={`/regions/${r.slug}`}
+                className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+              >
                 {r.name}
               </Link>
             ))}
@@ -570,9 +674,13 @@ export default async function RegionPage({ params }: PageProps) {
 
       {/* ─── CTA ────────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
             Besoin d'un artisan en {region.name} ?
@@ -581,10 +689,16 @@ export default async function RegionPage({ params }: PageProps) {
             Devis gratuit et sans engagement de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
+            >
               Obtenir mon devis gratuit
             </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors"
+            >
               Voir les services <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -600,48 +714,75 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="grid md:grid-cols-3 gap-10">
             {/* Services */}
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Services en {region.name}
+              </h3>
               <div className="space-y-2">
                 {allServices.slice(0, 6).map((s) => (
-                  <Link key={s.slug} href={`/regions/${regionSlug}/${s.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={s.slug}
+                    href={`/regions/${regionSlug}/${s.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {s.name} en {region.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3"
+              >
                 Tous les services <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Other regions */}
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Autres régions</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Autres régions
+              </h3>
               <div className="space-y-2">
                 {otherRegions.slice(0, 6).map((r) => (
-                  <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={r.slug}
+                    href={`/regions/${r.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     Artisans en {r.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/regions" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
+              <Link
+                href="/regions"
+                className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3"
+              >
                 Toutes les régions <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Cities in this region */}
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Villes en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Villes en {region.name}
+              </h3>
               <div className="space-y-2">
                 {allCities.slice(0, 4).map((city) => (
-                  <Link key={city.slug} href={`/villes/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={city.slug}
+                    href={`/villes/${city.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {city.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
+              <Link
+                href="/villes"
+                className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3"
+              >
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -650,11 +791,17 @@ export default async function RegionPage({ params }: PageProps) {
           {/* Intent variant links — devis, avis, tarifs (3 cities × 3 services per intent = 9 links each) */}
           <div className="mt-10 grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Devis en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Devis en {region.name}
+              </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 3).flatMap((city) =>
                   allServices.slice(0, 3).map((s) => (
-                    <Link key={`devis-${s.slug}-${city.slug}`} href={`/devis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
+                    <Link
+                      key={`devis-${s.slug}-${city.slug}`}
+                      href={`/devis/${s.slug}/${city.slug}`}
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors"
+                    >
                       <ChevronRight className="w-3 h-3" />
                       Devis {s.name.toLowerCase()} à {city.name}
                     </Link>
@@ -663,11 +810,17 @@ export default async function RegionPage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Avis en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Avis en {region.name}
+              </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 3).flatMap((city) =>
                   allServices.slice(0, 3).map((s) => (
-                    <Link key={`avis-${s.slug}-${city.slug}`} href={`/avis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
+                    <Link
+                      key={`avis-${s.slug}-${city.slug}`}
+                      href={`/avis/${s.slug}/${city.slug}`}
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors"
+                    >
                       <ChevronRight className="w-3 h-3" />
                       Avis {s.name.toLowerCase()} à {city.name}
                     </Link>
@@ -676,11 +829,17 @@ export default async function RegionPage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Tarifs en {region.name}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Tarifs en {region.name}
+              </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 3).flatMap((city) =>
                   allServices.slice(0, 3).map((s) => (
-                    <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/tarifs/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
+                    <Link
+                      key={`tarifs-${s.slug}-${city.slug}`}
+                      href={`/tarifs/${s.slug}/${city.slug}`}
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors"
+                    >
                       <ChevronRight className="w-3 h-3" />
                       Tarifs {s.name.toLowerCase()} à {city.name}
                     </Link>
@@ -690,11 +849,17 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
           <div className="mt-8">
-            <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Urgences en {region.name}</h3>
+            <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">
+              Urgences en {region.name}
+            </h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 3).flatMap((city) =>
                 allServices.slice(0, 3).map((s) => (
-                  <Link key={`urgence-${s.slug}-${city.slug}`} href={`/urgence/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
+                  <Link
+                    key={`urgence-${s.slug}-${city.slug}`}
+                    href={`/urgence/${s.slug}/${city.slug}`}
+                    className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200"
+                  >
                     Urgence {s.name.toLowerCase()} à {city.name}
                   </Link>
                 ))
@@ -702,11 +867,17 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
           <div className="mt-8">
-            <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Problèmes courants en {region.name}</h3>
+            <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">
+              Problèmes courants en {region.name}
+            </h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 3).flatMap((city) =>
                 problems.slice(0, 4).map((p) => (
-                  <Link key={`prob-${p.slug}-${city.slug}`} href={`/problemes/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
+                  <Link
+                    key={`prob-${p.slug}-${city.slug}`}
+                    href={`/problemes/${p.slug}/${city.slug}`}
+                    className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200"
+                  >
                     {p.name} à {city.name}
                   </Link>
                 ))
@@ -716,17 +887,22 @@ export default async function RegionPage({ params }: PageProps) {
         </div>
       </section>
 
-        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-        <section className="mb-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-              <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
-              <p className="text-xs text-charcoal-500 leading-relaxed">
-                Les profils géographiques et économiques sont des estimations régionales. Les données proviennent de sources publiques (INSEE, base SIRENE). ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
-              </p>
-            </div>
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Méthodologie éditoriale
+            </h3>
+            <p className="text-xs text-charcoal-500 leading-relaxed">
+              Les profils géographiques et économiques sont des estimations régionales. Les données
+              proviennent de sources publiques (INSEE, base SIRENE). ServicesArtisans est un
+              annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les
+              prestations.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
       {/* Services de saison */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -741,16 +917,28 @@ export default async function RegionPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-charcoal-900 mb-4">Confiance & Sécurité</h2>
           <div className="flex flex-wrap gap-4">
-            <Link href="/notre-processus-de-verification" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/notre-processus-de-verification"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               Processus de vérification
             </Link>
-            <Link href="/politique-avis" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/politique-avis"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               Politique d'avis
             </Link>
-            <Link href="/mediation" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/mediation"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               Médiation
             </Link>
-            <Link href="/cgv" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/cgv"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               CGV
             </Link>
           </div>

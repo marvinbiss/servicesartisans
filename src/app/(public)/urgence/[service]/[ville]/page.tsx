@@ -59,9 +59,9 @@ const emergencyMeta: Record<
   { gradient: string; lightBg: string; lightText: string; problems: string[] }
 > = {
   plombier: {
-    gradient: 'from-blue-600 to-blue-800',
-    lightBg: 'bg-blue-50',
-    lightText: 'text-blue-700',
+    gradient: 'from-primary-500 to-primary-700',
+    lightBg: 'bg-primary-50',
+    lightText: 'text-primary-600',
     problems: [
       "Fuite d'eau importante",
       'Canalisation bouchée',
@@ -388,7 +388,7 @@ export default async function UrgenceServiceVillePage({
   })
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <SearchRecorder
         type="urgence"
         label={`Urgence ${trade.name} à ${villeData.name}`}
@@ -446,7 +446,7 @@ export default async function UrgenceServiceVillePage({
             <div className="flex flex-col items-center sm:items-start">
               <a
                 href={PHONE_TEL}
-                className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+                className="inline-flex items-center justify-center gap-3 bg-white text-charcoal-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 <Phone className="w-6 h-6" />
                 Appeler l'assistance
@@ -501,10 +501,10 @@ export default async function UrgenceServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="font-heading text-3xl font-bold text-gray-900 mb-3">
+            <h2 className="font-heading text-3xl font-bold text-charcoal-900 mb-3">
               Urgences {tradeLower} courantes à {villeData.name}
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-charcoal-600 max-w-2xl mx-auto">
               Les {tradeLower}s d'urgence référencés interviennent rapidement à {villeData.name}{' '}
               pour tous ces problèmes.
             </p>
@@ -524,58 +524,58 @@ export default async function UrgenceServiceVillePage({
       </section>
 
       {/* ─── EMERGENCY PRICING ─────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-3xl font-bold text-gray-900 mb-3 text-center">
+          <h2 className="font-heading text-3xl font-bold text-charcoal-900 mb-3 text-center">
             Tarifs {tradeLower} urgence à {villeData.name}
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-center mb-10">
+          <p className="text-charcoal-600 max-w-2xl mx-auto text-center mb-10">
             Prix indicatifs pour les interventions d'urgence à {villeData.name}. Les majorations
             varient selon l'horaire et le jour d'intervention.
           </p>
 
           {/* 3 pricing cards */}
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center">
-              <div className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">
+            <div className="bg-white rounded-2xl border border-sand-300 p-6 text-center">
+              <div className="text-sm font-semibold text-charcoal-500 mb-2 uppercase tracking-wide">
                 Tarif journée
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">
+              <div className="text-3xl font-bold text-charcoal-900 mb-1">
                 {minPrice} — {maxPrice}
               </div>
-              <div className="text-sm text-gray-500">{trade.priceRange.unit}</div>
-              <div className="mt-3 text-xs text-gray-400">Lundi à samedi, 8h–20h</div>
+              <div className="text-sm text-charcoal-500">{trade.priceRange.unit}</div>
+              <div className="mt-3 text-xs text-charcoal-400">Lundi à samedi, 8h–20h</div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-amber-300 p-6 text-center relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full">
                 +50 %
               </div>
-              <div className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">
+              <div className="text-sm font-semibold text-charcoal-500 mb-2 uppercase tracking-wide">
                 Nuit / Week-end
               </div>
               <div className="text-3xl font-bold text-amber-600 mb-1">
                 {Math.round(minPrice * 1.5)} — {Math.round(maxPrice * 1.5)}
               </div>
-              <div className="text-sm text-gray-500">{trade.priceRange.unit}</div>
-              <div className="mt-3 text-xs text-gray-400">Samedi après 20h, dimanche matin</div>
+              <div className="text-sm text-charcoal-500">{trade.priceRange.unit}</div>
+              <div className="mt-3 text-xs text-charcoal-400">Samedi après 20h, dimanche matin</div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-red-300 p-6 text-center relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">
                 +100 %
               </div>
-              <div className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">
+              <div className="text-sm font-semibold text-charcoal-500 mb-2 uppercase tracking-wide">
                 Dimanche / Jour férié
               </div>
               <div className="text-3xl font-bold text-red-600 mb-1">
                 {Math.round(minPrice * 2)} — {Math.round(maxPrice * 2)}
               </div>
-              <div className="text-sm text-gray-500">{trade.priceRange.unit}</div>
-              <div className="mt-3 text-xs text-gray-400">Dimanche, jours fériés, 1er mai</div>
+              <div className="text-sm text-charcoal-500">{trade.priceRange.unit}</div>
+              <div className="mt-3 text-xs text-charcoal-400">Dimanche, jours fériés, 1er mai</div>
             </div>
           </div>
 
           {multiplier !== 1.0 && (
-            <p className="text-xs text-gray-400 text-center mb-8">
+            <p className="text-xs text-charcoal-400 text-center mb-8">
               {multiplier > 1.0
                 ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
                 : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
@@ -583,17 +583,17 @@ export default async function UrgenceServiceVillePage({
           )}
 
           {/* Common tasks grid */}
-          <h3 className="font-heading text-xl font-bold text-gray-900 mb-4 text-center">
+          <h3 className="font-heading text-xl font-bold text-charcoal-900 mb-4 text-center">
             Prestations courantes
           </h3>
           <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {trade.commonTasks.map((task, i) => (
               <div
                 key={i}
-                className="flex items-start gap-3 bg-white rounded-xl border border-gray-200 p-4"
+                className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4"
               >
                 <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 text-sm">{task}</span>
+                <span className="text-charcoal-700 text-sm">{task}</span>
               </div>
             ))}
           </div>
@@ -601,7 +601,7 @@ export default async function UrgenceServiceVillePage({
           <div className="text-center mt-8">
             <Link
               href={`/tarifs/${service}/${villeSlug}`}
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+              className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold"
             >
               Tarifs détaillés {tradeLower} à {villeData.name}
               <ArrowRight className="w-4 h-4" />
@@ -613,10 +613,10 @@ export default async function UrgenceServiceVillePage({
       {/* ─── LOCAL CONTEXT ─────────────────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
             Contexte local à {villeData.name}
           </h2>
-          <p className="text-gray-500 text-sm text-center mb-8">
+          <p className="text-charcoal-500 text-sm text-center mb-8">
             Données locales qui influencent les interventions d'urgence {tradeLower} à{' '}
             {villeData.name}.
           </p>
@@ -654,7 +654,7 @@ export default async function UrgenceServiceVillePage({
               }
             />
             <LocalFactorCard
-              icon={<MapPin className="w-5 h-5 text-blue-600" />}
+              icon={<MapPin className="w-5 h-5 text-primary-500" />}
               title="Population"
               value={
                 commune ? `${formatNumber(commune.population)} habitants` : villeData.population
@@ -667,12 +667,12 @@ export default async function UrgenceServiceVillePage({
 
       {/* ─── COMMUNE DATA: URGENCES CONTEXTE LOCAL ──────────── */}
       {commune && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-sand-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
               Urgences {tradeLower} à {villeData.name} : contexte local
             </h2>
-            <p className="text-gray-500 text-sm text-center mb-10">
+            <p className="text-charcoal-500 text-sm text-center mb-10">
               Données réelles de la commune pour comprendre les urgences {tradeLower} à{' '}
               {villeData.name}.
             </p>
@@ -689,7 +689,7 @@ export default async function UrgenceServiceVillePage({
                   (service === 'plombier' || service === 'chauffagiste')
                 ) {
                   climateInsights.push({
-                    icon: <Snowflake className="w-5 h-5 text-blue-500" />,
+                    icon: <Snowflake className="w-5 h-5 text-primary-400" />,
                     text: `Avec ${commune.jours_gel_annuels} jours de gel par an à ${villeData.name}, les urgences de canalisations gelées et pannes de chauffage sont fréquentes en hiver.`,
                   })
                 }
@@ -709,7 +709,7 @@ export default async function UrgenceServiceVillePage({
                   service === 'couvreur'
                 ) {
                   climateInsights.push({
-                    icon: <CloudRain className="w-5 h-5 text-blue-600" />,
+                    icon: <CloudRain className="w-5 h-5 text-primary-500" />,
                     text: `Avec ${formatNumber(commune.precipitation_annuelle)} mm de précipitations annuelles, les urgences de toiture sont courantes à ${villeData.name}.`,
                   })
                 }
@@ -723,7 +723,7 @@ export default async function UrgenceServiceVillePage({
                   climateInsights.length === 0
                 ) {
                   climateInsights.push({
-                    icon: <Snowflake className="w-5 h-5 text-blue-500" />,
+                    icon: <Snowflake className="w-5 h-5 text-primary-400" />,
                     text: `${villeData.name} connaît ${commune.jours_gel_annuels} jours de gel par an, ce qui peut entraîner des dégâts nécessitant une intervention ${tradeLower} en urgence.`,
                   })
                 }
@@ -743,12 +743,12 @@ export default async function UrgenceServiceVillePage({
                 if (climateInsights.length === 0) return null
 
                 return (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="bg-white rounded-xl border border-sand-300 p-6">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Thermometer className="w-5 h-5 text-blue-600" />
+                      <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Thermometer className="w-5 h-5 text-primary-500" />
                       </div>
-                      <h3 className="font-heading font-semibold text-gray-900">
+                      <h3 className="font-heading font-semibold text-charcoal-900">
                         Risques climatiques locaux
                       </h3>
                     </div>
@@ -756,7 +756,9 @@ export default async function UrgenceServiceVillePage({
                       {climateInsights.map((insight, i) => (
                         <div key={i} className="flex items-start gap-3">
                           <div className="flex-shrink-0 mt-0.5">{insight.icon}</div>
-                          <p className="text-gray-700 text-sm leading-relaxed">{insight.text}</p>
+                          <p className="text-charcoal-700 text-sm leading-relaxed">
+                            {insight.text}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -766,12 +768,12 @@ export default async function UrgenceServiceVillePage({
 
               {/* ── Densité d'artisans disponibles ── */}
               {(commune.nb_artisans_btp != null || commune.nb_artisans_rge != null) && (
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-xl border border-sand-300 p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Wrench className="w-5 h-5 text-amber-600" />
                     </div>
-                    <h3 className="font-heading font-semibold text-gray-900">
+                    <h3 className="font-heading font-semibold text-charcoal-900">
                       Artisans disponibles en urgence
                     </h3>
                   </div>
@@ -779,7 +781,7 @@ export default async function UrgenceServiceVillePage({
                     {commune.nb_artisans_btp != null && (
                       <div className="flex items-start gap-3">
                         <Users className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-charcoal-700 text-sm leading-relaxed">
                           À {villeData.name},{' '}
                           <strong>{formatNumber(commune.nb_artisans_btp)} artisans du BTP</strong>{' '}
                           sont référencés, ce qui facilite la disponibilité en urgence pour trouver
@@ -790,7 +792,7 @@ export default async function UrgenceServiceVillePage({
                     {commune.nb_artisans_rge != null && commune.nb_artisans_rge > 0 && (
                       <div className="flex items-start gap-3">
                         <Shield className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-charcoal-700 text-sm leading-relaxed">
                           Dont{' '}
                           <strong>
                             {formatNumber(commune.nb_artisans_rge)} artisans certifiés RGE
@@ -806,12 +808,12 @@ export default async function UrgenceServiceVillePage({
 
               {/* ── Contexte immobilier ── */}
               {(commune.part_maisons_pct != null || commune.nb_logements != null) && (
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="bg-white rounded-xl border border-sand-300 p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Home className="w-5 h-5 text-purple-600" />
                     </div>
-                    <h3 className="font-heading font-semibold text-gray-900">
+                    <h3 className="font-heading font-semibold text-charcoal-900">
                       Contexte immobilier et urgences
                     </h3>
                   </div>
@@ -819,7 +821,7 @@ export default async function UrgenceServiceVillePage({
                     {commune.part_maisons_pct != null && commune.part_maisons_pct > 60 && (
                       <div className="flex items-start gap-3">
                         <Building2 className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-charcoal-700 text-sm leading-relaxed">
                           Avec <strong>{commune.part_maisons_pct} % de maisons</strong> à{' '}
                           {villeData.name}, les urgences de toiture, plomberie extérieure et
                           serrurerie sont plus fréquentes que dans les villes à dominante
@@ -830,7 +832,7 @@ export default async function UrgenceServiceVillePage({
                     {commune.part_maisons_pct != null && commune.part_maisons_pct <= 60 && (
                       <div className="flex items-start gap-3">
                         <Building2 className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-charcoal-700 text-sm leading-relaxed">
                           À {villeData.name},{' '}
                           <strong>
                             {100 - commune.part_maisons_pct} % des logements sont des appartements
@@ -844,7 +846,7 @@ export default async function UrgenceServiceVillePage({
                     {commune.nb_logements != null && commune.population > 0 && (
                       <div className="flex items-start gap-3">
                         <MapPin className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-charcoal-700 text-sm leading-relaxed">
                           {villeData.name} compte{' '}
                           <strong>{formatNumber(commune.nb_logements)} logements</strong> pour{' '}
                           {formatNumber(commune.population)} habitants
@@ -871,18 +873,18 @@ export default async function UrgenceServiceVillePage({
                 commune.mois_travaux_ext_debut != null) && (
                 <div className="grid sm:grid-cols-2 gap-4">
                   {commune.temperature_moyenne_hiver != null && (
-                    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+                    <div className="bg-white rounded-xl border border-sand-300 p-5 flex items-center gap-4">
                       <div className="w-10 h-10 bg-cyan-50 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Snowflake className="w-5 h-5 text-cyan-600" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                        <p className="text-xs text-charcoal-500 font-medium uppercase tracking-wide">
                           Temp. moyenne hivernale
                         </p>
-                        <p className="text-lg font-bold text-gray-900">
+                        <p className="text-lg font-bold text-charcoal-900">
                           {commune.temperature_moyenne_hiver}°C
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-charcoal-500 mt-0.5">
                           {commune.temperature_moyenne_hiver <= 2
                             ? 'Risque élevé de gel — anticipez les urgences'
                             : commune.temperature_moyenne_hiver <= 5
@@ -894,37 +896,37 @@ export default async function UrgenceServiceVillePage({
                   )}
                   {commune.mois_travaux_ext_debut != null &&
                     commune.mois_travaux_ext_fin != null && (
-                      <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+                      <div className="bg-white rounded-xl border border-sand-300 p-5 flex items-center gap-4">
                         <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
                           <Sun className="w-5 h-5 text-green-600" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                          <p className="text-xs text-charcoal-500 font-medium uppercase tracking-wide">
                             Travaux extérieurs
                           </p>
-                          <p className="text-lg font-bold text-gray-900">
+                          <p className="text-lg font-bold text-charcoal-900">
                             {monthName(commune.mois_travaux_ext_debut)} —{' '}
                             {monthName(commune.mois_travaux_ext_fin)}
                           </p>
-                          <p className="text-xs text-gray-500 mt-0.5">
+                          <p className="text-xs text-charcoal-500 mt-0.5">
                             Période optimale pour les interventions extérieures
                           </p>
                         </div>
                       </div>
                     )}
                   {commune.temperature_moyenne_ete != null && (
-                    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
+                    <div className="bg-white rounded-xl border border-sand-300 p-5 flex items-center gap-4">
                       <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Sun className="w-5 h-5 text-orange-500" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                        <p className="text-xs text-charcoal-500 font-medium uppercase tracking-wide">
                           Temp. moyenne estivale
                         </p>
-                        <p className="text-lg font-bold text-gray-900">
+                        <p className="text-lg font-bold text-charcoal-900">
                           {commune.temperature_moyenne_ete}°C
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-charcoal-500 mt-0.5">
                           {commune.temperature_moyenne_ete >= 26
                             ? 'Été chaud — forte demande en climatisation'
                             : commune.temperature_moyenne_ete >= 22
@@ -935,18 +937,18 @@ export default async function UrgenceServiceVillePage({
                     </div>
                   )}
                   {commune.precipitation_annuelle != null && (
-                    <div className="bg-white rounded-xl border border-gray-200 p-5 flex items-center gap-4">
-                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <CloudRain className="w-5 h-5 text-blue-500" />
+                    <div className="bg-white rounded-xl border border-sand-300 p-5 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <CloudRain className="w-5 h-5 text-primary-400" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                        <p className="text-xs text-charcoal-500 font-medium uppercase tracking-wide">
                           Précipitations annuelles
                         </p>
-                        <p className="text-lg font-bold text-gray-900">
+                        <p className="text-lg font-bold text-charcoal-900">
                           {formatNumber(commune.precipitation_annuelle)} mm
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-charcoal-500 mt-0.5">
                           {commune.precipitation_annuelle > 1000
                             ? 'Zone très pluvieuse — vigilance toiture et infiltrations'
                             : commune.precipitation_annuelle > 700
@@ -964,9 +966,9 @@ export default async function UrgenceServiceVillePage({
       )}
 
       {/* ─── WHAT TO DO WHILE WAITING ──────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Que faire en attendant le {tradeLower} ?
           </h2>
           <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 md:p-8">
@@ -993,14 +995,14 @@ export default async function UrgenceServiceVillePage({
       {trade.certifications.length > 0 && (
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
               Certifications à vérifier
             </h2>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
                 <div
                   key={cert}
-                  className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium"
+                  className="flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-2 rounded-lg text-sm font-medium"
                 >
                   <Shield className="w-4 h-4" />
                   {cert}
@@ -1012,21 +1014,21 @@ export default async function UrgenceServiceVillePage({
       )}
 
       {/* ─── TIPS ──────────────────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Conseils pratiques
           </h2>
           <div className="space-y-4">
             {selectedTips.map((tip, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-white rounded-xl border border-gray-200 p-5"
+                className="flex items-start gap-4 bg-white rounded-xl border border-sand-300 p-5"
               >
                 <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <span className="text-amber-600 font-bold text-sm">{i + 1}</span>
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
               </div>
             ))}
           </div>
@@ -1036,17 +1038,21 @@ export default async function UrgenceServiceVillePage({
       {/* ─── FAQ ───────────────────────────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Questions fréquentes — {trade.name} urgence à {villeData.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
-              <details key={i} className="bg-gray-50 rounded-xl border border-gray-200 group">
+              <details key={i} className="bg-sand-50 rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
-                  <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-90 transition-transform" />
+                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">
+                    {item.question}
+                  </h3>
+                  <ArrowRight className="w-4 h-4 text-charcoal-400 flex-shrink-0 group-open:rotate-90 transition-transform" />
                 </summary>
-                <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed">{item.answer}</div>
+                <div className="px-5 pb-5 text-charcoal-600 text-sm leading-relaxed">
+                  {item.answer}
+                </div>
               </details>
             ))}
           </div>
@@ -1068,7 +1074,7 @@ export default async function UrgenceServiceVillePage({
             <div className="flex flex-col items-center">
               <a
                 href={PHONE_TEL}
-                className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+                className="inline-flex items-center justify-center gap-3 bg-white text-charcoal-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 <Phone className="w-6 h-6" />
                 Appeler l'assistance
@@ -1089,7 +1095,7 @@ export default async function UrgenceServiceVillePage({
       {/* ─── CROSS-LINKS: NEARBY CITIES ────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
             {trade.name} urgence dans d'autres villes
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
@@ -1097,12 +1103,12 @@ export default async function UrgenceServiceVillePage({
               <Link
                 key={v.slug}
                 href={`/urgence/${service}/${v.slug}`}
-                className="bg-gray-50 hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-xl p-4 transition-all group text-center"
+                className="bg-sand-50 hover:bg-red-50 border border-sand-300 hover:border-red-300 rounded-xl p-4 transition-all group text-center"
               >
-                <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
+                <div className="font-semibold text-charcoal-900 group-hover:text-red-600 transition-colors text-sm">
                   {trade.name} urgence à {v.name}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">Soir & week-end</div>
+                <div className="text-xs text-charcoal-500 mt-1">Soir & week-end</div>
               </Link>
             ))}
           </div>
@@ -1110,9 +1116,9 @@ export default async function UrgenceServiceVillePage({
       </section>
 
       {/* ─── CROSS-LINKS: OTHER EMERGENCY SERVICES ─────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
             Autres urgences à {villeData.name}
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -1122,12 +1128,12 @@ export default async function UrgenceServiceVillePage({
                 <Link
                   key={slug}
                   href={`/urgence/${slug}/${villeSlug}`}
-                  className="bg-white hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-xl p-4 transition-all group text-center"
+                  className="bg-white hover:bg-red-50 border border-sand-300 hover:border-red-300 rounded-xl p-4 transition-all group text-center"
                 >
-                  <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
+                  <div className="font-semibold text-charcoal-900 group-hover:text-red-600 transition-colors text-sm">
                     {t.name} urgence
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">{t.averageResponseTime}</div>
+                  <div className="text-xs text-charcoal-500 mt-1">{t.averageResponseTime}</div>
                 </Link>
               )
             })}
@@ -1142,13 +1148,13 @@ export default async function UrgenceServiceVillePage({
         return (
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Problèmes courants</h2>
+              <h2 className="text-xl font-bold text-charcoal-900 mb-4">Problèmes courants</h2>
               <div className="flex flex-wrap gap-3">
                 {problems.map((p) => (
                   <Link
                     key={p.slug}
                     href={`/problemes/${p.slug}/${villeSlug}`}
-                    className="px-4 py-2.5 bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-orange-200 transition-all"
+                    className="px-4 py-2.5 bg-sand-50 hover:bg-orange-50 text-charcoal-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-sand-300 hover:border-orange-200 transition-all"
                   >
                     {p.name} à {villeData.name}
                   </Link>
@@ -1162,7 +1168,7 @@ export default async function UrgenceServiceVillePage({
       {/* Cross-intent navigation */}
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
             Voir aussi
           </h2>
           <div className="flex flex-wrap gap-3">
@@ -1174,7 +1180,7 @@ export default async function UrgenceServiceVillePage({
             </Link>
             <Link
               href={`/avis/${service}/${villeSlug}`}
-              className="px-4 py-2 bg-blue-50 text-blue-800 rounded-lg text-sm font-medium border border-blue-100 hover:border-blue-200 transition-colors"
+              className="px-4 py-2 bg-primary-50 text-primary-800 rounded-lg text-sm font-medium border border-primary-100 hover:border-primary-200 transition-colors"
             >
               Avis {tradeLower} à {villeData.name}
             </Link>
@@ -1186,7 +1192,7 @@ export default async function UrgenceServiceVillePage({
             </Link>
             <Link
               href={`/services/${service}/${villeSlug}`}
-              className="px-4 py-2 bg-gray-50 text-gray-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-gray-300 transition-colors"
+              className="px-4 py-2 bg-sand-50 text-charcoal-800 rounded-lg text-sm font-medium border border-sand-300 hover:border-sand-400 transition-colors"
             >
               {trade.name} à {villeData.name}
             </Link>
@@ -1197,49 +1203,49 @@ export default async function UrgenceServiceVillePage({
       {/* ─── VOIR AUSSI ────────────────────────────────────── */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-heading font-semibold text-gray-900 mb-3">Ce service</h3>
+              <h3 className="font-heading font-semibold text-charcoal-900 mb-3">Ce service</h3>
               <div className="space-y-2">
                 <Link
                   href={`/urgence/${service}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   {trade.name} urgence en France
                 </Link>
                 <Link
                   href={`/services/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   {trade.name} à {villeData.name}
                 </Link>
                 <Link
                   href={`/tarifs/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Tarifs {tradeLower} à {villeData.name}
                 </Link>
                 <Link
                   href={`/devis/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Devis {tradeLower} à {villeData.name}
                 </Link>
                 <Link
                   href={`/avis/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Avis {tradeLower} à {villeData.name}
                 </Link>
               </div>
             </div>
             <div>
-              <h3 className="font-heading font-semibold text-gray-900 mb-3">Cette ville</h3>
+              <h3 className="font-heading font-semibold text-charcoal-900 mb-3">Cette ville</h3>
               <div className="space-y-2">
                 <Link
                   href={`/villes/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Artisans à {villeData.name}
                 </Link>
@@ -1250,7 +1256,7 @@ export default async function UrgenceServiceVillePage({
                     <Link
                       key={slug}
                       href={`/urgence/${slug}/${villeSlug}`}
-                      className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                      className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                     >
                       {t.name} urgence à {villeData.name}
                     </Link>
@@ -1259,32 +1265,37 @@ export default async function UrgenceServiceVillePage({
               </div>
             </div>
             <div>
-              <h3 className="font-heading font-semibold text-gray-900 mb-3">Informations utiles</h3>
+              <h3 className="font-heading font-semibold text-charcoal-900 mb-3">
+                Informations utiles
+              </h3>
               <div className="space-y-2">
                 <Link
                   href="/urgence"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Toutes les urgences
                 </Link>
                 <Link
                   href="/comment-ca-marche"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Comment ça marche
                 </Link>
                 <Link
                   href="/tarifs"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Guide des tarifs
                 </Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   FAQ
                 </Link>
                 <Link
                   href="/notre-processus-de-verification"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Processus de vérification
                 </Link>
@@ -1297,9 +1308,9 @@ export default async function UrgenceServiceVillePage({
       {/* ─── EDITORIAL CREDIBILITY ─────────────────────────── */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+          <div className="bg-sand-50 rounded-2xl border border-charcoal-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Information importante</h3>
+            <p className="text-xs text-charcoal-900 leading-relaxed">
               Les délais d'intervention et tarifs affichés pour {villeData.name} sont des
               estimations basées sur la disponibilité habituelle des artisans et les données
               régionales ({villeData.region}). Ils peuvent varier selon la complexité de
@@ -1483,23 +1494,23 @@ function EmergencyEditorialSections({
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       {/* Section 1: Signes d'urgence */}
       <section>
-        <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">{signes.title}</h2>
+        <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">{signes.title}</h2>
         <div className="prose prose-gray max-w-none">
-          <p className="text-gray-700 leading-relaxed">{signes.content}</p>
+          <p className="text-charcoal-700 leading-relaxed">{signes.content}</p>
         </div>
       </section>
 
       {/* Section 2: Checklist avant l'appel */}
       <section>
-        <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">{checklistTitle}</h2>
-        <p className="text-gray-600 mb-4">{checklistIntro}</p>
-        <div className="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100">
+        <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">{checklistTitle}</h2>
+        <p className="text-charcoal-600 mb-4">{checklistIntro}</p>
+        <div className="bg-white rounded-2xl border border-sand-300 divide-y divide-sand-200">
           {checklist.map((item, i) => (
             <div key={i} className="flex items-start gap-3 px-5 py-3.5">
               <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                 <CheckCircle className="w-3.5 h-3.5 text-green-600" />
               </div>
-              <span className="text-gray-700 text-sm leading-relaxed">{item}</span>
+              <span className="text-charcoal-700 text-sm leading-relaxed">{item}</span>
             </div>
           ))}
         </div>
@@ -1507,9 +1518,9 @@ function EmergencyEditorialSections({
 
       {/* Section 3: Prix urgence vs planifié */}
       <section>
-        <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">{prix.title}</h2>
+        <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">{prix.title}</h2>
         <div className="prose prose-gray max-w-none">
-          <p className="text-gray-700 leading-relaxed">{prix.content}</p>
+          <p className="text-charcoal-700 leading-relaxed">{prix.content}</p>
         </div>
       </section>
     </div>
@@ -1532,17 +1543,17 @@ function LocalFactorCard({
   description: string
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-sand-300 p-6">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 bg-sand-100 rounded-lg flex items-center justify-center flex-shrink-0">
           {icon}
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900 text-sm">{title}</h3>
-          {value && <p className="text-xs text-blue-600 font-medium">{value}</p>}
+          <h3 className="font-semibold text-charcoal-900 text-sm">{title}</h3>
+          {value && <p className="text-xs text-primary-500 font-medium">{value}</p>}
         </div>
       </div>
-      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+      <p className="text-charcoal-600 text-sm leading-relaxed">{description}</p>
     </div>
   )
 }

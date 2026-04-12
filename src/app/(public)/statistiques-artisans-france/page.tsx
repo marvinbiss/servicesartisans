@@ -1,9 +1,22 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import {
-  BarChart3, Building2, TrendingUp, MapPin, Thermometer,
-  GraduationCap, Zap, Users, Hammer, Euro, ArrowUpRight,
-  ArrowDownRight, Minus, Calendar, BookOpen, ExternalLink,
+  BarChart3,
+  Building2,
+  TrendingUp,
+  MapPin,
+  Thermometer,
+  GraduationCap,
+  Zap,
+  Users,
+  Hammer,
+  Euro,
+  ArrowUpRight,
+  ArrowDownRight,
+  Minus,
+  Calendar,
+  BookOpen,
+  ExternalLink,
   ChevronRight,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
@@ -32,30 +45,107 @@ function computeDeptStats() {
 
   // Population data (from INSEE 2024, sourced from dept-artisan-counts comments)
   const DEPT_POP: Record<string, number> = {
-    '75': 2104000, '77': 1421000, '78': 1448000, '91': 1306000,
-    '92': 1624000, '93': 1644000, '94': 1407000, '95': 1249000,
-    '02': 525000, '59': 2608000, '60': 829000, '62': 1468000, '80': 572000,
-    '08': 270000, '10': 311000, '51': 567000, '52': 172000, '54': 733000,
-    '55': 184000, '57': 1046000, '67': 1140000, '68': 764000, '88': 363000,
-    '14': 694000, '27': 601000, '50': 495000, '61': 278000, '76': 1256000,
-    '22': 600000, '29': 909000, '35': 1094000, '56': 759000,
-    '44': 1437000, '49': 818000, '53': 307000, '72': 566000, '85': 685000,
-    '18': 302000, '28': 432000, '36': 218000, '37': 610000, '41': 329000, '45': 680000,
-    '21': 534000, '25': 543000, '39': 260000, '58': 202000, '70': 234000,
-    '71': 551000, '89': 338000, '90': 142000,
-    '01': 655000, '03': 335000, '07': 328000, '15': 144000, '26': 517000,
-    '38': 1272000, '42': 762000, '43': 227000, '63': 659000, '69': 1878000,
-    '73': 436000, '74': 826000,
-    '16': 352000, '17': 651000, '19': 240000, '23': 116000, '24': 413000,
-    '33': 1623000, '40': 413000, '47': 330000, '64': 682000, '79': 374000,
-    '86': 439000, '87': 373000,
-    '09': 153000, '11': 374000, '12': 279000, '30': 748000, '31': 1415000,
-    '32': 191000, '34': 1175000, '46': 174000, '48': 76000, '65': 228000,
-    '66': 479000, '81': 389000, '82': 262000,
-    '04': 164000, '05': 141000, '06': 1083000, '13': 2043000, '83': 1076000,
+    '75': 2104000,
+    '77': 1421000,
+    '78': 1448000,
+    '91': 1306000,
+    '92': 1624000,
+    '93': 1644000,
+    '94': 1407000,
+    '95': 1249000,
+    '02': 525000,
+    '59': 2608000,
+    '60': 829000,
+    '62': 1468000,
+    '80': 572000,
+    '08': 270000,
+    '10': 311000,
+    '51': 567000,
+    '52': 172000,
+    '54': 733000,
+    '55': 184000,
+    '57': 1046000,
+    '67': 1140000,
+    '68': 764000,
+    '88': 363000,
+    '14': 694000,
+    '27': 601000,
+    '50': 495000,
+    '61': 278000,
+    '76': 1256000,
+    '22': 600000,
+    '29': 909000,
+    '35': 1094000,
+    '56': 759000,
+    '44': 1437000,
+    '49': 818000,
+    '53': 307000,
+    '72': 566000,
+    '85': 685000,
+    '18': 302000,
+    '28': 432000,
+    '36': 218000,
+    '37': 610000,
+    '41': 329000,
+    '45': 680000,
+    '21': 534000,
+    '25': 543000,
+    '39': 260000,
+    '58': 202000,
+    '70': 234000,
+    '71': 551000,
+    '89': 338000,
+    '90': 142000,
+    '01': 655000,
+    '03': 335000,
+    '07': 328000,
+    '15': 144000,
+    '26': 517000,
+    '38': 1272000,
+    '42': 762000,
+    '43': 227000,
+    '63': 659000,
+    '69': 1878000,
+    '73': 436000,
+    '74': 826000,
+    '16': 352000,
+    '17': 651000,
+    '19': 240000,
+    '23': 116000,
+    '24': 413000,
+    '33': 1623000,
+    '40': 413000,
+    '47': 330000,
+    '64': 682000,
+    '79': 374000,
+    '86': 439000,
+    '87': 373000,
+    '09': 153000,
+    '11': 374000,
+    '12': 279000,
+    '30': 748000,
+    '31': 1415000,
+    '32': 191000,
+    '34': 1175000,
+    '46': 174000,
+    '48': 76000,
+    '65': 228000,
+    '66': 479000,
+    '81': 389000,
+    '82': 262000,
+    '04': 164000,
+    '05': 141000,
+    '06': 1083000,
+    '13': 2043000,
+    '83': 1076000,
     '84': 561000,
-    '2A': 158000, '2B': 181000,
-    '971': 384000, '972': 364000, '973': 294000, '974': 860000, '976': 321000,
+    '2A': 158000,
+    '2B': 181000,
+    '971': 384000,
+    '972': 364000,
+    '973': 294000,
+    '974': 860000,
+    '976': 321000,
   }
 
   // Top 10 by absolute count
@@ -85,13 +175,7 @@ function computeDeptStats() {
   return { totalArtisans, totalBtp, btpRatio, sortedByCount, withDensity }
 }
 
-const {
-  totalArtisans,
-  totalBtp,
-  btpRatio,
-  sortedByCount,
-  withDensity,
-} = computeDeptStats()
+const { totalArtisans, totalBtp, btpRatio, sortedByCount, withDensity } = computeDeptStats()
 
 const prixMoyen = getPrixMoyenNational()
 const variationMoyenne = getVariationMoyenne()
@@ -159,7 +243,7 @@ function StatCard({
   accent?: 'blue' | 'green' | 'orange' | 'red' | 'purple' | 'teal'
 }) {
   const accents = {
-    blue: 'bg-blue-50 border-blue-200 text-blue-700',
+    blue: 'bg-primary-50 border-primary-200 text-primary-600',
     green: 'bg-green-50 border-green-200 text-green-700',
     orange: 'bg-orange-50 border-orange-200 text-orange-700',
     red: 'bg-red-50 border-red-200 text-red-700',
@@ -167,7 +251,7 @@ function StatCard({
     teal: 'bg-teal-50 border-teal-200 text-teal-700',
   }
   const iconBg = {
-    blue: 'bg-blue-100 text-blue-600',
+    blue: 'bg-primary-100 text-primary-500',
     green: 'bg-green-100 text-green-600',
     orange: 'bg-orange-100 text-orange-600',
     red: 'bg-red-100 text-red-600',
@@ -189,7 +273,13 @@ function StatCard({
   )
 }
 
-function TrendBadge({ tendance, variation }: { tendance: 'hausse' | 'stable' | 'baisse'; variation?: number }) {
+function TrendBadge({
+  tendance,
+  variation,
+}: {
+  tendance: 'hausse' | 'stable' | 'baisse'
+  variation?: number
+}) {
   if (tendance === 'hausse') {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
@@ -207,7 +297,7 @@ function TrendBadge({ tendance, variation }: { tendance: 'hausse' | 'stable' | '
     )
   }
   return (
-    <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1 text-xs font-medium text-charcoal-500 bg-sand-100 px-2 py-0.5 rounded-full">
       <Minus className="w-3 h-3" />
       {variation !== undefined ? `${variation > 0 ? '+' : ''}${variation}%` : 'Stable'}
     </span>
@@ -228,12 +318,12 @@ function SectionTitle({
   return (
     <div className="mb-8" id={id}>
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-500 flex items-center justify-center">
           <Icon className="w-5 h-5" />
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900">{title}</h2>
       </div>
-      <p className="text-gray-600 ml-[52px]">{subtitle}</p>
+      <p className="text-charcoal-600 ml-[52px]">{subtitle}</p>
     </div>
   )
 }
@@ -243,9 +333,7 @@ function SectionTitle({
 // ---------------------------------------------------------------------------
 
 export default function StatistiquesArtisansFrancePage() {
-  const breadcrumbItems = [
-    { label: 'Statistiques artisans France' },
-  ]
+  const breadcrumbItems = [{ label: 'Statistiques artisans France' }]
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -270,7 +358,8 @@ export default function StatistiquesArtisansFrancePage() {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: 'Statistiques du marché artisanal en France (2026)',
-    description: 'Données agrégées sur le nombre d\'artisans, les tarifs, la répartition géographique et les tendances du marché artisanal français.',
+    description:
+      "Données agrégées sur le nombre d'artisans, les tarifs, la répartition géographique et les tendances du marché artisanal français.",
     url: pageUrl,
     license: 'https://creativecommons.org/licenses/by/4.0/',
     creator: {
@@ -362,59 +451,69 @@ export default function StatistiquesArtisansFrancePage() {
         </div>
 
         {/* Hero */}
-        <header className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white mt-4">
+        <header className="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-indigo-900 text-white mt-4">
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: 'radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)',
-              backgroundSize: '50px 50px',
-            }} />
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)',
+                backgroundSize: '50px 50px',
+              }}
+            />
           </div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="w-4 h-4 text-blue-300" />
-              <span className="text-sm text-blue-300">Dernière mise à jour : mars 2026</span>
+              <Calendar className="w-4 h-4 text-primary-200" />
+              <span className="text-sm text-primary-200">Dernière mise à jour : mars 2026</span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
               Statistiques artisans en France
-              <span className="block text-blue-300 mt-2">Chiffres clés, prix et tendances 2026</span>
+              <span className="block text-primary-200 mt-2">
+                Chiffres clés, prix et tendances 2026
+              </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-blue-100 max-w-3xl mb-10">
-              Toutes les données essentielles sur le marché artisanal français :
-              nombre d'artisans, répartition géographique, tarifs moyens par métier,
-              rénovation énergétique et perspectives 2026. Données actualisées, sources officielles.
+            <p className="text-lg md:text-xl text-primary-100 max-w-3xl mb-10">
+              Toutes les données essentielles sur le marché artisanal français : nombre d'artisans,
+              répartition géographique, tarifs moyens par métier, rénovation énergétique et
+              perspectives 2026. Données actualisées, sources officielles.
             </p>
 
             {/* Hero stat counters */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
                 <p className="text-3xl md:text-4xl font-bold">1,3M</p>
-                <p className="text-sm text-blue-200 mt-1">Artisans en France</p>
+                <p className="text-sm text-primary-100 mt-1">Artisans en France</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
                 <p className="text-3xl md:text-4xl font-bold">300 Md€</p>
-                <p className="text-sm text-blue-200 mt-1">Chiffre d'affaires</p>
+                <p className="text-sm text-primary-100 mt-1">Chiffre d'affaires</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                <p className="text-3xl md:text-4xl font-bold">{totalArtisans.toLocaleString('fr-FR')}</p>
-                <p className="text-sm text-blue-200 mt-1">Artisans référencés</p>
+                <p className="text-3xl md:text-4xl font-bold">
+                  {totalArtisans.toLocaleString('fr-FR')}
+                </p>
+                <p className="text-sm text-primary-100 mt-1">Artisans référencés</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
                 <p className="text-3xl md:text-4xl font-bold">101</p>
-                <p className="text-sm text-blue-200 mt-1">Départements couverts</p>
+                <p className="text-sm text-primary-100 mt-1">Départements couverts</p>
               </div>
             </div>
           </div>
         </header>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-
           {/* Table of Contents */}
-          <nav className="mb-16 bg-gray-50 rounded-xl p-6 border border-gray-200" aria-label="Sommaire">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-blue-600" />
+          <nav
+            className="mb-16 bg-sand-50 rounded-xl p-6 border border-sand-300"
+            aria-label="Sommaire"
+          >
+            <h2 className="text-lg font-bold text-charcoal-900 mb-4 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-primary-500" />
               Sommaire
             </h2>
             <ol className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -422,9 +521,9 @@ export default function StatistiquesArtisansFrancePage() {
                 <li key={item.id}>
                   <a
                     href={`#${item.id}`}
-                    className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors group"
+                    className="flex items-center gap-2 text-charcoal-600 hover:text-primary-500 transition-colors group"
                   >
-                    <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-xs font-bold flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <span className="w-6 h-6 rounded-full bg-primary-100 text-primary-500 text-xs font-bold flex items-center justify-center group-hover:bg-primary-500 group-hover:text-white transition-colors">
                       {i + 1}
                     </span>
                     {item.label}
@@ -525,30 +624,36 @@ export default function StatistiquesArtisansFrancePage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Top 10 by count */}
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-bold text-gray-900">Top 10 départements par nombre d'artisans</h3>
-                  <p className="text-sm text-gray-500 mt-1">Source : CMA, CAPEB, INSEE — calculs ServicesArtisans</p>
+              <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
+                <div className="bg-sand-50 px-6 py-4 border-b border-sand-300">
+                  <h3 className="font-bold text-charcoal-900">
+                    Top 10 départements par nombre d'artisans
+                  </h3>
+                  <p className="text-sm text-charcoal-500 mt-1">
+                    Source : CMA, CAPEB, INSEE — calculs ServicesArtisans
+                  </p>
                 </div>
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-sand-200">
                   {sortedByCount.map((dept, i) => {
                     const maxCount = sortedByCount[0].artisans
                     const barWidth = (dept.artisans / maxCount) * 100
                     return (
                       <div key={dept.code} className="px-6 py-3 flex items-center gap-4">
-                        <span className="text-sm font-bold text-gray-400 w-6 text-right">{i + 1}</span>
+                        <span className="text-sm font-bold text-charcoal-400 w-6 text-right">
+                          {i + 1}
+                        </span>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-gray-900 truncate">
+                            <span className="text-sm font-medium text-charcoal-900 truncate">
                               {dept.name} ({dept.code})
                             </span>
-                            <span className="text-sm font-bold text-blue-700 ml-2">
+                            <span className="text-sm font-bold text-primary-600 ml-2">
                               {dept.artisans.toLocaleString('fr-FR')}
                             </span>
                           </div>
-                          <div className="w-full bg-gray-100 rounded-full h-2">
+                          <div className="w-full bg-sand-100 rounded-full h-2">
                             <div
-                              className="bg-blue-500 h-2 rounded-full transition-all"
+                              className="bg-primary-400 h-2 rounded-full transition-all"
                               style={{ width: `${barWidth}%` }}
                             />
                           </div>
@@ -560,28 +665,34 @@ export default function StatistiquesArtisansFrancePage() {
               </div>
 
               {/* Top 10 by density */}
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-bold text-gray-900">Top 10 départements par densité artisanale</h3>
-                  <p className="text-sm text-gray-500 mt-1">Artisans pour 10 000 habitants — Source : INSEE, CMA</p>
+              <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
+                <div className="bg-sand-50 px-6 py-4 border-b border-sand-300">
+                  <h3 className="font-bold text-charcoal-900">
+                    Top 10 départements par densité artisanale
+                  </h3>
+                  <p className="text-sm text-charcoal-500 mt-1">
+                    Artisans pour 10 000 habitants — Source : INSEE, CMA
+                  </p>
                 </div>
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-sand-200">
                   {withDensity.map((dept, i) => {
                     const maxDensity = withDensity[0].density
                     const barWidth = (dept.density / maxDensity) * 100
                     return (
                       <div key={dept.code} className="px-6 py-3 flex items-center gap-4">
-                        <span className="text-sm font-bold text-gray-400 w-6 text-right">{i + 1}</span>
+                        <span className="text-sm font-bold text-charcoal-400 w-6 text-right">
+                          {i + 1}
+                        </span>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-gray-900 truncate">
+                            <span className="text-sm font-medium text-charcoal-900 truncate">
                               {dept.name} ({dept.code})
                             </span>
                             <span className="text-sm font-bold text-green-700 ml-2">
                               {dept.density} / 10 000 hab.
                             </span>
                           </div>
-                          <div className="w-full bg-gray-100 rounded-full h-2">
+                          <div className="w-full bg-sand-100 rounded-full h-2">
                             <div
                               className="bg-green-500 h-2 rounded-full transition-all"
                               style={{ width: `${barWidth}%` }}
@@ -596,20 +707,31 @@ export default function StatistiquesArtisansFrancePage() {
             </div>
 
             {/* Regional insights */}
-            <div className="mt-8 bg-blue-50 rounded-xl border border-blue-200 p-6">
-              <h3 className="font-bold text-blue-900 mb-3">Disparités régionales : ce qu'il faut retenir</h3>
-              <ul className="space-y-2 text-sm text-blue-800">
+            <div className="mt-8 bg-primary-50 rounded-xl border border-primary-200 p-6">
+              <h3 className="font-bold text-primary-800 mb-3">
+                Disparités régionales : ce qu'il faut retenir
+              </h3>
+              <ul className="space-y-2 text-sm text-primary-800">
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span><strong>L'Île-de-France</strong> concentre environ 27 % des entreprises artisanales, avec Paris (75) et la Seine-Saint-Denis (93) en tête.</span>
+                  <span>
+                    <strong>L'Île-de-France</strong> concentre environ 27 % des entreprises
+                    artisanales, avec Paris (75) et la Seine-Saint-Denis (93) en tête.
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Les départements du <strong>Sud-Est</strong> (PACA, Corse) affichent les densités les plus élevées, tirées par le BTP et la rénovation.</span>
+                  <span>
+                    Les départements du <strong>Sud-Est</strong> (PACA, Corse) affichent les
+                    densités les plus élevées, tirées par le BTP et la rénovation.
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Les zones rurales (Creuse, Lozère) ont moins d'artisans en valeur absolue mais souvent une <strong>densité supérieure</strong> à la moyenne nationale.</span>
+                  <span>
+                    Les zones rurales (Creuse, Lozère) ont moins d'artisans en valeur absolue mais
+                    souvent une <strong>densité supérieure</strong> à la moyenne nationale.
+                  </span>
                 </li>
               </ul>
             </div>
@@ -654,61 +776,78 @@ export default function StatistiquesArtisansFrancePage() {
             {/* Price tables by service */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {servicePricings.map((sp) => (
-                <div key={sp.service} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                  <div className="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
-                    <h3 className="font-bold text-gray-900">{sp.serviceName}</h3>
+                <div
+                  key={sp.service}
+                  className="bg-white rounded-xl border border-sand-300 overflow-hidden"
+                >
+                  <div className="bg-sand-50 px-5 py-3 border-b border-sand-300 flex items-center justify-between">
+                    <h3 className="font-bold text-charcoal-900">{sp.serviceName}</h3>
                     <Link
                       href={`/barometre/tarifs/${sp.service}`}
-                      className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                      className="text-xs text-primary-500 hover:underline flex items-center gap-1"
                     >
                       Voir détail <ExternalLink className="w-3 h-3" />
                     </Link>
                   </div>
                   <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-left text-xs text-gray-500 border-b border-gray-100">
-                        <th className="px-5 py-2 font-medium">Intervention</th>
-                        <th className="px-3 py-2 font-medium text-right">Fourchette</th>
-                        <th className="px-3 py-2 font-medium text-right">Tendance</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                      {sp.interventions.map((int) => (
-                        <tr key={int.name} className="hover:bg-gray-50">
-                          <td className="px-5 py-2.5 text-gray-700">{int.name}</td>
-                          <td className="px-3 py-2.5 text-right text-gray-900 font-medium whitespace-nowrap">
-                            {int.prixMin}–{int.prixMax} €
-                            {int.unite !== 'intervention' && (
-                              <span className="text-gray-400 font-normal">/{int.unite}</span>
-                            )}
-                          </td>
-                          <td className="px-3 py-2.5 text-right">
-                            <TrendBadge tendance={int.tendance} variation={int.variation} />
-                          </td>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-left text-xs text-charcoal-500 border-b border-sand-200">
+                          <th className="px-5 py-2 font-medium">Intervention</th>
+                          <th className="px-3 py-2 font-medium text-right">Fourchette</th>
+                          <th className="px-3 py-2 font-medium text-right">Tendance</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-sand-100">
+                        {sp.interventions.map((int) => (
+                          <tr key={int.name} className="hover:bg-sand-50">
+                            <td className="px-5 py-2.5 text-charcoal-700">{int.name}</td>
+                            <td className="px-3 py-2.5 text-right text-charcoal-900 font-medium whitespace-nowrap">
+                              {int.prixMin}–{int.prixMax} €
+                              {int.unite !== 'intervention' && (
+                                <span className="text-charcoal-400 font-normal">/{int.unite}</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-2.5 text-right">
+                              <TrendBadge tendance={int.tendance} variation={int.variation} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Regional indices */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                <h3 className="font-bold text-gray-900">Indices régionaux des prix (base 100 = moyenne nationale)</h3>
-                <p className="text-sm text-gray-500 mt-1">Source : Baromètre ServicesArtisans 2026</p>
+            <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
+              <div className="bg-sand-50 px-6 py-4 border-b border-sand-300">
+                <h3 className="font-bold text-charcoal-900">
+                  Indices régionaux des prix (base 100 = moyenne nationale)
+                </h3>
+                <p className="text-sm text-charcoal-500 mt-1">
+                  Source : Baromètre ServicesArtisans 2026
+                </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 divide-gray-100">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 divide-sand-200">
                 {regionalIndices
-                  .filter((r) => !['guadeloupe', 'martinique', 'guyane', 'la-reunion', 'mayotte'].includes(r.regionSlug))
+                  .filter(
+                    (r) =>
+                      !['guadeloupe', 'martinique', 'guyane', 'la-reunion', 'mayotte'].includes(
+                        r.regionSlug
+                      )
+                  )
                   .map((region) => (
-                    <div key={region.regionSlug} className="px-6 py-3 flex items-center justify-between border-b border-gray-100">
-                      <span className="text-sm text-gray-700">{region.region}</span>
+                    <div
+                      key={region.regionSlug}
+                      className="px-6 py-3 flex items-center justify-between border-b border-sand-200"
+                    >
+                      <span className="text-sm text-charcoal-700">{region.region}</span>
                       <div className="flex items-center gap-2">
-                        <span className={`text-sm font-bold ${region.index > 105 ? 'text-red-600' : region.index < 95 ? 'text-green-600' : 'text-gray-700'}`}>
+                        <span
+                          className={`text-sm font-bold ${region.index > 105 ? 'text-red-600' : region.index < 95 ? 'text-green-600' : 'text-charcoal-700'}`}
+                        >
                           {region.index}
                         </span>
                         <TrendBadge tendance={region.tendance} />
@@ -776,10 +915,15 @@ export default function StatistiquesArtisansFrancePage() {
             </div>
 
             <div className="bg-orange-50 rounded-xl border border-orange-200 p-6">
-              <h3 className="font-bold text-orange-900 mb-3">L'enjeu de la rénovation énergétique</h3>
+              <h3 className="font-bold text-orange-900 mb-3">
+                L'enjeu de la rénovation énergétique
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-orange-800">
                 <div>
-                  <p className="mb-2">La loi Climat et Résilience interdit progressivement la location des passoires thermiques :</p>
+                  <p className="mb-2">
+                    La loi Climat et Résilience interdit progressivement la location des passoires
+                    thermiques :
+                  </p>
                   <ul className="space-y-1 ml-4">
                     <li>&bull; DPE G : interdit depuis janvier 2025</li>
                     <li>&bull; DPE F : interdit à partir de 2028</li>
@@ -787,7 +931,9 @@ export default function StatistiquesArtisansFrancePage() {
                   </ul>
                 </div>
                 <div>
-                  <p className="mb-2">Ce calendrier génère une demande massive d'artisans qualifiés RGE, notamment :</p>
+                  <p className="mb-2">
+                    Ce calendrier génère une demande massive d'artisans qualifiés RGE, notamment :
+                  </p>
                   <ul className="space-y-1 ml-4">
                     <li>&bull; Installateurs de pompes à chaleur</li>
                     <li>&bull; Poseurs d'isolation (ITE, combles, planchers)</li>
@@ -856,16 +1002,19 @@ export default function StatistiquesArtisansFrancePage() {
             </div>
 
             <div className="bg-purple-50 rounded-xl border border-purple-200 p-6">
-              <h3 className="font-bold text-purple-900 mb-3">La pénurie de main d'oeuvre dans le BTP</h3>
+              <h3 className="font-bold text-purple-900 mb-3">
+                La pénurie de main d'oeuvre dans le BTP
+              </h3>
               <p className="text-sm text-purple-800 mb-3">
-                Le secteur du bâtiment fait face à une tension majeure sur le recrutement.
-                Selon la FFB et la CAPEB, 70 000 à 80 000 postes restent vacants chaque année,
-                soit un taux de vacance parmi les plus élevés de l'économie française.
+                Le secteur du bâtiment fait face à une tension majeure sur le recrutement. Selon la
+                FFB et la CAPEB, 70 000 à 80 000 postes restent vacants chaque année, soit un taux
+                de vacance parmi les plus élevés de l'économie française.
               </p>
               <p className="text-sm text-purple-800">
-                Les métiers les plus en tension : <strong>couvreurs, plombiers-chauffagistes, électriciens,
-                menuisiers</strong> et <strong>maçons</strong>. L'apprentissage et la reconversion professionnelle
-                sont les leviers prioritaires pour combler ce déficit.
+                Les métiers les plus en tension :{' '}
+                <strong>couvreurs, plombiers-chauffagistes, électriciens, menuisiers</strong> et{' '}
+                <strong>maçons</strong>. L'apprentissage et la reconversion professionnelle sont les
+                leviers prioritaires pour combler ce déficit.
               </p>
             </div>
           </section>
@@ -893,22 +1042,24 @@ export default function StatistiquesArtisansFrancePage() {
                   réglementaires (loi Climat, RE2020) et les aides publiques (MaPrimeRénov').
                 </p>
                 <p className="text-sm text-green-700">
-                  <strong>+4,5 %</strong> de croissance attendue en 2026 pour la rénovation énergétique.
+                  <strong>+4,5 %</strong> de croissance attendue en 2026 pour la rénovation
+                  énergétique.
                 </p>
               </div>
 
               {/* Trend 2 */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-6">
-                <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-br from-primary-50 to-indigo-50 rounded-xl border border-primary-200 p-6">
+                <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-500 flex items-center justify-center mb-4">
                   <Zap className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-blue-900 mb-2">Impact de la RE2020</h3>
-                <p className="text-sm text-blue-800 mb-3">
-                  La Réglementation Environnementale 2020 impose des standards exigeants
-                  sur les constructions neuves : bas carbone, biosourcés, performance thermique.
+                <h3 className="font-bold text-primary-800 mb-2">Impact de la RE2020</h3>
+                <p className="text-sm text-primary-800 mb-3">
+                  La Réglementation Environnementale 2020 impose des standards exigeants sur les
+                  constructions neuves : bas carbone, biosourcés, performance thermique.
                 </p>
-                <p className="text-sm text-blue-700">
-                  <strong>+15 %</strong> de demande estimée pour les artisans qualifiés RE2020 d'ici 2027.
+                <p className="text-sm text-primary-600">
+                  <strong>+15 %</strong> de demande estimée pour les artisans qualifiés RE2020 d'ici
+                  2027.
                 </p>
               </div>
 
@@ -919,11 +1070,12 @@ export default function StatistiquesArtisansFrancePage() {
                 </div>
                 <h3 className="font-bold text-purple-900 mb-2">Digitalisation du secteur</h3>
                 <p className="text-sm text-purple-800 mb-3">
-                  Les artisans adoptent massivement les outils numériques : devis en ligne,
-                  prise de rendez-vous, réseaux sociaux, annuaires spécialisés.
+                  Les artisans adoptent massivement les outils numériques : devis en ligne, prise de
+                  rendez-vous, réseaux sociaux, annuaires spécialisés.
                 </p>
                 <p className="text-sm text-purple-700">
-                  <strong>72 %</strong> des artisans utilisent internet pour trouver des clients (CMA 2025).
+                  <strong>72 %</strong> des artisans utilisent internet pour trouver des clients
+                  (CMA 2025).
                 </p>
               </div>
             </div>
@@ -965,28 +1117,28 @@ export default function StatistiquesArtisansFrancePage() {
           {/* Méthodologie */}
           {/* ============================================================= */}
           <section className="mb-20" id="methodologie">
-            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                <BookOpen className="w-6 h-6 text-blue-600" />
+            <div className="bg-sand-50 rounded-xl border border-sand-300 p-6 md:p-8">
+              <h2 className="text-2xl font-bold text-charcoal-900 mb-4 flex items-center gap-3">
+                <BookOpen className="w-6 h-6 text-primary-500" />
                 Méthodologie
               </h2>
-              <div className="prose prose-sm max-w-none text-gray-700">
+              <div className="prose prose-sm max-w-none text-charcoal-700">
                 <p>
-                  Les statistiques présentées sur cette page proviennent de sources officielles
-                  et de calculs réalisés par l'équipe ServicesArtisans. Voici notre méthodologie :
+                  Les statistiques présentées sur cette page proviennent de sources officielles et
+                  de calculs réalisés par l'équipe ServicesArtisans. Voici notre méthodologie :
                 </p>
                 <ul className="space-y-2 mt-3">
                   <li>
-                    <strong>Nombre d'artisans par département :</strong> dérivés des données
-                    INSEE (populations légales 2024) croisées avec les ratios de densité artisanale
+                    <strong>Nombre d'artisans par département :</strong> dérivés des données INSEE
+                    (populations légales 2024) croisées avec les ratios de densité artisanale
                     publiés par Le Moniteur, la CMA et la CAPEB. Calibrés sur les totaux régionaux
                     et nationaux connus (CMA : 1,3M ; CAPEB : 621 803 BTP).
                   </li>
                   <li>
                     <strong>Tarifs :</strong> fourchettes issues de notre baromètre de prix 2026,
                     constitué à partir d'enquêtes auprès d'artisans partenaires et de données
-                    sectorielles (CAPEB, FFB, QUALIT'EnR). Les variations sont calculées
-                    en glissement annuel.
+                    sectorielles (CAPEB, FFB, QUALIT'EnR). Les variations sont calculées en
+                    glissement annuel.
                   </li>
                   <li>
                     <strong>Indices régionaux :</strong> base 100 correspondant à la moyenne
@@ -999,11 +1151,11 @@ export default function StatistiquesArtisansFrancePage() {
                     parlementaires.
                   </li>
                   <li>
-                    <strong>Données emploi :</strong> sources INSEE, DARES, DEPP,
-                    ISM (Institut Supérieur des Métiers) et CMA France.
+                    <strong>Données emploi :</strong> sources INSEE, DARES, DEPP, ISM (Institut
+                    Supérieur des Métiers) et CMA France.
                   </li>
                 </ul>
-                <p className="mt-3 text-xs text-gray-500">
+                <p className="mt-3 text-xs text-charcoal-500">
                   Les chiffres sont arrondis pour faciliter la lecture. Les estimations sont
                   signalées par le symbole « ~ ». Dernière mise à jour : mars 2026.
                 </p>
@@ -1015,13 +1167,13 @@ export default function StatistiquesArtisansFrancePage() {
           {/* Sources */}
           {/* ============================================================= */}
           <section className="mb-20" id="sources">
-            <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Sources et références</h2>
+            <div className="bg-white rounded-xl border border-sand-300 p-6 md:p-8">
+              <h2 className="text-2xl font-bold text-charcoal-900 mb-6">Sources et références</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
                   {
                     name: 'CMA France',
-                    desc: 'Chambres de Métiers et de l\'Artisanat — données nationales et régionales',
+                    desc: "Chambres de Métiers et de l'Artisanat — données nationales et régionales",
                     url: 'https://www.cma-france.fr/',
                   },
                   {
@@ -1036,7 +1188,7 @@ export default function StatistiquesArtisansFrancePage() {
                   },
                   {
                     name: 'CAPEB',
-                    desc: 'Confédération de l\'Artisanat et des Petites Entreprises du Bâtiment',
+                    desc: "Confédération de l'Artisanat et des Petites Entreprises du Bâtiment",
                     url: 'https://www.capeb.fr/',
                   },
                   {
@@ -1046,7 +1198,7 @@ export default function StatistiquesArtisansFrancePage() {
                   },
                   {
                     name: 'ANAH',
-                    desc: 'Agence Nationale de l\'Habitat — MaPrimeRénov\', aides',
+                    desc: "Agence Nationale de l'Habitat — MaPrimeRénov', aides",
                     url: 'https://www.anah.gouv.fr/',
                   },
                   {
@@ -1056,7 +1208,7 @@ export default function StatistiquesArtisansFrancePage() {
                   },
                   {
                     name: 'ISM',
-                    desc: 'Institut Supérieur des Métiers — baromètre de l\'artisanat',
+                    desc: "Institut Supérieur des Métiers — baromètre de l'artisanat",
                     url: 'https://www.infometiers.org/',
                   },
                   {
@@ -1065,14 +1217,17 @@ export default function StatistiquesArtisansFrancePage() {
                     url: 'https://www.statistiques.developpement-durable.gouv.fr/',
                   },
                 ].map((source) => (
-                  <div key={source.name} className="bg-gray-50 rounded-lg p-4 border border-gray-100">
-                    <h3 className="font-bold text-gray-900 text-sm mb-1">{source.name}</h3>
-                    <p className="text-xs text-gray-600 mb-2">{source.desc}</p>
+                  <div
+                    key={source.name}
+                    className="bg-sand-50 rounded-lg p-4 border border-sand-200"
+                  >
+                    <h3 className="font-bold text-charcoal-900 text-sm mb-1">{source.name}</h3>
+                    <p className="text-xs text-charcoal-600 mb-2">{source.desc}</p>
                     <a
                       href={source.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                      className="text-xs text-primary-500 hover:underline flex items-center gap-1"
                     >
                       Consulter <ExternalLink className="w-3 h-3" />
                     </a>
@@ -1086,10 +1241,11 @@ export default function StatistiquesArtisansFrancePage() {
           {/* Cross-links / CTA */}
           {/* ============================================================= */}
           <section className="mb-12">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-8 text-white">
+            <div className="bg-gradient-to-r from-primary-500 to-indigo-700 rounded-xl p-8 text-white">
               <h2 className="text-2xl font-bold mb-4">Explorez nos autres ressources</h2>
-              <p className="text-blue-100 mb-6">
-                Retrouvez des données détaillées sur les tarifs, les artisans par ville et nos guides pratiques.
+              <p className="text-primary-100 mb-6">
+                Retrouvez des données détaillées sur les tarifs, les artisans par ville et nos
+                guides pratiques.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Link
@@ -1100,7 +1256,9 @@ export default function StatistiquesArtisansFrancePage() {
                     Baromètre des prix
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-sm text-blue-200">Tarifs détaillés par métier et par région</p>
+                  <p className="text-sm text-primary-100">
+                    Tarifs détaillés par métier et par région
+                  </p>
                 </Link>
                 <Link
                   href="/services"
@@ -1110,7 +1268,9 @@ export default function StatistiquesArtisansFrancePage() {
                     Annuaire par métier
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-sm text-blue-200">Trouvez un artisan qualifié près de chez vous</p>
+                  <p className="text-sm text-primary-100">
+                    Trouvez un artisan qualifié près de chez vous
+                  </p>
                 </Link>
                 <Link
                   href="/guides"
@@ -1120,12 +1280,11 @@ export default function StatistiquesArtisansFrancePage() {
                     Guides pratiques
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-sm text-blue-200">Conseils pour vos projets de travaux</p>
+                  <p className="text-sm text-primary-100">Conseils pour vos projets de travaux</p>
                 </Link>
               </div>
             </div>
           </section>
-
         </div>
       </div>
 

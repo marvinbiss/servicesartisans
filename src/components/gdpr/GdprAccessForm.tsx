@@ -55,15 +55,19 @@ export default function GdprAccessForm() {
     return (
       <div className="text-center py-8">
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className="w-8 h-8 text-green-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">Demande envoy&eacute;e</h3>
-        <p className="text-gray-600">
-          Votre demande a bien &eacute;t&eacute; enregistr&eacute;e. Vous recevrez un
-          accus&eacute; de r&eacute;ception sous 48h et une r&eacute;ponse compl&egrave;te
-          sous 30 jours maximum.
+        <h3 className="text-xl font-bold text-charcoal-900 mb-2">Demande envoy&eacute;e</h3>
+        <p className="text-charcoal-600">
+          Votre demande a bien &eacute;t&eacute; enregistr&eacute;e. Vous recevrez un accus&eacute;
+          de r&eacute;ception sous 48h et une r&eacute;ponse compl&egrave;te sous 30 jours maximum.
         </p>
       </div>
     )
@@ -73,25 +77,29 @@ export default function GdprAccessForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Request type */}
       <div>
-        <label htmlFor="requestType" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="requestType" className="block text-sm font-medium text-charcoal-700 mb-1">
           Type de demande <span className="text-red-500">*</span>
         </label>
         <select
           id="requestType"
           value={form.requestType}
-          onChange={(e) => setForm({ ...form, requestType: e.target.value as 'access' | 'rectification' })}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          onChange={(e) =>
+            setForm({ ...form, requestType: e.target.value as 'access' | 'rectification' })
+          }
+          className="w-full rounded-lg border border-sand-400 px-4 py-2.5 text-charcoal-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           required
         >
           {REQUEST_TYPES.map((t) => (
-            <option key={t.value} value={t.value}>{t.label}</option>
+            <option key={t.value} value={t.value}>
+              {t.label}
+            </option>
           ))}
         </select>
       </div>
 
       {/* Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="name" className="block text-sm font-medium text-charcoal-700 mb-1">
           Nom complet <span className="text-red-500">*</span>
         </label>
         <input
@@ -99,7 +107,7 @@ export default function GdprAccessForm() {
           type="text"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          className="w-full rounded-lg border border-sand-400 px-4 py-2.5 text-charcoal-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           required
           minLength={2}
           placeholder="Jean Dupont"
@@ -108,7 +116,7 @@ export default function GdprAccessForm() {
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="email" className="block text-sm font-medium text-charcoal-700 mb-1">
           Email <span className="text-red-500">*</span>
         </label>
         <input
@@ -116,7 +124,7 @@ export default function GdprAccessForm() {
           type="email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          className="w-full rounded-lg border border-sand-400 px-4 py-2.5 text-charcoal-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           required
           placeholder="jean.dupont@exemple.fr"
         />
@@ -124,15 +132,15 @@ export default function GdprAccessForm() {
 
       {/* SIRET */}
       <div>
-        <label htmlFor="siret" className="block text-sm font-medium text-gray-700 mb-1">
-          SIRET <span className="text-gray-400">(optionnel — si professionnel)</span>
+        <label htmlFor="siret" className="block text-sm font-medium text-charcoal-700 mb-1">
+          SIRET <span className="text-charcoal-400">(optionnel — si professionnel)</span>
         </label>
         <input
           id="siret"
           type="text"
           value={form.siret}
           onChange={(e) => setForm({ ...form, siret: e.target.value })}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          className="w-full rounded-lg border border-sand-400 px-4 py-2.5 text-charcoal-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           placeholder="12345678901234"
           maxLength={14}
         />
@@ -140,17 +148,20 @@ export default function GdprAccessForm() {
 
       {/* Description */}
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="description" className="block text-sm font-medium text-charcoal-700 mb-1">
           Description de la demande <span className="text-red-500">*</span>
           {form.requestType === 'rectification' && (
-            <span className="text-gray-500 font-normal"> — pr&eacute;cisez quelles donn&eacute;es corriger</span>
+            <span className="text-charcoal-500 font-normal">
+              {' '}
+              — pr&eacute;cisez quelles donn&eacute;es corriger
+            </span>
           )}
         </label>
         <textarea
           id="description"
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
-          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          className="w-full rounded-lg border border-sand-400 px-4 py-2.5 text-charcoal-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           required
           rows={4}
           minLength={10}

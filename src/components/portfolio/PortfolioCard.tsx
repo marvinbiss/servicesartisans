@@ -50,14 +50,14 @@ export default function PortfolioCard({
   return (
     <div
       className={clsx(
-        'group relative bg-white rounded-2xl overflow-hidden border border-gray-200',
+        'group relative bg-white rounded-2xl overflow-hidden border border-sand-300',
         'transition-all duration-300',
         isDragging && 'shadow-2xl scale-105 rotate-2',
         onClick && 'cursor-pointer hover:shadow-lg hover:-translate-y-1'
       )}
     >
       {/* Image container */}
-      <div className="relative aspect-[4/3] bg-gray-100" onClick={onClick}>
+      <div className="relative aspect-[4/3] bg-sand-100" onClick={onClick}>
         {thumbnailUrl && !imageError ? (
           <Image
             src={thumbnailUrl}
@@ -68,8 +68,8 @@ export default function PortfolioCard({
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-            <Layers className="w-8 h-8 text-gray-400" />
+          <div className="absolute inset-0 flex items-center justify-center bg-sand-300">
+            <Layers className="w-8 h-8 text-charcoal-400" />
           </div>
         )}
 
@@ -100,7 +100,7 @@ export default function PortfolioCard({
         {/* Hidden indicator */}
         {!item.is_visible && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-900/80 rounded-lg">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-charcoal-900/80 rounded-lg">
               <EyeOff className="w-4 h-4 text-white" />
               <span className="text-sm text-white font-medium">Masqué</span>
             </div>
@@ -120,7 +120,7 @@ export default function PortfolioCard({
           {dragHandleProps && (
             <div
               {...dragHandleProps}
-              className="flex-shrink-0 p-1 -ml-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+              className="flex-shrink-0 p-1 -ml-1 text-charcoal-400 hover:text-charcoal-600 cursor-grab active:cursor-grabbing"
             >
               <GripVertical className="w-5 h-5" />
             </div>
@@ -128,9 +128,9 @@ export default function PortfolioCard({
 
           {/* Title and category */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 truncate">{item.title}</h3>
+            <h3 className="font-semibold text-charcoal-900 truncate">{item.title}</h3>
             {item.category && (
-              <p className="text-sm text-gray-500 mt-0.5 capitalize">{item.category}</p>
+              <p className="text-sm text-charcoal-500 mt-0.5 capitalize">{item.category}</p>
             )}
           </div>
 
@@ -142,18 +142,15 @@ export default function PortfolioCard({
                   e.stopPropagation()
                   setShowMenu(!showMenu)
                 }}
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1.5 text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 rounded-lg transition-colors"
               >
                 <MoreVertical className="w-5 h-5" />
               </button>
 
               {showMenu && (
                 <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setShowMenu(false)}
-                  />
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-1 z-20">
+                  <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-sand-300 py-1 z-20">
                     {onEdit && (
                       <button
                         onClick={(e) => {
@@ -161,7 +158,7 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onEdit()
                         }}
-                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-charcoal-700 hover:bg-sand-50"
                       >
                         <Pencil className="w-4 h-4" />
                         Modifier
@@ -174,7 +171,7 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onToggleFeatured()
                         }}
-                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-charcoal-700 hover:bg-sand-50"
                       >
                         <Star className={clsx('w-4 h-4', item.is_featured && 'text-amber-500')} />
                         {item.is_featured ? 'Retirer des favoris' : 'Mettre en avant'}
@@ -187,7 +184,7 @@ export default function PortfolioCard({
                           setShowMenu(false)
                           onToggleVisibility()
                         }}
-                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-charcoal-700 hover:bg-sand-50"
                       >
                         {item.is_visible ? (
                           <>
@@ -204,7 +201,7 @@ export default function PortfolioCard({
                     )}
                     {onDelete && (
                       <>
-                        <div className="my-1 border-t border-gray-100" />
+                        <div className="my-1 border-t border-sand-200" />
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -227,7 +224,7 @@ export default function PortfolioCard({
 
         {/* Description preview */}
         {item.description && (
-          <p className="mt-2 text-sm text-gray-600 line-clamp-2">{item.description}</p>
+          <p className="mt-2 text-sm text-charcoal-600 line-clamp-2">{item.description}</p>
         )}
 
         {/* Tags */}
@@ -236,15 +233,13 @@ export default function PortfolioCard({
             {item.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-md"
+                className="px-2 py-0.5 bg-sand-100 text-charcoal-600 text-xs rounded-md"
               >
                 {tag}
               </span>
             ))}
             {item.tags.length > 3 && (
-              <span className="px-2 py-0.5 text-gray-500 text-xs">
-                +{item.tags.length - 3}
-              </span>
+              <span className="px-2 py-0.5 text-charcoal-500 text-xs">+{item.tags.length - 3}</span>
             )}
           </div>
         )}

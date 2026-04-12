@@ -38,7 +38,7 @@ export function LoginForm() {
 
       router.push('/espace-artisan')
       router.refresh()
-    } catch (_err) {
+    } catch {
       setError('Une erreur est survenue')
     } finally {
       setIsLoading(false)
@@ -54,9 +54,7 @@ export function LoginForm() {
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
+        <label className="block text-sm font-medium text-charcoal-700 mb-1">Email</label>
         <Input
           type="email"
           value={formData.email}
@@ -67,9 +65,7 @@ export function LoginForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Mot de passe
-        </label>
+        <label className="block text-sm font-medium text-charcoal-700 mb-1">Mot de passe</label>
         <Input
           type="password"
           value={formData.password}
@@ -81,10 +77,10 @@ export function LoginForm() {
 
       <div className="flex items-center justify-between">
         <label className="flex items-center gap-2">
-          <input type="checkbox" className="rounded border-gray-300" />
-          <span className="text-sm text-gray-600">Se souvenir de moi</span>
+          <input type="checkbox" className="rounded border-sand-400" />
+          <span className="text-sm text-charcoal-600">Se souvenir de moi</span>
         </label>
-        <Link href="/mot-de-passe-oublie" className="text-sm text-blue-600 hover:underline">
+        <Link href="/mot-de-passe-oublie" className="text-sm text-primary-500 hover:underline">
           Mot de passe oublié ?
         </Link>
       </div>

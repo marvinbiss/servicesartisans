@@ -93,10 +93,7 @@ export default function VideoPlayer({
   return (
     <div
       ref={containerRef}
-      className={clsx(
-        'relative group bg-black rounded-2xl overflow-hidden',
-        className
-      )}
+      className={clsx('relative group bg-black rounded-2xl overflow-hidden', className)}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => isPlaying && setShowControls(false)}
     >
@@ -132,7 +129,7 @@ export default function VideoPlayer({
           className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
         >
           <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-            <Play className="w-8 h-8 text-gray-900 ml-1" fill="currentColor" />
+            <Play className="w-8 h-8 text-charcoal-900 ml-1" fill="currentColor" />
           </div>
         </button>
       )}
@@ -146,10 +143,7 @@ export default function VideoPlayer({
         )}
       >
         {/* Progress bar */}
-        <div
-          className="h-1 bg-white/30 rounded-full cursor-pointer mb-3"
-          onClick={handleSeek}
-        >
+        <div className="h-1 bg-white/30 rounded-full cursor-pointer mb-3" onClick={handleSeek}>
           <div
             className="h-full bg-white rounded-full transition-all"
             style={{ width: `${progress}%` }}

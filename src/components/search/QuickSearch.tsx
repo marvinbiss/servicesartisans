@@ -9,7 +9,10 @@ import { services, villesLight, type Ville } from '@/lib/data/france-light'
 let _allVilles: Ville[] | null = null
 function getAllVilles(): Promise<Ville[]> {
   if (_allVilles) return Promise.resolve(_allVilles)
-  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
+  return import('@/lib/data/france').then((m) => {
+    _allVilles = m.villes
+    return _allVilles as Ville[]
+  })
 }
 
 // ── Normalize text (strip accents, lowercase) ───────────────────────
@@ -116,7 +119,7 @@ function buildSuggestions(input: string, cityList: Ville[]): Suggestion[] {
   //    Also handle "Plombier a Paris", "Plombier à Paris"
   const words = trimmed.split(/\s+/)
 
-  let bestServiceMatch: typeof services[0] | null = null
+  let bestServiceMatch: (typeof services)[0] | null = null
   let bestSplitIndex = -1
 
   // Try progressively longer service prefixes
@@ -125,9 +128,7 @@ function buildSuggestions(input: string, cityList: Ville[]): Suggestion[] {
     const normalizedCandidate = normalizeText(serviceCandidate)
 
     // Check for exact service match
-    const exactMatch = services.find(
-      s => normalizeText(s.name) === normalizedCandidate
-    )
+    const exactMatch = services.find((s) => normalizeText(s.name) === normalizedCandidate)
     if (exactMatch) {
       bestServiceMatch = exactMatch
       bestSplitIndex = i
@@ -234,7 +235,7 @@ function buildSuggestions(input: string, cityList: Ville[]): Suggestion[] {
       const normalizedCandidate = normalizeText(serviceCandidate)
 
       // Find services that START with this partial
-      const partialServiceMatches = services.filter(s =>
+      const partialServiceMatches = services.filter((s) =>
         normalizeText(s.name).startsWith(normalizedCandidate)
       )
 
@@ -288,7 +289,7 @@ function HighlightMatch({ text, query }: { text: string; query: string }) {
   return (
     <>
       {before}
-      <span className="font-bold text-blue-600">{match}</span>
+      <span className="font-bold text-primary-500">{match}</span>
       {after}
     </>
   )
@@ -315,7 +316,7 @@ export default function QuickSearch() {
       return
     }
     setSuggestions(buildSuggestions(input, villesLight))
-    getAllVilles().then(full => {
+    getAllVilles().then((full) => {
       setSuggestions(buildSuggestions(input, full))
     })
   }, [input])
@@ -329,25 +330,38 @@ export default function QuickSearch() {
     }
     const controller = new AbortController()
     const timer = setTimeout(() => {
-      fetch(`/api/search/suggestions?q=${encodeURIComponent(input.trim())}`, { signal: controller.signal })
-        .then(r => r.json())
-        .then(data => {
+      fetch(`/api/search/suggestions?q=${encodeURIComponent(input.trim())}`, {
+        signal: controller.signal,
+      })
+        .then((r) => r.json())
+        .then((data) => {
           const results: Suggestion[] = (data.suggestions || [])
             .filter((s: { type: string }) => s.type === 'provider')
             .slice(0, 3)
-            .map((s: { label: string; slug: string; siret?: string; verified?: boolean; subtitle?: string }) => ({
-              type: 'enterprise' as SuggestionType,
-              label: s.label,
-              providerSlug: s.slug,
-              siret: s.siret,
-              verified: s.verified,
-              cityName: s.subtitle,
-            }))
+            .map(
+              (s: {
+                label: string
+                slug: string
+                siret?: string
+                verified?: boolean
+                subtitle?: string
+              }) => ({
+                type: 'enterprise' as SuggestionType,
+                label: s.label,
+                providerSlug: s.slug,
+                siret: s.siret,
+                verified: s.verified,
+                cityName: s.subtitle,
+              })
+            )
           setEnterpriseResults(results)
         })
         .catch(() => {})
     }, 300)
-    return () => { clearTimeout(timer); controller.abort() }
+    return () => {
+      clearTimeout(timer)
+      controller.abort()
+    }
   }, [input])
 
   // Merge local suggestions + enterprise results
@@ -380,84 +394,89 @@ export default function QuickSearch() {
   }, [])
 
   // Navigate based on suggestion type
-  const navigateToSuggestion = useCallback((suggestion: Suggestion) => {
-    setShowDropdown(false)
-    setInput('')
-
-    if (suggestion.type === 'combined' && suggestion.serviceSlug && suggestion.citySlug) {
-      router.push(`/services/${suggestion.serviceSlug}/${suggestion.citySlug}`)
-    } else if (suggestion.type === 'service' && suggestion.serviceSlug) {
-      router.push(`/services/${suggestion.serviceSlug}`)
-    } else if (suggestion.type === 'city' && suggestion.citySlug) {
-      router.push(`/villes/${suggestion.citySlug}`)
-    } else if (suggestion.type === 'enterprise' && suggestion.providerSlug) {
-      router.push(`/artisan/${suggestion.providerSlug}`)
-    }
-  }, [router])
-
-  // Handle form submit (navigate to first suggestion or search page)
-  const handleSubmit = useCallback((e?: React.FormEvent) => {
-    e?.preventDefault()
-    if (!input.trim()) return
-
-    if (highlightedIndex >= 0 && allSuggestions[highlightedIndex]) {
-      navigateToSuggestion(allSuggestions[highlightedIndex])
-    } else if (allSuggestions.length > 0) {
-      navigateToSuggestion(allSuggestions[0])
-    } else {
-      // Fallback: go to search page with query
-      router.push(`/recherche?q=${encodeURIComponent(input.trim())}`)
+  const navigateToSuggestion = useCallback(
+    (suggestion: Suggestion) => {
       setShowDropdown(false)
       setInput('')
-    }
-  }, [input, highlightedIndex, allSuggestions, navigateToSuggestion, router])
+
+      if (suggestion.type === 'combined' && suggestion.serviceSlug && suggestion.citySlug) {
+        router.push(`/services/${suggestion.serviceSlug}/${suggestion.citySlug}`)
+      } else if (suggestion.type === 'service' && suggestion.serviceSlug) {
+        router.push(`/services/${suggestion.serviceSlug}`)
+      } else if (suggestion.type === 'city' && suggestion.citySlug) {
+        router.push(`/villes/${suggestion.citySlug}`)
+      } else if (suggestion.type === 'enterprise' && suggestion.providerSlug) {
+        router.push(`/artisan/${suggestion.providerSlug}`)
+      }
+    },
+    [router]
+  )
+
+  // Handle form submit (navigate to first suggestion or search page)
+  const handleSubmit = useCallback(
+    (e?: React.FormEvent) => {
+      e?.preventDefault()
+      if (!input.trim()) return
+
+      if (highlightedIndex >= 0 && allSuggestions[highlightedIndex]) {
+        navigateToSuggestion(allSuggestions[highlightedIndex])
+      } else if (allSuggestions.length > 0) {
+        navigateToSuggestion(allSuggestions[0])
+      } else {
+        // Fallback: go to search page with query
+        router.push(`/recherche?q=${encodeURIComponent(input.trim())}`)
+        setShowDropdown(false)
+        setInput('')
+      }
+    },
+    [input, highlightedIndex, allSuggestions, navigateToSuggestion, router]
+  )
 
   // Keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!showDropdown || allSuggestions.length === 0) {
-      if (e.key === 'Enter') {
-        e.preventDefault()
-        handleSubmit()
-      }
-      if (e.key === 'ArrowDown' && allSuggestions.length > 0) {
-        e.preventDefault()
-        setShowDropdown(true)
-        setHighlightedIndex(0)
-      }
-      return
-    }
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev < allSuggestions.length - 1 ? prev + 1 : 0
-        )
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev > 0 ? prev - 1 : allSuggestions.length - 1
-        )
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (highlightedIndex >= 0 && allSuggestions[highlightedIndex]) {
-          navigateToSuggestion(allSuggestions[highlightedIndex])
-        } else {
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!showDropdown || allSuggestions.length === 0) {
+        if (e.key === 'Enter') {
+          e.preventDefault()
           handleSubmit()
         }
-        break
-      case 'Escape':
-        e.preventDefault()
-        setShowDropdown(false)
-        inputRef.current?.blur()
-        break
-      case 'Tab':
-        setShowDropdown(false)
-        break
-    }
-  }, [showDropdown, allSuggestions, highlightedIndex, navigateToSuggestion, handleSubmit])
+        if (e.key === 'ArrowDown' && allSuggestions.length > 0) {
+          e.preventDefault()
+          setShowDropdown(true)
+          setHighlightedIndex(0)
+        }
+        return
+      }
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault()
+          setHighlightedIndex((prev) => (prev < allSuggestions.length - 1 ? prev + 1 : 0))
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : allSuggestions.length - 1))
+          break
+        case 'Enter':
+          e.preventDefault()
+          if (highlightedIndex >= 0 && allSuggestions[highlightedIndex]) {
+            navigateToSuggestion(allSuggestions[highlightedIndex])
+          } else {
+            handleSubmit()
+          }
+          break
+        case 'Escape':
+          e.preventDefault()
+          setShowDropdown(false)
+          inputRef.current?.blur()
+          break
+        case 'Tab':
+          setShowDropdown(false)
+          break
+      }
+    },
+    [showDropdown, allSuggestions, highlightedIndex, navigateToSuggestion, handleSubmit]
+  )
 
   // Determine the "query" part to highlight in suggestions
   // For a combined suggestion, highlight the city portion from the input
@@ -472,7 +491,7 @@ export default function QuickSearch() {
   // Icon for suggestion type
   const SuggestionIcon = ({ type }: { type: SuggestionType }) => {
     if (type === 'service') {
-      return <Wrench className="w-4 h-4 text-blue-500" />
+      return <Wrench className="w-4 h-4 text-primary-400" />
     }
     if (type === 'city') {
       return <MapPin className="w-4 h-4 text-rose-500" />
@@ -489,7 +508,7 @@ export default function QuickSearch() {
       <form onSubmit={handleSubmit} role="search" aria-label="Recherche rapide">
         <div className="relative flex items-center">
           {/* Search icon */}
-          <Search className="absolute left-3.5 w-4 h-4 text-gray-400 pointer-events-none" />
+          <Search className="absolute left-3.5 w-4 h-4 text-charcoal-400 pointer-events-none" />
 
           {/* Input */}
           <input
@@ -512,7 +531,7 @@ export default function QuickSearch() {
             aria-expanded={showDropdown && allSuggestions.length > 0}
             aria-haspopup="listbox"
             aria-autocomplete="list"
-            className="w-full rounded-full bg-gray-50 border border-gray-200 pl-10 pr-10 py-2 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-all duration-200 hover:border-gray-300 hover:shadow-sm focus:border-blue-400 focus:bg-white focus:shadow-md focus:ring-2 focus:ring-blue-100"
+            className="w-full rounded-full bg-sand-50 border border-sand-300 pl-10 pr-10 py-2 text-sm text-charcoal-900 placeholder:text-charcoal-400 outline-none transition-all duration-200 hover:border-sand-400 hover:shadow-sm focus:border-primary-300 focus:bg-white focus:shadow-md focus:ring-2 focus:ring-primary-100"
           />
 
           {/* Clear button */}
@@ -524,17 +543,17 @@ export default function QuickSearch() {
                 setShowDropdown(false)
                 inputRef.current?.focus()
               }}
-              className="absolute right-10 w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
+              className="absolute right-10 w-5 h-5 rounded-full bg-sand-300 hover:bg-sand-400 flex items-center justify-center transition-colors"
               aria-label="Effacer"
             >
-              <X className="w-3 h-3 text-gray-500" />
+              <X className="w-3 h-3 text-charcoal-500" />
             </button>
           )}
 
           {/* Submit button */}
           <button
             type="submit"
-            className="absolute right-1.5 w-7 h-7 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-sm hover:shadow-md hover:scale-105"
+            className="absolute right-1.5 w-7 h-7 bg-primary-500 hover:bg-primary-600 text-white rounded-full flex items-center justify-center transition-all shadow-sm hover:shadow-md hover:scale-105"
             aria-label="Rechercher"
           >
             <Search className="w-3.5 h-3.5" />
@@ -545,7 +564,7 @@ export default function QuickSearch() {
       {/* Suggestions Dropdown */}
       {showDropdown && allSuggestions.length > 0 && (
         <div
-          className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden"
+          className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-sand-300 z-50 overflow-hidden"
           role="listbox"
           aria-label="Suggestions"
         >
@@ -565,32 +584,33 @@ export default function QuickSearch() {
                   onMouseEnter={() => setHighlightedIndex(idx)}
                   className={`
                     w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all duration-100
-                    ${isHighlighted
-                      ? 'bg-blue-50'
-                      : 'hover:bg-gray-50'
-                    }
+                    ${isHighlighted ? 'bg-primary-50' : 'hover:bg-sand-50'}
                   `}
                 >
                   {/* Icon */}
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
-                    isHighlighted
-                      ? suggestion.type === 'service'
-                        ? 'bg-blue-100'
-                        : suggestion.type === 'city'
-                          ? 'bg-rose-100'
-                          : suggestion.type === 'enterprise'
-                            ? 'bg-amber-100'
-                            : 'bg-emerald-100'
-                      : 'bg-gray-100'
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                      isHighlighted
+                        ? suggestion.type === 'service'
+                          ? 'bg-primary-100'
+                          : suggestion.type === 'city'
+                            ? 'bg-rose-100'
+                            : suggestion.type === 'enterprise'
+                              ? 'bg-amber-100'
+                              : 'bg-emerald-100'
+                        : 'bg-sand-100'
+                    }`}
+                  >
                     <SuggestionIcon type={suggestion.type} />
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-medium truncate transition-colors ${
-                      isHighlighted ? 'text-blue-700' : 'text-gray-900'
-                    }`}>
+                    <div
+                      className={`text-sm font-medium truncate transition-colors ${
+                        isHighlighted ? 'text-primary-600' : 'text-charcoal-900'
+                      }`}
+                    >
                       {suggestion.type === 'combined' ? (
                         <span>{suggestion.label}</span>
                       ) : (
@@ -600,23 +620,25 @@ export default function QuickSearch() {
 
                     {/* Meta info */}
                     {suggestion.type === 'service' && (
-                      <div className="text-xs text-gray-400 truncate">Service artisan</div>
+                      <div className="text-xs text-charcoal-400 truncate">Service artisan</div>
                     )}
                     {suggestion.type === 'city' && suggestion.cityDept && (
-                      <div className="text-xs text-gray-400 truncate">
+                      <div className="text-xs text-charcoal-400 truncate">
                         {suggestion.cityDept}
                         {suggestion.cityPop ? ` · ${suggestion.cityPop}` : ''}
                       </div>
                     )}
                     {suggestion.type === 'combined' && suggestion.cityDept && (
-                      <div className="text-xs text-gray-400 truncate">
+                      <div className="text-xs text-charcoal-400 truncate">
                         {suggestion.cityDept}
                         {suggestion.cityPop ? ` · ${suggestion.cityPop}` : ''}
                       </div>
                     )}
                     {suggestion.type === 'enterprise' && (
-                      <div className="text-xs text-gray-400 truncate">
-                        {suggestion.siret ? `SIREN ${suggestion.siret.slice(0, 9)} · SIRET ${suggestion.siret}` : ''}
+                      <div className="text-xs text-charcoal-400 truncate">
+                        {suggestion.siret
+                          ? `SIREN ${suggestion.siret.slice(0, 9)} · SIRET ${suggestion.siret}`
+                          : ''}
                         {suggestion.siret && suggestion.cityName ? ' · ' : ''}
                         {suggestion.cityName || ''}
                       </div>
@@ -624,16 +646,24 @@ export default function QuickSearch() {
                   </div>
 
                   {/* Type badge */}
-                  <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 ${
-                    suggestion.type === 'service'
-                      ? 'bg-blue-50 text-blue-600'
+                  <span
+                    className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 ${
+                      suggestion.type === 'service'
+                        ? 'bg-primary-50 text-primary-500'
+                        : suggestion.type === 'city'
+                          ? 'bg-rose-50 text-rose-600'
+                          : suggestion.type === 'enterprise'
+                            ? 'bg-amber-50 text-amber-600'
+                            : 'bg-emerald-50 text-emerald-600'
+                    }`}
+                  >
+                    {suggestion.type === 'service'
+                      ? 'Service'
                       : suggestion.type === 'city'
-                        ? 'bg-rose-50 text-rose-600'
+                        ? 'Ville'
                         : suggestion.type === 'enterprise'
-                          ? 'bg-amber-50 text-amber-600'
-                          : 'bg-emerald-50 text-emerald-600'
-                  }`}>
-                    {suggestion.type === 'service' ? 'Service' : suggestion.type === 'city' ? 'Ville' : suggestion.type === 'enterprise' ? 'Entreprise' : 'Service + Ville'}
+                          ? 'Entreprise'
+                          : 'Service + Ville'}
                   </span>
                 </button>
               )
@@ -641,17 +671,23 @@ export default function QuickSearch() {
           </div>
 
           {/* Keyboard hints */}
-          <div className="hidden md:flex items-center gap-3 px-3.5 py-2 bg-gray-50 border-t border-gray-100 text-[10px] text-gray-400">
+          <div className="hidden md:flex items-center gap-3 px-3.5 py-2 bg-sand-50 border-t border-sand-200 text-[10px] text-charcoal-400">
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">&#8593;&#8595;</kbd>
+              <kbd className="px-1 py-0.5 bg-white rounded border border-sand-300 font-mono">
+                &#8593;&#8595;
+              </kbd>
               naviguer
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Entrée</kbd>
+              <kbd className="px-1 py-0.5 bg-white rounded border border-sand-300 font-mono">
+                Entrée
+              </kbd>
               valider
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Échap</kbd>
+              <kbd className="px-1 py-0.5 bg-white rounded border border-sand-300 font-mono">
+                Échap
+              </kbd>
               fermer
             </span>
           </div>

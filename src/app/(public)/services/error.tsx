@@ -12,15 +12,15 @@ export default function ServicesError({
         <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-orange-50 flex items-center justify-center">
           <span className="text-2xl text-orange-600">!</span>
         </div>
-        <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="font-heading text-2xl font-bold text-charcoal-900 mb-2">
           Service temporairement indisponible
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-charcoal-500 mb-8">
           Nous rencontrons un problème technique. Veuillez réessayer dans quelques instants.
         </p>
         <button
           onClick={reset}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className="bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
         >
           Réessayer
         </button>

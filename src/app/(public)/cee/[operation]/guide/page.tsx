@@ -121,7 +121,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
@@ -143,24 +143,24 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">
               Prime CEE classique
             </div>
-            <div className="text-xl font-bold text-slate-900">{guide.primeClassique}</div>
+            <div className="text-xl font-bold text-charcoal-900">{guide.primeClassique}</div>
           </div>
           <div className="rounded-xl border border-amber-100 bg-amber-50/60 p-5">
             <div className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">
               Ménage précaire
             </div>
-            <div className="text-xl font-bold text-slate-900">{guide.primePrecarite}</div>
+            <div className="text-xl font-bold text-charcoal-900">{guide.primePrecarite}</div>
           </div>
-          <div className="rounded-xl border border-blue-100 bg-blue-50/60 p-5">
-            <div className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1">
+          <div className="rounded-xl border border-primary-100 bg-primary-50/60 p-5">
+            <div className="text-xs font-semibold text-primary-600 uppercase tracking-wide mb-1">
               MaPrimeR&eacute;nov&rsquo;
             </div>
-            <div className="text-xl font-bold text-slate-900">{guide.maPrimeRenov}</div>
+            <div className="text-xl font-bold text-charcoal-900">{guide.maPrimeRenov}</div>
           </div>
         </div>
 
         {/* Sections éditoriales */}
-        <article className="prose prose-emerald max-w-none prose-headings:font-heading prose-headings:font-extrabold prose-headings:text-slate-900 prose-p:text-slate-700 prose-p:leading-relaxed">
+        <article className="prose prose-emerald max-w-none prose-headings:font-heading prose-headings:font-extrabold prose-headings:text-charcoal-900 prose-p:text-charcoal-700 prose-p:leading-relaxed">
           {guide.sections.map((section, i) => (
             <section key={i} className="mb-10">
               <h2 className="text-2xl md:text-3xl mb-4">{section.heading}</h2>
@@ -173,13 +173,13 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
 
         {/* Qualifications RGE requises */}
         <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-6">
-          <h2 className="font-heading text-xl font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+          <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             Qualifications RGE exig&eacute;es
           </h2>
           <ul className="space-y-2">
             {guide.rgeRequises.map((qualif) => (
-              <li key={qualif} className="flex items-start gap-2 text-slate-700">
+              <li key={qualif} className="flex items-start gap-2 text-charcoal-700">
                 <CheckCircle2
                   className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
                   aria-hidden="true"
@@ -206,11 +206,11 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
         {/* Maillage RGE — guides qualification requis pour cette opération */}
         {guide.requiredQualifications.length > 0 && (
           <div className="mt-6 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-white p-6">
-            <h2 className="font-heading text-xl font-extrabold text-slate-900 mb-2 flex items-center gap-2">
+            <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-2 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
               Qualifications RGE requises &mdash; nos guides
             </h2>
-            <p className="text-sm text-slate-600 mb-4">
+            <p className="text-sm text-charcoal-600 mb-4">
               L&rsquo;artisan qui r&eacute;alise cette op&eacute;ration doit d&eacute;tenir
               l&rsquo;une des qualifications RGE ci-dessous&nbsp;:
             </p>
@@ -228,7 +228,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
                         <span className="block text-xs font-semibold text-emerald-700 uppercase tracking-wide">
                           {rgeGuide.organisme}
                         </span>
-                        <span className="block text-sm font-semibold text-slate-900 group-hover:text-emerald-800 transition">
+                        <span className="block text-sm font-semibold text-charcoal-900 group-hover:text-emerald-800 transition">
                           {rgeGuide.name}
                         </span>
                       </span>
@@ -246,24 +246,24 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       </section>
 
       {/* FAQ */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
             Questions fr&eacute;quentes &mdash; {guide.code}
           </h2>
           <div className="space-y-3">
             {guide.faq.map((item, i) => (
               <details
                 key={i}
-                className="group rounded-lg border border-slate-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                className="group rounded-lg border border-charcoal-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
               >
-                <summary className="cursor-pointer list-none font-semibold text-slate-900 flex items-start justify-between gap-4">
+                <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
                     +
                   </span>
                 </summary>
-                <p className="mt-3 text-slate-700 leading-relaxed">{item.answer}</p>
+                <p className="mt-3 text-charcoal-700 leading-relaxed">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -273,7 +273,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       {/* Top villes */}
       {topCities.length > 0 && (
         <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
             Trouver un artisan RGE pour cette op&eacute;ration
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -281,12 +281,12 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
               <Link
                 key={city.slug}
                 href={`/cee/${opCode}/${city.slug}`}
-                className="group flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-400 hover:shadow-sm transition"
+                className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
               >
-                <span className="font-semibold text-slate-900 group-hover:text-emerald-700 transition truncate">
+                <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
                   {city.name}
                 </span>
-                <span className="text-sm font-semibold text-slate-500 tabular-nums ml-2">
+                <span className="text-sm font-semibold text-charcoal-900 tabular-nums ml-2">
                   {city.count}
                 </span>
               </Link>

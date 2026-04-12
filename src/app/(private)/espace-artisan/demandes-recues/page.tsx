@@ -3,7 +3,20 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FileText, MessageSquare, ArrowLeft, Filter, Calendar, MapPin, ChevronRight, Eye, Send, Loader2, X, Phone } from 'lucide-react'
+import {
+  FileText,
+  MessageSquare,
+  ArrowLeft,
+  Filter,
+  Calendar,
+  MapPin,
+  ChevronRight,
+  Eye,
+  Send,
+  Loader2,
+  X,
+  Phone,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { getArtisanUrl } from '@/lib/utils'
@@ -41,8 +54,8 @@ interface PaginationInfo {
 const statusConfig: Record<string, { label: string; color: string }> = {
   pending: { label: 'Nouveau', color: 'bg-red-100 text-red-700' },
   viewed: { label: 'Vu', color: 'bg-yellow-100 text-yellow-700' },
-  quoted: { label: 'Devis envoyé', color: 'bg-blue-100 text-blue-700' },
-  declined: { label: 'Refusé', color: 'bg-gray-100 text-gray-700' },
+  quoted: { label: 'Devis envoyé', color: 'bg-primary-100 text-primary-600' },
+  declined: { label: 'Refusé', color: 'bg-sand-100 text-charcoal-700' },
   accepted: { label: 'Accepté', color: 'bg-green-100 text-green-700' },
 }
 
@@ -142,9 +155,7 @@ export default function DemandesRecuesPage() {
     const previousLeads = leads
     setLeads((prev) =>
       prev.map((l) =>
-        l.id === lead.id
-          ? { ...l, status: 'viewed', viewed_at: new Date().toISOString() }
-          : l
+        l.id === lead.id ? { ...l, status: 'viewed', viewed_at: new Date().toISOString() } : l
       )
     )
 
@@ -198,11 +209,11 @@ export default function DemandesRecuesPage() {
         await fetchLeads(pagination.page, filterStatus)
         setToast({ message: 'Devis envoyé avec succès !', type: 'success' })
       } else {
-        setToast({ message: data.error || 'Erreur lors de l\'envoi du devis', type: 'error' })
+        setToast({ message: data.error || "Erreur lors de l'envoi du devis", type: 'error' })
       }
     } catch (error) {
       logger.error('Error sending devis', error)
-      setToast({ message: 'Erreur lors de l\'envoi du devis', type: 'error' })
+      setToast({ message: "Erreur lors de l'envoi du devis", type: 'error' })
     } finally {
       setSubmitting(false)
     }
@@ -212,15 +223,17 @@ export default function DemandesRecuesPage() {
     router.push('/espace-artisan/messages')
   }
 
-  const pendingCount = leads.filter(l => l.status === 'pending').length
+  const pendingCount = leads.filter((l) => l.status === 'pending').length
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Toast notification */}
       {toast && (
-        <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white text-sm font-medium transition-all ${
-          toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
-        }`}>
+        <div
+          className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white text-sm font-medium transition-all ${
+            toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+          }`}
+        >
           <span>{toast.message}</span>
           <button onClick={() => setToast(null)} className="ml-2 hover:opacity-75">
             <X className="w-4 h-4" />
@@ -231,15 +244,17 @@ export default function DemandesRecuesPage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[
-            { label: 'Espace Artisan', href: '/espace-artisan' },
-            { label: 'Demandes reçues' }
-          ]} />
+          <Breadcrumb
+            items={[
+              { label: 'Espace Artisan', href: '/espace-artisan' },
+              { label: 'Demandes reçues' },
+            ]}
+          />
         </div>
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -247,7 +262,7 @@ export default function DemandesRecuesPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Demandes reçues</h1>
-              <p className="text-blue-100">Gérez vos demandes entrantes</p>
+              <p className="text-primary-100">Gérez vos demandes entrantes</p>
             </div>
           </div>
         </div>
@@ -266,12 +281,14 @@ export default function DemandesRecuesPage() {
             {/* Filters */}
             <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-                <Filter className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                <Filter className="w-5 h-5 text-charcoal-400" aria-hidden="true" />
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => handleFilterChange('all')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'all'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
                     }`}
                   >
                     Toutes ({filterStatus === 'all' ? totalItems : '—'})
@@ -279,7 +296,9 @@ export default function DemandesRecuesPage() {
                   <button
                     onClick={() => handleFilterChange('pending')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'pending' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'pending'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
                     }`}
                   >
                     Nouvelles
@@ -287,7 +306,9 @@ export default function DemandesRecuesPage() {
                   <button
                     onClick={() => handleFilterChange('quoted')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'quoted' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'quoted'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
                     }`}
                   >
                     Devis envoyés
@@ -295,7 +316,9 @@ export default function DemandesRecuesPage() {
                   <button
                     onClick={() => handleFilterChange('accepted')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'accepted' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'accepted'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
                     }`}
                   >
                     Acceptées
@@ -307,8 +330,8 @@ export default function DemandesRecuesPage() {
             {/* Leads list */}
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                <p className="text-gray-600">Chargement des demandes...</p>
+                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+                <p className="text-charcoal-600">Chargement des demandes...</p>
               </div>
             ) : (
               <>
@@ -316,7 +339,10 @@ export default function DemandesRecuesPage() {
                   {leads.map((item) => {
                     const lead = item.lead
                     if (!lead) return null
-                    const statusInfo = statusConfig[item.status] || { label: item.status, color: 'bg-gray-100 text-gray-700' }
+                    const statusInfo = statusConfig[item.status] || {
+                      label: item.status,
+                      color: 'bg-sand-100 text-charcoal-700',
+                    }
                     return (
                       <div
                         key={item.id}
@@ -325,8 +351,12 @@ export default function DemandesRecuesPage() {
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-2 flex-wrap">
-                              <h3 className="font-semibold text-gray-900">{lead.service_name}</h3>
-                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                              <h3 className="font-semibold text-charcoal-900">
+                                {lead.service_name}
+                              </h3>
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}
+                              >
                                 {statusInfo.label}
                               </span>
                               {lead.urgency === 'urgent' && (
@@ -340,16 +370,20 @@ export default function DemandesRecuesPage() {
                                 </span>
                               )}
                             </div>
-                            <p className="text-gray-600 mb-3">{lead.description}</p>
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                              <span className="font-medium text-gray-900">{lead.client_name}</span>
+                            <p className="text-charcoal-600 mb-3">{lead.description}</p>
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-charcoal-500">
+                              <span className="font-medium text-charcoal-900">
+                                {lead.client_name}
+                              </span>
                               <span className="flex items-center gap-1">
                                 <MapPin className="w-4 h-4" />
                                 {lead.city || lead.postal_code || 'Non précisé'}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                {new Date(lead.created_at).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })}
+                                {new Date(lead.created_at).toLocaleDateString('fr-FR', {
+                                  timeZone: 'Europe/Paris',
+                                })}
                               </span>
                             </div>
                           </div>
@@ -358,14 +392,14 @@ export default function DemandesRecuesPage() {
                               <>
                                 <button
                                   onClick={() => openDevisModal(item)}
-                                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+                                  className="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors text-sm"
                                 >
                                   <Send className="w-4 h-4" />
                                   <span className="hidden sm:inline">Envoyer</span> devis
                                 </button>
                                 <button
                                   onClick={() => openDetailModal(item)}
-                                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                                  className="p-2 text-charcoal-400 hover:text-charcoal-600 transition-colors"
                                   aria-label="Voir les détails"
                                 >
                                   <Eye className="w-5 h-5" />
@@ -375,19 +409,21 @@ export default function DemandesRecuesPage() {
                             {(item.status === 'viewed' || item.status === 'quoted') && (
                               <button
                                 onClick={handleContact}
-                                className="flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm"
+                                className="flex items-center gap-2 border border-sand-400 text-charcoal-700 px-4 py-2 rounded-lg font-medium hover:bg-sand-50 transition-colors text-sm"
                               >
                                 <MessageSquare className="w-4 h-4" />
                                 Contacter
                               </button>
                             )}
                             {item.status === 'accepted' && (
-                              <span className="text-green-600 font-medium text-sm">Mission confirmée</span>
+                              <span className="text-green-600 font-medium text-sm">
+                                Mission confirmée
+                              </span>
                             )}
                             {item.status === 'declined' && (
-                              <span className="text-gray-500 font-medium text-sm">Refusé</span>
+                              <span className="text-charcoal-500 font-medium text-sm">Refusé</span>
                             )}
-                            <ChevronRight className="w-5 h-5 text-gray-400 hidden sm:block" />
+                            <ChevronRight className="w-5 h-5 text-charcoal-400 hidden sm:block" />
                           </div>
                         </div>
                       </div>
@@ -397,9 +433,9 @@ export default function DemandesRecuesPage() {
 
                 {leads.length === 0 && (
                   <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                    <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="font-medium text-gray-900 mb-2">Aucune demande</h3>
-                    <p className="text-gray-500">Aucune demande ne correspond à ce filtre.</p>
+                    <FileText className="w-12 h-12 text-sand-500 mx-auto mb-4" />
+                    <h3 className="font-medium text-charcoal-900 mb-2">Aucune demande</h3>
+                    <p className="text-charcoal-500">Aucune demande ne correspond à ce filtre.</p>
                   </div>
                 )}
 
@@ -418,31 +454,43 @@ export default function DemandesRecuesPage() {
 
       {/* Modal Envoyer Devis */}
       {showDevisModal && selectedLead?.lead && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setShowDevisModal(false)} onKeyDown={(e) => { if (e.key === 'Escape') setShowDevisModal(false) }}>
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+          onClick={() => setShowDevisModal(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') setShowDevisModal(false)
+          }}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full p-6"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">
-                Envoyer un devis
-              </h2>
+              <h2 className="text-xl font-bold text-charcoal-900">Envoyer un devis</h2>
               <button
                 onClick={() => setShowDevisModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="p-2 hover:bg-sand-100 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <h3 className="font-medium text-gray-900 mb-2">{selectedLead.lead.service_name}</h3>
-              <p className="text-sm text-gray-600 mb-2">{selectedLead.lead.description}</p>
-              <div className="text-sm text-gray-500">
-                <span className="font-medium">{selectedLead.lead.client_name}</span> — {selectedLead.lead.city || selectedLead.lead.postal_code || 'Non précisé'}
+            <div className="bg-sand-50 rounded-lg p-4 mb-6">
+              <h3 className="font-medium text-charcoal-900 mb-2">
+                {selectedLead.lead.service_name}
+              </h3>
+              <p className="text-sm text-charcoal-600 mb-2">{selectedLead.lead.description}</p>
+              <div className="text-sm text-charcoal-500">
+                <span className="font-medium">{selectedLead.lead.client_name}</span> —{' '}
+                {selectedLead.lead.city || selectedLead.lead.postal_code || 'Non précisé'}
               </div>
             </div>
 
             <form onSubmit={handleSendDevis} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
                   Montant du devis (€) *
                 </label>
                 <input
@@ -452,13 +500,13 @@ export default function DemandesRecuesPage() {
                   value={devisForm.amount}
                   onChange={(e) => setDevisForm({ ...devisForm, amount: e.target.value })}
                   placeholder="Ex: 250.00"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-sand-400 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-400"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
                   Description / Détails du devis
                 </label>
                 <textarea
@@ -466,18 +514,20 @@ export default function DemandesRecuesPage() {
                   onChange={(e) => setDevisForm({ ...devisForm, description: e.target.value })}
                   rows={3}
                   placeholder="Détaillez les prestations incluses..."
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-sand-400 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-400"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
                   Validité du devis
                 </label>
                 <select
                   value={devisForm.validity_days}
-                  onChange={(e) => setDevisForm({ ...devisForm, validity_days: parseInt(e.target.value) })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) =>
+                    setDevisForm({ ...devisForm, validity_days: parseInt(e.target.value) })
+                  }
+                  className="w-full border border-sand-400 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-400"
                 >
                   <option value={7}>7 jours</option>
                   <option value={15}>15 jours</option>
@@ -490,14 +540,14 @@ export default function DemandesRecuesPage() {
                 <button
                   type="button"
                   onClick={() => setShowDevisModal(false)}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border border-sand-400 rounded-lg font-medium hover:bg-sand-50 transition-colors"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   <Send className="w-4 h-4" />
@@ -511,15 +561,24 @@ export default function DemandesRecuesPage() {
 
       {/* Modal Détails */}
       {showDetailModal && selectedLead?.lead && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setShowDetailModal(false)} onKeyDown={(e) => { if (e.key === 'Escape') setShowDetailModal(false) }}>
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+          onClick={() => setShowDetailModal(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') setShowDetailModal(false)
+          }}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full p-6"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">
-                Détails de la demande
-              </h2>
+              <h2 className="text-xl font-bold text-charcoal-900">Détails de la demande</h2>
               <button
                 onClick={() => setShowDetailModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="p-2 hover:bg-sand-100 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -527,28 +586,37 @@ export default function DemandesRecuesPage() {
 
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-2">{selectedLead.lead.service_name}</h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusConfig[selectedLead.status]?.color || 'bg-gray-100'}`}>
+                <h3 className="font-semibold text-charcoal-900 text-lg mb-2">
+                  {selectedLead.lead.service_name}
+                </h3>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${statusConfig[selectedLead.status]?.color || 'bg-sand-100'}`}
+                >
                   {statusConfig[selectedLead.status]?.label || selectedLead.status}
                 </span>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h4 className="font-medium text-gray-700 mb-2">Description</h4>
-                <p className="text-gray-600">{selectedLead.lead.description || 'Non précisé'}</p>
+              <div className="bg-sand-50 rounded-lg p-4">
+                <h4 className="font-medium text-charcoal-700 mb-2">Description</h4>
+                <p className="text-charcoal-600">
+                  {selectedLead.lead.description || 'Non précisé'}
+                </p>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h4 className="font-medium text-gray-700 mb-3">Contact client</h4>
+              <div className="bg-sand-50 rounded-lg p-4">
+                <h4 className="font-medium text-charcoal-700 mb-3">Contact client</h4>
                 <div className="space-y-2">
-                  <p className="font-medium text-gray-900">{selectedLead.lead.client_name}</p>
-                  <p className="flex items-center gap-2 text-gray-600">
+                  <p className="font-medium text-charcoal-900">{selectedLead.lead.client_name}</p>
+                  <p className="flex items-center gap-2 text-charcoal-600">
                     <Phone className="w-4 h-4" />
-                    <a href={`tel:${selectedLead.lead.client_phone.replace(/[\s.\-()]/g, '')}`} className="text-blue-600 hover:underline">
+                    <a
+                      href={`tel:${selectedLead.lead.client_phone.replace(/[\s.\-()]/g, '')}`}
+                      className="text-primary-500 hover:underline"
+                    >
                       {selectedLead.lead.client_phone}
                     </a>
                   </p>
-                  <p className="flex items-center gap-2 text-gray-600">
+                  <p className="flex items-center gap-2 text-charcoal-600">
                     <MapPin className="w-4 h-4" />
                     {selectedLead.lead.city || selectedLead.lead.postal_code || 'Non précisé'}
                   </p>
@@ -556,13 +624,15 @@ export default function DemandesRecuesPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <span className="text-gray-500">Urgence</span>
-                  <p className="font-medium text-gray-900 capitalize">{selectedLead.lead.urgency || 'Non précisé'}</p>
+                <div className="bg-sand-50 rounded-lg p-3">
+                  <span className="text-charcoal-500">Urgence</span>
+                  <p className="font-medium text-charcoal-900 capitalize">
+                    {selectedLead.lead.urgency || 'Non précisé'}
+                  </p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <span className="text-gray-500">Date de demande</span>
-                  <p className="font-medium text-gray-900">
+                <div className="bg-sand-50 rounded-lg p-3">
+                  <span className="text-charcoal-500">Date de demande</span>
+                  <p className="font-medium text-charcoal-900">
                     {new Date(selectedLead.lead.created_at).toLocaleDateString('fr-FR', {
                       day: 'numeric',
                       month: 'long',
@@ -576,7 +646,7 @@ export default function DemandesRecuesPage() {
               <div className="flex gap-4 pt-4">
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border border-sand-400 rounded-lg font-medium hover:bg-sand-50 transition-colors"
                 >
                   Fermer
                 </button>
@@ -586,7 +656,7 @@ export default function DemandesRecuesPage() {
                       setShowDetailModal(false)
                       openDevisModal(selectedLead)
                     }}
-                    className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-primary-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors flex items-center justify-center gap-2"
                   >
                     <Send className="w-4 h-4" />
                     Envoyer un devis

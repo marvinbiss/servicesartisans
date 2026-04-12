@@ -43,24 +43,38 @@ export default function MessagesClientPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Real-time: append new messages from Supabase Realtime without re-fetching
-  const handleRealtimeMessage = useCallback((msg: { id: string; sender_id: string; conversation_id: string; content: string; created_at: string; read_at: string | null }) => {
-    setMessages((prev) => {
-      if (prev.some((m) => m.id === msg.id)) return prev
-      return [...prev, msg]
-    })
-  }, [])
-
-  const handleRealtimeUpdate = useCallback((msg: { id: string; sender_id: string; conversation_id: string; content: string; created_at: string; read_at: string | null }) => {
-    setMessages((prev) =>
-      prev.map((m) => (m.id === msg.id ? { ...m, ...msg } : m))
-    )
-  }, [])
-
-  useRealtimeMessages(
-    selectedConversation?.id,
-    handleRealtimeMessage,
-    handleRealtimeUpdate,
+  const handleRealtimeMessage = useCallback(
+    (msg: {
+      id: string
+      sender_id: string
+      conversation_id: string
+      content: string
+      created_at: string
+      read_at: string | null
+    }) => {
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === msg.id)) return prev
+        return [...prev, msg]
+      })
+    },
+    []
   )
+
+  const handleRealtimeUpdate = useCallback(
+    (msg: {
+      id: string
+      sender_id: string
+      conversation_id: string
+      content: string
+      created_at: string
+      read_at: string | null
+    }) => {
+      setMessages((prev) => prev.map((m) => (m.id === msg.id ? { ...m, ...msg } : m)))
+    },
+    []
+  )
+
+  useRealtimeMessages(selectedConversation?.id, handleRealtimeMessage, handleRealtimeUpdate)
 
   useEffect(() => {
     fetchConversations()
@@ -159,7 +173,7 @@ export default function MessagesClientPage() {
         setSendError(null)
         fetchMessages(selectedConversation.id)
       } else {
-        setSendError('Impossible d\'envoyer le message. Veuillez réessayer.')
+        setSendError("Impossible d'envoyer le message. Veuillez réessayer.")
       }
     } catch (err) {
       logger.error('Error sending message', err)
@@ -171,7 +185,12 @@ export default function MessagesClientPage() {
 
   const getAvatar = (partner: Partner) => {
     const name = partner.full_name || 'A'
-    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+    return name
+      .split(' ')
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
   }
 
   const getDisplayName = (partner: Partner) => {
@@ -185,35 +204,43 @@ export default function MessagesClientPage() {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
     if (days === 0) {
-      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
+      return date.toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Europe/Paris',
+      })
     } else if (days === 1) {
       return 'Hier'
     } else if (days < 7) {
       return date.toLocaleDateString('fr-FR', { weekday: 'short', timeZone: 'Europe/Paris' })
     }
-    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })
+    return date.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      timeZone: 'Europe/Paris',
+    })
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
-            items={[
-              { label: 'Espace Client', href: '/espace-client' },
-              { label: 'Messages' }
-            ]}
+            items={[{ label: 'Espace Client', href: '/espace-client' }, { label: 'Messages' }]}
             className="mb-4"
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/espace-client/mes-demandes" className="text-gray-600 hover:text-gray-900">
+              <Link
+                href="/espace-client/mes-demandes"
+                className="text-charcoal-600 hover:text-charcoal-900"
+              >
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
-                <p className="text-gray-600">Vos conversations avec les artisans</p>
+                <h1 className="text-2xl font-bold text-charcoal-900">Messages</h1>
+                <p className="text-charcoal-600">Vos conversations avec les artisans</p>
               </div>
             </div>
           </div>
@@ -238,19 +265,21 @@ export default function MessagesClientPage() {
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
                 <div>
-                  <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                  <p className="text-gray-600">Chargement des messages...</p>
+                  <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+                  <p className="text-charcoal-600">Chargement des messages...</p>
                 </div>
               </div>
             ) : conversations.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
                 <div>
-                  <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="font-medium text-gray-900 mb-2">Aucune conversation</h3>
-                  <p className="text-gray-500 mb-4">Vos conversations avec les artisans apparaîtront ici.</p>
+                  <MessageSquare className="w-12 h-12 text-sand-500 mx-auto mb-4" />
+                  <h3 className="font-medium text-charcoal-900 mb-2">Aucune conversation</h3>
+                  <p className="text-charcoal-500 mb-4">
+                    Vos conversations avec les artisans apparaîtront ici.
+                  </p>
                   <Link
                     href="/recherche"
-                    className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                    className="inline-block bg-primary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors"
                   >
                     Trouver un artisan
                   </Link>
@@ -259,45 +288,56 @@ export default function MessagesClientPage() {
             ) : (
               <div className="bg-white rounded-xl shadow-sm overflow-hidden h-[600px] flex">
                 {/* Conversations list */}
-                <div className={`w-full sm:w-1/3 border-r ${selectedConversation ? 'hidden sm:block' : 'block'}`}>
+                <div
+                  className={`w-full sm:w-1/3 border-r ${selectedConversation ? 'hidden sm:block' : 'block'}`}
+                >
                   <div className="p-4 border-b">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
                       <input
                         type="text"
                         placeholder="Rechercher..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                        className="w-full pl-9 pr-4 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-400"
                       />
                     </div>
                   </div>
                   <div className="overflow-y-auto h-[calc(100%-73px)]">
                     {conversations
-                      .filter(conv =>
-                        !searchQuery ||
-                        getDisplayName(conv.partner).toLowerCase().includes(searchQuery.toLowerCase())
+                      .filter(
+                        (conv) =>
+                          !searchQuery ||
+                          getDisplayName(conv.partner)
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase())
                       )
                       .map((conv) => (
                         <button
                           key={conv.id}
                           onClick={() => setSelectedConversation(conv)}
-                          className={`w-full p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors ${
-                            selectedConversation?.id === conv.id ? 'bg-blue-50' : ''
+                          className={`w-full p-4 flex items-start gap-3 hover:bg-sand-50 transition-colors ${
+                            selectedConversation?.id === conv.id ? 'bg-primary-50' : ''
                           }`}
                         >
-                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">
+                          <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 font-semibold">
                             {getAvatar(conv.partner)}
                           </div>
                           <div className="flex-1 min-w-0 text-left">
                             <div className="flex items-center justify-between">
-                              <span className="font-medium text-gray-900 truncate">{getDisplayName(conv.partner)}</span>
-                              <span className="text-xs text-gray-500">{formatTime(conv.lastMessage.created_at)}</span>
+                              <span className="font-medium text-charcoal-900 truncate">
+                                {getDisplayName(conv.partner)}
+                              </span>
+                              <span className="text-xs text-charcoal-500">
+                                {formatTime(conv.lastMessage.created_at)}
+                              </span>
                             </div>
-                            <p className="text-sm text-gray-500 truncate">{conv.lastMessage.content}</p>
+                            <p className="text-sm text-charcoal-500 truncate">
+                              {conv.lastMessage.content}
+                            </p>
                           </div>
                           {conv.unreadCount > 0 && (
-                            <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
+                            <span className="bg-primary-500 text-white text-xs px-2 py-0.5 rounded-full">
                               {conv.unreadCount}
                             </span>
                           )}
@@ -307,7 +347,9 @@ export default function MessagesClientPage() {
                 </div>
 
                 {/* Chat */}
-                <div className={`flex-1 flex flex-col ${selectedConversation ? 'block' : 'hidden sm:flex'}`}>
+                <div
+                  className={`flex-1 flex flex-col ${selectedConversation ? 'block' : 'hidden sm:flex'}`}
+                >
                   {selectedConversation ? (
                     <>
                       {/* Chat header */}
@@ -315,16 +357,18 @@ export default function MessagesClientPage() {
                         <button
                           type="button"
                           onClick={() => setSelectedConversation(null)}
-                          className="sm:hidden p-1 text-gray-500 hover:text-gray-700 rounded"
+                          className="sm:hidden p-1 text-charcoal-500 hover:text-charcoal-700 rounded"
                           aria-label="Retour aux conversations"
                         >
                           <ArrowLeft className="w-5 h-5" />
                         </button>
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">
+                        <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-500 font-semibold">
                           {getAvatar(selectedConversation.partner)}
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900">{getDisplayName(selectedConversation.partner)}</h3>
+                          <h3 className="font-semibold text-charcoal-900">
+                            {getDisplayName(selectedConversation.partner)}
+                          </h3>
                         </div>
                       </div>
 
@@ -340,14 +384,14 @@ export default function MessagesClientPage() {
                               <div
                                 className={`max-w-[70%] rounded-2xl px-4 py-2 ${
                                   isOwnMessage
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 text-gray-900'
+                                    ? 'bg-primary-500 text-white'
+                                    : 'bg-sand-100 text-charcoal-900'
                                 }`}
                               >
                                 <p>{message.content}</p>
                                 <span
                                   className={`text-xs ${
-                                    isOwnMessage ? 'text-blue-200' : 'text-gray-500'
+                                    isOwnMessage ? 'text-primary-100' : 'text-charcoal-500'
                                   }`}
                                 >
                                   {formatTime(message.created_at)}
@@ -361,22 +405,20 @@ export default function MessagesClientPage() {
 
                       {/* Input */}
                       <form onSubmit={handleSendMessage} className="p-4 border-t">
-                        {sendError && (
-                          <p className="text-red-600 text-sm mb-2">{sendError}</p>
-                        )}
+                        {sendError && <p className="text-red-600 text-sm mb-2">{sendError}</p>}
                         <div className="flex gap-2">
                           <input
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Écrivez votre message..."
-                            className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="flex-1 px-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-400"
                             disabled={sendingMessage}
                           />
                           <button
                             type="submit"
                             disabled={sendingMessage || !newMessage.trim()}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                            className="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50"
                           >
                             {sendingMessage ? (
                               <Loader2 className="w-5 h-5 animate-spin" />
@@ -388,7 +430,7 @@ export default function MessagesClientPage() {
                       </form>
                     </>
                   ) : (
-                    <div className="flex-1 flex items-center justify-center text-gray-500">
+                    <div className="flex-1 flex items-center justify-center text-charcoal-500">
                       Sélectionnez une conversation
                     </div>
                   )}

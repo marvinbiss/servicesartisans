@@ -22,9 +22,9 @@ const SENTIMENT_CONFIG = {
   },
   neutral: {
     icon: Minus,
-    color: 'text-gray-500',
-    bgColor: 'bg-gray-50',
-    borderColor: 'border-gray-200',
+    color: 'text-charcoal-500',
+    bgColor: 'bg-sand-50',
+    borderColor: 'border-sand-300',
     label: 'Neutre',
   },
   negative: {
@@ -87,18 +87,18 @@ export function SentimentIndicator({
   return (
     <div className={cn('flex flex-col', sizeConfig.container, className)}>
       {/* Main indicator */}
-      <div className={cn(
-        'inline-flex items-center rounded-full border px-2 py-1',
-        config.bgColor,
-        config.borderColor,
-        sizeConfig.container
-      )}>
+      <div
+        className={cn(
+          'inline-flex items-center rounded-full border px-2 py-1',
+          config.bgColor,
+          config.borderColor,
+          sizeConfig.container
+        )}
+      >
         <Icon className={cn(sizeConfig.icon, config.color)} />
-        <span className={cn(sizeConfig.text, config.color, 'font-medium')}>
-          {config.label}
-        </span>
+        <span className={cn(sizeConfig.text, config.color, 'font-medium')}>{config.label}</span>
         {showScore && (
-          <span className={cn(sizeConfig.text, 'text-gray-400')}>
+          <span className={cn(sizeConfig.text, 'text-charcoal-400')}>
             ({(score * 100).toFixed(0)}%)
           </span>
         )}
@@ -110,10 +110,7 @@ export function SentimentIndicator({
           {keywords.slice(0, 5).map((keyword) => (
             <span
               key={keyword}
-              className={cn(
-                'rounded-full bg-gray-100 text-gray-600',
-                sizeConfig.keyword
-              )}
+              className={cn('rounded-full bg-sand-100 text-charcoal-600', sizeConfig.keyword)}
             >
               {keyword}
             </span>
@@ -154,13 +151,15 @@ export function TopicSentiment({ topics, size = 'sm', className }: TopicSentimen
 
         return (
           <div key={topic} className="flex items-center gap-2">
-            <span className={cn(
-              'text-gray-600 min-w-[100px]',
-              size === 'sm' ? 'text-xs' : 'text-sm'
-            )}>
+            <span
+              className={cn(
+                'text-charcoal-600 min-w-[100px]',
+                size === 'sm' ? 'text-xs' : 'text-sm'
+              )}
+            >
               {label}
             </span>
-            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="flex-1 h-2 bg-sand-100 rounded-full overflow-hidden">
               <div
                 className={cn(
                   'h-full rounded-full transition-all',
@@ -172,12 +171,15 @@ export function TopicSentiment({ topics, size = 'sm', className }: TopicSentimen
                 }}
               />
             </div>
-            <span className={cn(
-              config.color,
-              size === 'sm' ? 'text-xs' : 'text-sm',
-              'min-w-[40px] text-right'
-            )}>
-              {score >= 0 ? '+' : ''}{(score * 100).toFixed(0)}%
+            <span
+              className={cn(
+                config.color,
+                size === 'sm' ? 'text-xs' : 'text-sm',
+                'min-w-[40px] text-right'
+              )}
+            >
+              {score >= 0 ? '+' : ''}
+              {(score * 100).toFixed(0)}%
             </span>
           </div>
         )

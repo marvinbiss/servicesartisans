@@ -17,7 +17,7 @@ const canonicalUrl = `${SITE_URL}/barometre/tarifs`
 export const metadata: Metadata = {
   title: `Statistiques par métier — Baromètre Artisans`,
   description:
-    'Consultez les statistiques détaillées par corps de métier : plombier, électricien, maçon, couvreur et plus. Nombre d\'artisans, notes moyennes, avis par métier en France.',
+    "Consultez les statistiques détaillées par corps de métier : plombier, électricien, maçon, couvreur et plus. Nombre d'artisans, notes moyennes, avis par métier en France.",
   alternates: { canonical: canonicalUrl },
   robots: { index: true, follow: true },
   openGraph: {
@@ -48,30 +48,25 @@ export default async function BarometreTarifsPage() {
     <>
       <JsonLd data={breadcrumbSchema} />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         {/* Breadcrumb */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <Breadcrumb
-            items={[
-              { label: 'Baromètre', href: '/barometre' },
-              { label: 'Métiers' },
-            ]}
-          />
+          <Breadcrumb items={[{ label: 'Baromètre', href: '/barometre' }, { label: 'Métiers' }]} />
         </div>
 
         {/* Header */}
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-50 text-primary-600 rounded-full text-sm font-medium mb-6">
               <BarChart3 className="w-4 h-4" />
               {metiers.length} métiers référencés
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight mb-4">
               Statistiques par métier
             </h1>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              Explorez les données détaillées pour chaque corps de métier du bâtiment :
-              nombre d'artisans, note moyenne et avis clients.
+            <p className="text-lg text-charcoal-600 leading-relaxed">
+              Explorez les données détaillées pour chaque corps de métier du bâtiment : nombre
+              d'artisans, note moyenne et avis clients.
             </p>
           </div>
         </header>
@@ -85,17 +80,17 @@ export default async function BarometreTarifsPage() {
                 <Link
                   key={row.metier_slug}
                   href={`/barometre/tarifs/${row.metier_slug}`}
-                  className="group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow"
+                  className="group bg-white rounded-xl border border-sand-300 p-5 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-2xl" role="img" aria-hidden="true">
                       {metier?.icon || '🔧'}
                     </span>
-                    <h2 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    <h2 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
                       {row.metier}
                     </h2>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                  <div className="flex items-center gap-4 text-sm text-charcoal-600 mb-3">
                     <span className="flex items-center gap-1">
                       <Users className="w-3.5 h-3.5" />
                       {row.nb_artisans.toLocaleString('fr-FR')}
@@ -109,15 +104,15 @@ export default async function BarometreTarifsPage() {
                     <span>{row.nb_avis.toLocaleString('fr-FR')} avis</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="w-full bg-gray-100 rounded-full h-1.5 mr-3">
+                    <div className="w-full bg-sand-100 rounded-full h-1.5 mr-3">
                       <div
-                        className="bg-blue-500 rounded-full h-1.5"
+                        className="bg-primary-400 rounded-full h-1.5"
                         style={{
                           width: `${metiers[0] ? (row.nb_artisans / metiers[0].nb_artisans) * 100 : 0}%`,
                         }}
                       />
                     </div>
-                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 flex-shrink-0" />
+                    <ArrowRight className="w-4 h-4 text-sand-500 group-hover:text-primary-400 flex-shrink-0" />
                   </div>
                 </Link>
               )

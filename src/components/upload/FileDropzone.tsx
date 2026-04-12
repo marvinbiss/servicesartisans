@@ -130,8 +130,8 @@ export default function FileDropzone({
           'transition-all duration-300',
           disabled && 'opacity-50 cursor-not-allowed',
           isDragging
-            ? 'border-blue-500 bg-blue-50'
-            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+            ? 'border-primary-400 bg-primary-50'
+            : 'border-sand-400 hover:border-primary-300 hover:bg-sand-50'
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -155,23 +155,24 @@ export default function FileDropzone({
           <div
             className={clsx(
               'w-16 h-16 rounded-2xl flex items-center justify-center',
-              isDragging ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'
+              isDragging ? 'bg-primary-100 text-primary-500' : 'bg-sand-100 text-charcoal-500'
             )}
           >
             <Icon className="w-8 h-8" />
           </div>
 
           <div>
-            <p className="text-base font-medium text-gray-700">
+            <p className="text-base font-medium text-charcoal-700">
               {isDragging ? (
                 'Déposez vos fichiers ici'
               ) : (
                 <>
-                  <span className="text-blue-600">Cliquez pour parcourir</span> ou glissez-déposez
+                  <span className="text-primary-500">Cliquez pour parcourir</span> ou
+                  glissez-déposez
                 </>
               )}
             </p>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-charcoal-500">
               {accept === 'video'
                 ? 'MP4, WebM'
                 : accept === 'both'

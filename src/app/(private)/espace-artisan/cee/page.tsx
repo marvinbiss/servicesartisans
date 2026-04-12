@@ -48,7 +48,7 @@ export default async function EspaceArtisanCeePage() {
 
   if (!provider) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
             <h1 className="text-lg font-semibold text-red-700">Accès réservé</h1>
@@ -57,7 +57,7 @@ export default async function EspaceArtisanCeePage() {
             </p>
             <Link
               href="/espace-artisan"
-              className="mt-4 inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              className="mt-4 inline-block rounded-lg bg-primary-500 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-600"
             >
               Retour à l’espace artisan
             </Link>
@@ -83,7 +83,7 @@ export default async function EspaceArtisanCeePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Breadcrumb */}
       <div className="border-b bg-white">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
@@ -97,10 +97,10 @@ export default async function EspaceArtisanCeePage() {
       </div>
 
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <header className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold">Mes dossiers CEE</h1>
-          <p className="mt-1 text-blue-100">
+          <p className="mt-1 text-primary-100">
             Suivi des Certificats d’Économies d’Énergie (loi n°&nbsp;2025-594)
           </p>
         </div>
@@ -124,19 +124,19 @@ export default async function EspaceArtisanCeePage() {
               </p>
             </div>
           ) : dossiers.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
-                <FileText className="h-7 w-7 text-blue-600" aria-hidden="true" />
+            <div className="rounded-xl border border-dashed border-sand-400 bg-white p-10 text-center">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50">
+                <FileText className="h-7 w-7 text-primary-500" aria-hidden="true" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-gray-900">
+              <h2 className="mt-4 text-lg font-semibold text-charcoal-900">
                 Aucun dossier CEE pour le moment
               </h2>
-              <p className="mx-auto mt-2 max-w-md text-sm text-gray-500">
+              <p className="mx-auto mt-2 max-w-md text-sm text-charcoal-500">
                 Vos dossiers CEE apparaîtront ici dès qu’un devis éligible sera signé. Aucune
                 démarche supplémentaire n’est requise de votre part : ServicesArtisans s’occupe du
                 montage et de la dépose.
               </p>
-              <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-700">
+              <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary-50 px-3 py-2 text-xs text-primary-600">
                 <Info className="h-4 w-4" aria-hidden="true" />
                 Plus d’infos sur le mandataire CEE
               </div>
@@ -144,7 +144,7 @@ export default async function EspaceArtisanCeePage() {
           ) : (
             <>
               <div className="mb-4 flex items-baseline justify-between">
-                <h2 className="text-sm font-medium text-gray-600">
+                <h2 className="text-sm font-medium text-charcoal-600">
                   {dossiers.length} dossier{dossiers.length > 1 ? 's' : ''}
                 </h2>
               </div>

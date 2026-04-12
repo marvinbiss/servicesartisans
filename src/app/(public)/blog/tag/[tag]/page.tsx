@@ -39,7 +39,7 @@ const allTags = getAllTags()
 
 // Pre-render all tag pages at build time
 export function generateStaticParams() {
-  return allTags.map(t => ({ tag: t.slug }))
+  return allTags.map((t) => ({ tag: t.slug }))
 }
 
 export const dynamicParams = false
@@ -50,7 +50,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { tag: tagSlug } = await params
-  const tagInfo = allTags.find(t => t.slug === tagSlug)
+  const tagInfo = allTags.find((t) => t.slug === tagSlug)
   if (!tagInfo) return { title: 'Tag non trouvé' }
 
   const title = `${tagInfo.label} — Articles & Guides | ServicesArtisans`
@@ -60,7 +60,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical: `${SITE_URL}/blog/tag/${tagSlug}` },
-    robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const },
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1 as const,
+      'max-image-preview': 'large' as const,
+    },
     openGraph: {
       title,
       description,
@@ -78,12 +83,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogTagPage({ params }: PageProps) {
   const { tag: tagSlug } = await params
-  const tagInfo = allTags.find(t => t.slug === tagSlug)
+  const tagInfo = allTags.find((t) => t.slug === tagSlug)
   if (!tagInfo) notFound()
 
-  const articles = allArticlesMeta.filter(a =>
-    a.tags.some(t => slugifyTag(t) === tagSlug)
-  )
+  const articles = allArticlesMeta.filter((a) => a.tags.some((t) => slugifyTag(t) === tagSlug))
 
   // Related tags: tags that co-occur in the same articles
   const relatedTagSlugs = new Set<string>()
@@ -93,9 +96,7 @@ export default async function BlogTagPage({ params }: PageProps) {
       if (s !== tagSlug) relatedTagSlugs.add(s)
     }
   }
-  const relatedTags = allTags
-    .filter(t => relatedTagSlugs.has(t.slug))
-    .slice(0, 12)
+  const relatedTags = allTags.filter((t) => relatedTagSlugs.has(t.slug)).slice(0, 12)
 
   // JSON-LD
   const collectionSchema = {
@@ -110,7 +111,7 @@ export default async function BlogTagPage({ params }: PageProps) {
       name: 'Blog ServicesArtisans',
       url: `${SITE_URL}/blog`,
     },
-    hasPart: articles.slice(0, 10).map(a => ({
+    hasPart: articles.slice(0, 10).map((a) => ({
       '@type': 'BlogPosting',
       headline: a.title,
       url: `${SITE_URL}/blog/${a.slug}`,
@@ -118,7 +119,12 @@ export default async function BlogTagPage({ params }: PageProps) {
       author: (() => {
         const authorName = allArticles[a.slug]?.author || 'ServicesArtisans'
         return authorName === 'ServicesArtisans'
-          ? { '@type': 'Organization', name: 'Équipe éditoriale ServicesArtisans', url: `${SITE_URL}/a-propos`, '@id': `${SITE_URL}#organization` }
+          ? {
+              '@type': 'Organization',
+              name: 'Équipe éditoriale ServicesArtisans',
+              url: `${SITE_URL}/a-propos`,
+              '@id': `${SITE_URL}#organization`,
+            }
           : { '@type': 'Person', name: authorName }
       })(),
     })),
@@ -130,7 +136,12 @@ export default async function BlogTagPage({ params }: PageProps) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-      { '@type': 'ListItem', position: 3, name: tagInfo.label, item: `${SITE_URL}/blog/tag/${tagSlug}` },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: tagInfo.label,
+        item: `${SITE_URL}/blog/tag/${tagSlug}`,
+      },
     ],
   }
 
@@ -139,22 +150,23 @@ export default async function BlogTagPage({ params }: PageProps) {
       <JsonLd data={collectionSchema} />
       <JsonLd data={breadcrumbSchema} />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         {/* Hero */}
-        <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <section className="relative bg-charcoal-950 text-white overflow-hidden">
           <div className="absolute inset-0">
-            <div className="absolute inset-0" style={{
-              background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%)',
-            }} />
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%)',
+              }}
+            />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
             <Breadcrumb
-              items={[
-                { label: 'Blog', href: '/blog' },
-                { label: tagInfo.label },
-              ]}
-              className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+              items={[{ label: 'Blog', href: '/blog' }, { label: tagInfo.label }]}
+              className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
             />
             <div className="text-center">
               <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
@@ -164,8 +176,9 @@ export default async function BlogTagPage({ params }: PageProps) {
               <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
                 {tagInfo.label}
               </h1>
-              <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-                {articles.length} article{articles.length > 1 ? 's' : ''} sur {tagInfo.label.toLowerCase()}
+              <p className="text-xl text-charcoal-400 max-w-2xl mx-auto">
+                {articles.length} article{articles.length > 1 ? 's' : ''} sur{' '}
+                {tagInfo.label.toLowerCase()}
               </p>
             </div>
           </div>
@@ -176,8 +189,13 @@ export default async function BlogTagPage({ params }: PageProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {articles.length === 0 ? (
               <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">Aucun article avec ce tag pour le moment.</p>
-                <Link href="/blog" className="inline-flex items-center gap-2 mt-4 text-blue-600 font-medium hover:text-blue-800">
+                <p className="text-charcoal-500 text-lg">
+                  Aucun article avec ce tag pour le moment.
+                </p>
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center gap-2 mt-4 text-primary-500 font-medium hover:text-primary-800"
+                >
                   <ArrowLeft className="w-4 h-4" />
                   Retour au blog
                 </Link>
@@ -188,7 +206,7 @@ export default async function BlogTagPage({ params }: PageProps) {
                   <Link
                     key={article.slug}
                     href={`/blog/${article.slug}`}
-                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
+                    className="bg-white rounded-2xl border border-sand-300 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
                   >
                     <div className="relative overflow-hidden h-48">
                       <Image
@@ -201,21 +219,23 @@ export default async function BlogTagPage({ params }: PageProps) {
                         blurDataURL={BLUR_PLACEHOLDER}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                      <span className="absolute top-4 left-4 z-10 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                      <span className="absolute top-4 left-4 z-10 bg-primary-100 text-primary-600 px-3 py-1 rounded-full text-xs font-semibold">
                         {article.category}
                       </span>
                     </div>
                     <div className="p-6">
-                      <h2 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200">
+                      <h2 className="font-bold text-lg text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors duration-200">
                         {article.title}
                       </h2>
-                      <p className="text-sm text-gray-600 mb-4">{article.excerpt}</p>
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <p className="text-sm text-charcoal-600 mb-4">{article.excerpt}</p>
+                      <div className="flex items-center justify-between pt-4 border-t border-sand-200">
+                        <div className="flex items-center gap-4 text-sm text-charcoal-500">
                           <span className="flex items-center gap-1.5">
                             <Calendar className="w-3.5 h-3.5" />
                             {new Date(article.date).toLocaleDateString('fr-FR', {
-                              day: 'numeric', month: 'short', year: 'numeric',
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
                             })}
                           </span>
                           <span className="flex items-center gap-1.5">
@@ -223,7 +243,7 @@ export default async function BlogTagPage({ params }: PageProps) {
                             {article.readTime}
                           </span>
                         </div>
-                        <span className="text-blue-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+                        <span className="text-primary-500 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
                           Lire <ArrowRight className="w-4 h-4" />
                         </span>
                       </div>
@@ -239,15 +259,15 @@ export default async function BlogTagPage({ params }: PageProps) {
         {relatedTags.length > 0 && (
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-blue-500 pl-4">
+              <h2 className="text-2xl font-bold text-charcoal-900 mb-6 border-l-4 border-primary-400 pl-4">
                 Tags associés
               </h2>
               <div className="flex flex-wrap gap-3">
-                {relatedTags.map(t => (
+                {relatedTags.map((t) => (
                   <Link
                     key={t.slug}
                     href={`/blog/tag/${t.slug}`}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-full text-sm font-medium border border-gray-200 hover:border-blue-200 transition-all"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-300 hover:border-primary-200 transition-all"
                   >
                     <Tag className="w-3.5 h-3.5" />
                     {t.label}
@@ -259,11 +279,11 @@ export default async function BlogTagPage({ params }: PageProps) {
         )}
 
         {/* Back to blog */}
-        <section className="py-8 bg-gray-50 border-t">
+        <section className="py-8 bg-sand-50 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-blue-600 font-medium hover:text-blue-800 transition-colors"
+              className="inline-flex items-center gap-2 text-primary-500 font-medium hover:text-primary-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Tous les articles

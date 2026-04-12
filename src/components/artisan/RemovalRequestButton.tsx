@@ -9,7 +9,11 @@ interface RemovalRequestButtonProps {
   hasSiret: boolean
 }
 
-export function RemovalRequestButton({ providerId, providerName, hasSiret }: RemovalRequestButtonProps) {
+export function RemovalRequestButton({
+  providerId,
+  providerName,
+  hasSiret,
+}: RemovalRequestButtonProps) {
   const [showModal, setShowModal] = useState(false)
   const [siret, setSiret] = useState('')
   const [requesterName, setRequesterName] = useState('')
@@ -49,10 +53,7 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
     setError(null)
   }
 
-  const isFormValid =
-    siret.length === 14 &&
-    requesterName.trim().length >= 2 &&
-    email.includes('@')
+  const isFormValid = siret.length === 14 && requesterName.trim().length >= 2 && email.includes('@')
 
   const handleSubmit = async () => {
     if (siret.length !== 14) {
@@ -105,7 +106,7 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="text-xs text-gray-400 hover:text-red-500 underline underline-offset-2 transition-colors"
+        className="text-xs text-charcoal-400 hover:text-red-500 underline underline-offset-2 transition-colors"
       >
         Vous êtes cet artisan ? Demander la suppression de cette fiche
       </button>
@@ -120,7 +121,7 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
           <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => !isLoading && setShowModal(false)}
-              className="absolute top-3 right-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              className="absolute top-3 right-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-charcoal-400 hover:text-charcoal-600 rounded-lg hover:bg-sand-100 transition-colors"
               aria-label="Fermer"
             >
               <X className="w-5 h-5" />
@@ -131,19 +132,18 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Demande enregistrée
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Votre demande de suppression pour <strong>{providerName}</strong> a bien été prise en compte.
+                <h3 className="text-xl font-bold text-charcoal-900 mb-2">Demande enregistrée</h3>
+                <p className="text-charcoal-600 mb-4">
+                  Votre demande de suppression pour <strong>{providerName}</strong> a bien été prise
+                  en compte.
                 </p>
-                <p className="text-sm text-gray-500 mb-6">
-                  La fiche a été immédiatement retirée de l&apos;indexation Google.
-                  Un administrateur traitera votre demande sous 72 heures conformément au RGPD.
+                <p className="text-sm text-charcoal-500 mb-6">
+                  La fiche a été immédiatement retirée de l&apos;indexation Google. Un
+                  administrateur traitera votre demande sous 72 heures conformément au RGPD.
                 </p>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+                  className="bg-sand-100 text-charcoal-700 px-6 py-2.5 rounded-xl font-medium hover:bg-sand-300 transition-colors"
                 >
                   Fermer
                 </button>
@@ -155,16 +155,14 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
                     <Trash2 className="w-5 h-5 text-red-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Demander la suppression
-                    </h3>
-                    <p className="text-sm text-gray-500">{providerName}</p>
+                    <h3 className="text-lg font-bold text-charcoal-900">Demander la suppression</h3>
+                    <p className="text-sm text-charcoal-500">{providerName}</p>
                   </div>
                 </div>
 
-                <p className="text-sm text-gray-600 mb-4">
-                  Conformément au RGPD (Art. 21), vous pouvez demander la suppression de cette fiche.
-                  Votre SIRET (14 chiffres) est requis pour vérifier votre identité.
+                <p className="text-sm text-charcoal-600 mb-4">
+                  Conformément au RGPD (Art. 21), vous pouvez demander la suppression de cette
+                  fiche. Votre SIRET (14 chiffres) est requis pour vérifier votre identité.
                 </p>
 
                 {error && (
@@ -176,36 +174,42 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Nom complet <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={requesterName}
-                      onChange={(e) => { setRequesterName(e.target.value); setError(null) }}
+                      onChange={(e) => {
+                        setRequesterName(e.target.value)
+                        setError(null)
+                      }}
                       placeholder="Jean Dupont"
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Email <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
                       inputMode="email"
                       value={email}
-                      onChange={(e) => { setEmail(e.target.value); setError(null) }}
+                      onChange={(e) => {
+                        setEmail(e.target.value)
+                        setError(null)
+                      }}
                       placeholder="jean@monentreprise.fr"
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       SIRET <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -213,19 +217,19 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
                       value={formatSiret(siret)}
                       onChange={(e) => handleSiretChange(e.target.value)}
                       placeholder="XXX XXX XXX XXXXX"
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
                       maxLength={17}
                       inputMode="numeric"
                       disabled={isLoading}
                     />
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-charcoal-500">
                       14 chiffres — visible sur votre extrait Kbis
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Motif <span className="text-gray-400 font-normal">(optionnel)</span>
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                      Motif <span className="text-charcoal-400 font-normal">(optionnel)</span>
                     </label>
                     <textarea
                       value={reason}
@@ -233,7 +237,7 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
                       placeholder="Entreprise fermée, ne souhaite pas apparaître..."
                       rows={3}
                       maxLength={2000}
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"
                       disabled={isLoading}
                     />
                   </div>
@@ -243,7 +247,7 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
                   <button
                     onClick={() => setShowModal(false)}
                     disabled={isLoading}
-                    className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
+                    className="flex-1 bg-sand-100 text-charcoal-700 py-3 rounded-xl font-medium hover:bg-sand-300 transition-colors disabled:opacity-50"
                   >
                     Annuler
                   </button>
@@ -260,8 +264,9 @@ export function RemovalRequestButton({ providerId, providerName, hasSiret }: Rem
                   </button>
                 </div>
 
-                <p className="mt-4 text-xs text-gray-400 text-center">
-                  La fiche sera immédiatement retirée de Google. Traitement définitif sous 72h (RGPD Art. 21).
+                <p className="mt-4 text-xs text-charcoal-400 text-center">
+                  La fiche sera immédiatement retirée de Google. Traitement définitif sous 72h (RGPD
+                  Art. 21).
                 </p>
               </>
             )}

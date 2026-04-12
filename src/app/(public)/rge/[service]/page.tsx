@@ -132,7 +132,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16 md:py-24">
+      <section className="relative bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
@@ -180,13 +180,13 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       </section>
 
       {/* Bloc stats contextualisées */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
               {hasStats ? total.toLocaleString('fr-FR') : '—'}
             </div>
-            <div className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               Artisans RGE actifs recensés en France pour ce métier, qualification en cours de
               validité au référentiel ADEME.
             </div>
@@ -195,7 +195,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
               {label?.label ?? 'RGE'}
             </div>
-            <div className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               Qualification de référence pour ce métier, délivrée par{' '}
               {label?.organisme ?? 'un organisme accrédité COFRAC'}.
             </div>
@@ -204,7 +204,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
               {content.aides.length}
             </div>
-            <div className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               Dispositifs d&apos;aides publiques mobilisables sur ce type de travaux, cumulables
               sous conditions.
             </div>
@@ -222,10 +222,10 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 Guides qualifications RGE
               </span>
             </div>
-            <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+            <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
               Comprendre les qualifications RGE {label?.label ?? ''} en détail
             </h2>
-            <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+            <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
               Périmètre exact, organisme certificateur, travaux couverts et primes débloquées : nos
               guides éditoriaux décryptent chaque qualification RGE reconnue pour ce métier.
             </p>
@@ -243,14 +243,14 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-2 flex-wrap">
-                        <h3 className="font-heading font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+                        <h3 className="font-heading font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
                           {g.name}
                         </h3>
                         <span className="text-xs font-semibold text-emerald-700">
                           {g.organisme}
                         </span>
                       </div>
-                      <p className="text-sm text-slate-600 mt-1.5 leading-relaxed line-clamp-3">
+                      <p className="text-sm text-charcoal-600 mt-1.5 leading-relaxed line-clamp-3">
                         {g.lede}
                       </p>
                       <div className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 group-hover:text-emerald-900">
@@ -271,18 +271,18 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
 
       {/* Primes CEE débloquées — cross-linking éditorial vers /cee/[code]/guide */}
       {ceeGuideLinks.length > 0 && (
-        <section className="bg-gradient-to-br from-blue-50 via-white to-blue-50/40 border-b border-blue-100">
+        <section className="bg-gradient-to-br from-primary-50 via-white to-primary-50/40 border-b border-primary-100">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
             <div className="flex items-center gap-2 mb-3">
-              <Euro className="w-5 h-5 text-blue-700" aria-hidden="true" />
-              <span className="text-xs font-bold text-blue-800 uppercase tracking-wider">
+              <Euro className="w-5 h-5 text-primary-600" aria-hidden="true" />
+              <span className="text-xs font-bold text-primary-800 uppercase tracking-wider">
                 Primes CEE débloquées
               </span>
             </div>
-            <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+            <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
               Primes CEE mobilisables pour ce métier
             </h2>
-            <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+            <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
               Chaque opération CEE standardisée ci-dessous est éligible aux primes versées par les
               délégataires obligés (Effy, Sonergia, TotalEnergies, EDF) dès lors que les travaux
               sont réalisés par un artisan RGE qualifié. Cliquez pour accéder au guide détaillé.
@@ -292,18 +292,18 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={c.code}
                   href={`/cee/${c.code}/guide`}
-                  className="group inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-white hover:border-blue-400 hover:bg-blue-50 transition px-3 py-2 text-sm"
+                  className="group inline-flex items-center gap-2 rounded-lg border border-primary-200 bg-white hover:border-primary-300 hover:bg-primary-50 transition px-3 py-2 text-sm"
                 >
-                  <span className="font-mono font-bold text-blue-800 text-xs">{c.code}</span>
-                  <span className="text-slate-700">{c.label}</span>
+                  <span className="font-mono font-bold text-primary-800 text-xs">{c.code}</span>
+                  <span className="text-charcoal-700">{c.label}</span>
                   <ArrowRight
-                    className="w-3.5 h-3.5 text-blue-600 group-hover:translate-x-0.5 transition-transform"
+                    className="w-3.5 h-3.5 text-primary-500 group-hover:translate-x-0.5 transition-transform"
                     aria-hidden="true"
                   />
                 </Link>
               ))}
             </div>
-            <p className="text-xs text-slate-500 mt-5 leading-relaxed max-w-3xl">
+            <p className="text-xs text-charcoal-900 mt-5 leading-relaxed max-w-3xl">
               Les primes CEE sont cumulables avec MaPrimeRénov&rsquo;. Le montant exact dépend de
               vos revenus, de la zone climatique et du délégataire choisi.
             </p>
@@ -312,12 +312,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       )}
 
       {/* Description longue (contenu unique éditorial) */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
             Comprendre la mention {label?.label ?? 'RGE'} pour ce métier
           </h2>
-          <div className="space-y-5 text-slate-700 leading-relaxed">
+          <div className="space-y-5 text-charcoal-700 leading-relaxed">
             {content.description.map((para, idx) => (
               <p key={idx}>{para}</p>
             ))}
@@ -328,24 +328,24 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       {/* Travaux couverts */}
       <section className="bg-emerald-50/40 border-y border-emerald-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
             Travaux couverts par la qualification
           </h2>
-          <p className="text-slate-600 max-w-3xl mb-10 leading-relaxed">
+          <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
             Les interventions typiques pour lesquelles ces artisans sont qualifiés et éligibles aux
             aides publiques.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {content.travaux.map((t, idx) => (
-              <div key={idx} className="p-6 bg-white rounded-2xl border border-slate-200">
+              <div key={idx} className="p-6 bg-white rounded-2xl border border-charcoal-200">
                 <div className="flex items-start gap-3">
                   <Wrench
                     className="w-5 h-5 text-emerald-700 mt-1 flex-shrink-0"
                     aria-hidden="true"
                   />
                   <div>
-                    <h3 className="font-heading font-bold text-slate-900 text-lg">{t.label}</h3>
-                    <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">{t.detail}</p>
+                    <h3 className="font-heading font-bold text-charcoal-900 text-lg">{t.label}</h3>
+                    <p className="text-sm text-charcoal-600 mt-1.5 leading-relaxed">{t.detail}</p>
                   </div>
                 </div>
               </div>
@@ -355,12 +355,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       </section>
 
       {/* Aides publiques */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
             Aides publiques mobilisables
           </h2>
-          <p className="text-slate-600 max-w-3xl mb-10 leading-relaxed">
+          <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
             Les dispositifs d&apos;aides cumulables pour ces travaux lorsqu&apos;ils sont réalisés
             par un artisan RGE. Montants indicatifs au 1er janvier 2026.
           </p>
@@ -374,12 +374,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                   />
                   <div className="min-w-0">
                     <div className="flex items-baseline gap-2 flex-wrap">
-                      <h3 className="font-heading font-bold text-slate-900">{a.label}</h3>
+                      <h3 className="font-heading font-bold text-charcoal-900">{a.label}</h3>
                       {a.montant !== '—' && (
                         <span className="text-sm font-bold text-emerald-700">{a.montant}</span>
                       )}
                     </div>
-                    <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">{a.detail}</p>
+                    <p className="text-sm text-charcoal-600 mt-1.5 leading-relaxed">{a.detail}</p>
                   </div>
                 </div>
               </div>
@@ -390,12 +390,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
 
       {/* Top villes — cross-link vers /rge/[service]/[ville] */}
       {topCities.length > 0 && (
-        <section className="bg-slate-50 border-y border-slate-100">
+        <section className="bg-sand-50 border-y border-charcoal-100">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-            <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+            <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
               Trouvez un artisan RGE près de chez vous
             </h2>
-            <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+            <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
               Classement des villes françaises par nombre d&apos;artisans RGE actifs pour ce métier.
               Cliquez sur une ville pour accéder à l&apos;annuaire local.
             </p>
@@ -404,15 +404,15 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={city.slug}
                   href={`/rge/${serviceSlug}/${city.slug}`}
-                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" aria-hidden="true" />
-                    <span className="font-semibold text-slate-900 group-hover:text-emerald-700 transition truncate">
+                    <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
                       {city.name}
                     </span>
                   </div>
-                  <span className="text-sm font-semibold text-slate-500 tabular-nums ml-2">
+                  <span className="text-sm font-semibold text-charcoal-900 tabular-nums ml-2">
                     {city.count.toLocaleString('fr-FR')}
                   </span>
                 </Link>
@@ -423,12 +423,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       )}
 
       {/* Top départements — cross-link vers /rge/[service]/departement/[dept] */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
             Chercher par d&eacute;partement
           </h2>
-          <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+          <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
             Acc&eacute;dez &agrave; l&rsquo;annuaire {label?.label ?? 'RGE'} de chaque
             d&eacute;partement fran&ccedil;ais pour couvrir les zones rurales et les communes
             o&ugrave; la densit&eacute; d&rsquo;artisans qualifi&eacute;s est plus faible
@@ -439,9 +439,9 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               <Link
                 key={d.slug}
                 href={`/rge/${serviceSlug}/departement/${d.slug}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-full text-xs font-medium text-slate-700 hover:text-emerald-700 transition"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sand-50 hover:bg-emerald-50 border border-charcoal-200 hover:border-emerald-300 rounded-full text-xs font-medium text-charcoal-700 hover:text-emerald-700 transition"
               >
-                <span className="tabular-nums text-slate-400">{d.code}</span>
+                <span className="tabular-nums text-charcoal-400">{d.code}</span>
                 <span>{d.name}</span>
               </Link>
             ))}
@@ -450,7 +450,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       </section>
 
       {/* Bénéfices rapide */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="flex items-start gap-3">
             <FileCheck2
@@ -458,8 +458,8 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               aria-hidden="true"
             />
             <div>
-              <div className="font-semibold text-slate-900">MaPrimeRénov&apos;</div>
-              <div className="text-sm text-slate-600">
+              <div className="font-semibold text-charcoal-900">MaPrimeRénov&apos;</div>
+              <div className="text-sm text-charcoal-600">
                 Aide directe de l&apos;Anah, réservée aux travaux réalisés par un artisan RGE actif.
               </div>
             </div>
@@ -470,8 +470,8 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               aria-hidden="true"
             />
             <div>
-              <div className="font-semibold text-slate-900">Primes CEE</div>
-              <div className="text-sm text-slate-600">
+              <div className="font-semibold text-charcoal-900">Primes CEE</div>
+              <div className="text-sm text-charcoal-600">
                 Versées par les délégataires obligés (Effy, Sonergia, TotalEnergies, EDF).
               </div>
             </div>
@@ -479,8 +479,8 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           <div className="flex items-start gap-3">
             <Percent className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <div>
-              <div className="font-semibold text-slate-900">TVA à 5,5 %</div>
-              <div className="text-sm text-slate-600">
+              <div className="font-semibold text-charcoal-900">TVA à 5,5 %</div>
+              <div className="text-sm text-charcoal-600">
                 Taux réduit sur la main-d&apos;œuvre et les matériaux des travaux énergétiques.
               </div>
             </div>
@@ -490,10 +490,10 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
 
       {/* FAQ contextualisée */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
           Questions fréquentes
         </h2>
-        <p className="text-slate-600 mb-10 leading-relaxed">
+        <p className="text-charcoal-600 mb-10 leading-relaxed">
           Tout ce qu&apos;il faut savoir avant de signer un devis avec un artisan RGE pour ce type
           de travaux.
         </p>
@@ -501,24 +501,24 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           {content.faq.map((item, idx) => (
             <details
               key={idx}
-              className="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 transition p-6"
+              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
             >
-              <summary className="font-heading font-bold text-lg text-slate-900 cursor-pointer list-none flex items-start justify-between gap-4">
+              <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                 <span>{item.question}</span>
                 <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
-              <p className="text-slate-700 mt-4 leading-relaxed">{item.answer}</p>
+              <p className="text-charcoal-700 mt-4 leading-relaxed">{item.answer}</p>
             </details>
           ))}
         </div>
       </section>
 
       {/* Cross-linking vers autres services RGE */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-xl md:text-2xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 mb-6">
             Autres métiers énergétiques couverts par la mention RGE
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -528,7 +528,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={s}
                   href={`/rge/${s}`}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-white rounded-full border border-slate-200 text-sm font-medium text-slate-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-white rounded-full border border-charcoal-200 text-sm font-medium text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
                   {otherLabel?.label ?? s}

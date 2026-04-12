@@ -208,17 +208,17 @@ export default async function DevisQuartierPage({
   const nearbyCities = getNearbyCities(location, 6)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <JsonLd data={jsonLdData} />
 
       {/* ─── 1. HERO ──────────────────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
           <div
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%)',
             }}
           />
           <div
@@ -229,7 +229,7 @@ export default async function DevisQuartierPage({
               backgroundSize: '64px 64px',
             }}
           />
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
@@ -239,7 +239,7 @@ export default async function DevisQuartierPage({
               { label: ville.name, href: `/devis/${service}/${location}` },
               { label: quartierName },
             ]}
-            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
@@ -255,7 +255,7 @@ export default async function DevisQuartierPage({
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+            <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
               Devis gratuit de {tradeLower}s à {quartierName} ({ville.departement}).
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
@@ -311,23 +311,23 @@ export default async function DevisQuartierPage({
       </section>
 
       {/* ─── 4. TRADE PRICING ─────────────────────────────────── */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-12">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-8 text-center mb-12">
+            <h2 className="text-lg font-semibold text-charcoal-700 mb-2">
               Tarif indicatif à {quartierName}, {ville.name}
             </h2>
             <div className="flex items-baseline justify-center gap-2">
-              <span className="text-5xl font-bold text-blue-600">
+              <span className="text-5xl font-bold text-primary-500">
                 {minPrice} — {maxPrice}
               </span>
-              <span className="text-gray-600 text-lg">{unit}</span>
+              <span className="text-charcoal-600 text-lg">{unit}</span>
             </div>
-            <p className="text-gray-500 text-sm mt-3">
+            <p className="text-charcoal-500 text-sm mt-3">
               Prix moyen constaté à {quartierName}, main-d'œuvre incluse
             </p>
             {multiplier !== 1.0 && (
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
                   ? `Les tarifs en ${ville.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
                   : `Les tarifs en ${ville.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
@@ -335,7 +335,7 @@ export default async function DevisQuartierPage({
             )}
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
             Prestations courantes à {quartierName}
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -351,9 +351,9 @@ export default async function DevisQuartierPage({
               return (
                 <div
                   key={i}
-                  className="flex items-start justify-between gap-3 p-4 bg-white rounded-xl text-sm border border-gray-200 hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                  className="flex items-start justify-between gap-3 p-4 bg-white rounded-xl text-sm border border-sand-300 hover:bg-primary-50 hover:border-primary-200 transition-colors"
                 >
-                  <span className="text-gray-700">{label}</span>
+                  <span className="text-charcoal-700">{label}</span>
                   {adjustedPrice && (
                     <span className="font-semibold text-amber-700 whitespace-nowrap">
                       {adjustedPrice}
@@ -369,19 +369,19 @@ export default async function DevisQuartierPage({
       {/* ─── 5. TIPS ──────────────────────────────────────────── */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Conseils pour choisir un {tradeLower} à {quartierName}
           </h2>
           <div className="space-y-4">
             {selectedTips.map((tip, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-gray-50 rounded-xl border border-gray-200 p-5"
+                className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5"
               >
                 <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-amber-600" />
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
               </div>
             ))}
           </div>
@@ -390,19 +390,21 @@ export default async function DevisQuartierPage({
 
       {/* ─── 6. FAQ ───────────────────────────────────────────── */}
       {combinedFaq.length > 0 && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-sand-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-8 text-center">
               Questions fréquentes — Devis {trade.name} à {quartierName}, {ville.name}
             </h2>
             <div className="space-y-4">
               {combinedFaq.map((item, i) => (
-                <details key={i} className="bg-white rounded-xl border border-gray-200 group">
+                <details key={i} className="bg-white rounded-xl border border-sand-300 group">
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
-                    <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                    <h3 className="text-base font-semibold text-charcoal-900 pr-4">
+                      {item.question}
+                    </h3>
+                    <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                   </summary>
-                  <div className="px-6 pb-6 text-gray-600 text-sm leading-relaxed">
+                  <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
                     {item.answer}
                   </div>
                 </details>
@@ -413,26 +415,26 @@ export default async function DevisQuartierPage({
       )}
 
       {/* ─── 7. CTA ───────────────────────────────────────────── */}
-      <section className="py-20 bg-blue-600">
+      <section className="py-20 bg-primary-500">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Prêt à lancer votre projet à {quartierName} ?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-xl text-primary-100 mb-8">
             Comparez les profils et obtenez un devis gratuit auprès de professionnels référencés à{' '}
             {quartierName}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="#formulaire"
-              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+              className="inline-flex items-center gap-2 bg-white text-primary-500 px-8 py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors text-lg"
             >
               Obtenir mon devis gratuit
               <ArrowRight className="w-5 h-5" />
             </a>
             <Link
               href={`/services/${service}/${location}/${quartier}`}
-              className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
+              className="inline-flex items-center gap-2 bg-primary-400 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-300 transition-colors text-lg border border-primary-300"
             >
               Voir les {tradeLower}s à {quartierName}
               <ArrowRight className="w-5 h-5" />
@@ -455,7 +457,7 @@ export default async function DevisQuartierPage({
           {/* Other quartiers */}
           {otherQuartiers.length > 0 && (
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-charcoal-900 mb-4">
                 Devis {tradeLower} dans d'autres quartiers de {ville.name}
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -463,7 +465,7 @@ export default async function DevisQuartierPage({
                   <Link
                     key={q.slug}
                     href={`/devis/${service}/${location}/${q.slug}`}
-                    className="text-sm bg-gray-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 hover:bg-blue-50 transition-colors"
+                    className="text-sm bg-sand-50 text-primary-600 px-3 py-1.5 rounded-full border border-primary-100 hover:bg-primary-50 transition-colors"
                   >
                     {q.name}
                   </Link>
@@ -475,7 +477,7 @@ export default async function DevisQuartierPage({
           {/* Other services */}
           {otherServices.length > 0 && (
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-charcoal-900 mb-4">
                 Autres devis artisans à {quartierName}
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -486,7 +488,7 @@ export default async function DevisQuartierPage({
                     <Link
                       key={slug}
                       href={`/devis/${slug}/${location}/${quartier}`}
-                      className="text-sm bg-gray-50 text-gray-700 px-3 py-1.5 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors"
+                      className="text-sm bg-sand-50 text-charcoal-700 px-3 py-1.5 rounded-full border border-sand-300 hover:bg-sand-100 transition-colors"
                     >
                       Devis {t.name.toLowerCase()}
                     </Link>
@@ -499,7 +501,7 @@ export default async function DevisQuartierPage({
           {/* Nearby cities */}
           {nearbyCities.length > 0 && (
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-charcoal-900 mb-4">
                 Devis {tradeLower} dans les villes proches
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -507,7 +509,7 @@ export default async function DevisQuartierPage({
                   <Link
                     key={c.slug}
                     href={`/devis/${service}/${c.slug}`}
-                    className="text-sm bg-gray-50 text-gray-700 px-3 py-1.5 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors"
+                    className="text-sm bg-sand-50 text-charcoal-700 px-3 py-1.5 rounded-full border border-sand-300 hover:bg-sand-100 transition-colors"
                   >
                     {c.name}
                   </Link>
@@ -519,45 +521,45 @@ export default async function DevisQuartierPage({
       </section>
 
       {/* ─── 9. VOIR AUSSI ────────────────────────────────────── */}
-      <section className="py-12 bg-gray-50 border-t">
+      <section className="py-12 bg-sand-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="text-xl font-bold text-charcoal-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Ce service</h3>
               <div className="space-y-2">
                 <Link
                   href={`/devis/${service}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Devis {tradeLower} en France
                 </Link>
                 <Link
                   href={`/tarifs/${service}/${location}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Tarifs {tradeLower} à {ville.name}
                 </Link>
                 <Link
                   href={`/services/${service}/${location}/${quartier}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   {trade.name} à {quartierName}
                 </Link>
                 <Link
                   href={`/services/${service}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   {trade.name} — tous les artisans
                 </Link>
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Cette ville</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Cette ville</h3>
               <div className="space-y-2">
                 <Link
                   href={`/villes/${location}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Artisans à {ville.name}
                 </Link>
@@ -568,7 +570,7 @@ export default async function DevisQuartierPage({
                     <Link
                       key={slug}
                       href={`/devis/${slug}/${location}`}
-                      className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                      className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                     >
                       Devis {t.name.toLowerCase()} à {ville.name}
                     </Link>
@@ -577,27 +579,30 @@ export default async function DevisQuartierPage({
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
                 <Link
                   href="/devis"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Demander un devis
                 </Link>
                 <Link
                   href="/tarifs"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Guide complet des tarifs
                 </Link>
                 <Link
                   href="/comment-ca-marche"
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Comment ça marche
                 </Link>
-                <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
                   FAQ
                 </Link>
               </div>
@@ -609,9 +614,9 @@ export default async function DevisQuartierPage({
       {/* ─── 10. EDITORIAL CREDIBILITY ────────────────────────── */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence tarifaire</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+          <div className="bg-sand-50 rounded-2xl border border-charcoal-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Transparence tarifaire</h3>
+            <p className="text-xs text-charcoal-900 leading-relaxed">
               Les prix affichés pour {quartierName} à {ville.name} sont des fourchettes indicatives
               ajustées en fonction des données régionales ({ville.region}). Ils varient selon la
               complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait
@@ -630,8 +635,8 @@ export default async function DevisQuartierPage({
 
 const STAT_COLORS: Record<string, { bg: string; border: string; text: string }> = {
   amber: { bg: 'bg-amber-50', border: 'border-amber-100', text: 'text-amber-700' },
-  blue: { bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-700' },
-  slate: { bg: 'bg-slate-50', border: 'border-slate-100', text: 'text-slate-700' },
+  blue: { bg: 'bg-primary-50', border: 'border-primary-100', text: 'text-primary-600' },
+  slate: { bg: 'bg-sand-50', border: 'border-charcoal-100', text: 'text-charcoal-700' },
   emerald: { bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-700' },
 }
 
@@ -640,7 +645,7 @@ function StatCard({ label, value, color }: { label: string; value: string; color
   return (
     <div className={`text-center p-3 ${c.bg} rounded-xl border ${c.border}`}>
       <div className={`text-sm font-bold ${c.text}`}>{value}</div>
-      <div className="text-xs text-gray-500 mt-1">{label}</div>
+      <div className="text-xs text-charcoal-500 mt-1">{label}</div>
     </div>
   )
 }

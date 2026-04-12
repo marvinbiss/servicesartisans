@@ -2,13 +2,28 @@
 
 import Link from 'next/link'
 import {
-  Search, ChevronDown, MapPin, Wrench, ArrowRight, Star,
-  Layers, Sparkles, Navigation, Map, Building2, Phone, Heart, BookOpen
+  Search,
+  ChevronDown,
+  MapPin,
+  Wrench,
+  ArrowRight,
+  Star,
+  Layers,
+  Sparkles,
+  Navigation,
+  Map,
+  Building2,
+  Phone,
+  Heart,
+  BookOpen,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   serviceCategories,
-  type MobileAccordion, type PopularCity, type MetroRegion, type DomTomRegion
+  type MobileAccordion,
+  type PopularCity,
+  type MetroRegion,
+  type DomTomRegion,
 } from './header-data'
 
 interface MobileMenuProps {
@@ -51,45 +66,51 @@ export default function MobileMenu({
   return (
     <div
       data-menu-content="mobile-menu"
-      className="lg:hidden border-t border-gray-100/50 max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 backdrop-blur-xl"
+      className="lg:hidden border-t border-sand-200/50 max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 backdrop-blur-xl"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
         {/* Search Mobile - Dual Field */}
         <form onSubmit={handleSearch} className="mb-4">
-          <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-clay-400 focus-within:shadow-lg focus-within:shadow-clay-400/10 transition-all duration-200">
+          <div className="flex items-center bg-white border-2 border-sand-300 rounded-2xl overflow-hidden focus-within:border-clay-400 focus-within:shadow-lg focus-within:shadow-clay-400/10 transition-all duration-200">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <label htmlFor="mobile-search-service" className="sr-only">Service recherché</label>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+              <label htmlFor="mobile-search-service" className="sr-only">
+                Service recherché
+              </label>
               <input
                 id="mobile-search-service"
                 type="text"
                 placeholder="Service..."
                 value={serviceQuery}
                 onChange={(e) => setServiceQuery(e.target.value)}
-                className="w-full h-12 pl-9 pr-2 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none text-sm"
+                className="w-full h-12 pl-9 pr-2 bg-transparent text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none text-sm"
               />
             </div>
-            <div className="w-px h-7 bg-gray-200" />
+            <div className="w-px h-7 bg-sand-300" />
             <div className="relative flex-1">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <label htmlFor="mobile-search-location" className="sr-only">Ville ou code postal</label>
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+              <label htmlFor="mobile-search-location" className="sr-only">
+                Ville ou code postal
+              </label>
               <input
                 id="mobile-search-location"
                 type="text"
                 placeholder="Ville..."
                 value={locationQuery}
                 onChange={(e) => setLocationQuery(e.target.value)}
-                className="w-full h-12 pl-9 pr-10 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none text-sm"
+                className="w-full h-12 pl-9 pr-10 bg-transparent text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none text-sm"
               />
               <button
                 type="button"
                 onClick={handleGeolocation}
                 disabled={isLocating}
-                className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-sand-100 rounded-full transition-colors disabled:opacity-50"
                 aria-label="Utiliser ma position"
                 title="Ma position"
               >
-                <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-clay-400' : 'text-gray-400'}`} />
+                <Navigation
+                  className={`w-4 h-4 ${isLocating ? 'animate-spin text-clay-400' : 'text-charcoal-400'}`}
+                />
               </button>
             </div>
             <button
@@ -104,36 +125,44 @@ export default function MobileMenu({
 
         <nav className="space-y-2" aria-label="Menu mobile">
           {/* ===== Services Accordion ===== */}
-          <div className="rounded-xl border border-gray-100 overflow-hidden">
+          <div className="rounded-xl border border-sand-200 overflow-hidden">
             <button
               type="button"
               onClick={() => toggleMobileAccordion('services')}
               aria-expanded={mobileAccordion === 'services'}
               className={cn(
                 'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
-                mobileAccordion === 'services' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
+                mobileAccordion === 'services' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
               )}
             >
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                  mobileAccordion === 'services' ? 'bg-blue-100' : 'bg-white'
-                }`}>
-                  <Wrench className={`w-4 h-4 ${mobileAccordion === 'services' ? 'text-blue-600' : 'text-slate-500'}`} />
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    mobileAccordion === 'services' ? 'bg-primary-100' : 'bg-white'
+                  }`}
+                >
+                  <Wrench
+                    className={`w-4 h-4 ${mobileAccordion === 'services' ? 'text-primary-500' : 'text-charcoal-900'}`}
+                  />
                 </div>
-                <span className={`font-semibold text-sm ${mobileAccordion === 'services' ? 'text-blue-700' : 'text-slate-900'}`}>
+                <span
+                  className={`font-semibold text-sm ${mobileAccordion === 'services' ? 'text-primary-600' : 'text-charcoal-900'}`}
+                >
                   Services
                 </span>
               </div>
-              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
-                mobileAccordion === 'services' ? 'rotate-180 text-blue-500' : ''
-              }`} />
+              <ChevronDown
+                className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
+                  mobileAccordion === 'services' ? 'rotate-180 text-primary-400' : ''
+                }`}
+              />
             </button>
 
             {mobileAccordion === 'services' && (
               <div className="px-4 pb-4 pt-2 bg-white">
                 {serviceCategories.map((cat) => (
                   <div key={cat.category} className="mb-3 last:mb-0">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
+                    <div className="text-xs font-bold text-charcoal-400 uppercase tracking-wider mb-2 px-1">
                       {cat.category}
                     </div>
                     <div className="grid grid-cols-2 gap-1.5">
@@ -143,11 +172,13 @@ export default function MobileMenu({
                           <Link
                             key={`mob-${cat.category}-${service.slug}`}
                             href={`/services/${service.slug}`}
-                            className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                            className="flex items-center gap-2 p-2.5 bg-sand-50 rounded-lg hover:bg-primary-50 transition-colors"
                             onClick={closeAndResetAccordion}
                           >
-                            <Icon className="w-4 h-4 text-blue-600" />
-                            <span className="text-sm font-medium text-slate-700">{service.name}</span>
+                            <Icon className="w-4 h-4 text-primary-500" />
+                            <span className="text-sm font-medium text-charcoal-700">
+                              {service.name}
+                            </span>
                           </Link>
                         )
                       })}
@@ -156,7 +187,7 @@ export default function MobileMenu({
                 ))}
                 <Link
                   href="/services"
-                  className="flex items-center gap-2 text-blue-600 text-sm font-semibold mt-3 px-1"
+                  className="flex items-center gap-2 text-primary-500 text-sm font-semibold mt-3 px-1"
                   onClick={closeAndResetAccordion}
                 >
                   Voir tous les services
@@ -167,29 +198,37 @@ export default function MobileMenu({
           </div>
 
           {/* ===== Villes Accordion ===== */}
-          <div className="rounded-xl border border-gray-100 overflow-hidden">
+          <div className="rounded-xl border border-sand-200 overflow-hidden">
             <button
               type="button"
               onClick={() => toggleMobileAccordion('villes')}
               aria-expanded={mobileAccordion === 'villes'}
               className={cn(
                 'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
-                mobileAccordion === 'villes' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
+                mobileAccordion === 'villes' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
               )}
             >
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                  mobileAccordion === 'villes' ? 'bg-blue-100' : 'bg-white'
-                }`}>
-                  <Building2 className={`w-4 h-4 ${mobileAccordion === 'villes' ? 'text-blue-600' : 'text-slate-500'}`} />
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    mobileAccordion === 'villes' ? 'bg-primary-100' : 'bg-white'
+                  }`}
+                >
+                  <Building2
+                    className={`w-4 h-4 ${mobileAccordion === 'villes' ? 'text-primary-500' : 'text-charcoal-900'}`}
+                  />
                 </div>
-                <span className={`font-semibold text-sm ${mobileAccordion === 'villes' ? 'text-blue-700' : 'text-slate-900'}`}>
+                <span
+                  className={`font-semibold text-sm ${mobileAccordion === 'villes' ? 'text-primary-600' : 'text-charcoal-900'}`}
+                >
                   Villes
                 </span>
               </div>
-              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
-                mobileAccordion === 'villes' ? 'rotate-180 text-blue-500' : ''
-              }`} />
+              <ChevronDown
+                className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
+                  mobileAccordion === 'villes' ? 'rotate-180 text-primary-400' : ''
+                }`}
+              />
             </button>
 
             {mobileAccordion === 'villes' && (
@@ -199,7 +238,7 @@ export default function MobileMenu({
                     <Link
                       key={city.slug}
                       href={`/villes/${city.slug}`}
-                      className="inline-flex items-center gap-1.5 text-sm bg-gray-100 hover:bg-blue-100 text-slate-700 hover:text-blue-700 px-3 py-2 rounded-lg font-medium transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm bg-sand-100 hover:bg-primary-100 text-charcoal-700 hover:text-primary-600 px-3 py-2 rounded-lg font-medium transition-colors"
                       onClick={closeAndResetAccordion}
                     >
                       <MapPin className="w-3 h-3" />
@@ -209,7 +248,7 @@ export default function MobileMenu({
                 </div>
                 <Link
                   href="/villes"
-                  className="flex items-center gap-2 text-blue-600 text-sm font-semibold mt-3 px-1"
+                  className="flex items-center gap-2 text-primary-500 text-sm font-semibold mt-3 px-1"
                   onClick={closeAndResetAccordion}
                 >
                   Voir toutes les villes
@@ -220,29 +259,37 @@ export default function MobileMenu({
           </div>
 
           {/* ===== Régions Accordion ===== */}
-          <div className="rounded-xl border border-gray-100 overflow-hidden">
+          <div className="rounded-xl border border-sand-200 overflow-hidden">
             <button
               type="button"
               onClick={() => toggleMobileAccordion('regions')}
               aria-expanded={mobileAccordion === 'regions'}
               className={cn(
                 'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
-                mobileAccordion === 'regions' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
+                mobileAccordion === 'regions' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
               )}
             >
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                  mobileAccordion === 'regions' ? 'bg-blue-100' : 'bg-white'
-                }`}>
-                  <Map className={`w-4 h-4 ${mobileAccordion === 'regions' ? 'text-blue-600' : 'text-slate-500'}`} />
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    mobileAccordion === 'regions' ? 'bg-primary-100' : 'bg-white'
+                  }`}
+                >
+                  <Map
+                    className={`w-4 h-4 ${mobileAccordion === 'regions' ? 'text-primary-500' : 'text-charcoal-900'}`}
+                  />
                 </div>
-                <span className={`font-semibold text-sm ${mobileAccordion === 'regions' ? 'text-blue-700' : 'text-slate-900'}`}>
+                <span
+                  className={`font-semibold text-sm ${mobileAccordion === 'regions' ? 'text-primary-600' : 'text-charcoal-900'}`}
+                >
                   Régions
                 </span>
               </div>
-              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
-                mobileAccordion === 'regions' ? 'rotate-180 text-blue-500' : ''
-              }`} />
+              <ChevronDown
+                className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
+                  mobileAccordion === 'regions' ? 'rotate-180 text-primary-400' : ''
+                }`}
+              />
             </button>
 
             {mobileAccordion === 'regions' && (
@@ -252,20 +299,24 @@ export default function MobileMenu({
                     <Link
                       key={region.slug}
                       href={`/regions/${region.slug}`}
-                      className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                      className="flex items-center gap-2 p-2.5 bg-sand-50 rounded-lg hover:bg-primary-50 transition-colors"
                       onClick={closeAndResetAccordion}
                     >
-                      <Map className="w-3.5 h-3.5 text-slate-400" />
+                      <Map className="w-3.5 h-3.5 text-charcoal-400" />
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-slate-700 truncate">{region.name}</div>
-                        <div className="text-[11px] text-slate-400">{(region.departments?.length ?? 0)} dép.</div>
+                        <div className="text-sm font-medium text-charcoal-700 truncate">
+                          {region.name}
+                        </div>
+                        <div className="text-[11px] text-charcoal-400">
+                          {region.departments?.length ?? 0} dép.
+                        </div>
                       </div>
                     </Link>
                   ))}
                 </div>
                 <Link
                   href="/regions"
-                  className="flex items-center gap-2 text-blue-600 text-sm font-semibold mt-3 px-1"
+                  className="flex items-center gap-2 text-primary-500 text-sm font-semibold mt-3 px-1"
                   onClick={closeAndResetAccordion}
                 >
                   Voir toutes les régions
@@ -279,35 +330,35 @@ export default function MobileMenu({
           <div className="grid grid-cols-2 gap-2">
             <Link
               href="/avis"
-              className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
               onClick={closeMobileMenu}
             >
               <Star className="w-4 h-4 text-amber-500" />
-              <span className="font-medium text-sm text-slate-700">Avis</span>
+              <span className="font-medium text-sm text-charcoal-700">Avis</span>
             </Link>
             <Link
               href="/tarifs"
-              className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
               onClick={closeMobileMenu}
             >
-              <Layers className="w-4 h-4 text-blue-500" />
-              <span className="font-medium text-sm text-slate-700">Tarifs</span>
+              <Layers className="w-4 h-4 text-primary-400" />
+              <span className="font-medium text-sm text-charcoal-700">Tarifs</span>
             </Link>
             <Link
               href="/blog"
-              className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
               onClick={closeMobileMenu}
             >
               <Sparkles className="w-4 h-4 text-purple-500" />
-              <span className="font-medium text-sm text-slate-700">Blog</span>
+              <span className="font-medium text-sm text-charcoal-700">Blog</span>
             </Link>
             <Link
               href="/guides"
-              className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
+              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
               onClick={closeMobileMenu}
             >
               <BookOpen className="w-4 h-4 text-green-500" />
-              <span className="font-medium text-sm text-slate-700">Guides</span>
+              <span className="font-medium text-sm text-charcoal-700">Guides</span>
             </Link>
           </div>
 
@@ -337,7 +388,7 @@ export default function MobileMenu({
             <div className="flex gap-3">
               <Link
                 href="/connexion"
-                className="flex-1 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-medium text-center hover:bg-gray-50 hover:border-gray-300 transition-all duration-200"
+                className="flex-1 py-3 border-2 border-sand-300 text-charcoal-700 rounded-xl font-medium text-center hover:bg-sand-50 hover:border-sand-400 transition-all duration-200"
                 onClick={closeMobileMenu}
               >
                 Connexion

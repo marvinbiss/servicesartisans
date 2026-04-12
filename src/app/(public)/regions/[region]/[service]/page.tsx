@@ -1,12 +1,32 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, Euro, CheckCircle, Building2, Users, Globe, Thermometer } from 'lucide-react'
+import {
+  MapPin,
+  ArrowRight,
+  Shield,
+  Clock,
+  ChevronRight,
+  Wrench,
+  HelpCircle,
+  Euro,
+  CheckCircle,
+  Building2,
+  Users,
+  Globe,
+  Thermometer,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
-import { regions, getRegionBySlug, services as allServices, getVillesByDepartement, parsePopulation } from '@/lib/data/france'
+import {
+  regions,
+  getRegionBySlug,
+  services as allServices,
+  getVillesByDepartement,
+  parsePopulation,
+} from '@/lib/data/france'
 import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
@@ -20,9 +40,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 export function generateStaticParams() {
   // Pre-render top 5 services per region (16 × 5 = 80 pages) — rest via ISR
   const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
-  return regions.flatMap(r =>
-    topServices.map(s => ({ region: r.slug, service: s }))
-  )
+  return regions.flatMap((r) => topServices.map((s) => ({ region: r.slug, service: s })))
 }
 
 export const dynamicParams = true
@@ -79,7 +97,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       url: `${SITE_URL}/regions/${regionSlug}/${serviceSlug}`,
-      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} en ${region.name}` }],
+      images: [
+        { url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} en ${region.name}` },
+      ],
     },
     twitter: {
       card: 'summary_large_image' as const,
@@ -99,9 +119,10 @@ export default async function RegionServicePage({ params }: PageProps) {
   const content = generateRegionContent(region)
   const deptCount = region.departments.length
   const deptCitiesMap = Object.fromEntries(
-    region.departments.map(dept => [dept.code, getVillesByDepartement(dept.code)])
+    region.departments.map((dept) => [dept.code, getVillesByDepartement(dept.code)])
   )
-  const allCities = region.departments.flatMap(dept => deptCitiesMap[dept.code])
+  const allCities = region.departments
+    .flatMap((dept) => deptCitiesMap[dept.code])
     .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
   const cityCount = allCities.length
   const multiplier = getRegionalMultiplier(region.name)
@@ -111,26 +132,32 @@ export default async function RegionServicePage({ params }: PageProps) {
   // Other services
   const allTradeSlugs = getTradesSlugs()
   const otherServices = allTradeSlugs
-    .filter(s => s !== serviceSlug)
+    .filter((s) => s !== serviceSlug)
     .slice(0, 12)
-    .map(s => { const t = getTradeContent(s); return t ? { slug: s, name: t.name } : null })
+    .map((s) => {
+      const t = getTradeContent(s)
+      return t ? { slug: s, name: t.name } : null
+    })
     .filter(Boolean) as { slug: string; name: string }[]
 
   // Related services
   const relatedSlugs = relatedServices[serviceSlug] || []
   const relatedServicesData = relatedSlugs
-    .map(s => { const t = getTradeContent(s); return t ? { slug: s, name: t.name } : null })
+    .map((s) => {
+      const t = getTradeContent(s)
+      return t ? { slug: s, name: t.name } : null
+    })
     .filter((x): x is { slug: string; name: string } => x !== null)
 
   // Other regions
-  const otherRegions = regions.filter(r => r.slug !== regionSlug)
+  const otherRegions = regions.filter((r) => r.slug !== regionSlug)
 
   // Hash-selected tips
   const selectedTips = trade.tips
     .map((tip, i) => ({ tip, score: Math.abs(hashCode(`tip-region-${i}-${regionSlug}`)) }))
     .sort((a, b) => a.score - b.score)
     .slice(0, 3)
-    .map(t => t.tip)
+    .map((t) => t.tip)
 
   // FAQ
   const tradeFaq = trade.faq
@@ -138,10 +165,7 @@ export default async function RegionServicePage({ params }: PageProps) {
     .sort((a, b) => a.score - b.score)
     .slice(0, 3)
   const regionFaq = content.faqItems.slice(0, 2)
-  const allFaq = [
-    ...tradeFaq.map(f => ({ question: f.q, answer: f.a })),
-    ...regionFaq,
-  ]
+  const allFaq = [...tradeFaq.map((f) => ({ question: f.q, answer: f.a })), ...regionFaq]
 
   // JSON-LD
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -167,13 +191,21 @@ export default async function RegionServicePage({ params }: PageProps) {
       {/* ─── DARK HERO ──────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.20) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.20) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
 
@@ -191,17 +223,21 @@ export default async function RegionServicePage({ params }: PageProps) {
 
           <div className="max-w-3xl">
             <div className="flex flex-wrap gap-3 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-sand-1000/15 backdrop-blur-sm rounded-full border border-charcoal-400/25">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal-900/15 backdrop-blur-sm rounded-full border border-charcoal-400/25">
                 <Globe className="w-4 h-4 text-charcoal-300" />
                 <span className="text-sm font-medium text-charcoal-200">{region.name}</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
                 <Thermometer className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-medium text-cyan-200">{content.profile.climateLabel}</span>
+                <span className="text-sm font-medium text-cyan-200">
+                  {content.profile.climateLabel}
+                </span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500/15 backdrop-blur-sm rounded-full border border-accent-400/25">
                 <Euro className="w-4 h-4 text-accent-400" />
-                <span className="text-sm font-medium text-accent-200">{minPrice}–{maxPrice} {trade.priceRange.unit}</span>
+                <span className="text-sm font-medium text-accent-200">
+                  {minPrice}–{maxPrice} {trade.priceRange.unit}
+                </span>
               </div>
             </div>
 
@@ -222,17 +258,23 @@ export default async function RegionServicePage({ params }: PageProps) {
             })()}
 
             <p className="text-lg text-charcoal-400 max-w-2xl leading-relaxed mb-8">
-              Trouvez un {trade.name.toLowerCase()} qualifié en {region.name}. {deptCount} départements, {cityCount} villes couvertes. Tarif moyen régional : {minPrice} à {maxPrice} {trade.priceRange.unit}.
+              Trouvez un {trade.name.toLowerCase()} qualifié en {region.name}. {deptCount}{' '}
+              départements, {cityCount} villes couvertes. Tarif moyen régional : {minPrice} à{' '}
+              {maxPrice} {trade.priceRange.unit}.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Building2 className="w-4 h-4 text-charcoal-400" />
-                <span>{deptCount} département{deptCount > 1 ? 's' : ''}</span>
+                <span>
+                  {deptCount} département{deptCount > 1 ? 's' : ''}
+                </span>
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <MapPin className="w-4 h-4 text-charcoal-400" />
-                <span>{cityCount} ville{cityCount > 1 ? 's' : ''}</span>
+                <span>
+                  {cityCount} ville{cityCount > 1 ? 's' : ''}
+                </span>
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Users className="w-4 h-4 text-charcoal-400" />
@@ -242,10 +284,12 @@ export default async function RegionServicePage({ params }: PageProps) {
 
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Artisans vérifiés SIREN</span>
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Artisans vérifiés SIREN</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis 100 % gratuit</span>
+                <Clock className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Devis 100 % gratuit</span>
               </div>
             </div>
           </div>
@@ -270,25 +314,40 @@ export default async function RegionServicePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Tarifs {trade.name.toLowerCase()} en {region.name}
               </h2>
-              <p className="text-sm text-charcoal-500">Coefficient régional : {multiplier.toFixed(2)}x</p>
+              <p className="text-sm text-charcoal-500">
+                Coefficient régional : {multiplier.toFixed(2)}x
+              </p>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-sand-300 p-8">
             <div className="grid sm:grid-cols-3 gap-6 mb-6">
               <div className="text-center p-4 bg-sand-100 rounded-xl">
-                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">Tarif horaire min.</div>
+                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">
+                  Tarif horaire min.
+                </div>
                 <div className="text-2xl font-bold text-charcoal-900">{minPrice} €</div>
               </div>
               <div className="text-center p-4 bg-accent-50 rounded-xl">
-                <div className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">Tarif horaire max.</div>
+                <div className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">
+                  Tarif horaire max.
+                </div>
                 <div className="text-2xl font-bold text-accent-700">{maxPrice} €</div>
               </div>
               <div className="text-center p-4 bg-sand-100 rounded-xl">
-                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">Moyenne nationale</div>
-                <div className="text-2xl font-bold text-charcoal-900">{trade.priceRange.min}–{trade.priceRange.max} €</div>
+                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">
+                  Moyenne nationale
+                </div>
+                <div className="text-2xl font-bold text-charcoal-900">
+                  {trade.priceRange.min}–{trade.priceRange.max} €
+                </div>
               </div>
             </div>
-            <p className="text-sm text-charcoal-500">Les tarifs en {region.name} sont {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'} la moyenne nationale (coefficient {multiplier.toFixed(2)}). {content.profile.economyLabel}.</p>
+            <p className="text-sm text-charcoal-500">
+              Les tarifs en {region.name} sont{' '}
+              {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'}{' '}
+              la moyenne nationale (coefficient {multiplier.toFixed(2)}).{' '}
+              {content.profile.economyLabel}.
+            </p>
           </div>
         </section>
 
@@ -313,7 +372,9 @@ export default async function RegionServicePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 {trade.name} par département en {region.name}
               </h2>
-              <p className="text-sm text-charcoal-500">{deptCount} département{deptCount > 1 ? 's' : ''}</p>
+              <p className="text-sm text-charcoal-500">
+                {deptCount} département{deptCount > 1 ? 's' : ''}
+              </p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -329,20 +390,30 @@ export default async function RegionServicePage({ params }: PageProps) {
                       <span className="text-accent-700 font-bold text-sm">{dept.code}</span>
                     </div>
                     <div>
-                      <h3 className="font-heading text-base font-bold text-charcoal-900 group-hover:text-accent-700 transition-colors">{trade.name} en {dept.name}</h3>
-                      <span className="text-xs text-charcoal-400">{deptCitiesMap[dept.code].length} ville{deptCitiesMap[dept.code].length > 1 ? 's' : ''}</span>
+                      <h3 className="font-heading text-base font-bold text-charcoal-900 group-hover:text-accent-700 transition-colors">
+                        {trade.name} en {dept.name}
+                      </h3>
+                      <span className="text-xs text-charcoal-400">
+                        {deptCitiesMap[dept.code].length} ville
+                        {deptCitiesMap[dept.code].length > 1 ? 's' : ''}
+                      </span>
                     </div>
                   </div>
                   <ArrowRight className="w-5 h-5 text-charcoal-300 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {deptCitiesMap[dept.code].slice(0, 3).map((city) => (
-                    <span key={city.slug} className="text-xs bg-sand-50 text-charcoal-500 px-2.5 py-1 rounded-full group-hover:bg-accent-50 group-hover:text-primary-400 transition-colors">
+                    <span
+                      key={city.slug}
+                      className="text-xs bg-sand-50 text-charcoal-500 px-2.5 py-1 rounded-full group-hover:bg-accent-50 group-hover:text-primary-400 transition-colors"
+                    >
                       {city.name}
                     </span>
                   ))}
                   {deptCitiesMap[dept.code].length > 3 && (
-                    <span className="text-xs text-charcoal-400 px-2 py-1">+{deptCitiesMap[dept.code].length - 3}</span>
+                    <span className="text-xs text-charcoal-400 px-2 py-1">
+                      +{deptCitiesMap[dept.code].length - 3}
+                    </span>
                   )}
                 </div>
               </Link>
@@ -370,7 +441,9 @@ export default async function RegionServicePage({ params }: PageProps) {
                 href={`/services/${serviceSlug}/${city.slug}`}
                 className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group text-center"
               >
-                <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">{city.name}</div>
+                <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">
+                  {city.name}
+                </div>
                 <div className="text-xs text-charcoal-400 mt-1">{trade.name}</div>
               </Link>
             ))}
@@ -480,16 +553,28 @@ export default async function RegionServicePage({ params }: PageProps) {
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href={`/services/${serviceSlug}`} className="bg-white border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 text-charcoal-700 hover:text-primary-600 px-5 py-3 rounded-xl text-sm font-semibold transition-colors">
+            <Link
+              href={`/services/${serviceSlug}`}
+              className="bg-white border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 text-charcoal-700 hover:text-primary-600 px-5 py-3 rounded-xl text-sm font-semibold transition-colors"
+            >
               {trade.name} — Annuaire national
             </Link>
-            <Link href={`/tarifs/${serviceSlug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+            <Link
+              href={`/tarifs/${serviceSlug}`}
+              className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+            >
               Tarifs {trade.name.toLowerCase()} en France
             </Link>
-            <Link href={`/avis/${serviceSlug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+            <Link
+              href={`/avis/${serviceSlug}`}
+              className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+            >
               Avis {trade.name.toLowerCase()}
             </Link>
-            <Link href={`/devis/${serviceSlug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+            <Link
+              href={`/devis/${serviceSlug}`}
+              className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+            >
               Devis {trade.name.toLowerCase()}
             </Link>
           </div>
@@ -498,9 +583,13 @@ export default async function RegionServicePage({ params }: PageProps) {
 
       {/* ─── CTA ──────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
             Besoin d'un {trade.name.toLowerCase()} en {region.name} ?
@@ -509,10 +598,16 @@ export default async function RegionServicePage({ params }: PageProps) {
             Devis gratuit et sans engagement de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href={`/devis/${serviceSlug}`} className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">
+            <Link
+              href={`/devis/${serviceSlug}`}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
+            >
               Obtenir mon devis gratuit
             </Link>
-            <Link href={`/services/${serviceSlug}`} className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors">
+            <Link
+              href={`/services/${serviceSlug}`}
+              className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors"
+            >
               Voir le service <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -527,10 +622,16 @@ export default async function RegionServicePage({ params }: PageProps) {
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">{trade.name} par département</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                {trade.name} par département
+              </h3>
               <div className="space-y-2">
                 {region.departments.map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={d.slug}
+                    href={`/departements/${d.slug}/${serviceSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} en {d.name}
                   </Link>
@@ -538,33 +639,60 @@ export default async function RegionServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Autres régions</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Autres régions
+              </h3>
               <div className="space-y-2">
                 {otherRegions.slice(0, 12).map((r) => (
-                  <Link key={r.slug} href={`/regions/${r.slug}/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={r.slug}
+                    href={`/regions/${r.slug}/${serviceSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} en {r.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/regions" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
+              <Link
+                href="/regions"
+                className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3"
+              >
                 Toutes les régions <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Navigation</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Navigation
+              </h3>
               <div className="space-y-2">
-                <Link href={`/services/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />{trade.name} en France
+                <Link
+                  href={`/services/${serviceSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  {trade.name} en France
                 </Link>
-                <Link href={`/devis/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Devis {trade.name.toLowerCase()}
+                <Link
+                  href={`/devis/${serviceSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  Devis {trade.name.toLowerCase()}
                 </Link>
-                <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Artisans en {region.name}
+                <Link
+                  href={`/regions/${regionSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  Artisans en {region.name}
                 </Link>
-                <Link href="/services" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Tous les services
+                <Link
+                  href="/services"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  Tous les services
                 </Link>
               </div>
             </div>
@@ -583,9 +711,14 @@ export default async function RegionServicePage({ params }: PageProps) {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Méthodologie éditoriale
+            </h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les tarifs indiqués sont des estimations basées sur les données nationales ajustées par un coefficient régional. Les données proviennent de sources publiques (INSEE, base SIRENE). ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
+              Les tarifs indiqués sont des estimations basées sur les données nationales ajustées
+              par un coefficient régional. Les données proviennent de sources publiques (INSEE, base
+              SIRENE). ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de
+              travaux.
             </p>
           </div>
         </div>

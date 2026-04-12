@@ -58,7 +58,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url: canonicalUrl,
       type: 'website',
-      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `${metier.label} — Baromètre ${SITE_NAME}` }],
+      images: [
+        {
+          url: `${SITE_URL}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${metier.label} — Baromètre ${SITE_NAME}`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -127,7 +134,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
     <>
       <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         {/* Breadcrumb */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <Breadcrumb
@@ -143,12 +150,14 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-4xl" role="img" aria-hidden="true">{metier.icon}</span>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+              <span className="text-4xl" role="img" aria-hidden="true">
+                {metier.icon}
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
                 {metier.label} en France
               </h1>
             </div>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-charcoal-600">
               Statistiques détaillées des {metier.label.toLowerCase()}s référencés sur {SITE_NAME}.
               Données agrégées à partir de notre base de 940 000+ artisans.
             </p>
@@ -158,33 +167,33 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         {/* Stats cards */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
-              <Users className="w-5 h-5 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">
+            <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
+              <Users className="w-5 h-5 text-primary-500 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-charcoal-900">
                 {stats ? stats.nb_artisans.toLocaleString('fr-FR') : '--'}
               </div>
-              <div className="text-xs text-gray-500 mt-1">Artisans référencés</div>
+              <div className="text-xs text-charcoal-500 mt-1">Artisans référencés</div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+            <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
               <Star className="w-5 h-5 text-amber-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-bold text-charcoal-900">
                 {stats?.note_moyenne ? `${stats.note_moyenne.toFixed(1)}/5` : '--'}
               </div>
-              <div className="text-xs text-gray-500 mt-1">Note moyenne</div>
+              <div className="text-xs text-charcoal-500 mt-1">Note moyenne</div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+            <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
               <MapPin className="w-5 h-5 text-emerald-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-bold text-charcoal-900">
                 {stats ? stats.nb_avis.toLocaleString('fr-FR') : '--'}
               </div>
-              <div className="text-xs text-gray-500 mt-1">Avis clients</div>
+              <div className="text-xs text-charcoal-500 mt-1">Avis clients</div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+            <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
               <Shield className="w-5 h-5 text-purple-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-bold text-charcoal-900">
                 {stats ? `${Math.round(stats.taux_verification * 100)}%` : '--'}
               </div>
-              <div className="text-xs text-gray-500 mt-1">Taux vérification</div>
+              <div className="text-xs text-charcoal-500 mt-1">Taux vérification</div>
             </div>
           </div>
         </section>
@@ -192,30 +201,32 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         {/* Tableau des villes */}
         {villeStats.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              {metier.label} par ville
-            </h2>
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-6">{metier.label} par ville</h2>
+            <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gray-50 text-left">
-                      <th className="px-6 py-3 font-semibold text-gray-700">Ville</th>
-                      <th className="px-4 py-3 font-semibold text-gray-700 text-right">Artisans</th>
-                      <th className="px-4 py-3 font-semibold text-gray-700 text-right">Note</th>
-                      <th className="px-4 py-3 font-semibold text-gray-700 text-right">Avis</th>
-                      <th className="px-4 py-3 font-semibold text-gray-700 text-right">Vérifiés</th>
-                      <th className="px-4 py-3 font-semibold text-gray-700"></th>
+                    <tr className="bg-sand-50 text-left">
+                      <th className="px-6 py-3 font-semibold text-charcoal-700">Ville</th>
+                      <th className="px-4 py-3 font-semibold text-charcoal-700 text-right">
+                        Artisans
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-charcoal-700 text-right">Note</th>
+                      <th className="px-4 py-3 font-semibold text-charcoal-700 text-right">Avis</th>
+                      <th className="px-4 py-3 font-semibold text-charcoal-700 text-right">
+                        Vérifiés
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-charcoal-700"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {villeStats.map((row, idx) => (
                       <tr
                         key={row.ville_slug}
-                        className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}
+                        className={idx % 2 === 0 ? 'bg-white' : 'bg-sand-50/50'}
                       >
-                        <td className="px-6 py-3 font-medium text-gray-900">{row.ville}</td>
-                        <td className="px-4 py-3 text-right text-gray-700">
+                        <td className="px-6 py-3 font-medium text-charcoal-900">{row.ville}</td>
+                        <td className="px-4 py-3 text-right text-charcoal-700">
                           {row.nb_artisans.toLocaleString('fr-FR')}
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -225,19 +236,19 @@ export default async function BarometreMetierPage({ params }: PageProps) {
                               {row.note_moyenne.toFixed(1)}
                             </span>
                           ) : (
-                            <span className="text-gray-400">--</span>
+                            <span className="text-charcoal-400">--</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-right text-gray-700">
+                        <td className="px-4 py-3 text-right text-charcoal-700">
                           {row.nb_avis.toLocaleString('fr-FR')}
                         </td>
-                        <td className="px-4 py-3 text-right text-gray-700">
+                        <td className="px-4 py-3 text-right text-charcoal-700">
                           {Math.round(row.taux_verification * 100)}%
                         </td>
                         <td className="px-4 py-3 text-right">
                           <Link
                             href={`/services/${metierSlug}/${row.ville_slug}`}
-                            className="text-blue-600 hover:text-blue-800"
+                            className="text-primary-500 hover:text-primary-800"
                           >
                             <ArrowRight className="w-4 h-4" />
                           </Link>
@@ -253,39 +264,49 @@ export default async function BarometreMetierPage({ params }: PageProps) {
 
         {/* Avis & Tarifs cross-links */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Aller plus loin
-          </h2>
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-6">Aller plus loin</h2>
           <div className="grid sm:grid-cols-3 gap-4">
             <Link
               href={`/avis/${metierSlug}`}
-              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all group"
+              className="bg-white rounded-xl border border-sand-300 p-5 hover:shadow-md hover:border-primary-200 transition-all group"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Star className="w-5 h-5 text-amber-500" />
-                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Avis {metier.label.toLowerCase()}</h3>
+                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
+                  Avis {metier.label.toLowerCase()}
+                </h3>
               </div>
-              <p className="text-sm text-gray-500">Consultez les retours clients vérifiés et comparez les professionnels.</p>
+              <p className="text-sm text-charcoal-500">
+                Consultez les retours clients vérifiés et comparez les professionnels.
+              </p>
             </Link>
             <Link
               href={`/tarifs/${metierSlug}`}
-              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all group"
+              className="bg-white rounded-xl border border-sand-300 p-5 hover:shadow-md hover:border-primary-200 transition-all group"
             >
               <div className="flex items-center gap-2 mb-2">
-                <ArrowRight className="w-5 h-5 text-blue-600" />
-                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Tarifs {metier.label.toLowerCase()}</h3>
+                <ArrowRight className="w-5 h-5 text-primary-500" />
+                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
+                  Tarifs {metier.label.toLowerCase()}
+                </h3>
               </div>
-              <p className="text-sm text-gray-500">Grille tarifaire détaillée, prix par prestation et conseils budget.</p>
+              <p className="text-sm text-charcoal-500">
+                Grille tarifaire détaillée, prix par prestation et conseils budget.
+              </p>
             </Link>
             <Link
               href={`/devis/${metierSlug}`}
-              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-blue-200 transition-all group"
+              className="bg-white rounded-xl border border-sand-300 p-5 hover:shadow-md hover:border-primary-200 transition-all group"
             >
               <div className="flex items-center gap-2 mb-2">
                 <ArrowRight className="w-5 h-5 text-emerald-600" />
-                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Devis {metier.label.toLowerCase()}</h3>
+                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
+                  Devis {metier.label.toLowerCase()}
+                </h3>
               </div>
-              <p className="text-sm text-gray-500">Devis gratuit et sans engagement de professionnels vérifiés.</p>
+              <p className="text-sm text-charcoal-500">
+                Devis gratuit et sans engagement de professionnels vérifiés.
+              </p>
             </Link>
           </div>
         </section>
@@ -293,15 +314,19 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         {/* Liens rapides */}
         <section className="bg-white py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <h2 className="text-xl font-bold text-charcoal-900 mb-4">
               Trouver un {metier.label.toLowerCase()}
             </h2>
             <div className="flex flex-wrap gap-2">
               {TOP_VILLES.slice(0, 10).map((ville) => (
                 <Link
                   key={ville}
-                  href={`/services/${metierSlug}/${ville.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')}`}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-full text-sm text-gray-700 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
+                  href={`/services/${metierSlug}/${ville
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')}`}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-50 border border-sand-300 rounded-full text-sm text-charcoal-700 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-600 transition-colors"
                 >
                   <MapPin className="w-3 h-3" />
                   {metier.label} à {ville}
@@ -314,19 +339,24 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         {/* FAQ */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-500 flex items-center justify-center">
               <HelpCircle className="w-5 h-5" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">Questions fréquentes</h2>
+            <h2 className="text-2xl font-bold text-charcoal-900">Questions fréquentes</h2>
           </div>
           <div className="space-y-4">
             {faqItems.map((item) => (
-              <details key={item.question} className="group bg-gray-50 rounded-xl border border-gray-200">
-                <summary className="flex items-center justify-between p-5 cursor-pointer list-none font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+              <details
+                key={item.question}
+                className="group bg-sand-50 rounded-xl border border-sand-300"
+              >
+                <summary className="flex items-center justify-between p-5 cursor-pointer list-none font-semibold text-charcoal-900 hover:text-primary-500 transition-colors">
                   {item.question}
-                  <span className="ml-4 text-gray-400 group-open:rotate-45 transition-transform text-xl">+</span>
+                  <span className="ml-4 text-charcoal-400 group-open:rotate-45 transition-transform text-xl">
+                    +
+                  </span>
                 </summary>
-                <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
+                <div className="px-5 pb-5 text-charcoal-600 text-sm leading-relaxed">
                   {item.answer}
                 </div>
               </details>
@@ -335,7 +365,10 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         </section>
       </div>
 
-      <RelatedHubs currentPath="/barometre" extraLinks={[{href: "/comparaison", label: "Comparatifs artisans"}]} />
+      <RelatedHubs
+        currentPath="/barometre"
+        extraLinks={[{ href: '/comparaison', label: 'Comparatifs artisans' }]}
+      />
     </>
   )
 }

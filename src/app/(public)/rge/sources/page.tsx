@@ -159,7 +159,7 @@ export default function RgeSourcesPage() {
         items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Sources et m\u00e9thodologie' }]}
       />
 
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 text-white py-16">
+      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-emerald-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
@@ -182,7 +182,7 @@ export default function RgeSourcesPage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
           <Database className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Sources officielles mobilis&eacute;es
           </h2>
         </div>
@@ -190,26 +190,26 @@ export default function RgeSourcesPage() {
           {OFFICIAL_SOURCES.map((src) => (
             <article
               key={src.name}
-              className="p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 transition"
+              className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
             >
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700">
                   {src.role}
                 </span>
               </div>
-              <h3 className="font-heading font-bold text-lg text-slate-900 leading-snug">
+              <h3 className="font-heading font-bold text-lg text-charcoal-900 leading-snug">
                 {src.name}
               </h3>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">{src.description}</p>
-              <dl className="mt-4 text-xs text-slate-500 space-y-1">
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">{src.description}</p>
+              <dl className="mt-4 text-xs text-charcoal-900 space-y-1">
                 <div>
-                  <dt className="inline font-semibold text-slate-700">
+                  <dt className="inline font-semibold text-charcoal-700">
                     Mise &agrave; jour&nbsp;:{' '}
                   </dt>
                   <dd className="inline">{src.frequency}</dd>
                 </div>
                 <div>
-                  <dt className="inline font-semibold text-slate-700">Licence&nbsp;: </dt>
+                  <dt className="inline font-semibold text-charcoal-700">Licence&nbsp;: </dt>
                   <dd className="inline">{src.license}</dd>
                 </div>
               </dl>
@@ -227,17 +227,17 @@ export default function RgeSourcesPage() {
         </div>
       </section>
 
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
             <RefreshCw className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Cadence de mise &agrave; jour
             </h2>
           </div>
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
             <table className="w-full text-sm">
-              <thead className="bg-slate-100 text-slate-700">
+              <thead className="bg-sand-200 text-charcoal-700">
                 <tr>
                   <th className="text-left p-4 font-semibold">Op&eacute;ration</th>
                   <th className="text-left p-4 font-semibold">Fr&eacute;quence</th>
@@ -246,10 +246,10 @@ export default function RgeSourcesPage() {
               </thead>
               <tbody>
                 {UPDATE_CADENCE.map((row) => (
-                  <tr key={row.what} className="border-t border-slate-100">
-                    <td className="p-4 font-semibold text-slate-900 align-top">{row.what}</td>
-                    <td className="p-4 text-slate-700 align-top">{row.when}</td>
-                    <td className="p-4 text-slate-600 align-top">{row.how}</td>
+                  <tr key={row.what} className="border-t border-charcoal-100">
+                    <td className="p-4 font-semibold text-charcoal-900 align-top">{row.what}</td>
+                    <td className="p-4 text-charcoal-700 align-top">{row.when}</td>
+                    <td className="p-4 text-charcoal-600 align-top">{row.how}</td>
                   </tr>
                 ))}
               </tbody>
@@ -261,18 +261,18 @@ export default function RgeSourcesPage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
           <FileCheck2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             V&eacute;rifier vous-m&ecirc;me une qualification RGE
           </h2>
         </div>
-        <p className="text-slate-600 max-w-3xl mb-6 leading-relaxed">
+        <p className="text-charcoal-600 max-w-3xl mb-6 leading-relaxed">
           Avant de signer un devis, v&eacute;rifiez la qualification de l&rsquo;artisan
           aupr&egrave;s des organismes officiels. C&rsquo;est la seule garantie
           d&rsquo;&eacute;ligibilit&eacute; aux primes CEE et &agrave; MaPrimeR&eacute;nov&rsquo;.
         </p>
         <ol className="space-y-3 list-decimal pl-6 marker:text-emerald-600 marker:font-bold">
           {VERIFICATION_STEPS.map((step, i) => (
-            <li key={i} className="text-slate-700 leading-relaxed">
+            <li key={i} className="text-charcoal-700 leading-relaxed">
               {step}
             </li>
           ))}

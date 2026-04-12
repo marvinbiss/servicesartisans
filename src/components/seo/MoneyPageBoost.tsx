@@ -31,7 +31,7 @@ const ANCHOR_SAME_SERVICE: string[] = [
 const ANCHOR_SAME_CITY: string[] = [
   '{service} à {ville}',
   'Prix {service} à {ville}',
-  'Besoin d\'un {service} à {ville}',
+  "Besoin d'un {service} à {ville}",
   '{service} disponible à {ville}',
 ]
 
@@ -42,7 +42,12 @@ const ANCHOR_CROSS_SILO: string[] = [
   '{service}s près de {ville}',
 ]
 
-function renderAnchor(templates: string[], seed: number, serviceName: string, villeName: string): string {
+function renderAnchor(
+  templates: string[],
+  seed: number,
+  serviceName: string,
+  villeName: string
+): string {
   const idx = seed % templates.length
   return templates[idx]
     .replace(/\{service\}/g, serviceName.toLowerCase())
@@ -70,7 +75,7 @@ const SECTION_LABELS = [
  */
 function selectMoneyPages(
   currentService?: string,
-  currentVille?: string,
+  currentVille?: string
 ): { page: MoneyPage; anchor: string }[] {
   const all = getTopMoneyPages()
   const seed = hashCode(`${currentService || ''}::${currentVille || ''}`)
@@ -104,35 +109,44 @@ function selectMoneyPages(
   // Slot 1: same service, different city
   if (currentService) {
     const sameService = all.filter(
-      p => p.serviceSlug === currentService && p.villeSlug !== currentVille
+      (p) => p.serviceSlug === currentService && p.villeSlug !== currentVille
     )
     const mp = pick(sameService)
     if (mp) {
       const anchorSeed = hashCode(`anchor-slot1-${mp.serviceSlug}-${mp.villeSlug}`)
-      selected.push({ page: mp, anchor: renderAnchor(ANCHOR_SAME_SERVICE, anchorSeed, mp.serviceName, mp.villeName) })
+      selected.push({
+        page: mp,
+        anchor: renderAnchor(ANCHOR_SAME_SERVICE, anchorSeed, mp.serviceName, mp.villeName),
+      })
     }
   }
 
   // Slot 2: same city, different service
   if (currentVille) {
     const sameCity = all.filter(
-      p => p.villeSlug === currentVille && p.serviceSlug !== currentService
+      (p) => p.villeSlug === currentVille && p.serviceSlug !== currentService
     )
     const mp = pick(sameCity)
     if (mp) {
       const anchorSeed = hashCode(`anchor-slot2-${mp.serviceSlug}-${mp.villeSlug}`)
-      selected.push({ page: mp, anchor: renderAnchor(ANCHOR_SAME_CITY, anchorSeed, mp.serviceName, mp.villeName) })
+      selected.push({
+        page: mp,
+        anchor: renderAnchor(ANCHOR_SAME_CITY, anchorSeed, mp.serviceName, mp.villeName),
+      })
     }
   }
 
   // Slot 3: different service AND different city
   const crossSilo = all.filter(
-    p => p.serviceSlug !== currentService && p.villeSlug !== currentVille
+    (p) => p.serviceSlug !== currentService && p.villeSlug !== currentVille
   )
   const mp = pick(crossSilo)
   if (mp) {
     const anchorSeed = hashCode(`anchor-slot3-${mp.serviceSlug}-${mp.villeSlug}`)
-    selected.push({ page: mp, anchor: renderAnchor(ANCHOR_CROSS_SILO, anchorSeed, mp.serviceName, mp.villeName) })
+    selected.push({
+      page: mp,
+      anchor: renderAnchor(ANCHOR_CROSS_SILO, anchorSeed, mp.serviceName, mp.villeName),
+    })
   }
 
   // Fallback: fill remaining slots with stride
@@ -144,8 +158,18 @@ function selectMoneyPages(
       const key = `${candidate.serviceSlug}::${candidate.villeSlug}`
       if (!usedKeys.has(key)) {
         usedKeys.add(key)
-        const anchorSeed = hashCode(`anchor-fallback-${candidate.serviceSlug}-${candidate.villeSlug}`)
-        selected.push({ page: candidate, anchor: renderAnchor(ANCHOR_CROSS_SILO, anchorSeed, candidate.serviceName, candidate.villeName) })
+        const anchorSeed = hashCode(
+          `anchor-fallback-${candidate.serviceSlug}-${candidate.villeSlug}`
+        )
+        selected.push({
+          page: candidate,
+          anchor: renderAnchor(
+            ANCHOR_CROSS_SILO,
+            anchorSeed,
+            candidate.serviceName,
+            candidate.villeName
+          ),
+        })
       }
       pos += stride
       if (pos > all.length * 2) break // safety
@@ -164,10 +188,7 @@ function selectMoneyPages(
  * - Section label rotates per page
  * - Deterministic but page-unique selection via hash
  */
-export default function MoneyPageBoost({
-  currentService,
-  currentVille,
-}: MoneyPageBoostProps) {
+export default function MoneyPageBoost({ currentService, currentVille }: MoneyPageBoostProps) {
   const entries = selectMoneyPages(currentService, currentVille)
   if (entries.length === 0) return null
 
@@ -175,7 +196,7 @@ export default function MoneyPageBoost({
   const sectionLabel = SECTION_LABELS[labelSeed % SECTION_LABELS.length]
 
   return (
-    <nav aria-label={sectionLabel} className="border-t border-slate-100 mt-6 pt-4">
+    <nav aria-label={sectionLabel} className="border-t border-charcoal-100 mt-6 pt-4">
       <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">
         {sectionLabel}
       </p>

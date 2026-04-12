@@ -13,12 +13,14 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Plan du site',
-  description: 'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
+  description:
+    'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
   alternates: { canonical: `${SITE_URL}/plan-du-site` },
   robots: { index: false, follow: true },
   openGraph: {
     title: 'Plan du site',
-    description: 'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
+    description:
+      'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
     url: `${SITE_URL}/plan-du-site`,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -26,7 +28,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Plan du site',
-    description: 'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
+    description:
+      'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
   },
 }
 
@@ -35,12 +38,10 @@ export default async function PlanDuSitePage() {
 
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -61,14 +62,14 @@ export default async function PlanDuSitePage() {
 
   // Group cities by department for structured display
   const citiesByDept = departements
-    .map(dept => ({
+    .map((dept) => ({
       dept,
-      cities: villes.filter(v => v.departementCode === dept.code),
+      cities: villes.filter((v) => v.departementCode === dept.code),
     }))
-    .filter(g => g.cities.length > 0)
+    .filter((g) => g.cities.length > 0)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -81,22 +82,22 @@ export default async function PlanDuSitePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">Plan du site</h1>
-        <p className="text-gray-500 mb-10">
+        <h1 className="font-heading text-3xl font-bold text-charcoal-900 mb-2">Plan du site</h1>
+        <p className="text-charcoal-500 mb-10">
           Retrouvez l'ensemble des pages de ServicesArtisans pour trouver votre artisan.
         </p>
 
         {/* Services */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Services ({services.length})
           </h2>
           <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-3">
-            {services.map(s => (
+            {services.map((s) => (
               <Link
                 key={s.slug}
                 href={`/services/${s.slug}`}
-                className="text-sm text-blue-600 hover:text-blue-800 py-1"
+                className="text-sm text-primary-500 hover:text-primary-800 py-1"
               >
                 {s.name}
               </Link>
@@ -106,15 +107,15 @@ export default async function PlanDuSitePage() {
 
         {/* Régions */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Régions ({regions.length})
           </h2>
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {regions.map(r => (
+            {regions.map((r) => (
               <Link
                 key={r.slug}
                 href={`/regions/${r.slug}`}
-                className="text-sm text-blue-600 hover:text-blue-800 py-1"
+                className="text-sm text-primary-500 hover:text-primary-800 py-1"
               >
                 {r.name}
               </Link>
@@ -124,23 +125,26 @@ export default async function PlanDuSitePage() {
 
         {/* Départements avec villes */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Départements et villes ({departements.length} départements, {villes.length} villes)
           </h2>
           <div className="space-y-6">
             {citiesByDept.map(({ dept, cities }) => (
               <div key={dept.code}>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  <Link href={`/departements/${dept.slug}`} className="hover:text-blue-600 transition-colors">
+                <h3 className="font-semibold text-charcoal-900 mb-2">
+                  <Link
+                    href={`/departements/${dept.slug}`}
+                    className="hover:text-primary-500 transition-colors"
+                  >
                     {dept.name} ({dept.code})
                   </Link>
                 </h3>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 ml-4">
-                  {cities.slice(0, 15).map(c => (
+                  {cities.slice(0, 15).map((c) => (
                     <Link
                       key={c.slug}
                       href={`/villes/${c.slug}`}
-                      className="text-sm text-gray-600 hover:text-blue-600"
+                      className="text-sm text-charcoal-600 hover:text-primary-500"
                     >
                       {c.name}
                     </Link>
@@ -148,7 +152,7 @@ export default async function PlanDuSitePage() {
                   {cities.length > 15 && (
                     <Link
                       href={`/departements/${dept.slug}`}
-                      className="text-sm text-blue-600 font-medium"
+                      className="text-sm text-primary-500 font-medium"
                     >
                       +{cities.length - 15} villes
                     </Link>
@@ -161,19 +165,19 @@ export default async function PlanDuSitePage() {
 
         {/* Services par ville (matrice) */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Services par ville
           </h2>
           <div className="space-y-6">
-            {services.map(s => (
+            {services.map((s) => (
               <div key={s.slug}>
-                <h3 className="font-semibold text-gray-900 mb-2">{s.name}</h3>
+                <h3 className="font-semibold text-charcoal-900 mb-2">{s.name}</h3>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 ml-4">
-                  {villes.slice(0, 20).map(v => (
+                  {villes.slice(0, 20).map((v) => (
                     <Link
                       key={`${s.slug}-${v.slug}`}
                       href={`/services/${s.slug}/${v.slug}`}
-                      className="text-sm text-gray-600 hover:text-blue-600"
+                      className="text-sm text-charcoal-600 hover:text-primary-500"
                     >
                       {s.name} à {v.name}
                     </Link>
@@ -186,15 +190,15 @@ export default async function PlanDuSitePage() {
 
         {/* Urgences par service */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Urgences par service
           </h2>
           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {Object.keys(tradeContent).map(slug => (
+            {Object.keys(tradeContent).map((slug) => (
               <Link
                 key={slug}
                 href={`/urgence/${slug}`}
-                className="text-sm text-blue-600 hover:text-blue-800 py-1"
+                className="text-sm text-primary-500 hover:text-primary-800 py-1"
               >
                 {tradeContent[slug].name} urgence
               </Link>
@@ -204,15 +208,15 @@ export default async function PlanDuSitePage() {
 
         {/* Tarifs par service */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Tarifs par service ({Object.keys(tradeContent).length})
           </h2>
           <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-3">
-            {Object.values(tradeContent).map(trade => (
+            {Object.values(tradeContent).map((trade) => (
               <Link
                 key={trade.slug}
                 href={`/tarifs/${trade.slug}`}
-                className="text-sm text-blue-600 hover:text-blue-800 py-1"
+                className="text-sm text-primary-500 hover:text-primary-800 py-1"
               >
                 Tarifs {trade.name.toLowerCase()}
               </Link>
@@ -222,27 +226,30 @@ export default async function PlanDuSitePage() {
 
         {/* Quartiers des grandes villes */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Quartiers des grandes villes
           </h2>
           <div className="space-y-6">
-            {villes.slice(0, 20).map(v => {
+            {villes.slice(0, 20).map((v) => {
               const quartiers = getQuartiersByVille(v.slug)
               if (quartiers.length === 0) return null
               return (
                 <div key={v.slug}>
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    <Link href={`/villes/${v.slug}`} className="hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-charcoal-900 mb-2">
+                    <Link
+                      href={`/villes/${v.slug}`}
+                      className="hover:text-primary-500 transition-colors"
+                    >
                       {v.name}
-                    </Link>
-                    {' '}({quartiers.length} quartiers)
+                    </Link>{' '}
+                    ({quartiers.length} quartiers)
                   </h3>
                   <div className="flex flex-wrap gap-x-4 gap-y-1 ml-4">
-                    {quartiers.map(q => (
+                    {quartiers.map((q) => (
                       <Link
                         key={q.slug}
                         href={`/villes/${v.slug}/${q.slug}`}
-                        className="text-sm text-gray-600 hover:text-blue-600"
+                        className="text-sm text-charcoal-600 hover:text-primary-500"
                       >
                         {q.name}
                       </Link>
@@ -256,15 +263,15 @@ export default async function PlanDuSitePage() {
 
         {/* Blog articles */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Articles du blog ({allArticlesMeta.length})
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {allArticlesMeta.map(article => (
+            {allArticlesMeta.map((article) => (
               <Link
                 key={article.slug}
                 href={`/blog/${article.slug}`}
-                className="text-sm text-blue-600 hover:text-blue-800 py-1"
+                className="text-sm text-primary-500 hover:text-primary-800 py-1"
               >
                 {article.title}
               </Link>
@@ -274,7 +281,7 @@ export default async function PlanDuSitePage() {
 
         {/* Pages utiles */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+          <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-amber-500 pl-4">
             Pages utiles
           </h2>
           <div className="grid md:grid-cols-3 gap-3">
@@ -294,12 +301,12 @@ export default async function PlanDuSitePage() {
               { href: '/cgv', label: 'CGV' },
               { href: '/accessibilite', label: 'Accessibilité' },
               { href: '/mediation', label: 'Médiation' },
-              { href: '/politique-avis', label: 'Politique d\'avis' },
-            ].map(p => (
+              { href: '/politique-avis', label: "Politique d'avis" },
+            ].map((p) => (
               <Link
                 key={p.href}
                 href={p.href}
-                className="text-sm text-blue-600 hover:text-blue-800 py-1"
+                className="text-sm text-primary-500 hover:text-primary-800 py-1"
               >
                 {p.label}
               </Link>

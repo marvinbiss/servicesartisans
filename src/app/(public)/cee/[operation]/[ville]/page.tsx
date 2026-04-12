@@ -167,10 +167,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     return (
       <main className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold text-gray-900 font-jakarta mb-4">
+          <h1 className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4">
             Prime CEE {opCode} &agrave; {villeName}
           </h1>
-          <p className="text-gray-700">
+          <p className="text-charcoal-700">
             Cette op&eacute;ration CEE n&rsquo;est pas actuellement disponible dans notre catalogue.
             Consultez le{' '}
             <Link href="/cee" className="text-emerald-700 underline">
@@ -269,10 +269,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               Fiche officielle DGEC {operation.code}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 font-jakarta">
+          <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
             {operation.nom} : artisans RGE certifi&eacute;s &agrave; {villeName}
           </h1>
-          <p className="mt-3 text-gray-600">
+          <p className="mt-3 text-charcoal-600">
             {count > 0 ? (
               <>
                 {count} artisan{count > 1 ? 's' : ''} RGE qualifi&eacute;{count > 1 ? 's' : ''} pour
@@ -287,7 +287,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           </p>
         </header>
 
-        <section className="mb-8 text-gray-700 leading-relaxed space-y-4">
+        <section className="mb-8 text-charcoal-700 leading-relaxed space-y-4">
           {enrichedParagraphs.map((para, i) => (
             <p key={i} dangerouslySetInnerHTML={{ __html: para }} />
           ))}
@@ -295,8 +295,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
 
         <section className="mb-10">
           {count === 0 ? (
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-              <p className="text-gray-700 mb-3">
+            <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
+              <p className="text-charcoal-700 mb-3">
                 Aucun artisan RGE qualifi&eacute; pour la fiche {operation.code} n&rsquo;est
                 actuellement r&eacute;f&eacute;renc&eacute; &agrave; {villeName}.
               </p>
@@ -309,7 +309,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 </Link>
                 <Link
                   href="/cee"
-                  className="inline-flex items-center px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition"
+                  className="inline-flex items-center px-5 py-2.5 rounded-lg border border-sand-400 text-charcoal-700 font-semibold hover:bg-sand-50 transition"
                 >
                   Voir toutes les primes CEE
                 </Link>
@@ -322,35 +322,35 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
 
         {/* Comprendre cette prime CEE */}
         <section className="mb-12 rounded-2xl border border-emerald-100 bg-emerald-50/50 p-6">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 font-jakarta mb-4">
+          <h2 className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-4">
             Comprendre la prime CEE {operation.code}
           </h2>
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
             <div>
-              <dt className="font-semibold text-gray-900">Domaine</dt>
-              <dd className="text-gray-700">{domaineLabel}</dd>
+              <dt className="font-semibold text-charcoal-900">Domaine</dt>
+              <dd className="text-charcoal-700">{domaineLabel}</dd>
             </div>
             {operation.sous_domaine && (
               <div>
-                <dt className="font-semibold text-gray-900">Sous-domaine</dt>
-                <dd className="text-gray-700">{operation.sous_domaine.replace(/_/g, ' ')}</dd>
+                <dt className="font-semibold text-charcoal-900">Sous-domaine</dt>
+                <dd className="text-charcoal-700">{operation.sous_domaine.replace(/_/g, ' ')}</dd>
               </div>
             )}
             <div>
-              <dt className="font-semibold text-gray-900">Qualifications RGE requises</dt>
-              <dd className="text-gray-700">
+              <dt className="font-semibold text-charcoal-900">Qualifications RGE requises</dt>
+              <dd className="text-charcoal-700">
                 {operation.rge_qualifications_requises.join(', ') || 'Qualibat RGE'}
               </dd>
             </div>
             {operation.unite_mesure && (
               <div>
-                <dt className="font-semibold text-gray-900">Unit&eacute; de mesure</dt>
-                <dd className="text-gray-700">{operation.unite_mesure}</dd>
+                <dt className="font-semibold text-charcoal-900">Unit&eacute; de mesure</dt>
+                <dd className="text-charcoal-700">{operation.unite_mesure}</dd>
               </div>
             )}
             <div>
-              <dt className="font-semibold text-gray-900">&Eacute;ligibilit&eacute;</dt>
-              <dd className="text-gray-700">
+              <dt className="font-semibold text-charcoal-900">&Eacute;ligibilit&eacute;</dt>
+              <dd className="text-charcoal-700">
                 {operation.classique_eligible && 'Tous m\u00e9nages'}
                 {operation.classique_eligible && operation.precarite_eligible && ' + '}
                 {operation.precarite_eligible && 'Bonifi\u00e9 pr\u00e9carit\u00e9'}
@@ -358,7 +358,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             </div>
             {operation.coup_de_pouce && (
               <div>
-                <dt className="font-semibold text-gray-900">Coup de pouce</dt>
+                <dt className="font-semibold text-charcoal-900">Coup de pouce</dt>
                 <dd className="text-emerald-700 font-semibold">
                   Oui{operation.coup_de_pouce_charte ? ` (${operation.coup_de_pouce_charte})` : ''}
                 </dd>
@@ -382,23 +382,26 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {/* FAQ */}
         {faqItems.length > 0 && (
           <section aria-labelledby="faq" className="mb-12">
-            <h2 id="faq" className="text-xl md:text-2xl font-bold text-gray-900 font-jakarta mb-6">
+            <h2
+              id="faq"
+              className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-6"
+            >
               Questions fr&eacute;quentes &mdash; {operation.nom} &agrave; {villeName}
             </h2>
             <div className="space-y-3">
               {faqItems.map((item, i) => (
                 <details
                   key={i}
-                  className="group rounded-lg border border-gray-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                  className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
                 >
-                  <summary className="cursor-pointer list-none font-semibold text-gray-900 flex items-start justify-between gap-4">
+                  <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                     <span>{item.question}</span>
                     <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
                       +
                     </span>
                   </summary>
                   <p
-                    className="mt-3 text-gray-700 leading-relaxed"
+                    className="mt-3 text-charcoal-700 leading-relaxed"
                     dangerouslySetInnerHTML={{ __html: item.answer }}
                   />
                 </details>
@@ -410,10 +413,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {/* Cross-linking m\u00e9tiers RGE */}
         {rgeServices.length > 0 && (
           <section aria-labelledby="rge-services" className="mb-12">
-            <h2 id="rge-services" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+            <h2 id="rge-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
               M&eacute;tiers RGE qualifi&eacute;s &agrave; {villeName}
             </h2>
-            <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+            <p className="text-sm text-charcoal-600 mb-4 max-w-3xl">
               Explorer l&rsquo;annuaire des artisans RGE par m&eacute;tier &agrave; {villeName}
               &nbsp;:
             </p>
@@ -440,7 +443,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {/* Cross-linking villes */}
         {otherCities.length > 0 && (
           <section aria-labelledby="other-cities" className="mb-12">
-            <h2 id="other-cities" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+            <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
               {operation.nom} dans d&rsquo;autres villes
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -448,7 +451,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 <Link
                   key={c.slug}
                   href={`/cee/${opCode}/${c.slug}`}
-                  className="inline-flex items-center px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center px-4 py-2 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
                 >
                   {c.name}
                 </Link>
@@ -460,7 +463,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {/* Cross-linking op\u00e9rations */}
         {sameDomainOps.length > 0 && (
           <section aria-labelledby="same-domain" className="mb-12">
-            <h2 id="same-domain" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+            <h2 id="same-domain" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
               Autres primes CEE du domaine {domaineLabel.toLowerCase()}
             </h2>
             <ul className="grid gap-3 md:grid-cols-3">
@@ -468,10 +471,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 <li key={op.code}>
                   <Link
                     href={`/cee/${op.code}/${villeSlug}`}
-                    className="block rounded-lg border border-gray-200 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                    className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
                   >
                     <div className="text-xs font-semibold text-emerald-700">{op.code}</div>
-                    <div className="font-semibold text-gray-900 mt-1">{op.nom}</div>
+                    <div className="font-semibold text-charcoal-900 mt-1">{op.nom}</div>
                   </Link>
                 </li>
               ))}
@@ -479,11 +482,11 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           </section>
         )}
 
-        <section className="mb-12 rounded-2xl border border-gray-200 bg-white p-6 text-center">
-          <h2 className="text-lg font-bold text-gray-900 font-jakarta mb-2">
+        <section className="mb-12 rounded-2xl border border-sand-300 bg-white p-6 text-center">
+          <h2 className="text-lg font-bold text-charcoal-900 font-jakarta mb-2">
             Pr&ecirc;t &agrave; lancer votre projet &agrave; {villeName}&nbsp;?
           </h2>
-          <p className="text-gray-600 text-sm mb-4 max-w-2xl mx-auto">
+          <p className="text-charcoal-600 text-sm mb-4 max-w-2xl mx-auto">
             Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute; pour la
             fiche {operation.code}. Devis sans engagement, primes CEE et MaPrimeR&eacute;nov&rsquo;
             calcul&eacute;es automatiquement.

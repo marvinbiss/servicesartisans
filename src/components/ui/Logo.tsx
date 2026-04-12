@@ -27,9 +27,7 @@ export default function Logo({
 }: LogoProps) {
   const { icon: iconSize, text: textSize } = sizes[size]
 
-  const textColor = theme === 'dark'
-    ? 'text-white'
-    : 'text-gray-900'
+  const textColor = theme === 'dark' ? 'text-white' : 'text-charcoal-900'
 
   const LogoIcon = () => (
     <svg
@@ -56,11 +54,7 @@ export default function Logo({
       <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#logoGradient)" />
 
       {/* House roof — clean proportions */}
-      <path
-        d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z"
-        fill="white"
-        fillOpacity="0.95"
-      />
+      <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
 
       {/* Wrench — simplified, bolder */}
       <path
@@ -85,7 +79,7 @@ export default function Logo({
 
   const LogoText = () => (
     <span className={clsx('font-heading font-extrabold tracking-tight', textSize, textColor)}>
-      Services<span className="text-blue-600">Artisans</span>
+      Services<span className="text-primary-500">Artisans</span>
     </span>
   )
 
@@ -98,7 +92,10 @@ export default function Logo({
 
   if (href) {
     return (
-      <Link href={href} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
+      <Link
+        href={href}
+        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 rounded"
+      >
         {content}
       </Link>
     )
@@ -110,7 +107,7 @@ export default function Logo({
 // Tagline component
 export function Tagline({ className }: { className?: string }) {
   return (
-    <p className={clsx('text-gray-600', className)}>
+    <p className={clsx('text-charcoal-600', className)}>
       Trouvez des artisans qualifiés près de chez vous
     </p>
   )

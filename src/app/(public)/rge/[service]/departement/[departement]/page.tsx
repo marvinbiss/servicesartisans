@@ -174,10 +174,10 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
         />
 
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 font-jakarta">
+          <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
             {serviceName} certifi&eacute; RGE dans le {dept.name} ({dept.code})
           </h1>
-          <p className="mt-3 text-gray-600">
+          <p className="mt-3 text-charcoal-600">
             {count > 0 ? (
               <>
                 <strong>{count.toLocaleString('fr-FR')}</strong> {serviceName.toLowerCase()} RGE{' '}
@@ -192,7 +192,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
           </p>
         </header>
 
-        <section className="mb-8 text-gray-700 leading-relaxed space-y-4">
+        <section className="mb-8 text-charcoal-700 leading-relaxed space-y-4">
           <p>
             {qualif ? (
               <>
@@ -242,12 +242,12 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
         <section className="mb-12">
           {count === 0 ? (
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-              <p className="text-gray-700">
+            <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
+              <p className="text-charcoal-700">
                 Aucun {serviceName.toLowerCase()} RGE actif actuellement
                 r&eacute;f&eacute;renc&eacute; dans le d&eacute;partement {dept.name}.
               </p>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-charcoal-500">
                 Consultez{' '}
                 <Link href={`/rge/${serviceSlug}`} className="text-clay-500 underline">
                   tous les {serviceName.toLowerCase()} RGE de France
@@ -269,10 +269,10 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
         {topVilles.length > 0 && (
           <section aria-labelledby="top-villes" className="mb-12">
-            <h2 id="top-villes" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+            <h2 id="top-villes" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
               {serviceName} RGE par ville dans le {dept.name}
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-charcoal-600 mb-4">
               Affinez votre recherche en ciblant directement la commune o&ugrave; vos travaux seront
               r&eacute;alis&eacute;s.
             </p>
@@ -281,7 +281,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                 <Link
                   key={v.slug}
                   href={`/rge/${serviceSlug}/${v.slug}`}
-                  className="flex items-center justify-between px-3 py-2 bg-white rounded-lg border border-gray-200 hover:border-emerald-400 hover:bg-emerald-50 transition text-sm text-gray-700 hover:text-emerald-700"
+                  className="flex items-center justify-between px-3 py-2 bg-white rounded-lg border border-sand-300 hover:border-emerald-400 hover:bg-emerald-50 transition text-sm text-charcoal-700 hover:text-emerald-700"
                 >
                   <span className="truncate font-medium">{v.name}</span>
                 </Link>
@@ -291,7 +291,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
         )}
 
         <section aria-labelledby="other-services" className="mb-12">
-          <h2 id="other-services" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+          <h2 id="other-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
             Autres m&eacute;tiers RGE dans le {dept.name}
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -301,7 +301,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                 <Link
                   key={s}
                   href={`/rge/${s}/departement/${deptSlug}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full border border-gray-200 text-xs font-medium text-gray-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full border border-sand-300 text-xs font-medium text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
                 >
                   {otherLabel?.label ?? s}
                 </Link>
@@ -311,17 +311,19 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
         </section>
 
         <section aria-labelledby="cross-links" className="mb-12">
-          <h2 id="cross-links" className="text-xl font-bold text-gray-900 font-jakarta mb-4">
+          <h2 id="cross-links" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
             Aller plus loin
           </h2>
           <ul className="grid gap-3 md:grid-cols-2">
             <li>
               <Link
                 href={`/rge/${serviceSlug}`}
-                className="block rounded-lg border border-gray-200 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
               >
-                <div className="font-semibold text-gray-900">Hub national {serviceName} RGE</div>
-                <div className="text-sm text-gray-500">
+                <div className="font-semibold text-charcoal-900">
+                  Hub national {serviceName} RGE
+                </div>
+                <div className="text-sm text-charcoal-500">
                   Vue d&rsquo;ensemble, guides et qualifications
                 </div>
               </Link>
@@ -329,19 +331,25 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
             <li>
               <Link
                 href={`/departements/${deptSlug}`}
-                className="block rounded-lg border border-gray-200 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
               >
-                <div className="font-semibold text-gray-900">Tous les artisans du {dept.name}</div>
-                <div className="text-sm text-gray-500">Annuaire complet du d&eacute;partement</div>
+                <div className="font-semibold text-charcoal-900">
+                  Tous les artisans du {dept.name}
+                </div>
+                <div className="text-sm text-charcoal-500">
+                  Annuaire complet du d&eacute;partement
+                </div>
               </Link>
             </li>
             <li>
               <Link
                 href="/rge/qualifications"
-                className="block rounded-lg border border-gray-200 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
               >
-                <div className="font-semibold text-gray-900">Comprendre les qualifications RGE</div>
-                <div className="text-sm text-gray-500">
+                <div className="font-semibold text-charcoal-900">
+                  Comprendre les qualifications RGE
+                </div>
+                <div className="text-sm text-charcoal-500">
                   QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV
                 </div>
               </Link>
@@ -349,10 +357,10 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
             <li>
               <Link
                 href="/cee/guides"
-                className="block rounded-lg border border-gray-200 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
               >
-                <div className="font-semibold text-gray-900">Guides primes CEE 2026</div>
-                <div className="text-sm text-gray-500">
+                <div className="font-semibold text-charcoal-900">Guides primes CEE 2026</div>
+                <div className="text-sm text-charcoal-500">
                   Montants et conditions par op&eacute;ration
                 </div>
               </Link>

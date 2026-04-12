@@ -14,7 +14,10 @@ const FIELDS = ['phone', 'phone_secondary', 'email', 'website'] as const
 const PHONE_PATTERN = '^(?:\\+33|0)[1-9](?:[\\s.\\-]*\\d{2}){4}$'
 
 export function ContactSection({ provider, onSaved }: ContactSectionProps) {
-  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
+  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(
+    provider,
+    FIELDS
+  )
 
   const onSave = async () => {
     const updated = await handleSave()
@@ -34,7 +37,10 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="contact-phone" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact-phone"
+              className="block text-sm font-medium text-charcoal-700 mb-2"
+            >
               Téléphone principal
             </label>
             <input
@@ -45,12 +51,17 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               pattern={PHONE_PATTERN}
               maxLength={20}
               placeholder="06 12 34 56 78"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
-            <p className="text-xs text-gray-500 mt-1">Format : 06 12 34 56 78 ou +33 6 12 34 56 78</p>
+            <p className="text-xs text-charcoal-500 mt-1">
+              Format : 06 12 34 56 78 ou +33 6 12 34 56 78
+            </p>
           </div>
           <div>
-            <label htmlFor="contact-phone-secondary" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact-phone-secondary"
+              className="block text-sm font-medium text-charcoal-700 mb-2"
+            >
               Téléphone secondaire
             </label>
             <input
@@ -61,15 +72,20 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               pattern={PHONE_PATTERN}
               maxLength={20}
               placeholder="06 12 34 56 78"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
-            <p className="text-xs text-gray-500 mt-1">Format : 06 12 34 56 78 ou +33 6 12 34 56 78</p>
+            <p className="text-xs text-charcoal-500 mt-1">
+              Format : 06 12 34 56 78 ou +33 6 12 34 56 78
+            </p>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact-email"
+              className="block text-sm font-medium text-charcoal-700 mb-2"
+            >
               Email
             </label>
             <input
@@ -79,11 +95,14 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               onChange={(e) => setField('email', e.target.value || null)}
               maxLength={200}
               placeholder="contact@entreprise.fr"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
           </div>
           <div>
-            <label htmlFor="contact-website" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact-website"
+              className="block text-sm font-medium text-charcoal-700 mb-2"
+            >
               Site web
             </label>
             <input
@@ -93,7 +112,7 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               onChange={(e) => setField('website', e.target.value || null)}
               maxLength={500}
               placeholder="https://www.entreprise.fr"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
           </div>
         </div>

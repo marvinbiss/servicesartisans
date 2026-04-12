@@ -5,24 +5,27 @@ import { QuickSiteLinks } from '@/components/InternalLinks'
 
 export default function FacturesPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
             items={[
               { label: 'Espace Client', href: '/espace-client' },
-              { label: 'Factures et paiements' }
+              { label: 'Factures et paiements' },
             ]}
             className="mb-4"
           />
           <div className="flex items-center gap-4">
-            <Link href="/espace-client/mes-demandes" className="text-gray-600 hover:text-gray-900">
+            <Link
+              href="/espace-client/mes-demandes"
+              className="text-charcoal-600 hover:text-charcoal-900"
+            >
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Factures et paiements</h1>
-              <p className="text-gray-600">Historique de vos transactions</p>
+              <h1 className="text-2xl font-bold text-charcoal-900">Factures et paiements</h1>
+              <p className="text-charcoal-600">Historique de vos transactions</p>
             </div>
           </div>
         </div>
@@ -30,13 +33,11 @@ export default function FacturesPage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-xl p-10 text-center shadow-sm">
-          <FileText className="w-14 h-14 text-gray-300 mx-auto mb-5" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-3">
+          <FileText className="w-14 h-14 text-sand-500 mx-auto mb-5" />
+          <h2 className="text-xl font-semibold text-charcoal-900 mb-3">
             Fonctionnalité en cours de développement
           </h2>
-          <p className="text-gray-600">
-            Les factures seront disponibles prochainement.
-          </p>
+          <p className="text-charcoal-600">Les factures seront disponibles prochainement.</p>
         </div>
 
         <QuickSiteLinks className="mt-8" />

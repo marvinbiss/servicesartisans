@@ -67,7 +67,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
 
       if (!response.ok) {
         const data = await response.json().catch(() => null)
-        throw new Error(data?.error || 'Erreur lors de l\'envoi')
+        throw new Error(data?.error || "Erreur lors de l'envoi")
       }
 
       setIsSuccess(true)
@@ -84,15 +84,10 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
       <div className="text-center py-4">
         <div className="text-4xl mb-2">✅</div>
         <p className="text-green-600 font-medium">Demande envoyée !</p>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-charcoal-500 mt-1">
           L'artisan vous contactera dans les meilleurs délais.
         </p>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsSuccess(false)}
-          className="mt-3"
-        >
+        <Button variant="outline" size="sm" onClick={() => setIsSuccess(false)} className="mt-3">
           Nouvelle demande
         </Button>
       </div>
@@ -143,7 +138,7 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
       <select
         value={formData.urgency}
         onChange={(e) => setFormData({ ...formData, urgency: e.target.value })}
-        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+        className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm"
       >
         <option value="flexible">Pas urgent</option>
         <option value="mois">Ce mois-ci</option>
@@ -170,13 +165,15 @@ export function QuoteForm({ providerId: _providerId, serviceSlug, onSuccess }: Q
           type="checkbox"
           checked={consentRgpd}
           onChange={(e) => setConsentRgpd(e.target.checked)}
-          className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          className="mt-1 rounded border-sand-400 text-primary-500 focus:ring-primary-400"
         />
-        <span className="text-xs text-gray-500">
-          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-          <Link href="/confidentialite" className="underline hover:text-blue-600">
+        <span className="text-xs text-charcoal-500">
+          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en
+          relation avec des artisans partenaires. Voir notre{' '}
+          <Link href="/confidentialite" className="underline hover:text-primary-500">
             politique de confidentialité
-          </Link>.
+          </Link>
+          .
         </span>
       </label>
 

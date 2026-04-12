@@ -11,7 +11,12 @@ interface AvailabilityFilterProps {
   className?: string
 }
 
-const OPTIONS: { value: AvailabilityOption; label: string; sublabel: string; icon: React.ElementType }[] = [
+const OPTIONS: {
+  value: AvailabilityOption
+  label: string
+  sublabel: string
+  icon: React.ElementType
+}[] = [
   {
     value: 'any',
     label: 'Tous',
@@ -20,7 +25,7 @@ const OPTIONS: { value: AvailabilityOption; label: string; sublabel: string; ico
   },
   {
     value: 'today',
-    label: 'Aujourd\'hui',
+    label: "Aujourd'hui",
     sublabel: 'Disponible maintenant',
     icon: Clock,
   },
@@ -38,11 +43,7 @@ const OPTIONS: { value: AvailabilityOption; label: string; sublabel: string; ico
   },
 ]
 
-export function AvailabilityFilter({
-  value,
-  onChange,
-  className,
-}: AvailabilityFilterProps) {
+export function AvailabilityFilter({ value, onChange, className }: AvailabilityFilterProps) {
   return (
     <div className={cn('space-y-2', className)}>
       {OPTIONS.map((option) => {
@@ -57,15 +58,13 @@ export function AvailabilityFilter({
               'w-full flex items-center gap-3 p-3 rounded-lg border transition-all',
               isSelected
                 ? 'border-purple-500 bg-purple-50'
-                : 'border-gray-200 hover:border-gray-300'
+                : 'border-sand-300 hover:border-sand-400'
             )}
           >
             <div
               className={cn(
                 'w-10 h-10 rounded-full flex items-center justify-center',
-                isSelected
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-100 text-gray-500'
+                isSelected ? 'bg-purple-500 text-white' : 'bg-sand-100 text-charcoal-500'
               )}
             >
               <Icon className="w-5 h-5" />
@@ -73,23 +72,14 @@ export function AvailabilityFilter({
 
             <div className="flex-1 text-left">
               <div
-                className={cn(
-                  'font-medium',
-                  isSelected
-                    ? 'text-purple-700'
-                    : 'text-gray-900'
-                )}
+                className={cn('font-medium', isSelected ? 'text-purple-700' : 'text-charcoal-900')}
               >
                 {option.label}
               </div>
-              <div className="text-sm text-gray-500">
-                {option.sublabel}
-              </div>
+              <div className="text-sm text-charcoal-500">{option.sublabel}</div>
             </div>
 
-            {isSelected && (
-              <Check className="w-5 h-5 text-purple-500" />
-            )}
+            {isSelected && <Check className="w-5 h-5 text-purple-500" />}
           </button>
         )
       })}

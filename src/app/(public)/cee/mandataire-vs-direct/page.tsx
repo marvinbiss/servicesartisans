@@ -231,7 +231,7 @@ export default function MandataireVsDirectPage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Scale className="w-4 h-4 text-emerald-300" />
@@ -267,7 +267,7 @@ export default function MandataireVsDirectPage() {
 
       {/* Intro éditoriale */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <p className="text-slate-700 leading-relaxed text-lg mb-4">
+        <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
           Le dispositif des certificats d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie,
           cr&eacute;&eacute; par la loi POPE du 13 juillet 2005 et codifi&eacute; aux articles
           L221-1 &agrave; L221-12 du code de l&rsquo;&eacute;nergie, repose sur un principe
@@ -277,7 +277,7 @@ export default function MandataireVsDirectPage() {
           d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie (PNCEE), service de la Direction
           g&eacute;n&eacute;rale de l&rsquo;&eacute;nergie et du climat.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           Autour de ce m&eacute;canisme, trois r&ocirc;les se sont stabilis&eacute;s au fil des
           p&eacute;riodes d&rsquo;obligation&nbsp;: les
           <strong> oblig&eacute;s</strong>, qui portent l&rsquo;obligation l&eacute;gale&nbsp;; les{' '}
@@ -288,7 +288,7 @@ export default function MandataireVsDirectPage() {
           l&rsquo;origine d&rsquo;une grande partie des malentendus &mdash; et de certaines arnaques
           &mdash; rencontr&eacute;s par les particuliers et les artisans.
         </p>
-        <p className="text-slate-700 leading-relaxed">
+        <p className="text-charcoal-700 leading-relaxed">
           Cet article d&eacute;crit chaque r&ocirc;le, ses obligations PNCEE, son mod&egrave;le
           &eacute;conomique et ses limites. Il d&eacute;taille ensuite ce que cela change
           concr&egrave;tement pour un particulier qui fait isoler sa maison, pour un artisan RGE qui
@@ -298,12 +298,12 @@ export default function MandataireVsDirectPage() {
       </section>
 
       {/* Les 3 rôles */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
             Les 3 r&ocirc;les du circuit CEE
           </h2>
-          <p className="text-slate-600 max-w-3xl mb-10 leading-relaxed">
+          <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
             Trois acteurs, trois responsabilit&eacute;s r&eacute;glementaires tr&egrave;s
             diff&eacute;rentes. Les d&eacute;finitions ci-dessous s&rsquo;appuient sur les articles
             L221-1 &agrave; L221-12 et R221-1 &agrave; R221-27 du code de l&rsquo;&eacute;nergie,
@@ -317,35 +317,35 @@ export default function MandataireVsDirectPage() {
               return (
                 <article
                   key={role.key}
-                  className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col"
+                  className="bg-white rounded-2xl border border-charcoal-200 p-6 flex flex-col"
                 >
                   <div className="flex items-start gap-3 mb-4">
                     <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
                       <Icon className="w-5 h-5 text-emerald-700" />
                     </div>
                     <div>
-                      <h3 className="font-heading text-xl font-bold text-slate-900">
+                      <h3 className="font-heading text-xl font-bold text-charcoal-900">
                         {role.label}
                       </h3>
                       <p className="text-sm text-emerald-700 font-medium mt-0.5">{role.tagline}</p>
                     </div>
                   </div>
 
-                  <div className="space-y-4 text-sm text-slate-700 leading-relaxed">
+                  <div className="space-y-4 text-sm text-charcoal-700 leading-relaxed">
                     <div>
-                      <div className="font-semibold text-slate-900 mb-1">
+                      <div className="font-semibold text-charcoal-900 mb-1">
                         D&eacute;finition juridique
                       </div>
                       <p>{role.legal}</p>
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900 mb-1">
+                      <div className="font-semibold text-charcoal-900 mb-1">
                         Ce qu&rsquo;il fait concr&egrave;tement
                       </div>
                       <p>{role.mission}</p>
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900 mb-1">Obligations PNCEE</div>
+                      <div className="font-semibold text-charcoal-900 mb-1">Obligations PNCEE</div>
                       <ul className="list-disc pl-5 space-y-1.5">
                         {role.obligations.map((o, i) => (
                           <li key={i}>{o}</li>
@@ -353,13 +353,13 @@ export default function MandataireVsDirectPage() {
                       </ul>
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900 mb-1">
+                      <div className="font-semibold text-charcoal-900 mb-1">
                         D&rsquo;o&ugrave; vient sa marge
                       </div>
                       <p>{role.revenue}</p>
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900 mb-1">Exemples</div>
+                      <div className="font-semibold text-charcoal-900 mb-1">Exemples</div>
                       <p>{role.examples}</p>
                     </div>
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
@@ -384,14 +384,14 @@ export default function MandataireVsDirectPage() {
       {/* Impact particulier */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <Users className="w-5 h-5 text-blue-700" />
+          <div className="w-11 h-11 rounded-xl bg-primary-100 flex items-center justify-center flex-shrink-0">
+            <Users className="w-5 h-5 text-primary-600" />
           </div>
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Quel impact pour le particulier&nbsp;?
           </h2>
         </div>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           En pratique, le particulier qui fait isoler ses combles ou remplacer sa chaudi&egrave;re
           ne voit pas de diff&eacute;rence fondamentale selon le type d&rsquo;acteur qu&rsquo;il a
           en face de lui. Les bar&egrave;mes forfaitaires des op&eacute;rations standardis&eacute;es
@@ -399,7 +399,7 @@ export default function MandataireVsDirectPage() {
           gain &eacute;nerg&eacute;tique calcul&eacute; (en kWh cumac) est le m&ecirc;me quel que
           soit le circuit emprunt&eacute;.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           Ce qui varie, c&rsquo;est le <strong>prix de rachat</strong> de ce cumac &mdash; donc le
           montant de prime finalement vers&eacute; au b&eacute;n&eacute;ficiaire. Ce prix
           d&eacute;pend de la politique commerciale de chaque d&eacute;l&eacute;gataire et du niveau
@@ -407,14 +407,14 @@ export default function MandataireVsDirectPage() {
           non couvertes par une charte Coup de pouce, les &eacute;carts peuvent &ecirc;tre
           significatifs d&rsquo;un acteur &agrave; l&rsquo;autre.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           Le service rendu varie aussi nettement. Certains acteurs proposent un accompagnement de
           bout en bout (qualification, montage, relances, SAV), d&rsquo;autres se contentent
           d&rsquo;une plateforme self-service. Le d&eacute;lai de versement de la prime &mdash;
           souvent entre 4 et 12 semaines apr&egrave;s d&eacute;p&ocirc;t du dossier complet &mdash;
           varie &eacute;galement selon la charge du d&eacute;l&eacute;gataire et son taux de rejet.
         </p>
-        <p className="text-slate-700 leading-relaxed">
+        <p className="text-charcoal-700 leading-relaxed">
           En r&eacute;sum&eacute;&nbsp;: le montant maximal th&eacute;orique de la prime est
           fig&eacute; par la r&eacute;glementation, mais le montant r&eacute;ellement per&ccedil;u,
           le d&eacute;lai de versement et la qualit&eacute; du SAV d&eacute;pendent beaucoup du
@@ -423,38 +423,38 @@ export default function MandataireVsDirectPage() {
       </section>
 
       {/* Impact artisan */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
           <div className="flex items-start gap-3 mb-4">
             <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
               <Wrench className="w-5 h-5 text-emerald-700" />
             </div>
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Quel impact pour l&rsquo;artisan&nbsp;?
             </h2>
           </div>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Pour un artisan RGE, le choix du partenaire CEE est op&eacute;rationnel avant
             d&rsquo;&ecirc;tre commercial. Trois crit&egrave;res font la diff&eacute;rence au
             quotidien&nbsp;: la facilit&eacute; d&rsquo;instruction des dossiers, le d&eacute;lai de
             versement de la prime au client final, et la qualit&eacute; du contr&ocirc;le
             qualit&eacute; impos&eacute; avant d&eacute;p&ocirc;t au PNCEE.
           </p>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             La <strong>facilit&eacute; d&rsquo;instruction</strong> d&eacute;pend de la
             clart&eacute; des pi&egrave;ces demand&eacute;es, de l&rsquo;existence d&rsquo;un outil
             de d&eacute;p&ocirc;t en ligne stable, et de la r&eacute;activit&eacute; du support en
             cas de doute sur un dossier. Un mandataire s&eacute;rieux peut apporter une vraie valeur
             sur ce point en absorbant une partie du travail administratif.
           </p>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Le <strong>d&eacute;lai de versement</strong> impacte directement la tr&eacute;sorerie
             du chantier quand la prime est factur&eacute;e en d&eacute;duction du devis (principe du
             tiers payant). Un d&eacute;lai moyen court est un vrai diff&eacute;renciateur pour
             l&rsquo;artisan&nbsp;; un d&eacute;lai long, au contraire, tend les relations avec les
             clients finaux.
           </p>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Enfin, la <strong>qualit&eacute; du contr&ocirc;le</strong>
             impos&eacute; avant d&eacute;p&ocirc;t au PNCEE est paradoxalement un bon signe&nbsp;:
             un partenaire exigeant sur les photos g&eacute;otagg&eacute;es, les factures et
@@ -463,7 +463,7 @@ export default function MandataireVsDirectPage() {
             reporte ce risque sur l&rsquo;installateur, qui peut se retrouver avec une prime
             r&eacute;clam&eacute;e en restitution des ann&eacute;es apr&egrave;s le chantier.
           </p>
-          <p className="text-slate-700 leading-relaxed">
+          <p className="text-charcoal-700 leading-relaxed">
             Le bon partenaire CEE n&rsquo;est donc pas forc&eacute;ment celui qui propose la prime
             la plus &eacute;lev&eacute;e&nbsp;: c&rsquo;est celui qui combine un bar&egrave;me
             comp&eacute;titif, un d&eacute;lai de paiement fiable et un contr&ocirc;le
@@ -478,11 +478,11 @@ export default function MandataireVsDirectPage() {
           <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
             <ShieldCheck className="w-5 h-5 text-emerald-700" />
           </div>
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Comment v&eacute;rifier qu&rsquo;un partenaire CEE est l&eacute;gitime&nbsp;?
           </h2>
         </div>
-        <p className="text-slate-700 leading-relaxed mb-6">
+        <p className="text-charcoal-700 leading-relaxed mb-6">
           Que vous soyez un particulier qui re&ccedil;oit une proposition de prime ou un artisan qui
           &eacute;value un partenariat, quelques v&eacute;rifications simples permettent de filtrer
           la quasi-totalit&eacute; des acteurs douteux.
@@ -516,16 +516,16 @@ export default function MandataireVsDirectPage() {
           ].map((item, i) => (
             <li
               key={i}
-              className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 p-4"
+              className="flex items-start gap-3 bg-white rounded-xl border border-charcoal-200 p-4"
             >
               <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" />
               <div>
                 <div
-                  className="font-semibold text-slate-900 mb-1"
+                  className="font-semibold text-charcoal-900 mb-1"
                   dangerouslySetInnerHTML={{ __html: item.title }}
                 />
                 <p
-                  className="text-sm text-slate-700 leading-relaxed"
+                  className="text-sm text-charcoal-700 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: item.text }}
                 />
               </div>
@@ -535,24 +535,24 @@ export default function MandataireVsDirectPage() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-10">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
             Questions fr&eacute;quentes
           </h2>
           <div className="space-y-4">
             {FAQ.map((item, idx) => (
               <details
                 key={idx}
-                className="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 transition p-6"
+                className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
               >
-                <summary className="font-heading font-bold text-lg text-slate-900 cursor-pointer list-none flex items-start justify-between gap-4">
+                <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                     +
                   </span>
                 </summary>
-                <p className="text-slate-700 mt-4 leading-relaxed">{item.answer}</p>
+                <p className="text-charcoal-700 mt-4 leading-relaxed">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -561,10 +561,10 @@ export default function MandataireVsDirectPage() {
 
       {/* Sources officielles */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-xl md:text-2xl font-extrabold text-slate-900 mb-4">
+        <h2 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 mb-4">
           Sources r&eacute;glementaires
         </h2>
-        <ul className="space-y-3 text-sm text-slate-700">
+        <ul className="space-y-3 text-sm text-charcoal-700">
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>

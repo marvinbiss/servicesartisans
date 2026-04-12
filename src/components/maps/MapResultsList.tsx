@@ -3,8 +3,15 @@
 import type { Ref } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Star, ChevronDown, ChevronUp,
-  Loader2, X, Shield, Heart, ExternalLink, MapPin
+  Star,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  X,
+  Shield,
+  Heart,
+  ExternalLink,
+  MapPin,
 } from 'lucide-react'
 import Link from 'next/link'
 import NextImage from 'next/image'
@@ -65,16 +72,12 @@ export function DesktopResultsSidebar({
           className="bg-white border-r overflow-hidden hidden md:flex flex-col"
         >
           {/* Results Header */}
-          <div className="p-4 border-b bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
+          <div className="p-4 border-b bg-gradient-to-r from-sand-50 to-white flex items-center justify-between">
             <div>
-              <p className="font-semibold text-gray-900">
-                {providers.length} artisans
-              </p>
-              <p className="text-sm text-gray-500">dans cette zone</p>
+              <p className="font-semibold text-charcoal-900">{providers.length} artisans</p>
+              <p className="text-sm text-charcoal-500">dans cette zone</p>
             </div>
-            {loading && (
-              <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
-            )}
+            {loading && <Loader2 className="w-5 h-5 animate-spin text-primary-500" />}
           </div>
 
           {/* Results List */}
@@ -90,20 +93,27 @@ export function DesktopResultsSidebar({
                 onClick={() => onSelectProvider(provider)}
                 className={`p-4 border-b cursor-pointer transition-all ${
                   selectedProvider?.id === provider.id
-                    ? 'bg-blue-50 border-l-4 border-l-blue-600'
+                    ? 'bg-primary-50 border-l-4 border-l-primary-500'
                     : hoveredProvider?.id === provider.id
-                    ? 'bg-gray-50'
-                    : 'hover:bg-gray-50'
+                      ? 'bg-sand-50'
+                      : 'hover:bg-sand-50'
                 }`}
               >
                 <div className="flex gap-4">
                   {/* Avatar */}
                   <div className="relative flex-shrink-0">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
+                    <div className="w-20 h-20 bg-gradient-to-br from-sand-300 to-sand-400 rounded-xl flex items-center justify-center overflow-hidden">
                       {provider.avatar_url ? (
-                        <NextImage src={provider.avatar_url} alt={provider.name} width={80} height={80} sizes="80px" className="w-full h-full object-cover" />
+                        <NextImage
+                          src={provider.avatar_url}
+                          alt={provider.name}
+                          width={80}
+                          height={80}
+                          sizes="80px"
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
-                        <span className="text-3xl font-bold text-gray-400">
+                        <span className="text-3xl font-bold text-charcoal-400">
                           {provider.name.charAt(0)}
                         </span>
                       )}
@@ -113,27 +123,25 @@ export function DesktopResultsSidebar({
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-semibold text-gray-900 truncate">
-                        {provider.name}
-                      </h3>
+                      <h3 className="font-semibold text-charcoal-900 truncate">{provider.name}</h3>
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
                           onToggleFavorite(provider.id)
                         }}
-                        className="flex-shrink-0 p-1 rounded-full hover:bg-gray-100"
+                        className="flex-shrink-0 p-1 rounded-full hover:bg-sand-100"
                       >
                         <Heart
                           className={`w-5 h-5 transition-colors ${
                             favorites.has(provider.id)
                               ? 'fill-red-500 text-red-500'
-                              : 'text-gray-400'
+                              : 'text-charcoal-400'
                           }`}
                         />
                       </button>
                     </div>
 
-                    <p className="text-sm text-blue-600 font-medium">
+                    <p className="text-sm text-primary-500 font-medium">
                       {provider.specialty || 'Artisan'}
                     </p>
 
@@ -143,9 +151,7 @@ export function DesktopResultsSidebar({
                         <span className="font-semibold text-sm">
                           {provider.rating_average?.toFixed(1)}
                         </span>
-                        <span className="text-gray-400 text-sm">
-                          ({provider.review_count})
-                        </span>
+                        <span className="text-charcoal-400 text-sm">({provider.review_count})</span>
                       </div>
                       {provider.is_verified && (
                         <span className="flex items-center gap-1 text-green-600 text-xs">
@@ -155,7 +161,7 @@ export function DesktopResultsSidebar({
                       )}
                     </div>
 
-                    <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                    <p className="text-sm text-charcoal-500 mt-1 flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
                       {provider.address_city}
                     </p>
@@ -163,9 +169,14 @@ export function DesktopResultsSidebar({
                     {/* Quick Actions */}
                     <div className="flex gap-2 mt-3">
                       <Link
-                        href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
+                        href={getArtisanUrl({
+                          stable_id: provider.stable_id,
+                          slug: provider.slug,
+                          specialty: provider.specialty,
+                          city: provider.address_city,
+                        })}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                        className="flex-1 text-center py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
                       >
                         Voir profil
                       </Link>
@@ -178,9 +189,9 @@ export function DesktopResultsSidebar({
             {/* Empty State */}
             {providers.length === 0 && !loading && (
               <div className="p-8 text-center">
-                <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-600 font-medium">Aucun artisan trouvé</p>
-                <p className="text-sm text-gray-400 mt-1">
+                <MapPin className="w-16 h-16 text-sand-500 mx-auto mb-4" />
+                <p className="text-charcoal-600 font-medium">Aucun artisan trouvé</p>
+                <p className="text-sm text-charcoal-400 mt-1">
                   Déplacez la carte ou modifiez vos filtres
                 </p>
               </div>
@@ -191,11 +202,11 @@ export function DesktopResultsSidebar({
               <div className="p-4 space-y-4">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div key={i} className="flex gap-4 animate-pulse">
-                    <div className="w-20 h-20 bg-gray-200 rounded-xl" />
+                    <div className="w-20 h-20 bg-sand-300 rounded-xl" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-4 bg-gray-200 rounded w-3/4" />
-                      <div className="h-3 bg-gray-200 rounded w-1/2" />
-                      <div className="h-3 bg-gray-200 rounded w-1/4" />
+                      <div className="h-4 bg-sand-300 rounded w-3/4" />
+                      <div className="h-3 bg-sand-300 rounded w-1/2" />
+                      <div className="h-3 bg-sand-300 rounded w-1/4" />
                     </div>
                   </div>
                 ))}
@@ -229,12 +240,12 @@ export function MobileResultsToggle({
       >
         <div>
           <span className="font-bold text-lg">{providerCount}</span>
-          <span className="text-gray-600 ml-1">artisans trouvés</span>
+          <span className="text-charcoal-600 ml-1">artisans trouvés</span>
         </div>
         {mobileDrawerOpen ? (
-          <ChevronDown className="w-6 h-6 text-gray-400" />
+          <ChevronDown className="w-6 h-6 text-charcoal-400" />
         ) : (
-          <ChevronUp className="w-6 h-6 text-gray-400" />
+          <ChevronUp className="w-6 h-6 text-charcoal-400" />
         )}
       </button>
     </div>
@@ -249,11 +260,7 @@ interface MobileDrawerProps {
   onClose: () => void
 }
 
-export function MobileResultsDrawer({
-  providers,
-  mobileDrawerOpen,
-  onClose,
-}: MobileDrawerProps) {
+export function MobileResultsDrawer({ providers, mobileDrawerOpen, onClose }: MobileDrawerProps) {
   return (
     <AnimatePresence>
       {mobileDrawerOpen && (
@@ -265,11 +272,11 @@ export function MobileResultsDrawer({
           className="md:hidden fixed inset-x-0 bottom-0 h-[70vh] bg-white rounded-t-3xl shadow-2xl z-40"
         >
           <div className="p-4 border-b">
-            <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
+            <div className="w-12 h-1 bg-sand-400 rounded-full mx-auto mb-4" />
             <div className="flex items-center justify-between">
               <h2 className="font-bold text-lg">{providers.length} artisans</h2>
               <button onClick={onClose}>
-                <X className="w-6 h-6 text-gray-400" />
+                <X className="w-6 h-6 text-charcoal-400" />
               </button>
             </div>
           </div>
@@ -277,24 +284,31 @@ export function MobileResultsDrawer({
             {providers.map((provider) => (
               <Link
                 key={provider.id}
-                href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
-                className="flex gap-4 p-4 border-b hover:bg-gray-50"
+                href={getArtisanUrl({
+                  stable_id: provider.stable_id,
+                  slug: provider.slug,
+                  specialty: provider.specialty,
+                  city: provider.address_city,
+                })}
+                className="flex gap-4 p-4 border-b hover:bg-sand-50"
               >
-                <div className="w-16 h-16 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl font-bold text-gray-400">
+                <div className="w-16 h-16 bg-sand-300 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl font-bold text-charcoal-400">
                     {provider.name.charAt(0)}
                   </span>
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold">{provider.name}</h3>
-                  <p className="text-sm text-blue-600">{provider.specialty}</p>
+                  <p className="text-sm text-primary-500">{provider.specialty}</p>
                   <div className="flex items-center gap-2 mt-1">
                     <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                    <span className="font-medium text-sm">{provider.rating_average?.toFixed(1)}</span>
-                    <span className="text-gray-400 text-sm">• {provider.address_city}</span>
+                    <span className="font-medium text-sm">
+                      {provider.rating_average?.toFixed(1)}
+                    </span>
+                    <span className="text-charcoal-400 text-sm">• {provider.address_city}</span>
                   </div>
                 </div>
-                <ExternalLink className="w-5 h-5 text-gray-400 self-center" />
+                <ExternalLink className="w-5 h-5 text-charcoal-400 self-center" />
               </Link>
             ))}
           </div>
@@ -303,4 +317,3 @@ export function MobileResultsDrawer({
     </AnimatePresence>
   )
 }
-

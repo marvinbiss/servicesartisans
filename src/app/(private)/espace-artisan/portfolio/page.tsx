@@ -110,9 +110,7 @@ export default function PortfolioPage() {
       if (response.ok) {
         // Sync with server response for any additional fields
         const data = await response.json()
-        setItems((prev) =>
-          prev.map((i) => (i.id === item.id ? data.item : i))
-        )
+        setItems((prev) => prev.map((i) => (i.id === item.id ? data.item : i)))
       } else {
         // Rollback on error
         setItems(previousItems)
@@ -144,9 +142,7 @@ export default function PortfolioPage() {
       if (response.ok) {
         // Sync with server response for any additional fields
         const data = await response.json()
-        setItems((prev) =>
-          prev.map((i) => (i.id === item.id ? data.item : i))
-        )
+        setItems((prev) => prev.map((i) => (i.id === item.id ? data.item : i)))
       } else {
         // Rollback on error
         setItems(previousItems)
@@ -168,9 +164,7 @@ export default function PortfolioPage() {
   }
 
   const handleItemUpdated = (updatedItem: PortfolioItem) => {
-    setItems((prev) =>
-      prev.map((i) => (i.id === updatedItem.id ? updatedItem : i))
-    )
+    setItems((prev) => prev.map((i) => (i.id === updatedItem.id ? updatedItem : i)))
     setEditingItem(null)
   }
 
@@ -184,14 +178,14 @@ export default function PortfolioPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid lg:grid-cols-4 gap-8">
             <ArtisanSidebar activePage="portfolio" />
             <div className="lg:col-span-3 flex items-center justify-center py-20">
               <div className="text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                <p className="text-gray-600">Chargement...</p>
+                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+                <p className="text-charcoal-600">Chargement...</p>
               </div>
             </div>
           </div>
@@ -202,21 +196,21 @@ export default function PortfolioPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid lg:grid-cols-4 gap-8">
             <ArtisanSidebar activePage="portfolio" />
             <div className="lg:col-span-3 flex items-center justify-center py-20">
               <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
                 <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Erreur</h2>
-                <p className="text-gray-600 mb-6">{error}</p>
+                <h2 className="text-xl font-semibold text-charcoal-900 mb-2">Erreur</h2>
+                <p className="text-charcoal-600 mb-6">{error}</p>
                 <button
                   onClick={() => {
                     setLoading(true)
                     fetchPortfolio()
                   }}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  className="bg-primary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors"
                 >
                   Réessayer
                 </button>
@@ -229,7 +223,7 @@ export default function PortfolioPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Action error toast */}
       {actionError && (
         <div className="fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg bg-red-600 text-white text-sm font-medium transition-all">
@@ -245,21 +239,18 @@ export default function PortfolioPage() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb
-            items={[
-              { label: 'Espace Artisan', href: '/espace-artisan' },
-              { label: 'Portfolio' },
-            ]}
+            items={[{ label: 'Espace Artisan', href: '/espace-artisan' }, { label: 'Portfolio' }]}
           />
         </div>
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Mon Portfolio</h1>
-              <p className="text-blue-100">
+              <p className="text-primary-100">
                 Gérez vos réalisations et mettez en valeur votre travail
               </p>
             </div>
@@ -267,7 +258,7 @@ export default function PortfolioPage() {
               variant="primary"
               leftIcon={<Plus className="w-5 h-5" />}
               onClick={() => setShowAddModal(true)}
-              className="bg-white text-blue-600 hover:bg-blue-50"
+              className="bg-white text-primary-500 hover:bg-primary-50"
             >
               Ajouter
             </Button>
@@ -283,25 +274,25 @@ export default function PortfolioPage() {
           <main id="main-content" className="lg:col-span-3 space-y-6">
             {/* Stats summary */}
             <div className="bg-white rounded-xl shadow-sm p-4">
-              <h4 className="font-medium text-gray-900 mb-3">Statistiques</h4>
+              <h4 className="font-medium text-charcoal-900 mb-3">Statistiques</h4>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-charcoal-600">
                   <span>Total</span>
-                  <span className="font-medium text-gray-900">{stats.total}</span>
+                  <span className="font-medium text-charcoal-900">{stats.total}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-charcoal-600">
                   <span>Images</span>
-                  <span className="font-medium text-gray-900">{stats.images}</span>
+                  <span className="font-medium text-charcoal-900">{stats.images}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-charcoal-600">
                   <span>Vidéos</span>
-                  <span className="font-medium text-gray-900">{stats.videos}</span>
+                  <span className="font-medium text-charcoal-900">{stats.videos}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-charcoal-600">
                   <span>Avant/Après</span>
-                  <span className="font-medium text-gray-900">{stats.beforeAfter}</span>
+                  <span className="font-medium text-charcoal-900">{stats.beforeAfter}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-charcoal-600">
                   <span>Mis en avant</span>
                   <span className="font-medium text-amber-600">{stats.featured}</span>
                 </div>
@@ -310,13 +301,13 @@ export default function PortfolioPage() {
 
             {/* Filters */}
             <div className="flex items-center gap-2 flex-wrap">
-              <Filter className="w-5 h-5 text-gray-500" />
+              <Filter className="w-5 h-5 text-charcoal-500" />
               <button
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === 'all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
                 }`}
               >
                 Tout ({items.length})
@@ -325,8 +316,8 @@ export default function PortfolioPage() {
                 onClick={() => setFilter('image')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                   filter === 'image'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
                 }`}
               >
                 <ImageIcon className="w-4 h-4" />
@@ -336,8 +327,8 @@ export default function PortfolioPage() {
                 onClick={() => setFilter('video')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                   filter === 'video'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
                 }`}
               >
                 <Video className="w-4 h-4" />
@@ -347,8 +338,8 @@ export default function PortfolioPage() {
                 onClick={() => setFilter('before_after')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                   filter === 'before_after'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
                 }`}
               >
                 <Layers className="w-4 h-4" />
@@ -359,13 +350,11 @@ export default function PortfolioPage() {
             {/* Portfolio grid */}
             {filteredItems.length === 0 ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {items.length === 0
-                    ? 'Aucune réalisation'
-                    : 'Aucun résultat pour ce filtre'}
+                <ImageIcon className="w-16 h-16 text-sand-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-charcoal-900 mb-2">
+                  {items.length === 0 ? 'Aucune réalisation' : 'Aucun résultat pour ce filtre'}
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-charcoal-500 mb-6">
                   {items.length === 0
                     ? 'Ajoutez vos premières réalisations pour les mettre en valeur sur votre profil.'
                     : 'Essayez un autre filtre.'}
@@ -402,10 +391,7 @@ export default function PortfolioPage() {
 
       {/* Add Modal */}
       {showAddModal && (
-        <AddPortfolioModal
-          onClose={() => setShowAddModal(false)}
-          onCreated={handleItemCreated}
-        />
+        <AddPortfolioModal onClose={() => setShowAddModal(false)} onCreated={handleItemCreated} />
       )}
 
       {/* Edit Modal */}

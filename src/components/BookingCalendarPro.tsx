@@ -27,10 +27,7 @@ import {
 } from 'lucide-react'
 import { useRealTimeAvailability, type Slot } from '@/hooks/useRealTimeAvailability'
 import { BookingFunnel } from '@/lib/analytics/tracking'
-import {
-  getRecommendedSlots,
-  type SuggestedSlot,
-} from '@/lib/booking/smart-suggestions'
+import { getRecommendedSlots, type SuggestedSlot } from '@/lib/booking/smart-suggestions'
 import { logger } from '@/lib/logger'
 
 interface BookingCalendarProProps {
@@ -112,8 +109,18 @@ export default function BookingCalendarPro({
   const firstDayOfMonth = new Date(year, month, 1).getDay()
 
   const monthNames = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
   ]
 
   const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
@@ -254,9 +261,12 @@ export default function BookingCalendarPro({
     const recommendation = recommendedSlots.find((r) => r.slotId === slot.id)
     if (!recommendation) return null
 
-    const badges: Record<string, { icon: React.ComponentType<{ className?: string }>; text: string; color: string }> = {
+    const badges: Record<
+      string,
+      { icon: React.ComponentType<{ className?: string }>; text: string; color: string }
+    > = {
       popular: { icon: TrendingUp, text: 'Populaire', color: 'bg-orange-100 text-orange-700' },
-      recommended: { icon: Sparkles, text: 'Recommandé', color: 'bg-blue-100 text-blue-700' },
+      recommended: { icon: Sparkles, text: 'Recommandé', color: 'bg-primary-100 text-primary-600' },
       last_minute: { icon: Clock, text: 'Dernière minute', color: 'bg-green-100 text-green-700' },
       best_value: { icon: Star, text: 'Meilleur choix', color: 'bg-purple-100 text-purple-700' },
     }
@@ -266,7 +276,9 @@ export default function BookingCalendarPro({
 
     const Icon = badge.icon
     return (
-      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${badge.color}`}>
+      <span
+        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${badge.color}`}
+      >
         <Icon className="w-3 h-3" />
         {badge.text}
       </span>
@@ -280,16 +292,12 @@ export default function BookingCalendarPro({
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
           <Check className="w-8 h-8 text-green-600" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-          Réservation confirmée !
-        </h3>
-        <p className="text-gray-600 mb-6">
-          Votre rendez-vous avec {artisanName} est confirmé.
-        </p>
-        <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+        <h3 className="text-2xl font-bold text-charcoal-900 mb-2">Réservation confirmée !</h3>
+        <p className="text-charcoal-600 mb-6">Votre rendez-vous avec {artisanName} est confirmé.</p>
+        <div className="bg-sand-50 rounded-lg p-4 mb-6 text-left">
           <div className="flex items-center gap-3 mb-3">
-            <Calendar className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-gray-900 capitalize">
+            <Calendar className="w-5 h-5 text-primary-500" />
+            <span className="font-medium text-charcoal-900 capitalize">
               {selectedDate?.toLocaleDateString('fr-FR', {
                 weekday: 'long',
                 day: 'numeric',
@@ -298,24 +306,24 @@ export default function BookingCalendarPro({
             </span>
           </div>
           <div className="flex items-center gap-3 mb-3">
-            <Clock className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-gray-900">
+            <Clock className="w-5 h-5 text-primary-500" />
+            <span className="font-medium text-charcoal-900">
               {selectedSlot?.startTime} - {selectedSlot?.endTime}
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <User className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-gray-900">{serviceName}</span>
+            <User className="w-5 h-5 text-primary-500" />
+            <span className="font-medium text-charcoal-900">{serviceName}</span>
           </div>
         </div>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-charcoal-500 mb-6">
           Un email de confirmation a été envoyé à {formData.clientEmail}
         </p>
 
         {bookingResult && (
           <a
             href={`/booking/${bookingResult.bookingId}`}
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-4"
+            className="inline-block bg-primary-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors mb-4"
           >
             Gérer ma réservation
           </a>
@@ -329,7 +337,7 @@ export default function BookingCalendarPro({
             setFormData({ clientName: '', clientPhone: '', clientEmail: '', message: '' })
             setBookingResult(null)
           }}
-          className="block w-full text-blue-600 hover:underline mt-4"
+          className="block w-full text-primary-500 hover:underline mt-4"
         >
           Faire une autre réservation
         </button>
@@ -342,23 +350,23 @@ export default function BookingCalendarPro({
     return (
       <div className="bg-white rounded-xl shadow-lg p-6">
         <div className="text-center mb-6">
-          <CreditCard className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-          <h3 className="text-xl font-bold text-gray-900">Paiement de l'acompte</h3>
-          <p className="text-gray-600">Sécurisez votre réservation</p>
+          <CreditCard className="w-12 h-12 text-primary-500 mx-auto mb-3" />
+          <h3 className="text-xl font-bold text-charcoal-900">Paiement de l'acompte</h3>
+          <p className="text-charcoal-600">Sécurisez votre réservation</p>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+        <div className="bg-sand-50 rounded-lg p-4 mb-6">
           <div className="flex justify-between mb-2">
-            <span className="text-gray-600">Service</span>
+            <span className="text-charcoal-600">Service</span>
             <span className="font-medium">{serviceName}</span>
           </div>
           <div className="flex justify-between mb-2">
-            <span className="text-gray-600">Prix total</span>
+            <span className="text-charcoal-600">Prix total</span>
             <span className="font-medium">{servicePrice}EUR</span>
           </div>
           <div className="flex justify-between pt-2 border-t mt-2">
             <span className="font-semibold">Acompte ({depositPercentage}%)</span>
-            <span className="font-bold text-blue-600">{depositAmount}EUR</span>
+            <span className="font-bold text-primary-500">{depositAmount}EUR</span>
           </div>
         </div>
 
@@ -377,7 +385,7 @@ export default function BookingCalendarPro({
               window.location.href = data.url
             }
           }}
-          className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2"
+          className="w-full bg-primary-500 text-white py-4 rounded-lg font-semibold hover:bg-primary-600 flex items-center justify-center gap-2"
         >
           <CreditCard className="w-5 h-5" />
           Payer {depositAmount}EUR
@@ -385,7 +393,7 @@ export default function BookingCalendarPro({
 
         <button
           onClick={() => setStep('confirmation')}
-          className="w-full text-gray-600 py-3 mt-2 hover:text-gray-800"
+          className="w-full text-charcoal-600 py-3 mt-2 hover:text-charcoal-800"
         >
           Payer plus tard
         </button>
@@ -396,11 +404,13 @@ export default function BookingCalendarPro({
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-6">
         <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
-        <p className="text-blue-100 text-sm">{artisanName} - {serviceName}</p>
+        <p className="text-primary-100 text-sm">
+          {artisanName} - {serviceName}
+        </p>
         {servicePrice && (
-          <p className="text-blue-200 text-sm mt-1">À partir de {servicePrice}EUR</p>
+          <p className="text-primary-100 text-sm mt-1">À partir de {servicePrice}EUR</p>
         )}
       </div>
 
@@ -416,8 +426,8 @@ export default function BookingCalendarPro({
 
           {/* Recommended slots */}
           {recommendedSlots.length > 0 && !selectedDate && (
-            <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-              <h4 className="font-medium text-blue-900 mb-3 flex items-center gap-2">
+            <div className="mb-6 p-4 bg-primary-50 rounded-lg">
+              <h4 className="font-medium text-primary-800 mb-3 flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 Créneaux recommandés
               </h4>
@@ -431,21 +441,17 @@ export default function BookingCalendarPro({
                       const slot = slots[rec.date]?.find((s) => s.id === rec.slotId)
                       if (slot) setSelectedSlot(slot)
                     }}
-                    className="p-3 bg-white rounded-lg border-2 border-blue-200 hover:border-blue-400 transition-colors text-left"
+                    className="p-3 bg-white rounded-lg border-2 border-primary-200 hover:border-primary-300 transition-colors text-left"
                   >
-                    <div className="text-sm font-medium text-gray-900 capitalize">
+                    <div className="text-sm font-medium text-charcoal-900 capitalize">
                       {new Date(rec.date).toLocaleDateString('fr-FR', {
                         weekday: 'short',
                         day: 'numeric',
                         month: 'short',
                       })}
                     </div>
-                    <div className="text-blue-600 font-semibold">
-                      {rec.startTime}
-                    </div>
-                    {rec.badge && (
-                      <span className="text-xs text-blue-500">{rec.badgeText}</span>
-                    )}
+                    <div className="text-primary-500 font-semibold">{rec.startTime}</div>
+                    {rec.badge && <span className="text-xs text-primary-400">{rec.badgeText}</span>}
                   </button>
                 ))}
               </div>
@@ -456,17 +462,17 @@ export default function BookingCalendarPro({
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-sand-100 rounded-lg transition-colors"
               aria-label="Mois précédent"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <h4 className="font-semibold text-gray-900">
+            <h4 className="font-semibold text-charcoal-900">
               {monthNames[month]} {year}
             </h4>
             <button
               onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-sand-100 rounded-lg transition-colors"
               aria-label="Mois suivant"
             >
               <ChevronRight className="w-5 h-5" />
@@ -475,7 +481,7 @@ export default function BookingCalendarPro({
 
           {/* Loading indicator */}
           {isLoading && (
-            <div className="flex items-center justify-center py-4 text-gray-500">
+            <div className="flex items-center justify-center py-4 text-charcoal-500">
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
               <span className="text-sm">Chargement des disponibilités...</span>
             </div>
@@ -484,7 +490,11 @@ export default function BookingCalendarPro({
           {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-1 mb-4" role="grid" aria-label="Calendrier">
             {dayNames.map((day) => (
-              <div key={day} className="text-center text-xs font-medium text-gray-500 py-2" role="columnheader">
+              <div
+                key={day}
+                className="text-center text-xs font-medium text-charcoal-500 py-2"
+                role="columnheader"
+              >
                 {day}
               </div>
             ))}
@@ -507,16 +517,16 @@ export default function BookingCalendarPro({
                   aria-selected={selected}
                   aria-disabled={!available || past}
                   aria-label={`${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}${available ? ', disponible' : ', indisponible'}`}
-                  className={`aspect-square rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  className={`aspect-square rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 ${
                     selected
-                      ? 'bg-blue-600 text-white shadow-lg scale-105'
+                      ? 'bg-primary-500 text-white shadow-lg scale-105'
                       : available && !past
-                      ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
-                      : isToday(date)
-                      ? 'bg-blue-50 text-blue-600'
-                      : past
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-400 cursor-not-allowed'
+                        ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+                        : isToday(date)
+                          ? 'bg-primary-50 text-primary-500'
+                          : past
+                            ? 'text-sand-500 cursor-not-allowed'
+                            : 'text-charcoal-400 cursor-not-allowed'
                   }`}
                 >
                   {date.getDate()}
@@ -526,13 +536,13 @@ export default function BookingCalendarPro({
           </div>
 
           {/* Legend */}
-          <div className="flex items-center gap-4 text-xs text-gray-500 mb-6">
+          <div className="flex items-center gap-4 text-xs text-charcoal-500 mb-6">
             <div className="flex items-center gap-1">
               <div className="w-3 h-3 rounded bg-green-100 border border-green-200" />
               <span>Disponible</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded bg-gray-100" />
+              <div className="w-3 h-3 rounded bg-sand-100" />
               <span>Indisponible</span>
             </div>
           </div>
@@ -540,7 +550,7 @@ export default function BookingCalendarPro({
           {/* Time Slots */}
           {selectedDate && (
             <div className="border-t pt-4" role="region" aria-label="Créneaux horaires">
-              <h4 className="font-medium text-gray-900 mb-3">
+              <h4 className="font-medium text-charcoal-900 mb-3">
                 Créneaux disponibles le{' '}
                 <span className="capitalize">
                   {selectedDate.toLocaleDateString('fr-FR', {
@@ -556,10 +566,10 @@ export default function BookingCalendarPro({
                     key={slot.id}
                     onClick={() => handleSlotSelect(slot)}
                     aria-pressed={selectedSlot?.id === slot.id}
-                    className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-primary-400 ${
                       selectedSlot?.id === slot.id
-                        ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-md'
-                        : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                        ? 'border-primary-400 bg-primary-50 text-primary-600 shadow-md'
+                        : 'border-sand-300 hover:border-primary-300 hover:bg-primary-50'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -570,7 +580,7 @@ export default function BookingCalendarPro({
                     </div>
                     {getSlotBadge(slot)}
                     {slot.teamMemberName && (
-                      <span className="text-xs text-gray-500">{slot.teamMemberName}</span>
+                      <span className="text-xs text-charcoal-500">{slot.teamMemberName}</span>
                     )}
                   </button>
                 ))}
@@ -582,7 +592,7 @@ export default function BookingCalendarPro({
           {selectedSlot && (
             <button
               onClick={() => setStep('form')}
-              className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
+              className="w-full mt-6 bg-primary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors shadow-lg hover:shadow-xl"
             >
               Continuer
             </button>
@@ -601,8 +611,8 @@ export default function BookingCalendarPro({
           )}
 
           {/* Selected slot summary */}
-          <div className="bg-blue-50 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-3 text-blue-700 flex-wrap">
+          <div className="bg-primary-50 rounded-lg p-4 mb-6">
+            <div className="flex items-center gap-3 text-primary-600 flex-wrap">
               <Calendar className="w-5 h-5 flex-shrink-0" />
               <span className="font-medium capitalize">
                 {selectedDate?.toLocaleDateString('fr-FR', {
@@ -611,7 +621,7 @@ export default function BookingCalendarPro({
                   month: 'long',
                 })}
               </span>
-              <span className="text-blue-400">-</span>
+              <span className="text-primary-300">-</span>
               <Clock className="w-5 h-5 flex-shrink-0" />
               <span className="font-medium">
                 {selectedSlot?.startTime} - {selectedSlot?.endTime}
@@ -621,11 +631,17 @@ export default function BookingCalendarPro({
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="clientName"
+                className="block text-sm font-medium text-charcoal-700 mb-1"
+              >
                 Votre nom <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
+                <User
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400"
+                  aria-hidden="true"
+                />
                 <input
                   id="clientName"
                   type="text"
@@ -633,18 +649,24 @@ export default function BookingCalendarPro({
                   autoComplete="name"
                   value={formData.clientName}
                   onChange={(e) => handleFormChange('clientName', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   placeholder="Jean Dupont"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="clientPhone" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="clientPhone"
+                className="block text-sm font-medium text-charcoal-700 mb-1"
+              >
                 Téléphone <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
+                <Phone
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400"
+                  aria-hidden="true"
+                />
                 <input
                   id="clientPhone"
                   type="tel"
@@ -653,18 +675,24 @@ export default function BookingCalendarPro({
                   autoComplete="tel"
                   value={formData.clientPhone}
                   onChange={(e) => handleFormChange('clientPhone', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   placeholder="06 12 34 56 78"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="clientEmail" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="clientEmail"
+                className="block text-sm font-medium text-charcoal-700 mb-1"
+              >
                 Email <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
+                <Mail
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400"
+                  aria-hidden="true"
+                />
                 <input
                   id="clientEmail"
                   type="email"
@@ -673,23 +701,26 @@ export default function BookingCalendarPro({
                   autoComplete="email"
                   value={formData.clientEmail}
                   onChange={(e) => handleFormChange('clientEmail', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   placeholder="jean@exemple.fr"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="message" className="block text-sm font-medium text-charcoal-700 mb-1">
                 Message (optionnel)
               </label>
               <div className="relative">
-                <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" aria-hidden="true" />
+                <MessageSquare
+                  className="absolute left-3 top-3 w-5 h-5 text-charcoal-400"
+                  aria-hidden="true"
+                />
                 <textarea
                   id="message"
                   value={formData.message}
                   onChange={(e) => handleFormChange('message', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   rows={3}
                   placeholder="Décrivez brièvement votre besoin..."
                 />
@@ -702,21 +733,27 @@ export default function BookingCalendarPro({
               type="checkbox"
               checked={consentRgpd}
               onChange={(e) => setConsentRgpd(e.target.checked)}
-              className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
+              className="mt-0.5 w-5 h-5 rounded border-sand-400 text-primary-500 focus:ring-primary-400 flex-shrink-0"
             />
-            <span className="text-sm text-gray-600 leading-relaxed">
-              J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-              <Link href="/confidentialite" className="text-blue-600 underline hover:text-blue-800">
+            <span className="text-sm text-charcoal-600 leading-relaxed">
+              J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre
+              en relation avec des artisans partenaires. Voir notre{' '}
+              <Link
+                href="/confidentialite"
+                className="text-primary-500 underline hover:text-primary-800"
+              >
                 politique de confidentialité
-              </Link>.
+              </Link>
+              .
             </span>
           </label>
 
           {/* Deposit notice */}
           {requireDeposit && servicePrice && (
-            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-              <p className="text-sm text-blue-700">
-                <strong>Acompte requis:</strong> {depositAmount}EUR ({depositPercentage}% du prix) sera demandé après confirmation.
+            <div className="mt-4 p-3 bg-primary-50 rounded-lg">
+              <p className="text-sm text-primary-600">
+                <strong>Acompte requis:</strong> {depositAmount}EUR ({depositPercentage}% du prix)
+                sera demandé après confirmation.
               </p>
             </div>
           )}
@@ -725,14 +762,14 @@ export default function BookingCalendarPro({
             <button
               type="button"
               onClick={() => setStep('calendar')}
-              className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              className="flex-1 border border-sand-400 text-charcoal-700 py-3 rounded-lg font-medium hover:bg-sand-50 transition-colors"
             >
               Retour
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="flex-1 bg-primary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>

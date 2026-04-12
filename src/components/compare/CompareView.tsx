@@ -22,19 +22,13 @@ interface CompareViewProps {
   onClose: () => void
 }
 
-function ProviderAvatar({
-  provider,
-  index,
-}: {
-  provider: CompareProvider
-  index: number
-}) {
-  const colors = ['bg-blue-500', 'bg-emerald-500', 'bg-amber-500']
+function ProviderAvatar({ provider, index }: { provider: CompareProvider; index: number }) {
+  const colors = ['bg-primary-400', 'bg-emerald-500', 'bg-amber-500']
   return (
     <div
       className={clsx(
         'w-16 h-16 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-md',
-        colors[index % colors.length],
+        colors[index % colors.length]
       )}
     >
       {provider.name.charAt(0).toUpperCase()}
@@ -46,23 +40,21 @@ function BooleanCell({ value }: { value: boolean | undefined }) {
   if (value) {
     return <CheckCircle className="w-5 h-5 text-green-500 mx-auto" />
   }
-  return <XCircle className="w-5 h-5 text-gray-300 mx-auto" />
+  return <XCircle className="w-5 h-5 text-sand-500 mx-auto" />
 }
 
 function RatingCell({ provider }: { provider: CompareProvider }) {
   if (!provider.rating_average) {
-    return <span className="text-gray-400 text-sm">Pas encore noté</span>
+    return <span className="text-charcoal-400 text-sm">Pas encore noté</span>
   }
   return (
     <div className="flex items-center justify-center gap-1.5">
       <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-      <span className="font-bold text-gray-900">
+      <span className="font-bold text-charcoal-900">
         {Number(provider.rating_average).toFixed(1)}
       </span>
       {provider.review_count != null && provider.review_count > 0 && (
-        <span className="text-gray-500 text-xs">
-          ({provider.review_count} avis)
-        </span>
+        <span className="text-charcoal-500 text-xs">({provider.review_count} avis)</span>
       )}
     </div>
   )
@@ -77,8 +69,8 @@ interface CompareRowProps {
 
 function CompareRow({ label, icon, children }: CompareRowProps) {
   return (
-    <div className="grid grid-cols-[140px_1fr] md:grid-cols-[180px_1fr] items-start border-b border-gray-100 last:border-b-0">
-      <div className="flex items-center gap-2 py-3 px-4 bg-gray-50 font-medium text-sm text-gray-600 self-stretch">
+    <div className="grid grid-cols-[140px_1fr] md:grid-cols-[180px_1fr] items-start border-b border-sand-200 last:border-b-0">
+      <div className="flex items-center gap-2 py-3 px-4 bg-sand-50 font-medium text-sm text-charcoal-600 self-stretch">
         {icon}
         {label}
       </div>
@@ -99,7 +91,7 @@ function ProviderGrid({
       className={clsx(
         'grid gap-4',
         providers.length === 2 && 'grid-cols-2',
-        providers.length === 3 && 'grid-cols-3',
+        providers.length === 3 && 'grid-cols-3'
       )}
     >
       {providers.map((p, i) => (
@@ -146,16 +138,13 @@ export function CompareView({ onClose }: CompareViewProps) {
           aria-labelledby="compare-title"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-100">
-            <h2
-              id="compare-title"
-              className="text-xl font-bold text-gray-900 font-heading"
-            >
+          <div className="flex items-center justify-between p-6 border-b border-sand-200">
+            <h2 id="compare-title" className="text-xl font-bold text-charcoal-900 font-heading">
               Comparer les artisans
             </h2>
             <button
               onClick={onClose}
-              className="p-2 -m-2 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
+              className="p-2 -m-2 text-charcoal-400 hover:text-charcoal-600 transition-colors rounded-lg hover:bg-sand-100"
               aria-label="Fermer"
             >
               <X className="w-5 h-5" />
@@ -163,7 +152,7 @@ export function CompareView({ onClose }: CompareViewProps) {
           </div>
 
           {/* Provider headers */}
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-6 border-b border-sand-200">
             <ProviderGrid providers={compareList}>
               {(provider, index) => (
                 <div className="flex flex-col items-center gap-3">
@@ -178,13 +167,9 @@ export function CompareView({ onClose }: CompareViewProps) {
                     </button>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 text-base">
-                      {provider.name}
-                    </h3>
+                    <h3 className="font-semibold text-charcoal-900 text-base">{provider.name}</h3>
                     {provider.specialty && (
-                      <p className="text-gray-500 text-xs mt-0.5">
-                        {provider.specialty}
-                      </p>
+                      <p className="text-charcoal-500 text-xs mt-0.5">{provider.specialty}</p>
                     )}
                   </div>
                 </div>
@@ -193,7 +178,7 @@ export function CompareView({ onClose }: CompareViewProps) {
           </div>
 
           {/* Comparison table */}
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-sand-200">
             {/* Rating */}
             <CompareRow
               label="Note"
@@ -208,15 +193,15 @@ export function CompareView({ onClose }: CompareViewProps) {
             {/* Location */}
             <CompareRow
               label="Ville"
-              icon={<MapPin className="w-4 h-4 text-gray-400" />}
+              icon={<MapPin className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
-                  <span className="text-gray-700">
+                  <span className="text-charcoal-700">
                     {provider.address_city || '-'}
                     {provider.address_region && (
-                      <span className="text-gray-400 text-xs block">
+                      <span className="text-charcoal-400 text-xs block">
                         {provider.address_region}
                       </span>
                     )}
@@ -239,16 +224,18 @@ export function CompareView({ onClose }: CompareViewProps) {
             {/* Phone */}
             <CompareRow
               label="Téléphone"
-              icon={<Phone className="w-4 h-4 text-gray-400" />}
+              icon={<Phone className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
             >
               <ProviderGrid providers={compareList}>
                 {() => (
-                  <span className="text-gray-700">
+                  <span className="text-charcoal-700">
                     <a
                       href={PHONE_TEL}
-                      onClick={() => { trackEvent('phone_click', { source: 'compare_view' }) }}
-                      className="text-blue-600 hover:text-blue-700"
+                      onClick={() => {
+                        trackEvent('phone_click', { source: 'compare_view' })
+                      }}
+                      className="text-primary-500 hover:text-primary-600"
                     >
                       {PHONE_NUMBER}
                     </a>
@@ -260,12 +247,12 @@ export function CompareView({ onClose }: CompareViewProps) {
             {/* SIRET */}
             <CompareRow
               label="SIRET"
-              icon={<FileText className="w-4 h-4 text-gray-400" />}
+              icon={<FileText className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
-                  <span className="text-gray-700 text-xs font-mono">
+                  <span className="text-charcoal-700 text-xs font-mono">
                     {provider.siret || '-'}
                   </span>
                 )}
@@ -275,25 +262,22 @@ export function CompareView({ onClose }: CompareViewProps) {
             {/* Postal code */}
             <CompareRow
               label="Code postal"
-              icon={<MapPinned className="w-4 h-4 text-gray-400" />}
+              icon={<MapPinned className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
-                  <span className="text-gray-700">
-                    {provider.address_postal_code || '-'}
-                  </span>
+                  <span className="text-charcoal-700">{provider.address_postal_code || '-'}</span>
                 )}
               </ProviderGrid>
             </CompareRow>
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
-            <p className="text-xs text-gray-500 text-center">
-              Les informations affichées sont fournies par les artisans et
-              vérifiées lorsque disponibles. Contactez directement
-              chaque artisan pour un devis personnalisé.
+          <div className="p-6 border-t border-sand-200 bg-sand-50 rounded-b-2xl">
+            <p className="text-xs text-charcoal-500 text-center">
+              Les informations affichées sont fournies par les artisans et vérifiées lorsque
+              disponibles. Contactez directement chaque artisan pour un devis personnalisé.
             </p>
           </div>
         </div>

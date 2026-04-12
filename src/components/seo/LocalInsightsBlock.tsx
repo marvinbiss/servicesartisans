@@ -34,9 +34,9 @@ interface LocalInsightsBlockProps {
 /** Classify demand level from population + density */
 function getDemandLevel(
   population: number,
-  density: number | null,
+  density: number | null
 ): { label: string; color: string; description: string } {
-  const d = density ?? (population / 50) // rough fallback
+  const d = density ?? population / 50 // rough fallback
   if (population > 200000 || d > 3000) {
     return {
       label: 'Forte',
@@ -62,7 +62,7 @@ function getDemandLevel(
 function getHousingInsight(
   partMaisonsPct: number | null,
   density: number | null,
-  serviceName: string,
+  serviceName: string
 ): string | null {
   if (partMaisonsPct != null) {
     if (partMaisonsPct >= 70) {
@@ -124,7 +124,7 @@ export default function LocalInsightsBlock({
       topQuartiers = quartiers
         .sort((a, b) => b.populationEstimee - a.populationEstimee)
         .slice(0, 4)
-        .map(q => q.name)
+        .map((q) => q.name)
     }
   } catch {
     // quartier-data may not have entries for this ville
@@ -167,17 +167,30 @@ export default function LocalInsightsBlock({
           <div className="px-6 py-5 space-y-4">
             {/* 1. Demand level */}
             <div className="flex items-start gap-3">
-              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${demand.color} flex-shrink-0 mt-0.5`}>
+              <span
+                className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${demand.color} flex-shrink-0 mt-0.5`}
+              >
                 Demande {demand.label.toLowerCase()}
               </span>
               <p className="text-sm text-charcoal-700 leading-relaxed">
-                Avec une population de {formatNumber(c.population)}{'\u00A0'}habitants
+                Avec une population de {formatNumber(c.population)}
+                {'\u00A0'}habitants
                 {c.densite_population != null && (
-                  <> et une densit{'é'} de {formatNumber(Math.round(c.densite_population))}{'\u00A0'}hab/km{'²'}</>
+                  <>
+                    {' '}
+                    et une densit{'é'} de {formatNumber(Math.round(c.densite_population))}
+                    {'\u00A0'}hab/km{'²'}
+                  </>
                 )}
-                , {villeName} pr{'é'}sente une demande <strong>{demand.description}</strong> en {serviceName.toLowerCase()}.
+                , {villeName} pr{'é'}sente une demande <strong>{demand.description}</strong> en{' '}
+                {serviceName.toLowerCase()}.
                 {providerCount != null && providerCount > 0 && (
-                  <> Actuellement, {providerCount} professionnel{providerCount > 1 ? 's' : ''} r{'é'}f{'é'}renc{'é'}{providerCount > 1 ? 's' : ''} couvrent cette zone.</>
+                  <>
+                    {' '}
+                    Actuellement, {providerCount} professionnel{providerCount > 1 ? 's' : ''} r{'é'}
+                    f{'é'}renc{'é'}
+                    {providerCount > 1 ? 's' : ''} couvrent cette zone.
+                  </>
                 )}
               </p>
             </div>
@@ -185,19 +198,28 @@ export default function LocalInsightsBlock({
             {/* 2. Price positioning */}
             {pricePositioning && (
               <div className="flex items-start gap-3">
-                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 mt-0.5 ${
-                  regionalMultiplier > 1 ? 'text-red-700 bg-red-100' : 'text-green-700 bg-green-100'
-                }`}>
+                <span
+                  className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 mt-0.5 ${
+                    regionalMultiplier > 1
+                      ? 'text-red-700 bg-red-100'
+                      : 'text-green-700 bg-green-100'
+                  }`}
+                >
                   {regionalMultiplier > 1 ? 'Prix sup.' : 'Prix inf.'}
                 </span>
                 <p className="text-sm text-charcoal-700 leading-relaxed">
                   {pricePositioning}.
                   {c.revenu_median && (
-                    <> Le revenu m{'é'}dian local ({formatNumber(c.revenu_median)}{'\u00A0'}{'€'}/an) {
-                      c.revenu_median > 25000
+                    <>
+                      {' '}
+                      Le revenu m{'é'}dian local ({formatNumber(c.revenu_median)}
+                      {'\u00A0'}
+                      {'€'}/an){' '}
+                      {c.revenu_median > 25000
                         ? 'soutient une demande r\u00E9guli\u00E8re de prestations de qualit\u00E9'
-                        : 'favorise l\u2019acc\u00E8s aux aides publiques (MaPrimeR\u00E9nov\u2019, CEE)'
-                    }.</>
+                        : 'favorise l\u2019acc\u00E8s aux aides publiques (MaPrimeR\u00E9nov\u2019, CEE)'}
+                      .
+                    </>
                   )}
                 </p>
               </div>
@@ -206,12 +228,10 @@ export default function LocalInsightsBlock({
             {/* 3. Housing type impact */}
             {housingInsight && (
               <div className="flex items-start gap-3">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-blue-700 bg-blue-100 flex-shrink-0 mt-0.5">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-primary-600 bg-primary-100 flex-shrink-0 mt-0.5">
                   Logement
                 </span>
-                <p className="text-sm text-charcoal-700 leading-relaxed">
-                  {housingInsight}
-                </p>
+                <p className="text-sm text-charcoal-700 leading-relaxed">{housingInsight}</p>
               </div>
             )}
 
@@ -222,8 +242,10 @@ export default function LocalInsightsBlock({
                   March{'é'}
                 </span>
                 <p className="text-sm text-charcoal-700 leading-relaxed">
-                  {formatNumber(c.nb_entreprises_artisanales)} entreprises artisanales sont r{'é'}f{'é'}renc{'é'}es {'à'} {villeName}
-                  {c.nb_artisans_btp ? `, dont ${formatNumber(c.nb_artisans_btp)} dans le BTP` : ''}.
+                  {formatNumber(c.nb_entreprises_artisanales)} entreprises artisanales sont r{'é'}f
+                  {'é'}renc{'é'}es {'à'} {villeName}
+                  {c.nb_artisans_btp ? `, dont ${formatNumber(c.nb_artisans_btp)} dans le BTP` : ''}
+                  .
                   {c.nb_entreprises_artisanales > 500
                     ? ' La concurrence soutenue maintient des tarifs comp\u00E9titifs.'
                     : c.nb_entreprises_artisanales > 100
@@ -240,8 +262,10 @@ export default function LocalInsightsBlock({
                   Quartiers
                 </span>
                 <p className="text-sm text-charcoal-700 leading-relaxed">
-                  Zones les plus demand{'é'}es {'à'} {villeName}{'\u00A0'}: <strong>{topQuartiers.join(', ')}</strong>.
-                  {' '}La demande en {serviceName.toLowerCase()} y est plus {'é'}lev{'é'}e en raison de la densit{'é'} de population et du parc immobilier.
+                  Zones les plus demand{'é'}es {'à'} {villeName}
+                  {'\u00A0'}: <strong>{topQuartiers.join(', ')}</strong>. La demande en{' '}
+                  {serviceName.toLowerCase()} y est plus {'é'}lev{'é'}e en raison de la densit{'é'}{' '}
+                  de population et du parc immobilier.
                 </p>
               </div>
             )}

@@ -102,14 +102,14 @@ export default function AvisRecusPage() {
   }
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid lg:grid-cols-4 gap-8">
             <ArtisanSidebar activePage="avis-recus" />
             <div className="lg:col-span-3 flex items-center justify-center py-20">
               <div className="text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                <p className="text-gray-600">Chargement des avis...</p>
+                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+                <p className="text-charcoal-600">Chargement des avis...</p>
               </div>
             </div>
           </div>
@@ -119,9 +119,9 @@ export default function AvisRecusPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -129,7 +129,7 @@ export default function AvisRecusPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Avis reçus</h1>
-              <p className="text-blue-100">Consultez et répondez aux avis de vos clients</p>
+              <p className="text-primary-100">Consultez et répondez aux avis de vos clients</p>
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@ export default function AvisRecusPage() {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-gray-900 mb-2">
+                  <div className="text-5xl font-bold text-charcoal-900 mb-2">
                     {Number(stats.moyenne).toFixed(1)}
                   </div>
                   <div className="flex justify-center mb-2">
@@ -163,18 +163,18 @@ export default function AvisRecusPage() {
                         className={`w-6 h-6 ${
                           i < Math.round(stats.moyenne)
                             ? 'text-yellow-400 fill-current'
-                            : 'text-gray-300'
+                            : 'text-sand-500'
                         }`}
                       />
                     ))}
                   </div>
-                  <p className="text-gray-500">Basé sur {stats.total} avis</p>
+                  <p className="text-charcoal-500">Basé sur {stats.total} avis</p>
                 </div>
                 <div className="space-y-2">
                   {stats.distribution.map((item) => (
                     <div key={item.note} className="flex items-center gap-3">
-                      <span className="text-sm text-gray-600 w-12">{item.note} étoiles</span>
-                      <div className="flex-1 bg-gray-200 rounded-full h-2">
+                      <span className="text-sm text-charcoal-600 w-12">{item.note} étoiles</span>
+                      <div className="flex-1 bg-sand-300 rounded-full h-2">
                         <div
                           className="bg-yellow-400 rounded-full h-2"
                           style={{
@@ -182,7 +182,7 @@ export default function AvisRecusPage() {
                           }}
                         />
                       </div>
-                      <span className="text-sm text-gray-500 w-8">{item.count}</span>
+                      <span className="text-sm text-charcoal-500 w-8">{item.count}</span>
                     </div>
                   ))}
                 </div>
@@ -192,16 +192,16 @@ export default function AvisRecusPage() {
             {/* Avis list */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Derniers avis</h2>
+                <h2 className="text-lg font-semibold text-charcoal-900">Derniers avis</h2>
                 <div className="flex items-center gap-2">
-                  <ArrowUpDown className="w-4 h-4 text-gray-400" />
+                  <ArrowUpDown className="w-4 h-4 text-charcoal-400" />
                   <select
                     value={sort}
                     onChange={(e) => {
                       setSort(e.target.value as typeof sort)
                       setPage(1)
                     }}
-                    className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="text-sm border border-sand-300 rounded-lg px-3 py-1.5 bg-white text-charcoal-700 focus:ring-2 focus:ring-primary-400 focus:outline-none"
                   >
                     <option value="recent">Récents</option>
                     <option value="oldest">Anciens</option>
@@ -214,24 +214,24 @@ export default function AvisRecusPage() {
                 {avis.map((item) => (
                   <div
                     key={item.id}
-                    className="border-b border-gray-100 pb-6 last:border-0 last:pb-0"
+                    className="border-b border-sand-200 pb-6 last:border-0 last:pb-0"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-3 mb-1">
-                          <span className="font-medium text-gray-900">{item.author_name}</span>
+                          <span className="font-medium text-charcoal-900">{item.author_name}</span>
                           <div className="flex">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${
-                                  i < item.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                  i < item.rating ? 'text-yellow-400 fill-current' : 'text-sand-500'
                                 }`}
                               />
                             ))}
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-charcoal-500">
                           {new Date(item.created_at).toLocaleDateString('fr-FR', {
                             timeZone: 'Europe/Paris',
                           })}
@@ -240,27 +240,27 @@ export default function AvisRecusPage() {
                       {!item.reply && (
                         <button
                           onClick={() => setReplyingTo(item.id)}
-                          className="flex items-center gap-2 text-blue-600 text-sm hover:underline"
+                          className="flex items-center gap-2 text-primary-500 text-sm hover:underline"
                         >
                           <MessageCircle className="w-4 h-4" />
                           Répondre
                         </button>
                       )}
                     </div>
-                    <p className="text-gray-700 mb-3">{item.content}</p>
+                    <p className="text-charcoal-700 mb-3">{item.content}</p>
 
                     {/* Reply form */}
                     {replyingTo === item.id && (
-                      <div className="bg-gray-50 rounded-lg p-4 ml-4 mb-3">
+                      <div className="bg-sand-50 rounded-lg p-4 ml-4 mb-3">
                         <div className="flex items-center justify-between mb-2">
-                          <p className="text-sm text-gray-600 font-medium">Votre réponse :</p>
+                          <p className="text-sm text-charcoal-600 font-medium">Votre réponse :</p>
                           <button
                             onClick={() => {
                               setReplyingTo(null)
                               setReplyText('')
                               setReplyError(null)
                             }}
-                            className="text-gray-400 hover:text-gray-600"
+                            className="text-charcoal-400 hover:text-charcoal-600"
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -269,14 +269,14 @@ export default function AvisRecusPage() {
                           value={replyText}
                           onChange={(e) => setReplyText(e.target.value)}
                           placeholder="Écrivez votre réponse..."
-                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
+                          className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-400 mb-2"
                           rows={3}
                         />
                         {replyError && <p className="text-red-600 text-sm mb-2">{replyError}</p>}
                         <button
                           onClick={() => handleReply(item.id)}
                           disabled={!replyText.trim()}
-                          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                          className="bg-primary-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors disabled:opacity-50 flex items-center gap-2"
                         >
                           Envoyer
                         </button>
@@ -284,9 +284,9 @@ export default function AvisRecusPage() {
                     )}
 
                     {item.reply && (
-                      <div className="bg-blue-50 rounded-lg p-4 ml-4">
-                        <p className="text-sm text-blue-600 font-medium mb-1">Votre réponse :</p>
-                        <p className="text-gray-700 text-sm">{item.reply}</p>
+                      <div className="bg-primary-50 rounded-lg p-4 ml-4">
+                        <p className="text-sm text-primary-500 font-medium mb-1">Votre réponse :</p>
+                        <p className="text-charcoal-700 text-sm">{item.reply}</p>
                       </div>
                     )}
                   </div>

@@ -42,15 +42,17 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
     if (!showModal || profileLoaded) return
     setProfileLoaded(true)
     fetch('/api/auth/me')
-      .then(res => res.ok ? res.json() : null)
-      .then(data => {
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
         if (data?.user) {
           if (data.user.fullName && !fullName) setFullName(data.user.fullName)
           if (data.user.email && !email) setEmail(data.user.email)
           if (data.user.phone && !phone) setPhone(data.user.phone)
         }
       })
-      .catch(() => { /* not logged in — that's fine */ })
+      .catch(() => {
+        /* not logged in — that's fine */
+      })
   }, [showModal, profileLoaded, fullName, email, phone])
 
   // Format SIREN/SIRET with spaces for display
@@ -100,7 +102,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
       return
     }
     if (position.trim().length < 2) {
-      setError('Veuillez indiquer votre poste dans l\'entreprise')
+      setError("Veuillez indiquer votre poste dans l'entreprise")
       return
     }
 
@@ -145,8 +147,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
           <div>
             <p className="text-sm font-medium text-amber-800">Vous êtes cet artisan ?</p>
             <p className="text-sm text-amber-700 mt-1">
-              Cette fiche ne peut pas encore être revendiquée automatiquement.
-              Contactez-nous à{' '}
+              Cette fiche ne peut pas encore être revendiquée automatiquement. Contactez-nous à{' '}
               <a href="mailto:support@servicesartisans.fr" className="underline font-medium">
                 support@servicesartisans.fr
               </a>{' '}
@@ -185,7 +186,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
             {/* Close button */}
             <button
               onClick={() => !isLoading && setShowModal(false)}
-              className="absolute top-3 right-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              className="absolute top-3 right-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-charcoal-400 hover:text-charcoal-600 rounded-lg hover:bg-sand-100 transition-colors"
               aria-label="Fermer"
             >
               <X className="w-5 h-5" />
@@ -197,16 +198,14 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Demande envoyée !
-                </h3>
-                <p className="text-gray-600 mb-6">
+                <h3 className="text-xl font-bold text-charcoal-900 mb-2">Demande envoyée !</h3>
+                <p className="text-charcoal-600 mb-6">
                   Votre demande de revendication pour <strong>{providerName}</strong> a été soumise.
                   Un administrateur la validera rapidement.
                 </p>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+                  className="bg-sand-100 text-charcoal-700 px-6 py-2.5 rounded-xl font-medium hover:bg-sand-300 transition-colors"
                 >
                   Fermer
                 </button>
@@ -219,15 +218,14 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                     <Shield className="w-5 h-5 text-amber-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Revendiquer cette fiche
-                    </h3>
-                    <p className="text-sm text-gray-500">{providerName}</p>
+                    <h3 className="text-lg font-bold text-charcoal-900">Revendiquer cette fiche</h3>
+                    <p className="text-sm text-charcoal-500">{providerName}</p>
                   </div>
                 </div>
 
-                <p className="text-sm text-gray-600 mb-4">
-                  Remplissez vos coordonnées et votre SIREN ou SIRET pour prouver que vous êtes le propriétaire de cette entreprise.
+                <p className="text-sm text-charcoal-600 mb-4">
+                  Remplissez vos coordonnées et votre SIREN ou SIRET pour prouver que vous êtes le
+                  propriétaire de cette entreprise.
                 </p>
 
                 {error && (
@@ -240,69 +238,81 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 <div className="space-y-3">
                   {/* Nom complet */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Nom complet <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={fullName}
-                      onChange={(e) => { setFullName(e.target.value); setError(null) }}
+                      onChange={(e) => {
+                        setFullName(e.target.value)
+                        setError(null)
+                      }}
                       placeholder="Jean Dupont"
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Email professionnel <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
                       inputMode="email"
                       value={email}
-                      onChange={(e) => { setEmail(e.target.value); setError(null) }}
+                      onChange={(e) => {
+                        setEmail(e.target.value)
+                        setError(null)
+                      }}
                       placeholder="jean@monentreprise.fr"
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
                   </div>
 
                   {/* Téléphone */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Téléphone <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
                       inputMode="tel"
                       value={phone}
-                      onChange={(e) => { setPhone(formatPhone(e.target.value)); setError(null) }}
+                      onChange={(e) => {
+                        setPhone(formatPhone(e.target.value))
+                        setError(null)
+                      }}
                       placeholder="06 12 34 56 78"
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
                   </div>
 
                   {/* Poste */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Poste / Fonction <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={position}
-                      onChange={(e) => { setPosition(e.target.value); setError(null) }}
+                      onChange={(e) => {
+                        setPosition(e.target.value)
+                        setError(null)
+                      }}
                       placeholder="Gérant, Artisan plombier, Chef d'entreprise..."
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                       disabled={isLoading}
                     />
                   </div>
 
                   {/* SIREN / SIRET */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       SIREN ou SIRET <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -310,12 +320,12 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                       value={formatSirenSiret(siret)}
                       onChange={(e) => handleSiretChange(e.target.value)}
                       placeholder="SIREN (9) ou SIRET (14 chiffres)"
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-lg tracking-wider font-mono"
                       maxLength={17}
                       inputMode="numeric"
                       disabled={isLoading}
                     />
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-charcoal-500">
                       Votre SIREN/SIRET figure sur votre extrait Kbis ou sur{' '}
                       <a
                         href="https://www.societe.com"
@@ -333,7 +343,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                   <button
                     onClick={() => setShowModal(false)}
                     disabled={isLoading}
-                    className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
+                    className="flex-1 bg-sand-100 text-charcoal-700 py-3 rounded-xl font-medium hover:bg-sand-300 transition-colors disabled:opacity-50"
                   >
                     Annuler
                   </button>
@@ -350,7 +360,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                   </button>
                 </div>
 
-                <p className="mt-4 text-xs text-gray-400 text-center">
+                <p className="mt-4 text-xs text-charcoal-400 text-center">
                   Un administrateur vérifiera et validera votre demande rapidement.
                 </p>
               </>

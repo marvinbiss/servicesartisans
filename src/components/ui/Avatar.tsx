@@ -46,7 +46,7 @@ const statusSizes = {
 
 const statusColors = {
   online: 'bg-green-500',
-  offline: 'bg-gray-400',
+  offline: 'bg-charcoal-400',
   busy: 'bg-red-500',
   away: 'bg-amber-500',
 }
@@ -54,7 +54,7 @@ const statusColors = {
 function getInitials(name: string): string {
   return name
     .split(' ')
-    .map(part => part[0])
+    .map((part) => part[0])
     .join('')
     .toUpperCase()
     .slice(0, 2)
@@ -62,7 +62,7 @@ function getInitials(name: string): string {
 
 function getColorFromName(name: string): string {
   const colors = [
-    'bg-blue-500',
+    'bg-primary-400',
     'bg-green-500',
     'bg-amber-500',
     'bg-purple-500',
@@ -84,24 +84,18 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   ({ src, name, size = 'md', status, className, alt }, ref) => {
     const hasImage = Boolean(src)
     const initials = name ? getInitials(name) : null
-    const bgColor = name ? getColorFromName(name) : 'bg-gray-200'
+    const bgColor = name ? getColorFromName(name) : 'bg-sand-300'
 
     return (
-      <div
-        ref={ref}
-        className={clsx('relative inline-flex flex-shrink-0', className)}
-      >
+      <div ref={ref} className={clsx('relative inline-flex flex-shrink-0', className)}>
         {hasImage ? (
           <Image
-            src={src!}
+            src={src ?? ''}
             alt={alt || name || 'Avatar'}
             width={sizePx[size]}
             height={sizePx[size]}
             sizes={`${sizePx[size]}px`}
-            className={clsx(
-              'rounded-full object-cover',
-              sizes[size]
-            )}
+            className={clsx('rounded-full object-cover', sizes[size])}
           />
         ) : (
           <div
@@ -156,7 +150,7 @@ export function AvatarGroup({ avatars, max = 4, size = 'md' }: AvatarGroupProps)
       {remaining > 0 && (
         <div
           className={clsx(
-            'rounded-full flex items-center justify-center font-medium bg-gray-100 text-gray-600 ring-2 ring-white',
+            'rounded-full flex items-center justify-center font-medium bg-sand-100 text-charcoal-600 ring-2 ring-white',
             sizes[size]
           )}
         >

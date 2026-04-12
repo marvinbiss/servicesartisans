@@ -3,7 +3,23 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox, LayoutDashboard, Menu, X, Users } from 'lucide-react'
+import {
+  FileText,
+  MessageSquare,
+  Star,
+  Settings,
+  TrendingUp,
+  Euro,
+  Calendar,
+  ExternalLink,
+  Search,
+  Image as ImageIcon,
+  Inbox,
+  LayoutDashboard,
+  Menu,
+  X,
+  Users,
+} from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
@@ -24,7 +40,19 @@ const badgeFetcher = (url: string): Promise<SidebarBadgeData> =>
   })
 
 interface ArtisanSidebarProps {
-  activePage?: 'dashboard' | 'leads' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement' | 'equipe' | 'parametres'
+  activePage?:
+    | 'dashboard'
+    | 'leads'
+    | 'demandes-recues'
+    | 'calendrier'
+    | 'messages'
+    | 'portfolio'
+    | 'statistiques'
+    | 'avis-recus'
+    | 'profil'
+    | 'abonnement'
+    | 'equipe'
+    | 'parametres'
   newDemandesCount?: number
   unreadMessagesCount?: number
   publicUrl?: string | null
@@ -49,10 +77,25 @@ const navSections: NavSection[] = [
   {
     title: 'Activité',
     items: [
-      { key: 'dashboard', href: '/espace-artisan/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
+      {
+        key: 'dashboard',
+        href: '/espace-artisan/dashboard',
+        icon: LayoutDashboard,
+        label: 'Tableau de bord',
+      },
       { key: 'leads', href: '/espace-artisan/leads', icon: Inbox, label: 'Leads reçus' },
-      { key: 'demandes-recues', href: '/espace-artisan/demandes-recues', icon: FileText, label: 'Demandes reçues' },
-      { key: 'calendrier', href: '/espace-artisan/calendrier', icon: Calendar, label: 'Calendrier' },
+      {
+        key: 'demandes-recues',
+        href: '/espace-artisan/demandes-recues',
+        icon: FileText,
+        label: 'Demandes reçues',
+      },
+      {
+        key: 'calendrier',
+        href: '/espace-artisan/calendrier',
+        icon: Calendar,
+        label: 'Calendrier',
+      },
       { key: 'equipe', href: '/espace-artisan/equipe', icon: Users, label: 'Équipe' },
       { key: 'messages', href: '/espace-artisan/messages', icon: MessageSquare, label: 'Messages' },
     ],
@@ -61,7 +104,12 @@ const navSections: NavSection[] = [
     title: 'Mon espace',
     items: [
       { key: 'portfolio', href: '/espace-artisan/portfolio', icon: ImageIcon, label: 'Portfolio' },
-      { key: 'statistiques', href: '/espace-artisan/statistiques', icon: TrendingUp, label: 'Statistiques' },
+      {
+        key: 'statistiques',
+        href: '/espace-artisan/statistiques',
+        icon: TrendingUp,
+        label: 'Statistiques',
+      },
       { key: 'avis-recus', href: '/espace-artisan/avis-recus', icon: Star, label: 'Avis reçus' },
     ],
   },
@@ -69,7 +117,12 @@ const navSections: NavSection[] = [
     title: 'Paramètres',
     items: [
       { key: 'profil', href: '/espace-artisan/profil', icon: Settings, label: 'Mon profil' },
-      { key: 'parametres', href: '/espace-artisan/parametres', icon: Settings, label: 'Paramètres' },
+      {
+        key: 'parametres',
+        href: '/espace-artisan/parametres',
+        icon: Settings,
+        label: 'Paramètres',
+      },
       { key: 'abonnement', href: '/espace-artisan/abonnement', icon: Euro, label: 'Mon compte' },
     ],
   },
@@ -77,7 +130,13 @@ const navSections: NavSection[] = [
 
 const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount, unreadMessagesCount, publicUrl, subscriptionPlan }: ArtisanSidebarProps) {
+export default function ArtisanSidebar({
+  activePage = 'dashboard',
+  newDemandesCount,
+  unreadMessagesCount,
+  publicUrl,
+  subscriptionPlan,
+}: ArtisanSidebarProps) {
   const [userId, setUserId] = useState<string | undefined>(undefined)
   const [mobileOpen, setMobileOpen] = useState(false)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -171,14 +230,18 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         <span
           role="status"
           aria-label={`${effectiveMessagesCount} message${effectiveMessagesCount > 1 ? 's' : ''} non lu${effectiveMessagesCount > 1 ? 's' : ''}`}
-          className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full"
+          className="ml-auto bg-primary-500 text-white text-xs px-2 py-0.5 rounded-full"
         >
           {effectiveMessagesCount}
         </span>
       )
     }
     if (key === 'calendrier' && (subscriptionPlan === 'pro' || subscriptionPlan === 'premium')) {
-      return <span className="ml-auto bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Pro</span>
+      return (
+        <span className="ml-auto bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+          Pro
+        </span>
+      )
     }
     return null
   }
@@ -192,10 +255,10 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         href={item.href}
         onClick={() => setMobileOpen(false)}
         aria-current={isActive ? 'page' : undefined}
-        className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border-l-[3px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+        className={`flex items-center gap-3 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border-l-[3px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
           isActive
-            ? 'bg-blue-50 text-blue-600 font-medium border-blue-600'
-            : 'text-gray-700 hover:bg-gray-50 border-transparent'
+            ? 'bg-primary-50 text-primary-500 font-medium border-primary-500'
+            : 'text-charcoal-700 hover:bg-sand-50 border-transparent'
         }`}
       >
         <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
@@ -209,15 +272,13 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
     <>
       {navSections.map((section, sectionIndex) => (
         <div key={section.title} className={sectionIndex > 0 ? 'mt-4' : undefined}>
-          <p className="px-3 sm:px-4 mb-1 text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider select-none">
+          <p className="px-3 sm:px-4 mb-1 text-[10px] sm:text-xs font-semibold text-charcoal-400 uppercase tracking-wider select-none">
             {section.title}
           </p>
-          <div className="space-y-0.5">
-            {section.items.map(renderNavLink)}
-          </div>
+          <div className="space-y-0.5">{section.items.map(renderNavLink)}</div>
         </div>
       ))}
-      <div className="mt-4 pt-2 border-t border-gray-100">
+      <div className="mt-4 pt-2 border-t border-sand-200">
         <LogoutButton />
       </div>
     </>
@@ -229,7 +290,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
       <button
         type="button"
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden flex items-center gap-2 px-3 py-2 mb-2 bg-white rounded-lg shadow-sm text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        className="lg:hidden flex items-center gap-2 px-3 py-2 mb-2 bg-white rounded-lg shadow-sm text-charcoal-700 hover:bg-sand-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
         aria-label="Ouvrir le menu"
       >
         <Menu className="w-5 h-5" aria-hidden="true" />
@@ -256,15 +317,17 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-sand-200">
+          <span className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
+            Menu
+          </span>
           <div className="flex items-center gap-2">
             <NotificationBell userId={userId} />
             <button
               ref={closeButtonRef}
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="p-1 text-gray-500 hover:text-gray-700 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="p-1 text-charcoal-500 hover:text-charcoal-700 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
               aria-label="Fermer le menu"
             >
               <X className="w-5 h-5" aria-hidden="true" />
@@ -287,8 +350,10 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         className="hidden lg:block bg-white rounded-xl shadow-sm p-2 sm:p-4 space-y-0.5 sm:space-y-1"
       >
         {/* Notifications */}
-        <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-gray-100">
-          <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
+        <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-sand-200">
+          <span className="text-[10px] sm:text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
+            Menu
+          </span>
           <NotificationBell userId={userId} />
         </div>
         {navContent}
@@ -299,7 +364,7 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
           <Link
             href={publicUrl}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded"
+            className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded"
           >
             <ExternalLink className="w-4 h-4" aria-hidden="true" />
             Voir mon profil public
@@ -314,13 +379,19 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
 
       {/* Additional links */}
       <div className="bg-white rounded-xl shadow-sm p-4 mt-4 hidden lg:block">
-        <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
+        <h4 className="font-medium text-charcoal-900 mb-3">Liens utiles</h4>
         <div className="space-y-2 text-sm">
-          <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded">
+          <Link
+            href="/services"
+            className="flex items-center gap-2 text-charcoal-600 hover:text-primary-500 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded"
+          >
             <Search className="w-4 h-4" aria-hidden="true" />
             Parcourir les services
           </Link>
-          <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded">
+          <Link
+            href="/recherche"
+            className="flex items-center gap-2 text-charcoal-600 hover:text-primary-500 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded"
+          >
             <Search className="w-4 h-4" aria-hidden="true" />
             Rechercher un artisan
           </Link>

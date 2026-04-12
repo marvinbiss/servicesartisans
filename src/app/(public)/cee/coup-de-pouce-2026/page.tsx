@@ -261,7 +261,7 @@ export default function CoupDePouce2026Page() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Sparkles className="w-4 h-4 text-emerald-300" />
@@ -297,7 +297,7 @@ export default function CoupDePouce2026Page() {
 
       {/* Intro éditoriale */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <p className="text-slate-700 leading-relaxed text-lg mb-4">
+        <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
           Les &laquo;&nbsp;Coup de pouce&nbsp;&raquo; sont devenus, depuis leur lancement en 2019,
           l&rsquo;un des leviers les plus visibles du dispositif des certificats
           d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie. Ils ne cr&eacute;ent pas de nouvelles
@@ -307,7 +307,7 @@ export default function CoupDePouce2026Page() {
           pris par un obligation&eacute; ou un d&eacute;l&eacute;gataire aupr&egrave;s de
           l&rsquo;&Eacute;tat.
         </p>
-        <p className="text-slate-700 leading-relaxed mb-4">
+        <p className="text-charcoal-700 leading-relaxed mb-4">
           Cet article d&eacute;crit ce qu&rsquo;est juridiquement un Coup de pouce, liste les
           chartes actives ou historiques en 2026, explique le parcours &agrave; suivre
           c&ocirc;t&eacute; particulier et l&rsquo;articulation avec MaPrimeR&eacute;nov&rsquo;, et
@@ -319,12 +319,12 @@ export default function CoupDePouce2026Page() {
       </section>
 
       {/* Qu'est-ce qu'un Coup de pouce */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
             Qu&rsquo;est-ce qu&rsquo;un Coup de pouce CEE&nbsp;?
           </h2>
-          <div className="space-y-4 text-slate-700 leading-relaxed">
+          <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
               <strong>D&eacute;finition juridique.</strong> Un Coup de pouce est une bonification
               contractuelle d&rsquo;une op&eacute;ration standardis&eacute;e CEE. Il ne
@@ -379,10 +379,10 @@ export default function CoupDePouce2026Page() {
 
       {/* Chartes actives 2026 */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
           Chartes Coup de pouce actives en 2026
         </h2>
-        <p className="text-slate-600 max-w-3xl mb-4 leading-relaxed">
+        <p className="text-charcoal-600 max-w-3xl mb-4 leading-relaxed">
           Le tableau ci-dessous recense les chartes en vigueur ou historiquement publi&eacute;es. Le
           statut d&rsquo;une charte peut &eacute;voluer par arr&ecirc;t&eacute; en cours
           d&rsquo;ann&eacute;e. En cas de doute, v&eacute;rifier la derni&egrave;re version
@@ -403,30 +403,30 @@ export default function CoupDePouce2026Page() {
             return (
               <article
                 key={c.key}
-                className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm"
+                className="bg-white border border-charcoal-200 rounded-xl p-6 shadow-sm"
               >
                 <div className="flex items-start gap-3 mb-3">
                   <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0">
                     <Icon className="w-5 h-5 text-emerald-700" />
                   </div>
                   <div>
-                    <h3 className="font-heading text-lg font-bold text-slate-900 leading-tight">
+                    <h3 className="font-heading text-lg font-bold text-charcoal-900 leading-tight">
                       {c.label}
                     </h3>
-                    <p className="text-xs text-slate-500 mt-1">{c.status}</p>
+                    <p className="text-xs text-charcoal-900 mt-1">{c.status}</p>
                   </div>
                 </div>
-                <dl className="space-y-3 text-sm text-slate-700 leading-relaxed">
+                <dl className="space-y-3 text-sm text-charcoal-700 leading-relaxed">
                   <div>
-                    <dt className="font-semibold text-slate-900">Base juridique</dt>
+                    <dt className="font-semibold text-charcoal-900">Base juridique</dt>
                     <dd>{c.legal}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-900">P&eacute;rim&egrave;tre</dt>
+                    <dt className="font-semibold text-charcoal-900">P&eacute;rim&egrave;tre</dt>
                     <dd>{c.perimeter}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-900">
+                    <dt className="font-semibold text-charcoal-900">
                       Op&eacute;rations concern&eacute;es
                     </dt>
                     <dd>
@@ -438,21 +438,21 @@ export default function CoupDePouce2026Page() {
                     </dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-900">Signataires</dt>
+                    <dt className="font-semibold text-charcoal-900">Signataires</dt>
                     <dd>{c.signers}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-900">
+                    <dt className="font-semibold text-charcoal-900">
                       Conditions d&rsquo;&eacute;ligibilit&eacute;
                     </dt>
                     <dd>{c.conditions}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-900">Montants indicatifs</dt>
+                    <dt className="font-semibold text-charcoal-900">Montants indicatifs</dt>
                     <dd>{c.amounts}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-900">Date de fin</dt>
+                    <dt className="font-semibold text-charcoal-900">Date de fin</dt>
                     <dd>{c.end}</dd>
                   </div>
                 </dl>
@@ -463,12 +463,12 @@ export default function CoupDePouce2026Page() {
       </section>
 
       {/* Comment bénéficier */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
             Comment b&eacute;n&eacute;ficier du Coup de pouce&nbsp;?
           </h2>
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <p className="text-charcoal-700 leading-relaxed mb-6">
             Le parcours est strict et l&rsquo;ordre des &eacute;tapes est
             <em> opposable</em>&nbsp;: une inversion, m&ecirc;me de bonne foi, peut faire rejeter le
             dossier au PNCEE et priver le b&eacute;n&eacute;ficiaire de la prime.
@@ -502,14 +502,14 @@ export default function CoupDePouce2026Page() {
             ].map((s, i) => (
               <li
                 key={i}
-                className="flex items-start gap-4 bg-white border border-slate-200 rounded-lg p-4"
+                className="flex items-start gap-4 bg-white border border-charcoal-200 rounded-lg p-4"
               >
                 <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0">
                   {i + 1}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-1">{s.t}</h3>
-                  <p className="text-sm text-slate-700 leading-relaxed">{s.d}</p>
+                  <h3 className="font-semibold text-charcoal-900 mb-1">{s.t}</h3>
+                  <p className="text-sm text-charcoal-700 leading-relaxed">{s.d}</p>
                 </div>
               </li>
             ))}
@@ -519,10 +519,10 @@ export default function CoupDePouce2026Page() {
 
       {/* Cumul MaPrimeRénov' */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
           Coup de pouce + MaPrimeR&eacute;nov&rsquo;&nbsp;: cumul possible&nbsp;?
         </h2>
-        <div className="space-y-4 text-slate-700 leading-relaxed">
+        <div className="space-y-4 text-charcoal-700 leading-relaxed">
           <p>
             <strong>Oui, en principe.</strong> MaPrimeR&eacute;nov&rsquo; (aide publique
             vers&eacute;e par l&rsquo;Anah) et la prime CEE &mdash; y compris bonifi&eacute;e par un
@@ -556,12 +556,12 @@ export default function CoupDePouce2026Page() {
       </section>
 
       {/* Évolutions 2026 */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
             &Eacute;volutions 2026 par rapport aux ann&eacute;es pr&eacute;c&eacute;dentes
           </h2>
-          <div className="space-y-4 text-slate-700 leading-relaxed">
+          <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
               Depuis 2023, la politique publique des CEE et des Coup de pouce poursuit trois
               tendances de fond. La premi&egrave;re est le
@@ -619,16 +619,16 @@ export default function CoupDePouce2026Page() {
 
       {/* Pièges et arnaques */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-6 flex items-center gap-3">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6 flex items-center gap-3">
           <AlertTriangle className="w-7 h-7 text-amber-600" />
           Pi&egrave;ges et arnaques fr&eacute;quentes
         </h2>
         <div className="space-y-5">
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
-            <h3 className="font-semibold text-slate-900 mb-1">
+            <h3 className="font-semibold text-charcoal-900 mb-1">
               Le mirage du &laquo;&nbsp;1&nbsp;euro symbolique&nbsp;&raquo;
             </h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <p className="text-sm text-charcoal-700 leading-relaxed">
               Certaines offres agressives annoncent une installation &agrave; 1&nbsp;euro en
               omettant le reste &agrave; charge minimum impos&eacute; par la r&eacute;glementation
               pour les op&eacute;rations aid&eacute;es, ou en facturant des prestations annexes
@@ -638,10 +638,10 @@ export default function CoupDePouce2026Page() {
             </p>
           </div>
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
-            <h3 className="font-semibold text-slate-900 mb-1">
+            <h3 className="font-semibold text-charcoal-900 mb-1">
               D&eacute;marchage t&eacute;l&eacute;phonique illicite
             </h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <p className="text-sm text-charcoal-700 leading-relaxed">
               La loi n&deg;&nbsp;2020-901 du 24 juillet 2020 interdit le d&eacute;marchage
               t&eacute;l&eacute;phonique pour la vente d&rsquo;&eacute;quipements ou la
               r&eacute;alisation de travaux d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie dans les
@@ -651,8 +651,8 @@ export default function CoupDePouce2026Page() {
             </p>
           </div>
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
-            <h3 className="font-semibold text-slate-900 mb-1">Fausse promesse de cumul</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <h3 className="font-semibold text-charcoal-900 mb-1">Fausse promesse de cumul</h3>
+            <p className="text-sm text-charcoal-700 leading-relaxed">
               Certains interm&eacute;diaires annoncent un cumul &laquo;&nbsp;gratuit&nbsp;&raquo;
               entre plusieurs chartes Coup de pouce pour la m&ecirc;me op&eacute;ration, alors
               qu&rsquo;un m&ecirc;me kWh cumac ne peut &ecirc;tre bonifi&eacute; deux fois.
@@ -665,20 +665,20 @@ export default function CoupDePouce2026Page() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-8 flex items-center gap-3">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-8 flex items-center gap-3">
             <BookOpen className="w-7 h-7 text-emerald-700" />
             Questions fr&eacute;quentes
           </h2>
           <div className="space-y-4">
             {FAQ.map((f, i) => (
-              <details key={i} className="bg-white border border-slate-200 rounded-lg p-5 group">
-                <summary className="font-semibold text-slate-900 cursor-pointer list-none flex items-start justify-between gap-4">
+              <details key={i} className="bg-white border border-charcoal-200 rounded-lg p-5 group">
+                <summary className="font-semibold text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                   <span>{f.question}</span>
-                  <ArrowRight className="w-4 h-4 text-slate-400 flex-shrink-0 mt-1 group-open:rotate-90 transition-transform" />
+                  <ArrowRight className="w-4 h-4 text-charcoal-400 flex-shrink-0 mt-1 group-open:rotate-90 transition-transform" />
                 </summary>
-                <p className="mt-3 text-sm text-slate-700 leading-relaxed">{f.answer}</p>
+                <p className="mt-3 text-sm text-charcoal-700 leading-relaxed">{f.answer}</p>
               </details>
             ))}
           </div>
@@ -687,63 +687,67 @@ export default function CoupDePouce2026Page() {
 
       {/* CTA fin */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <div className="bg-gradient-to-br from-emerald-50 to-blue-50 border border-emerald-100 rounded-2xl p-8">
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+        <div className="bg-gradient-to-br from-emerald-50 to-primary-50 border border-emerald-100 rounded-2xl p-8">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
             Aller plus loin
           </h2>
-          <p className="text-slate-700 leading-relaxed mb-6">
+          <p className="text-charcoal-700 leading-relaxed mb-6">
             Quatre ressources compl&eacute;mentaires pour ma&icirc;triser votre dossier CEE avant de
             signer un devis&nbsp;:
           </p>
           <div className="grid sm:grid-cols-2 gap-4">
             <Link
               href="/cee"
-              className="flex items-start gap-3 bg-white border border-slate-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
             >
               <ShieldCheck className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-slate-900">
+                <div className="font-semibold text-charcoal-900">
                   Primes CEE&nbsp;: panorama g&eacute;n&eacute;ral
                 </div>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-charcoal-600">
                   Le dispositif, les acteurs, les op&eacute;rations
                 </div>
               </div>
             </Link>
             <Link
               href="/cee/guides"
-              className="flex items-start gap-3 bg-white border border-slate-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
             >
               <BookOpen className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-slate-900">Guides CEE par op&eacute;ration</div>
-                <div className="text-sm text-slate-600">Isolation, chauffage, ventilation</div>
+                <div className="font-semibold text-charcoal-900">
+                  Guides CEE par op&eacute;ration
+                </div>
+                <div className="text-sm text-charcoal-600">Isolation, chauffage, ventilation</div>
               </div>
             </Link>
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="flex items-start gap-3 bg-white border border-slate-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
             >
               <FileCheck2 className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-slate-900">MaPrimeR&eacute;nov&rsquo; + CEE</div>
-                <div className="text-sm text-slate-600">R&egrave;gles de cumul et plafonds</div>
+                <div className="font-semibold text-charcoal-900">
+                  MaPrimeR&eacute;nov&rsquo; + CEE
+                </div>
+                <div className="text-sm text-charcoal-600">R&egrave;gles de cumul et plafonds</div>
               </div>
             </Link>
             <Link
               href="/cee/mandataire-vs-direct"
-              className="flex items-start gap-3 bg-white border border-slate-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
             >
               <ShieldCheck className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-slate-900">
+                <div className="font-semibold text-charcoal-900">
                   Oblig&eacute;, d&eacute;l&eacute;gataire, mandataire
                 </div>
-                <div className="text-sm text-slate-600">Les 3 r&ocirc;les du circuit CEE</div>
+                <div className="text-sm text-charcoal-600">Les 3 r&ocirc;les du circuit CEE</div>
               </div>
             </Link>
           </div>
-          <p className="text-xs text-slate-500 mt-6 flex items-center gap-2">
+          <p className="text-xs text-charcoal-900 mt-6 flex items-center gap-2">
             <ExternalLink className="w-3 h-3" />
             Sources officielles&nbsp;: legifrance.gouv.fr, france-renov.gouv.fr,
             maprimerenov.gouv.fr, Bulletin officiel du minist&egrave;re charg&eacute; de

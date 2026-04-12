@@ -4,7 +4,9 @@ import { useState } from 'react'
 import { ArrowRight, CheckCircle, Shield, Clock } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
-const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), { ssr: false })
+const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), {
+  ssr: false,
+})
 
 interface TarifsDevisCTAProps {
   service: string
@@ -43,12 +45,14 @@ export default function TarifsDevisCTA({
       <>
         <button
           onClick={handleClick}
-          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-base"
+          className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-base"
         >
           Devis gratuit sans engagement
           <ArrowRight className="w-4 h-4" />
         </button>
-        <p className="text-xs text-gray-400 mt-2">Gratuit, sans engagement, r{'é'}ponse rapide</p>
+        <p className="text-xs text-charcoal-400 mt-2">
+          Gratuit, sans engagement, r{'é'}ponse rapide
+        </p>
         <DevisBottomSheet
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
@@ -64,14 +68,14 @@ export default function TarifsDevisCTA({
     <>
       <button
         onClick={handleClick}
-        className="inline-flex items-center gap-3 bg-white text-blue-600 px-10 py-5 rounded-2xl font-bold hover:bg-blue-50 transition-all text-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+        className="inline-flex items-center gap-3 bg-white text-primary-500 px-10 py-5 rounded-2xl font-bold hover:bg-primary-50 transition-all text-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5"
       >
         {taskName
           ? `Obtenir mon devis ${taskName.toLowerCase()}`
           : `Obtenir mon devis ${serviceName}`}
         <ArrowRight className="w-6 h-6" />
       </button>
-      <div className="flex flex-wrap justify-center gap-6 mt-6 text-blue-100 text-sm">
+      <div className="flex flex-wrap justify-center gap-6 mt-6 text-primary-100 text-sm">
         <span className="flex items-center gap-1.5">
           <CheckCircle className="w-4 h-4" />
           100% gratuit
@@ -81,8 +85,7 @@ export default function TarifsDevisCTA({
           Artisans v{'é'}rifi{'é'}s SIREN
         </span>
         <span className="flex items-center gap-1.5">
-          <Clock className="w-4 h-4" />
-          R{'é'}ponse rapide
+          <Clock className="w-4 h-4" />R{'é'}ponse rapide
         </span>
       </div>
       <DevisBottomSheet

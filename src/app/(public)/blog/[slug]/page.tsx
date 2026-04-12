@@ -2,10 +2,24 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { Calendar, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
+import {
+  Calendar,
+  Clock,
+  ArrowLeft,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Tag,
+  ChevronRight,
+} from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAuthorByName } from '@/lib/data/authors'
-import { getBreadcrumbSchema, getArticleSpeakableSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getArticleSpeakableSchema,
+  getFAQSchema,
+  getHowToSchema,
+} from '@/lib/seo/jsonld'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
@@ -24,19 +38,25 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import dynamic from 'next/dynamic'
 import BlogInlineCTA from '@/components/blog/BlogInlineCTA'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
 
 export const revalidate = 86400
 
 /** Lightweight map for the related-articles scorer */
-const allArticlesMeta: Record<string, { category: string; tags: string[]; title: string; readTime: string }> =
-  Object.fromEntries(
-    Object.entries(allArticles).map(([slug, a]) => [
-      slug,
-      { category: a.category, tags: a.tags, title: a.title, readTime: a.readTime },
-    ])
-  )
+const allArticlesMeta: Record<
+  string,
+  { category: string; tags: string[]; title: string; readTime: string }
+> = Object.fromEntries(
+  Object.entries(allArticles).map(([slug, a]) => [
+    slug,
+    { category: a.category, tags: a.tags, title: a.title, readTime: a.readTime },
+  ])
+)
 
 export function generateStaticParams() {
   return articleSlugs.map((slug) => ({ slug }))
@@ -143,7 +163,14 @@ interface BlockquoteBlock {
   text: string
 }
 
-type ParsedBlock = H2Block | H3Block | ParagraphBlock | ListBlock | CalloutBlock | TableBlock | BlockquoteBlock
+type ParsedBlock =
+  | H2Block
+  | H3Block
+  | ParagraphBlock
+  | ListBlock
+  | CalloutBlock
+  | TableBlock
+  | BlockquoteBlock
 
 /**
  * Parse the raw content array into a flat list of blocks.
@@ -159,10 +186,16 @@ function parseContentBlocks(content: string[]): ParsedBlock[] {
   // First, split all content into individual lines
   const allLines: string[] = []
   for (const raw of content) {
-    const parts = raw.split(/\n\n/).map((s) => s.trim()).filter(Boolean)
+    const parts = raw
+      .split(/\n\n/)
+      .map((s) => s.trim())
+      .filter(Boolean)
     for (const part of parts) {
       // Some parts may have single newlines (e.g. list items, table rows, callout blocks)
-      const subLines = part.split('\n').map((s) => s.trim()).filter(Boolean)
+      const subLines = part
+        .split('\n')
+        .map((s) => s.trim())
+        .filter(Boolean)
       allLines.push(...subLines)
     }
   }
@@ -288,7 +321,9 @@ function parseTable(lines: string[]): TableBlock | null {
 }
 
 /** Extract TOC items (h2 and h3) for the Table of Contents */
-function extractTocItems(blocks: ParsedBlock[]): { id: string; text: string; level: 'h2' | 'h3' }[] {
+function extractTocItems(
+  blocks: ParsedBlock[]
+): { id: string; text: string; level: 'h2' | 'h3' }[] {
   return blocks
     .filter((b): b is H2Block | H3Block => b.type === 'h2' || b.type === 'h3')
     .map((b) => ({ id: b.id, text: b.text, level: b.type as 'h2' | 'h3' }))
@@ -383,20 +418,50 @@ function CalloutIcon({ calloutType }: { calloutType: CalloutBlock['calloutType']
   switch (calloutType) {
     case 'tip':
       return (
-        <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        <svg
+          className="w-5 h-5 text-emerald-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+          />
         </svg>
       )
     case 'warning':
       return (
-        <svg className="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        <svg
+          className="w-5 h-5 text-orange-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
         </svg>
       )
     case 'info':
       return (
-        <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          className="w-5 h-5 text-primary-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
       )
     case 'takeaway':
@@ -407,45 +472,69 @@ function CalloutIcon({ calloutType }: { calloutType: CalloutBlock['calloutType']
       )
     case 'budget':
       return (
-        <svg className="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          className="w-5 h-5 text-amber-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
       )
     case 'expert':
       return (
-        <svg className="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-charcoal-900" fill="currentColor" viewBox="0 0 24 24">
           <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11h4v10H0z" />
         </svg>
       )
   }
 }
 
-function getCalloutStyles(calloutType: CalloutBlock['calloutType']): { bg: string; border: string; headerColor: string } {
+function getCalloutStyles(calloutType: CalloutBlock['calloutType']): {
+  bg: string
+  border: string
+  headerColor: string
+} {
   switch (calloutType) {
     case 'tip':
       return { bg: 'bg-emerald-50', border: 'border-emerald-400', headerColor: 'text-emerald-700' }
     case 'warning':
       return { bg: 'bg-orange-50', border: 'border-orange-400', headerColor: 'text-orange-700' }
     case 'info':
-      return { bg: 'bg-blue-50', border: 'border-blue-400', headerColor: 'text-blue-700' }
+      return { bg: 'bg-primary-50', border: 'border-primary-300', headerColor: 'text-primary-600' }
     case 'takeaway':
       return { bg: 'bg-amber-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
     case 'budget':
-      return { bg: 'bg-gradient-to-r from-amber-50 to-orange-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
+      return {
+        bg: 'bg-gradient-to-r from-amber-50 to-orange-50',
+        border: 'border-amber-400',
+        headerColor: 'text-amber-700',
+      }
     case 'expert':
-      return { bg: 'bg-slate-50', border: 'border-slate-400', headerColor: 'text-slate-700' }
+      return { bg: 'bg-sand-50', border: 'border-charcoal-400', headerColor: 'text-charcoal-700' }
   }
 }
 
 function getCalloutLabel(calloutType: CalloutBlock['calloutType'], title: string): string {
   if (title) return title
   switch (calloutType) {
-    case 'tip': return 'CONSEIL'
-    case 'warning': return 'ATTENTION'
-    case 'info': return 'BON À SAVOIR'
-    case 'takeaway': return 'À RETENIR'
-    case 'budget': return 'BUDGET INDICATIF'
-    case 'expert': return 'AVIS D’EXPERT'
+    case 'tip':
+      return 'CONSEIL'
+    case 'warning':
+      return 'ATTENTION'
+    case 'info':
+      return 'BON À SAVOIR'
+    case 'takeaway':
+      return 'À RETENIR'
+    case 'budget':
+      return 'BUDGET INDICATIF'
+    case 'expert':
+      return 'AVIS D’EXPERT'
   }
 }
 
@@ -470,35 +559,35 @@ function renderCalloutContent(block: CalloutBlock) {
     const textLines = content.filter((l) => !l.startsWith('|'))
     return (
       <div className="article-callout-content">
-        {textLines.length > 0 && textLines.map((line, i) => (
-          <p key={`t-${i}`}>{renderInlineMarkdown(line)}</p>
-        ))}
-        {tableLines.length > 0 && (() => {
-          const parsed = parseTable(tableLines)
-          if (!parsed) return null
-          return (
-            <div className="article-table-wrapper mt-2">
-              <table className="article-table">
-                <thead>
-                  <tr>
-                    {parsed.headers.map((h, hi) => (
-                      <th key={hi}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {parsed.rows.map((row, ri) => (
-                    <tr key={ri}>
-                      {row.map((cell, ci) => (
-                        <td key={ci}>{renderInlineMarkdown(cell)}</td>
+        {textLines.length > 0 &&
+          textLines.map((line, i) => <p key={`t-${i}`}>{renderInlineMarkdown(line)}</p>)}
+        {tableLines.length > 0 &&
+          (() => {
+            const parsed = parseTable(tableLines)
+            if (!parsed) return null
+            return (
+              <div className="article-table-wrapper mt-2">
+                <table className="article-table">
+                  <thead>
+                    <tr>
+                      {parsed.headers.map((h, hi) => (
+                        <th key={hi}>{h}</th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )
-        })()}
+                  </thead>
+                  <tbody>
+                    {parsed.rows.map((row, ri) => (
+                      <tr key={ri}>
+                        {row.map((cell, ci) => (
+                          <td key={ci}>{renderInlineMarkdown(cell)}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          })()}
       </div>
     )
   }
@@ -516,14 +605,10 @@ function renderCalloutContent(block: CalloutBlock) {
     }
     return (
       <div className="article-callout-content">
-        <p className="italic text-lg leading-relaxed text-gray-700">
+        <p className="italic text-lg leading-relaxed text-charcoal-700">
           «&nbsp;{quoteLines.join(' ')}&nbsp;»
         </p>
-        {author && (
-          <p className="mt-3 font-semibold text-sm text-slate-600">
-            — {author}
-          </p>
-        )}
+        {author && <p className="mt-3 font-semibold text-sm text-charcoal-600">— {author}</p>}
       </div>
     )
   }
@@ -542,13 +627,13 @@ function renderCalloutContent(block: CalloutBlock) {
 
 function getAuthorGradient(name: string): string {
   const gradients = [
-    'from-blue-500 to-blue-600',
+    'from-primary-400 to-primary-500',
     'from-emerald-500 to-emerald-600',
     'from-purple-500 to-purple-600',
     'from-amber-500 to-amber-600',
     'from-rose-500 to-rose-600',
     'from-cyan-500 to-cyan-600',
-    'from-indigo-500 to-indigo-600',
+    'from-indigo-500 to-primary-600',
     'from-teal-500 to-teal-600',
   ]
   let hash = 0
@@ -567,12 +652,10 @@ export default async function BlogArticlePage({ params }: PageProps) {
   const cmsPage = await getPageContent(slug, 'blog')
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -607,22 +690,20 @@ export default async function BlogArticlePage({ params }: PageProps) {
   const tocItems = extractTocItems(blocks)
 
   // Derive contextual devis link from service links (first /services/X match -> /devis/X)
-  const firstServiceLink = getRelatedServiceLinks(slug, article.category, article.tags)
-    .find((l) => l.href.startsWith('/services/'))
+  const firstServiceLink = getRelatedServiceLinks(slug, article.category, article.tags).find((l) =>
+    l.href.startsWith('/services/')
+  )
   const primaryServiceSlug = firstServiceLink
     ? firstServiceLink.href.split('/services/')[1].split('/')[0]
     : null
-  const devisHref = primaryServiceSlug
-    ? `/devis/${primaryServiceSlug}`
-    : '/devis'
+  const devisHref = primaryServiceSlug ? `/devis/${primaryServiceSlug}` : '/devis'
 
   // Index after which to insert mid-article CTA (after ~2nd h2 section)
   const MID_ARTICLE_CTA_AFTER_SECTION = 2
 
   // Build FAQ items: prefer article.faq field, fallback to content-extracted FAQs
-  const faqItems = article.faq && article.faq.length > 0
-    ? article.faq
-    : extractFAQFromBlocks(blocks)
+  const faqItems =
+    article.faq && article.faq.length > 0 ? article.faq : extractFAQFromBlocks(blocks)
 
   const faqSchema = faqItems.length > 0 ? getFAQSchema(faqItems) : null
 
@@ -650,7 +731,10 @@ export default async function BlogArticlePage({ params }: PageProps) {
           const nextBlock = blocks.slice(h2Index + 1).find((b) => b.type === 'p')
           return {
             name: h2.text,
-            text: nextBlock && nextBlock.type === 'p' ? nextBlock.text.replace(/<[^>]+>/g, '').slice(0, 300) : h2.text,
+            text:
+              nextBlock && nextBlock.type === 'p'
+                ? nextBlock.text.replace(/<[^>]+>/g, '').slice(0, 300)
+                : h2.text,
           }
         })
         return getHowToSchema(steps, {
@@ -660,7 +744,13 @@ export default async function BlogArticlePage({ params }: PageProps) {
       })()
     : null
 
-  const allSchemas = [breadcrumbSchema, ...schemas, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(howToSchema ? [howToSchema] : [])]
+  const allSchemas = [
+    breadcrumbSchema,
+    ...schemas,
+    speakableSchema,
+    ...(faqSchema ? [faqSchema] : []),
+    ...(howToSchema ? [howToSchema] : []),
+  ]
 
   const articleUrl = `${SITE_URL}/blog/${slug}`
   const encodedUrl = encodeURIComponent(articleUrl)
@@ -694,7 +784,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <JsonLd data={allSchemas} />
       <ReadingProgress />
 
@@ -703,7 +793,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="inline-flex items-center gap-2 text-charcoal-600 hover:text-charcoal-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Retour au blog
@@ -715,31 +805,39 @@ export default async function BlogArticlePage({ params }: PageProps) {
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Category */}
         <div className="max-w-3xl mx-auto mb-4">
-          <Link href={`/blog?tag=${encodeURIComponent(article.category.toLowerCase())}`} className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-amber-200 transition-colors">
+          <Link
+            href={`/blog?tag=${encodeURIComponent(article.category.toLowerCase())}`}
+            className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-amber-200 transition-colors"
+          >
             {article.category}
           </Link>
         </div>
 
         {/* Title */}
-        <h1 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-6 max-w-3xl mx-auto leading-tight tracking-tight">
+        <h1 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-charcoal-900 mb-6 max-w-3xl mx-auto leading-tight tracking-tight">
           {article.title}
         </h1>
 
         {/* Byline with author avatar */}
         {(() => {
           const authorProfile = getAuthorByName(article.author)
-          const initials = article.author.split(' ').map(n => n[0]).join('')
+          const initials = article.author
+            .split(' ')
+            .map((n) => n[0])
+            .join('')
           const gradient = getAuthorGradient(article.author)
           return (
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-500 text-sm sm:text-base mb-8 sm:mb-10 max-w-3xl mx-auto">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-charcoal-500 text-sm sm:text-base mb-8 sm:mb-10 max-w-3xl mx-auto">
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
+                <div
+                  className={`w-10 h-10 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm`}
+                >
                   {initials}
                 </div>
                 <div>
-                  <span className="text-gray-900 font-semibold">{article.author}</span>
+                  <span className="text-charcoal-900 font-semibold">{article.author}</span>
                   {authorProfile && (
-                    <span className="block text-xs text-gray-400">{authorProfile.role}</span>
+                    <span className="block text-xs text-charcoal-400">{authorProfile.role}</span>
                   )}
                 </div>
               </div>
@@ -748,7 +846,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 {new Date(article.date).toLocaleDateString('fr-FR', {
                   day: 'numeric',
                   month: 'long',
-                  year: 'numeric'
+                  year: 'numeric',
                 })}
               </div>
               <div className="flex items-center gap-2">
@@ -758,10 +856,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
               {article.updatedDate && (
                 <div className="flex items-center gap-2 text-emerald-600">
                   <Clock className="w-4 h-4" />
-                  Mis à jour le {new Date(article.updatedDate).toLocaleDateString('fr-FR', {
+                  Mis à jour le{' '}
+                  {new Date(article.updatedDate).toLocaleDateString('fr-FR', {
                     day: 'numeric',
                     month: 'long',
-                    year: 'numeric'
+                    year: 'numeric',
                   })}
                 </div>
               )}
@@ -797,16 +896,12 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
         {/* Content — optimal reading width */}
         <div className="max-w-3xl mx-auto">
-
           {/* Table of Contents */}
           <TableOfContents items={tocItems} />
 
           {/* En bref — Featured Snippet bait for long-form content */}
-          {(article.keyTakeaways && article.keyTakeaways.length > 0) && (
-            <EnBrefBox
-              summary={article.excerpt}
-              keyPoints={article.keyTakeaways}
-            />
+          {article.keyTakeaways && article.keyTakeaways.length > 0 && (
+            <EnBrefBox summary={article.excerpt} keyPoints={article.keyTakeaways} />
           )}
 
           {/* Article body */}
@@ -821,8 +916,12 @@ export default async function BlogArticlePage({ params }: PageProps) {
                   <div className="not-prose my-8 bg-gradient-to-r from-clay-50 to-amber-50 border border-clay-200 rounded-xl p-6 sm:p-8">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900 mb-1">Besoin d'un professionnel ?</p>
-                        <p className="text-sm text-gray-600">Devis gratuit et sans engagement d'artisans vérifiés près de chez vous.</p>
+                        <p className="font-semibold text-charcoal-900 mb-1">
+                          Besoin d'un professionnel ?
+                        </p>
+                        <p className="text-sm text-charcoal-600">
+                          Devis gratuit et sans engagement d'artisans vérifiés près de chez vous.
+                        </p>
                       </div>
                       <Link
                         href={devisHref}
@@ -837,10 +936,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
                 {/* Section heading */}
                 {section.heading && (
-                  <h2
-                    id={section.heading.id}
-                    className="article-h2"
-                  >
+                  <h2 id={section.heading.id} className="article-h2">
                     <span className="article-h2-bar" aria-hidden="true" />
                     {section.heading.text}
                   </h2>
@@ -849,14 +945,17 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 {/* Section blocks */}
                 {section.blocks.map((block, bIdx) => {
                   // First paragraph of the entire article (intro) gets special styling
-                  const isIntro = sectionIdx === 0 && !section.heading && bIdx === 0 && block.type === 'p'
+                  const isIntro =
+                    sectionIdx === 0 && !section.heading && bIdx === 0 && block.type === 'p'
 
                   switch (block.type) {
                     case 'p':
                       return (
                         <p
                           key={bIdx}
-                          className={isIntro ? 'article-intro article-excerpt' : 'article-paragraph'}
+                          className={
+                            isIntro ? 'article-intro article-excerpt' : 'article-paragraph'
+                          }
                         >
                           {renderInlineMarkdown(block.text)}
                         </p>
@@ -864,11 +963,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
                     case 'h3':
                       return (
-                        <h3
-                          key={bIdx}
-                          id={block.id}
-                          className="article-h3"
-                        >
+                        <h3 key={bIdx} id={block.id} className="article-h3">
                           {block.text}
                         </h3>
                       )
@@ -888,10 +983,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                     case 'callout': {
                       const styles = getCalloutStyles(block.calloutType)
                       return (
-                        <div
-                          key={bIdx}
-                          className={`article-callout ${styles.bg} ${styles.border}`}
-                        >
+                        <div key={bIdx} className={`article-callout ${styles.bg} ${styles.border}`}>
                           <div className={`article-callout-header ${styles.headerColor}`}>
                             <CalloutIcon calloutType={block.calloutType} />
                             {getCalloutLabel(block.calloutType, block.title)}
@@ -941,9 +1033,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </div>
 
           {/* FAQ Section */}
-          {faqItems.length > 0 && (
-            <ArticleFAQ items={faqItems} />
-          )}
+          {faqItems.length > 0 && <ArticleFAQ items={faqItems} />}
 
           {/* CTA contextuel — après le contenu, avant les liens internes */}
           <BlogInlineCTA service={primaryServiceSlug || undefined} />
@@ -951,7 +1041,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
           {/* Services associes */}
           {serviceLinks.length > 0 && (
             <div className="mt-14 p-6 sm:p-8 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100/80 rounded-2xl">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-charcoal-900 mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-amber-500 rounded-full" />
                 Services associés
               </h3>
@@ -960,7 +1050,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium group transition-colors"
+                      className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-800 font-medium group transition-colors"
                     >
                       <ChevronRight className="w-4 h-4 text-amber-500 group-hover:translate-x-0.5 transition-transform" />
                       {link.text}
@@ -974,44 +1064,53 @@ export default async function BlogArticlePage({ params }: PageProps) {
           {/* Articles similaires */}
           {relatedArticles.length > 0 && (
             <div className="mt-12">
-              <h3 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-blue-500 rounded-full" />
+              <h3 className="text-lg font-bold text-charcoal-900 mb-5 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-primary-400 rounded-full" />
                 Articles similaires
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {relatedArticles.map(({ slug: relSlug, title: relTitle, category: relCategory, readTime: relReadTime }) => (
-                  <Link
-                    key={relSlug}
-                    href={`/blog/${relSlug}`}
-                    className="group p-5 bg-white border border-gray-200 rounded-2xl hover:border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
-                        {categoryEmoji[relCategory] || '📝'} {relCategory}
-                      </span>
-                      {relReadTime && (
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {relReadTime}
+                {relatedArticles.map(
+                  ({
+                    slug: relSlug,
+                    title: relTitle,
+                    category: relCategory,
+                    readTime: relReadTime,
+                  }) => (
+                    <Link
+                      key={relSlug}
+                      href={`/blog/${relSlug}`}
+                      className="group p-5 bg-white border border-sand-300 rounded-2xl hover:border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
+                          {categoryEmoji[relCategory] || '📝'} {relCategory}
                         </span>
-                      )}
-                    </div>
-                    <span className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">{relTitle}</span>
-                  </Link>
-                ))}
+                        {relReadTime && (
+                          <span className="text-xs text-charcoal-400 flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {relReadTime}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-sm font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors line-clamp-2">
+                        {relTitle}
+                      </span>
+                    </Link>
+                  )
+                )}
               </div>
             </div>
           )}
 
           {/* Tags */}
-          <div className="flex items-center gap-3 mt-12 pt-8 border-t border-gray-200">
-            <Tag className="w-5 h-5 text-gray-400 shrink-0" />
+          <div className="flex items-center gap-3 mt-12 pt-8 border-t border-sand-300">
+            <Tag className="w-5 h-5 text-charcoal-400 shrink-0" />
             <div className="flex flex-wrap gap-2">
               {article.tags.map((tag) => (
                 <Link
                   key={tag}
                   href={`/blog?tag=${encodeURIComponent(tag.toLowerCase())}`}
-                  className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 transition-colors"
+                  className="bg-sand-100 text-charcoal-700 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 transition-colors"
                 >
                   {tag}
                 </Link>
@@ -1020,15 +1119,15 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </div>
 
           {/* Share */}
-          <div className="flex items-center gap-4 mt-8 pt-8 border-t border-gray-200">
-            <span className="text-gray-600 font-medium">Partager :</span>
+          <div className="flex items-center gap-4 mt-8 pt-8 border-t border-sand-300">
+            <span className="text-charcoal-600 font-medium">Partager :</span>
             <div className="flex gap-2">
               <a
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
                 target="_blank"
                 rel="nofollow noopener noreferrer"
                 aria-label="Partager sur Facebook"
-                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-200"
+                className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center hover:bg-primary-600 hover:scale-110 transition-all duration-200"
               >
                 <Facebook className="w-5 h-5" />
               </a>
@@ -1046,7 +1145,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="nofollow noopener noreferrer"
                 aria-label="Partager sur LinkedIn"
-                className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 hover:scale-110 transition-all duration-200"
+                className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center hover:bg-primary-700 hover:scale-110 transition-all duration-200"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
@@ -1056,30 +1155,41 @@ export default async function BlogArticlePage({ params }: PageProps) {
           {/* Author Box — Enhanced E-E-A-T */}
           {(() => {
             const authorProfile = getAuthorByName(article.author)
-            const initials = article.author.split(' ').map(n => n[0]).join('')
+            const initials = article.author
+              .split(' ')
+              .map((n) => n[0])
+              .join('')
             const gradient = getAuthorGradient(article.author)
             return (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mt-10">
+              <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-6 sm:p-8 mt-10">
                 <div className="flex flex-col sm:flex-row gap-5">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md flex-shrink-0`}>
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md flex-shrink-0`}
+                  >
                     {initials}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-900 text-lg">{article.author}</h3>
+                    <h3 className="font-bold text-charcoal-900 text-lg">{article.author}</h3>
                     {authorProfile && (
-                      <p className="text-amber-700 text-sm font-medium mb-2">{authorProfile.role}</p>
+                      <p className="text-amber-700 text-sm font-medium mb-2">
+                        {authorProfile.role}
+                      </p>
                     )}
-                    <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                    <p className="text-charcoal-600 text-sm leading-relaxed mb-3">
                       {authorProfile
                         ? authorProfile.bio
-                        : (article.authorBio || "Expert en artisanat et batiment chez ServicesArtisans. Nos contenus sont rediges en collaboration avec des professionnels du secteur et verifies pour leur exactitude technique.")}
+                        : article.authorBio ||
+                          'Expert en artisanat et batiment chez ServicesArtisans. Nos contenus sont rediges en collaboration avec des professionnels du secteur et verifies pour leur exactitude technique.'}
                     </p>
                     {authorProfile && (
                       <>
                         {/* Expertise tags */}
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {authorProfile.expertise.map((exp) => (
-                            <span key={exp} className="bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full text-xs font-medium">
+                            <span
+                              key={exp}
+                              className="bg-primary-50 text-primary-600 px-2.5 py-0.5 rounded-full text-xs font-medium"
+                            >
                               {exp}
                             </span>
                           ))}
@@ -1087,16 +1197,29 @@ export default async function BlogArticlePage({ params }: PageProps) {
                         {/* Certifications */}
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {authorProfile.certifications.map((cert) => (
-                            <span key={cert} className="bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <span
+                              key={cert}
+                              className="bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1"
+                            >
+                              <svg
+                                className="w-3 h-3"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={2.5}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
                               </svg>
                               {cert}
                             </span>
                           ))}
                         </div>
                         {/* Experience + link */}
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-charcoal-500">
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
                             {authorProfile.yearsExperience} ans d'experience
@@ -1111,7 +1234,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                       </>
                     )}
                     {!authorProfile && (
-                      <p className="text-gray-400 text-xs mt-1">
+                      <p className="text-charcoal-400 text-xs mt-1">
                         Contenu verifie par des artisans professionnels
                       </p>
                     )}
@@ -1122,11 +1245,17 @@ export default async function BlogArticlePage({ params }: PageProps) {
           })()}
 
           {/* Editorial transparency */}
-          <div className="bg-gray-50 rounded-xl p-4 mt-6 border border-gray-100">
-            <p className="text-xs text-gray-500 leading-relaxed">
-              <strong className="text-gray-600">Méthodologie éditoriale :</strong> Cet article a été rédigé par notre équipe
-              rédactionnelle en collaboration avec des artisans professionnels. Les prix mentionnés sont indicatifs et basés
-              sur les données du marché. Dernière vérification : {new Date(article.updatedDate || article.date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}.
+          <div className="bg-sand-50 rounded-xl p-4 mt-6 border border-sand-200">
+            <p className="text-xs text-charcoal-500 leading-relaxed">
+              <strong className="text-charcoal-600">Méthodologie éditoriale :</strong> Cet article a
+              été rédigé par notre équipe rédactionnelle en collaboration avec des artisans
+              professionnels. Les prix mentionnés sont indicatifs et basés sur les données du
+              marché. Dernière vérification :{' '}
+              {new Date(article.updatedDate || article.date).toLocaleDateString('fr-FR', {
+                month: 'long',
+                year: 'numeric',
+              })}
+              .
             </p>
           </div>
         </div>
@@ -1135,17 +1264,20 @@ export default async function BlogArticlePage({ params }: PageProps) {
       {/* Trust & Safety Links (E-E-A-T) */}
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+            <Link
+              href="/notre-processus-de-verification"
+              className="text-primary-500 hover:text-primary-800"
+            >
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+            <Link href="/politique-avis" className="text-primary-500 hover:text-primary-800">
               Notre politique des avis
             </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+            <Link href="/mediation" className="text-primary-500 hover:text-primary-800">
               Service de médiation
             </Link>
           </nav>
@@ -1153,20 +1285,24 @@ export default async function BlogArticlePage({ params }: PageProps) {
       </section>
 
       {/* CTA */}
-      <div className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
-        }} />
+      <div className="relative py-16 overflow-hidden bg-gradient-to-br from-charcoal-950 via-[#111827] to-charcoal-950">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
             Besoin d'un artisan ?
           </h2>
-          <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+          <p className="text-charcoal-400 mb-8 max-w-xl mx-auto">
             Trouvez le professionnel qu'il vous faut en quelques clics
           </p>
           <Link
             href={devisHref}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-charcoal-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Obtenir mon devis gratuit
             <ChevronRight className="w-5 h-5" />
@@ -1181,12 +1317,13 @@ export default async function BlogArticlePage({ params }: PageProps) {
       <BlogServiceCityLinks articleSlug={slug} />
 
       {/* DeepPageLinks — Maillage interne blog → services/villes */}
-      {primaryServiceSlug && (
-        <DeepPageLinks currentService={primaryServiceSlug} />
-      )}
+      {primaryServiceSlug && <DeepPageLinks currentService={primaryServiceSlug} />}
 
       {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
-      <StickyMobileCTA serviceSlug={primaryServiceSlug || undefined} ctaText="Demander un devis gratuit" />
+      <StickyMobileCTA
+        serviceSlug={primaryServiceSlug || undefined}
+        ctaText="Demander un devis gratuit"
+      />
       <ExitIntentPopup />
     </div>
   )

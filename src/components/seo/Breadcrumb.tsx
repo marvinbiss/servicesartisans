@@ -15,19 +15,22 @@ interface BreadcrumbProps {
 
 export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
   return (
-    <nav
-      aria-label="Fil d'Ariane"
-      className={`flex items-center text-sm ${className}`}
-    >
-      <ol className="flex items-center space-x-2" itemScope itemType="https://schema.org/BreadcrumbList">
+    <nav aria-label="Fil d'Ariane" className={`flex items-center text-sm ${className}`}>
+      <ol
+        className="flex items-center space-x-2"
+        itemScope
+        itemType="https://schema.org/BreadcrumbList"
+      >
         <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
           <Link
             href="/"
-            className="text-gray-500 hover:text-blue-600 transition-colors"
+            className="text-charcoal-500 hover:text-primary-500 transition-colors"
             itemProp="item"
           >
             <Home className="w-4 h-4" />
-            <span className="sr-only" itemProp="name">Accueil</span>
+            <span className="sr-only" itemProp="name">
+              Accueil
+            </span>
           </Link>
           <meta itemProp="position" content="1" />
         </li>
@@ -40,17 +43,17 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             itemScope
             itemType="https://schema.org/ListItem"
           >
-            <ChevronRight className="w-4 h-4 text-gray-400 mx-1" />
+            <ChevronRight className="w-4 h-4 text-charcoal-400 mx-1" />
             {item.href ? (
               <Link
                 href={item.href}
-                className="text-gray-500 hover:text-blue-600 transition-colors"
+                className="text-charcoal-500 hover:text-primary-500 transition-colors"
                 itemProp="item"
               >
                 <span itemProp="name">{item.label}</span>
               </Link>
             ) : (
-              <span className="text-gray-900 font-medium" itemProp="name">
+              <span className="text-charcoal-900 font-medium" itemProp="name">
                 {item.label}
               </span>
             )}

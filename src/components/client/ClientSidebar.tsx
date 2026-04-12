@@ -15,7 +15,10 @@ interface ClientSidebarProps {
 
 const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessagesCount = 0 }: ClientSidebarProps) {
+export default function ClientSidebar({
+  activePage = 'mes-demandes',
+  unreadMessagesCount = 0,
+}: ClientSidebarProps) {
   const [userId, setUserId] = useState<string | undefined>(undefined)
   const [mobileOpen, setMobileOpen] = useState(false)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -79,8 +82,19 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
   }, [])
 
   const navItems = [
-    { key: 'mes-demandes', href: '/espace-client/mes-demandes', icon: FileText, label: 'Mes demandes' },
-    { key: 'messages', href: '/espace-client/messages', icon: MessageSquare, label: 'Messages', badge: unreadMessagesCount },
+    {
+      key: 'mes-demandes',
+      href: '/espace-client/mes-demandes',
+      icon: FileText,
+      label: 'Mes demandes',
+    },
+    {
+      key: 'messages',
+      href: '/espace-client/messages',
+      icon: MessageSquare,
+      label: 'Messages',
+      badge: unreadMessagesCount,
+    },
     { key: 'avis-donnes', href: '/espace-client/avis-donnes', icon: Star, label: 'Avis donnés' },
     { key: 'parametres', href: '/espace-client/parametres', icon: Settings, label: 'Paramètres' },
   ]
@@ -96,10 +110,10 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
             href={item.href}
             onClick={() => setMobileOpen(false)}
             aria-current={isActive ? 'page' : undefined}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
               isActive
-                ? 'bg-blue-50 text-blue-600 font-medium'
-                : 'text-gray-700 hover:bg-gray-50'
+                ? 'bg-primary-50 text-primary-500 font-medium'
+                : 'text-charcoal-700 hover:bg-sand-50'
             }`}
           >
             <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
@@ -108,7 +122,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
               <span
                 role="status"
                 aria-label={`${item.badge} message${item.badge > 1 ? 's' : ''} non lu${item.badge > 1 ? 's' : ''}`}
-                className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full"
+                className="ml-auto bg-primary-500 text-white text-xs px-2 py-0.5 rounded-full"
               >
                 {item.badge}
               </span>
@@ -126,7 +140,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
       <button
         type="button"
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden flex items-center gap-2 px-3 py-2 mb-2 bg-white rounded-lg shadow-sm text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        className="lg:hidden flex items-center gap-2 px-3 py-2 mb-2 bg-white rounded-lg shadow-sm text-charcoal-700 hover:bg-sand-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
         aria-label="Ouvrir le menu"
       >
         <Menu className="w-5 h-5" aria-hidden="true" />
@@ -153,15 +167,17 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-sand-200">
+          <span className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
+            Menu
+          </span>
           <div className="flex items-center gap-2">
             <NotificationBell userId={userId} />
             <button
               ref={closeButtonRef}
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="p-1 text-gray-500 hover:text-gray-700 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="p-1 text-charcoal-500 hover:text-charcoal-700 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
               aria-label="Fermer le menu"
             >
               <X className="w-5 h-5" aria-hidden="true" />
@@ -184,8 +200,10 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
         className="hidden lg:block bg-white rounded-xl shadow-sm p-4 space-y-1"
       >
         {/* Notifications */}
-        <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-gray-100">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
+        <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-sand-200">
+          <span className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
+            Menu
+          </span>
           <NotificationBell userId={userId} />
         </div>
         {navContent}

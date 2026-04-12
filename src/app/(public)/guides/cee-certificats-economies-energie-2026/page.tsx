@@ -227,10 +227,10 @@ export default function CEE2026Page() {
             <Award className="w-4 h-4" />
             Guide CEE 2026
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 font-heading leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             Certificats d&apos;Économies d&apos;Énergie (CEE) 2026 : le guide complet
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               "Mécanisme, acteurs, opérations les plus primées, coups de pouce 2026, éligibilité RGE, démarche pas à pas et cumul MaPrimeRénov' : tout pour comprendre et activer les CEE."
             }
@@ -239,11 +239,11 @@ export default function CEE2026Page() {
 
         {/* Mécanisme */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
               Le mécanisme des CEE, en deux minutes
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
+            <div className="prose prose-lg max-w-none text-charcoal-700">
               <p>
                 {
                   "Les Certificats d'Économies d'Énergie (CEE) sont nés en 2005 avec la loi POPE. Le principe est aussi simple qu'efficace : l'État impose aux fournisseurs d'énergie (électricité, gaz, fioul, carburants) un quota d'économies d'énergie à atteindre chaque période triennale. Ces fournisseurs, appelés « obligés », doivent prouver qu'ils ont fait réaliser ces économies chez des consommateurs finaux : particuliers, entreprises, collectivités."
@@ -265,7 +265,7 @@ export default function CEE2026Page() {
 
         {/* Acteurs */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
             Les 4 acteurs du dispositif
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -274,15 +274,15 @@ export default function CEE2026Page() {
               return (
                 <div
                   key={a.titre}
-                  className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                  className="bg-white rounded-xl shadow-sm border border-sand-200 p-6"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                       <Icon className="w-5 h-5 text-green-700" />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">{a.titre}</h3>
+                    <h3 className="text-lg font-bold text-charcoal-900">{a.titre}</h3>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">{a.description}</p>
+                  <p className="text-charcoal-600 leading-relaxed">{a.description}</p>
                 </div>
               )
             })}
@@ -291,35 +291,35 @@ export default function CEE2026Page() {
 
         {/* Opérations les plus primées */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
             Les opérations les plus primées en 2026
           </h2>
-          <p className="text-gray-700 mb-6 leading-relaxed">
+          <p className="text-charcoal-700 mb-6 leading-relaxed">
             {
               'Les fiches standardisées du catalogue officiel sont identifiées par un code (BAR pour « bâtiment résidentiel », suivi de la catégorie).'
             }
           </p>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-sand-50">
                 <tr>
-                  <th className="text-left font-semibold text-gray-700 p-4">Opération</th>
-                  <th className="text-left font-semibold text-gray-700 p-4">Code fiche</th>
-                  <th className="text-left font-semibold text-gray-700 p-4">Volume CEE</th>
+                  <th className="text-left font-semibold text-charcoal-700 p-4">Opération</th>
+                  <th className="text-left font-semibold text-charcoal-700 p-4">Code fiche</th>
+                  <th className="text-left font-semibold text-charcoal-700 p-4">Volume CEE</th>
                 </tr>
               </thead>
               <tbody>
                 {operations.map((op) => (
-                  <tr key={op.code} className="border-t border-gray-100">
-                    <td className="p-4 text-gray-900 font-medium">{op.nom}</td>
-                    <td className="p-4 text-gray-600 font-mono text-xs">{op.code}</td>
-                    <td className="p-4 text-gray-600">{op.kwhCumac}</td>
+                  <tr key={op.code} className="border-t border-sand-200">
+                    <td className="p-4 text-charcoal-900 font-medium">{op.nom}</td>
+                    <td className="p-4 text-charcoal-600 font-mono text-xs">{op.code}</td>
+                    <td className="p-4 text-charcoal-600">{op.kwhCumac}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-charcoal-500 mt-4">
             {
               'Les volumes exacts en kWh cumac dépendent de la zone climatique (H1, H2, H3), de la surface traitée et du type de bâtiment. Les simulateurs officiels et ceux des délégataires fournissent un chiffrage précis avant devis.'
             }
@@ -328,51 +328,51 @@ export default function CEE2026Page() {
 
         {/* Coups de pouce */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
             Les « coups de pouce » 2026
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
               <div className="flex items-center gap-3 mb-3">
                 <Flame className="w-6 h-6 text-orange-600" />
-                <h3 className="text-lg font-bold text-gray-900">Coup de pouce Chauffage</h3>
+                <h3 className="text-lg font-bold text-charcoal-900">Coup de pouce Chauffage</h3>
               </div>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-charcoal-600 leading-relaxed">
                 {
                   "Bonifie les primes pour le remplacement d'une chaudière fioul, gaz non condensation ou charbon par une PAC air/eau, une PAC hybride, une chaudière biomasse ou un raccordement à un réseau de chaleur. Les ménages très modestes peuvent atteindre plusieurs milliers d'euros de prime."
                 }
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
               <div className="flex items-center gap-3 mb-3">
-                <Building2 className="w-6 h-6 text-blue-600" />
-                <h3 className="text-lg font-bold text-gray-900">Coup de pouce Isolation</h3>
+                <Building2 className="w-6 h-6 text-primary-500" />
+                <h3 className="text-lg font-bold text-charcoal-900">Coup de pouce Isolation</h3>
               </div>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-charcoal-600 leading-relaxed">
                 {
                   "Majore la prime pour l'isolation des combles perdus, des rampants, des planchers bas et désormais des murs en ITE. Le versement est conditionné à un contrôle sur site et au respect des résistances thermiques R imposées par arrêté."
                 }
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
               <div className="flex items-center gap-3 mb-3">
                 <Zap className="w-6 h-6 text-amber-600" />
-                <h3 className="text-lg font-bold text-gray-900">Coup de pouce Pilotage</h3>
+                <h3 className="text-lg font-bold text-charcoal-900">Coup de pouce Pilotage</h3>
               </div>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-charcoal-600 leading-relaxed">
                 {
                   "Prime pour l'installation d'un système de régulation et de pilotage intelligent du chauffage : programmateur connecté, robinets thermostatiques, GTB dans les petits collectifs. Cumulable avec le remplacement de chauffage."
                 }
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
               <div className="flex items-center gap-3 mb-3">
                 <Wind className="w-6 h-6 text-teal-600" />
-                <h3 className="text-lg font-bold text-gray-900">
+                <h3 className="text-lg font-bold text-charcoal-900">
                   Coup de pouce Rénovation d&apos;ampleur
                 </h3>
               </div>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-charcoal-600 leading-relaxed">
                 {
                   "Destiné aux rénovations globales qui font sauter au moins deux classes DPE. Il se cumule avec le Parcours Accompagné MaPrimeRénov' et vise les passoires thermiques (F et G)."
                 }
@@ -383,21 +383,21 @@ export default function CEE2026Page() {
 
         {/* Démarche */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
             La démarche pas à pas
           </h2>
           <ol className="space-y-4">
             {etapes.map((e) => (
               <li
                 key={e.numero}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex gap-4"
+                className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 flex gap-4"
               >
                 <div className="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center shrink-0">
                   {e.numero}
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-1">{e.titre}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{e.detail}</p>
+                  <h3 className="font-bold text-charcoal-900 mb-1">{e.titre}</h3>
+                  <p className="text-charcoal-600 text-sm leading-relaxed">{e.detail}</p>
                 </div>
               </li>
             ))}
@@ -439,17 +439,17 @@ export default function CEE2026Page() {
 
         {/* Cumul MPR */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading flex items-center gap-3">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading flex items-center gap-3">
               <Euro className="w-8 h-8 text-green-600" />
               Cumul CEE + MaPrimeRénov&apos; : l&apos;exemple chiffré
             </h2>
-            <p className="text-gray-700 mb-4 leading-relaxed">
+            <p className="text-charcoal-700 mb-4 leading-relaxed">
               {
                 'Un ménage modeste remplace une chaudière fioul par une PAC air/eau de 12 kW, coût TTC 15 000 €.'
               }
             </p>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-charcoal-700">
               <li className="flex items-start gap-3">
                 <span className="text-green-600 font-bold">+</span>
                 <span>
@@ -475,7 +475,7 @@ export default function CEE2026Page() {
                 </span>
               </li>
             </ul>
-            <p className="text-gray-700 mt-4 leading-relaxed">
+            <p className="text-charcoal-700 mt-4 leading-relaxed">
               {
                 "Résultat : le reste à charge peut descendre à 10-20 % du coût total pour les profils modestes, contre 60-70 % pour les profils supérieurs. Notre guide dédié « Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables » détaille ce calcul."
               }
@@ -492,7 +492,7 @@ export default function CEE2026Page() {
 
         {/* FAQ */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading flex items-center gap-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading flex items-center gap-3">
             <HelpCircle className="w-8 h-8 text-green-600" />
             Questions fréquentes sur les CEE
           </h2>
@@ -500,15 +500,15 @@ export default function CEE2026Page() {
             {faqItems.map((item, index) => (
               <details
                 key={index}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 group"
+                className="bg-white rounded-xl shadow-sm border border-sand-200 group"
               >
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-gray-900 hover:text-green-700 transition-colors">
+                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-charcoal-900 hover:text-green-700 transition-colors">
                   {item.question}
-                  <span className="ml-4 text-gray-400 group-open:rotate-45 transition-transform text-2xl">
+                  <span className="ml-4 text-charcoal-400 group-open:rotate-45 transition-transform text-2xl">
                     +
                   </span>
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                <div className="px-6 pb-6 text-charcoal-600 leading-relaxed border-t border-sand-100 pt-4">
                   {item.answer}
                 </div>
               </details>

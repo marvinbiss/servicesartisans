@@ -7,17 +7,10 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import ProviderList from '@/components/ProviderList'
 import { SITE_URL } from '@/lib/seo/config'
-import {
-  getBreadcrumbSchema,
-  getCollectionPageSchema,
-  getItemListSchema,
-} from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getCollectionPageSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { villes, getVilleBySlug } from '@/lib/data/france'
 import { getArtisanUrl } from '@/lib/utils'
-import {
-  getRgeProvidersByCity,
-  getRgeProviderCountByCity,
-} from '@/lib/rge/city-listings'
+import { getRgeProvidersByCity, getRgeProviderCountByCity } from '@/lib/rge/city-listings'
 import {
   buildGenericRgeParagraphs,
   buildGenericRgeFaq,
@@ -56,7 +49,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const url = `${SITE_URL}/artisans-rge/${ville.slug}`
   const title = `Artisans RGE à ${ville.name} — Certifiés MaPrimeRénov' & CEE`
-  const description = `Liste des artisans certifiés RGE à ${ville.name}. Éligibles MaPrimeRénov', CEE et TVA 5,5%. Données officielles ADEME — data.gouv.fr.`.slice(0, 160)
+  const description =
+    `Liste des artisans certifiés RGE à ${ville.name}. Éligibles MaPrimeRénov', CEE et TVA 5,5%. Données officielles ADEME — data.gouv.fr.`.slice(
+      0,
+      160
+    )
 
   return {
     title,
@@ -143,9 +140,7 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
 
   return (
     <>
-      {shouldNoindex && (
-        <meta name="robots" content="noindex, follow" />
-      )}
+      {shouldNoindex && <meta name="robots" content="noindex, follow" />}
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={collectionSchema} />
       {itemListSchema && <JsonLd data={itemListSchema} />}
@@ -154,7 +149,7 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-14 md:py-20">
+      <section className="relative bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
@@ -166,13 +161,13 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
             Artisans certifiés RGE à {ville.name}
           </h1>
           <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl">
-            Le label RGE est délivré par des organismes accrédités (Qualibat,
-            Qualit&apos;EnR, Qualifelec, Certibat…) aux artisans qualifiés pour les
-            travaux de rénovation énergétique. C&apos;est la condition
-            <strong> indispensable</strong> pour faire bénéficier vos clients
-            de <strong>MaPrimeRénov&apos;</strong>, des <strong>Certificats d&apos;Économies
-            d&apos;Énergie (CEE)</strong>, de l&apos;<strong>Éco-PTZ</strong> et
-            de la <strong>TVA réduite à 5,5 %</strong>.
+            Le label RGE est délivré par des organismes accrédités (Qualibat, Qualit&apos;EnR,
+            Qualifelec, Certibat…) aux artisans qualifiés pour les travaux de rénovation
+            énergétique. C&apos;est la condition
+            <strong> indispensable</strong> pour faire bénéficier vos clients de{' '}
+            <strong>MaPrimeRénov&apos;</strong>, des{' '}
+            <strong>Certificats d&apos;Économies d&apos;Énergie (CEE)</strong>, de l&apos;
+            <strong>Éco-PTZ</strong> et de la <strong>TVA réduite à 5,5 %</strong>.
           </p>
           <p className="text-sm text-emerald-100/80 max-w-3xl mt-4">
             Données issues du jeu de données officiel{' '}
@@ -184,8 +179,8 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
             >
               « liste-des-entreprises-rge-2 »
               <ExternalLink className="w-3 h-3" aria-hidden="true" />
-            </a>
-            {' '}publié par l&apos;ADEME sur data.gouv.fr — Licence Ouverte Etalab 2.0.
+            </a>{' '}
+            publié par l&apos;ADEME sur data.gouv.fr — Licence Ouverte Etalab 2.0.
           </p>
         </div>
       </section>
@@ -195,11 +190,13 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <div className="text-2xl md:text-3xl font-bold text-slate-900">
-                {totalCount.toLocaleString('fr-FR')} artisan{totalCount > 1 ? 's' : ''} RGE actif{totalCount > 1 ? 's' : ''} à {ville.name}
+              <div className="text-2xl md:text-3xl font-bold text-charcoal-900">
+                {totalCount.toLocaleString('fr-FR')} artisan{totalCount > 1 ? 's' : ''} RGE actif
+                {totalCount > 1 ? 's' : ''} à {ville.name}
               </div>
-              <p className="text-sm text-slate-500 mt-1">
-                Certifications en cours de validité — mises à jour hebdomadaires depuis l&apos;ADEME.
+              <p className="text-sm text-charcoal-900 mt-1">
+                Certifications en cours de validité — mises à jour hebdomadaires depuis
+                l&apos;ADEME.
               </p>
             </div>
             <Link
@@ -217,24 +214,39 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       <section className="bg-emerald-50/60 border-b border-emerald-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="flex items-start gap-3">
-            <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <FileCheck2
+              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <div>
-              <div className="font-semibold text-slate-900">MaPrimeRénov&apos;</div>
-              <div className="text-sm text-slate-600">Aide de l&apos;État pour la rénovation énergétique, réservée aux travaux réalisés par un RGE.</div>
+              <div className="font-semibold text-charcoal-900">MaPrimeRénov&apos;</div>
+              <div className="text-sm text-charcoal-600">
+                Aide de l&apos;État pour la rénovation énergétique, réservée aux travaux réalisés
+                par un RGE.
+              </div>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <FileCheck2
+              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <div>
-              <div className="font-semibold text-slate-900">Primes CEE</div>
-              <div className="text-sm text-slate-600">Certificats d&apos;Économies d&apos;Énergie — versés par les délégataires (Effy, Sonergia…).</div>
+              <div className="font-semibold text-charcoal-900">Primes CEE</div>
+              <div className="text-sm text-charcoal-600">
+                Certificats d&apos;Économies d&apos;Énergie — versés par les délégataires (Effy,
+                Sonergia…).
+              </div>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Percent className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <div>
-              <div className="font-semibold text-slate-900">TVA à 5,5 %</div>
-              <div className="text-sm text-slate-600">Taux réduit applicable sur la main d&apos;œuvre et les matériaux pour les travaux d&apos;amélioration énergétique.</div>
+              <div className="font-semibold text-charcoal-900">TVA à 5,5 %</div>
+              <div className="text-sm text-charcoal-600">
+                Taux réduit applicable sur la main d&apos;œuvre et les matériaux pour les travaux
+                d&apos;amélioration énergétique.
+              </div>
             </div>
           </div>
         </div>
@@ -242,32 +254,30 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
 
       {/* Providers listing */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+        <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-2">
           Annuaire des artisans RGE à {ville.name}
         </h2>
-        <p className="text-slate-500 mb-6">
+        <p className="text-charcoal-900 mb-6">
           {providers.length > 0
             ? `${providers.length} résultat${providers.length > 1 ? 's' : ''} affiché${providers.length > 1 ? 's' : ''} sur ${totalCount.toLocaleString('fr-FR')} au total.`
             : 'Aucun artisan RGE actif actuellement référencé dans cette ville.'}
         </p>
 
         {providers.length > 0 ? (
-          <ProviderList
-            providers={providers as Provider[]}
-            totalCount={totalCount}
-          />
+          <ProviderList providers={providers as Provider[]} totalCount={totalCount} />
         ) : (
-          <div className="text-center py-16 bg-slate-50 rounded-2xl">
-            <ShieldCheck className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-            <p className="text-lg text-slate-600 font-medium">
+          <div className="text-center py-16 bg-sand-50 rounded-2xl">
+            <ShieldCheck className="w-12 h-12 text-charcoal-300 mx-auto mb-4" />
+            <p className="text-lg text-charcoal-600 font-medium">
               Aucun artisan RGE trouvé à {ville.name}
             </p>
-            <p className="text-slate-400 mt-2 max-w-md mx-auto">
-              Notre base est synchronisée chaque semaine depuis l&apos;ADEME.
-              Essayez une ville voisine ou consultez le{' '}
+            <p className="text-charcoal-400 mt-2 max-w-md mx-auto">
+              Notre base est synchronisée chaque semaine depuis l&apos;ADEME. Essayez une ville
+              voisine ou consultez le{' '}
               <Link href="/verifier-artisan" className="text-emerald-700 underline">
                 vérificateur officiel
-              </Link>.
+              </Link>
+              .
             </p>
           </div>
         )}
@@ -276,10 +286,10 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       {/* Long-form content: unique par ville */}
       <section className="bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6">
             Rénovation énergétique à {ville.name} : ce qu&apos;il faut savoir
           </h2>
-          <div className="prose prose-slate max-w-none space-y-5 text-slate-700 leading-relaxed">
+          <div className="prose prose-slate max-w-none space-y-5 text-charcoal-700 leading-relaxed">
             {contentParagraphs.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
@@ -288,12 +298,12 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       </section>
 
       {/* Cross-linking : services RGE principaux dans cette ville */}
-      <section className="bg-slate-50 border-t">
+      <section className="bg-sand-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-2">
             Par spécialité RGE à {ville.name}
           </h2>
-          <p className="text-slate-500 mb-6">
+          <p className="text-charcoal-900 mb-6">
             Filtrez les artisans RGE de {ville.name} par métier énergétique.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
@@ -301,14 +311,12 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
               <Link
                 key={svc.slug}
                 href={`/rge/${svc.slug}/${ville.slug}`}
-                className="block p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-300 hover:shadow-sm transition"
+                className="block p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-300 hover:shadow-sm transition"
               >
-                <div className="font-semibold text-slate-900 group-hover:text-emerald-700">
+                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700">
                   {svc.label}
                 </div>
-                <div className="text-xs text-slate-500 mt-1">
-                  RGE à {ville.name}
-                </div>
+                <div className="text-xs text-charcoal-900 mt-1">RGE à {ville.name}</div>
               </Link>
             ))}
           </div>
@@ -319,18 +327,19 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       {neighborVilles.length > 0 && (
         <section className="bg-white border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-2">
               Artisans RGE dans les communes voisines
             </h2>
-            <p className="text-slate-500 mb-6">
-              Département {ville.departement} ({ville.region}) — les artisans RGE d&apos;une commune voisine interviennent couramment chez vous.
+            <p className="text-charcoal-900 mb-6">
+              Département {ville.departement} ({ville.region}) — les artisans RGE d&apos;une commune
+              voisine interviennent couramment chez vous.
             </p>
             <div className="flex flex-wrap gap-2">
               {neighborVilles.map((n) => (
                 <Link
                   key={n.slug}
                   href={`/artisans-rge/${n.slug}`}
-                  className="inline-flex items-center px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center px-4 py-2 rounded-full border border-charcoal-200 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
                 >
                   RGE à {n.name}
                 </Link>
@@ -341,24 +350,24 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       )}
 
       {/* FAQ */}
-      <section className="bg-slate-50 border-t">
+      <section className="bg-sand-50 border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6">
             Questions fréquentes sur les artisans RGE à {ville.name}
           </h2>
           <div className="space-y-4">
             {faqItems.map((item, i) => (
               <details
                 key={i}
-                className="group bg-white rounded-xl border border-slate-200 p-5 open:border-emerald-300 open:shadow-sm"
+                className="group bg-white rounded-xl border border-charcoal-200 p-5 open:border-emerald-300 open:shadow-sm"
               >
-                <summary className="cursor-pointer list-none font-semibold text-slate-900 flex items-start justify-between gap-4">
+                <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                   <span>{item.question}</span>
-                  <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">+</span>
+                  <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
+                    +
+                  </span>
                 </summary>
-                <p className="mt-3 text-slate-600 leading-relaxed">
-                  {item.answer}
-                </p>
+                <p className="mt-3 text-charcoal-600 leading-relaxed">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -366,43 +375,43 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       </section>
 
       {/* Guides CTA */}
-      <section className="bg-slate-50 border-t">
+      <section className="bg-sand-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-6 flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-emerald-700" aria-hidden="true" />
             Guides pour vos travaux de rénovation énergétique
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link
               href="/guides/artisan-rge"
-              className="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 hover:shadow-md transition"
+              className="group p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 hover:shadow-md transition"
             >
-              <div className="font-bold text-slate-900 group-hover:text-emerald-700">
+              <div className="font-bold text-charcoal-900 group-hover:text-emerald-700">
                 Comprendre le label RGE
               </div>
-              <p className="text-sm text-slate-600 mt-2">
+              <p className="text-sm text-charcoal-600 mt-2">
                 Comment est attribué le label, qui peut le délivrer, comment le vérifier.
               </p>
             </Link>
             <Link
               href="/guides/aides-renovation-2026"
-              className="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 hover:shadow-md transition"
+              className="group p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 hover:shadow-md transition"
             >
-              <div className="font-bold text-slate-900 group-hover:text-emerald-700">
+              <div className="font-bold text-charcoal-900 group-hover:text-emerald-700">
                 Aides à la rénovation 2026
               </div>
-              <p className="text-sm text-slate-600 mt-2">
+              <p className="text-sm text-charcoal-600 mt-2">
                 Toutes les aides publiques disponibles : montants, conditions, cumul.
               </p>
             </Link>
             <Link
               href="/guides/maprimerenov-2026"
-              className="group p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 hover:shadow-md transition"
+              className="group p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 hover:shadow-md transition"
             >
-              <div className="font-bold text-slate-900 group-hover:text-emerald-700">
+              <div className="font-bold text-charcoal-900 group-hover:text-emerald-700">
                 MaPrimeRénov&apos; 2026
               </div>
-              <p className="text-sm text-slate-600 mt-2">
+              <p className="text-sm text-charcoal-600 mt-2">
                 Barèmes par revenus, travaux éligibles, procédure de demande.
               </p>
             </Link>

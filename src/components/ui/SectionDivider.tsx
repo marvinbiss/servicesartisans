@@ -5,7 +5,7 @@
 export function SectionDivider({ className = '' }: { className?: string }) {
   return (
     <div
-      className={`h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent ${className}`}
+      className={`h-px bg-gradient-to-r from-transparent via-sand-300 to-transparent ${className}`}
       aria-hidden="true"
     />
   )

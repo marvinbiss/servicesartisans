@@ -1,14 +1,37 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, Euro, CheckCircle, Building2, Users, Thermometer } from 'lucide-react'
+import {
+  MapPin,
+  ArrowRight,
+  Shield,
+  Clock,
+  ChevronRight,
+  Wrench,
+  HelpCircle,
+  Euro,
+  CheckCircle,
+  Building2,
+  Users,
+  Thermometer,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
-import { departements, getDepartementBySlug, getVillesByDepartement, services, getRegionSlugByName } from '@/lib/data/france'
+import {
+  departements,
+  getDepartementBySlug,
+  getVillesByDepartement,
+  services,
+  getRegionSlugByName,
+} from '@/lib/data/france'
 import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
-import { generateDepartementContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import {
+  generateDepartementContent,
+  hashCode,
+  getRegionalMultiplier,
+} from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -21,9 +44,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 const topServices = ['plombier']
 
 export function generateStaticParams() {
-  return departements.flatMap(d =>
-    topServices.map(s => ({ departement: d.slug, service: s }))
-  )
+  return departements.flatMap((d) => topServices.map((s) => ({ departement: d.slug, service: s })))
 }
 
 export const dynamicParams = true
@@ -79,7 +100,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       url: `${SITE_URL}/departements/${deptSlug}/${serviceSlug}`,
-      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} en ${dept.name}` }],
+      images: [
+        { url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} en ${dept.name}` },
+      ],
     },
     twitter: {
       card: 'summary_large_image' as const,
@@ -102,14 +125,14 @@ export default async function DeptServicePage({ params }: PageProps) {
   const multiplier = getRegionalMultiplier(dept.region)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
-  const serviceMeta = services.find(s => s.slug === serviceSlug)
+  const serviceMeta = services.find((s) => s.slug === serviceSlug)
 
   // Other services in this dept
   const allTradeSlugs = getTradesSlugs()
   const otherServices = allTradeSlugs
-    .filter(s => s !== serviceSlug)
+    .filter((s) => s !== serviceSlug)
     .slice(0, 8)
-    .map(s => {
+    .map((s) => {
       const t = getTradeContent(s)
       return t ? { slug: s, name: t.name } : null
     })
@@ -118,12 +141,15 @@ export default async function DeptServicePage({ params }: PageProps) {
   // Related services from navigation.ts
   const relatedSlugs = relatedServices[serviceSlug] || []
   const relatedServicesData = relatedSlugs
-    .map(s => { const t = getTradeContent(s); return t ? { slug: s, name: t.name } : null })
+    .map((s) => {
+      const t = getTradeContent(s)
+      return t ? { slug: s, name: t.name } : null
+    })
     .filter((x): x is { slug: string; name: string } => x !== null)
 
   // Sibling depts with same service
   const siblingDepts = departements
-    .filter(d => d.region === dept.region && d.slug !== dept.slug)
+    .filter((d) => d.region === dept.region && d.slug !== dept.slug)
     .slice(0, 4)
 
   // Hash-selected tips
@@ -131,7 +157,7 @@ export default async function DeptServicePage({ params }: PageProps) {
     .map((tip, i) => ({ tip, score: Math.abs(hashCode(`tip-${i}-${deptSlug}`)) }))
     .sort((a, b) => a.score - b.score)
     .slice(0, 3)
-    .map(t => t.tip)
+    .map((t) => t.tip)
 
   // Hash-selected FAQ
   const tradeFaq = trade.faq
@@ -139,10 +165,7 @@ export default async function DeptServicePage({ params }: PageProps) {
     .sort((a, b) => a.score - b.score)
     .slice(0, 3)
   const deptFaq = content.faqItems.slice(0, 2)
-  const allFaq = [
-    ...tradeFaq.map(f => ({ question: f.q, answer: f.a })),
-    ...deptFaq,
-  ]
+  const allFaq = [...tradeFaq.map((f) => ({ question: f.q, answer: f.a })), ...deptFaq]
 
   // JSON-LD
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -168,13 +191,21 @@ export default async function DeptServicePage({ params }: PageProps) {
       {/* ─── DARK HERO ──────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.12) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.12) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
 
@@ -195,21 +226,29 @@ export default async function DeptServicePage({ params }: PageProps) {
             <div className="flex flex-wrap gap-3 mb-5">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500/15 backdrop-blur-sm rounded-full border border-accent-400/25">
                 <Wrench className="w-4 h-4 text-accent-400" />
-                <span className="text-sm font-medium text-accent-200">{serviceMeta?.name || trade.name}</span>
+                <span className="text-sm font-medium text-accent-200">
+                  {serviceMeta?.name || trade.name}
+                </span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
                 <Thermometer className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-medium text-cyan-200">{content.profile.climateLabel}</span>
+                <span className="text-sm font-medium text-cyan-200">
+                  {content.profile.climateLabel}
+                </span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500/15 backdrop-blur-sm rounded-full border border-accent-400/25">
                 <Euro className="w-4 h-4 text-accent-400" />
-                <span className="text-sm font-medium text-accent-200">{minPrice}–{maxPrice} {trade.priceRange.unit}</span>
+                <span className="text-sm font-medium text-accent-200">
+                  {minPrice}–{maxPrice} {trade.priceRange.unit}
+                </span>
               </div>
             </div>
 
             <div className="flex items-center gap-4 mb-6">
               <div className="w-16 h-16 bg-accent-500/15 backdrop-blur rounded-2xl flex items-center justify-center border border-accent-400/20">
-                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300">{dept.code}</span>
+                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-primary-200">
+                  {dept.code}
+                </span>
               </div>
               <div>
                 {(() => {
@@ -232,7 +271,9 @@ export default async function DeptServicePage({ params }: PageProps) {
             </div>
 
             <p className="text-lg text-charcoal-400 max-w-2xl leading-relaxed mb-8">
-              Trouvez un {trade.name.toLowerCase()} qualifié dans le {dept.name} ({dept.code}). Tarif moyen régional : {minPrice} à {maxPrice} {trade.priceRange.unit}. {content.profile.climateLabel}, {content.profile.housingLabel.toLowerCase()}.
+              Trouvez un {trade.name.toLowerCase()} qualifié dans le {dept.name} ({dept.code}).
+              Tarif moyen régional : {minPrice} à {maxPrice} {trade.priceRange.unit}.{' '}
+              {content.profile.climateLabel}, {content.profile.housingLabel.toLowerCase()}.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
@@ -252,10 +293,12 @@ export default async function DeptServicePage({ params }: PageProps) {
 
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Artisans vérifiés SIREN</span>
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Artisans vérifiés SIREN</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis 100 % gratuit</span>
+                <Clock className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Devis 100 % gratuit</span>
               </div>
             </div>
           </div>
@@ -286,10 +329,16 @@ export default async function DeptServicePage({ params }: PageProps) {
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl border border-sand-300 p-8">
-              <PriceTable tasks={trade.commonTasks.slice(0, 6)} tradeName={trade.name} priceRange={{ min: minPrice, max: maxPrice, unit: trade.priceRange.unit }} />
+              <PriceTable
+                tasks={trade.commonTasks.slice(0, 6)}
+                tradeName={trade.name}
+                priceRange={{ min: minPrice, max: maxPrice, unit: trade.priceRange.unit }}
+              />
             </div>
             <div className="bg-white rounded-2xl border border-sand-300 p-8">
-              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">Certifications recommandées</h3>
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">
+                Certifications recommandées
+              </h3>
               <ul className="space-y-3">
                 {trade.certifications.map((cert, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-charcoal-700">
@@ -298,7 +347,9 @@ export default async function DeptServicePage({ params }: PageProps) {
                   </li>
                 ))}
               </ul>
-              <p className="text-xs text-charcoal-400 mt-4">Délai moyen : {trade.averageResponseTime}</p>
+              <p className="text-xs text-charcoal-400 mt-4">
+                Délai moyen : {trade.averageResponseTime}
+              </p>
             </div>
           </div>
         </section>
@@ -313,26 +364,44 @@ export default async function DeptServicePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Profil du {dept.name}
               </h2>
-              <p className="text-sm text-charcoal-500">{content.profile.climateLabel} · {content.profile.economyLabel}</p>
+              <p className="text-sm text-charcoal-500">
+                {content.profile.climateLabel} · {content.profile.economyLabel}
+              </p>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-sand-300 p-8">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <div className="bg-cyan-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climat</div>
-                <div className="text-sm text-charcoal-800 font-medium">{content.profile.climateLabel}</div>
+                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">
+                  Climat
+                </div>
+                <div className="text-sm text-charcoal-800 font-medium">
+                  {content.profile.climateLabel}
+                </div>
               </div>
               <div className="bg-accent-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-accent-700 uppercase tracking-wider mb-1">Habitat</div>
-                <div className="text-sm text-charcoal-800 font-medium">{content.profile.housingLabel}</div>
+                <div className="text-xs font-semibold text-accent-700 uppercase tracking-wider mb-1">
+                  Habitat
+                </div>
+                <div className="text-sm text-charcoal-800 font-medium">
+                  {content.profile.housingLabel}
+                </div>
               </div>
               <div className="bg-violet-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
-                <div className="text-sm text-charcoal-800 font-medium">{content.profile.economyLabel}</div>
+                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">
+                  Économie
+                </div>
+                <div className="text-sm text-charcoal-800 font-medium">
+                  {content.profile.economyLabel}
+                </div>
               </div>
               <div className="bg-amber-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Population</div>
-                <div className="text-sm text-charcoal-800 font-medium">{dept.population} habitants</div>
+                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">
+                  Population
+                </div>
+                <div className="text-sm text-charcoal-800 font-medium">
+                  {dept.population} habitants
+                </div>
               </div>
             </div>
           </div>
@@ -348,25 +417,40 @@ export default async function DeptServicePage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Tarifs {trade.name.toLowerCase()} dans le {dept.name}
               </h2>
-              <p className="text-sm text-charcoal-500">Coefficient régional : {multiplier.toFixed(2)}x</p>
+              <p className="text-sm text-charcoal-500">
+                Coefficient régional : {multiplier.toFixed(2)}x
+              </p>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-sand-300 p-8">
             <div className="grid sm:grid-cols-3 gap-6 mb-6">
               <div className="text-center p-4 bg-sand-100 rounded-xl">
-                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">Tarif horaire min.</div>
+                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">
+                  Tarif horaire min.
+                </div>
                 <div className="text-2xl font-bold text-charcoal-900">{minPrice} €</div>
               </div>
               <div className="text-center p-4 bg-accent-50 rounded-xl">
-                <div className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">Tarif horaire max.</div>
+                <div className="text-xs font-semibold text-accent-600 uppercase tracking-wider mb-1">
+                  Tarif horaire max.
+                </div>
                 <div className="text-2xl font-bold text-accent-700">{maxPrice} €</div>
               </div>
               <div className="text-center p-4 bg-sand-100 rounded-xl">
-                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">Moyenne nationale</div>
-                <div className="text-2xl font-bold text-charcoal-900">{trade.priceRange.min}–{trade.priceRange.max} €</div>
+                <div className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">
+                  Moyenne nationale
+                </div>
+                <div className="text-2xl font-bold text-charcoal-900">
+                  {trade.priceRange.min}–{trade.priceRange.max} €
+                </div>
               </div>
             </div>
-            <p className="text-sm text-charcoal-500">Les tarifs dans le {dept.name} sont {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'} la moyenne nationale (coefficient {multiplier.toFixed(2)}). Ces prix sont indicatifs et varient selon la complexité de l'intervention.</p>
+            <p className="text-sm text-charcoal-500">
+              Les tarifs dans le {dept.name} sont{' '}
+              {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'}{' '}
+              la moyenne nationale (coefficient {multiplier.toFixed(2)}). Ces prix sont indicatifs
+              et varient selon la complexité de l'intervention.
+            </p>
           </div>
         </section>
 
@@ -386,7 +470,9 @@ export default async function DeptServicePage({ params }: PageProps) {
                 <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                   {trade.name} par ville dans le {dept.name}
                 </h2>
-                <p className="text-sm text-charcoal-500">{villesDuDepartement.length} villes référencées</p>
+                <p className="text-sm text-charcoal-500">
+                  {villesDuDepartement.length} villes référencées
+                </p>
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -401,7 +487,9 @@ export default async function DeptServicePage({ params }: PageProps) {
                       <MapPin className="w-5 h-5 text-accent-600" />
                     </div>
                     <div className="min-w-0">
-                      <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">{trade.name} à {ville.name}</div>
+                      <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">
+                        {trade.name} à {ville.name}
+                      </div>
                       <div className="text-xs text-charcoal-400">{ville.population} hab.</div>
                     </div>
                   </div>
@@ -410,8 +498,12 @@ export default async function DeptServicePage({ params }: PageProps) {
             </div>
             {villesDuDepartement.length > 10 && (
               <div className="mt-6 text-center">
-                <Link href={`/departements/${deptSlug}`} className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors">
-                  Voir les {villesDuDepartement.length} villes du {dept.name} <ArrowRight className="w-4 h-4" />
+                <Link
+                  href={`/departements/${deptSlug}`}
+                  className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors"
+                >
+                  Voir les {villesDuDepartement.length} villes du {dept.name}{' '}
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             )}
@@ -518,7 +610,11 @@ export default async function DeptServicePage({ params }: PageProps) {
             </div>
             <div className="flex flex-wrap gap-3">
               {siblingDepts.map((d) => (
-                <Link key={d.slug} href={`/departements/${d.slug}/${serviceSlug}`} className="bg-white border border-sand-300 hover:bg-primary-50 hover:border-primary-200 text-charcoal-700 hover:text-primary-500 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+                <Link
+                  key={d.slug}
+                  href={`/departements/${d.slug}/${serviceSlug}`}
+                  className="bg-white border border-sand-300 hover:bg-primary-50 hover:border-primary-200 text-charcoal-700 hover:text-primary-500 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                >
                   {d.name} ({d.code})
                 </Link>
               ))}
@@ -529,9 +625,13 @@ export default async function DeptServicePage({ params }: PageProps) {
 
       {/* ─── CTA ──────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
             Besoin d'un {trade.name.toLowerCase()} dans le {dept.name} ?
@@ -540,10 +640,16 @@ export default async function DeptServicePage({ params }: PageProps) {
             Devis gratuit et sans engagement de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href={`/devis/${serviceSlug}`} className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">
+            <Link
+              href={`/devis/${serviceSlug}`}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
+            >
               Obtenir mon devis gratuit
             </Link>
-            <Link href={`/services/${serviceSlug}`} className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors">
+            <Link
+              href={`/services/${serviceSlug}`}
+              className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors"
+            >
               Voir le service <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -558,10 +664,16 @@ export default async function DeptServicePage({ params }: PageProps) {
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">{trade.name} par ville</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                {trade.name} par ville
+              </h3>
               <div className="space-y-2">
                 {villesDuDepartement.slice(0, 5).map((v) => (
-                  <Link key={v.slug} href={`/services/${serviceSlug}/${v.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={v.slug}
+                    href={`/services/${serviceSlug}/${v.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} à {v.name}
                   </Link>
@@ -569,20 +681,31 @@ export default async function DeptServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Département {dept.name}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Département {dept.name}
+              </h3>
               <div className="space-y-2">
-                <Link href={`/departements/${deptSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                <Link
+                  href={`/departements/${deptSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Tous les artisans du {dept.name}
                 </Link>
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    href={`/regions/${regionSlug}/${serviceSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} en {dept.region}
                   </Link>
                 )}
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    href={`/regions/${regionSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     Artisans en {dept.region}
                   </Link>
@@ -590,19 +713,37 @@ export default async function DeptServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Navigation</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Navigation
+              </h3>
               <div className="space-y-2">
-                <Link href={`/services/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />{trade.name} en France
+                <Link
+                  href={`/services/${serviceSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  {trade.name} en France
                 </Link>
-                <Link href={`/devis/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Devis {trade.name.toLowerCase()}
+                <Link
+                  href={`/devis/${serviceSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  Devis {trade.name.toLowerCase()}
                 </Link>
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Tous les départements
+                <Link
+                  href="/departements"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  Tous les départements
                 </Link>
-                <Link href="/services" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Tous les services
+                <Link
+                  href="/services"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                  Tous les services
                 </Link>
               </div>
             </div>
@@ -626,9 +767,13 @@ export default async function DeptServicePage({ params }: PageProps) {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Méthodologie éditoriale
+            </h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les tarifs indiqués sont des estimations basées sur les données nationales ajustées par un coefficient régional. Les données démographiques proviennent de l'INSEE. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
+              Les tarifs indiqués sont des estimations basées sur les données nationales ajustées
+              par un coefficient régional. Les données démographiques proviennent de l'INSEE.
+              ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
             </p>
           </div>
         </div>

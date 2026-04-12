@@ -33,17 +33,17 @@ const SPEED_CONFIG = {
     icon: Clock,
     label: 'Rapide',
     sublabel: '< 4h',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200',
+    color: 'text-primary-500',
+    bgColor: 'bg-primary-50',
+    borderColor: 'border-primary-200',
   },
   normal: {
     icon: Timer,
     label: 'Normal',
     sublabel: '< 24h',
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-50',
-    borderColor: 'border-gray-200',
+    color: 'text-charcoal-600',
+    bgColor: 'bg-sand-50',
+    borderColor: 'border-sand-300',
   },
   slow: {
     icon: Timer,
@@ -120,14 +120,12 @@ export function ResponseTimeDisplay({
       <div className={cn('flex items-center gap-2', className)}>
         <div className="flex items-center gap-1">
           <Icon className={cn('w-4 h-4', speedConfig.color)} />
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-charcoal-600">
             Répond en ~{formatTime(avgResponseTimeHours)}
           </span>
         </div>
         {responseRate >= 90 && (
-          <span className="text-sm text-green-600 font-medium">
-            {responseRate}% de réponse
-          </span>
+          <span className="text-sm text-green-600 font-medium">{responseRate}% de réponse</span>
         )}
       </div>
     )
@@ -137,9 +135,7 @@ export function ResponseTimeDisplay({
   return (
     <div className={cn('p-4 rounded-lg border bg-white', className)}>
       <div className="flex items-center justify-between mb-4">
-        <h4 className="font-medium text-gray-900">
-          Réactivité aux avis
-        </h4>
+        <h4 className="font-medium text-charcoal-900">Réactivité aux avis</h4>
         <div
           className={cn(
             'inline-flex items-center rounded-full border px-2 py-0.5',
@@ -148,9 +144,7 @@ export function ResponseTimeDisplay({
           )}
         >
           <Icon className={cn('w-3 h-3 mr-1', speedConfig.color)} />
-          <span className={cn('text-xs font-medium', speedConfig.color)}>
-            {speedConfig.label}
-          </span>
+          <span className={cn('text-xs font-medium', speedConfig.color)}>{speedConfig.label}</span>
         </div>
       </div>
 
@@ -158,36 +152,38 @@ export function ResponseTimeDisplay({
       <div className="grid grid-cols-2 gap-4">
         {/* Response time */}
         <div>
-          <div className="flex items-center gap-1.5 text-gray-500 text-sm mb-1">
+          <div className="flex items-center gap-1.5 text-charcoal-500 text-sm mb-1">
             <Clock className="w-4 h-4" />
             Temps moyen
           </div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-charcoal-900">
             {formatTime(avgResponseTimeHours)}
           </div>
         </div>
 
         {/* Response rate */}
         <div>
-          <div className="flex items-center gap-1.5 text-gray-500 text-sm mb-1">
+          <div className="flex items-center gap-1.5 text-charcoal-500 text-sm mb-1">
             <TrendingUp className="w-4 h-4" />
             Taux de réponse
           </div>
-          <div className="text-2xl font-bold text-gray-900">
-            {responseRate}%
-          </div>
+          <div className="text-2xl font-bold text-charcoal-900">{responseRate}%</div>
         </div>
       </div>
 
       {/* Progress bar for response rate */}
       <div className="mt-4">
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2 bg-sand-100 rounded-full overflow-hidden">
           <div
             className={cn(
               'h-full rounded-full transition-all',
-              responseRate >= 90 ? 'bg-green-500' :
-              responseRate >= 70 ? 'bg-blue-500' :
-              responseRate >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+              responseRate >= 90
+                ? 'bg-green-500'
+                : responseRate >= 70
+                  ? 'bg-primary-400'
+                  : responseRate >= 50
+                    ? 'bg-yellow-500'
+                    : 'bg-red-500'
             )}
             style={{ width: `${responseRate}%` }}
           />
@@ -196,7 +192,7 @@ export function ResponseTimeDisplay({
 
       {/* Review count */}
       {totalReviews !== undefined && reviewsWithResponse !== undefined && (
-        <p className="mt-3 text-xs text-gray-500">
+        <p className="mt-3 text-xs text-charcoal-500">
           {reviewsWithResponse} réponses sur {totalReviews} avis
         </p>
       )}

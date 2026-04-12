@@ -33,18 +33,10 @@ export function SiretAutocomplete({
   inputClassName = '',
   disabled = false,
   showCompanyPreview = true,
-  autoFocus = false
+  autoFocus = false,
 }: SiretAutocompleteProps) {
-  const {
-    siret,
-    setSiret,
-    rawSiret,
-    isValid,
-    isLoading,
-    error,
-    companyInfo,
-    clear
-  } = useSiretValidation()
+  const { siret, setSiret, rawSiret, isValid, isLoading, error, companyInfo, clear } =
+    useSiretValidation()
 
   const [isFocused, setIsFocused] = useState(false)
   const [extendedInfo, setExtendedInfo] = useState<CompanyInfo | null>(null)
@@ -81,7 +73,7 @@ export function SiretAutocomplete({
               ? `${entreprise.siege.adresse}, ${entreprise.siege.codePostal} ${entreprise.siege.ville}`
               : undefined,
             activity: entreprise.libelleNAF,
-            siren: rawSiret.substring(0, 9)
+            siren: rawSiret.substring(0, 9),
           }
           setExtendedInfo(info)
           onValidated?.(rawSiret, info)
@@ -90,7 +82,7 @@ export function SiretAutocomplete({
           const info: CompanyInfo = {
             name: companyInfo?.name || '',
             active: companyInfo?.active || false,
-            siren: rawSiret.substring(0, 9)
+            siren: rawSiret.substring(0, 9),
           }
           setExtendedInfo(info)
           onValidated?.(rawSiret, info)
@@ -101,7 +93,7 @@ export function SiretAutocomplete({
           const info: CompanyInfo = {
             name: companyInfo.name,
             active: companyInfo.active,
-            siren: rawSiret.substring(0, 9)
+            siren: rawSiret.substring(0, 9),
           }
           setExtendedInfo(info)
           onValidated?.(rawSiret, info)
@@ -125,7 +117,7 @@ export function SiretAutocomplete({
   // Get status icon
   const getStatusIcon = () => {
     if (isLoading || loadingExtended) {
-      return <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+      return <Loader2 className="w-5 h-5 text-primary-400 animate-spin" />
     }
     if (rawSiret.length === 14) {
       if (isValid === true) {
@@ -138,7 +130,7 @@ export function SiretAutocomplete({
     if (rawSiret.length > 0 && rawSiret.length < 14) {
       return <AlertCircle className="w-5 h-5 text-amber-500" />
     }
-    return <Search className="w-5 h-5 text-gray-400" />
+    return <Search className="w-5 h-5 text-charcoal-400" />
   }
 
   // Get border color based on status
@@ -147,8 +139,8 @@ export function SiretAutocomplete({
       if (isValid === true) return 'border-green-500 focus-within:ring-green-500/20'
       if (isValid === false) return 'border-red-500 focus-within:ring-red-500/20'
     }
-    if (isFocused) return 'border-blue-500 focus-within:ring-blue-500/20'
-    return 'border-gray-200'
+    if (isFocused) return 'border-primary-400 focus-within:ring-primary-400/20'
+    return 'border-sand-300'
   }
 
   return (
@@ -163,7 +155,7 @@ export function SiretAutocomplete({
       >
         {/* Left Icon */}
         <div className="absolute left-3 top-1/2 -translate-y-1/2">
-          <Building2 className="w-5 h-5 text-gray-400" />
+          <Building2 className="w-5 h-5 text-charcoal-400" />
         </div>
 
         {/* Input */}
@@ -180,9 +172,9 @@ export function SiretAutocomplete({
           className={`
             w-full pl-10 pr-20 py-3.5
             bg-transparent
-            placeholder:text-gray-400 text-gray-900
+            placeholder:text-charcoal-400 text-charcoal-900
             font-mono tracking-wider text-lg
-            disabled:bg-gray-100 disabled:cursor-not-allowed
+            disabled:bg-sand-100 disabled:cursor-not-allowed
             focus:outline-none
             ${inputClassName}
           `}
@@ -200,17 +192,17 @@ export function SiretAutocomplete({
             <button
               type="button"
               onClick={handleClear}
-              className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-sand-100 rounded-lg transition-colors"
               aria-label="Effacer"
             >
-              <X className="w-4 h-4 text-gray-400" />
+              <X className="w-4 h-4 text-charcoal-400" />
             </button>
           )}
         </div>
       </div>
 
       {/* Character Counter */}
-      <div className="absolute right-3 -bottom-5 text-xs text-gray-400">
+      <div className="absolute right-3 -bottom-5 text-xs text-charcoal-400">
         {rawSiret.length}/14
       </div>
 
@@ -233,33 +225,26 @@ export function SiretAutocomplete({
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h4 className="font-semibold text-gray-900 truncate">
-                  {extendedInfo.name}
-                </h4>
-                <span className={`
+                <h4 className="font-semibold text-charcoal-900 truncate">{extendedInfo.name}</h4>
+                <span
+                  className={`
                   px-2 py-0.5 text-xs font-medium rounded-full
-                  ${extendedInfo.active
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
-                  }
-                `}>
+                  ${extendedInfo.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}
+                `}
+                >
                   {extendedInfo.active ? 'Active' : 'Cessée'}
                 </span>
               </div>
 
               {extendedInfo.activity && (
-                <p className="mt-1 text-sm text-gray-600 truncate">
-                  {extendedInfo.activity}
-                </p>
+                <p className="mt-1 text-sm text-charcoal-600 truncate">{extendedInfo.activity}</p>
               )}
 
               {extendedInfo.address && (
-                <p className="mt-1 text-sm text-gray-500 truncate">
-                  📍 {extendedInfo.address}
-                </p>
+                <p className="mt-1 text-sm text-charcoal-500 truncate">📍 {extendedInfo.address}</p>
               )}
 
-              <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+              <div className="mt-2 flex items-center gap-3 text-xs text-charcoal-500">
                 <span className="font-mono">SIREN: {extendedInfo.siren}</span>
                 <span className="font-mono">SIRET: {rawSiret}</span>
               </div>
@@ -270,7 +255,7 @@ export function SiretAutocomplete({
 
       {/* Progress Hint */}
       {rawSiret.length > 0 && rawSiret.length < 14 && isFocused && (
-        <div className="mt-2 text-sm text-gray-500">
+        <div className="mt-2 text-sm text-charcoal-500">
           Entrez encore {14 - rawSiret.length} chiffre{14 - rawSiret.length > 1 ? 's' : ''}
         </div>
       )}

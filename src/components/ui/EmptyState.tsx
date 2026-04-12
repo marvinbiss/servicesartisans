@@ -31,8 +31,8 @@ const defaultIcons = {
 }
 
 const iconColors = {
-  search: 'text-blue-500 bg-blue-50',
-  inbox: 'text-gray-500 bg-gray-50',
+  search: 'text-primary-400 bg-primary-50',
+  inbox: 'text-charcoal-500 bg-sand-50',
   notFound: 'text-amber-500 bg-amber-50',
   error: 'text-red-500 bg-red-50',
 }
@@ -64,46 +64,42 @@ export function EmptyState({
       >
         {IconComponent}
       </div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-      {description && (
-        <p className="text-gray-600 mb-8 max-w-md">{description}</p>
-      )}
+      <h3 className="text-xl font-semibold text-charcoal-900 mb-2">{title}</h3>
+      {description && <p className="text-charcoal-600 mb-8 max-w-md">{description}</p>}
       {(action || secondaryAction) && (
         <div className="flex flex-col sm:flex-row gap-3">
-          {action && (
-            action.href ? (
+          {action &&
+            (action.href ? (
               <Link
                 href={action.href}
-                className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
+                className="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-600 transition-colors shadow-lg shadow-primary-400/25"
               >
                 {action.label}
               </Link>
             ) : (
               <button
                 onClick={action.onClick}
-                className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
+                className="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-600 transition-colors shadow-lg shadow-primary-400/25"
               >
                 {action.label}
               </button>
-            )
-          )}
-          {secondaryAction && (
-            secondaryAction.href ? (
+            ))}
+          {secondaryAction &&
+            (secondaryAction.href ? (
               <Link
                 href={secondaryAction.href}
-                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-sand-300 text-charcoal-700 px-6 py-3 rounded-xl font-semibold hover:bg-sand-50 transition-colors"
               >
                 {secondaryAction.label}
               </Link>
             ) : (
               <button
                 onClick={secondaryAction.onClick}
-                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-sand-300 text-charcoal-700 px-6 py-3 rounded-xl font-semibold hover:bg-sand-50 transition-colors"
               >
                 {secondaryAction.label}
               </button>
-            )
-          )}
+            ))}
         </div>
       )}
     </div>

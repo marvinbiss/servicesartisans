@@ -12,7 +12,10 @@ interface IdentiteSectionProps {
 const FIELDS = ['name', 'siret'] as const
 
 export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
-  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
+  const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(
+    provider,
+    FIELDS
+  )
 
   const isVerified = Boolean(provider.is_verified)
 
@@ -34,7 +37,10 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="identite-name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="identite-name"
+              className="block text-sm font-medium text-charcoal-700 mb-2"
+            >
               Nom de l'entreprise *
             </label>
             <input
@@ -44,17 +50,22 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               onChange={(e) => setField('name', e.target.value)}
               minLength={2}
               maxLength={100}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
             />
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="identite-siret" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="identite-siret"
+              className="block text-sm font-medium text-charcoal-700 mb-2"
+            >
               N&deg; SIRET
               {isVerified && (
-                <span className="ml-2 text-xs text-green-600 font-normal">(vérifié - non modifiable)</span>
+                <span className="ml-2 text-xs text-green-600 font-normal">
+                  (vérifié - non modifiable)
+                </span>
               )}
             </label>
             <input
@@ -66,16 +77,15 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               readOnly={isVerified}
               aria-describedby="siret-help"
               aria-readonly={isVerified}
-              className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                isVerified ? 'bg-gray-100 cursor-not-allowed' : ''
+              className={`w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 ${
+                isVerified ? 'bg-sand-100 cursor-not-allowed' : ''
               }`}
             />
-            <p id="siret-help" className="text-xs text-gray-500 mt-1">
+            <p id="siret-help" className="text-xs text-charcoal-500 mt-1">
               {isVerified ? '14 chiffres — SIRET vérifié, non modifiable' : '14 chiffres'}
             </p>
           </div>
         </div>
-
       </div>
     </SectionCard>
   )

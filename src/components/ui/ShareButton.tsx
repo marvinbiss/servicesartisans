@@ -1,12 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import {
-  Share2,
-  Link2,
-  Mail,
-  X,
-} from 'lucide-react'
+import { Share2, Link2, Mail, X } from 'lucide-react'
 import { clsx } from 'clsx'
 
 interface ShareButtonProps {
@@ -71,10 +66,7 @@ export function ShareButton({
   useEffect(() => {
     if (!isOpen) return
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -143,7 +135,7 @@ export function ShareButton({
         window.open(
           `https://wa.me/?text=${encodedDesc}%20${encodedUrl}`,
           '_blank',
-          'noopener,noreferrer',
+          'noopener,noreferrer'
         )
         setIsOpen(false)
       },
@@ -156,11 +148,11 @@ export function ShareButton({
         window.open(
           `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
           '_blank',
-          'noopener,noreferrer',
+          'noopener,noreferrer'
         )
         setIsOpen(false)
       },
-      color: 'text-blue-600 hover:bg-blue-50',
+      color: 'text-primary-500 hover:bg-primary-50',
     },
     {
       label: 'X (Twitter)',
@@ -169,11 +161,11 @@ export function ShareButton({
         window.open(
           `https://x.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
           '_blank',
-          'noopener,noreferrer',
+          'noopener,noreferrer'
         )
         setIsOpen(false)
       },
-      color: 'text-gray-900 hover:bg-gray-100',
+      color: 'text-charcoal-900 hover:bg-sand-100',
     },
     {
       label: 'Email',
@@ -182,7 +174,7 @@ export function ShareButton({
         window.location.href = `mailto:?subject=${encodedTitle}&body=${encodedDesc}%0A%0A${encodedUrl}`
         setIsOpen(false)
       },
-      color: 'text-gray-600 hover:bg-gray-100',
+      color: 'text-charcoal-600 hover:bg-sand-100',
     },
     {
       label: copied ? 'Lien copié !' : 'Copier le lien',
@@ -190,9 +182,7 @@ export function ShareButton({
       onClick: () => {
         handleCopyLink()
       },
-      color: copied
-        ? 'text-green-600 bg-green-50'
-        : 'text-gray-600 hover:bg-gray-100',
+      color: copied ? 'text-green-600 bg-green-50' : 'text-charcoal-600 hover:bg-sand-100',
     },
   ]
 
@@ -203,26 +193,26 @@ export function ShareButton({
           type="button"
           onClick={handleClick}
           className={clsx(
-            'p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center',
-            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-            className,
+            'p-2.5 rounded-full bg-sand-50 hover:bg-sand-100 border border-sand-200 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center',
+            'focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2',
+            className
           )}
           aria-label="Partager"
           aria-expanded={isOpen}
           aria-haspopup="true"
         >
-          <Share2 className="w-4.5 h-4.5 text-slate-600" />
+          <Share2 className="w-4.5 h-4.5 text-charcoal-600" />
         </button>
       ) : (
         <button
           type="button"
           onClick={handleClick}
           className={clsx(
-            'inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200',
-            'text-sm font-medium text-gray-700 bg-white',
-            'hover:bg-gray-50 hover:border-gray-300 transition-all duration-200',
-            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-            className,
+            'inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-sand-300',
+            'text-sm font-medium text-charcoal-700 bg-white',
+            'hover:bg-sand-50 hover:border-sand-400 transition-all duration-200',
+            'focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2',
+            className
           )}
           aria-label="Partager"
           aria-expanded={isOpen}
@@ -237,14 +227,14 @@ export function ShareButton({
       {isOpen && (
         <div
           className={clsx(
-            'absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 z-50',
-            'py-1',
+            'absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-sand-300 z-50',
+            'py-1'
           )}
           role="menu"
           aria-label="Options de partage"
         >
-          <div className="px-3 py-2 border-b border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          <div className="px-3 py-2 border-b border-sand-200">
+            <p className="text-xs font-semibold text-charcoal-500 uppercase tracking-wide">
               Partager via
             </p>
           </div>
@@ -255,7 +245,7 @@ export function ShareButton({
               onClick={option.onClick}
               className={clsx(
                 'w-full flex items-center gap-3 px-3 py-3 text-sm transition-colors min-h-[44px]',
-                option.color,
+                option.color
               )}
               role="menuitem"
             >
@@ -263,11 +253,11 @@ export function ShareButton({
               <span className="font-medium">{option.label}</span>
             </button>
           ))}
-          <div className="border-t border-gray-100 mt-1 pt-1 px-3 pb-2">
+          <div className="border-t border-sand-200 mt-1 pt-1 px-3 pb-2">
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs text-gray-400 hover:text-gray-600 transition-colors min-h-[44px]"
+              className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs text-charcoal-400 hover:text-charcoal-600 transition-colors min-h-[44px]"
             >
               <X className="w-4 h-4" />
               Fermer

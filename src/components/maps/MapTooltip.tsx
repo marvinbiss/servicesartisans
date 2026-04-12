@@ -32,20 +32,18 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
       className="fixed z-[10000] pointer-events-none"
       style={{
         left: position.x + 20,
-        top: position.y - 60
+        top: position.y - 60,
       }}
     >
-      <div className="bg-white rounded-xl shadow-2xl p-3 min-w-[250px] max-w-[300px] border border-gray-100">
+      <div className="bg-white rounded-xl shadow-2xl p-3 min-w-[250px] max-w-[300px] border border-sand-200">
         {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-gray-900 text-sm truncate leading-tight">
+            <h4 className="font-bold text-charcoal-900 text-sm truncate leading-tight">
               {provider.name}
             </h4>
             {provider.specialty && (
-              <p className="text-xs text-blue-600 font-medium mt-0.5">
-                {provider.specialty}
-              </p>
+              <p className="text-xs text-primary-500 font-medium mt-0.5">{provider.specialty}</p>
             )}
           </div>
           <div className="flex items-center gap-1 flex-shrink-0">
@@ -56,7 +54,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
                 style={{ backgroundColor: '#1877f2' }}
               >
                 <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                 </svg>
               </div>
             )}
@@ -64,7 +62,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2" />
+        <div className="h-px bg-gradient-to-r from-transparent via-sand-300 to-transparent my-2" />
 
         {/* Stats */}
         <div className="space-y-1.5">
@@ -73,20 +71,18 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
             <div className="flex items-center gap-1.5">
               <div className="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-full">
                 <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                <span className="font-bold text-gray-900 text-xs">
+                <span className="font-bold text-charcoal-900 text-xs">
                   {provider.rating_average.toFixed(1)}
                 </span>
               </div>
-              <span className="text-gray-500 text-xs">
-                ({provider.review_count} avis)
-              </span>
+              <span className="text-charcoal-500 text-xs">({provider.review_count} avis)</span>
             </div>
           )}
 
           {/* Location */}
           {provider.address_city && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-600">
-              <MapPin className="w-3 h-3 text-gray-400 flex-shrink-0" />
+            <div className="flex items-center gap-1.5 text-xs text-charcoal-600">
+              <MapPin className="w-3 h-3 text-charcoal-400 flex-shrink-0" />
               <span className="truncate">{provider.address_city}</span>
             </div>
           )}
@@ -99,7 +95,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
         </div>
 
         {/* Hover indicator */}
-        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-gray-100 rotate-45" />
+        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-sand-200 rotate-45" />
       </div>
     </motion.div>
   )

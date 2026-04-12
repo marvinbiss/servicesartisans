@@ -22,9 +22,7 @@ export function PreferencesSection({ provider, onSaved }: PreferencesSectionProp
       error={null}
       success={null}
     >
-      <p className="text-sm text-gray-500">
-        Cette section sera bientôt disponible.
-      </p>
+      <p className="text-sm text-charcoal-500">Cette section sera bientôt disponible.</p>
     </SectionCard>
   )
 }

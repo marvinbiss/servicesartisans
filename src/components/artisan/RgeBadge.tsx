@@ -82,10 +82,14 @@ export default function RgeBadge({
       `Organisme${(organismes?.length ?? 0) > 1 ? 's' : ''} : ${organismesLabel}`,
       '',
       ...qualifications.slice(0, 5).map((q) => `• ${q.nom} (${q.organisme})`),
-      qualifications.length > 5 ? `… +${qualifications.length - 5} autre${qualifications.length - 5 > 1 ? 's' : ''}` : '',
+      qualifications.length > 5
+        ? `… +${qualifications.length - 5} autre${qualifications.length - 5 > 1 ? 's' : ''}`
+        : '',
       '',
-      'Source : ADEME — France Rénov\'',
-    ].filter(Boolean).join('\n')
+      "Source : ADEME — France Rénov'",
+    ]
+      .filter(Boolean)
+      .join('\n')
 
     const compactClasses =
       'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200'
@@ -94,9 +98,7 @@ export default function RgeBadge({
       <>
         <Leaf className="w-3 h-3 text-emerald-600" aria-hidden="true" />
         RGE
-        {count > 1 && (
-          <span className="text-[10px] font-normal text-emerald-600">×{count}</span>
-        )}
+        {count > 1 && <span className="text-[10px] font-normal text-emerald-600">×{count}</span>}
       </>
     )
 
@@ -119,11 +121,7 @@ export default function RgeBadge({
     }
 
     return (
-      <span
-        className={compactClasses}
-        title={titleLines}
-        aria-label={compactAria}
-      >
+      <span className={compactClasses} title={titleLines} aria-label={compactAria}>
         {compactInner}
       </span>
     )
@@ -157,23 +155,26 @@ export default function RgeBadge({
           <div className="text-xs uppercase tracking-wide text-emerald-600 font-semibold mb-1">
             Reconnu Garant de l&apos;Environnement
           </div>
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-charcoal-700">
             Valide jusqu&apos;au <strong>{formatDate(validUntil)}</strong>
           </div>
-          <div className="text-xs text-gray-500 mt-0.5">Organismes : {organismesLabel}</div>
+          <div className="text-xs text-charcoal-500 mt-0.5">Organismes : {organismesLabel}</div>
         </div>
 
         <ul className="space-y-2 text-sm">
           {qualifications.map((q) => (
             <li key={`${q.code}-${q.organisme}`} className="flex items-start gap-2">
-              <Leaf className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <Leaf
+                className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-gray-900 truncate">{q.nom}</div>
-                <div className="text-xs text-gray-500">
+                <div className="font-medium text-charcoal-900 truncate">{q.nom}</div>
+                <div className="text-xs text-charcoal-500">
                   {q.organisme}
                   {q.meta_domaine ? ` — ${q.meta_domaine}` : q.domaine ? ` — ${q.domaine}` : ''}
                 </div>
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-charcoal-400">
                   Jusqu&apos;au {formatDate(q.date_fin)}
                 </div>
               </div>
@@ -181,7 +182,7 @@ export default function RgeBadge({
           ))}
         </ul>
 
-        <div className="mt-3 pt-3 border-t border-emerald-100 text-xs text-gray-500">
+        <div className="mt-3 pt-3 border-t border-emerald-100 text-xs text-charcoal-500">
           Source :{' '}
           {sourceUrl ? (
             <a
@@ -194,8 +195,8 @@ export default function RgeBadge({
             </a>
           ) : (
             <span>ADEME — France Rénov&apos;</span>
-          )}
-          {' '}(Licence Etalab 2.0)
+          )}{' '}
+          (Licence Etalab 2.0)
         </div>
       </div>
     </details>

@@ -273,15 +273,15 @@ export default function ArtisanPageClient({
           {/* Bandeau fiche non-revendiquee */}
           {!isClaimed && (
             <div
-              className="mb-6 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3.5"
+              className="mb-6 flex items-start gap-3 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3.5"
               role="status"
             >
-              <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <Info className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div>
-                <p className="text-sm font-semibold text-blue-800">
+                <p className="text-sm font-semibold text-primary-800">
                   Cet artisan n&apos;a pas encore rejoint ServicesArtisans
                 </p>
-                <p className="text-sm text-blue-700 mt-0.5">
+                <p className="text-sm text-primary-600 mt-0.5">
                   Les informations affichées proviennent de sources publiques. Le contact direct
                   n&apos;est pas disponible tant que l&apos;artisan n&apos;a pas revendiqué sa
                   fiche.

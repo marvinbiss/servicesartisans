@@ -27,7 +27,11 @@ interface ProviderCardProps {
 }
 
 export function ProviderCard({ provider, priority = false }: ProviderCardProps) {
-  const providerUrl = getArtisanUrl({ slug: provider.slug, specialty: provider.service_type, city: provider.address_city })
+  const providerUrl = getArtisanUrl({
+    slug: provider.slug,
+    specialty: provider.service_type,
+    city: provider.address_city,
+  })
 
   const renderStars = (rating: number) => {
     return (
@@ -39,8 +43,8 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
               star <= rating
                 ? 'fill-amber-400 text-amber-400'
                 : star - 0.5 <= rating
-                ? 'fill-amber-400/50 text-amber-400'
-                : 'text-gray-300'
+                  ? 'fill-amber-400/50 text-amber-400'
+                  : 'text-sand-500'
             }`}
           />
         ))}
@@ -49,11 +53,11 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl shadow-sm border border-sand-200 overflow-hidden hover:shadow-md transition-shadow">
       <div className="p-6">
         <div className="flex items-start gap-4">
           {/* Avatar */}
-          <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+          <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-sand-100 flex-shrink-0">
             {provider.image_url ? (
               <Image
                 src={provider.image_url}
@@ -66,7 +70,7 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
                 priority={priority}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">
+              <div className="w-full h-full flex items-center justify-center text-charcoal-400 text-2xl font-bold">
                 {provider.name.charAt(0)}
               </div>
             )}
@@ -77,42 +81,38 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
             <div className="flex items-center gap-2">
               <Link
                 href={providerUrl}
-                className="font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate"
+                className="font-semibold text-charcoal-900 hover:text-primary-500 transition-colors truncate"
               >
                 {provider.name}
               </Link>
               {provider.is_verified && (
-                <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-primary-500 flex-shrink-0" />
               )}
             </div>
 
             {provider.service_type && (
-              <p className="text-sm text-blue-600 font-medium mt-0.5">
-                {provider.service_type}
-              </p>
+              <p className="text-sm text-primary-500 font-medium mt-0.5">{provider.service_type}</p>
             )}
 
             <div className="flex items-center gap-1 mt-1">
               {renderStars(provider.rating_average)}
-              <span className="text-sm font-medium text-gray-700 ml-1">
+              <span className="text-sm font-medium text-charcoal-700 ml-1">
                 {provider.rating_average.toFixed(1)}
               </span>
-              <span className="text-sm text-gray-500">
-                ({provider.review_count} avis)
-              </span>
+              <span className="text-sm text-charcoal-500">({provider.review_count} avis)</span>
             </div>
 
-            <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
+            <div className="flex items-center gap-1 text-sm text-charcoal-500 mt-1">
               <MapPin className="w-4 h-4" />
-              <span>{provider.address_city}, {provider.address_region}</span>
+              <span>
+                {provider.address_city}, {provider.address_region}
+              </span>
             </div>
           </div>
         </div>
 
         {provider.description && (
-          <p className="mt-4 text-gray-600 text-sm line-clamp-2">
-            {provider.description}
-          </p>
+          <p className="mt-4 text-charcoal-600 text-sm line-clamp-2">{provider.description}</p>
         )}
 
         {/* Tags */}
@@ -124,17 +124,17 @@ export function ProviderCard({ provider, priority = false }: ProviderCardProps) 
             </span>
           )}
           {provider.response_time && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-600 rounded-full text-xs font-medium">
               Répond en {provider.response_time}
             </span>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
+        <div className="flex items-center gap-3 mt-4 pt-4 border-t border-sand-200">
           <Link
             href={providerUrl}
-            className="flex-1 text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            className="flex-1 text-center px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm font-medium"
           >
             Voir le profil
           </Link>

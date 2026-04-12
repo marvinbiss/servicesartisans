@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/Skeleton'
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo placeholder */}
         <div className="flex justify-center mb-8">
@@ -10,7 +10,7 @@ export default function Loading() {
         </div>
 
         {/* Form card */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 space-y-5">
+        <div className="bg-white rounded-2xl border border-sand-300 shadow-sm p-8 space-y-5">
           <Skeleton className="h-7 w-48 mb-2" />
           <Skeleton className="h-4 w-64" />
 

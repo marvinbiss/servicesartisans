@@ -53,7 +53,7 @@ const services = [
     name: 'Plombier',
     slug: 'plombier',
     icon: 'Wrench',
-    color: 'from-blue-500 to-blue-600',
+    color: 'from-primary-400 to-primary-500',
     searches: '15k/mois',
     urgent: true,
   },
@@ -69,7 +69,7 @@ const services = [
     name: 'Serrurier',
     slug: 'serrurier',
     icon: 'Key',
-    color: 'from-slate-600 to-slate-700',
+    color: 'from-charcoal-600 to-charcoal-700',
     searches: '9k/mois',
     urgent: true,
   },
@@ -212,7 +212,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <>
       {before}
-      <span className="font-bold text-blue-600">{match}</span>
+      <span className="font-bold text-primary-500">{match}</span>
       {after}
     </>
   )
@@ -585,7 +585,7 @@ export function HeroSearch() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white rounded-2xl shadow-2xl shadow-slate-900/10 overflow-visible relative"
+        className="bg-white rounded-2xl shadow-2xl shadow-charcoal-900/10 overflow-visible relative"
       >
         <form onSubmit={handleSubmit} role="search" aria-label="Rechercher un artisan">
           <div className="flex flex-col md:flex-row">
@@ -594,21 +594,21 @@ export function HeroSearch() {
               <div
                 className={`p-4 md:p-5 cursor-text border-b md:border-b-0 md:border-r transition-all duration-200 ${
                   activeField === 'service'
-                    ? 'bg-slate-50 border-blue-200'
-                    : 'hover:bg-slate-50/50 border-slate-200'
+                    ? 'bg-sand-50 border-primary-200'
+                    : 'hover:bg-sand-50/50 border-charcoal-200'
                 }`}
                 onClick={() => {
                   setActiveField('service')
                   serviceInputRef.current?.focus()
                 }}
               >
-                <label className="block text-xs font-semibold text-slate-500 mb-1 tracking-wide uppercase">
+                <label className="block text-xs font-semibold text-charcoal-900 mb-1 tracking-wide uppercase">
                   Quel service ?
                 </label>
                 <div className="flex items-center gap-3">
                   <Search
                     className={`w-5 h-5 flex-shrink-0 transition-colors duration-200 ${
-                      activeField === 'service' ? 'text-blue-500' : 'text-slate-400'
+                      activeField === 'service' ? 'text-primary-400' : 'text-charcoal-400'
                     }`}
                   />
                   <input
@@ -623,7 +623,7 @@ export function HeroSearch() {
                     aria-expanded={activeField === 'service'}
                     aria-haspopup="listbox"
                     autoComplete="off"
-                    className="w-full bg-transparent text-base md:text-lg text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                    className="w-full bg-transparent text-base md:text-lg text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none"
                   />
                   {query && (
                     <button
@@ -633,10 +633,10 @@ export function HeroSearch() {
                         setQuery('')
                         serviceInputRef.current?.focus()
                       }}
-                      className="flex-shrink-0 w-7 h-7 min-h-[28px] rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
+                      className="flex-shrink-0 w-7 h-7 min-h-[28px] rounded-full bg-charcoal-200 hover:bg-charcoal-300 flex items-center justify-center transition-colors"
                       aria-label="Effacer le service"
                     >
-                      <X className="w-3.5 h-3.5 text-slate-500" />
+                      <X className="w-3.5 h-3.5 text-charcoal-900" />
                     </button>
                   )}
                 </div>
@@ -651,7 +651,7 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[420px] overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-charcoal-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[420px] overflow-y-auto"
                     role="listbox"
                     aria-label="Services disponibles"
                   >
@@ -673,12 +673,12 @@ export function HeroSearch() {
 
                     {/* Services List */}
                     <div className="p-2" ref={serviceListRef}>
-                      <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
+                      <div className="flex items-center gap-2 px-3 py-2 text-xs text-charcoal-900 font-medium">
                         <TrendingUp className="w-3 h-3" />
                         {query ? `Résultats pour « ${query} »` : 'Services populaires'}
                       </div>
                       {filteredServices.length === 0 && (
-                        <div className="px-3 py-6 text-center text-slate-400 text-sm">
+                        <div className="px-3 py-6 text-center text-charcoal-400 text-sm">
                           Aucun service trouvé. Essayez un autre terme.
                         </div>
                       )}
@@ -695,7 +695,7 @@ export function HeroSearch() {
                             onClick={() => selectService(service)}
                             onMouseEnter={() => setHighlightedServiceIndex(idx)}
                             className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-150 group min-h-[48px] ${
-                              isHighlighted ? 'bg-blue-50 shadow-sm' : 'hover:bg-blue-50/60'
+                              isHighlighted ? 'bg-primary-50 shadow-sm' : 'hover:bg-primary-50/60'
                             }`}
                           >
                             <div
@@ -709,13 +709,13 @@ export function HeroSearch() {
                               <div
                                 className={`font-medium transition-colors duration-150 ${
                                   isHighlighted
-                                    ? 'text-blue-700'
-                                    : 'text-slate-900 group-hover:text-blue-600'
+                                    ? 'text-primary-600'
+                                    : 'text-charcoal-900 group-hover:text-primary-500'
                                 }`}
                               >
                                 {service.name}
                               </div>
-                              <div className="text-xs text-slate-500">
+                              <div className="text-xs text-charcoal-900">
                                 {service.searches} recherches
                               </div>
                             </div>
@@ -726,7 +726,9 @@ export function HeroSearch() {
                             )}
                             <ChevronRight
                               className={`w-4 h-4 transition-all duration-150 ${
-                                isHighlighted ? 'text-blue-400 translate-x-0.5' : 'text-slate-300'
+                                isHighlighted
+                                  ? 'text-primary-300 translate-x-0.5'
+                                  : 'text-charcoal-300'
                               }`}
                             />
                           </button>
@@ -735,21 +737,21 @@ export function HeroSearch() {
                     </div>
 
                     {/* Keyboard hint */}
-                    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
+                    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-sand-50 border-t border-charcoal-100 text-xs text-charcoal-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
                           Flèches
                         </kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
                           Entrée
                         </kbd>
                         valider
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
                           Échap
                         </kbd>
                         fermer
@@ -765,21 +767,21 @@ export function HeroSearch() {
               <div
                 className={`p-4 md:p-5 cursor-text transition-all duration-200 ${
                   activeField === 'location'
-                    ? 'bg-slate-50 border-blue-200'
-                    : 'hover:bg-slate-50/50'
+                    ? 'bg-sand-50 border-primary-200'
+                    : 'hover:bg-sand-50/50'
                 }`}
                 onClick={() => {
                   setActiveField('location')
                   locationInputRef.current?.focus()
                 }}
               >
-                <label className="block text-xs font-semibold text-slate-500 mb-1 tracking-wide uppercase">
+                <label className="block text-xs font-semibold text-charcoal-900 mb-1 tracking-wide uppercase">
                   Où ?
                 </label>
                 <div className="flex items-center gap-3">
                   <MapPin
                     className={`w-5 h-5 flex-shrink-0 transition-colors duration-200 ${
-                      activeField === 'location' ? 'text-blue-500' : 'text-slate-400'
+                      activeField === 'location' ? 'text-primary-400' : 'text-charcoal-400'
                     }`}
                   />
                   <input
@@ -794,7 +796,7 @@ export function HeroSearch() {
                     aria-expanded={activeField === 'location'}
                     aria-haspopup="listbox"
                     autoComplete="off"
-                    className="w-full bg-transparent text-base md:text-lg text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                    className="w-full bg-transparent text-base md:text-lg text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none"
                   />
                   {location && (
                     <button
@@ -804,10 +806,10 @@ export function HeroSearch() {
                         setLocation('')
                         locationInputRef.current?.focus()
                       }}
-                      className="flex-shrink-0 w-7 h-7 min-h-[28px] rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
+                      className="flex-shrink-0 w-7 h-7 min-h-[28px] rounded-full bg-charcoal-200 hover:bg-charcoal-300 flex items-center justify-center transition-colors"
                       aria-label="Effacer la ville"
                     >
-                      <X className="w-3.5 h-3.5 text-slate-500" />
+                      <X className="w-3.5 h-3.5 text-charcoal-900" />
                     </button>
                   )}
                 </div>
@@ -822,7 +824,7 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[460px] overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-charcoal-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[460px] overflow-y-auto"
                     role="listbox"
                     aria-label="Villes disponibles"
                   >
@@ -831,31 +833,31 @@ export function HeroSearch() {
                       type="button"
                       onClick={handleGeolocate}
                       disabled={isLocating}
-                      className="w-full flex items-center gap-3 p-4 hover:bg-blue-50 border-b border-slate-100 transition-all duration-150 min-h-[56px]"
+                      className="w-full flex items-center gap-3 p-4 hover:bg-primary-50 border-b border-charcoal-100 transition-all duration-150 min-h-[56px]"
                     >
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                          isLocating ? 'bg-blue-200' : 'bg-blue-100'
+                          isLocating ? 'bg-primary-200' : 'bg-primary-100'
                         }`}
                       >
                         {isLocating ? (
-                          <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                          <div className="w-5 h-5 border-2 border-primary-400 border-t-transparent rounded-full animate-spin" />
                         ) : (
-                          <Navigation className="w-5 h-5 text-blue-600" />
+                          <Navigation className="w-5 h-5 text-primary-500" />
                         )}
                       </div>
                       <div className="text-left">
-                        <div className="font-medium text-slate-900">
+                        <div className="font-medium text-charcoal-900">
                           {isLocating ? 'Localisation en cours...' : 'Utiliser ma position'}
                         </div>
-                        <div className="text-sm text-slate-500">Artisans autour de vous</div>
+                        <div className="text-sm text-charcoal-900">Artisans autour de vous</div>
                       </div>
                     </button>
 
                     {/* Recent searches */}
                     {showRecentSearches && (
                       <div className="p-2">
-                        <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
+                        <div className="flex items-center gap-2 px-3 py-2 text-xs text-charcoal-900 font-medium">
                           <Clock className="w-3 h-3" />
                           Recherches récentes
                         </div>
@@ -871,21 +873,21 @@ export function HeroSearch() {
                               onClick={() => selectCity(cityName)}
                               onMouseEnter={() => setHighlightedCityIndex(idx)}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group min-h-[44px] ${
-                                isHighlighted ? 'bg-blue-50 shadow-sm' : 'hover:bg-blue-50/60'
+                                isHighlighted ? 'bg-primary-50 shadow-sm' : 'hover:bg-primary-50/60'
                               }`}
                             >
                               <div
                                 className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                                  isHighlighted ? 'bg-blue-100' : 'bg-slate-100'
+                                  isHighlighted ? 'bg-primary-100' : 'bg-sand-200'
                                 }`}
                               >
                                 <Clock
-                                  className={`w-4 h-4 ${isHighlighted ? 'text-blue-600' : 'text-slate-400'}`}
+                                  className={`w-4 h-4 ${isHighlighted ? 'text-primary-500' : 'text-charcoal-400'}`}
                                 />
                               </div>
                               <span
                                 className={`flex-1 text-left font-medium transition-colors ${
-                                  isHighlighted ? 'text-blue-700' : 'text-slate-900'
+                                  isHighlighted ? 'text-primary-600' : 'text-charcoal-900'
                                 }`}
                               >
                                 {cityName}
@@ -893,10 +895,10 @@ export function HeroSearch() {
                               <button
                                 type="button"
                                 onClick={(e) => handleRemoveRecent(cityName, e)}
-                                className="flex-shrink-0 w-6 h-6 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
+                                className="flex-shrink-0 w-6 h-6 rounded-full hover:bg-charcoal-200 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
                                 aria-label={`Supprimer ${cityName} des recherches récentes`}
                               >
-                                <X className="w-3 h-3 text-slate-400" />
+                                <X className="w-3 h-3 text-charcoal-400" />
                               </button>
                             </button>
                           )
@@ -907,7 +909,7 @@ export function HeroSearch() {
                     {/* Filtered cities from france.ts (fuzzy search results) */}
                     {filteredCities.length > 0 && (
                       <div className="p-2" ref={cityListRef}>
-                        <div className="px-3 py-2 text-xs text-slate-500 font-medium">
+                        <div className="px-3 py-2 text-xs text-charcoal-900 font-medium">
                           {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''}{' '}
                           trouvée{filteredCities.length > 1 ? 's' : ''}
                         </div>
@@ -923,34 +925,34 @@ export function HeroSearch() {
                               onClick={() => selectCity(city.name)}
                               onMouseEnter={() => setHighlightedCityIndex(idx)}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 min-h-[48px] ${
-                                isHighlighted ? 'bg-blue-50 shadow-sm' : 'hover:bg-blue-50/60'
+                                isHighlighted ? 'bg-primary-50 shadow-sm' : 'hover:bg-primary-50/60'
                               }`}
                             >
                               <div
                                 className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors flex-shrink-0 ${
-                                  isHighlighted ? 'bg-blue-100' : 'bg-slate-100'
+                                  isHighlighted ? 'bg-primary-100' : 'bg-sand-200'
                                 }`}
                               >
                                 <MapPin
-                                  className={`w-4 h-4 ${isHighlighted ? 'text-blue-600' : 'text-slate-400'}`}
+                                  className={`w-4 h-4 ${isHighlighted ? 'text-primary-500' : 'text-charcoal-400'}`}
                                 />
                               </div>
                               <div className="flex-1 text-left min-w-0">
                                 <div
                                   className={`font-medium transition-colors truncate ${
-                                    isHighlighted ? 'text-blue-700' : 'text-slate-900'
+                                    isHighlighted ? 'text-primary-600' : 'text-charcoal-900'
                                   }`}
                                 >
                                   <HighlightedText text={city.name} query={location} />
-                                  <span className="text-slate-400 font-normal ml-1">
+                                  <span className="text-charcoal-400 font-normal ml-1">
                                     ({city.departementCode})
                                   </span>
                                 </div>
-                                <div className="text-xs text-slate-500 truncate">
+                                <div className="text-xs text-charcoal-900 truncate">
                                   {city.departement} · {formatPopulation(city.population)}
                                 </div>
                               </div>
-                              <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full flex-shrink-0">
+                              <span className="text-xs text-charcoal-400 bg-sand-200 px-2 py-0.5 rounded-full flex-shrink-0">
                                 {city.codePostal}
                               </span>
                             </button>
@@ -963,13 +965,13 @@ export function HeroSearch() {
                     {hasNoResults && (
                       <div className="p-4">
                         <div className="text-center py-3">
-                          <div className="text-sm text-slate-500 mb-1">
+                          <div className="text-sm text-charcoal-900 mb-1">
                             Aucune ville trouvée pour{' '}
-                            <span className="font-semibold text-slate-700">
+                            <span className="font-semibold text-charcoal-700">
                               «&thinsp;{location}&thinsp;»
                             </span>
                           </div>
-                          <div className="text-xs text-slate-400 mb-4">
+                          <div className="text-xs text-charcoal-400 mb-4">
                             Nous ne couvrons pas encore cette ville. Essayez une ville voisine.
                           </div>
                           <div className="flex flex-wrap items-center justify-center gap-2">
@@ -978,7 +980,7 @@ export function HeroSearch() {
                                 key={fc.name}
                                 type="button"
                                 onClick={() => selectCity(fc.name)}
-                                className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors font-medium min-h-[36px]"
+                                className="inline-flex items-center gap-1 text-sm text-primary-500 hover:text-primary-600 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-full transition-colors font-medium min-h-[36px]"
                               >
                                 <MapPin className="w-3 h-3" />
                                 {fc.name} ({fc.dept})
@@ -992,7 +994,7 @@ export function HeroSearch() {
                     {/* Popular cities (empty state, no recents) */}
                     {showPopularCities && (
                       <div className="p-2" ref={cityListRef}>
-                        <div className="px-3 py-2 text-xs text-slate-500 font-medium">
+                        <div className="px-3 py-2 text-xs text-charcoal-900 font-medium">
                           Villes populaires
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
@@ -1008,22 +1010,24 @@ export function HeroSearch() {
                                 onClick={() => selectCity(city.name)}
                                 onMouseEnter={() => setHighlightedCityIndex(idx)}
                                 className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-150 min-h-[44px] ${
-                                  isHighlighted ? 'bg-blue-50 shadow-sm' : 'hover:bg-blue-50/60'
+                                  isHighlighted
+                                    ? 'bg-primary-50 shadow-sm'
+                                    : 'hover:bg-primary-50/60'
                                 }`}
                               >
                                 <div className="text-left">
                                   <span
                                     className={`font-medium transition-colors ${
-                                      isHighlighted ? 'text-blue-700' : 'text-slate-900'
+                                      isHighlighted ? 'text-primary-600' : 'text-charcoal-900'
                                     }`}
                                   >
                                     {city.name}
                                   </span>
-                                  <div className="text-[11px] text-slate-400">
+                                  <div className="text-[11px] text-charcoal-400">
                                     {city.departement}
                                   </div>
                                 </div>
-                                <span className="text-xs text-slate-400">{city.pop}</span>
+                                <span className="text-xs text-charcoal-400">{city.pop}</span>
                               </button>
                             )
                           })}
@@ -1032,15 +1036,15 @@ export function HeroSearch() {
                     )}
 
                     {/* Keyboard hint */}
-                    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
+                    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-sand-50 border-t border-charcoal-100 text-xs text-charcoal-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
                           Flèches
                         </kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
                           Entrée
                         </kbd>
                         valider
@@ -1058,7 +1062,7 @@ export function HeroSearch() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 aria-label="Rechercher"
-                className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 flex items-center justify-center gap-2 min-h-[48px]"
+                className="w-full md:w-auto bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <Search className="w-5 h-5" />
                 <span className="md:hidden lg:inline">Rechercher</span>

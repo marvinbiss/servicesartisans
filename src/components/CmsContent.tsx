@@ -13,7 +13,7 @@ export async function CmsContent({ html, className = '' }: CmsContentProps) {
 
   return (
     <div
-      className={`prose prose-gray max-w-none prose-headings:text-gray-900 prose-a:text-blue-600 prose-img:rounded-lg ${className}`}
+      className={`prose prose-gray max-w-none prose-headings:text-charcoal-900 prose-a:text-primary-500 prose-img:rounded-lg ${className}`}
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
     />
   )

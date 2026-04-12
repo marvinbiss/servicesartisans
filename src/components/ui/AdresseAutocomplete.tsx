@@ -27,7 +27,7 @@ export function AdresseAutocomplete({
   onClear,
   className = '',
   inputClassName = '',
-  disabled = false
+  disabled = false,
 }: AdresseAutocompleteProps) {
   const [query, setQuery] = useState(value)
   const [suggestions, setSuggestions] = useState<AdresseSuggestion[]>([])
@@ -79,18 +79,21 @@ export function AdresseAutocomplete({
   }, [query])
 
   // Handle selection
-  const handleSelect = useCallback((suggestion: AdresseSuggestion) => {
-    setQuery(suggestion.label)
-    setIsOpen(false)
-    setSuggestions([])
-    onSelect({
-      label: suggestion.label,
-      rue: suggestion.name,
-      codePostal: suggestion.postcode,
-      ville: suggestion.city,
-      coords: suggestion.coordinates
-    })
-  }, [onSelect])
+  const handleSelect = useCallback(
+    (suggestion: AdresseSuggestion) => {
+      setQuery(suggestion.label)
+      setIsOpen(false)
+      setSuggestions([])
+      onSelect({
+        label: suggestion.label,
+        rue: suggestion.name,
+        codePostal: suggestion.postcode,
+        ville: suggestion.city,
+        coords: suggestion.coordinates,
+      })
+    },
+    [onSelect]
+  )
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -99,15 +102,11 @@ export function AdresseAutocomplete({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        )
+        setHighlightedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0))
         break
       case 'ArrowUp':
         e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        )
+        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1))
         break
       case 'Enter':
         e.preventDefault()
@@ -157,10 +156,10 @@ export function AdresseAutocomplete({
           disabled={disabled}
           className={`
             w-full pl-10 pr-12 py-3
-            bg-white border border-gray-200 rounded-xl
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
-            placeholder:text-gray-400 text-gray-900
-            disabled:bg-gray-100 disabled:cursor-not-allowed
+            bg-white border border-sand-300 rounded-xl
+            focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20
+            placeholder:text-charcoal-400 text-charcoal-900
+            disabled:bg-sand-100 disabled:cursor-not-allowed
             transition-all
             ${inputClassName}
           `}
@@ -168,22 +167,20 @@ export function AdresseAutocomplete({
         />
 
         {/* Left icon */}
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
 
         {/* Right actions */}
         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-          {isLoading && (
-            <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
-          )}
+          {isLoading && <Loader2 className="w-4 h-4 text-charcoal-400 animate-spin" />}
 
           {query && !isLoading && (
             <button
               type="button"
               onClick={handleClear}
-              className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-sand-100 rounded-lg transition-colors"
               aria-label="Effacer"
             >
-              <X className="w-4 h-4 text-gray-400" />
+              <X className="w-4 h-4 text-charcoal-400" />
             </button>
           )}
         </div>
@@ -194,7 +191,7 @@ export function AdresseAutocomplete({
         <ul
           className="
             absolute z-50 w-full mt-1
-            bg-white border border-gray-200 rounded-xl
+            bg-white border border-sand-300 rounded-xl
             shadow-lg max-h-72 overflow-y-auto
           "
           role="listbox"
@@ -208,9 +205,10 @@ export function AdresseAutocomplete({
                 px-4 py-3 cursor-pointer
                 flex items-start gap-3
                 transition-colors
-                ${index === highlightedIndex
-                  ? 'bg-blue-50 text-blue-900'
-                  : 'hover:bg-gray-50 text-gray-900'
+                ${
+                  index === highlightedIndex
+                    ? 'bg-primary-50 text-primary-800'
+                    : 'hover:bg-sand-50 text-charcoal-900'
                 }
                 ${index === 0 ? 'rounded-t-xl' : ''}
                 ${index === suggestions.length - 1 ? 'rounded-b-xl' : ''}
@@ -218,18 +216,16 @@ export function AdresseAutocomplete({
               role="option"
               aria-selected={index === highlightedIndex}
             >
-              <span className={`mt-0.5 flex-shrink-0 ${
-                index === highlightedIndex ? 'text-blue-600' : 'text-gray-400'
-              }`}>
+              <span
+                className={`mt-0.5 flex-shrink-0 ${
+                  index === highlightedIndex ? 'text-primary-500' : 'text-charcoal-400'
+                }`}
+              >
                 {getTypeIcon(suggestion.type)}
               </span>
               <div className="flex-1 min-w-0">
-                <div className="font-medium">
-                  {suggestion.label}
-                </div>
-                <div className="text-sm text-gray-500">
-                  {suggestion.context}
-                </div>
+                <div className="font-medium">{suggestion.label}</div>
+                <div className="text-sm text-charcoal-500">{suggestion.context}</div>
               </div>
             </li>
           ))}

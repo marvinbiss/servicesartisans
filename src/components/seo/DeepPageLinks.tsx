@@ -21,8 +21,8 @@ import { getProblemsByService } from '@/lib/data/problems'
 // ---------------------------------------------------------------------------
 
 interface DeepPageLinksProps {
-  currentService: string   // slug du service (ex: "plombier")
-  currentVille?: string    // slug de la ville (ex: "paris") — optionnel pour le mode hub
+  currentService: string // slug du service (ex: "plombier")
+  currentVille?: string // slug de la ville (ex: "paris") — optionnel pour le mode hub
   currentIntent?: 'services' | 'tarifs' | 'devis' | 'avis' | 'urgence'
   skipCrossIntent?: boolean // true when CrossIntentLinks is already rendered above
 }
@@ -34,9 +34,11 @@ interface DeepPageLinksProps {
 /** Haversine distance in km between two lat/lng points */
 export function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371
-  const dLat = (lat2 - lat1) * Math.PI / 180
-  const dLng = (lng2 - lng1) * Math.PI / 180
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+  const dLat = ((lat2 - lat1) * Math.PI) / 180
+  const dLng = ((lng2 - lng1) * Math.PI) / 180
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2
   return R * 2 * Math.asin(Math.sqrt(a))
 }
 
@@ -51,53 +53,367 @@ function parsePopulation(pop: string): number {
 
 const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
   // ── 15 services historiques ──
-  ['plombier', ['prix-plombier-2026-tarifs-horaires', 'comment-choisir-son-plombier', 'fuite-eau-que-faire-urgence']],
-  ['electricien', ['prix-electricien-2026-tarifs-travaux', 'comment-choisir-electricien-guide', 'electricite-normes-securite']],
-  ['serrurier', ['prix-serrurier-2026-tarifs-interventions', 'comment-choisir-serrurier-conseils', 'securiser-maison-cambriolage-solutions']],
-  ['chauffagiste', ['prix-chauffagiste-2026-installation-entretien', 'comment-choisir-chauffagiste-guide', 'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026']],
-  ['peintre-en-batiment', ['prix-peintre-batiment-2026-guide-complet', 'peinture-interieure-conseils', 'renover-facade-ravalement-guide']],
-  ['menuisier', ['prix-menuisier-2026-tarifs-travaux', 'comment-choisir-menuisier-guide', 'menuiseries-bois-pvc-alu-comparatif']],
-  ['carreleur', ['prix-carreleur-2026-pose-fourniture', 'comment-choisir-carreleur-guide', 'guide-carrelage-salle-de-bain']],
-  ['couvreur', ['prix-toiture-2026-refection-reparation-materiaux', 'comment-choisir-couvreur-guide', 'toiture-renovation-prix-2026']],
-  ['macon', ['prix-macon-2026-gros-oeuvre-renovation', 'comment-choisir-macon-guide', 'agrandir-maison-extension-guide']],
-  ['jardinier', ['prix-jardinier-paysagiste-2026', 'comment-choisir-jardinier-paysagiste', 'amenager-terrasse-exterieure-guide']],
-  ['vitrier', ['prix-vitrier-2026-remplacement-vitrage', 'comment-choisir-vitrier-guide', 'guide-fenetre-double-vitrage']],
-  ['climaticien', ['prix-climaticien-2026-installation-entretien', 'comment-choisir-climaticien-guide', 'climatisation-reversible-guide']],
-  ['cuisiniste', ['prix-cuisiniste-2026-pose-cuisine', 'comment-choisir-cuisiniste-guide', 'renover-cuisine-guide-complet-etapes']],
-  ['solier', ['prix-solier-revetement-sol-2026', 'comment-choisir-solier-guide', 'beton-cire-vs-resine-vs-carrelage']],
-  ['nettoyage', ['prix-nettoyage-professionnel-2026', 'comment-choisir-entreprise-nettoyage', 'entretien-annuel-maison-checklist-complete']],
+  [
+    'plombier',
+    [
+      'prix-plombier-2026-tarifs-horaires',
+      'comment-choisir-son-plombier',
+      'fuite-eau-que-faire-urgence',
+    ],
+  ],
+  [
+    'electricien',
+    [
+      'prix-electricien-2026-tarifs-travaux',
+      'comment-choisir-electricien-guide',
+      'electricite-normes-securite',
+    ],
+  ],
+  [
+    'serrurier',
+    [
+      'prix-serrurier-2026-tarifs-interventions',
+      'comment-choisir-serrurier-conseils',
+      'securiser-maison-cambriolage-solutions',
+    ],
+  ],
+  [
+    'chauffagiste',
+    [
+      'prix-chauffagiste-2026-installation-entretien',
+      'comment-choisir-chauffagiste-guide',
+      'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026',
+    ],
+  ],
+  [
+    'peintre-en-batiment',
+    [
+      'prix-peintre-batiment-2026-guide-complet',
+      'peinture-interieure-conseils',
+      'renover-facade-ravalement-guide',
+    ],
+  ],
+  [
+    'menuisier',
+    [
+      'prix-menuisier-2026-tarifs-travaux',
+      'comment-choisir-menuisier-guide',
+      'menuiseries-bois-pvc-alu-comparatif',
+    ],
+  ],
+  [
+    'carreleur',
+    [
+      'prix-carreleur-2026-pose-fourniture',
+      'comment-choisir-carreleur-guide',
+      'guide-carrelage-salle-de-bain',
+    ],
+  ],
+  [
+    'couvreur',
+    [
+      'prix-toiture-2026-refection-reparation-materiaux',
+      'comment-choisir-couvreur-guide',
+      'toiture-renovation-prix-2026',
+    ],
+  ],
+  [
+    'macon',
+    [
+      'prix-macon-2026-gros-oeuvre-renovation',
+      'comment-choisir-macon-guide',
+      'agrandir-maison-extension-guide',
+    ],
+  ],
+  [
+    'jardinier',
+    [
+      'prix-jardinier-paysagiste-2026',
+      'comment-choisir-jardinier-paysagiste',
+      'amenager-terrasse-exterieure-guide',
+    ],
+  ],
+  [
+    'vitrier',
+    [
+      'prix-vitrier-2026-remplacement-vitrage',
+      'comment-choisir-vitrier-guide',
+      'guide-fenetre-double-vitrage',
+    ],
+  ],
+  [
+    'climaticien',
+    [
+      'prix-climaticien-2026-installation-entretien',
+      'comment-choisir-climaticien-guide',
+      'climatisation-reversible-guide',
+    ],
+  ],
+  [
+    'cuisiniste',
+    [
+      'prix-cuisiniste-2026-pose-cuisine',
+      'comment-choisir-cuisiniste-guide',
+      'renover-cuisine-guide-complet-etapes',
+    ],
+  ],
+  [
+    'solier',
+    [
+      'prix-solier-revetement-sol-2026',
+      'comment-choisir-solier-guide',
+      'beton-cire-vs-resine-vs-carrelage',
+    ],
+  ],
+  [
+    'nettoyage',
+    [
+      'prix-nettoyage-professionnel-2026',
+      'comment-choisir-entreprise-nettoyage',
+      'entretien-annuel-maison-checklist-complete',
+    ],
+  ],
   // ── 31 nouveaux services (Sprint 1 SEO) ──
-  ['terrassier', ['prix-extension-maison-2026', 'construire-garage-guide-permis-budget', 'permis-construire-declaration-prealable-guide']],
-  ['charpentier', ['prix-toiture-2026-refection-reparation-materiaux', 'toiture-renovation-prix-2026', 'types-de-tuiles-guide']],
-  ['zingueur', ['comment-choisir-zingueur-guide', 'prix-toiture-2026-refection-reparation-materiaux', 'etancheite-toiture-terrasse-solutions']],
-  ['etancheiste', ['etancheite-toiture-terrasse-solutions', 'humidite-moisissure-maison-solutions', 'prix-toiture-2026-refection-reparation-materiaux']],
-  ['facadier', ['prix-ravalement-facade-2026', 'renover-facade-ravalement-guide', 'types-enduit-facade']],
-  ['platrier', ['plaque-de-platre-ba13-guide', 'prix-renovation-appartement-2026-budget', 'renovation-maison-par-ou-commencer']],
-  ['metallier', ['comment-choisir-metallier-guide', 'prix-cloture-portail-2026', 'installer-portail-automatique-guide']],
-  ['ferronnier', ['prix-cloture-portail-2026', 'installer-portail-automatique-guide', 'securiser-maison-cambriolage-solutions']],
-  ['poseur-de-parquet', ['comment-choisir-poseur-parquet-guide', 'installer-parquet-massif-contrecolle-guide', 'parquet-massif-vs-contrecolle-vs-stratifie']],
-  ['miroitier', ['comment-choisir-miroitier-guide', 'prix-vitrier-2026-remplacement-vitrage', 'guide-fenetre-double-vitrage']],
-  ['storiste', ['comment-choisir-storiste-guide', 'guide-volet-roulant-electrique', 'comment-reparer-volet-roulant']],
-  ['salle-de-bain', ['renovation-salle-de-bain-budget-etapes', 'tendances-salle-de-bain-2026', 'prix-salle-de-bain-complete-2026']],
-  ['architecte-interieur', ['comment-choisir-architecte-interieur-guide', 'renover-cuisine-guide-complet-etapes', 'renovation-maison-par-ou-commencer']],
-  ['decorateur', ['tendances-cuisine-2026', 'tendances-salle-de-bain-2026', 'peinture-interieure-conseils']],
-  ['domoticien', ['comment-choisir-domoticien-guide', 'domotique-maison-connectee-guide-debutant', 'prix-domotique-maison-2026']],
-  ['pompe-a-chaleur', ['prix-pompe-a-chaleur-2026', 'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026', 'cumul-aides-renovation-2026-tableau']],
-  ['panneaux-solaires', ['panneaux-solaires-rentabilite-2026', 'prix-panneaux-solaires-2026', 'installer-panneau-solaire-maison-2026']],
-  ['isolation-thermique', ['prix-isolation-thermique-2026-tarifs', 'isolation-combles-materiaux-guide', 'cumul-aides-renovation-2026-tableau']],
-  ['renovation-energetique', ['travaux-renovation-energetique-par-ou-commencer', 'dpe-obligatoire-2026-guide', 'eco-ptz-2026-conditions-montant']],
-  ['borne-recharge', ['prix-borne-recharge-domicile-2026', 'electricite-normes-securite', 'domotique-maison-connectee-guide-debutant']],
-  ['ramoneur', ['ramonage-obligatoire-avant-hiver', 'entretien-chaudiere-annuel', 'preparer-maison-hiver-checklist']],
-  ['paysagiste', ['prix-jardinier-paysagiste-2026', 'amenager-jardin-paysagiste-guide', 'amenagement-terrasse-exterieur-2026']],
-  ['pisciniste', ['comment-choisir-pisciniste-guide', 'prix-terrasse-exterieure-2026', 'amenagement-terrasse-exterieur-2026']],
-  ['alarme-securite', ['securite-alarme-maison-guide-2026', 'securiser-maison-cambriolage-solutions', 'domotique-maison-connectee-guide-debutant']],
-  ['antenniste', ['comment-choisir-antenniste-guide', 'domotique-maison-connectee-guide-debutant', 'prix-domotique-maison-2026']],
-  ['ascensoriste', ['comment-choisir-ascensoriste-guide', 'adaptation-logement-senior-aides-2026', 'accessibilite-pmr-logement-normes']],
-  ['diagnostiqueur', ['comment-choisir-diagnostiqueur-guide', 'dpe-obligatoire-2026-guide', 'diagnostic-immobilier-obligatoire-liste']],
-  ['geometre', ['comment-choisir-geometre-guide', 'permis-construire-declaration-prealable-guide', 'urbanisme-regles-construction-extension']],
-  ['desinsectisation', ['nuisibles-maison-prevention-traitement', 'entretien-annuel-maison-checklist-complete', 'humidite-moisissure-maison-solutions']],
-  ['deratisation', ['nuisibles-maison-prevention-traitement', 'entretien-annuel-maison-checklist-complete', 'humidite-moisissure-maison-solutions']],
-  ['demenageur', ['comment-choisir-demenageur-guide', 'preparer-maison-revente-travaux-rentables', 'travaux-avant-vendre-maison-rentables']],
+  [
+    'terrassier',
+    [
+      'prix-extension-maison-2026',
+      'construire-garage-guide-permis-budget',
+      'permis-construire-declaration-prealable-guide',
+    ],
+  ],
+  [
+    'charpentier',
+    [
+      'prix-toiture-2026-refection-reparation-materiaux',
+      'toiture-renovation-prix-2026',
+      'types-de-tuiles-guide',
+    ],
+  ],
+  [
+    'zingueur',
+    [
+      'comment-choisir-zingueur-guide',
+      'prix-toiture-2026-refection-reparation-materiaux',
+      'etancheite-toiture-terrasse-solutions',
+    ],
+  ],
+  [
+    'etancheiste',
+    [
+      'etancheite-toiture-terrasse-solutions',
+      'humidite-moisissure-maison-solutions',
+      'prix-toiture-2026-refection-reparation-materiaux',
+    ],
+  ],
+  [
+    'facadier',
+    ['prix-ravalement-facade-2026', 'renover-facade-ravalement-guide', 'types-enduit-facade'],
+  ],
+  [
+    'platrier',
+    [
+      'plaque-de-platre-ba13-guide',
+      'prix-renovation-appartement-2026-budget',
+      'renovation-maison-par-ou-commencer',
+    ],
+  ],
+  [
+    'metallier',
+    [
+      'comment-choisir-metallier-guide',
+      'prix-cloture-portail-2026',
+      'installer-portail-automatique-guide',
+    ],
+  ],
+  [
+    'ferronnier',
+    [
+      'prix-cloture-portail-2026',
+      'installer-portail-automatique-guide',
+      'securiser-maison-cambriolage-solutions',
+    ],
+  ],
+  [
+    'poseur-de-parquet',
+    [
+      'comment-choisir-poseur-parquet-guide',
+      'installer-parquet-massif-contrecolle-guide',
+      'parquet-massif-vs-contrecolle-vs-stratifie',
+    ],
+  ],
+  [
+    'miroitier',
+    [
+      'comment-choisir-miroitier-guide',
+      'prix-vitrier-2026-remplacement-vitrage',
+      'guide-fenetre-double-vitrage',
+    ],
+  ],
+  [
+    'storiste',
+    [
+      'comment-choisir-storiste-guide',
+      'guide-volet-roulant-electrique',
+      'comment-reparer-volet-roulant',
+    ],
+  ],
+  [
+    'salle-de-bain',
+    [
+      'renovation-salle-de-bain-budget-etapes',
+      'tendances-salle-de-bain-2026',
+      'prix-salle-de-bain-complete-2026',
+    ],
+  ],
+  [
+    'architecte-interieur',
+    [
+      'comment-choisir-architecte-interieur-guide',
+      'renover-cuisine-guide-complet-etapes',
+      'renovation-maison-par-ou-commencer',
+    ],
+  ],
+  [
+    'decorateur',
+    ['tendances-cuisine-2026', 'tendances-salle-de-bain-2026', 'peinture-interieure-conseils'],
+  ],
+  [
+    'domoticien',
+    [
+      'comment-choisir-domoticien-guide',
+      'domotique-maison-connectee-guide-debutant',
+      'prix-domotique-maison-2026',
+    ],
+  ],
+  [
+    'pompe-a-chaleur',
+    [
+      'prix-pompe-a-chaleur-2026',
+      'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026',
+      'cumul-aides-renovation-2026-tableau',
+    ],
+  ],
+  [
+    'panneaux-solaires',
+    [
+      'panneaux-solaires-rentabilite-2026',
+      'prix-panneaux-solaires-2026',
+      'installer-panneau-solaire-maison-2026',
+    ],
+  ],
+  [
+    'isolation-thermique',
+    [
+      'prix-isolation-thermique-2026-tarifs',
+      'isolation-combles-materiaux-guide',
+      'cumul-aides-renovation-2026-tableau',
+    ],
+  ],
+  [
+    'renovation-energetique',
+    [
+      'travaux-renovation-energetique-par-ou-commencer',
+      'dpe-obligatoire-2026-guide',
+      'eco-ptz-2026-conditions-montant',
+    ],
+  ],
+  [
+    'borne-recharge',
+    [
+      'prix-borne-recharge-domicile-2026',
+      'electricite-normes-securite',
+      'domotique-maison-connectee-guide-debutant',
+    ],
+  ],
+  [
+    'ramoneur',
+    [
+      'ramonage-obligatoire-avant-hiver',
+      'entretien-chaudiere-annuel',
+      'preparer-maison-hiver-checklist',
+    ],
+  ],
+  [
+    'paysagiste',
+    [
+      'prix-jardinier-paysagiste-2026',
+      'amenager-jardin-paysagiste-guide',
+      'amenagement-terrasse-exterieur-2026',
+    ],
+  ],
+  [
+    'pisciniste',
+    [
+      'comment-choisir-pisciniste-guide',
+      'prix-terrasse-exterieure-2026',
+      'amenagement-terrasse-exterieur-2026',
+    ],
+  ],
+  [
+    'alarme-securite',
+    [
+      'securite-alarme-maison-guide-2026',
+      'securiser-maison-cambriolage-solutions',
+      'domotique-maison-connectee-guide-debutant',
+    ],
+  ],
+  [
+    'antenniste',
+    [
+      'comment-choisir-antenniste-guide',
+      'domotique-maison-connectee-guide-debutant',
+      'prix-domotique-maison-2026',
+    ],
+  ],
+  [
+    'ascensoriste',
+    [
+      'comment-choisir-ascensoriste-guide',
+      'adaptation-logement-senior-aides-2026',
+      'accessibilite-pmr-logement-normes',
+    ],
+  ],
+  [
+    'diagnostiqueur',
+    [
+      'comment-choisir-diagnostiqueur-guide',
+      'dpe-obligatoire-2026-guide',
+      'diagnostic-immobilier-obligatoire-liste',
+    ],
+  ],
+  [
+    'geometre',
+    [
+      'comment-choisir-geometre-guide',
+      'permis-construire-declaration-prealable-guide',
+      'urbanisme-regles-construction-extension',
+    ],
+  ],
+  [
+    'desinsectisation',
+    [
+      'nuisibles-maison-prevention-traitement',
+      'entretien-annuel-maison-checklist-complete',
+      'humidite-moisissure-maison-solutions',
+    ],
+  ],
+  [
+    'deratisation',
+    [
+      'nuisibles-maison-prevention-traitement',
+      'entretien-annuel-maison-checklist-complete',
+      'humidite-moisissure-maison-solutions',
+    ],
+  ],
+  [
+    'demenageur',
+    [
+      'comment-choisir-demenageur-guide',
+      'preparer-maison-revente-travaux-rentables',
+      'travaux-avant-vendre-maison-rentables',
+    ],
+  ],
 ])
 
 // ---------------------------------------------------------------------------
@@ -110,7 +426,7 @@ export default async function DeepPageLinks({
   currentIntent,
   skipCrossIntent = false,
 }: DeepPageLinksProps) {
-  const serviceData = services.find(s => s.slug === currentService)
+  const serviceData = services.find((s) => s.slug === currentService)
   if (!serviceData) return null
 
   const serviceName = serviceData.name
@@ -147,10 +463,13 @@ export default async function DeepPageLinks({
     const gpsCities = await getNearbyVilleSlugs(currentVille, nearbyLimit)
     if (gpsCities && gpsCities.length > 0) {
       module1Links = gpsCities
-        .map(c => {
+        .map((c) => {
           const v = getVilleBySlug(c.slug)
           if (!v) return null
-          return { href: `/services/${currentService}/${v.slug}`, label: `${serviceName} à ${v.name}` }
+          return {
+            href: `/services/${currentService}/${v.slug}`,
+            label: `${serviceName} à ${v.name}`,
+          }
         })
         .filter((x): x is { href: string; label: string } => x !== null)
     }
@@ -166,7 +485,7 @@ export default async function DeepPageLinks({
         if (aIsMP !== bIsMP) return bIsMP - aIsMP
         return getCityScore(b) - getCityScore(a)
       })
-      module1Links = sorted.slice(0, nearbyLimit).map(v => ({
+      module1Links = sorted.slice(0, nearbyLimit).map((v) => ({
         href: `/services/${currentService}/${v.slug}`,
         label: `${serviceName} à ${v.name}`,
       }))
@@ -180,7 +499,11 @@ export default async function DeepPageLinks({
   // City mode: all 5 intents minus current (up to 5 links for full silo coverage)
   // Hub mode: 4 non-services intents minus current
   // ═══════════════════════════════════════════════════════════════════════════
-  const allIntents: { intent: DeepPageLinksProps['currentIntent']; prefix: string; label: string }[] = [
+  const allIntents: {
+    intent: DeepPageLinksProps['currentIntent']
+    prefix: string
+    label: string
+  }[] = [
     { intent: 'services', prefix: 'services', label: 'Services' },
     { intent: 'tarifs', prefix: 'tarifs', label: 'Tarifs' },
     { intent: 'devis', prefix: 'devis', label: 'Devis' },
@@ -188,21 +511,24 @@ export default async function DeepPageLinks({
     { intent: 'urgence', prefix: 'urgence', label: 'Urgence' },
   ]
   const filteredIntents = isHubMode
-    ? allIntents.filter(i => i.intent !== 'services' && i.intent !== currentIntent)
-    : allIntents.filter(i => i.intent !== currentIntent)
-  const module4Links = skipCrossIntent ? [] : dedup(
-    isHubMode
-      ? filteredIntents.map(i => ({
-          href: `/${i.prefix}/${currentService}`,
-          label: `${i.label} ${serviceName}`,
-        }))
-      : filteredIntents.map(i => ({
-          href: i.intent === 'services'
-            ? `/services/${currentService}/${currentVille}`
-            : `/${i.prefix}/${currentService}/${currentVille}`,
-          label: `${i.label} ${serviceName} à ${villeName}`,
-        }))
-  )
+    ? allIntents.filter((i) => i.intent !== 'services' && i.intent !== currentIntent)
+    : allIntents.filter((i) => i.intent !== currentIntent)
+  const module4Links = skipCrossIntent
+    ? []
+    : dedup(
+        isHubMode
+          ? filteredIntents.map((i) => ({
+              href: `/${i.prefix}/${currentService}`,
+              label: `${i.label} ${serviceName}`,
+            }))
+          : filteredIntents.map((i) => ({
+              href:
+                i.intent === 'services'
+                  ? `/services/${currentService}/${currentVille}`
+                  : `/${i.prefix}/${currentService}/${currentVille}`,
+              label: `${i.label} ${serviceName} à ${villeName}`,
+            }))
+      )
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MODULE 8 (NEW): Same service, other departments — SILO (city mode only)
@@ -215,11 +541,11 @@ export default async function DeepPageLinks({
     const currentRegion = ville.region
 
     const sameRegionDepts = departements
-      .filter(d => d.region === currentRegion && d.code !== currentDeptCode)
+      .filter((d) => d.region === currentRegion && d.code !== currentDeptCode)
       .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
 
     const otherRegionDepts = departements
-      .filter(d => d.region !== currentRegion && d.code !== currentDeptCode)
+      .filter((d) => d.region !== currentRegion && d.code !== currentDeptCode)
       .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
 
     const candidateDepts = [...sameRegionDepts, ...otherRegionDepts]
@@ -241,20 +567,21 @@ export default async function DeepPageLinks({
   // Hub mode: all 20 TOP_CITIES (money pages); City mode: 8
   // Uses TOP_CITIES from top-pages.ts for consistency with money page strategy
   // ═══════════════════════════════════════════════════════════════════════════
-  const GRANDES_VILLES = TOP_CITIES.map(c => c.slug)
+  const GRANDES_VILLES = TOP_CITIES.map((c) => c.slug)
 
   const maxGrandesVilles = isHubMode ? 20 : 8
-  const module1Slugs = new Set(module1Links.map(l => l.href.split('/').pop()!))
+  const module1Slugs = new Set(module1Links.map((l) => l.href.split('/').pop() ?? ''))
   const deptSlugs = new Set(
-    dept && ville ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []
+    dept && ville ? getVillesByDepartement(ville.departementCode).map((v) => v.slug) : []
   )
-  const filteredGrandesVilles = GRANDES_VILLES
-    .filter(slug => slug !== currentVille && !module1Slugs.has(slug) && !deptSlugs.has(slug))
+  const filteredGrandesVilles = GRANDES_VILLES.filter(
+    (slug) => slug !== currentVille && !module1Slugs.has(slug) && !deptSlugs.has(slug)
+  )
 
   // Sort grandes villes by commune score (provider count + artisan density + population)
   // Money pages get a boost (+10000) to ensure they appear first
   const grandesVillesScores = await Promise.all(
-    filteredGrandesVilles.map(async slug => ({
+    filteredGrandesVilles.map(async (slug) => ({
       slug,
       score: (await getCommuneScore(slug)) + (isMoneyPage(currentService, slug) ? 10000 : 0),
     }))
@@ -302,7 +629,7 @@ export default async function DeepPageLinks({
     }
   } else {
     // Fallback: pick from all services if no related mapping exists
-    const otherServicesAll = services.filter(s => s.slug !== currentService)
+    const otherServicesAll = services.filter((s) => s.slug !== currentService)
     otherServiceSlugs = [...otherServicesAll]
       .sort((a, b) => {
         const wDiff = getServiceWeight(b.slug) - getServiceWeight(a.slug)
@@ -314,13 +641,14 @@ export default async function DeepPageLinks({
         }
         return 0
       })
-      .slice(0, maxOtherServices).map(s => s.slug)
+      .slice(0, maxOtherServices)
+      .map((s) => s.slug)
   }
 
   const module2Links = dedup(
     otherServiceSlugs
-      .map(slug => {
-        const s = services.find(svc => svc.slug === slug)
+      .map((slug) => {
+        const s = services.find((svc) => svc.slug === slug)
         if (!s) return null
         return isHubMode
           ? { href: `/services/${s.slug}`, label: `${s.name} en France` }
@@ -349,7 +677,7 @@ export default async function DeepPageLinks({
       label: `Artisans dans le ${dept.name}`,
     })
     const deptCities = getVillesByDepartement(ville.departementCode)
-      .filter(v => v.slug !== currentVille)
+      .filter((v) => v.slug !== currentVille)
       .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
       .slice(0, 1)
     for (const c of deptCities) {
@@ -367,9 +695,19 @@ export default async function DeepPageLinks({
   const module5Links: { href: string; label: string }[] = []
   if (isHubMode) {
     // In hub mode: link to service×region pages for all metro regions
-    const metroRegions = regions.filter(r =>
-      !['guadeloupe', 'martinique', 'guyane', 'la-reunion', 'mayotte',
-        'saint-barthelemy', 'saint-martin', 'polynesie-francaise', 'nouvelle-caledonie'].includes(r.slug)
+    const metroRegions = regions.filter(
+      (r) =>
+        ![
+          'guadeloupe',
+          'martinique',
+          'guyane',
+          'la-reunion',
+          'mayotte',
+          'saint-barthelemy',
+          'saint-martin',
+          'polynesie-francaise',
+          'nouvelle-caledonie',
+        ].includes(r.slug)
     )
     for (const r of metroRegions.slice(0, 8)) {
       module5Links.push({
@@ -444,9 +782,7 @@ export default async function DeepPageLinks({
     const href = isHubMode
       ? `/problemes/${problem.slug}`
       : `/problemes/${problem.slug}/${currentVille}`
-    const label = isHubMode
-      ? problem.name
-      : `${problem.name} à ${villeName}`
+    const label = isHubMode ? problem.name : `${problem.name} à ${villeName}`
     module9Candidates.push({ href, label })
   }
   const module9Links = dedup(module9Candidates)
@@ -468,7 +804,10 @@ export default async function DeepPageLinks({
     modules.push({ title: `${serviceName} à proximité de ${villeName}`, links: module1Links })
   }
   if (module4Links.length > 0) {
-    modules.push({ title: isHubMode ? `Tarifs, devis et avis ${serviceName.toLowerCase()}` : 'Voir aussi', links: module4Links })
+    modules.push({
+      title: isHubMode ? `Tarifs, devis et avis ${serviceName.toLowerCase()}` : 'Voir aussi',
+      links: module4Links,
+    })
   }
   if (module8Links.length > 0) {
     modules.push({ title: `${serviceName} dans d'autres départements`, links: module8Links })
@@ -486,7 +825,10 @@ export default async function DeepPageLinks({
     modules.push({ title: `${serviceName} dans le ${dept.name}`, links: module3Links })
   }
   if (module5Links.length > 0) {
-    modules.push({ title: isHubMode ? `${serviceName} par région` : 'Hub service et région', links: module5Links })
+    modules.push({
+      title: isHubMode ? `${serviceName} par région` : 'Hub service et région',
+      links: module5Links,
+    })
   }
   if (module6Links.length > 0) {
     modules.push({ title: 'Guides et articles', links: module6Links })
@@ -501,20 +843,18 @@ export default async function DeepPageLinks({
   if (modules.length === 0) return null
 
   return (
-    <aside className="py-10 border-t border-slate-100">
+    <aside className="py-10 border-t border-charcoal-100">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {modules.map((mod) => (
             <section key={mod.title}>
-              <h3 className="text-sm font-semibold text-stone-800 mb-3">
-                {mod.title}
-              </h3>
+              <h3 className="text-sm font-semibold text-stone-800 mb-3">{mod.title}</h3>
               <div className="flex flex-wrap gap-2">
                 {mod.links.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="px-3 py-1.5 text-sm text-stone-600 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
+                    className="px-3 py-1.5 text-sm text-stone-600 bg-sand-200 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
                   >
                     {link.label}
                   </Link>

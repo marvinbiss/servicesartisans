@@ -8,32 +8,33 @@ interface SeasonalUrgencyProps {
 }
 
 /** Real seasonal BTP urgency messages — based on actual French construction market seasonality */
-const SEASONAL_MESSAGES: Record<string, { icon: typeof Calendar; message: string; color: string }> = {
-  // Spring: high season for outdoor work
-  'spring-default': {
-    icon: Sun,
-    message: 'Haute saison travaux — les carnets des artisans se remplissent vite au printemps',
-    color: 'text-amber-700 bg-amber-50 border-amber-200',
-  },
-  // Summer: renovation season
-  'summer-default': {
-    icon: TrendingUp,
-    message: 'Période idéale pour les travaux de rénovation — profitez des longs jours',
-    color: 'text-amber-700 bg-amber-50 border-amber-200',
-  },
-  // Fall: prepare for winter
-  'fall-default': {
-    icon: Snowflake,
-    message: 'Préparez votre logement avant l\'hiver — isolation, chauffage, toiture',
-    color: 'text-blue-700 bg-blue-50 border-blue-200',
-  },
-  // Winter: best prices
-  'winter-default': {
-    icon: Calendar,
-    message: 'Période creuse = meilleurs tarifs — idéal pour vos travaux d\'intérieur',
-    color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-  },
-}
+const SEASONAL_MESSAGES: Record<string, { icon: typeof Calendar; message: string; color: string }> =
+  {
+    // Spring: high season for outdoor work
+    'spring-default': {
+      icon: Sun,
+      message: 'Haute saison travaux — les carnets des artisans se remplissent vite au printemps',
+      color: 'text-amber-700 bg-amber-50 border-amber-200',
+    },
+    // Summer: renovation season
+    'summer-default': {
+      icon: TrendingUp,
+      message: 'Période idéale pour les travaux de rénovation — profitez des longs jours',
+      color: 'text-amber-700 bg-amber-50 border-amber-200',
+    },
+    // Fall: prepare for winter
+    'fall-default': {
+      icon: Snowflake,
+      message: "Préparez votre logement avant l'hiver — isolation, chauffage, toiture",
+      color: 'text-primary-600 bg-primary-50 border-primary-200',
+    },
+    // Winter: best prices
+    'winter-default': {
+      icon: Calendar,
+      message: "Période creuse = meilleurs tarifs — idéal pour vos travaux d'intérieur",
+      color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+    },
+  }
 
 /** Service-specific overrides */
 const SERVICE_OVERRIDES: Record<string, Record<string, string>> = {
@@ -42,15 +43,15 @@ const SERVICE_OVERRIDES: Record<string, Record<string, string>> = {
     winter: 'Risques de gel sur les canalisations — anticipez vos réparations',
   },
   chauffage: {
-    fall: 'Révision de chauffage avant l\'hiver — prenez rendez-vous avant la ruée',
-    winter: 'Forte demande en dépannage chauffage — les délais s\'allongent en hiver',
+    fall: "Révision de chauffage avant l'hiver — prenez rendez-vous avant la ruée",
+    winter: "Forte demande en dépannage chauffage — les délais s'allongent en hiver",
   },
   isolation: {
-    fall: 'Dernière ligne droite avant l\'hiver pour isoler votre logement',
-    spring: 'MaPrimeRénov\' : lancez vos travaux d\'isolation avant la fin des aides',
+    fall: "Dernière ligne droite avant l'hiver pour isoler votre logement",
+    spring: "MaPrimeRénov' : lancez vos travaux d'isolation avant la fin des aides",
   },
   toiture: {
-    spring: 'Saison idéale pour la toiture — vérifiez les dégâts de l\'hiver',
+    spring: "Saison idéale pour la toiture — vérifiez les dégâts de l'hiver",
     fall: 'Dernières semaines pour réparer votre toiture avant les intempéries',
   },
   peinture: {
@@ -58,8 +59,8 @@ const SERVICE_OVERRIDES: Record<string, Record<string, string>> = {
     winter: 'Meilleurs tarifs pour la peinture intérieure en basse saison',
   },
   jardin: {
-    spring: 'Haute saison jardinage — les paysagistes sont pris d\'assaut',
-    fall: 'Préparez votre jardin pour l\'hiver — dernières interventions avant le gel',
+    spring: "Haute saison jardinage — les paysagistes sont pris d'assaut",
+    fall: "Préparez votre jardin pour l'hiver — dernières interventions avant le gel",
   },
 }
 
@@ -93,7 +94,9 @@ export default function SeasonalUrgency({ service, className = '' }: SeasonalUrg
   const Icon = defaultEntry.icon
 
   return (
-    <div className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border text-sm ${defaultEntry.color} ${className}`}>
+    <div
+      className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border text-sm ${defaultEntry.color} ${className}`}
+    >
       <Icon className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
       <span>{message}</span>
     </div>

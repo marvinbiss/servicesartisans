@@ -34,16 +34,22 @@ export default function BeforeAfterSlider({
     setPosition(percentage)
   }, [])
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-    updatePosition(e.clientX)
-  }, [updatePosition])
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      setIsDragging(true)
+      updatePosition(e.clientX)
+    },
+    [updatePosition]
+  )
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    setIsDragging(true)
-    updatePosition(e.touches[0].clientX)
-  }, [updatePosition])
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      setIsDragging(true)
+      updatePosition(e.touches[0].clientX)
+    },
+    [updatePosition]
+  )
 
   useEffect(() => {
     if (!isDragging) return
@@ -127,7 +133,7 @@ export default function BeforeAfterSlider({
         >
           <div className="flex items-center gap-0.5">
             <svg
-              className="w-3 h-3 text-gray-600 rotate-180"
+              className="w-3 h-3 text-charcoal-600 rotate-180"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -137,11 +143,7 @@ export default function BeforeAfterSlider({
                 clipRule="evenodd"
               />
             </svg>
-            <svg
-              className="w-3 h-3 text-gray-600"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
+            <svg className="w-3 h-3 text-charcoal-600" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"

@@ -31,15 +31,19 @@ export function CompareButton({ provider, size = 'sm', className }: CompareButto
       onClick={handleClick}
       className={clsx(
         'inline-flex items-center gap-1.5 rounded-lg border font-medium transition-all duration-200',
-        'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+        'focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2',
         size === 'sm' && 'px-3 py-2 text-xs min-h-[44px]',
         size === 'md' && 'px-3 py-2.5 text-sm min-h-[44px]',
         active
-          ? 'bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100'
-          : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300',
-        className,
+          ? 'bg-primary-50 text-primary-600 border-primary-300 hover:bg-primary-100'
+          : 'bg-white text-charcoal-600 border-sand-300 hover:bg-sand-50 hover:border-sand-400',
+        className
       )}
-      aria-label={active ? `Retirer ${provider.name} de la comparaison` : `Ajouter ${provider.name} a la comparaison`}
+      aria-label={
+        active
+          ? `Retirer ${provider.name} de la comparaison`
+          : `Ajouter ${provider.name} a la comparaison`
+      }
       aria-pressed={active}
     >
       <Scale className={clsx('flex-shrink-0', size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4')} />

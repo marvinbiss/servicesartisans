@@ -1,9 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  Search, Filter, Shield, Zap, Layers, List, Map as MapIcon
-} from 'lucide-react'
+import { Search, Filter, Shield, Zap, Layers, List, Map as MapIcon } from 'lucide-react'
 import Link from 'next/link'
 
 export interface Filters {
@@ -55,18 +53,18 @@ export default function MapFilters({
         <div className="flex items-center gap-3">
           {/* Logo/Back */}
           <Link href="/" className="flex-shrink-0 hidden md:block">
-            <span className="text-xl font-bold text-blue-600">ServicesArtisans</span>
+            <span className="text-xl font-bold text-primary-500">ServicesArtisans</span>
           </Link>
 
           {/* Search Input */}
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Rechercher un artisan, une spécialité..."
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+              className="w-full pl-10 pr-4 py-2.5 border border-sand-400 rounded-full focus:ring-2 focus:ring-primary-400 focus:border-primary-400 bg-sand-50"
             />
           </div>
 
@@ -75,14 +73,16 @@ export default function MapFilters({
             {SERVICES.slice(0, 5).map((service) => (
               <button
                 key={service.value}
-                onClick={() => onFiltersChange({
-                  ...filters,
-                  service: filters.service === service.value ? '' : service.value
-                })}
+                onClick={() =>
+                  onFiltersChange({
+                    ...filters,
+                    service: filters.service === service.value ? '' : service.value,
+                  })
+                }
                 className={`px-3 py-2 rounded-full text-sm font-medium transition-all ${
                   filters.service === service.value
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-primary-500 text-white shadow-md'
+                    : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
                 }`}
               >
                 <span className="mr-1">{service.icon}</span>
@@ -96,21 +96,21 @@ export default function MapFilters({
             onClick={onToggleFilters}
             className={`flex items-center gap-2 px-4 py-2.5 border rounded-full transition-all ${
               showFilters || activeFilterCount > 0
-                ? 'bg-blue-50 border-blue-500 text-blue-600'
-                : 'border-gray-300 hover:bg-gray-50'
+                ? 'bg-primary-50 border-primary-400 text-primary-500'
+                : 'border-sand-400 hover:bg-sand-50'
             }`}
           >
             <Filter className="w-4 h-4" />
             <span className="hidden sm:inline">Filtres</span>
             {activeFilterCount > 0 && (
-              <span className="bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="bg-primary-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {activeFilterCount}
               </span>
             )}
           </button>
 
           {/* View Mode Toggle (Desktop) */}
-          <div className="hidden md:flex items-center bg-gray-100 rounded-full p-1">
+          <div className="hidden md:flex items-center bg-sand-100 rounded-full p-1">
             <button
               onClick={() => onViewModeChange('split')}
               className={`p-2 rounded-full transition-colors ${viewMode === 'split' ? 'bg-white shadow' : ''}`}
@@ -151,7 +151,7 @@ export default function MapFilters({
                   <select
                     value={filters.service}
                     onChange={(e) => onFiltersChange({ ...filters, service: e.target.value })}
-                    className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="px-4 py-2 border border-sand-400 rounded-full focus:ring-2 focus:ring-primary-400 bg-white"
                   >
                     <option value="">Tous les services</option>
                     {SERVICES.map((service) => (
@@ -164,8 +164,10 @@ export default function MapFilters({
                   {/* Rating Filter */}
                   <select
                     value={filters.minRating}
-                    onChange={(e) => onFiltersChange({ ...filters, minRating: Number(e.target.value) })}
-                    className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 bg-white"
+                    onChange={(e) =>
+                      onFiltersChange({ ...filters, minRating: Number(e.target.value) })
+                    }
+                    className="px-4 py-2 border border-sand-400 rounded-full focus:ring-2 focus:ring-primary-400 bg-white"
                   >
                     <option value={0}>Toutes notes</option>
                     <option value={3}>⭐ 3+</option>
@@ -179,7 +181,7 @@ export default function MapFilters({
                     className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                       filters.verified
                         ? 'bg-green-100 text-green-700 border border-green-300'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        : 'bg-sand-100 text-charcoal-600 hover:bg-sand-300'
                     }`}
                   >
                     <Shield className="w-4 h-4" />
@@ -191,7 +193,7 @@ export default function MapFilters({
                     className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                       filters.emergency
                         ? 'bg-red-100 text-red-700 border border-red-300'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        : 'bg-sand-100 text-charcoal-600 hover:bg-sand-300'
                     }`}
                   >
                     <Zap className="w-4 h-4" />
@@ -201,13 +203,15 @@ export default function MapFilters({
                   {/* Clear Filters */}
                   {activeFilterCount > 0 && (
                     <button
-                      onClick={() => onFiltersChange({
-                        service: '',
-                        minRating: 0,
-                        verified: false,
-                        emergency: false
-                      })}
-                      className="text-sm text-gray-500 hover:text-gray-700 underline"
+                      onClick={() =>
+                        onFiltersChange({
+                          service: '',
+                          minRating: 0,
+                          verified: false,
+                          emergency: false,
+                        })
+                      }
+                      className="text-sm text-charcoal-500 hover:text-charcoal-700 underline"
                     >
                       Réinitialiser
                     </button>

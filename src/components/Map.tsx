@@ -12,7 +12,7 @@ const createDivIcon = (isVerified: boolean) => {
   return L.divIcon({
     className: 'custom-marker',
     html: `
-      <div class="w-8 h-8 ${isVerified ? 'bg-green-600' : 'bg-blue-600'} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+      <div class="w-8 h-8 ${isVerified ? 'bg-green-600' : 'bg-primary-500'} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
         <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
         </svg>
@@ -61,8 +61,8 @@ export default function Map({
 
   if (!isMounted) {
     return (
-      <div className="w-full h-full bg-gray-100 animate-pulse flex items-center justify-center">
-        <span className="text-gray-500">Chargement de la carte...</span>
+      <div className="w-full h-full bg-sand-100 animate-pulse flex items-center justify-center">
+        <span className="text-charcoal-500">Chargement de la carte...</span>
       </div>
     )
   }
@@ -88,7 +88,7 @@ export default function Map({
       {validProviders.map((provider) => (
         <Marker
           key={provider.id}
-          position={[provider.latitude!, provider.longitude!]}
+          position={[provider.latitude ?? 0, provider.longitude ?? 0]}
           icon={createDivIcon(!!provider.is_verified)}
           eventHandlers={{
             click: () => onMarkerClick?.(provider),
@@ -96,16 +96,18 @@ export default function Map({
         >
           <Popup>
             <div className="p-1 min-w-[200px]">
-              <h3 className="font-semibold text-gray-900">{provider.name}</h3>
+              <h3 className="font-semibold text-charcoal-900">{provider.name}</h3>
               {provider.address_city && (
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-charcoal-600 mt-1">
                   {provider.address_postal_code} {provider.address_city}
                 </p>
               )}
               <a
                 href={PHONE_TEL}
-                onClick={() => { trackEvent('phone_click', { source: 'map_cta' }) }}
-                className="text-sm text-blue-600 hover:underline mt-1 block"
+                onClick={() => {
+                  trackEvent('phone_click', { source: 'map_cta' })
+                }}
+                className="text-sm text-primary-500 hover:underline mt-1 block"
               >
                 {PHONE_NUMBER}
               </a>

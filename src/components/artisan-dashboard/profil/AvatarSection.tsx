@@ -113,8 +113,8 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6" aria-busy={uploading || deleting}>
-      <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Camera className="w-5 h-5 text-blue-600" />
+      <h2 className="text-lg font-semibold text-charcoal-900 mb-6 flex items-center gap-2">
+        <Camera className="w-5 h-5 text-primary-500" />
         Photo de profil
       </h2>
 
@@ -131,22 +131,32 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               unoptimized
             />
           ) : (
-            <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center" role="img" aria-label="Aucune photo de profil">
-              <span className="text-3xl font-bold text-blue-600">{initials}</span>
+            <div
+              className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center"
+              role="img"
+              aria-label="Aucune photo de profil"
+            >
+              <span className="text-3xl font-bold text-primary-500">{initials}</span>
             </div>
           )}
           {(uploading || deleting) && (
-            <div className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center" aria-busy="true">
-              <Loader2 className="w-6 h-6 animate-spin text-white" aria-label="Traitement en cours" />
+            <div
+              className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center"
+              aria-busy="true"
+            >
+              <Loader2
+                className="w-6 h-6 animate-spin text-white"
+                aria-label="Traitement en cours"
+              />
             </div>
           )}
         </div>
 
         <div className="flex-1">
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-sm text-charcoal-600 mb-3">
             Ajoutez une photo de profil professionnelle pour inspirer confiance.
           </p>
-          <p className="text-xs text-gray-500 mb-4">
+          <p className="text-xs text-charcoal-500 mb-4">
             Formats acceptés : JPEG, PNG, WebP. Taille maximale : 5 Mo.
           </p>
 
@@ -163,7 +173,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading || deleting}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="bg-primary-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {uploading ? (
                 <>
@@ -203,12 +213,19 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
 
       {/* Error/Success */}
       {error && (
-        <div role="alert" className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+        <div
+          role="alert"
+          className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"
+        >
           {error}
         </div>
       )}
       {success && (
-        <div role="status" aria-live="polite" className="mt-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+        <div
+          role="status"
+          aria-live="polite"
+          className="mt-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm"
+        >
           {success}
         </div>
       )}

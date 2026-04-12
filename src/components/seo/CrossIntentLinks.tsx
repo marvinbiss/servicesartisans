@@ -27,11 +27,36 @@ interface IntentDef {
 }
 
 const ALL_INTENTS: IntentDef[] = [
-  { key: 'tarifs', label: 'Tarifs', icon: Euro, href: (s, v) => v ? `/tarifs/${s}/${v}` : `/tarifs/${s}` },
-  { key: 'avis', label: 'Avis', icon: Star, href: (s, v) => v ? `/avis/${s}/${v}` : `/avis/${s}` },
-  { key: 'services', label: 'Artisans', icon: Search, href: (s, v) => v ? `/services/${s}/${v}` : `/services/${s}` },
-  { key: 'urgence', label: 'Urgence', icon: AlertTriangle, href: (s, v) => v ? `/urgence/${s}/${v}` : `/urgence/${s}` },
-  { key: 'devis', label: 'Devis', icon: FileText, href: (s, v) => v ? `/devis/${s}/${v}` : `/devis/${s}` },
+  {
+    key: 'tarifs',
+    label: 'Tarifs',
+    icon: Euro,
+    href: (s, v) => (v ? `/tarifs/${s}/${v}` : `/tarifs/${s}`),
+  },
+  {
+    key: 'avis',
+    label: 'Avis',
+    icon: Star,
+    href: (s, v) => (v ? `/avis/${s}/${v}` : `/avis/${s}`),
+  },
+  {
+    key: 'services',
+    label: 'Artisans',
+    icon: Search,
+    href: (s, v) => (v ? `/services/${s}/${v}` : `/services/${s}`),
+  },
+  {
+    key: 'urgence',
+    label: 'Urgence',
+    icon: AlertTriangle,
+    href: (s, v) => (v ? `/urgence/${s}/${v}` : `/urgence/${s}`),
+  },
+  {
+    key: 'devis',
+    label: 'Devis',
+    icon: FileText,
+    href: (s, v) => (v ? `/devis/${s}/${v}` : `/devis/${s}`),
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -40,7 +65,7 @@ const ALL_INTENTS: IntentDef[] = [
 // This maximizes internal linking between intent clusters for SEO.
 // ---------------------------------------------------------------------------
 function selectIntents(currentIntent?: CurrentIntent): IntentDef[] {
-  return ALL_INTENTS.filter(i => i.key !== currentIntent)
+  return ALL_INTENTS.filter((i) => i.key !== currentIntent)
 }
 
 // ---------------------------------------------------------------------------
@@ -59,12 +84,7 @@ function hashCode(str: string): number {
 // Section label variants
 // ---------------------------------------------------------------------------
 
-const SECTION_LABELS = [
-  'Voir aussi',
-  'Explorer',
-  'À consulter',
-  'Autres rubriques',
-]
+const SECTION_LABELS = ['Voir aussi', 'Explorer', 'À consulter', 'Autres rubriques']
 
 // ---------------------------------------------------------------------------
 // Renderers per variant
@@ -79,7 +99,12 @@ interface ResolvedLink {
   isCurrent: boolean
 }
 
-function renderPills(links: ResolvedLink[], sectionLabel: string, serviceName: string, villeName?: string) {
+function renderPills(
+  links: ResolvedLink[],
+  sectionLabel: string,
+  serviceName: string,
+  villeName?: string
+) {
   return (
     <nav
       aria-label={`${sectionLabel} pour ${serviceName}${villeName ? ` à ${villeName}` : ''}`}
@@ -87,7 +112,8 @@ function renderPills(links: ResolvedLink[], sectionLabel: string, serviceName: s
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         <p className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">
-          {serviceName}{villeName ? ` à ${villeName}` : ''} — {sectionLabel.toLowerCase()}
+          {serviceName}
+          {villeName ? ` à ${villeName}` : ''} — {sectionLabel.toLowerCase()}
         </p>
         <div className="flex flex-wrap gap-2">
           {links.map(({ key, href, anchor, label, icon: Icon, isCurrent }) => {
@@ -107,7 +133,7 @@ function renderPills(links: ResolvedLink[], sectionLabel: string, serviceName: s
               <Link
                 key={key}
                 href={href}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-white text-charcoal-700 border border-sand-300 hover:border-blue-300 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-white text-charcoal-700 border border-sand-300 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600 transition-colors"
               >
                 <Icon className="w-4 h-4" />
                 {anchor}
@@ -121,7 +147,7 @@ function renderPills(links: ResolvedLink[], sectionLabel: string, serviceName: s
 }
 
 function renderInline(links: ResolvedLink[], serviceName: string, villeName?: string) {
-  const activeLinks = links.filter(l => !l.isCurrent)
+  const activeLinks = links.filter((l) => !l.isCurrent)
   if (activeLinks.length === 0) return null
 
   return (

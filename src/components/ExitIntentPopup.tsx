@@ -25,7 +25,7 @@ interface ExitIntentPopupProps {
 export default function ExitIntentPopup({
   sessionKey = 'sa:exit-intent-shown',
   title = 'Avant de partir...',
-  description = 'Devis gratuit et sans engagement d\'artisans qualifiés près de chez vous.',
+  description = "Devis gratuit et sans engagement d'artisans qualifiés près de chez vous.",
   ctaText = 'Recevoir mes devis gratuits',
   ctaHref = '/devis',
   onCtaClick,
@@ -106,21 +106,21 @@ export default function ExitIntentPopup({
         {/* Close button */}
         <button
           onClick={close}
-          className="absolute top-3 right-3 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-sand-200 transition-colors"
+          className="absolute top-3 right-3 p-1.5 rounded-full text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-200 transition-colors"
           aria-label="Fermer"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Content */}
-        <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
-        <p className="text-sm text-slate-600 mb-4 pr-6">{description}</p>
+        <p className="text-sm font-medium text-charcoal-900 mb-1">{title}</p>
+        <p className="text-sm text-charcoal-600 mb-4 pr-6">{description}</p>
 
         {/* CTA */}
         {onCtaClick ? (
           <button
             onClick={handleCTA}
-            className="w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md"
+            className="w-full py-2.5 px-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-md"
           >
             {ctaText}
           </button>
@@ -128,7 +128,7 @@ export default function ExitIntentPopup({
           <Link
             href={ctaHref}
             onClick={close}
-            className="block w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md text-center"
+            className="block w-full py-2.5 px-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-md text-center"
           >
             {ctaText}
           </Link>

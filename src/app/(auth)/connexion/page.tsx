@@ -95,7 +95,7 @@ export default function ConnexionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex flex-col">
       <div className="flex flex-1">
         {/* Left - Form */}
         <div className="flex-1 flex items-center justify-center p-8">
@@ -103,31 +103,31 @@ export default function ConnexionPage() {
             {/* Breadcrumb */}
             <Breadcrumb
               items={[{ label: 'Connexion' }]}
-              className="mb-6 text-gray-400 [&_a]:text-gray-400 [&_a:hover]:text-white [&_svg]:text-gray-500"
+              className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-500"
             />
 
             <div className="text-center mb-8">
               <Link href="/" className="inline-flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-xl">SA</span>
                 </div>
                 <span className="text-2xl font-bold text-white">
-                  Services<span className="text-blue-400">Artisans</span>
+                  Services<span className="text-primary-300">Artisans</span>
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">Connexion</h1>
-              <p className="text-gray-400">Accédez à votre espace personnel</p>
+              <p className="text-charcoal-400">Accédez à votre espace personnel</p>
             </div>
 
             {/* User type toggle */}
-            <div className="bg-slate-800/50 rounded-2xl p-1.5 flex mb-8 border border-slate-700">
+            <div className="bg-charcoal-800/50 rounded-2xl p-1.5 flex mb-8 border border-charcoal-700">
               <button
                 type="button"
                 onClick={() => setUserType('particulier')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'particulier'
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg'
+                    : 'text-charcoal-400 hover:text-white'
                 }`}
               >
                 <User className="w-4 h-4" />
@@ -139,7 +139,7 @@ export default function ConnexionPage() {
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'artisan'
                     ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg'
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-charcoal-400 hover:text-white'
                 }`}
               >
                 <Wrench className="w-4 h-4" />
@@ -156,36 +156,36 @@ export default function ConnexionPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                <label className="block text-sm font-medium text-sand-500 mb-2">Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-charcoal-800 border border-charcoal-700 rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all"
                     placeholder="votre@email.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
+                <label className="block text-sm font-medium text-sand-500 mb-2">Mot de passe</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full pl-10 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-12 py-3 bg-charcoal-800 border border-charcoal-700 rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-500 hover:text-sand-500"
                     aria-label={
                       showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
                     }
@@ -201,13 +201,13 @@ export default function ConnexionPage() {
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-blue-500"
+                    className="rounded bg-charcoal-800 border-charcoal-700 text-primary-500 focus:ring-primary-400"
                   />
-                  <span className="text-sm text-gray-400">Se souvenir de moi</span>
+                  <span className="text-sm text-charcoal-400">Se souvenir de moi</span>
                 </label>
                 <Link
                   href="/mot-de-passe-oublie"
-                  className="text-sm text-blue-400 hover:text-blue-300"
+                  className="text-sm text-primary-300 hover:text-primary-200"
                 >
                   Mot de passe oublié ?
                 </Link>
@@ -219,7 +219,7 @@ export default function ConnexionPage() {
                 className={`w-full py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
                   userType === 'artisan'
                     ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30'
-                    : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-blue-600/30'
+                    : 'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-primary-500/30'
                 }`}
               >
                 {isLoading ? (
@@ -234,11 +234,11 @@ export default function ConnexionPage() {
             </form>
 
             <div className="mt-8 text-center">
-              <p className="text-gray-400">
+              <p className="text-charcoal-400">
                 Pas encore de compte ?{' '}
                 <Link
                   href={`${userType === 'artisan' ? '/inscription-artisan' : '/inscription'}${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-                  className={`font-medium ${userType === 'artisan' ? 'text-amber-400 hover:text-amber-300' : 'text-blue-400 hover:text-blue-300'}`}
+                  className={`font-medium ${userType === 'artisan' ? 'text-amber-400 hover:text-amber-300' : 'text-primary-300 hover:text-primary-200'}`}
                 >
                   Créer un compte
                 </Link>
@@ -249,17 +249,17 @@ export default function ConnexionPage() {
             <div className="mt-8">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-700" />
+                  <div className="w-full border-t border-charcoal-700" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-slate-900 px-4 text-gray-500">Ou continuer avec</span>
+                  <span className="bg-charcoal-900 px-4 text-charcoal-500">Ou continuer avec</span>
                 </div>
               </div>
               <div className="mt-6">
                 <button
                   type="button"
                   onClick={handleGoogleLogin}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 py-3 rounded-xl hover:bg-slate-700 transition-all text-white"
+                  className="w-full flex items-center justify-center gap-2 bg-charcoal-800 border border-charcoal-700 py-3 rounded-xl hover:bg-charcoal-700 transition-all text-white"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
@@ -285,16 +285,16 @@ export default function ConnexionPage() {
             </div>
 
             {/* Contextual Links */}
-            <div className="mt-8 pt-8 border-t border-slate-700">
-              <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
+            <div className="mt-8 pt-8 border-t border-charcoal-700">
+              <p className="text-charcoal-400 text-sm mb-3">Liens utiles :</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-                <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
+                <Link href="/comment-ca-marche" className="text-primary-300 hover:text-primary-200">
                   Comment ça marche ?
                 </Link>
-                <Link href="/faq" className="text-blue-400 hover:text-blue-300">
+                <Link href="/faq" className="text-primary-300 hover:text-primary-200">
                   Questions fréquentes
                 </Link>
-                <Link href="/contact" className="text-blue-400 hover:text-blue-300">
+                <Link href="/contact" className="text-primary-300 hover:text-primary-200">
                   Nous contacter
                 </Link>
               </div>
@@ -303,7 +303,7 @@ export default function ConnexionPage() {
         </div>
 
         {/* Right - Image */}
-        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 items-center justify-center p-12 relative overflow-hidden">
+        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary-500 via-primary-600 to-indigo-800 items-center justify-center p-12 relative overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
@@ -314,22 +314,22 @@ export default function ConnexionPage() {
               <Wrench className="w-12 h-12" />
             </div>
             <h2 className="text-4xl font-bold mb-6">Bienvenue sur ServicesArtisans</h2>
-            <p className="text-blue-100 text-lg mb-8">
+            <p className="text-primary-100 text-lg mb-8">
               Connectez-vous pour accéder à votre espace personnel, suivre vos réservations et gérer
               votre compte.
             </p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">2500+</div>
-                <div className="text-sm text-blue-200">Artisans</div>
+                <div className="text-sm text-primary-100">Artisans</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">50K+</div>
-                <div className="text-sm text-blue-200">Clients</div>
+                <div className="text-sm text-primary-100">Clients</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">4.8</div>
-                <div className="text-sm text-blue-200">Note moyenne</div>
+                <div className="text-sm text-primary-100">Note moyenne</div>
               </div>
             </div>
           </div>
@@ -337,12 +337,12 @@ export default function ConnexionPage() {
       </div>
 
       {/* Related Links Section */}
-      <section className="bg-slate-800/50 py-10 border-t border-slate-700">
+      <section className="bg-charcoal-800/50 py-10 border-t border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-semibold text-white mb-6">Explorez nos services</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
-            <PopularCitiesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
+            <PopularServicesLinks className="[&_h3]:text-sand-500 [&_a]:bg-charcoal-700 [&_a]:text-sand-500 [&_a:hover]:bg-primary-500 [&_a:hover]:text-white" />
+            <PopularCitiesLinks className="[&_h3]:text-sand-500 [&_a]:bg-charcoal-700 [&_a]:text-sand-500 [&_a:hover]:bg-primary-500 [&_a:hover]:text-white" />
           </div>
         </div>
       </section>

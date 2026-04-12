@@ -78,38 +78,53 @@ export default function BookingCalendar({
   const firstDayOfMonth = new Date(year, month, 1).getDay()
 
   const monthNames = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
   ]
 
   const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
 
   // Fetch available slots from API when month changes
-  const fetchAvailableSlots = useCallback(async (year: number, month: number) => {
-    setIsLoadingSlots(true)
-    setError(null)
-    try {
-      const monthStr = `${year}-${String(month + 1).padStart(2, '0')}-01`
-      const response = await fetch(`/api/bookings?artisanId=${artisanId}&month=${monthStr}`)
+  const fetchAvailableSlots = useCallback(
+    async (year: number, month: number) => {
+      setIsLoadingSlots(true)
+      setError(null)
+      try {
+        const monthStr = `${year}-${String(month + 1).padStart(2, '0')}-01`
+        const response = await fetch(`/api/bookings?artisanId=${artisanId}&month=${monthStr}`)
 
-      if (!response.ok) {
-        throw new Error('Erreur lors du chargement des disponibilités')
+        if (!response.ok) {
+          throw new Error('Erreur lors du chargement des disponibilités')
+        }
+
+        const data = await response.json()
+        setAvailableSlots(data.data?.slots || {})
+      } catch (err) {
+        logger.error('Error fetching slots', err)
+        setError('Impossible de charger les disponibilités. Veuillez réessayer.')
+      } finally {
+        setIsLoadingSlots(false)
       }
-
-      const data = await response.json()
-      setAvailableSlots(data.data?.slots || {})
-    } catch (err) {
-      logger.error('Error fetching slots', err)
-      setError('Impossible de charger les disponibilités. Veuillez réessayer.')
-    } finally {
-      setIsLoadingSlots(false)
-    }
-  }, [artisanId])
+    },
+    [artisanId]
+  )
 
   // Load slots when component mounts or month changes
+  const currentYear = currentDate.getFullYear()
+  const currentMonth = currentDate.getMonth()
   useEffect(() => {
-    fetchAvailableSlots(currentDate.getFullYear(), currentDate.getMonth())
-  }, [currentDate.getFullYear(), currentDate.getMonth(), fetchAvailableSlots])
+    fetchAvailableSlots(currentYear, currentMonth)
+  }, [currentYear, currentMonth, fetchAvailableSlots])
 
   const getAvailableSlots = (date: Date): TimeSlot[] => {
     const dateStr = date.toISOString().split('T')[0]
@@ -187,16 +202,12 @@ export default function BookingCalendar({
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <Check className="w-8 h-8 text-green-600" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-          Réservation confirmée !
-        </h3>
-        <p className="text-gray-600 mb-6">
-          Votre rendez-vous avec {artisanName} est confirmé.
-        </p>
-        <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+        <h3 className="text-2xl font-bold text-charcoal-900 mb-2">Réservation confirmée !</h3>
+        <p className="text-charcoal-600 mb-6">Votre rendez-vous avec {artisanName} est confirmé.</p>
+        <div className="bg-sand-50 rounded-lg p-4 mb-6 text-left">
           <div className="flex items-center gap-3 mb-3">
-            <Calendar className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-gray-900">
+            <Calendar className="w-5 h-5 text-primary-500" />
+            <span className="font-medium text-charcoal-900">
               {selectedDate?.toLocaleDateString('fr-FR', {
                 weekday: 'long',
                 day: 'numeric',
@@ -205,19 +216,17 @@ export default function BookingCalendar({
             </span>
           </div>
           <div className="flex items-center gap-3 mb-3">
-            <Clock className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-gray-900">
+            <Clock className="w-5 h-5 text-primary-500" />
+            <span className="font-medium text-charcoal-900">
               {selectedSlot?.start} - {selectedSlot?.end}
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <User className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-gray-900">
-              {serviceName}
-            </span>
+            <User className="w-5 h-5 text-primary-500" />
+            <span className="font-medium text-charcoal-900">{serviceName}</span>
           </div>
         </div>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-charcoal-500 mb-6">
           Un email de confirmation a été envoyé à {formData.clientEmail}
         </p>
         <button
@@ -227,7 +236,7 @@ export default function BookingCalendar({
             setSelectedSlot(null)
             setFormData({ clientName: '', clientPhone: '', clientEmail: '', message: '' })
           }}
-          className="text-blue-600 hover:underline"
+          className="text-primary-500 hover:underline"
         >
           Faire une autre réservation
         </button>
@@ -238,9 +247,11 @@ export default function BookingCalendar({
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white p-6">
         <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
-        <p className="text-blue-100 text-sm">{artisanName} - {serviceName}</p>
+        <p className="text-primary-100 text-sm">
+          {artisanName} - {serviceName}
+        </p>
       </div>
 
       {step === 'calendar' && (
@@ -257,16 +268,16 @@ export default function BookingCalendar({
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
-              className="p-2 hover:bg-gray-100 rounded-lg"
+              className="p-2 hover:bg-sand-100 rounded-lg"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <h4 className="font-semibold text-gray-900">
+            <h4 className="font-semibold text-charcoal-900">
               {monthNames[month]} {year}
             </h4>
             <button
               onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
-              className="p-2 hover:bg-gray-100 rounded-lg"
+              className="p-2 hover:bg-sand-100 rounded-lg"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -274,8 +285,8 @@ export default function BookingCalendar({
 
           {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-1 mb-4">
-            {dayNames.map(day => (
-              <div key={day} className="text-center text-xs font-medium text-gray-500 py-2">
+            {dayNames.map((day) => (
+              <div key={day} className="text-center text-xs font-medium text-charcoal-500 py-2">
                 {day}
               </div>
             ))}
@@ -284,7 +295,7 @@ export default function BookingCalendar({
               <div key={`empty-${i}`} className="aspect-square" />
             ))}
 
-            {days.map(date => {
+            {days.map((date) => {
               const available = hasAvailableSlots(date)
               const past = isPast(date)
               const selected = selectedDate?.toDateString() === date.toDateString()
@@ -296,14 +307,14 @@ export default function BookingCalendar({
                   disabled={!available || past}
                   className={`aspect-square rounded-lg text-sm font-medium transition-all ${
                     selected
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary-500 text-white'
                       : available && !past
-                      ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
-                      : isToday(date)
-                      ? 'bg-blue-50 text-blue-600'
-                      : past
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-400 cursor-not-allowed'
+                        ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+                        : isToday(date)
+                          ? 'bg-primary-50 text-primary-500'
+                          : past
+                            ? 'text-sand-500 cursor-not-allowed'
+                            : 'text-charcoal-400 cursor-not-allowed'
                   }`}
                 >
                   {date.getDate()}
@@ -314,20 +325,20 @@ export default function BookingCalendar({
 
           {/* Loading indicator */}
           {isLoadingSlots && (
-            <div className="flex items-center justify-center py-4 text-gray-500">
+            <div className="flex items-center justify-center py-4 text-charcoal-500">
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
               <span className="text-sm">Chargement des disponibilités...</span>
             </div>
           )}
 
           {/* Legend */}
-          <div className="flex items-center gap-4 text-xs text-gray-500 mb-6">
+          <div className="flex items-center gap-4 text-xs text-charcoal-500 mb-6">
             <div className="flex items-center gap-1">
               <div className="w-3 h-3 rounded bg-green-100 border border-green-200" />
               <span>Disponible</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded bg-gray-100" />
+              <div className="w-3 h-3 rounded bg-sand-100" />
               <span>Indisponible</span>
             </div>
           </div>
@@ -335,22 +346,23 @@ export default function BookingCalendar({
           {/* Time Slots */}
           {selectedDate && (
             <div className="border-t pt-4">
-              <h4 className="font-medium text-gray-900 mb-3">
-                Créneaux disponibles le {selectedDate.toLocaleDateString('fr-FR', {
+              <h4 className="font-medium text-charcoal-900 mb-3">
+                Créneaux disponibles le{' '}
+                {selectedDate.toLocaleDateString('fr-FR', {
                   weekday: 'long',
                   day: 'numeric',
                   month: 'long',
                 })}
               </h4>
               <div className="grid grid-cols-2 gap-2">
-                {getAvailableSlots(selectedDate).map(slot => (
+                {getAvailableSlots(selectedDate).map((slot) => (
                   <button
                     key={slot.id}
                     onClick={() => setSelectedSlot(slot)}
                     className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       selectedSlot?.id === slot.id
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                        ? 'border-primary-400 bg-primary-50 text-primary-600'
+                        : 'border-sand-300 hover:border-primary-300 hover:bg-primary-50'
                     }`}
                   >
                     <Clock className="w-4 h-4" />
@@ -365,7 +377,7 @@ export default function BookingCalendar({
           {selectedSlot && (
             <button
               onClick={() => setStep('form')}
-              className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="w-full mt-6 bg-primary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors"
             >
               Continuer
             </button>
@@ -384,8 +396,8 @@ export default function BookingCalendar({
           )}
 
           {/* Selected slot summary */}
-          <div className="bg-blue-50 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-3 text-blue-700">
+          <div className="bg-primary-50 rounded-lg p-4 mb-6">
+            <div className="flex items-center gap-3 text-primary-600">
               <Calendar className="w-5 h-5" />
               <span className="font-medium">
                 {selectedDate?.toLocaleDateString('fr-FR', {
@@ -404,68 +416,66 @@ export default function BookingCalendar({
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">
                 Votre nom *
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                 <input
                   type="text"
                   required
                   value={formData.clientName}
                   onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   placeholder="Jean Dupont"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">
                 Téléphone *
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                 <input
                   type="tel"
                   inputMode="tel"
                   required
                   value={formData.clientPhone}
                   onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   placeholder="06 12 34 56 78"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email *
-              </label>
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">Email *</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                 <input
                   type="email"
                   inputMode="email"
                   required
                   value={formData.clientEmail}
                   onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   placeholder="jean@exemple.fr"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">
                 Message (optionnel)
               </label>
               <div className="relative">
-                <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-charcoal-400" />
                 <textarea
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
                   rows={3}
                   placeholder="Décrivez brièvement votre besoin..."
                 />
@@ -478,13 +488,18 @@ export default function BookingCalendar({
               type="checkbox"
               checked={consentRgpd}
               onChange={(e) => setConsentRgpd(e.target.checked)}
-              className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
+              className="mt-0.5 w-5 h-5 rounded border-sand-400 text-primary-500 focus:ring-primary-400 flex-shrink-0"
             />
-            <span className="text-sm text-gray-600 leading-relaxed">
-              J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-              <Link href="/confidentialite" className="text-blue-600 underline hover:text-blue-800">
+            <span className="text-sm text-charcoal-600 leading-relaxed">
+              J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre
+              en relation avec des artisans partenaires. Voir notre{' '}
+              <Link
+                href="/confidentialite"
+                className="text-primary-500 underline hover:text-primary-800"
+              >
                 politique de confidentialité
-              </Link>.
+              </Link>
+              .
             </span>
           </label>
 
@@ -492,14 +507,14 @@ export default function BookingCalendar({
             <button
               type="button"
               onClick={() => setStep('calendar')}
-              className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50"
+              className="flex-1 border border-sand-400 text-charcoal-700 py-3 rounded-lg font-medium hover:bg-sand-50"
             >
               Retour
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-primary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Confirmation...' : 'Confirmer le RDV'}
             </button>

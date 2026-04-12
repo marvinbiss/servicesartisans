@@ -41,36 +41,36 @@ export default function DossierListCard({ dossier }: DossierListCardProps) {
   return (
     <Link
       href={href}
-      className="group block rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+      className="group block rounded-xl border border-sand-300 bg-white p-5 transition-all hover:border-primary-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
       aria-label={`Voir le dossier CEE ${dossier.operation_code}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-900">
-              <FileText className="h-4 w-4 text-blue-600" aria-hidden="true" />
+            <div className="inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal-900">
+              <FileText className="h-4 w-4 text-primary-500" aria-hidden="true" />
               <span>{dossier.operation_code}</span>
             </div>
             <StatusBadge status={dossier.status} />
           </div>
 
-          <dl className="mt-3 grid grid-cols-1 gap-2 text-sm text-gray-600 sm:grid-cols-2">
+          <dl className="mt-3 grid grid-cols-1 gap-2 text-sm text-charcoal-600 sm:grid-cols-2">
             <div className="flex items-center gap-2">
-              <Euro className="h-4 w-4 text-gray-400" aria-hidden="true" />
+              <Euro className="h-4 w-4 text-charcoal-400" aria-hidden="true" />
               <dt className="sr-only">Prime estimée</dt>
               <dd>
                 Prime estimée :{' '}
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-charcoal-900">
                   {formatEuros(dossier.prime_estimee_eur)}
                 </span>
               </dd>
             </div>
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-400" aria-hidden="true" />
+              <Calendar className="h-4 w-4 text-charcoal-400" aria-hidden="true" />
               <dt className="sr-only">Date d&apos;engagement</dt>
               <dd>
                 Engagement :{' '}
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-charcoal-900">
                   {formatDate(dossier.date_engagement)}
                 </span>
               </dd>
@@ -78,14 +78,14 @@ export default function DossierListCard({ dossier }: DossierListCardProps) {
           </dl>
 
           {dossier.postal_code && (
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-charcoal-500">
               Zone : {dossier.zone_climatique ?? '—'} · {dossier.postal_code}
             </p>
           )}
         </div>
 
         <ChevronRight
-          className="mt-1 h-5 w-5 shrink-0 text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-blue-600"
+          className="mt-1 h-5 w-5 shrink-0 text-charcoal-400 transition-transform group-hover:translate-x-0.5 group-hover:text-primary-500"
           aria-hidden="true"
         />
       </div>

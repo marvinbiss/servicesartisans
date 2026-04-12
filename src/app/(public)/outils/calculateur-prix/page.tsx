@@ -62,14 +62,17 @@ export default function CalculateurPrixPage() {
   const faqSchema = null
 
   // Serialize trade content for client component (only what's needed)
-  const clientTradeContent: Record<string, {
-    slug: string
-    name: string
-    priceRange: { min: number; max: number; unit: string }
-    commonTasks: string[]
-    tips: string[]
-    faq: { q: string; a: string }[]
-  }> = {}
+  const clientTradeContent: Record<
+    string,
+    {
+      slug: string
+      name: string
+      priceRange: { min: number; max: number; unit: string }
+      commonTasks: string[]
+      tips: string[]
+      faq: { q: string; a: string }[]
+    }
+  > = {}
 
   for (const [key, trade] of Object.entries(tradeContent)) {
     clientTradeContent[key] = {
@@ -86,15 +89,15 @@ export default function CalculateurPrixPage() {
     <>
       <JsonLd data={[breadcrumbSchema, howToSchema, faqSchema]} />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         {/* Hero */}
-        <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <section className="relative bg-charcoal-950 text-white overflow-hidden">
           <div className="absolute inset-0">
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,107,75,0.06) 0%, transparent 50%)',
               }}
             />
             <div
@@ -105,23 +108,20 @@ export default function CalculateurPrixPage() {
                 backgroundSize: '64px 64px',
               }}
             />
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
             <Breadcrumb
-              items={[
-                { label: 'Outils', href: '/outils' },
-                { label: 'Calculateur de prix' },
-              ]}
-              className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+              items={[{ label: 'Outils', href: '/outils' }, { label: 'Calculateur de prix' }]}
+              className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
             />
             <div className="text-center">
               <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
                 Calculateur de prix artisan 2026
               </h1>
-              <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-                Estimez le coût de vos travaux en quelques clics.
-                Tarifs actualisés pour {Object.keys(tradeContent).length} métiers du bâtiment.
+              <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
+                Estimez le coût de vos travaux en quelques clics. Tarifs actualisés pour{' '}
+                {Object.keys(tradeContent).length} métiers du bâtiment.
               </p>
             </div>
           </div>
@@ -130,45 +130,46 @@ export default function CalculateurPrixPage() {
         {/* Calculator */}
         <section className="py-12 sm:py-16 -mt-16 relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <CalculateurClient
-              services={services}
-              tradeContent={clientTradeContent}
-            />
+            <CalculateurClient services={services} tradeContent={clientTradeContent} />
           </div>
         </section>
 
         {/* How it works */}
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-8 text-center">
               Comment fonctionne le calculateur ?
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center p-6">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-blue-600">1</span>
+                <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-primary-500">1</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Choisissez un métier</h3>
-                <p className="text-gray-600 text-sm">
-                  Sélectionnez parmi 10 corps de métier : plombier, électricien, serrurier, peintre et plus.
+                <h3 className="font-semibold text-charcoal-900 mb-2">Choisissez un métier</h3>
+                <p className="text-charcoal-600 text-sm">
+                  Sélectionnez parmi 10 corps de métier : plombier, électricien, serrurier, peintre
+                  et plus.
                 </p>
               </div>
               <div className="text-center p-6">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-blue-600">2</span>
+                <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-primary-500">2</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Sélectionnez une prestation</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="font-semibold text-charcoal-900 mb-2">
+                  Sélectionnez une prestation
+                </h3>
+                <p className="text-charcoal-600 text-sm">
                   Choisissez l'intervention souhaitée pour obtenir une estimation précise du coût.
                 </p>
               </div>
               <div className="text-center p-6">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-blue-600">3</span>
+                <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-primary-500">3</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Obtenez votre estimation</h3>
-                <p className="text-gray-600 text-sm">
-                  Consultez la fourchette de prix, les conseils pratiques et trouvez un artisan qualifié.
+                <h3 className="font-semibold text-charcoal-900 mb-2">Obtenez votre estimation</h3>
+                <p className="text-charcoal-600 text-sm">
+                  Consultez la fourchette de prix, les conseils pratiques et trouvez un artisan
+                  qualifié.
                 </p>
               </div>
             </div>

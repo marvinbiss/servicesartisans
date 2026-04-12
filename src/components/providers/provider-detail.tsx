@@ -60,7 +60,11 @@ interface ProviderDetailProps {
   isClaimed?: boolean
 }
 
-export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = false }: ProviderDetailProps) {
+export function ProviderDetail({
+  provider,
+  showQuoteForm = true,
+  isClaimed = false,
+}: ProviderDetailProps) {
   const [activeTab, setActiveTab] = useState<'about' | 'services' | 'reviews'>('about')
 
   const renderStars = (rating: number) => {
@@ -70,9 +74,7 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
           <Star
             key={star}
             className={`w-5 h-5 ${
-              star <= rating
-                ? 'fill-amber-400 text-amber-400'
-                : 'text-gray-300'
+              star <= rating ? 'fill-amber-400 text-amber-400' : 'text-sand-500'
             }`}
           />
         ))}
@@ -91,13 +93,13 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white border-b border-sand-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row gap-6">
             {/* Avatar */}
-            <div className="relative w-32 h-32 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+            <div className="relative w-32 h-32 rounded-xl overflow-hidden bg-sand-100 flex-shrink-0">
               {provider.image_url ? (
                 <Image
                   src={provider.image_url}
@@ -107,7 +109,7 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl font-bold">
+                <div className="w-full h-full flex items-center justify-center text-charcoal-400 text-4xl font-bold">
                   {provider.name.charAt(0)}
                 </div>
               )}
@@ -116,11 +118,11 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
             {/* Info */}
             <div className="flex-1">
               <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl md:text-3xl font-bold text-charcoal-900">
                   {provider.name}
                 </h1>
                 {provider.is_verified && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-600 rounded-full text-sm font-medium">
                     <CheckCircle className="w-4 h-4" />
                     Vérifié
                   </span>
@@ -129,15 +131,13 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
 
               <div className="flex items-center gap-2 mt-2">
                 {renderStars(provider.rating_average)}
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-charcoal-900">
                   {provider.rating_average.toFixed(1)}
                 </span>
-                <span className="text-gray-500">
-                  ({provider.review_count} avis)
-                </span>
+                <span className="text-charcoal-500">({provider.review_count} avis)</span>
               </div>
 
-              <div className="flex items-center gap-1 text-gray-600 mt-2">
+              <div className="flex items-center gap-1 text-charcoal-600 mt-2">
                 <MapPin className="w-5 h-5" />
                 <span>
                   {provider.address ? `${provider.address}, ` : ''}
@@ -160,7 +160,7 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
                   </span>
                 )}
                 {provider.response_time && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-600 rounded-full text-sm font-medium">
                     <MessageSquare className="w-4 h-4" />
                     Répond en {provider.response_time}
                   </span>
@@ -173,7 +173,7 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
               {provider.email && (
                 <a
                   href={`mailto:${provider.email}`}
-                  className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
+                  className="flex items-center justify-center gap-2 px-6 py-3 border border-sand-400 rounded-lg hover:bg-sand-50 transition-colors font-medium text-charcoal-700"
                 >
                   <Mail className="w-5 h-5" />
                   Envoyer un email
@@ -184,7 +184,7 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
                   href={provider.website}
                   target="_blank"
                   rel="nofollow noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
+                  className="flex items-center justify-center gap-2 px-6 py-3 border border-sand-400 rounded-lg hover:bg-sand-50 transition-colors font-medium text-charcoal-700"
                 >
                   <Globe className="w-5 h-5" />
                   Site web
@@ -196,7 +196,7 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-sand-300 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-8">
             {[
@@ -209,8 +209,8 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`py-4 border-b-2 font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-primary-500 text-primary-500'
+                    : 'border-transparent text-charcoal-500 hover:text-charcoal-700'
                 }`}
               >
                 {tab.label}
@@ -228,27 +228,27 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
             {activeTab === 'about' && (
               <>
                 {/* Description */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                    À propos
-                  </h2>
-                  <p className="text-gray-600 whitespace-pre-line">
-                    {provider.full_description || provider.description || 'Pas de description disponible.'}
+                <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
+                  <h2 className="text-xl font-semibold text-charcoal-900 mb-4">À propos</h2>
+                  <p className="text-charcoal-600 whitespace-pre-line">
+                    {provider.full_description ||
+                      provider.description ||
+                      'Pas de description disponible.'}
                   </p>
                 </div>
 
                 {/* Opening hours */}
                 {provider.opening_hours && (
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-blue-600" />
+                  <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
+                    <h2 className="text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-primary-500" />
                       Horaires d'ouverture
                     </h2>
                     <div className="space-y-2">
                       {Object.entries(provider.opening_hours).map(([day, hours]) => (
                         <div key={day} className="flex justify-between">
-                          <span className="text-gray-600">{dayNames[day] || day}</span>
-                          <span className="font-medium text-gray-900">{hours}</span>
+                          <span className="text-charcoal-600">{dayNames[day] || day}</span>
+                          <span className="font-medium text-charcoal-900">{hours}</span>
                         </div>
                       ))}
                     </div>
@@ -258,33 +258,29 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
             )}
 
             {activeTab === 'services' && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Services proposés
-                </h2>
+              <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
+                <h2 className="text-xl font-semibold text-charcoal-900 mb-4">Services proposés</h2>
                 {provider.services && provider.services.length > 0 ? (
                   <ul className="space-y-2">
                     {provider.services.map((service, i) => (
-                      <li key={i} className="flex items-center gap-2 text-gray-600">
+                      <li key={i} className="flex items-center gap-2 text-charcoal-600">
                         <CheckCircle className="w-5 h-5 text-green-500" />
                         {service}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-500">Aucun service spécifié.</p>
+                  <p className="text-charcoal-500">Aucun service spécifié.</p>
                 )}
 
                 {provider.service_areas && provider.service_areas.length > 0 && (
-                  <div className="mt-6 pt-6 border-t border-gray-100">
-                    <h3 className="font-semibold text-gray-900 mb-3">
-                      Zones d'intervention
-                    </h3>
+                  <div className="mt-6 pt-6 border-t border-sand-200">
+                    <h3 className="font-semibold text-charcoal-900 mb-3">Zones d'intervention</h3>
                     <div className="flex flex-wrap gap-2">
                       {provider.service_areas.map((area, i) => (
                         <span
                           key={i}
-                          className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                          className="px-3 py-1 bg-primary-100 text-primary-600 rounded-full text-sm"
                         >
                           {area}
                         </span>
@@ -296,8 +292,8 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
             )}
 
             {activeTab === 'reviews' && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
+                <h2 className="text-xl font-semibold text-charcoal-900 mb-4">
                   Avis clients ({provider.review_count})
                 </h2>
                 <ReviewsList reviews={provider.reviews || []} />
@@ -308,10 +304,8 @@ export function ProviderDetail({ provider, showQuoteForm = true, isClaimed = fal
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {showQuoteForm && isClaimed && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Demander un devis
-                </h2>
+              <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 sticky top-24">
+                <h2 className="text-xl font-semibold text-charcoal-900 mb-4">Demander un devis</h2>
                 <QuoteForm providerId={provider.id} serviceSlug={provider.slug} />
               </div>
             )}

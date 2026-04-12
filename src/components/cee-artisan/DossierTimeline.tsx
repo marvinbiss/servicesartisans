@@ -69,9 +69,11 @@ function describeEvent(event: CeeDossierEvent): string {
 export default function DossierTimeline({ events }: DossierTimelineProps) {
   if (!events || events.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 p-6 text-center">
-        <Activity className="mx-auto h-8 w-8 text-gray-400" aria-hidden="true" />
-        <p className="mt-2 text-sm text-gray-500">Aucun événement enregistré pour ce dossier.</p>
+      <div className="rounded-xl border border-dashed border-sand-300 bg-sand-50 p-6 text-center">
+        <Activity className="mx-auto h-8 w-8 text-charcoal-400" aria-hidden="true" />
+        <p className="mt-2 text-sm text-charcoal-500">
+          Aucun événement enregistré pour ce dossier.
+        </p>
       </div>
     )
   }
@@ -79,7 +81,7 @@ export default function DossierTimeline({ events }: DossierTimelineProps) {
   return (
     <ol
       data-testid="timeline-vertical-line"
-      className="relative space-y-5 pl-6 before:pointer-events-none before:absolute before:left-2 before:top-1 before:h-[calc(100%-0.5rem)] before:w-px before:bg-gray-200 before:content-['']"
+      className="relative space-y-5 pl-6 before:pointer-events-none before:absolute before:left-2 before:top-1 before:h-[calc(100%-0.5rem)] before:w-px before:bg-sand-300 before:content-['']"
       aria-label="Chronologie du dossier"
     >
       {events.map((event) => {
@@ -87,27 +89,27 @@ export default function DossierTimeline({ events }: DossierTimelineProps) {
         return (
           <li key={event.id} className="relative">
             <span
-              className="absolute -left-6 top-0.5 flex h-5 w-5 items-center justify-center rounded-full border border-gray-200 bg-white"
+              className="absolute -left-6 top-0.5 flex h-5 w-5 items-center justify-center rounded-full border border-sand-300 bg-white"
               aria-hidden="true"
             >
-              <Icon className="h-3 w-3 text-blue-600" />
+              <Icon className="h-3 w-3 text-primary-500" />
             </span>
             <div className="flex flex-col gap-1">
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-medium text-charcoal-900">
                 {EVENT_LABELS[event.event_type] ?? 'Événement'}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-charcoal-600">
                 {event.event_type === 'status_change' ? (
                   <span className="inline-flex items-center gap-1.5">
                     {event.from_status && getStatusLabel(event.from_status)}
-                    <ArrowRight className="h-3.5 w-3.5 text-gray-400" aria-hidden="true" />
+                    <ArrowRight className="h-3.5 w-3.5 text-charcoal-400" aria-hidden="true" />
                     {event.to_status && getStatusLabel(event.to_status)}
                   </span>
                 ) : (
                   describeEvent(event)
                 )}
               </p>
-              <time dateTime={event.created_at} className="text-xs text-gray-400">
+              <time dateTime={event.created_at} className="text-xs text-charcoal-400">
                 {formatDateTime(event.created_at)}
               </time>
             </div>

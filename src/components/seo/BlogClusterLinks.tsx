@@ -1,9 +1,6 @@
 import Link from 'next/link'
 import { BookOpen, Euro, FileText, Wrench, AlertCircle, BarChart3 } from 'lucide-react'
-import {
-  getClusterLinksForArticle,
-  getClusterRelatedArticles,
-} from '@/lib/seo/topical-clusters'
+import { getClusterLinksForArticle, getClusterRelatedArticles } from '@/lib/seo/topical-clusters'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -57,13 +54,13 @@ export default function BlogClusterLinks({
   const clusterData = getClusterLinksForArticle(articleSlug, maxServiceLinks)
   const relatedArticles = getClusterRelatedArticles(articleSlug, maxRelatedArticles)
 
-  const hasClusterLinks = clusterData.some(c => c.links.length > 0)
+  const hasClusterLinks = clusterData.some((c) => c.links.length > 0)
   const hasRelatedArticles = relatedArticles.length > 0
 
   if (!hasClusterLinks && !hasRelatedArticles) return null
 
   return (
-    <section className="py-10 border-t border-slate-200 bg-slate-50/50">
+    <section className="py-10 border-t border-charcoal-200 bg-sand-50/50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Related articles from same cluster */}
         {hasRelatedArticles && (
@@ -76,7 +73,7 @@ export default function BlogClusterLinks({
                 <Link
                   key={slug}
                   href={`/blog/${slug}`}
-                  className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-200 hover:shadow-sm transition-all"
+                  className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-primary-200 hover:shadow-sm transition-all"
                   prefetch={false}
                 >
                   <BookOpen className="w-4 h-4 mt-0.5 text-primary-400 flex-shrink-0" />
@@ -94,7 +91,7 @@ export default function BlogClusterLinks({
           if (links.length === 0) return null
 
           // Filter out blog links (we already show related articles above)
-          const nonBlogLinks = links.filter(l => l.type !== 'blog')
+          const nonBlogLinks = links.filter((l) => l.type !== 'blog')
           if (nonBlogLinks.length === 0) return null
 
           return (
@@ -109,7 +106,7 @@ export default function BlogClusterLinks({
                     <Link
                       key={link.path}
                       href={link.path}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-stone-600 bg-white hover:bg-primary-50 hover:text-primary-600 rounded-full border border-slate-200 hover:border-primary-200 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-stone-600 bg-white hover:bg-primary-50 hover:text-primary-600 rounded-full border border-charcoal-200 hover:border-primary-200 transition-colors"
                       prefetch={false}
                     >
                       <Icon className="w-3.5 h-3.5 flex-shrink-0" />

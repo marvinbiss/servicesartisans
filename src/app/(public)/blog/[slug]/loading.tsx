@@ -2,8 +2,8 @@ import { Skeleton } from '@/components/ui/Skeleton'
 
 export default function BlogArticleLoading() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 py-16">
+    <div className="min-h-screen bg-sand-50">
+      <div className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 py-16">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <Skeleton className="h-8 w-32 mx-auto mb-4 bg-white/10 rounded-full" />
           <Skeleton className="h-10 w-full mx-auto mb-3 bg-white/10" />

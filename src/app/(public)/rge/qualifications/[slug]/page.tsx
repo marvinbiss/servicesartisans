@@ -137,7 +137,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Award className="w-4 h-4 text-emerald-300" />
@@ -156,13 +156,13 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-6">
-            <h2 className="font-heading text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+            <h2 className="font-heading text-lg font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
               Travaux couverts
             </h2>
             <ul className="space-y-2">
               {guide.travauxCouverts.map((travail) => (
-                <li key={travail} className="flex items-start gap-2 text-sm text-slate-700">
+                <li key={travail} className="flex items-start gap-2 text-sm text-charcoal-700">
                   <CheckCircle2
                     className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
@@ -172,16 +172,16 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-blue-100 bg-blue-50/40 p-6">
-            <h2 className="font-heading text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
-              <Award className="w-5 h-5 text-blue-700" aria-hidden="true" />
+          <div className="rounded-2xl border border-primary-100 bg-primary-50/40 p-6">
+            <h2 className="font-heading text-lg font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
+              <Award className="w-5 h-5 text-primary-600" aria-hidden="true" />
               Primes CEE d&eacute;bloqu&eacute;es
             </h2>
             <ul className="space-y-2">
               {guide.ceeDebloquees.map((cee) => (
-                <li key={cee} className="flex items-start gap-2 text-sm text-slate-700">
+                <li key={cee} className="flex items-start gap-2 text-sm text-charcoal-700">
                   <CheckCircle2
-                    className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5"
+                    className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>{cee}</span>
@@ -192,7 +192,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
         </div>
 
         {/* Sections éditoriales */}
-        <article className="prose prose-emerald max-w-none prose-headings:font-heading prose-headings:font-extrabold prose-headings:text-slate-900 prose-p:text-slate-700 prose-p:leading-relaxed">
+        <article className="prose prose-emerald max-w-none prose-headings:font-heading prose-headings:font-extrabold prose-headings:text-charcoal-900 prose-p:text-charcoal-700 prose-p:leading-relaxed">
           {guide.sections.map((section, i) => (
             <section key={i} className="mb-10">
               <h2 className="text-2xl md:text-3xl mb-4">{section.heading}</h2>
@@ -205,12 +205,12 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
 
         {/* Maillage CEE — primes débloquées par cette qualification */}
         {guide.linkedCeeOperations.length > 0 && (
-          <div className="mt-10 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/60 to-white p-6">
-            <h2 className="font-heading text-xl font-extrabold text-slate-900 mb-2 flex items-center gap-2">
-              <Award className="w-5 h-5 text-blue-700" aria-hidden="true" />
+          <div className="mt-10 rounded-2xl border border-primary-100 bg-gradient-to-br from-primary-50/60 to-white p-6">
+            <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-2 flex items-center gap-2">
+              <Award className="w-5 h-5 text-primary-600" aria-hidden="true" />
               Primes CEE d&eacute;bloqu&eacute;es par {guide.name}
             </h2>
-            <p className="text-sm text-slate-600 mb-4">
+            <p className="text-sm text-charcoal-600 mb-4">
               Consultez le guide de chaque op&eacute;ration CEE standardis&eacute;e accessible
               gr&acirc;ce &agrave; cette qualification.
             </p>
@@ -219,18 +219,18 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
                 <li key={code}>
                   <Link
                     href={`/cee/${code}/guide`}
-                    className="group flex items-start justify-between gap-3 p-4 bg-white rounded-xl border border-blue-100 hover:border-blue-400 hover:shadow-sm transition"
+                    className="group flex items-start justify-between gap-3 p-4 bg-white rounded-xl border border-primary-100 hover:border-primary-300 hover:shadow-sm transition"
                   >
                     <span className="flex-1">
-                      <span className="block text-xs font-semibold text-blue-700 uppercase tracking-wide">
+                      <span className="block text-xs font-semibold text-primary-600 uppercase tracking-wide">
                         {code}
                       </span>
-                      <span className="block text-sm font-semibold text-slate-900 group-hover:text-blue-800 transition">
+                      <span className="block text-sm font-semibold text-charcoal-900 group-hover:text-primary-800 transition">
                         {CEE_SHORT_LABELS[code] ?? code}
                       </span>
                     </span>
                     <ArrowRight
-                      className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"
+                      className="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0"
                       aria-hidden="true"
                     />
                   </Link>
@@ -242,24 +242,24 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       </section>
 
       {/* FAQ */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
             Questions fr&eacute;quentes &mdash; {guide.name}
           </h2>
           <div className="space-y-3">
             {guide.faq.map((item, i) => (
               <details
                 key={i}
-                className="group rounded-lg border border-slate-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                className="group rounded-lg border border-charcoal-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
               >
-                <summary className="cursor-pointer list-none font-semibold text-slate-900 flex items-start justify-between gap-4">
+                <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
                     +
                   </span>
                 </summary>
-                <p className="mt-3 text-slate-700 leading-relaxed">{item.answer}</p>
+                <p className="mt-3 text-charcoal-700 leading-relaxed">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -269,10 +269,10 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       {/* Vérification officielle */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-6">
-          <h2 className="font-heading text-xl font-extrabold text-slate-900 mb-3">
+          <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-3">
             V&eacute;rifier une qualification {guide.name}
           </h2>
-          <p className="text-slate-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-4">
             Toujours v&eacute;rifier la qualification d&rsquo;un artisan sur les sources officielles
             avant signature du devis. La v&eacute;rification prend moins de 2 minutes.
           </p>

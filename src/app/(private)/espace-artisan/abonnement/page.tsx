@@ -15,9 +15,9 @@ const features = [
 
 export default function AbonnementArtisanPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -25,7 +25,7 @@ export default function AbonnementArtisanPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Mon compte</h1>
-              <p className="text-blue-100">Votre compte artisan est entièrement gratuit</p>
+              <p className="text-primary-100">Votre compte artisan est entièrement gratuit</p>
             </div>
           </div>
         </div>
@@ -51,25 +51,25 @@ export default function AbonnementArtisanPage() {
 
             {/* Features */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Ce qui est inclus</h2>
+              <h2 className="text-lg font-semibold text-charcoal-900 mb-6">Ce qui est inclus</h2>
               <ul className="space-y-4">
                 {features.map((feature, index) => (
                   <li key={index} className="flex items-center gap-3">
                     <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                       <Check className="w-4 h-4 text-green-600" />
                     </div>
-                    <span className="text-gray-700">{feature}</span>
+                    <span className="text-charcoal-700">{feature}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Info */}
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
-              <p className="text-blue-800 font-medium">
+            <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 text-center">
+              <p className="text-primary-800 font-medium">
                 ServicesArtisans est 100% gratuit pour les artisans.
               </p>
-              <p className="text-blue-600 text-sm mt-1">
+              <p className="text-primary-500 text-sm mt-1">
                 Pas d'abonnement, pas de commission, pas de frais cachés.
               </p>
             </div>

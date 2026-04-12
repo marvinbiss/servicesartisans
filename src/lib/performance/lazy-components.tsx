@@ -15,7 +15,7 @@ function LoadingFallback({ height = '200px' }: { height?: string }) {
       className="flex items-center justify-center bg-gray-100 rounded-lg animate-pulse"
       style={{ minHeight: height }}
     >
-      <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
     </div>
   )
 }
@@ -40,37 +40,34 @@ function CardSkeleton() {
 }
 
 // Lazy load heavy components
-export const LazyMap = dynamic(
-  () => import('@/components/Map').then(mod => mod.default),
-  {
-    loading: () => <LoadingFallback height="400px" />,
-    ssr: false, // Map doesn't work with SSR
-  }
-)
+export const LazyMap = dynamic(() => import('@/components/Map').then((mod) => mod.default), {
+  loading: () => <LoadingFallback height="400px" />,
+  ssr: false, // Map doesn't work with SSR
+})
 
 export const LazyBookingCalendar = dynamic(
-  () => import('@/components/BookingCalendar').then(mod => mod.default),
+  () => import('@/components/BookingCalendar').then((mod) => mod.default),
   {
     loading: () => <LoadingFallback height="500px" />,
   }
 )
 
 export const LazyBookingCalendarPro = dynamic(
-  () => import('@/components/BookingCalendarPro').then(mod => mod.default),
+  () => import('@/components/BookingCalendarPro').then((mod) => mod.default),
   {
     loading: () => <LoadingFallback height="600px" />,
   }
 )
 
 export const LazyChatWindow = dynamic(
-  () => import('@/components/chat/ChatWindow').then(mod => mod.default),
+  () => import('@/components/chat/ChatWindow').then((mod) => mod.default),
   {
     loading: () => <LoadingFallback height="500px" />,
   }
 )
 
 export const LazyReviewsSection = dynamic(
-  () => import('@/components/ReviewsSection').then(mod => mod.default),
+  () => import('@/components/ReviewsSection').then((mod) => mod.default),
   {
     loading: () => (
       <div className="space-y-4">
@@ -82,7 +79,7 @@ export const LazyReviewsSection = dynamic(
 )
 
 export const LazyPaymentForm = dynamic(
-  () => import('@/components/PaymentForm').then(mod => mod.default),
+  () => import('@/components/PaymentForm').then((mod) => mod.default),
   {
     loading: () => <LoadingFallback height="300px" />,
   }
@@ -91,10 +88,7 @@ export const LazyPaymentForm = dynamic(
 /**
  * Higher-order component for lazy loading with intersection observer
  */
-export function withLazyLoad<P extends object>(
-  Component: ComponentType<P>,
-  fallback?: ReactNode
-) {
+export function withLazyLoad<P extends object>(Component: ComponentType<P>, fallback?: ReactNode) {
   return dynamic(() => Promise.resolve(Component), {
     loading: () => <>{fallback || <LoadingFallback />}</>,
   })

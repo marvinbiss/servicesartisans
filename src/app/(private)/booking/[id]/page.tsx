@@ -112,7 +112,12 @@ export default function BookingPage() {
       // Flatten slots from all dates
       const allSlots: AvailableSlot[] = []
       for (const [date, slots] of Object.entries(data.data.slots || {})) {
-        for (const slot of slots as Array<{ id: string; start: string; end: string; available: boolean }>) {
+        for (const slot of slots as Array<{
+          id: string
+          start: string
+          end: string
+          available: boolean
+        }>) {
           if (slot.available && new Date(`${date}T${slot.start}`) > new Date()) {
             allSlots.push({
               id: slot.id,
@@ -124,10 +129,13 @@ export default function BookingPage() {
         }
       }
 
-      setAvailableSlots(allSlots.sort((a, b) =>
-        new Date(`${a.date}T${a.start_time}`).getTime() -
-        new Date(`${b.date}T${b.start_time}`).getTime()
-      ))
+      setAvailableSlots(
+        allSlots.sort(
+          (a, b) =>
+            new Date(`${a.date}T${a.start_time}`).getTime() -
+            new Date(`${b.date}T${b.start_time}`).getTime()
+        )
+      )
     } catch (err) {
       logger.error('Error fetching slots', err)
     } finally {
@@ -191,7 +199,7 @@ export default function BookingPage() {
         )
       case 'completed':
         return (
-          <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+          <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-600 rounded-full text-sm font-medium">
             <Check className="w-4 h-4" />
             Terminé
           </span>
@@ -203,29 +211,26 @@ export default function BookingPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
       </div>
     )
   }
 
   if (error || !booking) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center p-4">
         <div className="text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-red-600" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
+          <h1 className="text-xl font-bold text-charcoal-900 mb-2">
             {error || 'Réservation introuvable'}
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-charcoal-600 mb-6">
             La réservation que vous recherchez n'existe pas ou a été supprimée.
           </p>
-          <Link
-            href="/"
-            className="text-blue-600 hover:underline"
-          >
+          <Link href="/" className="text-primary-500 hover:underline">
             Retour à l'accueil
           </Link>
         </div>
@@ -234,12 +239,12 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="max-w-3xl mx-auto px-4 py-8">
           <h1 className="text-2xl font-bold mb-2">Ma réservation</h1>
-          <p className="text-blue-100">
+          <p className="text-primary-100">
             Gérez votre rendez-vous avec {booking.artisan.name || booking.artisan.full_name}
           </p>
         </div>
@@ -249,13 +254,13 @@ export default function BookingPage() {
         {/* Status Card */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Statut</h2>
+            <h2 className="text-lg font-semibold text-charcoal-900">Statut</h2>
             {getStatusBadge(booking.status)}
           </div>
 
           {booking.status === 'cancelled' && booking.cancellation_reason && (
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600">
+            <div className="p-4 bg-sand-50 rounded-lg">
+              <p className="text-sm text-charcoal-600">
                 <span className="font-medium">Raison de l'annulation:</span>{' '}
                 {booking.cancellation_reason}
               </p>
@@ -265,56 +270,52 @@ export default function BookingPage() {
 
         {/* Booking Details */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">
-            Détails du rendez-vous
-          </h2>
+          <h2 className="text-lg font-semibold text-charcoal-900 mb-6">Détails du rendez-vous</h2>
 
           <div className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Calendar className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Calendar className="w-5 h-5 text-primary-500" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Date</p>
-                <p className="font-medium text-gray-900 capitalize">
+                <p className="text-sm text-charcoal-500">Date</p>
+                <p className="font-medium text-charcoal-900 capitalize">
                   {formatDate(booking.slot.date)}
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Clock className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Clock className="w-5 h-5 text-primary-500" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Horaire</p>
-                <p className="font-medium text-gray-900">
+                <p className="text-sm text-charcoal-500">Horaire</p>
+                <p className="font-medium text-charcoal-900">
                   {booking.slot.start_time} - {booking.slot.end_time}
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <User className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <User className="w-5 h-5 text-primary-500" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Artisan</p>
-                <p className="font-medium text-gray-900">
+                <p className="text-sm text-charcoal-500">Artisan</p>
+                <p className="font-medium text-charcoal-900">
                   {booking.artisan.name || booking.artisan.full_name}
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-5 h-5 text-primary-500" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Service</p>
-                <p className="font-medium text-gray-900">
-                  {booking.service_description}
-                </p>
+                <p className="text-sm text-charcoal-500">Service</p>
+                <p className="font-medium text-charcoal-900">{booking.service_description}</p>
               </div>
             </div>
           </div>
@@ -322,22 +323,20 @@ export default function BookingPage() {
 
         {/* Your Information */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">
-            Vos coordonnées
-          </h2>
+          <h2 className="text-lg font-semibold text-charcoal-900 mb-6">Vos coordonnées</h2>
 
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <User className="w-5 h-5 text-gray-400" />
-              <span className="text-gray-900">{booking.client_name}</span>
+              <User className="w-5 h-5 text-charcoal-400" />
+              <span className="text-charcoal-900">{booking.client_name}</span>
             </div>
             <div className="flex items-center gap-4">
-              <Phone className="w-5 h-5 text-gray-400" />
-              <span className="text-gray-900">{booking.client_phone}</span>
+              <Phone className="w-5 h-5 text-charcoal-400" />
+              <span className="text-charcoal-900">{booking.client_phone}</span>
             </div>
             <div className="flex items-center gap-4">
-              <Mail className="w-5 h-5 text-gray-400" />
-              <span className="text-gray-900">{booking.client_email}</span>
+              <Mail className="w-5 h-5 text-charcoal-400" />
+              <span className="text-charcoal-900">{booking.client_email}</span>
             </div>
           </div>
         </div>
@@ -345,9 +344,7 @@ export default function BookingPage() {
         {/* Actions */}
         {booking.status === 'confirmed' && (
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">
-              Actions
-            </h2>
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-6">Actions</h2>
 
             <div className="space-y-3">
               <button
@@ -355,16 +352,16 @@ export default function BookingPage() {
                   setShowRescheduleModal(true)
                   fetchAvailableSlots()
                 }}
-                className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-4 border border-sand-300 rounded-lg hover:bg-sand-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <RefreshCw className="w-5 h-5 text-blue-600" />
+                  <RefreshCw className="w-5 h-5 text-primary-500" />
                   <div className="text-left">
-                    <p className="font-medium text-gray-900">Reporter le rendez-vous</p>
-                    <p className="text-sm text-gray-500">Choisir un autre créneau</p>
+                    <p className="font-medium text-charcoal-900">Reporter le rendez-vous</p>
+                    <p className="text-sm text-charcoal-500">Choisir un autre créneau</p>
                   </div>
                 </div>
-                <ChevronRight className="w-5 h-5 text-gray-400" />
+                <ChevronRight className="w-5 h-5 text-charcoal-400" />
               </button>
 
               <button
@@ -386,13 +383,11 @@ export default function BookingPage() {
 
         {/* Contact Artisan */}
         <div className="mt-6 text-center">
-          <p className="text-gray-600 text-sm mb-2">
-            Besoin d'aide ?
-          </p>
+          <p className="text-charcoal-600 text-sm mb-2">Besoin d'aide ?</p>
           {booking.artisan.phone && (
             <a
               href={`tel:${booking.artisan.phone.replace(/[\s.\-()]/g, '')}`}
-              className="text-blue-600 hover:underline font-medium"
+              className="text-primary-500 hover:underline font-medium"
             >
               Contacter l'artisan
             </a>
@@ -421,7 +416,7 @@ export default function BookingPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-hidden shadow-2xl">
             <div className="flex items-center justify-between p-6 border-b">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-charcoal-900">
                 Choisir un nouveau créneau
               </h3>
               <button
@@ -429,7 +424,7 @@ export default function BookingPage() {
                   setShowRescheduleModal(false)
                   setSelectedNewSlot(null)
                 }}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="p-2 hover:bg-sand-100 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -438,10 +433,10 @@ export default function BookingPage() {
             <div className="p-6 overflow-y-auto max-h-[50vh]">
               {isLoadingSlots ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                  <Loader2 className="w-6 h-6 animate-spin text-primary-500" />
                 </div>
               ) : availableSlots.length === 0 ? (
-                <p className="text-center text-gray-500 py-8">
+                <p className="text-center text-charcoal-500 py-8">
                   Aucun créneau disponible pour le moment
                 </p>
               ) : (
@@ -452,14 +447,14 @@ export default function BookingPage() {
                       onClick={() => setSelectedNewSlot(slot.id)}
                       className={`w-full p-4 rounded-lg border-2 text-left transition-colors ${
                         selectedNewSlot === slot.id
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-blue-300'
+                          ? 'border-primary-400 bg-primary-50'
+                          : 'border-sand-300 hover:border-primary-300'
                       }`}
                     >
-                      <div className="font-medium text-gray-900 capitalize">
+                      <div className="font-medium text-charcoal-900 capitalize">
                         {formatDate(slot.date)}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-charcoal-600">
                         {slot.start_time} - {slot.end_time}
                       </div>
                     </button>
@@ -476,14 +471,14 @@ export default function BookingPage() {
                     setSelectedNewSlot(null)
                   }}
                   disabled={isRescheduling}
-                  className="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-50 disabled:opacity-50"
+                  className="flex-1 border border-sand-400 text-charcoal-700 px-4 py-3 rounded-lg font-medium hover:bg-sand-50 disabled:opacity-50"
                 >
                   Annuler
                 </button>
                 <button
                   onClick={handleReschedule}
                   disabled={!selectedNewSlot || isRescheduling}
-                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary-500 text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-600 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isRescheduling && <Loader2 className="w-4 h-4 animate-spin" />}
                   Confirmer

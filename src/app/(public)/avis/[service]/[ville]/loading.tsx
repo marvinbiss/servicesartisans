@@ -2,8 +2,8 @@ import { Skeleton } from '@/components/ui/Skeleton'
 
 export default function AvisVilleLoading() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 py-16">
+    <div className="min-h-screen bg-sand-50">
+      <div className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <Skeleton className="h-10 w-72 mx-auto mb-3 bg-white/10" />
           <Skeleton className="h-6 w-96 mx-auto bg-white/10" />
@@ -11,7 +11,7 @@ export default function AvisVilleLoading() {
       </div>
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-6">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
+          <div key={i} className="bg-white rounded-xl border border-sand-300 p-6">
             <div className="flex items-center gap-3 mb-4">
               <Skeleton className="w-12 h-12 rounded-full" />
               <div>

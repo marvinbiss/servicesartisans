@@ -20,7 +20,7 @@ export default function JustificatifGapBadge({ gap }: JustificatifGapBadgeProps)
 
   if (gap.requis.length === 0) {
     return (
-      <span className={`${base} border-gray-200 bg-gray-50 text-gray-600`} role="status">
+      <span className={`${base} border-sand-300 bg-sand-50 text-charcoal-600`} role="status">
         <Info className="h-3.5 w-3.5" aria-hidden="true" />
         Aucune pièce requise
       </span>

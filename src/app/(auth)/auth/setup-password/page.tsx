@@ -9,19 +9,21 @@ export default function SetupPasswordPage() {
   const [loading, setLoading] = useState(false)
 
   // Extract the hashed_token from query param
-  const token = typeof window !== 'undefined'
-    ? new URLSearchParams(window.location.search).get('token')
-    : null
+  const token =
+    typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('token') : null
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-gray-900 mb-2">Lien invalide</h1>
-          <p className="text-gray-600">
-            Ce lien ne contient pas les informations nécessaires.
-            Contactez-nous à <a href="mailto:support@servicesartisans.fr" className="text-amber-600 underline">support@servicesartisans.fr</a>.
+          <h1 className="text-xl font-bold text-charcoal-900 mb-2">Lien invalide</h1>
+          <p className="text-charcoal-600">
+            Ce lien ne contient pas les informations nécessaires. Contactez-nous à{' '}
+            <a href="mailto:support@servicesartisans.fr" className="text-amber-600 underline">
+              support@servicesartisans.fr
+            </a>
+            .
           </p>
         </div>
       </div>
@@ -35,16 +37,17 @@ export default function SetupPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
         <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
           <Wrench className="w-8 h-8 text-white" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-3">
           Bienvenue sur ServicesArtisans !
         </h1>
-        <p className="text-gray-600 mb-6">
-          Votre fiche artisan a été validée. Cliquez le bouton ci-dessous pour définir votre mot de passe et accéder à votre espace.
+        <p className="text-charcoal-600 mb-6">
+          Votre fiche artisan a été validée. Cliquez le bouton ci-dessous pour définir votre mot de
+          passe et accéder à votre espace.
         </p>
 
         <button
@@ -61,9 +64,7 @@ export default function SetupPasswordPage() {
             'Définir mon mot de passe'
           )}
         </button>
-        <p className="mt-4 text-xs text-gray-400">
-          Ce lien expire dans 24 heures.
-        </p>
+        <p className="mt-4 text-xs text-charcoal-400">Ce lien expire dans 24 heures.</p>
       </div>
     </div>
   )

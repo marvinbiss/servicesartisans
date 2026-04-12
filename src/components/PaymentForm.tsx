@@ -2,16 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
-import {
-  Elements,
-  PaymentElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js'
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { motion } from 'framer-motion'
 import { Check, AlertCircle, Lock } from 'lucide-react'
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')
 
 interface PaymentFormProps {
   bookingId: string
@@ -74,6 +69,7 @@ export default function PaymentForm(props: PaymentFormProps) {
 
   useEffect(() => {
     createPaymentIntent()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentType, splitInstallments, depositPercentage])
 
   const formatPrice = (cents: number) => {
@@ -88,26 +84,28 @@ export default function PaymentForm(props: PaymentFormProps) {
       {/* Payment Type Selection */}
       {(props.showSplitPayment || props.showDeposit) && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Mode de paiement</h3>
+          <h3 className="text-lg font-semibold text-charcoal-900">Mode de paiement</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Full Payment */}
             <button
               onClick={() => setPaymentType('full')}
               className={`p-4 rounded-xl border-2 text-left transition-all ${
                 paymentType === 'full'
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-primary-400 bg-primary-50'
+                  : 'border-sand-300 hover:border-sand-400'
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  paymentType === 'full' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
-                }`}>
+                <div
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    paymentType === 'full' ? 'border-primary-400 bg-primary-400' : 'border-sand-400'
+                  }`}
+                >
                   {paymentType === 'full' && <Check className="w-3 h-3 text-white" />}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">Paiement complet</div>
-                  <div className="text-sm text-gray-500">{formatPrice(amount)}</div>
+                  <div className="font-medium text-charcoal-900">Paiement complet</div>
+                  <div className="text-sm text-charcoal-500">{formatPrice(amount)}</div>
                 </div>
               </div>
             </button>
@@ -118,19 +116,23 @@ export default function PaymentForm(props: PaymentFormProps) {
                 onClick={() => setPaymentType('deposit')}
                 className={`p-4 rounded-xl border-2 text-left transition-all ${
                   paymentType === 'deposit'
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-primary-400 bg-primary-50'
+                    : 'border-sand-300 hover:border-sand-400'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    paymentType === 'deposit' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
-                  }`}>
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      paymentType === 'deposit'
+                        ? 'border-primary-400 bg-primary-400'
+                        : 'border-sand-400'
+                    }`}
+                  >
                     {paymentType === 'deposit' && <Check className="w-3 h-3 text-white" />}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Acompte</div>
-                    <div className="text-sm text-gray-500">
+                    <div className="font-medium text-charcoal-900">Acompte</div>
+                    <div className="text-sm text-charcoal-500">
                       {formatPrice(Math.round(amount * (depositPercentage / 100)))} maintenant
                     </div>
                   </div>
@@ -144,19 +146,23 @@ export default function PaymentForm(props: PaymentFormProps) {
                 onClick={() => setPaymentType('split')}
                 className={`p-4 rounded-xl border-2 text-left transition-all ${
                   paymentType === 'split'
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-primary-400 bg-primary-50'
+                    : 'border-sand-300 hover:border-sand-400'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    paymentType === 'split' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
-                  }`}>
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      paymentType === 'split'
+                        ? 'border-primary-400 bg-primary-400'
+                        : 'border-sand-400'
+                    }`}
+                  >
                     {paymentType === 'split' && <Check className="w-3 h-3 text-white" />}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Paiement fractionné</div>
-                    <div className="text-sm text-gray-500">
+                    <div className="font-medium text-charcoal-900">Paiement fractionné</div>
+                    <div className="text-sm text-charcoal-500">
                       {splitInstallments}x {formatPrice(Math.round(amount / splitInstallments))}
                     </div>
                   </div>
@@ -170,9 +176,9 @@ export default function PaymentForm(props: PaymentFormProps) {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="p-4 bg-gray-50 rounded-xl"
+              className="p-4 bg-sand-50 rounded-xl"
             >
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-charcoal-700 mb-2">
                 Nombre de mensualités
               </label>
               <div className="flex gap-2">
@@ -182,15 +188,15 @@ export default function PaymentForm(props: PaymentFormProps) {
                     onClick={() => setSplitInstallments(n)}
                     className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
                       splitInstallments === n
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-white border border-sand-400 text-charcoal-700 hover:bg-sand-50'
                     }`}
                   >
                     {n}x
                   </button>
                 ))}
               </div>
-              <div className="mt-3 text-sm text-gray-600">
+              <div className="mt-3 text-sm text-charcoal-600">
                 <div className="flex justify-between">
                   <span>Première échéance (aujourd'hui)</span>
                   <span className="font-medium">
@@ -212,9 +218,9 @@ export default function PaymentForm(props: PaymentFormProps) {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="p-4 bg-gray-50 rounded-xl"
+              className="p-4 bg-sand-50 rounded-xl"
             >
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-charcoal-700 mb-2">
                 Pourcentage de l'acompte
               </label>
               <div className="flex gap-2">
@@ -224,15 +230,15 @@ export default function PaymentForm(props: PaymentFormProps) {
                     onClick={() => setDepositPercentage(pct)}
                     className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
                       depositPercentage === pct
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-white border border-sand-400 text-charcoal-700 hover:bg-sand-50'
                     }`}
                   >
                     {pct}%
                   </button>
                 ))}
               </div>
-              <div className="mt-3 text-sm text-gray-600">
+              <div className="mt-3 text-sm text-charcoal-600">
                 <div className="flex justify-between">
                   <span>Acompte (aujourd'hui)</span>
                   <span className="font-medium">
@@ -252,19 +258,21 @@ export default function PaymentForm(props: PaymentFormProps) {
       )}
 
       {/* Payment Summary */}
-      <div className="bg-gray-50 rounded-xl p-4">
+      <div className="bg-sand-50 rounded-xl p-4">
         <div className="flex items-center justify-between text-lg">
-          <span className="font-medium text-gray-700">
-            {paymentType === 'full' ? 'Total à payer' :
-             paymentType === 'deposit' ? 'Acompte à payer' :
-             'Première échéance'}
+          <span className="font-medium text-charcoal-700">
+            {paymentType === 'full'
+              ? 'Total à payer'
+              : paymentType === 'deposit'
+                ? 'Acompte à payer'
+                : 'Première échéance'}
           </span>
-          <span className="font-bold text-gray-900">
+          <span className="font-bold text-charcoal-900">
             {paymentDetails ? formatPrice(paymentDetails.amount) : formatPrice(amount)}
           </span>
         </div>
         {paymentType !== 'full' && paymentDetails && (
-          <div className="text-sm text-gray-500 text-right mt-1">
+          <div className="text-sm text-charcoal-500 text-right mt-1">
             Total: {formatPrice(paymentDetails.totalAmount)}
           </div>
         )}
@@ -289,19 +297,16 @@ export default function PaymentForm(props: PaymentFormProps) {
             },
           }}
         >
-          <CheckoutForm
-            onSuccess={props.onSuccess}
-            onError={props.onError}
-          />
+          <CheckoutForm onSuccess={props.onSuccess} onError={props.onError} />
         </Elements>
       ) : (
         <div className="h-48 flex items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
         </div>
       )}
 
       {/* Security Badge */}
-      <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+      <div className="flex items-center justify-center gap-2 text-sm text-charcoal-500">
         <Lock className="w-4 h-4" />
         Paiement sécurisé par Stripe
       </div>
@@ -345,7 +350,7 @@ function CheckoutForm({
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         onSuccess?.(paymentIntent.id)
       }
-    } catch (err) {
+    } catch {
       setErrorMessage('An unexpected error occurred')
       onError?.('An unexpected error occurred')
     } finally {
@@ -375,7 +380,7 @@ function CheckoutForm({
       <button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full py-4 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isProcessing ? (
           <>

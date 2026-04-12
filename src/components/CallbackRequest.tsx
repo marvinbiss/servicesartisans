@@ -51,7 +51,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
 
       if (!res.ok) {
         const body = await res.json().catch(() => null)
-        throw new Error(body?.error || 'Erreur lors de l\'envoi')
+        throw new Error(body?.error || "Erreur lors de l'envoi")
       }
 
       trackEvent('devis_submitted', {
@@ -99,7 +99,10 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
           autoComplete="tel"
           placeholder="06 12 34 56 78"
           value={phone}
-          onChange={(e) => { setPhone(e.target.value); setError('') }}
+          onChange={(e) => {
+            setPhone(e.target.value)
+            setError('')
+          }}
           style={{ fontSize: '16px' }}
           className={`flex-1 rounded-lg border ${error ? 'border-red-400' : 'border-amber-300'} bg-white px-3 py-2.5 text-sm text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500`}
         />
@@ -120,8 +123,12 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
           className="mt-0.5 accent-amber-600"
         />
         <span className="text-[11px] text-amber-900/70">
-          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-          <Link href="/confidentialite" className="underline text-blue-600">politique de confidentialité</Link>.
+          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en
+          relation avec des artisans partenaires. Voir notre{' '}
+          <Link href="/confidentialite" className="underline text-primary-500">
+            politique de confidentialité
+          </Link>
+          .
         </span>
       </label>
     </div>

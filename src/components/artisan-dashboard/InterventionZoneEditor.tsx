@@ -47,25 +47,23 @@ export const InterventionZoneEditor = memo(function InterventionZoneEditor({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-1">
-        <MapPin className="w-4 h-4 text-blue-600" aria-hidden="true" />
+        <MapPin className="w-4 h-4 text-primary-500" aria-hidden="true" />
         <label
           htmlFor="intervention-radius"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-charcoal-700"
         >
           Zone d&apos;intervention
         </label>
       </div>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-charcoal-500">
         Définissez la distance maximale à laquelle vous pouvez vous déplacer pour vos interventions.
       </p>
 
       {/* Summary */}
-      <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 text-center">
-        <span className="text-2xl font-bold text-blue-700">{clampedValue} km</span>
-        <span className="block text-sm text-blue-600 mt-0.5">
-          autour de {cityLabel}
-        </span>
+      <div className="bg-primary-50 border border-primary-100 rounded-lg px-4 py-3 text-center">
+        <span className="text-2xl font-bold text-primary-600">{clampedValue} km</span>
+        <span className="block text-sm text-primary-500 mt-0.5">autour de {cityLabel}</span>
       </div>
 
       {/* Slider */}
@@ -82,9 +80,9 @@ export const InterventionZoneEditor = memo(function InterventionZoneEditor({
           aria-valuemax={MAX_RADIUS}
           aria-valuenow={clampedValue}
           aria-valuetext={`${clampedValue} kilomètres`}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+          className="w-full h-2 bg-sand-300 rounded-lg appearance-none cursor-pointer accent-primary-500"
         />
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
+        <div className="flex justify-between text-xs text-charcoal-400 mt-1">
           <span>{MIN_RADIUS} km</span>
           <span>100 km</span>
           <span>{MAX_RADIUS} km</span>
@@ -93,9 +91,7 @@ export const InterventionZoneEditor = memo(function InterventionZoneEditor({
 
       {/* Quick presets */}
       <div>
-        <span className="text-xs font-medium text-gray-500 mb-2 block">
-          Raccourcis
-        </span>
+        <span className="text-xs font-medium text-charcoal-500 mb-2 block">Raccourcis</span>
         <div className="flex flex-wrap gap-2">
           {PRESETS.map((preset) => (
             <button
@@ -104,8 +100,8 @@ export const InterventionZoneEditor = memo(function InterventionZoneEditor({
               onClick={() => handlePreset(preset)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 clampedValue === preset
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-primary-500 text-white'
+                  : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
               }`}
             >
               {preset} km

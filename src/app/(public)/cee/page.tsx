@@ -139,7 +139,7 @@ export default async function CeeHubPage() {
       <Breadcrumb items={[{ label: 'Accueil', href: '/' }, { label: 'Primes CEE' }]} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
@@ -184,20 +184,20 @@ export default async function CeeHubPage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
               {totalOps > 0 ? totalOps : 19}
             </div>
-            <div className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               Op&eacute;rations standardis&eacute;es couvertes, secteur r&eacute;sidentiel. Source
               DGEC &mdash; arr&ecirc;t&eacute;s officiels publi&eacute;s au Journal Officiel.
             </div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">1050</div>
-            <div className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               TWhc/an d&rsquo;obligation annuelle sur la p&eacute;riode P6 (2026-2030), dont 280
               TWhc r&eacute;serv&eacute;s au segment pr&eacute;carit&eacute;
               &eacute;nerg&eacute;tique.
@@ -205,7 +205,7 @@ export default async function CeeHubPage() {
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">5</div>
-            <div className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               D&eacute;l&eacute;gataires obligor majeurs : Effy, Sonergia, TotalEnergies, EDF,
               Engie.
             </div>
@@ -222,8 +222,10 @@ export default async function CeeHubPage() {
               aria-hidden="true"
             />
             <div>
-              <div className="font-semibold text-slate-900">Cumul MaPrimeR&eacute;nov&rsquo;</div>
-              <div className="text-sm text-slate-600">
+              <div className="font-semibold text-charcoal-900">
+                Cumul MaPrimeR&eacute;nov&rsquo;
+              </div>
+              <div className="text-sm text-charcoal-600">
                 La prime CEE se cumule avec l&rsquo;aide Anah sans plafond sp&eacute;cifique.
               </div>
             </div>
@@ -231,8 +233,8 @@ export default async function CeeHubPage() {
           <div className="flex items-start gap-3">
             <Percent className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <div>
-              <div className="font-semibold text-slate-900">TVA &agrave; 5,5 %</div>
-              <div className="text-sm text-slate-600">
+              <div className="font-semibold text-charcoal-900">TVA &agrave; 5,5 %</div>
+              <div className="text-sm text-charcoal-600">
                 Taux r&eacute;duit automatique sur main-d&rsquo;&oelig;uvre et mat&eacute;riaux
                 &eacute;nerg&eacute;tiques.
               </div>
@@ -244,10 +246,10 @@ export default async function CeeHubPage() {
               aria-hidden="true"
             />
             <div>
-              <div className="font-semibold text-slate-900">
+              <div className="font-semibold text-charcoal-900">
                 Artisans RGE v&eacute;rifi&eacute;s
               </div>
-              <div className="text-sm text-slate-600">
+              <div className="text-sm text-charcoal-600">
                 Synchronisation hebdomadaire du r&eacute;f&eacute;rentiel ADEME France
                 R&eacute;nov&rsquo;.
               </div>
@@ -258,10 +260,10 @@ export default async function CeeHubPage() {
 
       {/* Catalogue par domaine */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
           Les 19 op&eacute;rations CEE r&eacute;sidentielles 2026
         </h2>
-        <p className="text-slate-600 max-w-3xl mb-10 leading-relaxed">
+        <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
           Chaque fiche d&rsquo;op&eacute;ration standardis&eacute;e est identifi&eacute;e par un
           code officiel (ex. BAR-EN-101) qui en d&eacute;finit les crit&egrave;res techniques.
           Cliquez sur une op&eacute;ration pour acc&eacute;der aux conditions
@@ -281,10 +283,10 @@ export default async function CeeHubPage() {
                     <Icon className="w-5 h-5 text-emerald-700" />
                   </div>
                   <div>
-                    <h3 className="font-heading text-xl md:text-2xl font-bold text-slate-900">
+                    <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900">
                       {info.label}
                     </h3>
-                    <p className="text-sm text-slate-600 mt-1">{info.tagline}</p>
+                    <p className="text-sm text-charcoal-600 mt-1">{info.tagline}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -292,10 +294,10 @@ export default async function CeeHubPage() {
                     <Link
                       key={op.code}
                       href={`/cee/${op.code}`}
-                      className="group block p-5 bg-white rounded-xl border border-slate-200 hover:border-emerald-400 hover:shadow-md transition"
+                      className="group block p-5 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-md transition"
                     >
                       <div className="text-xs font-semibold text-emerald-700">{op.code}</div>
-                      <div className="font-bold text-slate-900 mt-1 group-hover:text-emerald-700 transition">
+                      <div className="font-bold text-charcoal-900 mt-1 group-hover:text-emerald-700 transition">
                         {op.nom}
                       </div>
                       {op.coup_de_pouce && (
@@ -316,9 +318,9 @@ export default async function CeeHubPage() {
       </section>
 
       {/* \u00c9tapes */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-10">
+          <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
             Comment obtenir une prime CEE&nbsp;?
           </h2>
           <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -344,12 +346,12 @@ export default async function CeeHubPage() {
                 text: 'Apr\u00e8s les travaux, r\u00e9unissez factures, photos g\u00e9otagg\u00e9es et justificatifs puis d\u00e9posez le dossier aupr\u00e8s du d\u00e9l\u00e9gataire. Versement 4 \u00e0 12 semaines.',
               },
             ].map((step) => (
-              <li key={step.n} className="bg-white rounded-xl border border-slate-200 p-5">
+              <li key={step.n} className="bg-white rounded-xl border border-charcoal-200 p-5">
                 <div className="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center mb-3">
                   {step.n}
                 </div>
-                <div className="font-bold text-slate-900 mb-1">{step.title}</div>
-                <p className="text-sm text-slate-600 leading-relaxed">{step.text}</p>
+                <div className="font-bold text-charcoal-900 mb-1">{step.title}</div>
+                <p className="text-sm text-charcoal-600 leading-relaxed">{step.text}</p>
               </li>
             ))}
           </ol>
@@ -358,34 +360,34 @@ export default async function CeeHubPage() {
 
       {/* FAQ */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-slate-900 mb-10">
+        <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
           Questions fr&eacute;quentes sur les primes CEE
         </h2>
         <div className="space-y-4">
           {FAQ.map((item, idx) => (
             <details
               key={idx}
-              className="group bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 transition p-6"
+              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
             >
-              <summary className="font-heading font-bold text-lg text-slate-900 cursor-pointer list-none flex items-start justify-between gap-4">
+              <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                 <span>{item.question}</span>
                 <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
-              <p className="text-slate-700 mt-4 leading-relaxed">{item.answer}</p>
+              <p className="text-charcoal-700 mt-4 leading-relaxed">{item.answer}</p>
             </details>
           ))}
         </div>
       </section>
 
       {/* Comprendre le circuit CEE — liens vers pages satellites \u00e9ditoriales */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
             Comprendre le circuit CEE
           </h2>
-          <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+          <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
             Trois d&eacute;cisions structurantes avant de lancer un projet&nbsp;: choisir entre
             mandataire et d&eacute;p&ocirc;t direct, profiter des bonifications Coup de pouce 2026,
             et orchestrer le cumul avec MaPrimeR&eacute;nov&rsquo;.
@@ -393,15 +395,15 @@ export default async function CeeHubPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <Link
               href="/cee/coup-de-pouce-2026"
-              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+              className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
             >
               <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
                 <Flame className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
-              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
                 Coup de pouce CEE 2026
               </div>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
                 Bonifications CEE en vigueur&nbsp;: chauffage biomasse, r&eacute;novation globale,
                 pr&eacute;carit&eacute; &eacute;nerg&eacute;tique. Montants major&eacute;s.
               </p>
@@ -412,15 +414,15 @@ export default async function CeeHubPage() {
 
             <Link
               href="/cee/mandataire-vs-direct"
-              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+              className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
             >
               <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
                 <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
-              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
                 Mandataire CEE ou d&eacute;p&ocirc;t direct&nbsp;?
               </div>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
                 Comparatif des deux circuits de valorisation&nbsp;: d&eacute;lais, garanties, cas
                 d&rsquo;usage. Montant de la prime identique.
               </p>
@@ -431,15 +433,15 @@ export default async function CeeHubPage() {
 
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+              className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
             >
               <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
                 <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
-              <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+              <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
                 R&egrave;gles de cumul MaPrimeR&eacute;nov&rsquo; &amp; CEE 2026
               </div>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
                 Plafonds par profil de revenus, ordre des aides, pi&egrave;ges &agrave;
                 &eacute;viter et simulateur des aides cumulables.
               </p>
@@ -454,10 +456,10 @@ export default async function CeeHubPage() {
 
       {/* Ressources compl\u00e9mentaires — cross-linking RGE / Qualifications / ADEME */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-        <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+        <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
           Comprendre l&rsquo;&eacute;cosyst&egrave;me RGE
         </h2>
-        <p className="text-slate-600 max-w-3xl mb-8 leading-relaxed">
+        <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
           Toute prime CEE n&eacute;cessite un artisan RGE qualifi&eacute;. D&eacute;couvrez les
           m&eacute;tiers concern&eacute;s, les qualifications officielles et la source des
           donn&eacute;es que nous v&eacute;rifions.
@@ -465,15 +467,15 @@ export default async function CeeHubPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <Link
             href="/rge"
-            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
           >
             <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
               <ShieldCheck className="w-6 h-6 text-emerald-700" aria-hidden="true" />
             </div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+            <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
               Annuaire artisans RGE
             </div>
-            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               14 m&eacute;tiers &eacute;nerg&eacute;tiques (PAC, ITI, PV, po&ecirc;le bois&hellip;)
               et 500+ villes couvertes avec qualifications actives.
             </p>
@@ -484,15 +486,15 @@ export default async function CeeHubPage() {
 
           <Link
             href="/rge/qualifications"
-            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
           >
             <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
               <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
             </div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+            <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
               Qualifications RGE officielles
             </div>
-            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec&nbsp;: ce que couvre chaque
               qualification et comment la v&eacute;rifier.
             </p>
@@ -503,15 +505,15 @@ export default async function CeeHubPage() {
 
           <Link
             href="/ademe"
-            className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+            className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
           >
             <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
               <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
             </div>
-            <div className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition">
+            <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
               Source officielle ADEME
             </div>
-            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+            <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               165&nbsp;000 qualifications synchronis&eacute;es chaque semaine avec France
               R&eacute;nov&rsquo;. M&eacute;thodologie transparente.
             </p>

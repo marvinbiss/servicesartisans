@@ -1,14 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import {
-  X,
-  Image as ImageIcon,
-  Video,
-  Layers,
-  Loader2,
-  AlertCircle,
-} from 'lucide-react'
+import { X, Image as ImageIcon, Video, Layers, Loader2, AlertCircle } from 'lucide-react'
 import Image from 'next/image'
 import { FileDropzone } from '@/components/upload'
 import Button from '@/components/ui/Button'
@@ -23,18 +16,12 @@ interface AddPortfolioModalProps {
   onCreated: (item: PortfolioItem) => void
 }
 
-export default function AddPortfolioModal({
-  item,
-  onClose,
-  onCreated,
-}: AddPortfolioModalProps) {
+export default function AddPortfolioModal({ item, onClose, onCreated }: AddPortfolioModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   useFocusTrap(modalRef, true, onClose)
 
   const isEditing = !!item
-  const [step, setStep] = useState<'type' | 'upload' | 'details'>(
-    isEditing ? 'details' : 'type'
-  )
+  const [step, setStep] = useState<'type' | 'upload' | 'details'>(isEditing ? 'details' : 'type')
   const [mediaType, setMediaType] = useState<MediaType>(item?.media_type || 'image')
   const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -80,7 +67,7 @@ export default function AddPortfolioModal({
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Erreur lors de l\'upload')
+        throw new Error(data.error || "Erreur lors de l'upload")
       }
 
       const data = await response.json()
@@ -100,7 +87,7 @@ export default function AddPortfolioModal({
       }
     } catch (err) {
       logger.error('Upload error', err)
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'upload')
+      setError(err instanceof Error ? err.message : "Erreur lors de l'upload")
     } finally {
       setUploading(false)
     }
@@ -162,19 +149,12 @@ export default function AddPortfolioModal({
     }
   }
 
-  const canProceedToDetails =
-    mediaType === 'before_after'
-      ? beforeFile && afterFile
-      : mainFile
+  const canProceedToDetails = mediaType === 'before_after' ? beforeFile && afterFile : mainFile
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
 
       {/* Modal */}
       <div
@@ -186,12 +166,12 @@ export default function AddPortfolioModal({
       >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between rounded-t-2xl">
-          <h2 id="portfolio-modal-title" className="text-xl font-semibold text-gray-900">
+          <h2 id="portfolio-modal-title" className="text-xl font-semibold text-charcoal-900">
             {isEditing ? 'Modifier' : 'Ajouter une réalisation'}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
+            className="p-2 text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 rounded-lg"
             aria-label="Fermer"
           >
             <X className="w-5 h-5" />
@@ -201,7 +181,10 @@ export default function AddPortfolioModal({
         <div className="p-6">
           {/* Error */}
           {error && (
-            <div role="alert" className="mb-6 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+            <div
+              role="alert"
+              className="mb-6 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700"
+            >
               <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <p>{error}</p>
             </div>
@@ -210,7 +193,7 @@ export default function AddPortfolioModal({
           {/* Step 1: Type selection */}
           {step === 'type' && (
             <div className="space-y-4">
-              <p className="text-gray-600 mb-6">
+              <p className="text-charcoal-600 mb-6">
                 Quel type de contenu souhaitez-vous ajouter ?
               </p>
 
@@ -219,16 +202,14 @@ export default function AddPortfolioModal({
                   setMediaType('image')
                   setStep('upload')
                 }}
-                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                className="w-full flex items-center gap-4 p-4 border-2 border-sand-300 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-colors text-left"
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <ImageIcon className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                  <ImageIcon className="w-6 h-6 text-primary-500" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Image</h3>
-                  <p className="text-sm text-gray-500">
-                    Photo de vos réalisations
-                  </p>
+                  <h3 className="font-semibold text-charcoal-900">Image</h3>
+                  <p className="text-sm text-charcoal-500">Photo de vos réalisations</p>
                 </div>
               </button>
 
@@ -237,16 +218,14 @@ export default function AddPortfolioModal({
                   setMediaType('video')
                   setStep('upload')
                 }}
-                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                className="w-full flex items-center gap-4 p-4 border-2 border-sand-300 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-colors text-left"
               >
                 <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
                   <Video className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Vidéo</h3>
-                  <p className="text-sm text-gray-500">
-                    Présentation vidéo de vos travaux
-                  </p>
+                  <h3 className="font-semibold text-charcoal-900">Vidéo</h3>
+                  <p className="text-sm text-charcoal-500">Présentation vidéo de vos travaux</p>
                 </div>
               </button>
 
@@ -255,14 +234,14 @@ export default function AddPortfolioModal({
                   setMediaType('before_after')
                   setStep('upload')
                 }}
-                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                className="w-full flex items-center gap-4 p-4 border-2 border-sand-300 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-colors text-left"
               >
                 <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
                   <Layers className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Avant / Après</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="font-semibold text-charcoal-900">Avant / Après</h3>
+                  <p className="text-sm text-charcoal-500">
                     Comparez l'avant et l'après de vos travaux
                   </p>
                 </div>
@@ -276,11 +255,11 @@ export default function AddPortfolioModal({
               {mediaType === 'before_after' ? (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-2">
                       Image Avant
                     </label>
                     {beforeFile ? (
-                      <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
+                      <div className="relative aspect-video rounded-xl overflow-hidden bg-sand-100">
                         <Image
                           src={beforeFile.url}
                           alt="Avant"
@@ -291,7 +270,7 @@ export default function AddPortfolioModal({
                         />
                         <button
                           onClick={() => setBeforeFile(null)}
-                          className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-gray-100"
+                          className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-sand-100"
                           aria-label="Supprimer l'image avant"
                         >
                           <X className="w-4 h-4" />
@@ -308,11 +287,11 @@ export default function AddPortfolioModal({
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-2">
                       Image Après
                     </label>
                     {afterFile ? (
-                      <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
+                      <div className="relative aspect-video rounded-xl overflow-hidden bg-sand-100">
                         <Image
                           src={afterFile.url}
                           alt="Après"
@@ -323,7 +302,7 @@ export default function AddPortfolioModal({
                         />
                         <button
                           onClick={() => setAfterFile(null)}
-                          className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-gray-100"
+                          className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-sand-100"
                           aria-label="Supprimer l'image après"
                         >
                           <X className="w-4 h-4" />
@@ -341,17 +320,13 @@ export default function AddPortfolioModal({
                 </>
               ) : (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-2">
                     {mediaType === 'video' ? 'Vidéo' : 'Image'}
                   </label>
                   {mainFile ? (
-                    <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
+                    <div className="relative aspect-video rounded-xl overflow-hidden bg-sand-100">
                       {mediaType === 'video' ? (
-                        <video
-                          src={mainFile.url}
-                          className="w-full h-full object-cover"
-                          controls
-                        />
+                        <video src={mainFile.url} className="w-full h-full object-cover" controls />
                       ) : (
                         <Image
                           src={mainFile.url}
@@ -364,7 +339,7 @@ export default function AddPortfolioModal({
                       )}
                       <button
                         onClick={() => setMainFile(null)}
-                        className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-gray-100"
+                        className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow-sm hover:bg-sand-100"
                         aria-label="Supprimer le fichier"
                       >
                         <X className="w-4 h-4" />
@@ -382,7 +357,7 @@ export default function AddPortfolioModal({
               )}
 
               {uploading && (
-                <div className="flex items-center justify-center gap-2 text-blue-600">
+                <div className="flex items-center justify-center gap-2 text-primary-500">
                   <Loader2 className="w-5 h-5 animate-spin" />
                   <span>Upload en cours...</span>
                 </div>
@@ -408,7 +383,10 @@ export default function AddPortfolioModal({
           {step === 'details' && (
             <div className="space-y-6">
               <div>
-                <label htmlFor="portfolio-title" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="portfolio-title"
+                  className="block text-sm font-medium text-charcoal-700 mb-2"
+                >
                   Titre *
                 </label>
                 <input
@@ -417,13 +395,16 @@ export default function AddPortfolioModal({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Ex: Rénovation salle de bain"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-sand-400 rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                   maxLength={100}
                 />
               </div>
 
               <div>
-                <label htmlFor="portfolio-description" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="portfolio-description"
+                  className="block text-sm font-medium text-charcoal-700 mb-2"
+                >
                   Description
                 </label>
                 <textarea
@@ -432,23 +413,26 @@ export default function AddPortfolioModal({
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Décrivez les travaux réalisés..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                  className="w-full px-4 py-3 border border-sand-400 rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-primary-400 resize-none"
                   maxLength={500}
                 />
-                <p className="text-xs text-gray-500 mt-1 text-right">
+                <p className="text-xs text-charcoal-500 mt-1 text-right">
                   {description.length}/500
                 </p>
               </div>
 
               <div>
-                <label htmlFor="portfolio-category" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="portfolio-category"
+                  className="block text-sm font-medium text-charcoal-700 mb-2"
+                >
                   Catégorie
                 </label>
                 <select
                   id="portfolio-category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-sand-400 rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
                 >
                   <option value="">Sélectionner une catégorie</option>
                   {PORTFOLIO_CATEGORIES.map((cat) => (

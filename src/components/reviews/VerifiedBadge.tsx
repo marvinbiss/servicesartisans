@@ -3,7 +3,13 @@
 import { CheckCircle, Shield, Award, Star, Building2, FileCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-type VerificationType = 'identity' | 'insurance' | 'certification' | 'premium' | 'enterprise' | 'review'
+type VerificationType =
+  | 'identity'
+  | 'insurance'
+  | 'certification'
+  | 'premium'
+  | 'enterprise'
+  | 'review'
 type VerificationLevel = 'none' | 'basic' | 'standard' | 'premium' | 'enterprise'
 
 interface VerifiedBadgeProps {
@@ -43,7 +49,7 @@ const badgeConfig = {
     icon: Building2,
     label: 'Entreprise référencée',
     className: 'verified-badge-enterprise',
-    color: 'text-slate-600',
+    color: 'text-charcoal-600',
   },
   review: {
     icon: CheckCircle,
@@ -72,12 +78,7 @@ export function VerifiedBadge({
 
   return (
     <span
-      className={cn(
-        'verified-badge',
-        config.className,
-        sizeConf.text,
-        className
-      )}
+      className={cn('verified-badge', config.className, sizeConf.text, className)}
       title={config.label}
     >
       <Icon size={sizeConf.icon} className={config.color} />
@@ -93,14 +94,10 @@ interface TrustScoreProps {
   className?: string
 }
 
-export function TrustScore({
-  score,
-  showLabel = true,
-  size = 'md',
-  className,
-}: TrustScoreProps) {
+export function TrustScore({ score, showLabel = true, size = 'md', className }: TrustScoreProps) {
   const getScoreConfig = (score: number) => {
-    if (score >= 80) return { label: 'Excellent', className: 'trust-score-excellent', color: 'bg-green-500' }
+    if (score >= 80)
+      return { label: 'Excellent', className: 'trust-score-excellent', color: 'bg-green-500' }
     if (score >= 60) return { label: 'Bon', className: 'trust-score-good', color: 'bg-blue-500' }
     if (score >= 40) return { label: 'Moyen', className: 'trust-score-fair', color: 'bg-amber-500' }
     return { label: 'Faible', className: 'trust-score-poor', color: 'bg-red-500' }
@@ -112,7 +109,7 @@ export function TrustScore({
   return (
     <div className={cn('trust-score', config.className, className)}>
       <div className="flex items-center gap-1">
-        <div className={cn('h-2 w-8 rounded-full bg-gray-200 overflow-hidden')}>
+        <div className={cn('h-2 w-8 rounded-full bg-sand-300 overflow-hidden')}>
           <div
             className={cn('h-full rounded-full transition-all', config.color)}
             style={{ width: `${score}%` }}
@@ -135,11 +132,31 @@ interface VerificationLevelBadgeProps {
 }
 
 const levelConfig = {
-  none: { label: 'Non référencé', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
-  basic: { label: 'Vérifié', className: 'bg-blue-100 text-blue-700 border-blue-200', icon: CheckCircle },
-  standard: { label: 'Référencé+', className: 'bg-green-100 text-green-700 border-green-200', icon: Shield },
-  premium: { label: 'Premium', className: 'bg-amber-100 text-amber-700 border-amber-200', icon: Star },
-  enterprise: { label: 'Entreprise', className: 'bg-slate-100 text-slate-700 border-slate-200', icon: Building2 },
+  none: {
+    label: 'Non référencé',
+    className: 'bg-sand-100 text-charcoal-600 border-sand-300',
+    icon: null,
+  },
+  basic: {
+    label: 'Vérifié',
+    className: 'bg-blue-100 text-blue-700 border-blue-200',
+    icon: CheckCircle,
+  },
+  standard: {
+    label: 'Référencé+',
+    className: 'bg-green-100 text-green-700 border-green-200',
+    icon: Shield,
+  },
+  premium: {
+    label: 'Premium',
+    className: 'bg-amber-100 text-amber-700 border-amber-200',
+    icon: Star,
+  },
+  enterprise: {
+    label: 'Entreprise',
+    className: 'bg-sand-200 text-charcoal-700 border-charcoal-200',
+    icon: Building2,
+  },
 }
 
 export function VerificationLevelBadge({
@@ -208,14 +225,14 @@ const kycStatusConfig = {
   verified: { label: 'Vérifié', className: 'kyc-status-verified', icon: CheckCircle },
   pending: { label: 'En cours', className: 'kyc-status-pending', icon: null },
   rejected: { label: 'Rejeté', className: 'kyc-status-rejected', icon: null },
-  not_started: { label: 'Non soumis', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
+  not_started: {
+    label: 'Non soumis',
+    className: 'bg-sand-100 text-charcoal-600 border-sand-300',
+    icon: null,
+  },
 }
 
-export function KYCStatusBadge({
-  status,
-  size = 'md',
-  className,
-}: KYCStatusBadgeProps) {
+export function KYCStatusBadge({ status, size = 'md', className }: KYCStatusBadgeProps) {
   const config = kycStatusConfig[status]
   const sizeConf = sizeConfig[size]
   const Icon = config.icon
@@ -236,26 +253,29 @@ export function KYCStatusBadge({
 }
 
 interface EscrowStatusBadgeProps {
-  status: 'created' | 'funded' | 'in_progress' | 'work_completed' | 'released' | 'disputed' | 'refunded'
+  status:
+    | 'created'
+    | 'funded'
+    | 'in_progress'
+    | 'work_completed'
+    | 'released'
+    | 'disputed'
+    | 'refunded'
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
 
 const escrowStatusConfig = {
-  created: { label: 'Créé', className: 'bg-gray-100 text-gray-700' },
+  created: { label: 'Créé', className: 'bg-sand-100 text-charcoal-700' },
   funded: { label: 'Financé', className: 'escrow-funded' },
   in_progress: { label: 'En cours', className: 'escrow-in-progress' },
-  work_completed: { label: 'Travaux terminés', className: 'bg-blue-100 text-blue-700' },
+  work_completed: { label: 'Travaux terminés', className: 'bg-primary-100 text-primary-600' },
   released: { label: 'Libéré', className: 'escrow-completed' },
   disputed: { label: 'Litige', className: 'escrow-disputed' },
   refunded: { label: 'Remboursé', className: 'bg-purple-100 text-purple-700' },
 }
 
-export function EscrowStatusBadge({
-  status,
-  size = 'md',
-  className,
-}: EscrowStatusBadgeProps) {
+export function EscrowStatusBadge({ status, size = 'md', className }: EscrowStatusBadgeProps) {
   const config = escrowStatusConfig[status]
   const sizeConf = sizeConfig[size]
 
@@ -307,9 +327,7 @@ export function ArtisanVerificationSummary({
     <div className={cn('space-y-2', className)}>
       <div className="flex items-center gap-2 flex-wrap">
         <VerificationLevelBadge level={level} size="sm" />
-        {trustScore !== undefined && (
-          <TrustScore score={trustScore} size="sm" />
-        )}
+        {trustScore !== undefined && <TrustScore score={trustScore} size="sm" />}
       </div>
       <div className="flex items-center gap-2 flex-wrap">
         {identity && <VerifiedBadge type="identity" size="sm" />}

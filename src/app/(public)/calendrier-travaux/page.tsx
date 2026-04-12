@@ -41,7 +41,10 @@ export const revalidate = false
 
 const breadcrumbItems = [{ label: 'Calendrier des travaux' }]
 
-const seasonInfo: Record<string, { icon: typeof Sun; color: string; label: string; months: string[] }> = {
+const seasonInfo: Record<
+  string,
+  { icon: typeof Sun; color: string; label: string; months: string[] }
+> = {
   hiver: {
     icon: Snowflake,
     color: 'blue',
@@ -68,12 +71,15 @@ const seasonInfo: Record<string, { icon: typeof Sun; color: string; label: strin
   },
 }
 
-const monthColors: Record<string, { gradient: string; badge: string; badgeText: string; accent: string }> = {
+const monthColors: Record<
+  string,
+  { gradient: string; badge: string; badgeText: string; accent: string }
+> = {
   hiver: {
-    gradient: 'from-blue-50 to-blue-100/50',
-    badge: 'bg-blue-100',
-    badgeText: 'text-blue-700',
-    accent: 'border-blue-200',
+    gradient: 'from-primary-50 to-primary-100/50',
+    badge: 'bg-primary-100',
+    badgeText: 'text-primary-600',
+    accent: 'border-primary-200',
   },
   printemps: {
     gradient: 'from-green-50 to-green-100/50',
@@ -130,10 +136,10 @@ export default function CalendrierTravauxPage() {
             <Calendar className="w-4 h-4" />
             Guide saisonnier
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 font-heading leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             {'Calendrier des travaux : quand faire quoi ?'}
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               'Chaque saison a ses travaux. Ce guide mois par mois vous aide à planifier vos travaux au bon moment pour un résultat optimal et des économies réelles.'
             }
@@ -149,7 +155,7 @@ export default function CalendrierTravauxPage() {
                 <a
                   key={key}
                   href={`#${key}`}
-                  className={`flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-all group`}
+                  className={`flex items-center gap-3 bg-white rounded-xl shadow-sm border border-sand-200 p-4 hover:shadow-md transition-all group`}
                 >
                   <div
                     className={`w-10 h-10 bg-${info.color}-100 rounded-lg flex items-center justify-center`}
@@ -157,10 +163,10 @@ export default function CalendrierTravauxPage() {
                     <Icon className={`w-5 h-5 text-${info.color}-600`} />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+                    <div className="font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">
                       {info.label}
                     </div>
-                    <div className="text-xs text-gray-500">{info.months.join(', ')}</div>
+                    <div className="text-xs text-charcoal-500">{info.months.join(', ')}</div>
                   </div>
                 </a>
               )
@@ -170,8 +176,8 @@ export default function CalendrierTravauxPage() {
 
         {/* Month-by-month quick jump */}
         <section className="max-w-6xl mx-auto px-4 pb-8">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-4 md:p-6">
+            <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3 flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               Accès rapide par mois
             </h2>
@@ -180,7 +186,7 @@ export default function CalendrierTravauxPage() {
                 <a
                   key={mois.slug}
                   href={`#mois-${mois.slug}`}
-                  className="flex items-center justify-center bg-gray-50 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                  className="flex items-center justify-center bg-sand-50 rounded-lg px-3 py-2.5 text-sm font-medium text-charcoal-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                 >
                   {mois.mois}
                 </a>
@@ -191,17 +197,23 @@ export default function CalendrierTravauxPage() {
 
         {/* Season sections */}
         {Object.entries(seasonInfo).map(([seasonKey, season]) => {
-          const seasonMonths = calendrierTravaux.filter((m) =>
-            season.months.includes(m.mois)
-          )
+          const seasonMonths = calendrierTravaux.filter((m) => season.months.includes(m.mois))
           // Sort in month order
           const monthOrder = [
-            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
+            'Janvier',
+            'Février',
+            'Mars',
+            'Avril',
+            'Mai',
+            'Juin',
+            'Juillet',
+            'Août',
+            'Septembre',
+            'Octobre',
+            'Novembre',
+            'Décembre',
           ]
-          seasonMonths.sort(
-            (a, b) => monthOrder.indexOf(a.mois) - monthOrder.indexOf(b.mois)
-          )
+          seasonMonths.sort((a, b) => monthOrder.indexOf(a.mois) - monthOrder.indexOf(b.mois))
 
           const SeasonIcon = season.icon
           const colors = monthColors[seasonKey]
@@ -217,12 +229,12 @@ export default function CalendrierTravauxPage() {
                     <SeasonIcon className={`w-7 h-7 ${colors.badgeText}`} />
                   </div>
                   <div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading">
+                    <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading">
                       {season.label}
                     </h2>
-                    <p className="text-gray-500">{season.months.join(' - ')}</p>
+                    <p className="text-charcoal-500">{season.months.join(' - ')}</p>
                   </div>
-                  <div className="flex-1 h-px bg-gray-200 ml-4" />
+                  <div className="flex-1 h-px bg-sand-300 ml-4" />
                 </div>
               </section>
 
@@ -237,7 +249,7 @@ export default function CalendrierTravauxPage() {
                     className={`bg-gradient-to-br ${colors.gradient} rounded-2xl border ${colors.accent} overflow-hidden`}
                   >
                     {/* Month header */}
-                    <div className="p-6 md:p-8 border-b border-gray-200/50">
+                    <div className="p-6 md:p-8 border-b border-sand-300/50">
                       <div className="flex items-center gap-3 mb-2">
                         <span
                           className={`${colors.badge} ${colors.badgeText} px-3 py-1 rounded-full text-sm font-semibold`}
@@ -248,15 +260,15 @@ export default function CalendrierTravauxPage() {
 
                       {/* Climate note */}
                       <div className="flex items-start gap-2 mt-4 bg-white/70 rounded-lg p-3">
-                        <CloudSun className="w-5 h-5 text-gray-500 mt-0.5 shrink-0" />
-                        <p className="text-sm text-gray-600">{mois.climatNote}</p>
+                        <CloudSun className="w-5 h-5 text-charcoal-500 mt-0.5 shrink-0" />
+                        <p className="text-sm text-charcoal-600">{mois.climatNote}</p>
                       </div>
                     </div>
 
                     <div className="p-6 md:p-8 space-y-8">
                       {/* Travaux recommandés */}
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <h3 className="text-lg font-bold text-charcoal-900 mb-4 flex items-center gap-2">
                           <CheckCircle2 className="w-5 h-5 text-green-600" />
                           Travaux recommandés
                         </h3>
@@ -264,15 +276,15 @@ export default function CalendrierTravauxPage() {
                           {mois.travauxRecommandes.map((travail, idx) => (
                             <div
                               key={idx}
-                              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+                              className="bg-white rounded-xl shadow-sm border border-sand-200 p-5"
                             >
-                              <h4 className="font-bold text-gray-900 mb-2">{travail.titre}</h4>
-                              <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                              <h4 className="font-bold text-charcoal-900 mb-2">{travail.titre}</h4>
+                              <p className="text-sm text-charcoal-600 leading-relaxed mb-3">
                                 {travail.description}
                               </p>
                               <Link
                                 href={`/services/${travail.service}`}
-                                className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-500 hover:text-primary-800 transition-colors"
                               >
                                 Trouver un artisan
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -284,7 +296,7 @@ export default function CalendrierTravauxPage() {
 
                       {/* Travaux à éviter */}
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <h3 className="text-lg font-bold text-charcoal-900 mb-4 flex items-center gap-2">
                           <XCircle className="w-5 h-5 text-red-500" />
                           {'Travaux à éviter ce mois-ci'}
                         </h3>
@@ -293,7 +305,7 @@ export default function CalendrierTravauxPage() {
                             {mois.travauxAEviter.map((item, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start gap-3 text-sm text-gray-700"
+                                className="flex items-start gap-3 text-sm text-charcoal-700"
                               >
                                 <XCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
                                 <span>{item}</span>
@@ -305,12 +317,12 @@ export default function CalendrierTravauxPage() {
 
                       {/* Conseil du mois */}
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <h3 className="text-lg font-bold text-charcoal-900 mb-4 flex items-center gap-2">
                           <Lightbulb className="w-5 h-5 text-amber-500" />
                           Conseil du mois
                         </h3>
                         <div className="bg-amber-50 rounded-xl border border-amber-200 p-5">
-                          <p className="text-sm text-gray-700 leading-relaxed">
+                          <p className="text-sm text-charcoal-700 leading-relaxed">
                             {mois.conseilDuMois}
                           </p>
                         </div>
@@ -325,54 +337,54 @@ export default function CalendrierTravauxPage() {
 
         {/* Cross-links */}
         <section className="max-w-6xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
             Ressources complémentaires
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Link
               href="/glossaire"
-              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:border-blue-300 hover:shadow-md transition-all group"
+              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-sand-200 p-5 hover:border-primary-300 hover:shadow-md transition-all group"
             >
-              <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                <BookOpen className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center group-hover:bg-primary-100 transition-colors">
+                <BookOpen className="w-5 h-5 text-primary-500" />
               </div>
               <div>
-                <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors text-sm">
+                <span className="font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors text-sm">
                   Glossaire du bâtiment
                 </span>
-                <p className="text-xs text-gray-500">150+ termes expliqués</p>
+                <p className="text-xs text-charcoal-500">150+ termes expliqués</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-blue-600 transition-colors" />
+              <ArrowRight className="w-4 h-4 text-charcoal-400 ml-auto group-hover:text-primary-500 transition-colors" />
             </Link>
             <Link
               href="/guides/artisan-rge"
-              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:border-green-300 hover:shadow-md transition-all group"
+              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-sand-200 p-5 hover:border-green-300 hover:shadow-md transition-all group"
             >
               <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center group-hover:bg-green-100 transition-colors">
                 <BookOpen className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <span className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors text-sm">
+                <span className="font-semibold text-charcoal-900 group-hover:text-green-700 transition-colors text-sm">
                   Guide artisan RGE
                 </span>
-                <p className="text-xs text-gray-500">Certification et aides</p>
+                <p className="text-xs text-charcoal-500">Certification et aides</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-green-600 transition-colors" />
+              <ArrowRight className="w-4 h-4 text-charcoal-400 ml-auto group-hover:text-green-600 transition-colors" />
             </Link>
             <Link
               href="/faq"
-              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:border-amber-300 hover:shadow-md transition-all group"
+              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-sand-200 p-5 hover:border-amber-300 hover:shadow-md transition-all group"
             >
               <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center group-hover:bg-amber-100 transition-colors">
                 <BookOpen className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <span className="font-semibold text-gray-900 group-hover:text-amber-700 transition-colors text-sm">
+                <span className="font-semibold text-charcoal-900 group-hover:text-amber-700 transition-colors text-sm">
                   FAQ
                 </span>
-                <p className="text-xs text-gray-500">Questions fréquentes</p>
+                <p className="text-xs text-charcoal-500">Questions fréquentes</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-amber-600 transition-colors" />
+              <ArrowRight className="w-4 h-4 text-charcoal-400 ml-auto group-hover:text-amber-600 transition-colors" />
             </Link>
           </div>
         </section>

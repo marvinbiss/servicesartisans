@@ -4,7 +4,7 @@ import { relatedServices, getServiceWeight } from '@/lib/constants/navigation'
 import { tradeContent } from '@/lib/data/trade-content'
 
 interface OrphanRescueLinksProps {
-  currentPath: string       // e.g., '/services/plombier'
+  currentPath: string // e.g., '/services/plombier'
   serviceSlug?: string
   villeSlug?: string
 }
@@ -22,10 +22,11 @@ function parsePopulation(pop: string): number {
  */
 function getSmallCitiesInDepartment(departementCode: string, excludeSlug?: string): Ville[] {
   return villes
-    .filter(v =>
-      v.departementCode === departementCode &&
-      parsePopulation(v.population) < 10000 &&
-      v.slug !== excludeSlug
+    .filter(
+      (v) =>
+        v.departementCode === departementCode &&
+        parsePopulation(v.population) < 10000 &&
+        v.slug !== excludeSlug
     )
     .slice(0, 10)
 }
@@ -35,12 +36,18 @@ function getSmallCitiesInDepartment(departementCode: string, excludeSlug?: strin
  */
 function getRareServices(excludeSlug?: string): { slug: string; name: string }[] {
   const popularSlugs = new Set([
-    'plombier', 'electricien', 'serrurier', 'chauffagiste',
-    'peintre-en-batiment', 'menuisier', 'macon', 'jardinier',
+    'plombier',
+    'electricien',
+    'serrurier',
+    'chauffagiste',
+    'peintre-en-batiment',
+    'menuisier',
+    'macon',
+    'jardinier',
   ])
 
   return services
-    .filter(s => !popularSlugs.has(s.slug) && s.slug !== excludeSlug)
+    .filter((s) => !popularSlugs.has(s.slug) && s.slug !== excludeSlug)
     .sort((a, b) => getServiceWeight(b.slug) - getServiceWeight(a.slug))
     .slice(0, 15)
 }
@@ -52,7 +59,7 @@ function extractServiceFromPath(path: string): string | undefined {
   const match = path.match(/^\/(services|tarifs|devis|urgence|avis)\/([^/]+)/)
   if (match) {
     const slug = match[2]
-    if (services.some(s => s.slug === slug)) return slug
+    if (services.some((s) => s.slug === slug)) return slug
   }
   return undefined
 }
@@ -93,11 +100,11 @@ const DISCOVERY_LINKS: RescueLink[] = [
  */
 function getServiceHubRescueLinks(serviceSlug: string): RescueLink[] {
   const links: RescueLink[] = []
-  const service = services.find(s => s.slug === serviceSlug)
+  const service = services.find((s) => s.slug === serviceSlug)
   if (!service) return links
 
   // Find small cities across different departments
-  const departmentCodes = Array.from(new Set(villes.map(v => v.departementCode)))
+  const departmentCodes = Array.from(new Set(villes.map((v) => v.departementCode)))
   const smallCities: Ville[] = []
 
   for (const code of departmentCodes) {
@@ -119,10 +126,10 @@ function getServiceHubRescueLinks(serviceSlug: string): RescueLink[] {
   const related = relatedServices[serviceSlug]
   if (related) {
     const rareRelated = related
-      .filter(slug => !['plombier', 'electricien', 'serrurier', 'chauffagiste'].includes(slug))
+      .filter((slug) => !['plombier', 'electricien', 'serrurier', 'chauffagiste'].includes(slug))
       .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
     for (const relSlug of rareRelated.slice(0, 2)) {
-      const relService = services.find(s => s.slug === relSlug)
+      const relService = services.find((s) => s.slug === relSlug)
       if (relService) {
         links.push({
           href: `/services/${relSlug}`,
@@ -141,10 +148,10 @@ function getServiceHubRescueLinks(serviceSlug: string): RescueLink[] {
  */
 function getCityRescueLinks(villeSlug: string): RescueLink[] {
   const links: RescueLink[] = []
-  const ville = villes.find(v => v.slug === villeSlug)
+  const ville = villes.find((v) => v.slug === villeSlug)
   if (!ville) return links
 
-  const rareServices = getRareServices()  // already sorted by weight
+  const rareServices = getRareServices() // already sorted by weight
   for (const svc of rareServices.slice(0, 6)) {
     // Only link if the service exists in tradeContent (has real content)
     if (tradeContent[svc.slug]) {
@@ -164,8 +171,8 @@ function getCityRescueLinks(villeSlug: string): RescueLink[] {
  */
 function getServiceCityRescueLinks(serviceSlug: string, villeSlug: string): RescueLink[] {
   const links: RescueLink[] = []
-  const service = services.find(s => s.slug === serviceSlug)
-  const ville = villes.find(v => v.slug === villeSlug)
+  const service = services.find((s) => s.slug === serviceSlug)
+  const ville = villes.find((v) => v.slug === villeSlug)
   if (!service || !ville) return links
 
   // Small cities in same department
@@ -182,7 +189,7 @@ function getServiceCityRescueLinks(serviceSlug: string, villeSlug: string): Resc
   if (related) {
     const sortedRelated = [...related].sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
     for (const relSlug of sortedRelated.slice(0, 3)) {
-      const relService = services.find(s => s.slug === relSlug)
+      const relService = services.find((s) => s.slug === relSlug)
       if (relService) {
         links.push({
           href: `/services/${relSlug}/${villeSlug}`,
@@ -224,7 +231,7 @@ export default function OrphanRescueLinks({
   }
 
   // Append discovery links (orphan rescue) if not already present and not self-referencing
-  const existingHrefs = new Set(rescueLinks.map(l => l.href))
+  const existingHrefs = new Set(rescueLinks.map((l) => l.href))
   for (const dl of DISCOVERY_LINKS) {
     if (!existingHrefs.has(dl.href) && dl.href !== currentPath) {
       rescueLinks.push(dl)
@@ -234,10 +241,7 @@ export default function OrphanRescueLinks({
   if (rescueLinks.length === 0) return null
 
   return (
-    <nav
-      aria-label="Voir aussi"
-      className="border-t border-sand-200 mt-8 pt-6"
-    >
+    <nav aria-label="Voir aussi" className="border-t border-sand-200 mt-8 pt-6">
       <p className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">
         Voir aussi
       </p>
@@ -246,7 +250,7 @@ export default function OrphanRescueLinks({
           <li key={link.href}>
             <Link
               href={link.href}
-              className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+              className="text-sm text-primary-500 hover:text-primary-800 hover:underline transition-colors"
               prefetch={false}
             >
               {link.label}

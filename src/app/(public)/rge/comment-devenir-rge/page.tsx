@@ -249,7 +249,7 @@ export default function CommentDevenirRgePage() {
       />
 
       {/* HERO */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 text-white py-16">
+      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-emerald-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <GraduationCap className="w-4 h-4 text-emerald-300" />
@@ -278,11 +278,11 @@ export default function CommentDevenirRgePage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
           <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Qu&rsquo;est-ce que le label RGE concr&egrave;tement&nbsp;?
           </h2>
         </div>
-        <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed">
+        <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
             RGE signifie &laquo;&nbsp;<strong>Reconnu Garant de l&rsquo;Environnement</strong>
             &nbsp;&raquo;. Il ne s&rsquo;agit pas d&rsquo;un label commercial mais d&rsquo;une{' '}
@@ -323,15 +323,15 @@ export default function CommentDevenirRgePage() {
       </section>
 
       {/* ORGANISMES QUALIFICATEURS */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
             <Building2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Les organismes qualificateurs RGE
             </h2>
           </div>
-          <p className="text-slate-600 mb-8 max-w-3xl leading-relaxed">
+          <p className="text-charcoal-600 mb-8 max-w-3xl leading-relaxed">
             Le choix de l&rsquo;organisme d&eacute;pend de votre activit&eacute; principale. Un
             m&ecirc;me artisan peut cumuler plusieurs qualifications aupr&egrave;s de plusieurs
             organismes pour couvrir l&rsquo;ensemble de ses m&eacute;tiers.
@@ -342,15 +342,15 @@ export default function CommentDevenirRgePage() {
               return (
                 <article
                   key={org.name}
-                  className="p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 transition"
+                  className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
                       <Icon className="w-5 h-5 text-emerald-700" aria-hidden="true" />
                     </div>
-                    <h3 className="font-heading font-bold text-lg text-slate-900">{org.name}</h3>
+                    <h3 className="font-heading font-bold text-lg text-charcoal-900">{org.name}</h3>
                   </div>
-                  <p className="text-sm font-semibold text-slate-800 mb-2">{org.scope}</p>
+                  <p className="text-sm font-semibold text-charcoal-800 mb-2">{org.scope}</p>
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {org.badges.map((b) => (
                       <span
@@ -361,9 +361,9 @@ export default function CommentDevenirRgePage() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-sm text-slate-600 mb-3 leading-relaxed">{org.who}</p>
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    <span className="font-semibold text-slate-700">
+                  <p className="text-sm text-charcoal-600 mb-3 leading-relaxed">{org.who}</p>
+                  <p className="text-xs text-charcoal-900 leading-relaxed">
+                    <span className="font-semibold text-charcoal-700">
                       Co&ucirc;ts indicatifs&nbsp;:
                     </span>{' '}
                     {org.cost}
@@ -380,7 +380,7 @@ export default function CommentDevenirRgePage() {
               )
             })}
           </div>
-          <p className="text-xs text-slate-500 mt-6 italic">
+          <p className="text-xs text-charcoal-900 mt-6 italic">
             Les fourchettes de co&ucirc;ts sont indicatives et doivent &ecirc;tre confirm&eacute;es
             directement aupr&egrave;s de chaque organisme, qui publie ses bar&egrave;mes &agrave;
             jour sur son site.
@@ -392,7 +392,7 @@ export default function CommentDevenirRgePage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
           <CheckCircle2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Les 5 &eacute;tapes pour obtenir votre qualification RGE
           </h2>
         </div>
@@ -400,14 +400,16 @@ export default function CommentDevenirRgePage() {
           {STEPS.map((step, i) => (
             <li
               key={step.name}
-              className="p-6 bg-white rounded-2xl border border-slate-200 flex gap-4"
+              className="p-6 bg-white rounded-2xl border border-charcoal-200 flex gap-4"
             >
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-600 text-white font-heading font-extrabold flex items-center justify-center">
                 {i + 1}
               </div>
               <div>
-                <h3 className="font-heading font-bold text-lg text-slate-900 mb-2">{step.name}</h3>
-                <p className="text-slate-700 text-sm leading-relaxed">{step.text}</p>
+                <h3 className="font-heading font-bold text-lg text-charcoal-900 mb-2">
+                  {step.name}
+                </h3>
+                <p className="text-charcoal-700 text-sm leading-relaxed">{step.text}</p>
               </div>
             </li>
           ))}
@@ -415,22 +417,22 @@ export default function CommentDevenirRgePage() {
       </section>
 
       {/* COUTS */}
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
             <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Combien &ccedil;a co&ucirc;te vraiment&nbsp;?
             </h2>
           </div>
-          <p className="text-slate-600 mb-6 max-w-3xl leading-relaxed">
+          <p className="text-charcoal-600 mb-6 max-w-3xl leading-relaxed">
             Les co&ucirc;ts varient selon l&rsquo;organisme, le nombre de qualifications
             demand&eacute;es et la taille de l&rsquo;entreprise. Voici un ordre de grandeur
             bas&eacute; sur les bar&egrave;mes publics des organismes &agrave; date&nbsp;:
           </p>
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
             <table className="w-full text-sm">
-              <thead className="bg-slate-100 text-slate-700">
+              <thead className="bg-sand-200 text-charcoal-700">
                 <tr>
                   <th className="text-left p-4 font-semibold">Poste de co&ucirc;t</th>
                   <th className="text-left p-4 font-semibold">Fourchette indicative</th>
@@ -439,16 +441,16 @@ export default function CommentDevenirRgePage() {
               </thead>
               <tbody>
                 {COSTS.map((row) => (
-                  <tr key={row.item} className="border-t border-slate-100">
-                    <td className="p-4 font-semibold text-slate-900 align-top">{row.item}</td>
+                  <tr key={row.item} className="border-t border-charcoal-100">
+                    <td className="p-4 font-semibold text-charcoal-900 align-top">{row.item}</td>
                     <td className="p-4 text-emerald-700 font-semibold align-top">{row.range}</td>
-                    <td className="p-4 text-slate-600 align-top">{row.note}</td>
+                    <td className="p-4 text-charcoal-600 align-top">{row.note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-slate-500 mt-4 italic">
+          <p className="text-xs text-charcoal-900 mt-4 italic">
             Budget total moyen pour une premi&egrave;re qualification&nbsp;: entre 3&nbsp;000 &euro;
             et 6&nbsp;000 &euro; la premi&egrave;re ann&eacute;e, formation comprise. Certaines
             formations peuvent &ecirc;tre financ&eacute;es par l&rsquo;OPCO Constructys ou le FAFCEA
@@ -461,11 +463,11 @@ export default function CommentDevenirRgePage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
           <TrendingUp className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Combien &ccedil;a rapporte concr&egrave;tement&nbsp;?
           </h2>
         </div>
-        <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed">
+        <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
             La logique est simple et m&eacute;canique&nbsp;: la mention RGE est une{' '}
             <strong>condition r&eacute;glementaire</strong> pour que le client final puisse
@@ -508,18 +510,18 @@ export default function CommentDevenirRgePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
             <AlertTriangle className="w-5 h-5 text-amber-700" aria-hidden="true" />
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Pi&egrave;ges &agrave; &eacute;viter
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {PITFALLS.map((p) => (
               <article key={p.title} className="p-5 bg-white rounded-2xl border border-amber-200">
-                <h3 className="font-heading font-bold text-slate-900 mb-2 flex items-start gap-2">
+                <h3 className="font-heading font-bold text-charcoal-900 mb-2 flex items-start gap-2">
                   <Flame className="w-4 h-4 text-amber-600 flex-shrink-0 mt-1" aria-hidden="true" />
                   <span>{p.title}</span>
                 </h3>
-                <p className="text-sm text-slate-700 leading-relaxed">{p.text}</p>
+                <p className="text-sm text-charcoal-700 leading-relaxed">{p.text}</p>
               </article>
             ))}
           </div>
@@ -528,22 +530,22 @@ export default function CommentDevenirRgePage() {
 
       {/* FAQ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+        <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
           Questions fr&eacute;quentes
         </h2>
         <div className="space-y-4">
           {FAQS.map((faq) => (
             <details
               key={faq.question}
-              className="group p-5 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 transition"
+              className="group p-5 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
             >
-              <summary className="font-heading font-bold text-slate-900 cursor-pointer list-none flex items-start justify-between gap-3">
+              <summary className="font-heading font-bold text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-3">
                 <span>{faq.question}</span>
                 <span className="text-emerald-600 text-xl font-extrabold group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
-              <p className="text-sm text-slate-700 mt-3 leading-relaxed">{faq.answer}</p>
+              <p className="text-sm text-charcoal-700 mt-3 leading-relaxed">{faq.answer}</p>
             </details>
           ))}
         </div>

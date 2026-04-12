@@ -56,15 +56,15 @@ export default function RecentSearches() {
   if (searches.length === 0) return null
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+    <div className="bg-white rounded-2xl border border-sand-300 p-5 shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-gray-400" />
-          <h3 className="text-sm font-semibold text-gray-900">Vos recherches récentes</h3>
+          <Clock className="w-4 h-4 text-charcoal-400" />
+          <h3 className="text-sm font-semibold text-charcoal-900">Vos recherches récentes</h3>
         </div>
         <button
           onClick={clearAll}
-          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-xs text-charcoal-400 hover:text-charcoal-600 transition-colors"
           aria-label="Effacer l'historique"
         >
           <X className="w-4 h-4" />
@@ -75,10 +75,12 @@ export default function RecentSearches() {
           <Link
             key={search.href}
             href={search.href}
-            className="flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50 transition-colors group"
+            className="flex items-center justify-between p-2.5 rounded-xl hover:bg-primary-50 transition-colors group"
           >
-            <span className="text-sm text-gray-700 group-hover:text-blue-700">{search.label}</span>
-            <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors" />
+            <span className="text-sm text-charcoal-700 group-hover:text-primary-600">
+              {search.label}
+            </span>
+            <ArrowRight className="w-4 h-4 text-sand-500 group-hover:text-primary-400 transition-colors" />
           </Link>
         ))}
       </div>

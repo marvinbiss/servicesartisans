@@ -3,14 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
-import {
-  Loader2,
-  AlertCircle,
-  CheckCircle,
-  User,
-  Phone,
-  Shield,
-} from 'lucide-react'
+import { Loader2, AlertCircle, CheckCircle, User, Phone, Shield } from 'lucide-react'
 
 interface SettingsData {
   profile: {
@@ -90,12 +83,12 @@ export default function ArtisanSettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid lg:grid-cols-4 gap-8">
             <ArtisanSidebar activePage="parametres" />
             <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
-              <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+              <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
             </div>
           </div>
         </div>
@@ -104,12 +97,14 @@ export default function ArtisanSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500">
-          <Link href="/espace-artisan" className="hover:text-gray-900">Espace Artisan</Link>
+        <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-charcoal-500">
+          <Link href="/espace-artisan" className="hover:text-charcoal-900">
+            Espace Artisan
+          </Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">Paramètres</span>
+          <span className="text-charcoal-900">Paramètres</span>
         </div>
       </div>
 
@@ -117,103 +112,103 @@ export default function ArtisanSettingsPage() {
         <div className="grid lg:grid-cols-4 gap-8">
           <ArtisanSidebar activePage="parametres" />
           <div className="lg:col-span-3">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Paramètres</h1>
+            <h1 className="text-2xl font-bold text-charcoal-900 mb-8">Paramètres</h1>
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-red-700">{error}</p>
-          </div>
-        )}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-red-500" />
+                <p className="text-red-700">{error}</p>
+              </div>
+            )}
 
-        {success && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-green-500" />
-            <p className="text-green-700">{success}</p>
-          </div>
-        )}
+            {success && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                <p className="text-green-700">{success}</p>
+              </div>
+            )}
 
-        {/* Account status */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gray-400" />
-            Statut du compte
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-gray-500">Email :</span>{' '}
-              <span className="text-gray-900">{data?.profile?.email || '—'}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">Type :</span>{' '}
-              <span className="text-gray-900 capitalize">{data?.profile?.role || '—'}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">Compte actif :</span>{' '}
-              {data?.provider?.is_active ? (
-                <span className="text-green-600 font-medium">Oui</span>
-              ) : (
-                <span className="text-red-600 font-medium">Non</span>
-              )}
-            </div>
-            <div>
-              <span className="text-gray-500">Vérifié :</span>{' '}
-              {data?.provider?.is_verified ? (
-                <span className="text-green-600 font-medium">Oui</span>
-              ) : (
-                <span className="text-orange-600 font-medium">En attente</span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Edit form */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <User className="w-5 h-5 text-gray-400" />
-            Informations
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nom / Raison sociale
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-                <Phone className="w-4 h-4" />
-                Téléphone
-              </label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="06 12 34 56 78"
-              />
+            {/* Account status */}
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 mb-6">
+              <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-charcoal-400" />
+                Statut du compte
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-charcoal-500">Email :</span>{' '}
+                  <span className="text-charcoal-900">{data?.profile?.email || '—'}</span>
+                </div>
+                <div>
+                  <span className="text-charcoal-500">Type :</span>{' '}
+                  <span className="text-charcoal-900 capitalize">{data?.profile?.role || '—'}</span>
+                </div>
+                <div>
+                  <span className="text-charcoal-500">Compte actif :</span>{' '}
+                  {data?.provider?.is_active ? (
+                    <span className="text-green-600 font-medium">Oui</span>
+                  ) : (
+                    <span className="text-red-600 font-medium">Non</span>
+                  )}
+                </div>
+                <div>
+                  <span className="text-charcoal-500">Vérifié :</span>{' '}
+                  {data?.provider?.is_verified ? (
+                    <span className="text-green-600 font-medium">Oui</span>
+                  ) : (
+                    <span className="text-orange-600 font-medium">En attente</span>
+                  )}
+                </div>
+              </div>
             </div>
 
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-            >
-              {saving ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <CheckCircle className="w-4 h-4" />
-              )}
-              Enregistrer
-            </button>
-          </div>
-        </div>
+            {/* Edit form */}
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
+              <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                <User className="w-5 h-5 text-charcoal-400" />
+                Informations
+              </h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                    Nom / Raison sociale
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1 flex items-center gap-1">
+                    <Phone className="w-4 h-4" />
+                    Téléphone
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400"
+                    placeholder="06 12 34 56 78"
+                  />
+                </div>
+
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50"
+                >
+                  {saving ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <CheckCircle className="w-4 h-4" />
+                  )}
+                  Enregistrer
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

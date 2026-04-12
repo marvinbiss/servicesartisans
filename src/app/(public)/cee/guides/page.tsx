@@ -65,7 +65,7 @@ export default function CeeGuidesIndexPage() {
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: 'Guides' }]} />
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white py-16">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <BookOpen className="w-4 h-4 text-emerald-300" />
@@ -93,19 +93,19 @@ export default function CeeGuidesIndexPage() {
               <Link
                 key={code}
                 href={`/cee/${code}/guide`}
-                className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition"
+                className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700">
                     {g.code}
                   </span>
-                  <span className="text-xs text-slate-500">{g.primeClassique}</span>
+                  <span className="text-xs text-charcoal-900">{g.primeClassique}</span>
                 </div>
-                <h2 className="font-heading font-bold text-xl text-slate-900 group-hover:text-emerald-700 transition leading-snug">
+                <h2 className="font-heading font-bold text-xl text-charcoal-900 group-hover:text-emerald-700 transition leading-snug">
                   {g.h1}
                 </h2>
-                <p className="text-sm text-slate-600 mt-3 leading-relaxed">{g.lede}</p>
-                <div className="flex items-center gap-2 mt-4 text-xs text-slate-500">
+                <p className="text-sm text-charcoal-600 mt-3 leading-relaxed">{g.lede}</p>
+                <div className="flex items-center gap-2 mt-4 text-xs text-charcoal-900">
                   <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
                   <span>RGE requis&nbsp;: {g.rgeRequises.join(', ')}</span>
                 </div>
@@ -118,12 +118,12 @@ export default function CeeGuidesIndexPage() {
         </div>
       </section>
 
-      <section className="bg-slate-50 border-y border-slate-100">
+      <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-4">
             Vous cherchez une autre prime CEE&nbsp;?
           </h2>
-          <p className="text-slate-600 max-w-3xl mb-6 leading-relaxed">
+          <p className="text-charcoal-600 max-w-3xl mb-6 leading-relaxed">
             Le catalogue complet recense 19 op&eacute;rations standardis&eacute;es
             r&eacute;sidentielles (enveloppe, chauffage, ECS, ventilation, services). Chaque
             op&eacute;ration dispose de sa fiche d&eacute;taill&eacute;e et de sa liste

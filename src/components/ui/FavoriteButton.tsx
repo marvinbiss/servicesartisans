@@ -52,12 +52,10 @@ export function FavoriteButton({
 
       // Show toast
       setToast(
-        willBeFavorite
-          ? `${providerName} ajouté aux favoris`
-          : `${providerName} retiré des favoris`,
+        willBeFavorite ? `${providerName} ajouté aux favoris` : `${providerName} retiré des favoris`
       )
     },
-    [favorited, toggleFavorite, providerId, providerName],
+    [favorited, toggleFavorite, providerId, providerName]
   )
 
   return (
@@ -66,23 +64,19 @@ export function FavoriteButton({
         type="button"
         onClick={handleClick}
         aria-label={
-          favorited
-            ? `Retirer ${providerName} des favoris`
-            : `Ajouter ${providerName} aux favoris`
+          favorited ? `Retirer ${providerName} des favoris` : `Ajouter ${providerName} aux favoris`
         }
         className={cn(
           btnSize,
           'bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-110',
-          animating && 'animate-[favoriteScale_0.3s_ease-in-out]',
+          animating && 'animate-[favoriteScale_0.3s_ease-in-out]'
         )}
       >
         <Heart
           className={cn(
             iconSize,
             'transition-colors duration-200',
-            favorited
-              ? 'text-red-500 fill-red-500'
-              : 'text-slate-600 hover:text-red-400',
+            favorited ? 'text-red-500 fill-red-500' : 'text-charcoal-600 hover:text-red-400'
           )}
         />
       </button>
@@ -90,7 +84,7 @@ export function FavoriteButton({
       {/* Toast notification */}
       {toast && (
         <div className="absolute top-full right-0 mt-2 z-50 pointer-events-none">
-          <div className="whitespace-nowrap bg-slate-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg animate-[toastFadeIn_0.2s_ease-out]">
+          <div className="whitespace-nowrap bg-charcoal-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg animate-[toastFadeIn_0.2s_ease-out]">
             {toast}
           </div>
         </div>

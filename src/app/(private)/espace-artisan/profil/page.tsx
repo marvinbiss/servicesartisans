@@ -2,7 +2,19 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Loader2, Building2, Phone, MapPin, FileText, Euro, Award, Clock, Settings2, Camera, HelpCircle } from 'lucide-react'
+import {
+  Loader2,
+  Building2,
+  Phone,
+  MapPin,
+  FileText,
+  Euro,
+  Award,
+  Clock,
+  Settings2,
+  Camera,
+  HelpCircle,
+} from 'lucide-react'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { IdentiteSection } from '@/components/artisan-dashboard/profil/IdentiteSection'
 import { ContactSection } from '@/components/artisan-dashboard/profil/ContactSection'
@@ -16,7 +28,17 @@ import { FaqSection } from '@/components/artisan-dashboard/profil/FaqSection'
 import { AvatarSection } from '@/components/artisan-dashboard/profil/AvatarSection'
 import { getArtisanUrl } from '@/lib/utils'
 
-type TabId = 'identite' | 'contact' | 'localisation' | 'presentation' | 'services' | 'qualifications' | 'disponibilite' | 'faq' | 'preferences' | 'avatar'
+type TabId =
+  | 'identite'
+  | 'contact'
+  | 'localisation'
+  | 'presentation'
+  | 'services'
+  | 'qualifications'
+  | 'disponibilite'
+  | 'faq'
+  | 'preferences'
+  | 'avatar'
 
 const TABS = [
   { id: 'identite' as const, label: 'Identité', icon: Building2 },
@@ -34,8 +56,9 @@ const TABS = [
 export default function ProfilArtisanPage() {
   const searchParams = useSearchParams()
   const tabParam = searchParams.get('tab')
-  const validTabs = useMemo(() => TABS.map(t => t.id), [])
-  const initialTab = (tabParam && validTabs.includes(tabParam as TabId)) ? tabParam as TabId : 'identite'
+  const validTabs = useMemo(() => TABS.map((t) => t.id), [])
+  const initialTab =
+    tabParam && validTabs.includes(tabParam as TabId) ? (tabParam as TabId) : 'identite'
 
   const [provider, setProvider] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(true)
@@ -44,19 +67,19 @@ export default function ProfilArtisanPage() {
 
   useEffect(() => {
     fetch('/api/artisan/provider')
-      .then(res => {
+      .then((res) => {
         if (res.status === 401) {
           window.location.href = '/connexion?redirect=/espace-artisan/profil'
           return null
         }
         return res.json()
       })
-      .then(data => {
+      .then((data) => {
         if (!data) return
         if (data.error) throw new Error(data.error)
         setProvider(data.provider)
       })
-      .catch(err => setError(err instanceof Error ? err.message : 'Erreur de chargement'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Erreur de chargement'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -87,12 +110,14 @@ export default function ProfilArtisanPage() {
   }
 
   // Build public URL from provider data using the shared utility
-  const publicUrl = provider ? getArtisanUrl({
-    stable_id: provider.stable_id as string | null,
-    slug: provider.slug as string | null,
-    specialty: provider.specialty as string | null,
-    city: provider.address_city as string | null,
-  }) : null
+  const publicUrl = provider
+    ? getArtisanUrl({
+        stable_id: provider.stable_id as string | null,
+        slug: provider.slug as string | null,
+        specialty: provider.specialty as string | null,
+        city: provider.address_city as string | null,
+      })
+    : null
 
   // Only show the link if we have an identifier
   const showPublicUrl = provider && (provider.stable_id || provider.slug) ? publicUrl : null
@@ -100,10 +125,10 @@ export default function ProfilArtisanPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Chargement du profil...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+          <p className="text-charcoal-600">Chargement du profil...</p>
         </div>
       </div>
     )
@@ -112,11 +137,13 @@ export default function ProfilArtisanPage() {
   // No provider found
   if (error || !provider) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
             <h2 className="font-semibold mb-2">Profil introuvable</h2>
-            <p className="text-sm">{error || 'Aucun profil artisan associé à votre compte. Contactez le support.'}</p>
+            <p className="text-sm">
+              {error || 'Aucun profil artisan associé à votre compte. Contactez le support.'}
+            </p>
           </div>
         </div>
       </div>
@@ -124,12 +151,12 @@ export default function ProfilArtisanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-2xl font-bold">Mon profil public</h1>
-          <p className="text-blue-100">Gérez les informations visibles sur votre page artisan</p>
+          <p className="text-primary-100">Gérez les informations visibles sur votre page artisan</p>
         </div>
       </div>
 
@@ -140,7 +167,12 @@ export default function ProfilArtisanPage() {
             <ArtisanSidebar activePage="profil" publicUrl={showPublicUrl} />
 
             {/* Tab navigation */}
-            <nav className="bg-white rounded-xl shadow-sm p-4 mt-4 space-y-1" aria-label="Sections du profil" role="tablist" aria-orientation="vertical">
+            <nav
+              className="bg-white rounded-xl shadow-sm p-4 mt-4 space-y-1"
+              aria-label="Sections du profil"
+              role="tablist"
+              aria-orientation="vertical"
+            >
               {TABS.map((tab, index) => (
                 <button
                   key={tab.id}
@@ -153,8 +185,8 @@ export default function ProfilArtisanPage() {
                   onKeyDown={(e) => handleTabKeyDown(e, index)}
                   className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
                     activeTab === tab.id
-                      ? 'bg-blue-50 text-blue-600 font-medium'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? 'bg-primary-50 text-primary-500 font-medium'
+                      : 'text-charcoal-600 hover:bg-sand-50'
                   }`}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -166,23 +198,41 @@ export default function ProfilArtisanPage() {
 
           {/* Content */}
           <div id="main-content" className="lg:col-span-3">
-          <main
-            className="w-full"
-            role="tabpanel"
-            id={`tabpanel-${activeTab}`}
-            aria-labelledby={`tab-${activeTab}`}
-          >
-            {activeTab === 'identite' && <IdentiteSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'contact' && <ContactSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'localisation' && <LocalisationSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'presentation' && <PresentationSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'services' && <ServicesTarifsSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'qualifications' && <QualificationsSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'disponibilite' && <DisponibiliteSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'faq' && <FaqSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'preferences' && <PreferencesSection provider={provider} onSaved={handleSaved} />}
-            {activeTab === 'avatar' && <AvatarSection provider={provider} onSaved={handleSaved} />}
-          </main>
+            <main
+              className="w-full"
+              role="tabpanel"
+              id={`tabpanel-${activeTab}`}
+              aria-labelledby={`tab-${activeTab}`}
+            >
+              {activeTab === 'identite' && (
+                <IdentiteSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'contact' && (
+                <ContactSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'localisation' && (
+                <LocalisationSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'presentation' && (
+                <PresentationSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'services' && (
+                <ServicesTarifsSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'qualifications' && (
+                <QualificationsSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'disponibilite' && (
+                <DisponibiliteSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'faq' && <FaqSection provider={provider} onSaved={handleSaved} />}
+              {activeTab === 'preferences' && (
+                <PreferencesSection provider={provider} onSaved={handleSaved} />
+              )}
+              {activeTab === 'avatar' && (
+                <AvatarSection provider={provider} onSaved={handleSaved} />
+              )}
+            </main>
           </div>
         </div>
       </div>

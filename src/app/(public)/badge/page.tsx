@@ -24,8 +24,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Badge Artisan Vérifié — ServicesArtisans',
-    description:
-      'Intégrez le badge Artisan Vérifié sur votre site. Gratuit, sans engagement.',
+    description: 'Intégrez le badge Artisan Vérifié sur votre site. Gratuit, sans engagement.',
   },
 }
 
@@ -170,8 +169,8 @@ export default function BadgePage() {
           <div className="grid sm:grid-cols-3 gap-6">
             {/* WordPress */}
             <div className="bg-white rounded-xl border border-sand-200 p-6 shadow-soft hover:shadow-card-hover transition-shadow">
-              <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                <Monitor className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center mb-4">
+                <Monitor className="w-5 h-5 text-primary-500" />
               </div>
               <h3 className="font-heading font-semibold text-charcoal-900 mb-3">WordPress</h3>
               <ol className="text-charcoal-600 text-sm space-y-2 list-decimal list-inside">

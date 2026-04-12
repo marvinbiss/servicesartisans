@@ -77,10 +77,7 @@ export function ReviewPhotoGallery({
           <button
             key={item.id}
             onClick={() => openLightbox(index)}
-            className={cn(
-              'relative rounded-lg overflow-hidden group',
-              config.thumb
-            )}
+            className={cn('relative rounded-lg overflow-hidden group', config.thumb)}
           >
             {item.type === 'photo' ? (
               <Image
@@ -94,7 +91,7 @@ export function ReviewPhotoGallery({
                 unoptimized
               />
             ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+              <div className="w-full h-full bg-sand-300 flex items-center justify-center">
                 <Play className="w-6 h-6 text-white" />
               </div>
             )}

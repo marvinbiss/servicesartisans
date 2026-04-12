@@ -358,7 +358,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─── RÉNOVATION ÉNERGÉTIQUE — CEE / RGE / ADEME ─────── */}
-      <section className="py-16 bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 text-white border-t border-emerald-900">
+      <section className="py-16 bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white border-t border-emerald-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/20 border border-emerald-400/30 rounded-full text-sm font-medium text-emerald-100 mb-5">

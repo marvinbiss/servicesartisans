@@ -32,7 +32,10 @@ export function ArtisanBreadcrumb({ artisan }: ArtisanBreadcrumbProps) {
   items.push({ label: displayName })
 
   return (
-    <nav className="flex items-center gap-1 text-sm text-gray-500 overflow-x-auto pb-2 scrollbar-hide" aria-label="Fil d'Ariane">
+    <nav
+      className="flex items-center gap-1 text-sm text-charcoal-500 overflow-x-auto pb-2 scrollbar-hide"
+      aria-label="Fil d'Ariane"
+    >
       <ol className="flex items-center gap-1">
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-1 whitespace-nowrap">
@@ -46,7 +49,12 @@ export function ArtisanBreadcrumb({ artisan }: ArtisanBreadcrumbProps) {
                 {item.label}
               </Link>
             ) : (
-              <span className="text-gray-900 font-medium truncate max-w-[200px]" aria-current="page">{item.label}</span>
+              <span
+                className="text-charcoal-900 font-medium truncate max-w-[200px]"
+                aria-current="page"
+              >
+                {item.label}
+              </span>
             )}
           </li>
         ))}

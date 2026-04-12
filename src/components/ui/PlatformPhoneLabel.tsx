@@ -21,7 +21,8 @@ export function PlatformPhoneLabel({
 }) {
   const [showTooltip, setShowTooltip] = useState(false)
 
-  const tooltipText = 'Ce numéro est celui de ServicesArtisans, pas celui de l\'artisan. Nous vous mettons en relation avec le bon professionnel.'
+  const tooltipText =
+    "Ce numéro est celui de ServicesArtisans, pas celui de l'artisan. Nous vous mettons en relation avec le bon professionnel."
 
   if (variant === 'subtle') {
     return (
@@ -31,7 +32,7 @@ export function PlatformPhoneLabel({
         onMouseLeave={() => setShowTooltip(false)}
         onClick={() => setShowTooltip(!showTooltip)}
       >
-        <Info className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+        <Info className="w-3.5 h-3.5 text-charcoal-400 cursor-help" />
         {showTooltip && (
           <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 px-3 py-2 text-xs text-white bg-charcoal-800 rounded-lg shadow-lg z-50 text-center leading-relaxed">
             {tooltipText}
@@ -44,7 +45,7 @@ export function PlatformPhoneLabel({
   if (variant === 'badge') {
     return (
       <span
-        className={`relative inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium ${className}`}
+        className={`relative inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-50 text-primary-600 text-xs font-medium ${className}`}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
         onClick={() => setShowTooltip(!showTooltip)}
@@ -63,7 +64,7 @@ export function PlatformPhoneLabel({
   // variant === 'inline'
   return (
     <span
-      className={`relative inline-flex items-center gap-1 text-xs text-gray-500 ${className}`}
+      className={`relative inline-flex items-center gap-1 text-xs text-charcoal-500 ${className}`}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
       onClick={() => setShowTooltip(!showTooltip)}

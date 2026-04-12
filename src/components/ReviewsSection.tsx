@@ -119,7 +119,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
           <Star
             key={star}
             className={`${sizeClasses[size]} ${
-              star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+              star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-sand-500'
             }`}
           />
         ))}
@@ -130,11 +130,11 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
   if (loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-        <div className="h-24 bg-gray-200 rounded"></div>
+        <div className="h-8 bg-sand-300 rounded w-1/3"></div>
+        <div className="h-24 bg-sand-300 rounded"></div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-32 bg-gray-200 rounded"></div>
+            <div key={i} className="h-32 bg-sand-300 rounded"></div>
           ))}
         </div>
       </div>
@@ -143,10 +143,10 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
 
   if (!stats || stats.total === 0) {
     return (
-      <div className="bg-gray-50 rounded-xl p-8 text-center">
-        <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">Pas encore d'avis</h3>
-        <p className="text-gray-500">
+      <div className="bg-sand-50 rounded-xl p-8 text-center">
+        <MessageCircle className="w-12 h-12 text-sand-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-charcoal-700 mb-2">Pas encore d'avis</h3>
+        <p className="text-charcoal-500">
           Soyez le premier à laisser un avis après votre rendez-vous !
         </p>
       </div>
@@ -160,11 +160,11 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           {/* Average rating */}
           <div className="text-center md:text-left">
-            <div className="text-5xl font-bold text-gray-900">{stats.average}</div>
+            <div className="text-5xl font-bold text-charcoal-900">{stats.average}</div>
             <div className="flex justify-center md:justify-start mt-1">
               {renderStars(Math.round(stats.average), 'lg')}
             </div>
-            <p className="text-sm text-gray-600 mt-1">{stats.total} avis</p>
+            <p className="text-sm text-charcoal-600 mt-1">{stats.total} avis</p>
           </div>
 
           {/* Rating distribution */}
@@ -181,15 +181,15 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                     filterRating === rating ? 'opacity-100' : 'opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <span className="text-sm text-gray-600 w-3">{rating}</span>
+                  <span className="text-sm text-charcoal-600 w-3">{rating}</span>
                   <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                  <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 bg-sand-300 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-yellow-400 transition-all"
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
-                  <span className="text-xs text-gray-500 w-8">{count}</span>
+                  <span className="text-xs text-charcoal-500 w-8">{count}</span>
                 </button>
               )
             })}
@@ -198,8 +198,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
           {/* Recommendation rate */}
           <div className="text-center md:border-l md:pl-6">
             <div className="text-3xl font-bold text-green-600">{stats.recommendRate}%</div>
-            <p className="text-sm text-gray-600">recommandent</p>
-            <p className="text-xs text-gray-500">{artisanName || 'cet artisan'}</p>
+            <p className="text-sm text-charcoal-600">recommandent</p>
+            <p className="text-xs text-charcoal-500">{artisanName || 'cet artisan'}</p>
           </div>
         </div>
       </div>
@@ -207,8 +207,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
       {/* Filters and sort */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-400" />
-          <span className="text-sm text-gray-600">
+          <Filter className="w-4 h-4 text-charcoal-400" />
+          <span className="text-sm text-charcoal-600">
             {filterRating
               ? `${filterRating} étoile${filterRating > 1 ? 's' : ''}`
               : 'Tous les avis'}
@@ -226,7 +226,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+          className="text-sm border border-sand-400 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
         >
           <option value="recent">Plus récents</option>
           <option value="helpful">Plus utiles</option>
@@ -238,7 +238,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
       {/* Reviews list */}
       <div className="space-y-4">
         {displayedReviews.map((review) => (
-          <div key={review.id} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+          <div key={review.id} className="bg-white border border-sand-200 rounded-xl p-5 shadow-sm">
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
@@ -246,8 +246,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                   <User className="w-5 h-5 text-violet-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{review.author_name}</p>
-                  <p className="text-xs text-gray-500">{formatDate(review.created_at)}</p>
+                  <p className="font-medium text-charcoal-900">{review.author_name}</p>
+                  <p className="text-xs text-charcoal-500">{formatDate(review.created_at)}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 flex-wrap">
@@ -270,7 +270,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
             </div>
 
             {/* Comment */}
-            {review.content && <p className="text-gray-700 mb-4">{review.content}</p>}
+            {review.content && <p className="text-charcoal-700 mb-4">{review.content}</p>}
 
             {/* Artisan response */}
             {review.reply && (
@@ -278,9 +278,9 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                 <p className="text-xs font-medium text-violet-700 mb-1">
                   Réponse de {artisanName || "l'artisan"}
                 </p>
-                <p className="text-sm text-gray-700">{review.reply}</p>
+                <p className="text-sm text-charcoal-700">{review.reply}</p>
                 {review.reply_date && (
-                  <p className="text-xs text-gray-500 mt-1">{formatDate(review.reply_date)}</p>
+                  <p className="text-xs text-charcoal-500 mt-1">{formatDate(review.reply_date)}</p>
                 )}
               </div>
             )}
@@ -293,7 +293,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                 className={`flex items-center gap-1.5 text-sm transition ${
                   votedReviews.has(review.id)
                     ? 'text-violet-600'
-                    : 'text-gray-500 hover:text-violet-600'
+                    : 'text-charcoal-500 hover:text-violet-600'
                 }`}
               >
                 <ThumbsUp className="w-4 h-4" />

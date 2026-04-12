@@ -3,7 +3,15 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Star, MapPin, ChevronLeft, ChevronRight, Users, BadgeCheck, CheckCircle } from 'lucide-react'
+import {
+  Star,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+  Users,
+  BadgeCheck,
+  CheckCircle,
+} from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getArtisanUrl } from '@/lib/utils'
 
@@ -25,34 +33,34 @@ interface ArtisanSimilarProps {
   isClaimed?: boolean
 }
 
-export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed = true }: ArtisanSimilarProps) {
+export function ArtisanSimilar({
+  artisan: _artisan,
+  similarArtisans,
+  isClaimed = true,
+}: ArtisanSimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Fallback: show hub link when no similar artisans available
   if (!similarArtisans || similarArtisans.length === 0) {
-    const hubUrl = _artisan.specialty_slug && _artisan.city_slug
-      ? `/services/${_artisan.specialty_slug}/${_artisan.city_slug}`
-      : null
+    const hubUrl =
+      _artisan.specialty_slug && _artisan.city_slug
+        ? `/services/${_artisan.specialty_slug}/${_artisan.city_slug}`
+        : null
     if (!hubUrl) return null
     return (
       <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-4">
+        <h2 className="text-xl font-semibold text-charcoal-900 flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           {!isClaimed
             ? `Professionnels vérifiés disponibles à ${_artisan.city}`
-            : 'Artisans similaires'
-          }
+            : 'Artisans similaires'}
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p className="text-charcoal-600 mb-4">
           {!isClaimed
             ? `Ces artisans ont rejoint ServicesArtisans et acceptent les demandes de devis`
-            : `Découvrez d'autres ${_artisan.specialty?.toLowerCase() || 'artisans'} à ${_artisan.city}`
-          }
+            : `Découvrez d'autres ${_artisan.specialty?.toLowerCase() || 'artisans'} à ${_artisan.city}`}
         </p>
-        <Link
-          href={hubUrl}
-          className="text-clay-400 hover:text-clay-600 font-medium"
-        >
+        <Link href={hubUrl} className="text-clay-400 hover:text-clay-600 font-medium">
           Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
         </Link>
       </div>
@@ -71,9 +79,10 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed =
     }
   }
 
-  const hubUrl = _artisan.specialty_slug && _artisan.city_slug
-    ? `/services/${_artisan.specialty_slug}/${_artisan.city_slug}`
-    : null
+  const hubUrl =
+    _artisan.specialty_slug && _artisan.city_slug
+      ? `/services/${_artisan.specialty_slug}/${_artisan.city_slug}`
+      : null
 
   return (
     <motion.div
@@ -83,12 +92,11 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed =
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-charcoal-900 flex items-center gap-2">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           {!isClaimed
             ? `Professionnels vérifiés disponibles à ${_artisan.city}`
-            : 'Artisans similaires'
-          }
+            : 'Artisans similaires'}
         </h2>
 
         {/* Navigation buttons */}
@@ -97,26 +105,26 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed =
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('left')}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
+            className="p-2 rounded-full bg-sand-100 hover:bg-sand-300 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="Voir les artisans precedents"
           >
-            <ChevronLeft className="w-5 h-5 text-gray-600" aria-hidden="true" />
+            <ChevronLeft className="w-5 h-5 text-charcoal-600" aria-hidden="true" />
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('right')}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
+            className="p-2 rounded-full bg-sand-100 hover:bg-sand-300 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="Voir les artisans suivants"
           >
-            <ChevronRight className="w-5 h-5 text-gray-600" aria-hidden="true" />
+            <ChevronRight className="w-5 h-5 text-charcoal-600" aria-hidden="true" />
           </motion.button>
         </div>
       </div>
 
       {/* Subtitle for unclaimed */}
       {!isClaimed && (
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-charcoal-500 mb-4">
           Ces artisans ont rejoint ServicesArtisans et acceptent les demandes de devis
         </p>
       )}
@@ -140,12 +148,17 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed =
             style={{ scrollSnapAlign: 'start' }}
           >
             <Link
-              href={getArtisanUrl({ stable_id: item.stable_id, slug: item.slug, specialty: item.specialty, city: item.city })}
+              href={getArtisanUrl({
+                stable_id: item.stable_id,
+                slug: item.slug,
+                specialty: item.specialty,
+                city: item.city,
+              })}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
               <motion.article
                 whileHover={{ y: -4, boxShadow: '0 12px 24px -8px rgba(0,0,0,0.15)' }}
-                className="w-72 bg-white rounded-xl border border-gray-100 p-4 transition-all cursor-pointer"
+                className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer"
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
@@ -153,8 +166,8 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed =
                     <span aria-hidden="true">{item.name.charAt(0).toUpperCase()}</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
-                    <p className="text-sm text-gray-500">{item.specialty}</p>
+                    <h3 className="font-semibold text-charcoal-900 truncate">{item.name}</h3>
+                    <p className="text-sm text-charcoal-500">{item.specialty}</p>
                   </div>
                 </div>
 
@@ -176,17 +189,19 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans, isClaimed =
 
                 {/* Info */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1" aria-label={`Note: ${item.rating} sur 5, ${item.reviews} avis`}>
+                  <div
+                    className="flex items-center gap-1"
+                    aria-label={`Note: ${item.rating} sur 5, ${item.reviews} avis`}
+                  >
                     <Star className="w-4 h-4 text-amber-500 fill-amber-500" aria-hidden="true" />
-                    <span className="font-semibold text-gray-900">{item.rating}</span>
-                    <span className="text-gray-500 text-sm">({item.reviews})</span>
+                    <span className="font-semibold text-charcoal-900">{item.rating}</span>
+                    <span className="text-charcoal-500 text-sm">({item.reviews})</span>
                   </div>
-                  <div className="flex items-center gap-1 text-gray-500 text-sm">
+                  <div className="flex items-center gap-1 text-charcoal-500 text-sm">
                     <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
                     <span>{item.city}</span>
                   </div>
                 </div>
-
               </motion.article>
             </Link>
           </motion.div>

@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
-import JsonLd from "@/components/JsonLd"
-import { getFAQSchema } from "@/lib/seo/jsonld"
-import Breadcrumb from "@/components/Breadcrumb"
-import RgeGuideBlock from "@/components/rge/RgeGuideBlock"
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import JsonLd from '@/components/JsonLd'
+import { getFAQSchema } from '@/lib/seo/jsonld'
+import Breadcrumb from '@/components/Breadcrumb'
+import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import {
   FileText,
   AlertTriangle,
@@ -18,30 +18,28 @@ import {
   ShieldCheck,
   Building2,
   Hammer,
-} from "lucide-react"
+} from 'lucide-react'
 
 const PAGE_URL = `${SITE_URL}/guides/devis-travaux`
 
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: "Devis Travaux : Guide Complet pour Bien Comparer (2026)",
+  title: 'Devis Travaux : Guide Complet pour Bien Comparer (2026)',
   description:
-    "Comment obtenir et comparer des devis travaux : mentions obligatoires, nombre de devis à demander, négociation, pièges à éviter et conseils pour choisir le bon artisan.",
+    'Comment obtenir et comparer des devis travaux : mentions obligatoires, nombre de devis à demander, négociation, pièges à éviter et conseils pour choisir le bon artisan.',
   alternates: { canonical: PAGE_URL },
   openGraph: {
-    title: "Devis Travaux : Guide Complet pour Bien Comparer",
-    description:
-      "Guide complet pour obtenir, comparer et négocier vos devis travaux en 2026.",
+    title: 'Devis Travaux : Guide Complet pour Bien Comparer',
+    description: 'Guide complet pour obtenir, comparer et négocier vos devis travaux en 2026.',
     url: PAGE_URL,
-    type: "article",
+    type: 'article',
     siteName: SITE_NAME,
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Devis Travaux : Guide Complet pour Bien Comparer",
-    description:
-      "Guide complet pour obtenir, comparer et négocier vos devis travaux en 2026.",
+    card: 'summary_large_image',
+    title: 'Devis Travaux : Guide Complet pour Bien Comparer',
+    description: 'Guide complet pour obtenir, comparer et négocier vos devis travaux en 2026.',
   },
 }
 
@@ -53,47 +51,47 @@ const mentionsObligatoires = [
       "Nom, adresse, SIRET, numéro de TVA intracommunautaire, assurance décennale (nom de l'assureur et numéro de contrat). Ces informations doivent figurer en en-tête du devis.",
   },
   {
-    name: "Description détaillée des travaux",
+    name: 'Description détaillée des travaux',
     icon: ClipboardList,
     description:
-      "Nature et quantité de chaque prestation, marques et références des matériaux, surfaces ou métrés concernés. Plus le détail est précis, moins il y aura de litiges.",
+      'Nature et quantité de chaque prestation, marques et références des matériaux, surfaces ou métrés concernés. Plus le détail est précis, moins il y aura de litiges.',
   },
   {
-    name: "Prix et conditions",
+    name: 'Prix et conditions',
     icon: Euro,
     description:
-      "Prix unitaire HT et TTC, taux de TVA appliqué (10 % ou 5,5 % selon les travaux), montant total, conditions de paiement (acompte, échéancier), durée de validité du devis.",
+      'Prix unitaire HT et TTC, taux de TVA appliqué (10 % ou 5,5 % selon les travaux), montant total, conditions de paiement (acompte, échéancier), durée de validité du devis.',
   },
   {
-    name: "Délais et garanties",
+    name: 'Délais et garanties',
     icon: Scale,
     description:
-      "Date de début et durée prévisionnelle des travaux, pénalités de retard éventuelles, garanties applicables (décennale, biennale, parfait achèvement).",
+      'Date de début et durée prévisionnelle des travaux, pénalités de retard éventuelles, garanties applicables (décennale, biennale, parfait achèvement).',
   },
 ]
 
 const services = [
-  { label: "Plombier", href: "/services/plombier", icon: Hammer },
-  { label: "Électricien", href: "/services/electricien", icon: Hammer },
-  { label: "Maçon", href: "/services/macon", icon: Building2 },
-  { label: "Peintre", href: "/services/peintre", icon: Hammer },
-  { label: "Menuisier", href: "/services/menuisier", icon: Hammer },
-  { label: "Rénovation intérieure", href: "/services/renovation-interieure", icon: Building2 },
+  { label: 'Plombier', href: '/services/plombier', icon: Hammer },
+  { label: 'Électricien', href: '/services/electricien', icon: Hammer },
+  { label: 'Maçon', href: '/services/macon', icon: Building2 },
+  { label: 'Peintre', href: '/services/peintre', icon: Hammer },
+  { label: 'Menuisier', href: '/services/menuisier', icon: Hammer },
+  { label: 'Rénovation intérieure', href: '/services/renovation-interieure', icon: Building2 },
 ]
 
 const faqItems = [
   {
-    question: "Combien de devis faut-il demander ?",
+    question: 'Combien de devis faut-il demander ?',
     answer:
       "Il est recommandé de demander au minimum 3 devis pour pouvoir comparer efficacement. Pour des travaux importants (rénovation complète, extension), 4 à 5 devis permettent d'avoir une vision plus juste du marché. Attention : au-delà de 5 devis, la comparaison devient difficile et vous risquez de perdre du temps.",
   },
   {
-    question: "Un devis est-il payant ?",
+    question: 'Un devis est-il payant ?',
     answer:
       "Le devis est généralement gratuit pour les travaux courants (plomberie, électricité, peinture). En revanche, un devis peut être facturé si l'artisan doit se déplacer loin, réaliser une étude technique approfondie ou produire des plans. Dans ce cas, le montant doit être annoncé avant le déplacement.",
   },
   {
-    question: "Un devis signé engage-t-il ?",
+    question: 'Un devis signé engage-t-il ?',
     answer:
       "Oui, un devis signé par les deux parties vaut contrat. Il engage l'artisan à réaliser les travaux décrits au prix convenu, et le client à payer ce prix. Vous disposez d'un délai de rétractation de 14 jours uniquement si le devis a été signé à domicile suite à un démarchage.",
   },
@@ -103,43 +101,40 @@ const faqItems = [
       "La durée de validité est fixée par l'artisan sur le document (généralement 1 à 3 mois). Passé ce délai, l'artisan peut modifier ses prix. Si aucune durée n'est mentionnée, le devis reste valable un temps raisonnable (environ 3 mois selon la jurisprudence).",
   },
   {
-    question: "Comment négocier un devis ?",
+    question: 'Comment négocier un devis ?',
     answer:
       "Comparez les devis ligne par ligne, pas uniquement le total. Identifiez les écarts de prix sur les matériaux et la main-d'œuvre. Mentionnez les devis concurrents sans les montrer. Proposez un calendrier flexible (les artisans font de meilleurs prix en période creuse). Ne négociez jamais sur la qualité des matériaux.",
   },
   {
-    question: "Quels sont les pièges à éviter sur un devis ?",
+    question: 'Quels sont les pièges à éviter sur un devis ?',
     answer:
-      "Méfiez-vous des devis trop vagues (\"travaux de plomberie : forfait X €\"), des prix anormalement bas (risque de travaux bâclés ou de suppléments), de l'absence d'assurance décennale, des acomptes supérieurs à 30 % et des artisans qui refusent de fournir un devis écrit.",
+      'Méfiez-vous des devis trop vagues ("travaux de plomberie : forfait X €"), des prix anormalement bas (risque de travaux bâclés ou de suppléments), de l\'absence d\'assurance décennale, des acomptes supérieurs à 30 % et des artisans qui refusent de fournir un devis écrit.',
   },
 ]
 
-const breadcrumbItems = [
-  { label: "Guides", href: "/guides" },
-  { label: "Devis travaux" },
-]
+const breadcrumbItems = [{ label: 'Guides', href: '/guides' }, { label: 'Devis travaux' }]
 
 export default function DevisTravauxPage() {
   const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: "Accueil",
+        name: 'Accueil',
         item: SITE_URL,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
-        name: "Guides",
+        name: 'Guides',
         item: `${SITE_URL}/guides`,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 3,
-        name: "Devis travaux",
+        name: 'Devis travaux',
         item: PAGE_URL,
       },
     ],
@@ -163,31 +158,36 @@ export default function DevisTravauxPage() {
             <FileText className="w-4 h-4" />
             Guide devis travaux
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 font-heading leading-tight">
-            {"Devis travaux : guide complet pour bien comparer"}
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
+            {'Devis travaux : guide complet pour bien comparer'}
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {"Obtenir plusieurs devis est la clé pour faire les bons choix. Découvrez les mentions obligatoires, comment comparer efficacement et les pièges à éviter."}
+          <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
+            {
+              'Obtenir plusieurs devis est la clé pour faire les bons choix. Découvrez les mentions obligatoires, comment comparer efficacement et les pièges à éviter.'
+            }
           </p>
         </section>
 
         {/* Mentions obligatoires */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
             Les mentions obligatoires d{"'"}un devis
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {mentionsObligatoires.map((m) => {
               const Icon = m.icon
               return (
-                <div key={m.name} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div
+                  key={m.name}
+                  className="bg-white rounded-xl shadow-sm border border-sand-200 p-6"
+                >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
                       <Icon className="w-5 h-5 text-amber-700" />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">{m.name}</h3>
+                    <h3 className="text-lg font-bold text-charcoal-900">{m.name}</h3>
                   </div>
-                  <p className="text-gray-600">{m.description}</p>
+                  <p className="text-charcoal-600">{m.description}</p>
                 </div>
               )
             })}
@@ -196,13 +196,15 @@ export default function DevisTravauxPage() {
 
         {/* Combien de devis demander */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
-              {"Combien de devis demander ?"}
+          <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
+              {'Combien de devis demander ?'}
             </h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
+            <div className="prose prose-lg max-w-none text-charcoal-700">
               <p>
-                {"La règle d'or est de demander au minimum 3 devis. Cela vous permet de comparer les prix, les délais et les approches techniques de chaque artisan. Pour des chantiers importants (plus de 10 000 €), demandez 4 à 5 devis."}
+                {
+                  "La règle d'or est de demander au minimum 3 devis. Cela vous permet de comparer les prix, les délais et les approches techniques de chaque artisan. Pour des chantiers importants (plus de 10 000 €), demandez 4 à 5 devis."
+                }
               </p>
               <div className="grid md:grid-cols-3 gap-4 mt-6 not-prose">
                 <div className="bg-green-50 rounded-lg p-4 text-center">
@@ -210,13 +212,13 @@ export default function DevisTravauxPage() {
                   <div className="text-sm text-green-800 font-medium">Minimum recommandé</div>
                   <div className="text-xs text-green-600 mt-1">Travaux courants</div>
                 </div>
-                <div className="bg-blue-50 rounded-lg p-4 text-center">
-                  <div className="text-3xl font-bold text-blue-700 mb-1">4-5</div>
-                  <div className="text-sm text-blue-800 font-medium">Idéal</div>
-                  <div className="text-xs text-blue-600 mt-1">{"Travaux > 10 000 €"}</div>
+                <div className="bg-primary-50 rounded-lg p-4 text-center">
+                  <div className="text-3xl font-bold text-primary-600 mb-1">4-5</div>
+                  <div className="text-sm text-primary-800 font-medium">Idéal</div>
+                  <div className="text-xs text-primary-500 mt-1">{'Travaux > 10 000 €'}</div>
                 </div>
                 <div className="bg-amber-50 rounded-lg p-4 text-center">
-                  <div className="text-3xl font-bold text-amber-700 mb-1">{"≤ 5"}</div>
+                  <div className="text-3xl font-bold text-amber-700 mb-1">{'≤ 5'}</div>
                   <div className="text-sm text-amber-800 font-medium">Maximum utile</div>
                   <div className="text-xs text-amber-600 mt-1">Au-delà, trop complexe</div>
                 </div>
@@ -236,37 +238,49 @@ export default function DevisTravauxPage() {
                 <h3 className="text-lg font-semibold mb-4">Méthode de comparaison</h3>
                 <ol className="space-y-3 text-amber-50">
                   <li className="flex items-start gap-3">
-                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">1</span>
-                    <span>{"Vérifiez que les devis couvrent exactement le même périmètre de travaux"}</span>
+                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">
+                      1
+                    </span>
+                    <span>
+                      {'Vérifiez que les devis couvrent exactement le même périmètre de travaux'}
+                    </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">2</span>
+                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">
+                      2
+                    </span>
                     <span>{"Comparez ligne par ligne : main-d'œuvre, matériaux, fournitures"}</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">3</span>
-                    <span>{"Vérifiez les marques et références des matériaux proposés"}</span>
+                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">
+                      3
+                    </span>
+                    <span>{'Vérifiez les marques et références des matériaux proposés'}</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">4</span>
-                    <span>{"Comparez les délais de réalisation et les conditions de paiement"}</span>
+                    <span className="bg-white/20 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shrink-0">
+                      4
+                    </span>
+                    <span>
+                      {'Comparez les délais de réalisation et les conditions de paiement'}
+                    </span>
                   </li>
                 </ol>
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-4">{"Pièges à éviter"}</h3>
+                <h3 className="text-lg font-semibold mb-4">{'Pièges à éviter'}</h3>
                 <ul className="space-y-3 text-amber-50">
                   <li className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 mt-0.5 shrink-0" />
-                    <span>{"Ne comparez jamais uniquement le prix total"}</span>
+                    <span>{'Ne comparez jamais uniquement le prix total'}</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 mt-0.5 shrink-0" />
-                    <span>{"Méfiez-vous des prix anormalement bas (travaux bâclés)"}</span>
+                    <span>{'Méfiez-vous des prix anormalement bas (travaux bâclés)'}</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 mt-0.5 shrink-0" />
-                    <span>{"Refusez les acomptes supérieurs à 30 %"}</span>
+                    <span>{'Refusez les acomptes supérieurs à 30 %'}</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 mt-0.5 shrink-0" />
@@ -280,35 +294,43 @@ export default function DevisTravauxPage() {
 
         {/* Négociation */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
             Conseils pour négocier un devis
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
                 <Scale className="w-6 h-6 text-green-700" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Jouez sur le calendrier</h3>
-              <p className="text-gray-600">
-                {"Les artisans sont plus enclins à négocier en période creuse (janvier-février, août). Proposer une date flexible peut vous faire économiser 5 à 15 %."}
+              <h3 className="text-lg font-bold text-charcoal-900 mb-2">Jouez sur le calendrier</h3>
+              <p className="text-charcoal-600">
+                {
+                  'Les artisans sont plus enclins à négocier en période creuse (janvier-février, août). Proposer une date flexible peut vous faire économiser 5 à 15 %.'
+                }
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                <ClipboardList className="w-6 h-6 text-blue-700" />
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
+              <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
+                <ClipboardList className="w-6 h-6 text-primary-600" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Groupez les travaux</h3>
-              <p className="text-gray-600">
-                {"Confier plusieurs travaux au même artisan permet souvent de négocier un prix global plus avantageux. La logistique est simplifiée pour lui, ce qui justifie une remise."}
+              <h3 className="text-lg font-bold text-charcoal-900 mb-2">Groupez les travaux</h3>
+              <p className="text-charcoal-600">
+                {
+                  'Confier plusieurs travaux au même artisan permet souvent de négocier un prix global plus avantageux. La logistique est simplifiée pour lui, ce qui justifie une remise.'
+                }
               </p>
             </div>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
               <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4">
                 <ShieldCheck className="w-6 h-6 text-amber-700" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Ne sacrifiez pas la qualité</h3>
-              <p className="text-gray-600">
-                {"Ne négociez jamais sur la qualité des matériaux ou la suppression de prestations essentielles. Économiser 500 € sur l'isolation peut coûter des milliers en chauffage."}
+              <h3 className="text-lg font-bold text-charcoal-900 mb-2">
+                Ne sacrifiez pas la qualité
+              </h3>
+              <p className="text-charcoal-600">
+                {
+                  "Ne négociez jamais sur la qualité des matériaux ou la suppression de prestations essentielles. Économiser 500 € sur l'isolation peut coûter des milliers en chauffage."
+                }
               </p>
             </div>
           </div>
@@ -316,11 +338,13 @@ export default function DevisTravauxPage() {
 
         {/* Services liés */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-4 font-heading">
             Demander des devis par métier
           </h2>
-          <p className="text-gray-600 mb-8 text-lg">
-            {"Trouvez des artisans qualifiés sur notre annuaire et demandez vos devis gratuitement."}
+          <p className="text-charcoal-600 mb-8 text-lg">
+            {
+              'Trouvez des artisans qualifiés sur notre annuaire et demandez vos devis gratuitement.'
+            }
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {services.map((s) => {
@@ -329,15 +353,15 @@ export default function DevisTravauxPage() {
                 <Link
                   key={s.href}
                   href={s.href}
-                  className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:border-amber-300 hover:shadow-md transition-all group"
+                  className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-sand-200 p-5 hover:border-amber-300 hover:shadow-md transition-all group"
                 >
                   <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center group-hover:bg-amber-100 transition-colors">
                     <Icon className="w-5 h-5 text-amber-600" />
                   </div>
-                  <span className="font-semibold text-gray-900 group-hover:text-amber-700 transition-colors">
+                  <span className="font-semibold text-charcoal-900 group-hover:text-amber-700 transition-colors">
                     {s.label}
                   </span>
-                  <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:text-amber-600 transition-colors" />
+                  <ArrowRight className="w-4 h-4 text-charcoal-400 ml-auto group-hover:text-amber-600 transition-colors" />
                 </Link>
               )
             })}
@@ -346,28 +370,49 @@ export default function DevisTravauxPage() {
 
         {/* Guides liés */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 font-heading">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
             Guides complémentaires
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Link href="/guides/garantie-decennale" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-amber-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors mb-1">{"Garantie décennale"}</h3>
-              <p className="text-sm text-gray-500">{"Vérifiez que l'artisan est bien assuré avant de signer."}</p>
+            <Link
+              href="/guides/garantie-decennale"
+              className="group bg-white rounded-xl border border-sand-200 p-5 hover:shadow-md hover:border-amber-200 transition-all"
+            >
+              <h3 className="font-semibold text-charcoal-900 group-hover:text-amber-600 transition-colors mb-1">
+                {'Garantie décennale'}
+              </h3>
+              <p className="text-sm text-charcoal-500">
+                {"Vérifiez que l'artisan est bien assuré avant de signer."}
+              </p>
             </Link>
-            <Link href="/guides/artisan-rge" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-amber-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors mb-1">{"Artisan RGE"}</h3>
-              <p className="text-sm text-gray-500">{"Certification obligatoire pour les aides à la rénovation."}</p>
+            <Link
+              href="/guides/artisan-rge"
+              className="group bg-white rounded-xl border border-sand-200 p-5 hover:shadow-md hover:border-amber-200 transition-all"
+            >
+              <h3 className="font-semibold text-charcoal-900 group-hover:text-amber-600 transition-colors mb-1">
+                {'Artisan RGE'}
+              </h3>
+              <p className="text-sm text-charcoal-500">
+                {'Certification obligatoire pour les aides à la rénovation.'}
+              </p>
             </Link>
-            <Link href="/guides/aides-renovation-2026" className="group bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-amber-200 transition-all">
-              <h3 className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors mb-1">{"Aides rénovation 2026"}</h3>
-              <p className="text-sm text-gray-500">{"Toutes les aides pour réduire le coût de vos travaux."}</p>
+            <Link
+              href="/guides/aides-renovation-2026"
+              className="group bg-white rounded-xl border border-sand-200 p-5 hover:shadow-md hover:border-amber-200 transition-all"
+            >
+              <h3 className="font-semibold text-charcoal-900 group-hover:text-amber-600 transition-colors mb-1">
+                {'Aides rénovation 2026'}
+              </h3>
+              <p className="text-sm text-charcoal-500">
+                {'Toutes les aides pour réduire le coût de vos travaux.'}
+              </p>
             </Link>
           </div>
         </section>
 
         {/* FAQ */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 font-heading flex items-center gap-3">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading flex items-center gap-3">
             <HelpCircle className="w-8 h-8 text-amber-600" />
             Questions fréquentes sur les devis travaux
           </h2>
@@ -375,13 +420,15 @@ export default function DevisTravauxPage() {
             {faqItems.map((item, index) => (
               <details
                 key={index}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 group"
+                className="bg-white rounded-xl shadow-sm border border-sand-200 group"
               >
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-gray-900 hover:text-amber-700 transition-colors">
+                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-charcoal-900 hover:text-amber-700 transition-colors">
                   {item.question}
-                  <span className="ml-4 text-gray-400 group-open:rotate-45 transition-transform text-2xl">+</span>
+                  <span className="ml-4 text-charcoal-400 group-open:rotate-45 transition-transform text-2xl">
+                    +
+                  </span>
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                <div className="px-6 pb-6 text-charcoal-600 leading-relaxed border-t border-sand-100 pt-4">
                   {item.answer}
                 </div>
               </details>
@@ -395,10 +442,12 @@ export default function DevisTravauxPage() {
         <section className="max-w-5xl mx-auto px-4 py-12">
           <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
-              {"Prêt à demander vos devis ?"}
+              {'Prêt à demander vos devis ?'}
             </h2>
             <p className="text-amber-100 text-lg mb-8 max-w-2xl mx-auto">
-              {"Trouvez des artisans qualifiés près de chez vous et comparez gratuitement leurs devis."}
+              {
+                'Trouvez des artisans qualifiés près de chez vous et comparez gratuitement leurs devis.'
+              }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -406,7 +455,7 @@ export default function DevisTravauxPage() {
                 className="inline-flex items-center justify-center gap-2 bg-white text-amber-700 px-8 py-3.5 rounded-xl font-bold hover:bg-amber-50 transition-colors"
               >
                 <Search className="w-5 h-5" />
-                {"Trouver un artisan"}
+                {'Trouver un artisan'}
               </Link>
               <Link
                 href="/devis"

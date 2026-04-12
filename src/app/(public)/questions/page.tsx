@@ -1,12 +1,12 @@
-import Link from "next/link"
-import type { Metadata } from "next"
-import { ArrowRight, Euro, Search, AlertTriangle, FileText, Wrench, HelpCircle } from "lucide-react"
-import Breadcrumb from "@/components/Breadcrumb"
-import JsonLd from "@/components/JsonLd"
-import { getBreadcrumbSchema, getCollectionPageSchema } from "@/lib/seo/jsonld"
-import { SITE_URL } from "@/lib/seo/config"
+import Link from 'next/link'
+import type { Metadata } from 'next'
+import { ArrowRight, Euro, Search, AlertTriangle, FileText, Wrench, HelpCircle } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema, getCollectionPageSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
-import { questions, categoryLabels, type QuestionCategory } from "@/lib/data/questions"
+import { questions, categoryLabels, type QuestionCategory } from '@/lib/data/questions'
 
 // ---------------------------------------------------------------------------
 // Static config
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Questions Travaux et Artisanat — FAQ`,
     description:
-      "Trouvez les réponses à toutes vos questions sur les travaux, les tarifs des artisans, la réglementation et les urgences.",
-    type: "website",
+      'Trouvez les réponses à toutes vos questions sur les travaux, les tarifs des artisans, la réglementation et les urgences.',
+    type: 'website',
     url: `${SITE_URL}/questions`,
   },
 }
@@ -42,33 +42,33 @@ const categoryConfig: Record<
 > = {
   prix: {
     icon: Euro,
-    color: "text-green-600",
-    bgColor: "bg-green-50",
-    borderColor: "border-green-200",
+    color: 'text-green-600',
+    bgColor: 'bg-green-50',
+    borderColor: 'border-green-200',
   },
   choix: {
     icon: Search,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-200",
+    color: 'text-primary-500',
+    bgColor: 'bg-primary-50',
+    borderColor: 'border-primary-200',
   },
   urgence: {
     icon: AlertTriangle,
-    color: "text-red-600",
-    bgColor: "bg-red-50",
-    borderColor: "border-red-200",
+    color: 'text-red-600',
+    bgColor: 'bg-red-50',
+    borderColor: 'border-red-200',
   },
   reglementation: {
     icon: FileText,
-    color: "text-purple-600",
-    bgColor: "bg-purple-50",
-    borderColor: "border-purple-200",
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-50',
+    borderColor: 'border-purple-200',
   },
   diy: {
     icon: Wrench,
-    color: "text-amber-600",
-    bgColor: "bg-amber-50",
-    borderColor: "border-amber-200",
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-50',
+    borderColor: 'border-amber-200',
   },
 }
 
@@ -77,18 +77,18 @@ const categoryConfig: Record<
 // ---------------------------------------------------------------------------
 
 export default function QuestionsHubPage() {
-  const breadcrumbItems = [{ label: "Questions" }]
+  const breadcrumbItems = [{ label: 'Questions' }]
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: "Accueil", url: "/" },
-    { name: "Questions", url: "/questions" },
+    { name: 'Accueil', url: '/' },
+    { name: 'Questions', url: '/questions' },
   ])
 
   const collectionSchema = getCollectionPageSchema({
     name: "Questions fréquentes sur les travaux et l'artisanat",
     description:
-      "Réponses aux questions les plus posées sur les artisans, les tarifs, la réglementation et les travaux.",
-    url: "/questions",
+      'Réponses aux questions les plus posées sur les artisans, les tarifs, la réglementation et les travaux.',
+    url: '/questions',
     itemCount: questions.length,
   })
 
@@ -109,14 +109,14 @@ export default function QuestionsHubPage() {
       <JsonLd data={[breadcrumbSchema, collectionSchema]} />
 
       {/* Breadcrumb */}
-      <div className="bg-gray-50 border-b">
+      <div className="bg-sand-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12 sm:py-16">
+      <section className="bg-gradient-to-br from-primary-500 to-primary-700 text-white py-12 sm:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 mb-6">
             <HelpCircle className="w-8 h-8" />
@@ -124,9 +124,9 @@ export default function QuestionsHubPage() {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading mb-4">
             Questions fréquentes
           </h1>
-          <p className="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
-            Toutes les réponses à vos questions sur les travaux, les tarifs, le
-            choix d'un artisan et la réglementation.
+          <p className="text-lg sm:text-xl text-primary-100 max-w-2xl mx-auto leading-relaxed">
+            Toutes les réponses à vos questions sur les travaux, les tarifs, le choix d'un artisan
+            et la réglementation.
           </p>
         </div>
       </section>
@@ -147,11 +147,11 @@ export default function QuestionsHubPage() {
                   >
                     <Icon className={`w-5 h-5 ${config.color}`} />
                   </div>
-                  <h2 className="text-2xl font-bold font-heading text-gray-900">
+                  <h2 className="text-2xl font-bold font-heading text-charcoal-900">
                     {categoryLabels[category]}
                   </h2>
-                  <span className="text-sm text-gray-400">
-                    {catQuestions.length} question{catQuestions.length > 1 ? "s" : ""}
+                  <span className="text-sm text-charcoal-400">
+                    {catQuestions.length} question{catQuestions.length > 1 ? 's' : ''}
                   </span>
                 </div>
 
@@ -167,10 +167,10 @@ export default function QuestionsHubPage() {
                         className={`w-5 h-5 mt-0.5 shrink-0 ${config.color} group-hover:translate-x-0.5 transition-transform`}
                       />
                       <div>
-                        <p className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors leading-snug">
+                        <p className="font-medium text-charcoal-900 group-hover:text-primary-600 transition-colors leading-snug">
                           {q.question}
                         </p>
-                        <p className="text-sm text-gray-500 mt-1.5 line-clamp-2">
+                        <p className="text-sm text-charcoal-500 mt-1.5 line-clamp-2">
                           {q.shortAnswer}
                         </p>
                       </div>
@@ -184,8 +184,8 @@ export default function QuestionsHubPage() {
 
         {/* Empty state (in case no questions yet) */}
         {groupedQuestions.length === 0 && (
-          <div className="text-center py-20 text-gray-500">
-            <HelpCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <div className="text-center py-20 text-charcoal-500">
+            <HelpCircle className="w-12 h-12 mx-auto mb-4 text-sand-500" />
             <p className="text-lg">Aucune question disponible pour le moment.</p>
           </div>
         )}

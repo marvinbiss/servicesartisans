@@ -26,10 +26,10 @@ export default function PhotoUploadBanner({ photoCount }: PhotoUploadBannerProps
         </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-slate-900 text-base">
+          <h3 className="font-semibold text-charcoal-900 text-base">
             Ajoutez des photos de vos réalisations
           </h3>
-          <p className="text-sm text-slate-600 mt-0.5">
+          <p className="text-sm text-charcoal-600 mt-0.5">
             Les artisans avec des photos reçoivent 3x plus de demandes de devis.
           </p>
         </div>

@@ -143,8 +143,8 @@ export default function CarteAvecListe({
 
   if (!mapReady || loading) {
     return (
-      <div className="h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <div className="h-screen bg-sand-50 flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -204,12 +204,14 @@ export default function CarteAvecListe({
                             <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                             <span className="font-bold">{provider.rating_average.toFixed(1)}</span>
                           </div>
-                          <div className="text-xs text-gray-500">{provider.review_count} avis</div>
+                          <div className="text-xs text-charcoal-500">
+                            {provider.review_count} avis
+                          </div>
                         </div>
                       )}
                   </div>
                   {provider.address_city && (
-                    <p className="text-sm text-gray-600 mb-3">{provider.address_city}</p>
+                    <p className="text-sm text-charcoal-600 mb-3">{provider.address_city}</p>
                   )}
                   <Link
                     href={getArtisanUrl({
@@ -218,7 +220,7 @@ export default function CarteAvecListe({
                       specialty: provider.specialty,
                       city: provider.address_city,
                     })}
-                    className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
+                    className="block w-full py-2 bg-primary-500 text-white text-center rounded-lg text-sm font-semibold hover:bg-primary-600"
                   >
                     Voir le profil
                   </Link>

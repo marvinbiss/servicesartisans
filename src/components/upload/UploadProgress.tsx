@@ -34,16 +34,16 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
 
   const statusConfig = {
     pending: {
-      icon: <Loader2 className="w-4 h-4 animate-spin text-gray-400" />,
+      icon: <Loader2 className="w-4 h-4 animate-spin text-charcoal-400" />,
       text: 'En attente...',
-      color: 'text-gray-500',
-      bgColor: 'bg-gray-100',
+      color: 'text-charcoal-500',
+      bgColor: 'bg-sand-100',
     },
     uploading: {
-      icon: <Loader2 className="w-4 h-4 animate-spin text-blue-500" />,
+      icon: <Loader2 className="w-4 h-4 animate-spin text-primary-400" />,
       text: `${progress}%`,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-500',
+      color: 'text-primary-500',
+      bgColor: 'bg-primary-400',
     },
     processing: {
       icon: <Loader2 className="w-4 h-4 animate-spin text-amber-500" />,
@@ -71,26 +71,26 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
     <div
       className={clsx(
         'flex items-center gap-3 p-3 rounded-xl border',
-        status === 'error' ? 'bg-red-50 border-red-200' : 'bg-white border-gray-200'
+        status === 'error' ? 'bg-red-50 border-red-200' : 'bg-white border-sand-300'
       )}
     >
       {/* File icon */}
       <div
         className={clsx(
           'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0',
-          status === 'error' ? 'bg-red-100' : 'bg-gray-100'
+          status === 'error' ? 'bg-red-100' : 'bg-sand-100'
         )}
       >
         {isVideo ? (
-          <Video className="w-5 h-5 text-gray-500" />
+          <Video className="w-5 h-5 text-charcoal-500" />
         ) : (
-          <ImageIcon className="w-5 h-5 text-gray-500" />
+          <ImageIcon className="w-5 h-5 text-charcoal-500" />
         )}
       </div>
 
       {/* File info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 truncate">{fileName}</p>
+        <p className="text-sm font-medium text-charcoal-900 truncate">{fileName}</p>
         <div className="flex items-center gap-2 mt-1">
           {config.icon}
           <span className={clsx('text-xs', config.color)}>{config.text}</span>
@@ -98,12 +98,9 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
 
         {/* Progress bar */}
         {(status === 'uploading' || status === 'processing') && (
-          <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div className="mt-2 h-1.5 bg-sand-100 rounded-full overflow-hidden">
             <div
-              className={clsx(
-                'h-full rounded-full transition-all duration-300',
-                config.bgColor
-              )}
+              className={clsx('h-full rounded-full transition-all duration-300', config.bgColor)}
               style={{ width: `${status === 'processing' ? 100 : progress}%` }}
             />
           </div>
@@ -115,7 +112,7 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
         <button
           type="button"
           onClick={() => onRemove(fileName)}
-          className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-1.5 text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 rounded-lg transition-colors"
           aria-label="Supprimer"
         >
           <X className="w-4 h-4" />
@@ -147,14 +144,9 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
 
         return (
           <div key={file.url} className="relative group aspect-square">
-            <div className="absolute inset-0 rounded-xl overflow-hidden bg-gray-100">
+            <div className="absolute inset-0 rounded-xl overflow-hidden bg-sand-100">
               {isVideo ? (
-                <video
-                  src={file.url}
-                  className="w-full h-full object-cover"
-                  muted
-                  playsInline
-                />
+                <video src={file.url} className="w-full h-full object-cover" muted playsInline />
               ) : (
                 <Image
                   src={file.thumbnailUrl || file.url}
@@ -175,7 +167,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
               <button
                 type="button"
                 onClick={() => onRemove(file.url)}
-                className="absolute top-2 right-2 p-1.5 bg-white/90 hover:bg-white text-gray-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                className="absolute top-2 right-2 p-1.5 bg-white/90 hover:bg-white text-charcoal-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
                 aria-label="Supprimer"
               >
                 <X className="w-4 h-4" />

@@ -1,17 +1,21 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import type { Metadata } from "next"
-import { CheckCircle, ArrowRight, ArrowLeft, BookOpen, Euro, Calculator } from "lucide-react"
-import Breadcrumb from "@/components/Breadcrumb"
-import JsonLd from "@/components/JsonLd"
-import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/jsonld"
-import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
-import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from "@/lib/data/questions"
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import type { Metadata } from 'next'
+import { CheckCircle, ArrowRight, ArrowLeft, BookOpen, Euro, Calculator } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from '@/lib/data/questions'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
 
 // ---------------------------------------------------------------------------
 // Static params
@@ -28,11 +32,7 @@ export const revalidate = 86400
 // Metadata
 // ---------------------------------------------------------------------------
 
-export function generateMetadata({
-  params,
-}: {
-  params: { slug: string }
-}): Metadata {
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const question = getQuestionBySlug(params.slug)
   if (!question) return {}
 
@@ -46,11 +46,11 @@ export function generateMetadata({
     openGraph: {
       title,
       description,
-      type: "article",
+      type: 'article',
       url: `${SITE_URL}/questions/${question.slug}`,
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
     },
@@ -61,11 +61,7 @@ export function generateMetadata({
 // Page
 // ---------------------------------------------------------------------------
 
-export default function QuestionPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
+export default function QuestionPage({ params }: { params: { slug: string } }) {
   const question = getQuestionBySlug(params.slug)
   if (!question) notFound()
 
@@ -73,38 +69,33 @@ export default function QuestionPage({
     .filter((q) => q.slug !== question.slug)
     .slice(0, 5)
 
-  const breadcrumbItems = [
-    { label: "Questions", href: "/questions" },
-    { label: question.question },
-  ]
+  const breadcrumbItems = [{ label: 'Questions', href: '/questions' }, { label: question.question }]
 
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: "Accueil", url: "/" },
-    { name: "Questions", url: "/questions" },
+    { name: 'Accueil', url: '/' },
+    { name: 'Questions', url: '/questions' },
     { name: question.question, url: `/questions/${question.slug}` },
   ])
 
-  const faqSchema = getFAQSchema([
-    { question: question.question, answer: question.shortAnswer },
-  ])
+  const faqSchema = getFAQSchema([{ question: question.question, answer: question.shortAnswer }])
 
   return (
     <>
       <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
       {/* Breadcrumb */}
-      <div className="bg-gray-50 border-b">
+      <div className="bg-sand-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12 sm:py-16">
+      <section className="bg-gradient-to-br from-primary-500 to-primary-700 text-white py-12 sm:py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/questions"
-            className="inline-flex items-center gap-1.5 text-blue-200 hover:text-white transition-colors text-sm mb-6"
+            className="inline-flex items-center gap-1.5 text-primary-100 hover:text-white transition-colors text-sm mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
             Toutes les questions
@@ -121,27 +112,23 @@ export default function QuestionPage({
           {/* Main content */}
           <article className="flex-1 max-w-3xl">
             {/* Featured snippet box */}
-            <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6 mb-10">
+            <div className="bg-primary-50 border-l-4 border-primary-400 rounded-lg p-6 mb-10">
               <div className="flex items-start gap-3">
-                <CheckCircle className="w-6 h-6 text-blue-600 mt-0.5 shrink-0" />
+                <CheckCircle className="w-6 h-6 text-primary-500 mt-0.5 shrink-0" />
                 <div>
-                  <p className="font-semibold text-blue-900 mb-1">
-                    Réponse rapide
-                  </p>
-                  <p className="text-blue-800 leading-relaxed">
-                    {question.shortAnswer}
-                  </p>
+                  <p className="font-semibold text-primary-800 mb-1">Réponse rapide</p>
+                  <p className="text-primary-800 leading-relaxed">{question.shortAnswer}</p>
                 </div>
               </div>
             </div>
 
             {/* Detailed answer */}
             <div className="prose prose-lg max-w-none">
-              <h2 className="text-2xl font-bold font-heading text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold font-heading text-charcoal-900 mb-6">
                 Réponse détaillée
               </h2>
               {question.detailedAnswer.map((paragraph, index) => (
-                <p key={index} className="text-gray-700 leading-relaxed mb-4">
+                <p key={index} className="text-charcoal-700 leading-relaxed mb-4">
                   {paragraph}
                 </p>
               ))}
@@ -149,50 +136,44 @@ export default function QuestionPage({
 
             {/* Cross-links */}
             <div className="mt-10 pt-8 border-t">
-              <h2 className="text-xl font-bold font-heading text-gray-900 mb-4">
+              <h2 className="text-xl font-bold font-heading text-charcoal-900 mb-4">
                 En savoir plus
               </h2>
               <div className="grid sm:grid-cols-3 gap-4">
                 <Link
                   href={`/services/${question.relatedService}`}
-                  className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
+                  className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:border-primary-300 hover:shadow-md transition-all group"
                 >
-                  <BookOpen className="w-5 h-5 text-blue-600" />
+                  <BookOpen className="w-5 h-5 text-primary-500" />
                   <div>
-                    <p className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
+                    <p className="font-medium text-charcoal-900 group-hover:text-primary-600 transition-colors">
                       Services
                     </p>
-                    <p className="text-sm text-gray-500">
-                      Trouver un professionnel
-                    </p>
+                    <p className="text-sm text-charcoal-500">Trouver un professionnel</p>
                   </div>
                 </Link>
                 <Link
                   href={`/tarifs/${question.relatedService}`}
-                  className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
+                  className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:border-primary-300 hover:shadow-md transition-all group"
                 >
                   <Euro className="w-5 h-5 text-green-600" />
                   <div>
-                    <p className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
+                    <p className="font-medium text-charcoal-900 group-hover:text-primary-600 transition-colors">
                       Tarifs
                     </p>
-                    <p className="text-sm text-gray-500">
-                      Grille de prix détaillée
-                    </p>
+                    <p className="text-sm text-charcoal-500">Grille de prix détaillée</p>
                   </div>
                 </Link>
                 <Link
                   href={`/devis/${question.relatedService}`}
-                  className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
+                  className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:border-primary-300 hover:shadow-md transition-all group"
                 >
                   <Calculator className="w-5 h-5 text-amber-600" />
                   <div>
-                    <p className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
+                    <p className="font-medium text-charcoal-900 group-hover:text-primary-600 transition-colors">
                       Devis gratuit
                     </p>
-                    <p className="text-sm text-gray-500">
-                      Demander une estimation
-                    </p>
+                    <p className="text-sm text-charcoal-500">Demander une estimation</p>
                   </div>
                 </Link>
               </div>
@@ -202,8 +183,8 @@ export default function QuestionPage({
           {/* Sidebar: related questions */}
           {relatedQuestions.length > 0 && (
             <aside className="lg:w-80 shrink-0">
-              <div className="bg-gray-50 rounded-xl p-6 lg:sticky lg:top-24">
-                <h2 className="text-lg font-bold font-heading text-gray-900 mb-4">
+              <div className="bg-sand-50 rounded-xl p-6 lg:sticky lg:top-24">
+                <h2 className="text-lg font-bold font-heading text-charcoal-900 mb-4">
                   Questions similaires
                 </h2>
                 <div className="space-y-3">
@@ -211,10 +192,10 @@ export default function QuestionPage({
                     <Link
                       key={q.slug}
                       href={`/questions/${q.slug}`}
-                      className="flex items-start gap-2 p-3 bg-white rounded-lg border hover:border-blue-300 hover:shadow-sm transition-all group"
+                      className="flex items-start gap-2 p-3 bg-white rounded-lg border hover:border-primary-300 hover:shadow-sm transition-all group"
                     >
-                      <ArrowRight className="w-4 h-4 text-blue-500 mt-1 shrink-0 group-hover:translate-x-0.5 transition-transform" />
-                      <span className="text-sm text-gray-700 group-hover:text-blue-700 transition-colors leading-snug">
+                      <ArrowRight className="w-4 h-4 text-primary-400 mt-1 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                      <span className="text-sm text-charcoal-700 group-hover:text-primary-600 transition-colors leading-snug">
                         {q.question}
                       </span>
                     </Link>
@@ -226,7 +207,13 @@ export default function QuestionPage({
         </div>
       </div>
 
-      <RelatedHubs currentPath="/faq" extraLinks={[{href: "/glossaire", label: "Glossaire"}, {href: "/guides", label: "Guides travaux"}]} />
+      <RelatedHubs
+        currentPath="/faq"
+        extraLinks={[
+          { href: '/glossaire', label: 'Glossaire' },
+          { href: '/guides', label: 'Guides travaux' },
+        ]}
+      />
 
       {question.relatedService && (
         <StickyMobileCTA serviceSlug={question.relatedService} ctaText="Devis gratuit" />

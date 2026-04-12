@@ -102,7 +102,7 @@ export default function DefinirMotDePassePage() {
     }
 
     init()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getPasswordStrength = (pwd: string) => {
@@ -117,7 +117,13 @@ export default function DefinirMotDePassePage() {
 
   const passwordStrength = getPasswordStrength(password)
   const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
-  const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-400', 'bg-green-600']
+  const strengthColors = [
+    'bg-red-500',
+    'bg-orange-500',
+    'bg-yellow-500',
+    'bg-green-400',
+    'bg-green-600',
+  ]
 
   const isValid =
     password.length >= 8 &&
@@ -148,7 +154,9 @@ export default function DefinirMotDePassePage() {
 
       // Determine redirect based on user role
       let redirectPath = '/espace-client'
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser()
       if (currentUser) {
         const { data: profile } = await supabase
           .from('profiles')
@@ -174,7 +182,7 @@ export default function DefinirMotDePassePage() {
 
   if (checking) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
       </div>
     )
@@ -182,12 +190,13 @@ export default function DefinirMotDePassePage() {
 
   if (tokenExpired) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-gray-900 mb-2">Lien expiré ou invalide</h1>
-          <p className="text-gray-600 mb-6">
-            Ce lien a expiré ou a déjà été utilisé. Vous pouvez demander un nouveau lien via la page de réinitialisation de mot de passe.
+          <h1 className="text-xl font-bold text-charcoal-900 mb-2">Lien expiré ou invalide</h1>
+          <p className="text-charcoal-600 mb-6">
+            Ce lien a expiré ou a déjà été utilisé. Vous pouvez demander un nouveau lien via la page
+            de réinitialisation de mot de passe.
           </p>
           <a
             href="/mot-de-passe-oublie"
@@ -195,8 +204,11 @@ export default function DefinirMotDePassePage() {
           >
             Mot de passe oublié
           </a>
-          <p className="mt-4 text-xs text-gray-400">
-            Ou contactez-nous à <a href="mailto:support@servicesartisans.fr" className="text-amber-600 underline">support@servicesartisans.fr</a>
+          <p className="mt-4 text-xs text-charcoal-400">
+            Ou contactez-nous à{' '}
+            <a href="mailto:support@servicesartisans.fr" className="text-amber-600 underline">
+              support@servicesartisans.fr
+            </a>
           </p>
         </div>
       </div>
@@ -205,16 +217,15 @@ export default function DefinirMotDePassePage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
           <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Mot de passe défini !
-          </h1>
-          <p className="text-gray-600 mb-4">
-            Votre compte est prêt. Redirection vers votre espace{userRole === 'artisan' ? ' artisan' : ''}...
+          <h1 className="text-2xl font-bold text-charcoal-900 mb-4">Mot de passe défini !</h1>
+          <p className="text-charcoal-600 mb-4">
+            Votre compte est prêt. Redirection vers votre espace
+            {userRole === 'artisan' ? ' artisan' : ''}...
           </p>
           <Loader2 className="w-6 h-6 text-amber-500 animate-spin mx-auto" />
         </div>
@@ -223,17 +234,16 @@ export default function DefinirMotDePassePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
             <Wrench className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Définissez votre mot de passe
-          </h1>
-          <p className="text-gray-400">
-            Votre fiche artisan a été validée. Choisissez un mot de passe pour accéder à votre espace.
+          <h1 className="text-3xl font-bold text-white mb-2">Définissez votre mot de passe</h1>
+          <p className="text-charcoal-400">
+            Votre fiche artisan a été validée. Choisissez un mot de passe pour accéder à votre
+            espace.
           </p>
         </div>
 
@@ -246,23 +256,23 @@ export default function DefinirMotDePassePage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-sand-500 mb-2">
               Nouveau mot de passe
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full pl-10 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                className="w-full pl-10 pr-12 py-3 bg-charcoal-800 border border-charcoal-700 rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                 placeholder="8 caractères minimum"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-500 hover:text-sand-500"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -273,29 +283,30 @@ export default function DefinirMotDePassePage() {
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
-                      className={`h-1 flex-1 rounded-full ${i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-slate-700'}`}
+                      className={`h-1 flex-1 rounded-full ${i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-charcoal-700'}`}
                     />
                   ))}
                 </div>
-                <p className="text-xs text-gray-500">
-                  Force : {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Très faible'}
+                <p className="text-xs text-charcoal-500">
+                  Force :{' '}
+                  {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Très faible'}
                 </p>
               </div>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-sand-500 mb-2">
               Confirmer le mot de passe
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-charcoal-800 border border-charcoal-700 rounded-xl text-white placeholder-charcoal-500 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                 placeholder="Confirmez votre mot de passe"
               />
             </div>

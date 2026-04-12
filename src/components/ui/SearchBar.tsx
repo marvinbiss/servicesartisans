@@ -21,12 +21,18 @@ async function searchCities(query: string): Promise<CitySuggestion[]> {
     const response = await fetch(url)
     if (!response.ok) return []
     const data = await response.json()
-    return data.features?.map((f: { properties: { city: string; context: string; label: string; postcode: string } }) => ({
-      city: f.properties.city || f.properties.label,
-      context: f.properties.context,
-      label: f.properties.label,
-      postcode: f.properties.postcode
-    })) || []
+    return (
+      data.features?.map(
+        (f: {
+          properties: { city: string; context: string; label: string; postcode: string }
+        }) => ({
+          city: f.properties.city || f.properties.label,
+          context: f.properties.context,
+          label: f.properties.label,
+          postcode: f.properties.postcode,
+        })
+      ) || []
+    )
   } catch {
     return []
   }
@@ -76,9 +82,7 @@ function saveRecentSearch(service: string, location: string) {
   try {
     const searches = getRecentSearches()
     const newSearch = { service, location }
-    const filtered = searches.filter(
-      s => s.service !== service || s.location !== location
-    )
+    const filtered = searches.filter((s) => s.service !== service || s.location !== location)
     const updated = [newSearch, ...filtered].slice(0, 5)
     localStorage.setItem('recentSearches', JSON.stringify(updated))
   } catch {
@@ -97,7 +101,9 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
   const [locationSuggestions, setLocationSuggestions] = useState<CitySuggestion[]>([])
   const [highlightedServiceIndex, setHighlightedServiceIndex] = useState(-1)
   const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1)
-  const [recentSearches, setRecentSearches] = useState<Array<{ service: string; location: string }>>([])
+  const [recentSearches, setRecentSearches] = useState<
+    Array<{ service: string; location: string }>
+  >([])
 
   const serviceInputRef = useRef<HTMLInputElement>(null)
   const locationInputRef = useRef<HTMLInputElement>(null)
@@ -128,10 +134,12 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
     }
 
     const normalized = normalizeText(query)
-    const filtered = allServices.filter(s =>
-      normalizeText(s.name).includes(normalized) ||
-      normalizeText(s.slug).includes(normalized)
-    ).slice(0, 6)
+    const filtered = allServices
+      .filter(
+        (s) =>
+          normalizeText(s.name).includes(normalized) || normalizeText(s.slug).includes(normalized)
+      )
+      .slice(0, 6)
 
     setServiceSuggestions(filtered)
     setHighlightedServiceIndex(-1)
@@ -188,29 +196,32 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
   }, [])
 
   // Submit handler
-  const handleSubmit = useCallback((e?: React.FormEvent) => {
-    e?.preventDefault()
+  const handleSubmit = useCallback(
+    (e?: React.FormEvent) => {
+      e?.preventDefault()
 
-    if (onSearch) {
-      onSearch(query, location)
-    } else {
-      const params = new URLSearchParams()
-      if (query) params.set('q', query)
-      if (location) params.set('location', location)
+      if (onSearch) {
+        onSearch(query, location)
+      } else {
+        const params = new URLSearchParams()
+        if (query) params.set('q', query)
+        if (location) params.set('location', location)
 
-      if (query || location) {
-        saveRecentSearch(query, location)
-        setRecentSearches(getRecentSearches())
-        router.push(`/recherche?${params.toString()}`)
+        if (query || location) {
+          saveRecentSearch(query, location)
+          setRecentSearches(getRecentSearches())
+          router.push(`/recherche?${params.toString()}`)
+        }
       }
-    }
 
-    setShowServiceSuggestions(false)
-    setShowLocationSuggestions(false)
-  }, [query, location, onSearch, router])
+      setShowServiceSuggestions(false)
+      setShowLocationSuggestions(false)
+    },
+    [query, location, onSearch, router]
+  )
 
   // Select a service
-  const selectService = useCallback((service: typeof allServices[0]) => {
+  const selectService = useCallback((service: (typeof allServices)[0]) => {
     setQuery(service.name)
     setShowServiceSuggestions(false)
     setServiceSuggestions([])
@@ -218,32 +229,38 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
   }, [])
 
   // Select a location
-  const selectLocation = useCallback((loc: CitySuggestion) => {
-    setLocation(loc.city)
-    setShowLocationSuggestions(false)
-    setLocationSuggestions([])
-    // Auto-submit after location selection
-    setTimeout(() => {
-      const params = new URLSearchParams()
-      if (query) params.set('q', query)
-      params.set('location', loc.city)
-      saveRecentSearch(query, loc.city)
-      setRecentSearches(getRecentSearches())
-      router.push(`/recherche?${params.toString()}`)
-    }, 100)
-  }, [query, router])
+  const selectLocation = useCallback(
+    (loc: CitySuggestion) => {
+      setLocation(loc.city)
+      setShowLocationSuggestions(false)
+      setLocationSuggestions([])
+      // Auto-submit after location selection
+      setTimeout(() => {
+        const params = new URLSearchParams()
+        if (query) params.set('q', query)
+        params.set('location', loc.city)
+        saveRecentSearch(query, loc.city)
+        setRecentSearches(getRecentSearches())
+        router.push(`/recherche?${params.toString()}`)
+      }, 100)
+    },
+    [query, router]
+  )
 
   // Apply recent search
-  const applyRecentSearch = useCallback((search: { service: string; location: string }) => {
-    setQuery(search.service)
-    setLocation(search.location)
-    const params = new URLSearchParams()
-    if (search.service) params.set('q', search.service)
-    if (search.location) params.set('location', search.location)
-    router.push(`/recherche?${params.toString()}`)
-    setShowServiceSuggestions(false)
-    setShowLocationSuggestions(false)
-  }, [router])
+  const applyRecentSearch = useCallback(
+    (search: { service: string; location: string }) => {
+      setQuery(search.service)
+      setLocation(search.location)
+      const params = new URLSearchParams()
+      if (search.service) params.set('q', search.service)
+      if (search.location) params.set('location', search.location)
+      router.push(`/recherche?${params.toString()}`)
+      setShowServiceSuggestions(false)
+      setShowLocationSuggestions(false)
+    },
+    [router]
+  )
 
   // Keyboard navigation for service input
   const handleServiceKeyDown = (e: React.KeyboardEvent) => {
@@ -252,15 +269,11 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setHighlightedServiceIndex(prev =>
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        )
+        setHighlightedServiceIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0))
         break
       case 'ArrowUp':
         e.preventDefault()
-        setHighlightedServiceIndex(prev =>
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        )
+        setHighlightedServiceIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1))
         break
       case 'Enter':
         e.preventDefault()
@@ -284,13 +297,13 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setHighlightedLocationIndex(prev =>
+        setHighlightedLocationIndex((prev) =>
           prev < locationSuggestions.length - 1 ? prev + 1 : 0
         )
         break
       case 'ArrowUp':
         e.preventDefault()
-        setHighlightedLocationIndex(prev =>
+        setHighlightedLocationIndex((prev) =>
           prev > 0 ? prev - 1 : locationSuggestions.length - 1
         )
         break
@@ -316,14 +329,16 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <form onSubmit={handleSubmit}>
-        <div className={`
+        <div
+          className={`
           ${isHero ? 'bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] p-4 md:p-5 border border-white/20' : ''}
-          ${variant === 'page' ? 'bg-white rounded-2xl shadow-xl p-4 border border-gray-100' : ''}
-        `}>
+          ${variant === 'page' ? 'bg-white rounded-2xl shadow-xl p-4 border border-sand-200' : ''}
+        `}
+        >
           <div className="flex flex-col md:flex-row gap-3">
             {/* Service field */}
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
               <input
                 ref={serviceInputRef}
                 type="text"
@@ -332,7 +347,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 onFocus={() => setShowServiceSuggestions(true)}
                 onKeyDown={handleServiceKeyDown}
                 placeholder="Quel service recherchez-vous ?"
-                className="w-full pl-12 pr-10 py-4 bg-gray-100/80 border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
+                className="w-full pl-12 pr-10 py-4 bg-sand-100/80 border-2 border-transparent rounded-xl text-charcoal-900 placeholder-charcoal-500 focus:ring-4 focus:ring-primary-400/20 focus:border-primary-400 focus:bg-white transition-all"
                 autoComplete="off"
               />
               {query && (
@@ -342,7 +357,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                     setQuery('')
                     serviceInputRef.current?.focus()
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal-400 hover:text-charcoal-600 p-1"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -350,11 +365,11 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
 
               {/* Service suggestions dropdown */}
               {showServiceSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-sand-200 overflow-hidden z-50">
                   {/* Recent searches */}
                   {recentSearches.length > 0 && !query && (
-                    <div className="p-3 border-b border-gray-100">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    <div className="p-3 border-b border-sand-200">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-charcoal-400 uppercase tracking-wide mb-2">
                         <Clock className="w-3 h-3" />
                         Recherches récentes
                       </div>
@@ -363,11 +378,12 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                           key={idx}
                           type="button"
                           onClick={() => applyRecentSearch(search)}
-                          className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
+                          className="w-full flex items-center gap-3 px-3 py-2 hover:bg-primary-50 rounded-xl text-left transition-colors"
                         >
-                          <Clock className="w-4 h-4 text-gray-300" />
-                          <span className="text-sm text-gray-700 truncate">
-                            {search.service || 'Tous'}{search.location && ` · ${search.location}`}
+                          <Clock className="w-4 h-4 text-sand-500" />
+                          <span className="text-sm text-charcoal-700 truncate">
+                            {search.service || 'Tous'}
+                            {search.location && ` · ${search.location}`}
                           </span>
                         </button>
                       ))}
@@ -384,45 +400,55 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                           onClick={() => selectService(service)}
                           className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all ${
                             idx === highlightedServiceIndex
-                              ? 'bg-blue-50 shadow-sm'
-                              : 'hover:bg-gray-50'
+                              ? 'bg-primary-50 shadow-sm'
+                              : 'hover:bg-sand-50'
                           }`}
                         >
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                            idx === highlightedServiceIndex ? 'bg-blue-100' : 'bg-gray-100'
-                          }`}>
-                            <Wrench className={`w-5 h-5 ${idx === highlightedServiceIndex ? 'text-blue-600' : 'text-gray-500'}`} />
+                          <div
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                              idx === highlightedServiceIndex ? 'bg-primary-100' : 'bg-sand-100'
+                            }`}
+                          >
+                            <Wrench
+                              className={`w-5 h-5 ${idx === highlightedServiceIndex ? 'text-primary-500' : 'text-charcoal-500'}`}
+                            />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className={`font-medium truncate ${idx === highlightedServiceIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                            <div
+                              className={`font-medium truncate ${idx === highlightedServiceIndex ? 'text-primary-600' : 'text-charcoal-900'}`}
+                            >
                               {service.name}
                             </div>
                           </div>
                         </button>
                       ))}
                     </div>
-                  ) : !query && (
-                    <div className="p-3">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
-                        <TrendingUp className="w-3 h-3" />
-                        Services populaires
+                  ) : (
+                    !query && (
+                      <div className="p-3">
+                        <div className="flex items-center gap-2 text-xs font-semibold text-charcoal-400 uppercase tracking-wide mb-2">
+                          <TrendingUp className="w-3 h-3" />
+                          Services populaires
+                        </div>
+                        <div className="grid grid-cols-2 gap-1">
+                          {popularServices.map((service) => (
+                            <button
+                              key={service.slug}
+                              type="button"
+                              onClick={() => selectService(service)}
+                              className="flex items-center gap-2 px-3 py-2.5 hover:bg-primary-50 rounded-xl text-left transition-colors"
+                            >
+                              <div className="w-8 h-8 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg flex items-center justify-center">
+                                <Wrench className="w-4 h-4 text-primary-500" />
+                              </div>
+                              <span className="text-sm font-medium text-charcoal-700">
+                                {service.name}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-1">
-                        {popularServices.map((service) => (
-                          <button
-                            key={service.slug}
-                            type="button"
-                            onClick={() => selectService(service)}
-                            className="flex items-center gap-2 px-3 py-2.5 hover:bg-blue-50 rounded-xl text-left transition-colors"
-                          >
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center">
-                              <Wrench className="w-4 h-4 text-blue-600" />
-                            </div>
-                            <span className="text-sm font-medium text-gray-700">{service.name}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                    )
                   )}
                 </div>
               )}
@@ -430,7 +456,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
 
             {/* Location field */}
             <div className="flex-1 relative">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
               <input
                 ref={locationInputRef}
                 type="text"
@@ -442,7 +468,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 onFocus={() => setShowLocationSuggestions(true)}
                 onKeyDown={handleLocationKeyDown}
                 placeholder="Ville ou code postal"
-                className="w-full pl-12 pr-12 py-4 bg-gray-100/80 border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
+                className="w-full pl-12 pr-12 py-4 bg-sand-100/80 border-2 border-transparent rounded-xl text-charcoal-900 placeholder-charcoal-500 focus:ring-4 focus:ring-primary-400/20 focus:border-primary-400 focus:bg-white transition-all"
                 autoComplete="off"
               />
 
@@ -451,11 +477,11 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 type="button"
                 onClick={handleGeolocate}
                 disabled={isLocating}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors disabled:opacity-50"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-charcoal-400 hover:text-primary-500 hover:bg-primary-50 rounded-full transition-colors disabled:opacity-50"
                 title="Utiliser ma position"
               >
                 {isLocating ? (
-                  <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-primary-400 border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <Navigation className="w-5 h-5" />
                 )}
@@ -463,7 +489,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
 
               {/* Location suggestions dropdown */}
               {showLocationSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-sand-200 overflow-hidden z-50">
                   {locationSuggestions.length > 0 ? (
                     <div className="p-2 max-h-64 overflow-y-auto">
                       {locationSuggestions.map((loc, idx) => (
@@ -473,20 +499,26 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                           onClick={() => selectLocation(loc)}
                           className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all ${
                             idx === highlightedLocationIndex
-                              ? 'bg-blue-50 shadow-sm'
-                              : 'hover:bg-gray-50'
+                              ? 'bg-primary-50 shadow-sm'
+                              : 'hover:bg-sand-50'
                           }`}
                         >
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                            idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
-                          }`}>
-                            <MapPin className={`w-5 h-5 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
+                          <div
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                              idx === highlightedLocationIndex ? 'bg-primary-100' : 'bg-sand-100'
+                            }`}
+                          >
+                            <MapPin
+                              className={`w-5 h-5 ${idx === highlightedLocationIndex ? 'text-primary-500' : 'text-charcoal-500'}`}
+                            />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className={`font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                            <div
+                              className={`font-medium truncate ${idx === highlightedLocationIndex ? 'text-primary-600' : 'text-charcoal-900'}`}
+                            >
                               {loc.city}
                             </div>
-                            <div className="text-xs text-gray-400 truncate">{loc.context}</div>
+                            <div className="text-xs text-charcoal-400 truncate">{loc.context}</div>
                           </div>
                         </button>
                       ))}
@@ -494,7 +526,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                   ) : (
                     /* Popular cities when empty */
                     <div className="p-3">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-charcoal-400 uppercase tracking-wide mb-2">
                         <MapPin className="w-3 h-3" />
                         Villes populaires
                       </div>
@@ -525,10 +557,12 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                                 router.push(`/recherche?${params.toString()}`)
                               }, 100)
                             }}
-                            className="flex items-center gap-2 px-3 py-2.5 hover:bg-blue-50 rounded-xl text-left transition-colors"
+                            className="flex items-center gap-2 px-3 py-2.5 hover:bg-primary-50 rounded-xl text-left transition-colors"
                           >
-                            <MapPin className="w-4 h-4 text-blue-600" />
-                            <span className="text-sm font-medium text-gray-700">{city.name}</span>
+                            <MapPin className="w-4 h-4 text-primary-500" />
+                            <span className="text-sm font-medium text-charcoal-700">
+                              {city.name}
+                            </span>
                           </button>
                         ))}
                       </div>
@@ -541,7 +575,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
             {/* Submit button */}
             <button
               type="submit"
-              className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
+              className="relative overflow-hidden bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
               <span className="relative">Rechercher</span>
