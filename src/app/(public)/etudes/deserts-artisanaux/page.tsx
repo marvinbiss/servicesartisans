@@ -807,8 +807,8 @@ export default function DesertsArtisanauxPage() {
 
                 <div className="bg-white border border-primary-200 rounded-lg p-4 mb-4">
                   <p className="text-sm text-charcoal-700 font-mono leading-relaxed">
-                    &laquo;&nbsp;D\u00e9serts artisanaux en France &mdash; \u00c9tude
-                    2026&nbsp;&raquo;, ServicesArtisans, mars 2026.
+                    «&nbsp;D\u00e9serts artisanaux en France — \u00c9tude 2026&nbsp;»,
+                    ServicesArtisans, mars 2026.
                     <br />
                     <span className="text-primary-500">{canonicalUrl}</span>
                   </p>

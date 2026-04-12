@@ -4,6 +4,7 @@ import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -81,7 +82,7 @@ export default async function CGVPage() {
           <h1 className="font-heading text-3xl font-bold text-charcoal-900">
             Conditions Générales de Vente et d'Utilisation
           </h1>
-          <p className="text-charcoal-600 mt-2">Dernière mise à jour : Janvier 2026</p>
+          <p className="text-charcoal-600 mt-2">Dernière mise à jour : Avril 2026</p>
         </div>
       </section>
 
@@ -208,19 +209,27 @@ export default async function CGVPage() {
             <h2>13. Droit applicable et juridiction</h2>
             <p>
               Les présentes CGVU sont soumises au droit français. En cas de litige, les tribunaux de
-              Paris seront seuls compétents.
+              Paris seront seuls compétents. Cette clause ne s'applique qu'entre professionnels.
             </p>
 
-            <h2>14. Contact</h2>
+            <h2>14. Médiation</h2>
+            <p>
+              En cas de litige non résolu par notre service client, vous pouvez recourir
+              gratuitement au service de médiation. Consultez notre{' '}
+              <Link href="/mediation">page dédiée à la médiation</Link> pour connaître les modalités
+              et coordonnées du médiateur compétent.
+            </p>
+
+            <h2>15. Contact</h2>
             <p>Pour toute question concernant ces CGVU :</p>
             <ul>
               <li>
                 Email :{' '}
                 <a
-                  href="mailto:contact@servicesartisans.fr"
+                  href={`mailto:${companyIdentity.email}`}
                   className="text-primary-500 hover:underline"
                 >
-                  contact@servicesartisans.fr
+                  {companyIdentity.email}
                 </a>
               </li>
               <li>Courrier : Coordonnées disponibles sur la page mentions légales.</li>

@@ -106,8 +106,8 @@ export default function SimulateurPrimeCeePage() {
             Simulateur de prime CEE
           </h1>
           <p className="text-lg md:text-xl text-charcoal-600 max-w-2xl mx-auto leading-relaxed">
-            Estimez gratuitement le montant de votre prime Certificats d&rsquo;&Eacute;conomies
-            d&rsquo;&Eacute;nergie en 30 secondes
+            Estimez gratuitement le montant de votre prime Certificats d’&Eacute;conomies
+            d’&Eacute;nergie en 30 secondes
           </p>
         </div>
       </section>

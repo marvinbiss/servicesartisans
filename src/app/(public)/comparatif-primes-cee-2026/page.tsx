@@ -257,16 +257,15 @@ export default function ComparatifPrimesCee2026Page() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <TrendingUp className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              Comparatif &mdash; P&eacute;riode 6 (2026-2030)
+              Comparatif — Période 6 (2026-2030)
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             Comparatif primes CEE 2026&nbsp;: qui verse le plus&nbsp;? Qui paie le plus vite&nbsp;?
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            Analyse ind&eacute;pendante des 4 principaux acteurs du march&eacute; CEE en France.
-            Montants, d&eacute;lais de paiement, avis clients, mod&egrave;le &eacute;conomique.
-            Donn&eacute;es v&eacute;rifi&eacute;es avril 2026.
+            Analyse indépendante des 4 principaux acteurs du marché CEE en France. Montants, délais
+            de paiement, avis clients, modèle économique. Données vérifiées avril 2026.
           </p>
         </div>
       </section>
@@ -316,21 +315,18 @@ export default function ComparatifPrimesCee2026Page() {
         </div>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            La 6<sup>e</sup> p&eacute;riode des CEE a d&eacute;marr&eacute; le 1<sup>er</sup>{' '}
-            janvier 2026. L&rsquo;obligation annuelle passe &agrave; 1 050 TWhc, dont 280 TWhc de
-            pr&eacute;carit&eacute; &eacute;nerg&eacute;tique. Cons&eacute;quence directe&nbsp;: les
-            d&eacute;l&eacute;gataires recrutent activement et les primes restent &agrave; des
-            niveaux &eacute;lev&eacute;s.
+            La 6<sup>e</sup> période des CEE a démarré le 1<sup>er</sup> janvier 2026. L’obligation
+            annuelle passe à 1 050 TWhc, dont 280 TWhc de précarité énergétique. Conséquence
+            directe&nbsp;: les délégataires recrutent activement et les primes restent à des niveaux
+            élevés.
           </p>
           <p>
-            Certaines op&eacute;rations ont &eacute;t&eacute; modifi&eacute;es&nbsp;: BAR-TH-104
-            (PAC) remplac&eacute;e par{' '}
+            Certaines opérations ont été modifiées&nbsp;: BAR-TH-104 (PAC) remplacée par{' '}
             <Link href="/cee/bar-th-171" className="text-emerald-700 font-semibold">
               BAR-TH-171
             </Link>
-            , BAR-TH-164 remplac&eacute;e par BAR-TH-174/175 (r&eacute;novation d&rsquo;ampleur avec
-            MAR). Le geste par geste isolation seule n&rsquo;est plus &eacute;ligible sans
-            r&eacute;novation d&rsquo;ampleur.
+            , BAR-TH-164 remplacée par BAR-TH-174/175 (rénovation d’ampleur avec MAR). Le geste par
+            geste isolation seule n’est plus éligible sans rénovation d’ampleur.
           </p>
         </div>
       </section>
@@ -372,9 +368,7 @@ export default function ComparatifPrimesCee2026Page() {
                     <span className="text-emerald-700 font-semibold">{actor.primeMax}</span>
                   </div>
                   <div>
-                    <span className="font-semibold text-charcoal-700">
-                      D&eacute;lai paiement&nbsp;:
-                    </span>{' '}
+                    <span className="font-semibold text-charcoal-700">Délai paiement&nbsp;:</span>{' '}
                     <span className="text-charcoal-600">{actor.delaiPaiement}</span>
                   </div>
                 </div>
@@ -422,19 +416,17 @@ export default function ComparatifPrimesCee2026Page() {
         <div className="flex items-center gap-2 mb-6">
           <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Montants indicatifs par op&eacute;ration (P6, 2026)
+            Montants indicatifs par opération (P6, 2026)
           </h2>
         </div>
         <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
           <table className="w-full text-sm">
             <thead className="bg-sand-200 text-charcoal-700">
               <tr>
-                <th className="text-left p-4 font-semibold">Op&eacute;ration</th>
+                <th className="text-left p-4 font-semibold">Opération</th>
                 <th className="text-left p-4 font-semibold">Code</th>
                 <th className="text-left p-4 font-semibold text-emerald-700">Prime classique</th>
-                <th className="text-left p-4 font-semibold text-emerald-700">
-                  Prime pr&eacute;carit&eacute;
-                </th>
+                <th className="text-left p-4 font-semibold text-emerald-700">Prime précarité</th>
               </tr>
             </thead>
             <tbody>
@@ -465,16 +457,15 @@ export default function ComparatifPrimesCee2026Page() {
           </table>
         </div>
         <p className="text-xs text-charcoal-500 mt-4 italic">
-          Fourchettes indicatives. Les montants r&eacute;els d&eacute;pendent de la zone climatique
-          (H1/H2/H3), de la surface, du type de logement et du d&eacute;l&eacute;gataire choisi.
-          Utilisez le{' '}
+          Fourchettes indicatives. Les montants réels dépendent de la zone climatique (H1/H2/H3), de
+          la surface, du type de logement et du délégataire choisi. Utilisez le{' '}
           <Link
             href="/simulateur-prime-cee"
             className="text-emerald-700 font-semibold hover:underline"
           >
             simulateur de prime CEE
           </Link>{' '}
-          pour une estimation personnalis&eacute;e.
+          pour une estimation personnalisée.
         </p>
       </section>
 
@@ -496,29 +487,24 @@ export default function ComparatifPrimesCee2026Page() {
           </div>
           <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
             <p>
-              <strong>
-                1. Comparez les montants r&eacute;els, pas les montants affich&eacute;s.
-              </strong>{' '}
-              Les sites affichent les fourchettes hautes (pr&eacute;carit&eacute;, zone H1, grande
-              surface). Demandez un devis personnalis&eacute; avec votre situation exacte.
+              <strong>1. Comparez les montants réels, pas les montants affichés.</strong> Les sites
+              affichent les fourchettes hautes (précarité, zone H1, grande surface). Demandez un
+              devis personnalisé avec votre situation exacte.
             </p>
             <p>
-              <strong>2. V&eacute;rifiez les d&eacute;lais de paiement r&eacute;els.</strong> Lisez
-              les avis r&eacute;cents (pas ceux d&rsquo;il y a 3 ans) sur Trustpilot et Avis
-              V&eacute;rifi&eacute;s. Cherchez sp&eacute;cifiquement les retours sur les
-              d&eacute;lais.
+              <strong>2. Vérifiez les délais de paiement réels.</strong> Lisez les avis récents (pas
+              ceux d’il y a 3 ans) sur Trustpilot et Avis Vérifiés. Cherchez spécifiquement les
+              retours sur les délais.
             </p>
             <p>
-              <strong>3. Ne signez pas avant d&rsquo;avoir choisi votre artisan.</strong> La
-              r&egrave;gle CEE impose que le dossier soit constitu&eacute; AVANT le d&eacute;but des
-              travaux. Si vous signez un engagement CEE avec un acteur, puis changez
-              d&rsquo;artisan, le dossier peut &ecirc;tre invalid&eacute;.
+              <strong>3. Ne signez pas avant d’avoir choisi votre artisan.</strong> La règle CEE
+              impose que le dossier soit constitué AVANT le début des travaux. Si vous signez un
+              engagement CEE avec un acteur, puis changez d’artisan, le dossier peut être invalidé.
             </p>
             <p>
-              <strong>4. V&eacute;rifiez le cumul MaPrimeR&eacute;nov&rsquo;.</strong> Certains
-              acteurs g&egrave;rent les deux (Effy, Hellio). D&rsquo;autres ne font que le CEE. Le
-              cumul peut repr&eacute;senter 80 &agrave; 90 % du co&ucirc;t des travaux pour les
-              m&eacute;nages modestes.
+              <strong>4. Vérifiez le cumul MaPrimeRénov’.</strong> Certains acteurs gèrent les deux
+              (Effy, Hellio). D’autres ne font que le CEE. Le cumul peut représenter 80 à 90 % du
+              co&ucirc;t des travaux pour les ménages modestes.
             </p>
           </div>
         </div>
@@ -529,7 +515,7 @@ export default function ComparatifPrimesCee2026Page() {
       {/* ============================================================ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-          Questions fr&eacute;quentes
+          Questions fréquentes
         </h2>
         <div className="space-y-4">
           {FAQS.map((faq) => (
@@ -559,7 +545,7 @@ export default function ComparatifPrimesCee2026Page() {
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Simulateur gratuit, sans engagement. Comparez les montants et trouvez un artisan RGE
-            qualifi&eacute; pr&egrave;s de chez vous.
+            qualifié près de chez vous.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
@@ -579,7 +565,7 @@ export default function ComparatifPrimesCee2026Page() {
               href="/cee/mandataire-vs-direct"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
             >
-              Oblig&eacute; vs d&eacute;l&eacute;gataire vs mandataire
+              Obligé vs délégataire vs mandataire
             </Link>
           </div>
         </div>

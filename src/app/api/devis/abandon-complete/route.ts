@@ -18,7 +18,10 @@ export async function POST(request: NextRequest) {
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
@@ -51,6 +54,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true })
   } catch (err) {
     logger.error('[abandon-complete] Error', err)
-    return NextResponse.json({ error: 'server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

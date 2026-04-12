@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides' } },
+        { success: false, error: { message: 'Données invalides' } },
         { status: 400 }
       )
     }

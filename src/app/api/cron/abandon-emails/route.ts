@@ -5,7 +5,7 @@ import { getAbandonEmail1 } from '@/lib/email/templates/abandon-email-1'
 import { getAbandonEmail2 } from '@/lib/email/templates/abandon-email-2'
 import { getAbandonEmail3 } from '@/lib/email/templates/abandon-email-3'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisans.fr'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 /**
  * POST /api/cron/abandon-emails
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const supabase = createAdminClient()

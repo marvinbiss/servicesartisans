@@ -332,7 +332,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
         <div role="alert" className="rounded-xl border border-sand-200 bg-sand-50 p-6 text-center">
           <AlertTriangle className="mx-auto h-10 w-10 text-sand-400 mb-3" aria-hidden="true" />
           <p className="font-heading text-lg font-semibold text-charcoal-800 mb-2">
-            Ce type de travaux n&rsquo;est pas \u00e9ligible aux CEE
+            Ce type de travaux n’est pas \u00e9ligible aux CEE
           </p>
           <p className="text-sm text-charcoal-500 mb-4">
             Tous les services ne donnent pas droit \u00e0 une prime \u00e9nergie. Consultez nos

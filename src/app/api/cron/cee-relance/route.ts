@@ -120,11 +120,11 @@ export async function GET(request: Request) {
     logger.error('cee-relance: CRON_SECRET not configured', undefined, {
       action: 'cee-relance',
     })
-    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
   const provided = extractBearer(request)
   if (!safeCompare(provided, expected)) {
-    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const supabase = createAdminClient()

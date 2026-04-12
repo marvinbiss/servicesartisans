@@ -237,30 +237,27 @@ export default function MandataireVsDirectPage() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Scale className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              Guide neutre &mdash; code de l&rsquo;&eacute;nergie L221-x / R221-x
+              Guide neutre — code de l’énergie L221-x / R221-x
             </span>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
-            Oblig&eacute;, d&eacute;l&eacute;gataire, mandataire CEE&nbsp;: comprendre les 3
-            r&ocirc;les du circuit
+            Obligé, délégataire, mandataire CEE&nbsp;: comprendre les 3 rôles du circuit
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
-            Qui ach&egrave;te les certificats d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie&nbsp;?
-            Qui d&eacute;pose les dossiers au PNCEE&nbsp;? Qui se contente de monter le dossier pour
-            le compte du b&eacute;n&eacute;ficiaire&nbsp;? Ce guide clarifie les trois r&ocirc;les
-            du dispositif CEE, leurs obligations r&eacute;glementaires et leur mod&egrave;le
-            &eacute;conomique &mdash; sans jargon, sans parti pris.
+            Qui achète les certificats d’économies d’énergie&nbsp;? Qui dépose les dossiers au
+            PNCEE&nbsp;? Qui se contente de monter le dossier pour le compte du bénéficiaire&nbsp;?
+            Ce guide clarifie les trois rôles du dispositif CEE, leurs obligations réglementaires et
+            leur modèle économique — sans jargon, sans parti pris.
           </p>
           <div
             className="speakable-summary mt-6 text-base md:text-lg text-emerald-50/80 leading-relaxed border-l-2 border-emerald-400/40 pl-4"
             data-speakable="true"
           >
             <p>
-              L&rsquo;oblig&eacute; est le vendeur d&rsquo;&eacute;nergie soumis &agrave;
-              l&rsquo;obligation&nbsp;; le d&eacute;l&eacute;gataire reprend cette obligation et
-              finance les travaux&nbsp;; le mandataire monte le dossier pour le compte du
-              b&eacute;n&eacute;ficiaire sans porter la dette CEE. La prime finale, elle, reste
-              toujours financ&eacute;e par l&rsquo;oblig&eacute;.
+              L’obligé est le vendeur d’énergie soumis à l’obligation&nbsp;; le délégataire reprend
+              cette obligation et finance les travaux&nbsp;; le mandataire monte le dossier pour le
+              compte du bénéficiaire sans porter la dette CEE. La prime finale, elle, reste toujours
+              financée par l’obligé.
             </p>
           </div>
         </div>
@@ -269,32 +266,27 @@ export default function MandataireVsDirectPage() {
       {/* Intro éditoriale */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
-          Le dispositif des certificats d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie,
-          cr&eacute;&eacute; par la loi POPE du 13 juillet 2005 et codifi&eacute; aux articles
-          L221-1 &agrave; L221-12 du code de l&rsquo;&eacute;nergie, repose sur un principe
-          simple&nbsp;: l&rsquo;&Eacute;tat impose aux vendeurs d&rsquo;&eacute;nergie un volume
-          d&rsquo;&eacute;conomies &agrave; r&eacute;aliser, et ces vendeurs doivent le justifier en
-          d&eacute;posant des certificats au P&ocirc;le national des certificats
-          d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie (PNCEE), service de la Direction
-          g&eacute;n&eacute;rale de l&rsquo;&eacute;nergie et du climat.
+          Le dispositif des certificats d’économies d’énergie, créé par la loi POPE du 13 juillet
+          2005 et codifié aux articles L221-1 à L221-12 du code de l’énergie, repose sur un principe
+          simple&nbsp;: l’&Eacute;tat impose aux vendeurs d’énergie un volume d’économies à
+          réaliser, et ces vendeurs doivent le justifier en déposant des certificats au Pôle
+          national des certificats d’économies d’énergie (PNCEE), service de la Direction générale
+          de l’énergie et du climat.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          Autour de ce m&eacute;canisme, trois r&ocirc;les se sont stabilis&eacute;s au fil des
-          p&eacute;riodes d&rsquo;obligation&nbsp;: les
-          <strong> oblig&eacute;s</strong>, qui portent l&rsquo;obligation l&eacute;gale&nbsp;; les{' '}
-          <strong>d&eacute;l&eacute;gataires</strong>, qui la reprennent contractuellement&nbsp;; et
-          les
-          <strong> mandataires</strong>, qui accompagnent les b&eacute;n&eacute;ficiaires sans
-          assumer l&rsquo;obligation. La confusion entre ces trois r&ocirc;les est &agrave;
-          l&rsquo;origine d&rsquo;une grande partie des malentendus &mdash; et de certaines arnaques
-          &mdash; rencontr&eacute;s par les particuliers et les artisans.
+          Autour de ce mécanisme, trois rôles se sont stabilisés au fil des périodes
+          d’obligation&nbsp;: les
+          <strong> obligés</strong>, qui portent l’obligation légale&nbsp;; les{' '}
+          <strong>délégataires</strong>, qui la reprennent contractuellement&nbsp;; et les
+          <strong> mandataires</strong>, qui accompagnent les bénéficiaires sans assumer
+          l’obligation. La confusion entre ces trois rôles est à l’origine d’une grande partie des
+          malentendus — et de certaines arnaques — rencontrés par les particuliers et les artisans.
         </p>
         <p className="text-charcoal-700 leading-relaxed">
-          Cet article d&eacute;crit chaque r&ocirc;le, ses obligations PNCEE, son mod&egrave;le
-          &eacute;conomique et ses limites. Il d&eacute;taille ensuite ce que cela change
-          concr&egrave;tement pour un particulier qui fait isoler sa maison, pour un artisan RGE qui
-          monte un dossier, puis propose une liste pratique pour v&eacute;rifier qu&rsquo;un
-          partenaire CEE est l&eacute;gitime.
+          Cet article décrit chaque rôle, ses obligations PNCEE, son modèle économique et ses
+          limites. Il détaille ensuite ce que cela change concrètement pour un particulier qui fait
+          isoler sa maison, pour un artisan RGE qui monte un dossier, puis propose une liste
+          pratique pour vérifier qu’un partenaire CEE est légitime.
         </p>
       </section>
 
@@ -302,14 +294,13 @@ export default function MandataireVsDirectPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
-            Les 3 r&ocirc;les du circuit CEE
+            Les 3 rôles du circuit CEE
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
-            Trois acteurs, trois responsabilit&eacute;s r&eacute;glementaires tr&egrave;s
-            diff&eacute;rentes. Les d&eacute;finitions ci-dessous s&rsquo;appuient sur les articles
-            L221-1 &agrave; L221-12 et R221-1 &agrave; R221-27 du code de l&rsquo;&eacute;nergie,
-            ainsi que sur l&rsquo;arr&ecirc;t&eacute; du 22 d&eacute;cembre 2014 modifi&eacute; qui
-            d&eacute;finit les op&eacute;rations standardis&eacute;es.
+            Trois acteurs, trois responsabilités réglementaires très différentes. Les définitions
+            ci-dessous s’appuient sur les articles L221-1 à L221-12 et R221-1 à R221-27 du code de
+            l’énergie, ainsi que sur l’arrêté du 22 décembre 2014 modifié qui définit les opérations
+            standardisées.
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -335,13 +326,13 @@ export default function MandataireVsDirectPage() {
                   <div className="space-y-4 text-sm text-charcoal-700 leading-relaxed">
                     <div>
                       <div className="font-semibold text-charcoal-900 mb-1">
-                        D&eacute;finition juridique
+                        Définition juridique
                       </div>
                       <p>{role.legal}</p>
                     </div>
                     <div>
                       <div className="font-semibold text-charcoal-900 mb-1">
-                        Ce qu&rsquo;il fait concr&egrave;tement
+                        Ce qu’il fait concrètement
                       </div>
                       <p>{role.mission}</p>
                     </div>
@@ -355,7 +346,7 @@ export default function MandataireVsDirectPage() {
                     </div>
                     <div>
                       <div className="font-semibold text-charcoal-900 mb-1">
-                        D&rsquo;o&ugrave; vient sa marge
+                        D’o&ugrave; vient sa marge
                       </div>
                       <p>{role.revenue}</p>
                     </div>
@@ -368,7 +359,7 @@ export default function MandataireVsDirectPage() {
                         <AlertTriangle className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
                         <div>
                           <div className="font-semibold text-amber-900 mb-1">
-                            Limites et risques du mod&egrave;le
+                            Limites et risques du modèle
                           </div>
                           <p className="text-amber-900/90">{role.limits}</p>
                         </div>
@@ -393,33 +384,30 @@ export default function MandataireVsDirectPage() {
           </h2>
         </div>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          En pratique, le particulier qui fait isoler ses combles ou remplacer sa chaudi&egrave;re
-          ne voit pas de diff&eacute;rence fondamentale selon le type d&rsquo;acteur qu&rsquo;il a
-          en face de lui. Les bar&egrave;mes forfaitaires des op&eacute;rations standardis&eacute;es
-          sont fix&eacute;s par arr&ecirc;t&eacute; et publi&eacute;s au Journal officiel&nbsp;: le
-          gain &eacute;nerg&eacute;tique calcul&eacute; (en kWh cumac) est le m&ecirc;me quel que
-          soit le circuit emprunt&eacute;.
+          En pratique, le particulier qui fait isoler ses combles ou remplacer sa chaudière ne voit
+          pas de différence fondamentale selon le type d’acteur qu’il a en face de lui. Les barèmes
+          forfaitaires des opérations standardisées sont fixés par arrêté et publiés au Journal
+          officiel&nbsp;: le gain énergétique calculé (en kWh cumac) est le même quel que soit le
+          circuit emprunté.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          Ce qui varie, c&rsquo;est le <strong>prix de rachat</strong> de ce cumac &mdash; donc le
-          montant de prime finalement vers&eacute; au b&eacute;n&eacute;ficiaire. Ce prix
-          d&eacute;pend de la politique commerciale de chaque d&eacute;l&eacute;gataire et du niveau
-          de service factur&eacute; par un &eacute;ventuel mandataire. Pour les op&eacute;rations
-          non couvertes par une charte Coup de pouce, les &eacute;carts peuvent &ecirc;tre
-          significatifs d&rsquo;un acteur &agrave; l&rsquo;autre.
+          Ce qui varie, c’est le <strong>prix de rachat</strong> de ce cumac — donc le montant de
+          prime finalement versé au bénéficiaire. Ce prix dépend de la politique commerciale de
+          chaque délégataire et du niveau de service facturé par un éventuel mandataire. Pour les
+          opérations non couvertes par une charte Coup de pouce, les écarts peuvent être
+          significatifs d’un acteur à l’autre.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
           Le service rendu varie aussi nettement. Certains acteurs proposent un accompagnement de
-          bout en bout (qualification, montage, relances, SAV), d&rsquo;autres se contentent
-          d&rsquo;une plateforme self-service. Le d&eacute;lai de versement de la prime &mdash;
-          souvent entre 4 et 12 semaines apr&egrave;s d&eacute;p&ocirc;t du dossier complet &mdash;
-          varie &eacute;galement selon la charge du d&eacute;l&eacute;gataire et son taux de rejet.
+          bout en bout (qualification, montage, relances, SAV), d’autres se contentent d’une
+          plateforme self-service. Le délai de versement de la prime — souvent entre 4 et 12
+          semaines après dépôt du dossier complet — varie également selon la charge du délégataire
+          et son taux de rejet.
         </p>
         <p className="text-charcoal-700 leading-relaxed">
-          En r&eacute;sum&eacute;&nbsp;: le montant maximal th&eacute;orique de la prime est
-          fig&eacute; par la r&eacute;glementation, mais le montant r&eacute;ellement per&ccedil;u,
-          le d&eacute;lai de versement et la qualit&eacute; du SAV d&eacute;pendent beaucoup du
-          choix du partenaire CEE. Comparer ne co&ucirc;te rien.
+          En résumé&nbsp;: le montant maximal théorique de la prime est figé par la réglementation,
+          mais le montant réellement perçu, le délai de versement et la qualité du SAV dépendent
+          beaucoup du choix du partenaire CEE. Comparer ne co&ucirc;te rien.
         </p>
       </section>
 
@@ -431,44 +419,39 @@ export default function MandataireVsDirectPage() {
               <Wrench className="w-5 h-5 text-emerald-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Quel impact pour l&rsquo;artisan&nbsp;?
+              Quel impact pour l’artisan&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Pour un artisan RGE, le choix du partenaire CEE est op&eacute;rationnel avant
-            d&rsquo;&ecirc;tre commercial. Trois crit&egrave;res font la diff&eacute;rence au
-            quotidien&nbsp;: la facilit&eacute; d&rsquo;instruction des dossiers, le d&eacute;lai de
-            versement de la prime au client final, et la qualit&eacute; du contr&ocirc;le
-            qualit&eacute; impos&eacute; avant d&eacute;p&ocirc;t au PNCEE.
+            Pour un artisan RGE, le choix du partenaire CEE est opérationnel avant d’être
+            commercial. Trois critères font la différence au quotidien&nbsp;: la facilité
+            d’instruction des dossiers, le délai de versement de la prime au client final, et la
+            qualité du contrôle qualité imposé avant dépôt au PNCEE.
           </p>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            La <strong>facilit&eacute; d&rsquo;instruction</strong> d&eacute;pend de la
-            clart&eacute; des pi&egrave;ces demand&eacute;es, de l&rsquo;existence d&rsquo;un outil
-            de d&eacute;p&ocirc;t en ligne stable, et de la r&eacute;activit&eacute; du support en
-            cas de doute sur un dossier. Un mandataire s&eacute;rieux peut apporter une vraie valeur
-            sur ce point en absorbant une partie du travail administratif.
+            La <strong>facilité d’instruction</strong> dépend de la clarté des pièces demandées, de
+            l’existence d’un outil de dépôt en ligne stable, et de la réactivité du support en cas
+            de doute sur un dossier. Un mandataire sérieux peut apporter une vraie valeur sur ce
+            point en absorbant une partie du travail administratif.
           </p>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Le <strong>d&eacute;lai de versement</strong> impacte directement la tr&eacute;sorerie
-            du chantier quand la prime est factur&eacute;e en d&eacute;duction du devis (principe du
-            tiers payant). Un d&eacute;lai moyen court est un vrai diff&eacute;renciateur pour
-            l&rsquo;artisan&nbsp;; un d&eacute;lai long, au contraire, tend les relations avec les
-            clients finaux.
+            Le <strong>délai de versement</strong> impacte directement la trésorerie du chantier
+            quand la prime est facturée en déduction du devis (principe du tiers payant). Un délai
+            moyen court est un vrai différenciateur pour l’artisan&nbsp;; un délai long, au
+            contraire, tend les relations avec les clients finaux.
           </p>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Enfin, la <strong>qualit&eacute; du contr&ocirc;le</strong>
-            impos&eacute; avant d&eacute;p&ocirc;t au PNCEE est paradoxalement un bon signe&nbsp;:
-            un partenaire exigeant sur les photos g&eacute;otagg&eacute;es, les factures et
-            l&rsquo;attestation sur l&rsquo;honneur prot&egrave;ge l&rsquo;artisan d&rsquo;un
-            contr&ocirc;le a posteriori ou d&rsquo;une non-validation. Un partenaire trop laxiste
-            reporte ce risque sur l&rsquo;installateur, qui peut se retrouver avec une prime
-            r&eacute;clam&eacute;e en restitution des ann&eacute;es apr&egrave;s le chantier.
+            Enfin, la <strong>qualité du contrôle</strong>
+            imposé avant dépôt au PNCEE est paradoxalement un bon signe&nbsp;: un partenaire
+            exigeant sur les photos géotaggées, les factures et l’attestation sur l’honneur protège
+            l’artisan d’un contrôle a posteriori ou d’une non-validation. Un partenaire trop laxiste
+            reporte ce risque sur l’installateur, qui peut se retrouver avec une prime réclamée en
+            restitution des années après le chantier.
           </p>
           <p className="text-charcoal-700 leading-relaxed">
-            Le bon partenaire CEE n&rsquo;est donc pas forc&eacute;ment celui qui propose la prime
-            la plus &eacute;lev&eacute;e&nbsp;: c&rsquo;est celui qui combine un bar&egrave;me
-            comp&eacute;titif, un d&eacute;lai de paiement fiable et un contr&ocirc;le
-            qualit&eacute; rigoureux.
+            Le bon partenaire CEE n’est donc pas forcément celui qui propose la prime la plus
+            élevée&nbsp;: c’est celui qui combine un barème compétitif, un délai de paiement fiable
+            et un contrôle qualité rigoureux.
           </p>
         </div>
       </section>
@@ -480,39 +463,39 @@ export default function MandataireVsDirectPage() {
             <ShieldCheck className="w-5 h-5 text-emerald-700" />
           </div>
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Comment v&eacute;rifier qu&rsquo;un partenaire CEE est l&eacute;gitime&nbsp;?
+            Comment vérifier qu’un partenaire CEE est légitime&nbsp;?
           </h2>
         </div>
         <p className="text-charcoal-700 leading-relaxed mb-6">
-          Que vous soyez un particulier qui re&ccedil;oit une proposition de prime ou un artisan qui
-          &eacute;value un partenariat, quelques v&eacute;rifications simples permettent de filtrer
-          la quasi-totalit&eacute; des acteurs douteux.
+          Que vous soyez un particulier qui reçoit une proposition de prime ou un artisan qui évalue
+          un partenariat, quelques vérifications simples permettent de filtrer la quasi-totalité des
+          acteurs douteux.
         </p>
         <ul className="space-y-4">
           {[
             {
-              title: 'Identit&eacute; juridique et SIREN actif',
-              text: "V&eacute;rifiez le SIREN sur annuaire-entreprises.data.gouv.fr ou sur l'INSEE. Un acteur CEE s&eacute;rieux est une soci&eacute;t&eacute; fran&ccedil;aise immatricul&eacute;e, avec une adresse physique, un num&eacute;ro RCS actif et des mentions l&eacute;gales compl&egrave;tes sur son site.",
+              title: 'Identité juridique et SIREN actif',
+              text: "Vérifiez le SIREN sur annuaire-entreprises.data.gouv.fr ou sur l'INSEE. Un acteur CEE sérieux est une société française immatriculée, avec une adresse physique, un numéro RCS actif et des mentions légales complètes sur son site.",
             },
             {
-              title: 'Statut au registre des d&eacute;l&eacute;gataires PNCEE',
-              text: "Si l'acteur se pr&eacute;sente comme d&eacute;l&eacute;gataire, il doit figurer au registre tenu par la DGEC. Un mandataire, lui, ne peut pas figurer sur ce registre &mdash; il doit l'indiquer clairement et citer le d&eacute;l&eacute;gataire partenaire qui traitera effectivement vos dossiers.",
+              title: 'Statut au registre des délégataires PNCEE',
+              text: "Si l'acteur se présente comme délégataire, il doit figurer au registre tenu par la DGEC. Un mandataire, lui, ne peut pas figurer sur ce registre — il doit l'indiquer clairement et citer le délégataire partenaire qui traitera effectivement vos dossiers.",
             },
             {
               title: 'Conditions du contrat de mandat',
-              text: "Lisez attentivement le contrat de mandat propos&eacute;&nbsp;: dur&eacute;e, conditions de r&eacute;siliation, r&eacute;mun&eacute;ration, exclusivit&eacute; ou non, identit&eacute; du d&eacute;l&eacute;gataire partenaire. Un contrat flou ou l'absence de mention explicite du statut de mandataire sont des signaux d'alerte.",
+              text: "Lisez attentivement le contrat de mandat proposé&nbsp;: durée, conditions de résiliation, rémunération, exclusivité ou non, identité du délégataire partenaire. Un contrat flou ou l'absence de mention explicite du statut de mandataire sont des signaux d'alerte.",
             },
             {
-              title: 'Attestation sur l\u2019honneur pr&eacute;-remplie',
-              text: "Refusez de signer une attestation sur l'honneur pr&eacute;-remplie dont vous n'avez pas v&eacute;rifi&eacute; chaque ligne (performance de l'&eacute;quipement, surface isol&eacute;e, r&eacute;sistance thermique). C'est un document juridiquement engageant&nbsp;: des d&eacute;clarations inexactes peuvent entra&icirc;ner un redressement, voire des poursuites pour fraude.",
+              title: 'Attestation sur l\u2019honneur pré-remplie',
+              text: "Refusez de signer une attestation sur l'honneur pré-remplie dont vous n'avez pas vérifié chaque ligne (performance de l'équipement, surface isolée, résistance thermique). C'est un document juridiquement engageant&nbsp;: des déclarations inexactes peuvent entra&icirc;ner un redressement, voire des poursuites pour fraude.",
             },
             {
-              title: 'R&eacute;putation et avis v&eacute;rifiables',
-              text: "Recoupez les avis sur plusieurs sources ind&eacute;pendantes (Signal-Arnaques, forums de consommateurs, Trustpilot en v&eacute;rifiant les avis suspects). Un volume d'avis n&eacute;gatifs convergents sur des probl&egrave;mes de d&eacute;lai de paiement ou de contrat opaque doit faire red&eacute;marrer l'analyse.",
+              title: 'Réputation et avis vérifiables',
+              text: "Recoupez les avis sur plusieurs sources indépendantes (Signal-Arnaques, forums de consommateurs, Trustpilot en vérifiant les avis suspects). Un volume d'avis négatifs convergents sur des problèmes de délai de paiement ou de contrat opaque doit faire redémarrer l'analyse.",
             },
             {
-              title: 'Respect de l\u2019interdiction du d&eacute;marchage',
-              text: "Depuis la loi du 24 juillet 2020, le d&eacute;marchage t&eacute;l&eacute;phonique est interdit pour les travaux d'&eacute;conomies d'&eacute;nergie. Un acteur qui vous appelle sans sollicitation pr&eacute;alable pour vous proposer une prime est, par construction, hors-la-loi&nbsp;: ne lui confiez aucun dossier.",
+              title: 'Respect de l\u2019interdiction du démarchage',
+              text: "Depuis la loi du 24 juillet 2020, le démarchage téléphonique est interdit pour les travaux d'économies d'énergie. Un acteur qui vous appelle sans sollicitation préalable pour vous proposer une prime est, par construction, hors-la-loi&nbsp;: ne lui confiez aucun dossier.",
             },
           ].map((item, i) => (
             <li
@@ -539,7 +522,7 @@ export default function MandataireVsDirectPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
-            Questions fr&eacute;quentes
+            Questions fréquentes
           </h2>
           <div className="space-y-4">
             {FAQ.map((item, idx) => (
@@ -563,52 +546,49 @@ export default function MandataireVsDirectPage() {
       {/* Sources officielles */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 mb-4">
-          Sources r&eacute;glementaires
+          Sources réglementaires
         </h2>
         <ul className="space-y-3 text-sm text-charcoal-700">
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>
-              Code de l&rsquo;&eacute;nergie, articles L221-1 &agrave; L221-12 et R221-1 &agrave;
-              R221-27 (d&eacute;finitions de l&rsquo;obligation, du d&eacute;l&eacute;gataire, du
-              registre PNCEE).
+              Code de l’énergie, articles L221-1 à L221-12 et R221-1 à R221-27 (définitions de
+              l’obligation, du délégataire, du registre PNCEE).
             </span>
           </li>
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>
-              Arr&ecirc;t&eacute; du 22 d&eacute;cembre 2014 modifi&eacute;, d&eacute;finissant les
-              op&eacute;rations standardis&eacute;es d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie
-              (catalogue BAR, BAT, IND, RES, TRA).
+              Arrêté du 22 décembre 2014 modifié, définissant les opérations standardisées
+              d’économies d’énergie (catalogue BAR, BAT, IND, RES, TRA).
             </span>
           </li>
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>
-              Arr&ecirc;t&eacute; du 4 septembre 2014 modifi&eacute;, fixant la liste des
-              pi&egrave;ces d&rsquo;un dossier de demande de CEE et les conditions du mandat.
+              Arrêté du 4 septembre 2014 modifié, fixant la liste des pièces d’un dossier de demande
+              de CEE et les conditions du mandat.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>
-              Arr&ecirc;t&eacute; du 28 septembre 2021 modifi&eacute;, relatif aux contr&ocirc;les
-              dans le cadre du dispositif CEE.
+              Arrêté du 28 septembre 2021 modifié, relatif aux contrôles dans le cadre du dispositif
+              CEE.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>
-              Loi n&deg; 2020-901 du 24 juillet 2020 encadrant le d&eacute;marchage
-              t&eacute;l&eacute;phonique (interdiction pour les travaux d&rsquo;&eacute;conomies
-              d&rsquo;&eacute;nergie).
+              Loi n&deg; 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique
+              (interdiction pour les travaux d’économies d’énergie).
             </span>
           </li>
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>
-              P&ocirc;le national des certificats d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie
-              (PNCEE), DGEC &mdash; Minist&egrave;re charg&eacute; de l&rsquo;&eacute;nergie.
+              Pôle national des certificats d’économies d’énergie (PNCEE), DGEC — Ministère chargé
+              de l’énergie.
             </span>
           </li>
         </ul>
@@ -626,9 +606,8 @@ export default function MandataireVsDirectPage() {
             Approfondir le dispositif CEE
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Retrouvez le catalogue des op&eacute;rations standardis&eacute;es, nos guides
-            &eacute;ditoriaux et l&rsquo;annuaire des artisans RGE qualifi&eacute;s pour chaque type
-            de travaux.
+            Retrouvez le catalogue des opérations standardisées, nos guides éditoriaux et l’annuaire
+            des artisans RGE qualifiés pour chaque type de travaux.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
@@ -657,7 +636,7 @@ export default function MandataireVsDirectPage() {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
-              Cumul MaPrimeR&eacute;nov&rsquo; &amp; CEE
+              Cumul MaPrimeRénov’ &amp; CEE
             </Link>
           </div>
         </div>

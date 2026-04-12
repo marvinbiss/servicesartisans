@@ -254,7 +254,7 @@ export default function CommentDevenirRgePage() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <GraduationCap className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              Guide artisan &mdash; qualification RGE
+              Guide artisan — qualification RGE
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
@@ -262,14 +262,12 @@ export default function CommentDevenirRgePage() {
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             Guide factuel et non commercial pour obtenir la qualification Reconnu Garant de
-            l&rsquo;Environnement&nbsp;: quels organismes&nbsp;? quelles &eacute;tapes&nbsp;?
-            combien &ccedil;a co&ucirc;te vraiment&nbsp;? Et surtout, est-ce rentable pour votre
-            entreprise&nbsp;?
+            l’Environnement&nbsp;: quels organismes&nbsp;? quelles étapes&nbsp;? combien ça
+            co&ucirc;te vraiment&nbsp;? Et surtout, est-ce rentable pour votre entreprise&nbsp;?
           </p>
           <p className="text-sm text-emerald-100/70 mt-4 max-w-3xl">
-            R&eacute;dig&eacute; sur la base de l&rsquo;arr&ecirc;t&eacute; du 1<sup>er</sup>{' '}
-            d&eacute;cembre 2015 modifi&eacute;, de la charte RGE France R&eacute;nov&rsquo; et des
-            documents publics des organismes certificateurs.
+            Rédigé sur la base de l’arrêté du 1<sup>er</sup> décembre 2015 modifié, de la charte RGE
+            France Rénov’ et des documents publics des organismes certificateurs.
           </p>
         </div>
       </section>
@@ -279,45 +277,41 @@ export default function CommentDevenirRgePage() {
         <div className="flex items-center gap-2 mb-6">
           <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Qu&rsquo;est-ce que le label RGE concr&egrave;tement&nbsp;?
+            Qu’est-ce que le label RGE concrètement&nbsp;?
           </h2>
         </div>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            RGE signifie &laquo;&nbsp;<strong>Reconnu Garant de l&rsquo;Environnement</strong>
-            &nbsp;&raquo;. Il ne s&rsquo;agit pas d&rsquo;un label commercial mais d&rsquo;une{' '}
-            <strong>mention officielle</strong> attribu&eacute;e par des organismes de qualification
-            accr&eacute;dit&eacute;s par le COFRAC (Comit&eacute; fran&ccedil;ais
-            d&rsquo;accr&eacute;ditation) selon la norme NF&nbsp;EN&nbsp;ISO/IEC&nbsp;17065.
+            RGE signifie «&nbsp;<strong>Reconnu Garant de l’Environnement</strong>
+            &nbsp;». Il ne s’agit pas d’un label commercial mais d’une{' '}
+            <strong>mention officielle</strong> attribuée par des organismes de qualification
+            accrédités par le COFRAC (Comité français d’accréditation) selon la norme
+            NF&nbsp;EN&nbsp;ISO/IEC&nbsp;17065.
           </p>
           <p>
-            Le dispositif est encadr&eacute; par{' '}
+            Le dispositif est encadré par{' '}
             <strong>
-              l&rsquo;arr&ecirc;t&eacute; du 1<sup>er</sup> d&eacute;cembre 2015 modifi&eacute;
+              l’arrêté du 1<sup>er</sup> décembre 2015 modifié
             </strong>
-            , pris en application des articles L.232-1 et suivants du code de
-            l&rsquo;&eacute;nergie. Il d&eacute;finit la liste des travaux &eacute;ligibles aux
-            aides publiques &agrave; la r&eacute;novation &eacute;nerg&eacute;tique
-            (MaPrimeR&eacute;nov&rsquo;, Certificats d&rsquo;&Eacute;conomies
-            d&rsquo;&Eacute;nergie, &eacute;co-pr&ecirc;t &agrave; taux z&eacute;ro) et les
-            qualifications exig&eacute;es pour chaque type de chantier.
+            , pris en application des articles L.232-1 et suivants du code de l’énergie. Il définit
+            la liste des travaux éligibles aux aides publiques à la rénovation énergétique
+            (MaPrimeRénov’, Certificats d’&Eacute;conomies d’&Eacute;nergie, éco-prêt à taux zéro)
+            et les qualifications exigées pour chaque type de chantier.
           </p>
           <p>
-            La <strong>gouvernance du dispositif</strong> est assur&eacute;e conjointement par
-            France R&eacute;nov&rsquo; (service public de la r&eacute;novation) et l&rsquo;ADEME,
-            sous la tutelle de la Direction g&eacute;n&eacute;rale de l&rsquo;&eacute;nergie et du
-            climat (DGEC) du Minist&egrave;re de la Transition &eacute;cologique. L&rsquo;annuaire
-            officiel unifi&eacute; est publi&eacute; sur <em>france-renov.gouv.fr</em>.
+            La <strong>gouvernance du dispositif</strong> est assurée conjointement par France
+            Rénov’ (service public de la rénovation) et l’ADEME, sous la tutelle de la Direction
+            générale de l’énergie et du climat (DGEC) du Ministère de la Transition écologique.
+            L’annuaire officiel unifié est publié sur <em>france-renov.gouv.fr</em>.
           </p>
           <p>
-            Concr&egrave;tement, la mention RGE est d&eacute;livr&eacute;e par{' '}
-            <strong>quatre grandes familles d&rsquo;organismes</strong>
-            sp&eacute;cialis&eacute;s&nbsp;: Qualit&rsquo;EnR pour les &eacute;nergies
-            renouvelables, Qualibat pour les corps de m&eacute;tier du b&acirc;timent, Qualifelec
-            pour l&rsquo;&eacute;lectrotechnique et le photovolta&iuml;que, et
-            C&eacute;quami/CertiBat/OPQIBI pour les audits et bureaux d&rsquo;&eacute;tudes. Chaque
-            organisme d&eacute;livre des qualifications sp&eacute;cifiques qui couvrent un
-            p&eacute;rim&egrave;tre technique pr&eacute;cis.
+            Concrètement, la mention RGE est délivrée par{' '}
+            <strong>quatre grandes familles d’organismes</strong>
+            spécialisés&nbsp;: Qualit’EnR pour les énergies renouvelables, Qualibat pour les corps
+            de métier du b&acirc;timent, Qualifelec pour l’électrotechnique et le
+            photovolta&iuml;que, et Céquami/CertiBat/OPQIBI pour les audits et bureaux d’études.
+            Chaque organisme délivre des qualifications spécifiques qui couvrent un périmètre
+            technique précis.
           </p>
         </div>
       </section>
@@ -332,9 +326,9 @@ export default function CommentDevenirRgePage() {
             </h2>
           </div>
           <p className="text-charcoal-600 mb-8 max-w-3xl leading-relaxed">
-            Le choix de l&rsquo;organisme d&eacute;pend de votre activit&eacute; principale. Un
-            m&ecirc;me artisan peut cumuler plusieurs qualifications aupr&egrave;s de plusieurs
-            organismes pour couvrir l&rsquo;ensemble de ses m&eacute;tiers.
+            Le choix de l’organisme dépend de votre activité principale. Un même artisan peut
+            cumuler plusieurs qualifications auprès de plusieurs organismes pour couvrir l’ensemble
+            de ses métiers.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {ORGANISMES.map((org) => {
@@ -381,9 +375,8 @@ export default function CommentDevenirRgePage() {
             })}
           </div>
           <p className="text-xs text-charcoal-900 mt-6 italic">
-            Les fourchettes de co&ucirc;ts sont indicatives et doivent &ecirc;tre confirm&eacute;es
-            directement aupr&egrave;s de chaque organisme, qui publie ses bar&egrave;mes &agrave;
-            jour sur son site.
+            Les fourchettes de co&ucirc;ts sont indicatives et doivent être confirmées directement
+            auprès de chaque organisme, qui publie ses barèmes à jour sur son site.
           </p>
         </div>
       </section>
@@ -393,7 +386,7 @@ export default function CommentDevenirRgePage() {
         <div className="flex items-center gap-2 mb-6">
           <CheckCircle2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Les 5 &eacute;tapes pour obtenir votre qualification RGE
+            Les 5 étapes pour obtenir votre qualification RGE
           </h2>
         </div>
         <ol className="space-y-5">
@@ -422,13 +415,13 @@ export default function CommentDevenirRgePage() {
           <div className="flex items-center gap-2 mb-6">
             <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Combien &ccedil;a co&ucirc;te vraiment&nbsp;?
+              Combien ça co&ucirc;te vraiment&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-600 mb-6 max-w-3xl leading-relaxed">
-            Les co&ucirc;ts varient selon l&rsquo;organisme, le nombre de qualifications
-            demand&eacute;es et la taille de l&rsquo;entreprise. Voici un ordre de grandeur
-            bas&eacute; sur les bar&egrave;mes publics des organismes &agrave; date&nbsp;:
+            Les co&ucirc;ts varient selon l’organisme, le nombre de qualifications demandées et la
+            taille de l’entreprise. Voici un ordre de grandeur basé sur les barèmes publics des
+            organismes à date&nbsp;:
           </p>
           <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
             <table className="w-full text-sm">
@@ -451,10 +444,9 @@ export default function CommentDevenirRgePage() {
             </table>
           </div>
           <p className="text-xs text-charcoal-900 mt-4 italic">
-            Budget total moyen pour une premi&egrave;re qualification&nbsp;: entre 3&nbsp;000 &euro;
-            et 6&nbsp;000 &euro; la premi&egrave;re ann&eacute;e, formation comprise. Certaines
-            formations peuvent &ecirc;tre financ&eacute;es par l&rsquo;OPCO Constructys ou le FAFCEA
-            selon le statut de l&rsquo;entreprise.
+            Budget total moyen pour une première qualification&nbsp;: entre 3&nbsp;000 &euro; et
+            6&nbsp;000 &euro; la première année, formation comprise. Certaines formations peuvent
+            être financées par l’OPCO Constructys ou le FAFCEA selon le statut de l’entreprise.
           </p>
         </div>
       </section>
@@ -464,43 +456,38 @@ export default function CommentDevenirRgePage() {
         <div className="flex items-center gap-2 mb-6">
           <TrendingUp className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Combien &ccedil;a rapporte concr&egrave;tement&nbsp;?
+            Combien ça rapporte concrètement&nbsp;?
           </h2>
         </div>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            La logique est simple et m&eacute;canique&nbsp;: la mention RGE est une{' '}
-            <strong>condition r&eacute;glementaire</strong> pour que le client final puisse
-            b&eacute;n&eacute;ficier de MaPrimeR&eacute;nov&rsquo;, des Certificats
-            d&rsquo;&Eacute;conomies d&rsquo;&Eacute;nergie (CEE) et de
-            l&rsquo;&eacute;co-pr&ecirc;t &agrave; taux z&eacute;ro. Sans RGE, le client paie
-            l&rsquo;int&eacute;gralit&eacute; du devis sans aide publique.
+            La logique est simple et mécanique&nbsp;: la mention RGE est une{' '}
+            <strong>condition réglementaire</strong> pour que le client final puisse bénéficier de
+            MaPrimeRénov’, des Certificats d’&Eacute;conomies d’&Eacute;nergie (CEE) et de
+            l’éco-prêt à taux zéro. Sans RGE, le client paie l’intégralité du devis sans aide
+            publique.
           </p>
           <p>
-            En pratique, cela signifie qu&rsquo;un artisan non-RGE est{' '}
-            <strong>mécaniquement exclu</strong> de la majeure partie du march&eacute; de la
-            r&eacute;novation &eacute;nerg&eacute;tique performante&nbsp;: isolation, pompes
-            &agrave; chaleur, chaudi&egrave;res biomasse, solaire thermique, menuiseries
-            performantes, ventilation double flux. Sur ces segments, les clients demandent
-            syst&eacute;matiquement un devis d&rsquo;artisan qualifi&eacute; RGE pour ne pas perdre
+            En pratique, cela signifie qu’un artisan non-RGE est{' '}
+            <strong>mécaniquement exclu</strong> de la majeure partie du marché de la rénovation
+            énergétique performante&nbsp;: isolation, pompes à chaleur, chaudières biomasse, solaire
+            thermique, menuiseries performantes, ventilation double flux. Sur ces segments, les
+            clients demandent systématiquement un devis d’artisan qualifié RGE pour ne pas perdre
             leurs aides.
           </p>
           <p>
-            Selon les donn&eacute;es publi&eacute;es par France R&eacute;nov&rsquo; et l&rsquo;ANAH,
-            plus de{' '}
-            <strong>60&nbsp;% des chantiers de r&eacute;novation &eacute;nerg&eacute;tique</strong>{' '}
-            en France sont aujourd&rsquo;hui r&eacute;alis&eacute;s avec mobilisation d&rsquo;au
-            moins une aide publique. Ne pas &ecirc;tre RGE revient donc &agrave; se couper
-            d&rsquo;environ deux tiers du march&eacute; sur les m&eacute;tiers concern&eacute;s.
+            Selon les données publiées par France Rénov’ et l’ANAH, plus de{' '}
+            <strong>60&nbsp;% des chantiers de rénovation énergétique</strong> en France sont
+            aujourd’hui réalisés avec mobilisation d’au moins une aide publique. Ne pas être RGE
+            revient donc à se couper d’environ deux tiers du marché sur les métiers concernés.
           </p>
           <p>
-            Le retour sur investissement de la qualification d&eacute;pend du volume de chantiers,
-            mais le point d&rsquo;&eacute;quilibre est g&eacute;n&eacute;ralement atteint{' '}
-            <strong>d&egrave;s les premiers dossiers</strong>
-            (un seul chantier &eacute;nerg&eacute;tique couvre habituellement le co&ucirc;t annuel
-            de la qualification). Il ne s&rsquo;agit donc pas d&rsquo;un pari mais d&rsquo;un{' '}
-            <em>ticket d&rsquo;entr&eacute;e r&eacute;glementaire</em>
-            pour exercer dans le secteur de la r&eacute;novation subventionn&eacute;e.
+            Le retour sur investissement de la qualification dépend du volume de chantiers, mais le
+            point d’équilibre est généralement atteint <strong>dès les premiers dossiers</strong>
+            (un seul chantier énergétique couvre habituellement le co&ucirc;t annuel de la
+            qualification). Il ne s’agit donc pas d’un pari mais d’un{' '}
+            <em>ticket d’entrée réglementaire</em>
+            pour exercer dans le secteur de la rénovation subventionnée.
           </p>
         </div>
       </section>
@@ -511,7 +498,7 @@ export default function CommentDevenirRgePage() {
           <div className="flex items-center gap-2 mb-6">
             <AlertTriangle className="w-5 h-5 text-amber-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Pi&egrave;ges &agrave; &eacute;viter
+              Pièges à éviter
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -531,7 +518,7 @@ export default function CommentDevenirRgePage() {
       {/* FAQ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-          Questions fr&eacute;quentes
+          Questions fréquentes
         </h2>
         <div className="space-y-4">
           {FAQS.map((faq) => (
@@ -556,9 +543,8 @@ export default function CommentDevenirRgePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">Aller plus loin</h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Explorez l&rsquo;annuaire RGE officiel, approfondissez les qualifications ou
-            d&eacute;couvrez comment r&eacute;f&eacute;rencer gratuitement votre entreprise sur
-            ServicesArtisans.
+            Explorez l’annuaire RGE officiel, approfondissez les qualifications ou découvrez comment
+            référencer gratuitement votre entreprise sur ServicesArtisans.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
@@ -578,7 +564,7 @@ export default function CommentDevenirRgePage() {
               href="/rge/sources"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
             >
-              Sources et m&eacute;thodologie
+              Sources et méthodologie
             </Link>
             <Link
               href="/espace-artisan"

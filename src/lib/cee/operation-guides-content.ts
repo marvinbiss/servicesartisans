@@ -92,7 +92,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
     metaTitle: 'Guide BAR-EN-101 : prime CEE isolation combles 2026',
     metaDescription:
       'BAR-EN-101\u202f: prime CEE isolation des combles perdus (R\u202f≥\u202f7) et rampants de toiture (R\u202f≥\u202f6). Normes NF EN 12664/12667/12939, ACERMI et RGE «\u202fIsolation thermique\u202f».',
-    primeClassique: 'forfait CEE selon barème DGEC et cours obligor',
+    primeClassique: 'forfait CEE selon barème DGEC et cours obligé',
     primePrecarite: 'bonification Coup de pouce Isolation (ménages modestes)',
     maPrimeRenov: 'cumul de plein droit (plafonds ménage applicables)',
     rgeRequises: ['RGE mention «\u202fIsolation thermique\u202f» (Qualibat ou équivalent)'],
@@ -109,7 +109,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         heading: 'Le montant de la prime CEE BAR-EN-101',
         paragraphs: [
-          'Le barème officiel s’exprime en kWh cumac par m² isolé, multiplié par le cours hebdomadaire pratiqué par l’obligor\u202f: le montant réellement perçu varie donc selon le volume de CEE en circulation et la politique commerciale du délégataire ou mandataire. Les ménages précaires bénéficient d’une bonification via le Coup de pouce Isolation.',
+          'Le barème officiel s’exprime en kWh cumac par m² isolé, multiplié par le cours hebdomadaire pratiqué par l’obligé\u202f: le montant réellement perçu varie donc selon le volume de CEE en circulation et la politique commerciale du délégataire ou mandataire. Les ménages précaires bénéficient d’une bonification via le Coup de pouce Isolation.',
           'Le cumul avec MaPrimeRénov’ est de plein droit sur le même chantier, sous réserve des plafonds de ressources et du plafond global d’aides cumulées. La TVA à 5,5\u202f% s’applique automatiquement sur matériel et pose dès lors que les critères techniques BAR-EN-101 sont respectés.',
         ],
       },
@@ -137,7 +137,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         question: 'L’isolation à 1\u202f€ existe-t-elle encore\u202f?',
         answer:
-          'Non. Le Coup de pouce Isolation à 1\u202f€ a été supprimé au 30\u202fjuin\u202f2021. Aujourd’hui un reste à charge minimum subsiste systématiquement, même pour les ménages les plus précaires\u202f: son niveau dépend du cours CEE, du barème DGEC en vigueur et de la politique commerciale de l’obligor/mandataire retenu.',
+          'Non. Le Coup de pouce Isolation à 1\u202f€ a été supprimé au 30\u202fjuin\u202f2021. Aujourd’hui un reste à charge minimum subsiste systématiquement, même pour les ménages les plus précaires\u202f: son niveau dépend du cours CEE, du barème DGEC en vigueur et de la politique commerciale de l’obligé/mandataire retenu.',
       },
       {
         question: 'Peut-on cumuler MaPrimeRénov’ et CEE sur le même m²\u202f?',
@@ -152,7 +152,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         question: 'Faut-il une visite technique préalable?',
         answer:
-          "Oui depuis 2021. L'artisan RGE est tenu de réaliser une visite préalable avant édition du devis, obligation vérifiée par les organismes de contrôle mandatés par les obligors.",
+          "Oui depuis 2021. L'artisan RGE est tenu de réaliser une visite préalable avant édition du devis, obligation vérifiée par les organismes de contrôle mandatés par les obligés.",
       },
     ],
   },
@@ -164,7 +164,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
     metaTitle: 'Guide BAR-EN-103 : prime CEE isolation plancher 2026',
     metaDescription:
       'BAR-EN-103\u202f: prime CEE isolation d’un plancher bas (vide sanitaire, cave). R\u202f≥\u202f3\u202fm².K/W, normes NF\u202fEN\u202f12664/12667/12939, ACERMI et RGE «\u202fIsolation thermique\u202f».',
-    primeClassique: 'forfait CEE selon barème DGEC et cours obligor',
+    primeClassique: 'forfait CEE selon barème DGEC et cours obligé',
     primePrecarite: 'bonification Coup de pouce Isolation (ménages modestes)',
     maPrimeRenov: 'cumul de plein droit (plafonds ménage applicables)',
     rgeRequises: ['RGE mention «\u202fIsolation thermique\u202f» (Qualibat ou équivalent)'],
@@ -181,7 +181,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         heading: "Montant de la prime CEE et cumul d'aides",
         paragraphs: [
-          'La prime CEE BAR-EN-103 s’exprime en kWh cumac par m² isolé, valorisés au cours obligor/mandataire du moment. Les ménages modestes et très modestes bénéficient d’une bonification Coup de pouce Isolation. Le montant final dépend donc du barème DGEC applicable et du cours CEE en vigueur lors du dépôt du dossier.',
+          'La prime CEE BAR-EN-103 s’exprime en kWh cumac par m² isolé, valorisés au cours obligé/mandataire du moment. Les ménages modestes et très modestes bénéficient d’une bonification Coup de pouce Isolation. Le montant final dépend donc du barème DGEC applicable et du cours CEE en vigueur lors du dépôt du dossier.',
           'Le cumul avec MaPrimeRénov’ est automatique dans la limite des plafonds de ressources et du plafond global d’aides (exprimé en pourcentage du coût HT selon la catégorie de revenus). TVA à 5,5\u202f% appliquée directement par l’artisan sur la facture. Éco\u2011PTZ mobilisable en complément si le bouquet de travaux comprend au moins deux postes éligibles.',
         ],
       },
@@ -220,14 +220,14 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
   'BAR-TH-112': {
     code: 'BAR-TH-112',
     h1: 'Prime CEE BAR-TH-112 : installer un poêle à bois bûches ou granulés en 2026',
-    lede: "Appareil indépendant de chauffage au bois — poêle à bûches (EN 13240), poêle à granulés (EN 14785) ou insert/foyer fermé à accumulation (EN 15250) : critères techniques distincts selon le combustible, prime CEE 2026 variable selon signataire, cumul MaPrimeRénov' et RGE Qualibois Air.",
+    lede: "Appareil indépendant de chauffage au bois — poêle à bûches (EN 13240), poêle à granulés (EN 14785) ou insert/foyer fermé à accumulation (EN 15250) : critères techniques distincts selon le combustible, prime CEE 2026 variable selon signataire, cumul MaPrimeRénov' et RGE QualiBois Air.",
     metaTitle: 'Guide BAR-TH-112 : prime CEE poêle bûches ou granulés 2026',
     metaDescription:
-      "BAR-TH-112 : prime CEE poêle bois bûches (EN 13240) ou granulés (EN 14785). Critères rendement, CO et PM distincts, cumul MaPrimeRénov' et Qualibois Air.",
+      "BAR-TH-112 : prime CEE poêle bois bûches (EN 13240) ou granulés (EN 14785). Critères rendement, CO et PM distincts, cumul MaPrimeRénov' et QualiBois Air.",
     primeClassique: 'variable selon signataire de la charte — demander simulation',
     primePrecarite: 'bonifiée via Coup de pouce Chauffage — variable selon signataire',
     maPrimeRenov: 'variable selon revenus et combustible — demander simulation',
-    rgeRequises: ['Qualibois Air', "Qualit'EnR"],
+    rgeRequises: ['QualiBois Air', "Qualit'EnR"],
     requiredQualifications: ['qualibois'],
     sections: [
       {
@@ -245,10 +245,10 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
         ],
       },
       {
-        heading: 'Qualification Qualibois : air vs eau',
+        heading: 'Qualification QualiBois : air vs eau',
         paragraphs: [
-          "Pour BAR-TH-112 (poêle indépendant), la qualification RGE exigée est Qualibois Air, délivrée par Qualit'EnR. Qualibois Eau ne couvre que les appareils hydraulisés (chaudières, poêles à bouilleur). Vérifiez toujours la mention \u00ab\u202fQualibois Air\u202f\u00bb sur l'attestation RGE de l'artisan.",
-          "Un installateur titulaire de Qualibois Eau ne peut PAS déclencher la prime BAR-TH-112 sur un poêle simple — le dossier sera refusé par l'obligor. C'est une source fréquente de contentieux entre ménages et artisans, souvent détectée trop tard.",
+          "Pour BAR-TH-112 (poêle indépendant), la qualification RGE exigée est QualiBois Air, délivrée par Qualit'EnR. QualiBois Eau ne couvre que les appareils hydraulisés (chaudières, poêles à bouilleur). Vérifiez toujours la mention \u00ab\u202fQualiBois Air\u202f\u00bb sur l'attestation RGE de l'artisan.",
+          "Un installateur titulaire de QualiBois Eau ne peut PAS déclencher la prime BAR-TH-112 sur un poêle simple — le dossier sera refusé par l'obligé. C'est une source fréquente de contentieux entre ménages et artisans, souvent détectée trop tard.",
         ],
       },
     ],
@@ -261,7 +261,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         question: 'Quelle différence entre poêle à bûches et à granulés?',
         answer:
-          "Les deux sont éligibles à BAR-TH-112, mais la prime est en général plus élevée pour les poêles à granulés (meilleur rendement et régulation automatique). Les montants exacts varient selon l'obligor.",
+          "Les deux sont éligibles à BAR-TH-112, mais la prime est en général plus élevée pour les poêles à granulés (meilleur rendement et régulation automatique). Les montants exacts varient selon l'obligé.",
       },
       {
         question: "Peut-on installer un poêle en complément d'un chauffage existant?",
@@ -279,20 +279,20 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
   'BAR-TH-113': {
     code: 'BAR-TH-113',
     h1: 'Prime CEE BAR-TH-113 : chaudière biomasse individuelle en 2026',
-    lede: "Chaudière biomasse (granulés, plaquettes, bûches) : rendement\u202f≥\u202f87\u202f%, prime CEE BAR-TH-113 bonifiée, cumul MaPrimeRénov' et Qualibois Eau obligatoire.",
+    lede: "Chaudière biomasse (granulés, plaquettes, bûches) : rendement\u202f≥\u202f87\u202f%, prime CEE BAR-TH-113 bonifiée, cumul MaPrimeRénov' et QualiBois Eau obligatoire.",
     metaTitle: 'Guide BAR-TH-113 : prime CEE chaudière biomasse 2026',
     metaDescription:
-      "BAR-TH-113 : prime CEE chaudière biomasse individuelle (granulés, plaquettes). Rendement ≥\u202f87\u202f%, Coup de pouce, cumul MaPrimeRénov' et Qualibois Eau.",
+      "BAR-TH-113 : prime CEE chaudière biomasse individuelle (granulés, plaquettes). Rendement ≥\u202f87\u202f%, Coup de pouce, cumul MaPrimeRénov' et QualiBois Eau.",
     primeClassique: "jusqu'à 4\u202f000\u202f€",
     primePrecarite: "jusqu'à 5\u202f000\u202f€ (Coup de pouce Chauffage)",
     maPrimeRenov: "jusqu'à 10\u202f000\u202f€ (ménage très modeste, granulés)",
-    rgeRequises: ['Qualibois Eau', "Qualit'EnR"],
+    rgeRequises: ['QualiBois Eau', "Qualit'EnR"],
     requiredQualifications: ['qualibois'],
     sections: [
       {
         heading: 'Périmètre de BAR-TH-113',
         paragraphs: [
-          "La fiche BAR-TH-113 couvre l'installation d'une chaudière biomasse individuelle dans un logement résidentiel de plus de 2 ans : granulés, plaquettes forestières ou bois bûches. Elle vise typiquement le remplacement d'une chaudière fioul, gaz ou charbon, et s'inscrit dans le Coup de pouce Chauffage avec un montant bonifié signé par tous les grands obligors.",
+          "La fiche BAR-TH-113 couvre l'installation d'une chaudière biomasse individuelle dans un logement résidentiel de plus de 2 ans : granulés, plaquettes forestières ou bois bûches. Elle vise typiquement le remplacement d'une chaudière fioul, gaz ou charbon, et s'inscrit dans le Coup de pouce Chauffage avec un montant bonifié signé par tous les grands obligés.",
           "La performance minimale exigée est un rendement saisonnier ≥ 87\u202f% (calculé selon la norme EN 303-5). Le bois bûches impose en plus un ballon tampon d'au moins 55\u202fL par kW de puissance nominale — une exigence souvent oubliée par les installateurs et qui fait capoter le dossier au contrôle.",
         ],
       },
@@ -304,10 +304,10 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
         ],
       },
       {
-        heading: 'Qualibois Eau obligatoire (pas Qualibois Air)',
+        heading: 'QualiBois Eau obligatoire (pas QualiBois Air)',
         paragraphs: [
-          "Attention, la qualification RGE exigée pour BAR-TH-113 est Qualibois Eau (délivrée par Qualit'EnR). Qualibois Air (poêles) n'est PAS acceptée pour les chaudières. Un installateur qui n'est qualifié qu'en Qualibois Air ne peut pas déclencher la prime BAR-TH-113 — le dossier sera refusé.",
-          "Vérifiez toujours la mention explicite \u00ab\u202fQualibois Eau\u202f\u00bb sur l'attestation RGE, et assurez-vous qu'elle est en cours de validité à la date d'acceptation du devis. La vérification se fait en 2 minutes sur france-renov.gouv.fr ou dans notre annuaire RGE.",
+          "Attention, la qualification RGE exigée pour BAR-TH-113 est QualiBois Eau (délivrée par Qualit'EnR). QualiBois Air (poêles) n'est PAS acceptée pour les chaudières. Un installateur qui n'est qualifié qu'en QualiBois Air ne peut pas déclencher la prime BAR-TH-113 — le dossier sera refusé.",
+          "Vérifiez toujours la mention explicite \u00ab\u202fQualiBois Eau\u202f\u00bb sur l'attestation RGE, et assurez-vous qu'elle est en cours de validité à la date d'acceptation du devis. La vérification se fait en 2 minutes sur france-renov.gouv.fr ou dans notre annuaire RGE.",
         ],
       },
     ],
@@ -325,7 +325,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         question: 'Une chaudière plaquettes est-elle éligible?',
         answer:
-          "Oui, au même titre que les chaudières granulés et bûches, à condition que le rendement saisonnier atteigne 87\u202f% minimum et que l'installateur soit titulaire de Qualibois Eau.",
+          "Oui, au même titre que les chaudières granulés et bûches, à condition que le rendement saisonnier atteigne 87\u202f% minimum et que l'installateur soit titulaire de QualiBois Eau.",
       },
       {
         question: "Peut-on cumuler avec l'éco-PTZ?",
@@ -335,7 +335,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         question: 'Combien de temps entre signature du devis et réception de la prime?',
         answer:
-          "En moyenne 8 à 12 semaines après la fin des travaux (le temps de transmission du dossier à l'obligor, contrôle terrain éventuel et virement). Certains obligors versent en moins de 4 semaines sur dossier complet.",
+          "En moyenne 8 à 12 semaines après la fin des travaux (le temps de transmission du dossier à l'obligé, contrôle terrain éventuel et virement). Certains obligés versent en moins de 4 semaines sur dossier complet.",
       },
     ],
   },
@@ -348,7 +348,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
     metaDescription:
       "BAR-TH-148 vA73-3 en vigueur depuis 01/11/2025 (fiche applicable jusqu'au 01/11/2030) : COP \u003e\u202f2,5 air extrait ou \u003e\u202f2,4 air ambiant/ext\u00e9rieur, norme EN 16147, cumul MaPrimeR\u00e9nov'.",
     primeClassique:
-      "forfait CEE 6\u1d49 période, variable selon zone climatique et cours kWh cumac de l'obligor \u2014 simulation auprès du signataire",
+      "forfait CEE 6\u1d49 période, variable selon zone climatique et cours kWh cumac de l'obligé \u2014 simulation auprès du signataire",
     primePrecarite:
       'bonification pr\u00e9carit\u00e9 Coup de pouce CEE, variable selon signataire \u2014 simulation personnalis\u00e9e',
     maPrimeRenov:
@@ -369,14 +369,14 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         heading: 'Forfait CEE et rapport investissement/retour',
         paragraphs: [
-          "La prime CEE BAR-TH-148 reste modeste compar\u00e9e aux fiches PAC air/eau ou chaudi\u00e8re biomasse. En 6\u1d49 p\u00e9riode, le forfait en kWh cumac d\u00e9pend de la zone climatique (H1, H2, H3) et se traduit en euros via le cours hebdomadaire du kWh cumac sign\u00e9 entre l'obligor et le d\u00e9l\u00e9gataire \u2014 les montants en euros ne sont plus encadr\u00e9s par un plancher r\u00e9glementaire depuis 2022, il faut donc demander une simulation nominative au signataire. La bonification pr\u00e9carit\u00e9 via le Coup de pouce CEE reste mobilisable pour les m\u00e9nages modestes et tr\u00e8s modestes.",
+          "La prime CEE BAR-TH-148 reste modeste compar\u00e9e aux fiches PAC air/eau ou chaudi\u00e8re biomasse. En 6\u1d49 p\u00e9riode, le forfait en kWh cumac d\u00e9pend de la zone climatique (H1, H2, H3) et se traduit en euros via le cours hebdomadaire du kWh cumac sign\u00e9 entre l'obligé et le d\u00e9l\u00e9gataire \u2014 les montants en euros ne sont plus encadr\u00e9s par un plancher r\u00e9glementaire depuis 2022, il faut donc demander une simulation nominative au signataire. La bonification pr\u00e9carit\u00e9 via le Coup de pouce CEE reste mobilisable pour les m\u00e9nages modestes et tr\u00e8s modestes.",
           "Le cumul avec MaPrimeR\u00e9nov' (jusqu'\u00e0 1\u202f200\u202f\u20ac pour un m\u00e9nage tr\u00e8s modeste au 1\u1d49\u02b3 janvier 2026) et la TVA \u00e0 5,5\u202f% (article 278-0 bis A du CGI) rendent l'investissement rentable. Un CET co\u00fbte entre 2\u202f500 et 4\u202f000\u202f\u20ac pose incluse, contre 800 \u00e0 1\u202f500\u202f\u20ac pour un cumulus \u00e9lectrique classique. Le surco\u00fbt est amorti en 3 \u00e0 5 ans gr\u00e2ce \u00e0 la division par 3 de la facture d'eau chaude sanitaire (qui repr\u00e9sente environ 15\u202f% de la consommation \u00e9nerg\u00e9tique d'un logement fran\u00e7ais moyen).",
         ],
       },
       {
         heading: 'Qualification RGE et points de vigilance',
         paragraphs: [
-          "La qualification requise pour BAR-TH-148 est la mention RGE \u00ab\u202fInstallation de pompe \u00e0 chaleur\u202f\u00bb. En pratique, la qualification de r\u00e9f\u00e9rence est QualiPAC module chauffe-eau thermodynamique d\u00e9livr\u00e9e par Qualit'EnR. La qualification doit \u00eatre active et porter la mention RGE \u00e0 la date d'acceptation du devis par le m\u00e9nage, sans quoi l'obligor CEE refusera le dossier m\u00eame si l'\u00e9quipement install\u00e9 est techniquement \u00e9ligible.",
+          "La qualification requise pour BAR-TH-148 est la mention RGE \u00ab\u202fInstallation de pompe \u00e0 chaleur\u202f\u00bb. En pratique, la qualification de r\u00e9f\u00e9rence est QualiPAC module chauffe-eau thermodynamique d\u00e9livr\u00e9e par Qualit'EnR. La qualification doit \u00eatre active et porter la mention RGE \u00e0 la date d'acceptation du devis par le m\u00e9nage, sans quoi l'obligé CEE refusera le dossier m\u00eame si l'\u00e9quipement install\u00e9 est techniquement \u00e9ligible.",
           "Point de vigilance majeur : certains installateurs proposent le CET en solution \u00ab\u202fsimple\u202f\u00bb sans vérifier la compatibilité avec le volume d'air disponible pour la captation. Un CET sur air ambiant nécessite un local non chauffé d'au moins 20\u202fm³ bien ventilé. En captation sur air extérieur, prévoir le passage des gaines isolées. Un mauvais dimensionnement divise par 2 le COP réel mesuré en conditions d'usage.",
         ],
       },
@@ -679,7 +679,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
         heading: 'Montant indicatif de la prime CEE BAR-TH-143',
         paragraphs: [
           'Le forfait en kWh cumac est indexé sur la surface de capteurs installée et la zone climatique. Traduit en euros au cours hebdomadaire 2026, la prime CEE classique se situe typiquement dans une fourchette de 3\u202f000 à 4\u202f500\u202f€ pour une installation résidentielle standard de 12 à 15\u202fm² de capteurs. Ce montant est bonifié via le Coup de pouce Chauffage pour les ménages modestes et très modestes, qui atteignent couramment une fourchette de 5\u202f000 à 6\u202f500\u202f€.',
-          "Ces ordres de grandeur restent indicatifs : le barème exact figure dans l'annexe de la fiche DGEC publiée au BOAMP, qu'il faut consulter pour chaque chantier. Les chiffres réels dépendent de la surface captée, de la zone climatique (H1, H2, H3), du cours du kWh cumac et de la politique commerciale de l'obligor. Ne jamais accepter un engagement chiffré verbal : exigez l'offre de prime CEE nominative avant de signer le devis.",
+          "Ces ordres de grandeur restent indicatifs : le barème exact figure dans l'annexe de la fiche DGEC publiée au BOAMP, qu'il faut consulter pour chaque chantier. Les chiffres réels dépendent de la surface captée, de la zone climatique (H1, H2, H3), du cours du kWh cumac et de la politique commerciale de l'obligé. Ne jamais accepter un engagement chiffré verbal : exigez l'offre de prime CEE nominative avant de signer le devis.",
         ],
       },
       {
@@ -713,7 +713,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         question: 'QualiSol CESI suffit-il pour installer un SSC?',
         answer:
-          "Non. QualiSol se décline en deux modules strictement distincts : CESI (chauffe-eau solaire individuel) et SSC (système solaire combiné). Seul le module QualiSol SSC couvre le couplage au circuit de chauffage. Un artisan titulaire uniquement de QualiSol CESI ne peut pas déclencher la prime BAR-TH-143 — le dossier sera refusé par l'obligor.",
+          "Non. QualiSol se décline en deux modules strictement distincts : CESI (chauffe-eau solaire individuel) et SSC (système solaire combiné). Seul le module QualiSol SSC couvre le couplage au circuit de chauffage. Un artisan titulaire uniquement de QualiSol CESI ne peut pas déclencher la prime BAR-TH-143 — le dossier sera refusé par l'obligé.",
       },
       {
         question: 'Le SSC est-il pertinent dans le nord de la France?',
@@ -831,7 +831,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
     metaDescription:
       "BAR-TH-171 vA78.4 (arr\u00eat\u00e9 15/12/2025) : ETAS \u2265 126\u202f% (BT) ou \u2265 111\u202f% (MT/HT), r\u00e8glement UE 813/2013, bonification \u00d75 du 01/10/2025 au 31/12/2030, fiche applicable jusqu'au 30/06/2028.",
     primeClassique:
-      "forfait CEE bonifi\u00e9 \u00d75 (01/10/2025 \u2192 31/12/2030), variable selon zone climatique, surface et cours kWh cumac de l'obligor \u2014 simulation aupr\u00e8s du signataire",
+      "forfait CEE bonifi\u00e9 \u00d75 (01/10/2025 \u2192 31/12/2030), variable selon zone climatique, surface et cours kWh cumac de l'obligé \u2014 simulation aupr\u00e8s du signataire",
     primePrecarite:
       'bonification Coup de pouce Chauffage sur forfait \u00d75, variable selon signataire \u2014 simulation personnalis\u00e9e',
     maPrimeRenov:
@@ -852,7 +852,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
         heading: 'Arr\u00eat\u00e9 modificatif du 15 d\u00e9cembre 2025 et bonification \u00d75',
         paragraphs: [
           "L'arr\u00eat\u00e9 modificatif du 15 d\u00e9cembre 2025 (JORFTEXT000053043176), entr\u00e9 en vigueur au 1\u1d49\u02b3 janvier 2026, s'inscrit dans la 6\u1d49 p\u00e9riode CEE (arr\u00eat\u00e9 du 21 d\u00e9cembre 2025 et d\u00e9cret n\u00b0 2025-1048). Il consolide le r\u00e9gime BAR-TH-171 pour la p\u00e9riode 2026-2030 et reconduit la fiche dans sa r\u00e9daction applicable \u00e0 la 6\u1d49 p\u00e9riode, avec une validit\u00e9 r\u00e9glementaire jusqu'au 30 juin 2028 (reconduction \u00e9ventuelle \u00e0 confirmer par arr\u00eat\u00e9 ult\u00e9rieur).",
-          "Mesure majeure pour les m\u00e9nages et les mandataires CEE : une bonification de coefficient multiplicateur \u00d75 sur le volume de certificats d\u00e9livr\u00e9s au titre de BAR-TH-171 est applicable du 1\u1d49\u02b3 octobre 2025 au 31 d\u00e9cembre 2030. Concr\u00e8tement, le forfait kWh cumac de la fiche est multipli\u00e9 par 5 dans le calcul du volume CEE g\u00e9n\u00e9r\u00e9 par l'op\u00e9ration, ce qui augmente sensiblement le montant en euros reconstitu\u00e9 par l'obligor ou le d\u00e9l\u00e9gataire \u2014 sans qu'aucun plancher en euros ne soit fix\u00e9 par la r\u00e9glementation depuis 2022. Le montant d\u00e9finitif d\u00e9pend de la zone climatique (H1, H2, H3), de la surface chauff\u00e9e et du cours hebdomadaire du kWh cumac du signataire \u00e0 la date de l'offre nominative.",
+          "Mesure majeure pour les m\u00e9nages et les mandataires CEE : une bonification de coefficient multiplicateur \u00d75 sur le volume de certificats d\u00e9livr\u00e9s au titre de BAR-TH-171 est applicable du 1\u1d49\u02b3 octobre 2025 au 31 d\u00e9cembre 2030. Concr\u00e8tement, le forfait kWh cumac de la fiche est multipli\u00e9 par 5 dans le calcul du volume CEE g\u00e9n\u00e9r\u00e9 par l'op\u00e9ration, ce qui augmente sensiblement le montant en euros reconstitu\u00e9 par l'obligé ou le d\u00e9l\u00e9gataire \u2014 sans qu'aucun plancher en euros ne soit fix\u00e9 par la r\u00e9glementation depuis 2022. Le montant d\u00e9finitif d\u00e9pend de la zone climatique (H1, H2, H3), de la surface chauff\u00e9e et du cours hebdomadaire du kWh cumac du signataire \u00e0 la date de l'offre nominative.",
           "Cons\u00e9quence op\u00e9rationnelle : la BAR-TH-171 devient sur 2026-2030 la voie \u00e0 privil\u00e9gier syst\u00e9matiquement en r\u00e9novation ambitieuse, surtout lorsqu'une isolation pr\u00e9alable a \u00e9t\u00e9 r\u00e9alis\u00e9e. Sur un logement bien isol\u00e9, le dimensionnement d'une PAC haute performance est plus facile (besoins moindres, modulation en plage optimale) et le gain en facture \u00e9nerg\u00e9tique est maximal. Toute simulation chiffr\u00e9e doit \u00eatre demand\u00e9e directement au signataire de la charte CEE au moment de l'offre.",
         ],
       },
@@ -866,8 +866,8 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         heading: "Cumul MaPrimeR\u00e9nov', Coup de pouce et TVA 5,5\u202f%",
         paragraphs: [
-          "La BAR-TH-171 est cumulable sans plafond avec MaPrimeR\u00e9nov' r\u00e9sidentielle (jusqu'\u00e0 5\u202f000\u202f\u20ac pour un m\u00e9nage tr\u00e8s modeste rempla\u00e7ant une chaudi\u00e8re fossile, au 1\u1d49\u02b3 janvier 2026) et avec le Coup de pouce Chauffage pour la sortie des \u00e9nergies fossiles. Le montant du Coup de pouce est fix\u00e9 par les chartes sign\u00e9es entre les obligors et le m\u00e9nage \u2014 aucun plancher r\u00e9glementaire en euros n'est impos\u00e9, la simulation doit \u00eatre demand\u00e9e directement au signataire de la charte. La BAR-TH-171 ouvre \u00e9galement droit \u00e0 l'\u00e9co\u2011PTZ.",
-          "La TVA \u00e0 taux r\u00e9duit de 5,5\u202f% s'applique automatiquement \u00e0 la fourniture et \u00e0 la pose (article 278-0 bis A du CGI) d\u00e8s lors que l'ETAS conforme (\u2265 126\u202f% en basse temp\u00e9rature ou \u2265 111\u202f% en moyenne/haute temp\u00e9rature) est attest\u00e9 sur le devis et la facture. L'artisan doit faire figurer explicitement la r\u00e9f\u00e9rence BAR-TH-171 et la valeur ETAS du mod\u00e8le pour l'application install\u00e9e sur ses documents commerciaux, sans quoi l'obligor CEE refusera le dossier m\u00eame si le mod\u00e8le install\u00e9 est techniquement \u00e9ligible.",
+          "La BAR-TH-171 est cumulable sans plafond avec MaPrimeR\u00e9nov' r\u00e9sidentielle (jusqu'\u00e0 5\u202f000\u202f\u20ac pour un m\u00e9nage tr\u00e8s modeste rempla\u00e7ant une chaudi\u00e8re fossile, au 1\u1d49\u02b3 janvier 2026) et avec le Coup de pouce Chauffage pour la sortie des \u00e9nergies fossiles. Le montant du Coup de pouce est fix\u00e9 par les chartes sign\u00e9es entre les obligés et le m\u00e9nage \u2014 aucun plancher r\u00e9glementaire en euros n'est impos\u00e9, la simulation doit \u00eatre demand\u00e9e directement au signataire de la charte. La BAR-TH-171 ouvre \u00e9galement droit \u00e0 l'\u00e9co\u2011PTZ.",
+          "La TVA \u00e0 taux r\u00e9duit de 5,5\u202f% s'applique automatiquement \u00e0 la fourniture et \u00e0 la pose (article 278-0 bis A du CGI) d\u00e8s lors que l'ETAS conforme (\u2265 126\u202f% en basse temp\u00e9rature ou \u2265 111\u202f% en moyenne/haute temp\u00e9rature) est attest\u00e9 sur le devis et la facture. L'artisan doit faire figurer explicitement la r\u00e9f\u00e9rence BAR-TH-171 et la valeur ETAS du mod\u00e8le pour l'application install\u00e9e sur ses documents commerciaux, sans quoi l'obligé CEE refusera le dossier m\u00eame si le mod\u00e8le install\u00e9 est techniquement \u00e9ligible.",
         ],
       },
     ],
@@ -885,7 +885,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         question: 'Quelles qualifications RGE pour BAR-TH-171?',
         answer:
-          "La qualification requise est la mention RGE \u00ab Installation de pompe \u00e0 chaleur \u00bb. En pratique, la qualification de r\u00e9f\u00e9rence est QualiPAC module air/eau d\u00e9livr\u00e9e par Qualit'EnR. La qualification doit \u00eatre active et porter explicitement la mention RGE \u00e0 la date d'acceptation du devis par le m\u00e9nage, sans quoi l'obligor CEE refusera le dossier quelle que soit la qualit\u00e9 technique de l'installation.",
+          "La qualification requise est la mention RGE \u00ab Installation de pompe \u00e0 chaleur \u00bb. En pratique, la qualification de r\u00e9f\u00e9rence est QualiPAC module air/eau d\u00e9livr\u00e9e par Qualit'EnR. La qualification doit \u00eatre active et porter explicitement la mention RGE \u00e0 la date d'acceptation du devis par le m\u00e9nage, sans quoi l'obligé CEE refusera le dossier quelle que soit la qualit\u00e9 technique de l'installation.",
       },
       {
         question: "L'ETAS d\u00e9clar\u00e9 par le constructeur est-il suffisant?",
@@ -918,7 +918,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         heading: 'Le forfait CEE BAR-TH-172 et les cumuls mobilisables',
         paragraphs: [
-          "Le forfait CEE de la BAR-TH-172 est élevé, à la mesure de la complexité de pose (terrassement ou forage) et de la performance atteinte. Il varie selon la zone climatique (H1, H2, H3) et la surface chauffée, et se traduit en euros via le cours hebdomadaire du kWh cumac de l'obligor. Les montants précis doivent être demandés au cas par cas dans l'offre de prime CEE nominative.",
+          "Le forfait CEE de la BAR-TH-172 est élevé, à la mesure de la complexité de pose (terrassement ou forage) et de la performance atteinte. Il varie selon la zone climatique (H1, H2, H3) et la surface chauffée, et se traduit en euros via le cours hebdomadaire du kWh cumac de l'obligé. Les montants précis doivent être demandés au cas par cas dans l'offre de prime CEE nominative.",
           "La BAR-TH-172 est pleinement cumulable avec MaPrimeRénov' résidentielle classique, avec le Coup de pouce Chauffage pour la sortie des énergies fossiles, et avec le Parcours Accompagné MaPrimeRénov' (fiche BAR-TH-174, qui a remplacé l'ancienne BAR-TH-164 abrogée début 2024) pour les rénovations d'ampleur visant au moins 2 sauts de classe DPE. L'éco-PTZ et la TVA 5,5\u202f% s'appliquent également.",
         ],
       },

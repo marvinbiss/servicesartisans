@@ -92,32 +92,32 @@ const howSteps = [
 
 const faqItems = [
   {
-    question: 'Comment sont vérifiés les avis ?',
+    question: 'Comment sont vérifiés les avis&nbsp;?',
     answer:
       'Les avis publiés sur ServicesArtisans proviennent de clients ayant effectivement sollicité un artisan via notre plateforme. Chaque avis est associé à une demande de devis ou à une mise en relation vérifiée.',
   },
   {
-    question: 'Puis-je laisser un avis ?',
+    question: 'Puis-je laisser un avis&nbsp;?',
     answer:
       'Oui, tout client ayant fait appel à un artisan référencé peut déposer un avis. Celui-ci sera publié après vérification de la mise en relation.',
   },
   {
-    question: 'Les artisans peuvent-ils supprimer un avis négatif ?',
+    question: 'Les artisans peuvent-ils supprimer un avis négatif&nbsp;?',
     answer:
       'Non. Les avis négatifs sont maintenus dès lors qu’ils respectent nos conditions de publication (pas d’insultes, contenu véridique). Les artisans peuvent y répondre publiquement.',
   },
   {
-    question: 'Comment lire les avis efficacement ?',
+    question: 'Comment lire les avis efficacement&nbsp;?',
     answer:
       'Privilégiez les avis détaillés qui décrivent le type de travaux réalisés, le respect des délais et la qualité du résultat. Un artisan avec 10 avis à 4,5/5 est souvent plus fiable qu’un artisan avec 2 avis à 5/5.',
   },
   {
-    question: 'Les avis influencent-ils le classement des artisans ?',
+    question: 'Les avis influencent-ils le classement des artisans&nbsp;?',
     answer:
       'Oui, les artisans les mieux notés et les plus actifs apparaissent en priorité dans les résultats de recherche sur ServicesArtisans.',
   },
   {
-    question: 'Que faire en cas de litige avec un artisan ?',
+    question: 'Que faire en cas de litige avec un artisan&nbsp;?',
     answer:
       'En cas de différend, contactez notre service de médiation. Nous intervenons gratuitement pour faciliter la résolution entre le client et l’artisan.',
   },

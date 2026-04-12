@@ -243,7 +243,7 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       {
         question: 'Faut-il un artisan RGE pour les CEE ?',
         answer:
-          "Oui, la certification RGE est obligatoire pour les travaux ouvrant droit aux CEE. L'artisan doit être certifié RGE dans le domaine correspondant aux travaux (QualiPAC pour les PAC, Qualibois pour le bois, etc.). Vérifiez sa certification sur france-renov.gouv.fr.",
+          "Oui, la certification RGE est obligatoire pour les travaux ouvrant droit aux CEE. L'artisan doit être certifié RGE dans le domaine correspondant aux travaux (QualiPAC pour les PAC, QualiBois pour le bois, etc.). Vérifiez sa certification sur france-renov.gouv.fr.",
       },
     ],
     keyTakeaways: [

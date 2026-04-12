@@ -100,7 +100,7 @@ export const RGE_QUALIFICATION_GUIDES: Record<string, RgeQualificationGuide> = {
       {
         heading: "Comment vérifier qu'un artisan est bien QualiPAC en 2026",
         paragraphs: [
-          "La vérification doit toujours se faire sur le site officiel france-renov.gouv.fr ou directement sur qualit-enr.org/annuaire. Ne jamais se contenter d'un logo QualiPAC sur un devis ou un site web : les usurpations sont fréquentes et détectées chaque année par les obligors CEE.",
+          "La vérification doit toujours se faire sur le site officiel france-renov.gouv.fr ou directement sur qualit-enr.org/annuaire. Ne jamais se contenter d'un logo QualiPAC sur un devis ou un site web : les usurpations sont fréquentes et détectées chaque année par les obligés CEE.",
           "Sur france-renov, saisissez le SIRET de l'entreprise (pas son nom commercial) et vérifiez la colonne \u00ab\u202fDomaines de travaux reconnus\u202f\u00bb. La mention doit explicitement inclure \u00ab\u202fPompe à chaleur\u202f\u00bb et la date de validité doit être postérieure à la date d'acceptation du devis. Une qualification expirée entre le devis et les travaux reste valable, mais l'inverse est un refus systématique.",
         ],
       },
@@ -526,7 +526,7 @@ export const RGE_QUALIFICATION_GUIDES: Record<string, RgeQualificationGuide> = {
         heading: "Intérêt de Qualibat 5911 pour l'artisan",
         paragraphs: [
           "Pour un artisan chauffagiste, Qualibat 5911 est l'un des sésames commerciaux les plus importants du secteur résidentiel : il débloque simultanément l'accès aux fiches CEE BAR-TH-171, BAR-TH-172, BAR-TH-129, BAR-TH-148 et BAR-TH-159, à MaPrimeRénov' (qui exclut depuis 2023 les énergies fossiles) et à la TVA 5,5\u202f%. Un chauffagiste non-RGE se coupe de facto de 80 à 90\u202f% du marché résidentiel de la rénovation énergétique.",
-          "La qualification est également une preuve de sérieux reconnue par les obligors CEE, les assureurs et les maîtres d'ouvrage. Elle facilite l'accès aux appels d'offres publics et aux marchés de rénovation encadrée (Parcours Accompagné MaPrimeRénov', BAR-TH-174 qui remplace depuis 2024 l'ancienne BAR-TH-164 abrogée). L'investissement de certification et de maintien (formation continue, audits, cotisation) s'amortit en pratique dès le premier chantier CEE facturé. La question n'est donc pas \u00ab\u202ffaut-il obtenir Qualibat 5911\u202f\u00bb mais \u00ab\u202fquand la passer\u202f\u00bb.",
+          "La qualification est également une preuve de sérieux reconnue par les obligés CEE, les assureurs et les maîtres d'ouvrage. Elle facilite l'accès aux appels d'offres publics et aux marchés de rénovation encadrée (Parcours Accompagné MaPrimeRénov', BAR-TH-174 qui remplace depuis 2024 l'ancienne BAR-TH-164 abrogée). L'investissement de certification et de maintien (formation continue, audits, cotisation) s'amortit en pratique dès le premier chantier CEE facturé. La question n'est donc pas \u00ab\u202ffaut-il obtenir Qualibat 5911\u202f\u00bb mais \u00ab\u202fquand la passer\u202f\u00bb.",
         ],
       },
     ],
@@ -534,7 +534,7 @@ export const RGE_QUALIFICATION_GUIDES: Record<string, RgeQualificationGuide> = {
       {
         question: 'Qualibat 5911 remplace-t-il QualiPAC pour une fiche CEE PAC?',
         answer:
-          "Oui. Qualibat 5911 (classe 3) est explicitement reconnu équivalent à QualiPAC pour les fiches CEE BAR-TH-171 (PAC air/eau haute performance) et BAR-TH-148 (CET), à condition que la qualification soit active et portant la mention RGE à la date d'acceptation du devis. Pour BAR-TH-129 (PAC air/air), Qualit'EnR recommande QualiPAC mention air/air spécifiquement, mais Qualibat 5911 peut rester accepté selon l'obligor — à vérifier au cas par cas.",
+          "Oui. Qualibat 5911 (classe 3) est explicitement reconnu équivalent à QualiPAC pour les fiches CEE BAR-TH-171 (PAC air/eau haute performance) et BAR-TH-148 (CET), à condition que la qualification soit active et portant la mention RGE à la date d'acceptation du devis. Pour BAR-TH-129 (PAC air/air), Qualit'EnR recommande QualiPAC mention air/air spécifiquement, mais Qualibat 5911 peut rester accepté selon l'obligé — à vérifier au cas par cas.",
       },
       {
         question: 'Quelle différence entre Qualibat 5911 et Qualibat 5912?',
@@ -596,7 +596,7 @@ export const RGE_QUALIFICATION_GUIDES: Record<string, RgeQualificationGuide> = {
         heading: "Primes CEE et MaPrimeRénov' débloquées",
         paragraphs: [
           "Qualibat 7131 avec mention RGE est la qualification de référence pour activer les trois fiches CEE d'isolation intérieure les plus utilisées : BAR-EN-101 (combles et toitures, exigence R ≥ 7,0 pour les combles perdus), BAR-EN-102 (planchers bas, R ≥ 3,0) et BAR-EN-103 (murs intérieurs, R ≥ 3,7). Elle ouvre également MaPrimeRénov' résidentielle classique (barèmes par m² isolé selon les revenus), le Coup de pouce Isolation et la TVA à taux réduit de 5,5\u202f% (article 278-0 bis A CGI).",
-          "Sans une qualification RGE isolation (7131 ou 7141 selon le chantier), aucune de ces aides n'est mobilisable. C'est une condition d'éligibilité prévue par l'arrêté du 24 décembre 2015 modifié, et les obligors CEE vérifient systématiquement le certificat à la date d'acceptation du devis. Un artisan non-RGE se coupe mécaniquement de l'essentiel du marché de la rénovation énergétique aidée.",
+          "Sans une qualification RGE isolation (7131 ou 7141 selon le chantier), aucune de ces aides n'est mobilisable. C'est une condition d'éligibilité prévue par l'arrêté du 24 décembre 2015 modifié, et les obligés CEE vérifient systématiquement le certificat à la date d'acceptation du devis. Un artisan non-RGE se coupe mécaniquement de l'essentiel du marché de la rénovation énergétique aidée.",
         ],
       },
       {

@@ -40,7 +40,7 @@ export function getAbandonEmail1(data: { service: string; city: string; unsubscr
   </div>
 
   <div style="text-align: center; margin: 32px 0;">
-    <a href="https://www.servicesartisans.fr/devis"
+    <a href="https://servicesartisans.fr/devis"
        style="background: #2563eb; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 16px; display: inline-block;">
       Finaliser ma demande de devis
     </a>

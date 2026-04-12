@@ -267,30 +267,27 @@ export default function CoupDePouce2026Page() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Sparkles className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              Guide neutre &mdash; article L221-7 du code de l&rsquo;&eacute;nergie
+              Guide neutre — article L221-7 du code de l’énergie
             </span>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
             Coup de pouce CEE 2026&nbsp;: chartes actives et bonifications
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
-            Les chartes &laquo;&nbsp;Coup de pouce&nbsp;&raquo; bonifient certaines primes CEE
-            d&rsquo;une op&eacute;ration standardis&eacute;e. Ce guide recense les chartes actives
-            en 2026, leur cadre juridique, les op&eacute;rations concern&eacute;es et le parcours
-            &agrave; suivre pour en b&eacute;n&eacute;ficier sans se faire pi&eacute;ger.
+            Les chartes «&nbsp;Coup de pouce&nbsp;» bonifient certaines primes CEE d’une opération
+            standardisée. Ce guide recense les chartes actives en 2026, leur cadre juridique, les
+            opérations concernées et le parcours à suivre pour en bénéficier sans se faire piéger.
           </p>
           <div
             className="speakable-summary mt-6 text-base md:text-lg text-emerald-50/80 leading-relaxed border-l-2 border-emerald-400/40 pl-4"
             data-speakable="true"
           >
             <p>
-              Un Coup de pouce est une bonification contractuelle d&rsquo;une prime CEE,
-              d&eacute;finie par une charte sign&eacute;e entre l&rsquo;&Eacute;tat et un
-              obligation&eacute; ou d&eacute;l&eacute;gataire. La bonification est revers&eacute;e
-              au b&eacute;n&eacute;ficiaire final sous forme de prime major&eacute;e. Engagement
-              obligatoire
-              <em> avant</em> signature du devis, artisan RGE, d&eacute;p&ocirc;t dans les
-              d&eacute;lais&nbsp;: trois r&egrave;gles d&rsquo;or.
+              Un Coup de pouce est une bonification contractuelle d’une prime CEE, définie par une
+              charte signée entre l’&Eacute;tat et un obligationé ou délégataire. La bonification
+              est reversée au bénéficiaire final sous forme de prime majorée. Engagement obligatoire
+              <em> avant</em> signature du devis, artisan RGE, dépôt dans les délais&nbsp;: trois
+              règles d’or.
             </p>
           </div>
         </div>
@@ -299,23 +296,19 @@ export default function CoupDePouce2026Page() {
       {/* Intro éditoriale */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
-          Les &laquo;&nbsp;Coup de pouce&nbsp;&raquo; sont devenus, depuis leur lancement en 2019,
-          l&rsquo;un des leviers les plus visibles du dispositif des certificats
-          d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie. Ils ne cr&eacute;ent pas de nouvelles
-          op&eacute;rations&nbsp;: ils
-          <em> majorent</em> le volume de CEE g&eacute;n&eacute;r&eacute; par une op&eacute;ration
-          d&eacute;j&agrave; standardis&eacute;e, en contrepartie d&rsquo;un engagement contractuel
-          pris par un obligation&eacute; ou un d&eacute;l&eacute;gataire aupr&egrave;s de
-          l&rsquo;&Eacute;tat.
+          Les «&nbsp;Coup de pouce&nbsp;» sont devenus, depuis leur lancement en 2019, l’un des
+          leviers les plus visibles du dispositif des certificats d’économies d’énergie. Ils ne
+          créent pas de nouvelles opérations&nbsp;: ils
+          <em> majorent</em> le volume de CEE généré par une opération déjà standardisée, en
+          contrepartie d’un engagement contractuel pris par un obligationé ou un délégataire auprès
+          de l’&Eacute;tat.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          Cet article d&eacute;crit ce qu&rsquo;est juridiquement un Coup de pouce, liste les
-          chartes actives ou historiques en 2026, explique le parcours &agrave; suivre
-          c&ocirc;t&eacute; particulier et l&rsquo;articulation avec MaPrimeR&eacute;nov&rsquo;, et
-          signale les pi&egrave;ges fr&eacute;quents. Les donn&eacute;es chiffr&eacute;es exactes
-          sont volontairement renvoy&eacute;es aux sites officiels &mdash; france-renov.gouv.fr et
-          maprimerenov.gouv.fr &mdash; car les montants peuvent &ecirc;tre ajust&eacute;s par
-          arr&ecirc;t&eacute; en cours d&rsquo;ann&eacute;e.
+          Cet article décrit ce qu’est juridiquement un Coup de pouce, liste les chartes actives ou
+          historiques en 2026, explique le parcours à suivre côté particulier et l’articulation avec
+          MaPrimeRénov’, et signale les pièges fréquents. Les données chiffrées exactes sont
+          volontairement renvoyées aux sites officiels — france-renov.gouv.fr et
+          maprimerenov.gouv.fr — car les montants peuvent être ajustés par arrêté en cours d’année.
         </p>
       </section>
 
@@ -323,56 +316,48 @@ export default function CoupDePouce2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            Qu&rsquo;est-ce qu&rsquo;un Coup de pouce CEE&nbsp;?
+            Qu’est-ce qu’un Coup de pouce CEE&nbsp;?
           </h2>
           <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
-              <strong>D&eacute;finition juridique.</strong> Un Coup de pouce est une bonification
-              contractuelle d&rsquo;une op&eacute;ration standardis&eacute;e CEE. Il ne
-              d&eacute;finit pas lui-m&ecirc;me une op&eacute;ration nouvelle&nbsp;: il
-              s&rsquo;adosse &agrave; une fiche existante (exemple BAR-TH-171 pour une pompe
-              &agrave; chaleur air/eau) et applique un coefficient multiplicateur au volume de CEE
-              g&eacute;n&eacute;r&eacute;, dont la contrepartie est vers&eacute;e par le signataire
-              de la charte au b&eacute;n&eacute;ficiaire final sous forme de prime. Depuis 2022, les
-              montants planchers en euros par profil de m&eacute;nage ne sont plus impos&eacute;s
-              par arr&ecirc;t&eacute;&nbsp;: chaque signataire fixe librement son propre
-              bar&egrave;me.
+              <strong>Définition juridique.</strong> Un Coup de pouce est une bonification
+              contractuelle d’une opération standardisée CEE. Il ne définit pas lui-même une
+              opération nouvelle&nbsp;: il s’adosse à une fiche existante (exemple BAR-TH-171 pour
+              une pompe à chaleur air/eau) et applique un coefficient multiplicateur au volume de
+              CEE généré, dont la contrepartie est versée par le signataire de la charte au
+              bénéficiaire final sous forme de prime. Depuis 2022, les montants planchers en euros
+              par profil de ménage ne sont plus imposés par arrêté&nbsp;: chaque signataire fixe
+              librement son propre barème.
             </p>
             <p>
-              <strong>Cadre r&eacute;glementaire.</strong> Les chartes Coup de pouce sont prises sur
-              le fondement de l&rsquo;article L221-7 du code de l&rsquo;&eacute;nergie, qui autorise
-              le ministre charg&eacute; de l&rsquo;&eacute;nergie &agrave; bonifier certaines
-              op&eacute;rations par arr&ecirc;t&eacute;. Chaque dispositif fait l&rsquo;objet
-              d&rsquo;un arr&ecirc;t&eacute; sectoriel (arr&ecirc;t&eacute; du 25 mars 2020
-              modifi&eacute; pour le chauffage, arr&ecirc;t&eacute; du 8 octobre 2020 modifi&eacute;
-              puis prolong&eacute; par l&rsquo;arr&ecirc;t&eacute; du 7 janvier 2026 pour la
-              r&eacute;novation d&rsquo;ampleur), publi&eacute; au Bulletin officiel du
-              minist&egrave;re charg&eacute; de l&rsquo;&eacute;nergie et consultable sur
-              L&eacute;gifrance. L&rsquo;ensemble du dispositif s&rsquo;inscrit depuis le 1
+              <strong>Cadre réglementaire.</strong> Les chartes Coup de pouce sont prises sur le
+              fondement de l’article L221-7 du code de l’énergie, qui autorise le ministre chargé de
+              l’énergie à bonifier certaines opérations par arrêté. Chaque dispositif fait l’objet
+              d’un arrêté sectoriel (arrêté du 25 mars 2020 modifié pour le chauffage, arrêté du 8
+              octobre 2020 modifié puis prolongé par l’arrêté du 7 janvier 2026 pour la rénovation
+              d’ampleur), publié au Bulletin officiel du ministère chargé de l’énergie et
+              consultable sur Légifrance. L’ensemble du dispositif s’inscrit depuis le 1
               <sup>er</sup> janvier 2026 dans la{' '}
               <strong>
-                6<sup>e</sup> p&eacute;riode CEE
+                6<sup>e</sup> période CEE
               </strong>{' '}
-              (01/01/2026 &ndash; 31/12/2030), encadr&eacute;e par l&rsquo;arr&ecirc;t&eacute; du 21
-              d&eacute;cembre 2025 (JORFTEXT000053158200) et le d&eacute;cret n&deg;&nbsp;2025-1048.
+              (01/01/2026 &ndash; 31/12/2030), encadrée par l’arrêté du 21 décembre 2025
+              (JORFTEXT000053158200) et le décret n&deg;&nbsp;2025-1048.
             </p>
             <p>
-              <strong>Principe &eacute;conomique.</strong> L&rsquo;oblig&eacute; ou le
-              d&eacute;l&eacute;gataire signe une charte d&rsquo;engagement avec
-              l&rsquo;&Eacute;tat. En &eacute;change, il obtient un bonus de volume CEE sur les
-              op&eacute;rations concern&eacute;es, qu&rsquo;il s&rsquo;engage &agrave; reverser au
-              b&eacute;n&eacute;ficiaire final sous forme de prime major&eacute;e. Le co&ucirc;t
-              total reste support&eacute; par l&rsquo;oblig&eacute;, qui le r&eacute;percute ensuite
-              dans le prix de l&rsquo;&eacute;nergie qu&rsquo;il vend &agrave; ses clients. Le Coup
-              de pouce n&rsquo;est donc pas une subvention publique, m&ecirc;me s&rsquo;il en donne
-              souvent l&rsquo;apparence dans la communication grand public.
+              <strong>Principe économique.</strong> L’obligé ou le délégataire signe une charte
+              d’engagement avec l’&Eacute;tat. En échange, il obtient un bonus de volume CEE sur les
+              opérations concernées, qu’il s’engage à reverser au bénéficiaire final sous forme de
+              prime majorée. Le co&ucirc;t total reste supporté par l’obligé, qui le répercute
+              ensuite dans le prix de l’énergie qu’il vend à ses clients. Le Coup de pouce n’est
+              donc pas une subvention publique, même s’il en donne souvent l’apparence dans la
+              communication grand public.
             </p>
             <p>
-              <strong>Port&eacute;e.</strong> Un Coup de pouce ne cr&eacute;e aucun droit
-              automatique&nbsp;: il ne s&rsquo;applique que si le b&eacute;n&eacute;ficiaire
-              contractualise avec un signataire effectif de la charte, avant la signature du devis
-              des travaux. C&rsquo;est cette antériorit&eacute; de l&rsquo;engagement qui
-              conditionne juridiquement l&rsquo;&eacute;ligibilit&eacute;.
+              <strong>Portée.</strong> Un Coup de pouce ne crée aucun droit automatique&nbsp;: il ne
+              s’applique que si le bénéficiaire contractualise avec un signataire effectif de la
+              charte, avant la signature du devis des travaux. C’est cette antériorité de
+              l’engagement qui conditionne juridiquement l’éligibilité.
             </p>
           </div>
         </div>
@@ -389,17 +374,16 @@ export default function CoupDePouce2026Page() {
           Chartes Coup de pouce actives en 2026
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-4 leading-relaxed">
-          Le tableau ci-dessous recense les chartes en vigueur ou historiquement publi&eacute;es. Le
-          statut d&rsquo;une charte peut &eacute;voluer par arr&ecirc;t&eacute; en cours
-          d&rsquo;ann&eacute;e. En cas de doute, v&eacute;rifier la derni&egrave;re version
-          publi&eacute;e sur L&eacute;gifrance et sur france-renov.gouv.fr avant tout engagement.
+          Le tableau ci-dessous recense les chartes en vigueur ou historiquement publiées. Le statut
+          d’une charte peut évoluer par arrêté en cours d’année. En cas de doute, vérifier la
+          dernière version publiée sur Légifrance et sur france-renov.gouv.fr avant tout engagement.
         </p>
         <div className="inline-flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-10 text-sm text-amber-900 max-w-3xl">
           <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
           <span>
-            Les informations ci-dessous sont donn&eacute;es &agrave; titre p&eacute;dagogique&nbsp;;
-            elles ne se substituent pas aux arr&ecirc;t&eacute;s en vigueur au jour du devis. Seul
-            le texte publi&eacute; au Bulletin officiel fait foi.
+            Les informations ci-dessous sont données à titre pédagogique&nbsp;; elles ne se
+            substituent pas aux arrêtés en vigueur au jour du devis. Seul le texte publié au
+            Bulletin officiel fait foi.
           </span>
         </div>
 
@@ -428,13 +412,11 @@ export default function CoupDePouce2026Page() {
                     <dd>{c.legal}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-charcoal-900">P&eacute;rim&egrave;tre</dt>
+                    <dt className="font-semibold text-charcoal-900">Périmètre</dt>
                     <dd>{c.perimeter}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-charcoal-900">
-                      Op&eacute;rations concern&eacute;es
-                    </dt>
+                    <dt className="font-semibold text-charcoal-900">Opérations concernées</dt>
                     <dd>
                       <ul className="list-disc pl-5 space-y-1">
                         {c.operations.map((o, i) => (
@@ -448,9 +430,7 @@ export default function CoupDePouce2026Page() {
                     <dd>{c.signers}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-charcoal-900">
-                      Conditions d&rsquo;&eacute;ligibilit&eacute;
-                    </dt>
+                    <dt className="font-semibold text-charcoal-900">Conditions d’éligibilité</dt>
                     <dd>{c.conditions}</dd>
                   </div>
                   <div>
@@ -472,12 +452,12 @@ export default function CoupDePouce2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            Comment b&eacute;n&eacute;ficier du Coup de pouce&nbsp;?
+            Comment bénéficier du Coup de pouce&nbsp;?
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-6">
-            Le parcours est strict et l&rsquo;ordre des &eacute;tapes est
-            <em> opposable</em>&nbsp;: une inversion, m&ecirc;me de bonne foi, peut faire rejeter le
-            dossier au PNCEE et priver le b&eacute;n&eacute;ficiaire de la prime.
+            Le parcours est strict et l’ordre des étapes est
+            <em> opposable</em>&nbsp;: une inversion, même de bonne foi, peut faire rejeter le
+            dossier au PNCEE et priver le bénéficiaire de la prime.
           </p>
           <ol className="space-y-4">
             {[
@@ -526,35 +506,32 @@ export default function CoupDePouce2026Page() {
       {/* Cumul MaPrimeRénov' */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-          Coup de pouce + MaPrimeR&eacute;nov&rsquo;&nbsp;: cumul possible&nbsp;?
+          Coup de pouce + MaPrimeRénov’&nbsp;: cumul possible&nbsp;?
         </h2>
         <div className="space-y-4 text-charcoal-700 leading-relaxed">
           <p>
-            <strong>Oui, en principe.</strong> MaPrimeR&eacute;nov&rsquo; (aide publique
-            vers&eacute;e par l&rsquo;Anah) et la prime CEE &mdash; y compris bonifi&eacute;e par un
-            Coup de pouce &mdash; rel&egrave;vent de deux logiques distinctes&nbsp;: l&rsquo;une est
-            budg&eacute;taire, l&rsquo;autre est une obligation priv&eacute;e pes&eacute;e sur les
-            vendeurs d&rsquo;&eacute;nergie. Le cumul est autoris&eacute; par principe, sauf
-            disposition contraire express&eacute;ment pr&eacute;vue dans la charte Coup de pouce ou
-            dans l&rsquo;arr&ecirc;t&eacute; encadrant MaPrimeR&eacute;nov&rsquo;.
+            <strong>Oui, en principe.</strong> MaPrimeRénov’ (aide publique versée par l’Anah) et la
+            prime CEE — y compris bonifiée par un Coup de pouce — relèvent de deux logiques
+            distinctes&nbsp;: l’une est budgétaire, l’autre est une obligation privée pesée sur les
+            vendeurs d’énergie. Le cumul est autorisé par principe, sauf disposition contraire
+            expressément prévue dans la charte Coup de pouce ou dans l’arrêté encadrant
+            MaPrimeRénov’.
           </p>
           <p>
-            <strong>Pr&eacute;caution pratique.</strong> Le total des aides ne peut toutefois pas
-            d&eacute;passer le co&ucirc;t r&eacute;el des travaux&nbsp;: un plafond de reste
-            &agrave; charge minimum est en g&eacute;n&eacute;ral impos&eacute;, en particulier pour
-            les m&eacute;nages modestes et tr&egrave;s modestes, par les d&eacute;crets applicables
-            &agrave; MaPrimeR&eacute;nov&rsquo;. Les simulateurs officiels de france-renov.gouv.fr
-            et maprimerenov.gouv.fr int&egrave;grent cette r&egrave;gle et donnent un chiffrage
-            fiable avant signature.
+            <strong>Précaution pratique.</strong> Le total des aides ne peut toutefois pas dépasser
+            le co&ucirc;t réel des travaux&nbsp;: un plafond de reste à charge minimum est en
+            général imposé, en particulier pour les ménages modestes et très modestes, par les
+            décrets applicables à MaPrimeRénov’. Les simulateurs officiels de france-renov.gouv.fr
+            et maprimerenov.gouv.fr intègrent cette règle et donnent un chiffrage fiable avant
+            signature.
           </p>
           <p>
-            Pour un panorama d&eacute;taill&eacute; du cumul et de ses limites, voir notre
-            guide&nbsp;:{' '}
+            Pour un panorama détaillé du cumul et de ses limites, voir notre guide&nbsp;:{' '}
             <Link
               href="/maprimerenov-cumulaison-cee"
               className="text-emerald-700 underline hover:text-emerald-800"
             >
-              MaPrimeR&eacute;nov&rsquo; et CEE&nbsp;: r&egrave;gles de cumul
+              MaPrimeRénov’ et CEE&nbsp;: règles de cumul
             </Link>
             .
           </p>
@@ -565,59 +542,46 @@ export default function CoupDePouce2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            &Eacute;volutions 2026 par rapport aux ann&eacute;es pr&eacute;c&eacute;dentes
+            &Eacute;volutions 2026 par rapport aux années précédentes
           </h2>
           <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
               Depuis 2023, la politique publique des CEE et des Coup de pouce poursuit trois
-              tendances de fond. La premi&egrave;re est le
-              <strong> durcissement progressif</strong> des crit&egrave;res techniques des
-              op&eacute;rations&nbsp;: coefficients de performance minimaux rehauss&eacute;s,
-              contr&ocirc;les sur site renforc&eacute;s par l&rsquo;arr&ecirc;t&eacute; du 28
-              septembre 2021 modifi&eacute;, exigences documentaires accrues.
+              tendances de fond. La première est le
+              <strong> durcissement progressif</strong> des critères techniques des
+              opérations&nbsp;: coefficients de performance minimaux rehaussés, contrôles sur site
+              renforcés par l’arrêté du 28 septembre 2021 modifié, exigences documentaires accrues.
             </p>
             <p>
-              La deuxi&egrave;me est la{' '}
-              <strong>r&eacute;vision &agrave; la baisse des bonifications</strong> les plus
-              g&eacute;n&eacute;reuses, observ&eacute;e en particulier sur les chartes historiques
-              qui avaient aliment&eacute; les offres &laquo;&nbsp;&agrave; 1&nbsp;euro&nbsp;&raquo;
-              entre 2019 et 2021. Ce mouvement vise &agrave; r&eacute;&eacute;quilibrer le reste
-              &agrave; charge et &agrave; limiter les effets d&rsquo;aubaine.
+              La deuxième est la <strong>révision à la baisse des bonifications</strong> les plus
+              généreuses, observée en particulier sur les chartes historiques qui avaient alimenté
+              les offres «&nbsp;à 1&nbsp;euro&nbsp;» entre 2019 et 2021. Ce mouvement vise à
+              rééquilibrer le reste à charge et à limiter les effets d’aubaine.
             </p>
             <p>
-              La troisi&egrave;me est le{' '}
-              <strong>retrait progressif des op&eacute;rations fossiles</strong> du
-              p&eacute;rim&egrave;tre des Coup de pouce&nbsp;: les bonifications sur les
-              chaudi&egrave;res au gaz, d&eacute;j&agrave; tr&egrave;s encadr&eacute;es, sont en
-              voie d&rsquo;extinction, dans la ligne de la strat&eacute;gie nationale bas carbone.
-              Les PAC, les chaudi&egrave;res biomasse et les raccordements &agrave; des
-              r&eacute;seaux de chaleur EnR&R concentrent d&eacute;sormais l&rsquo;essentiel de
-              l&rsquo;effort.
+              La troisième est le <strong>retrait progressif des opérations fossiles</strong> du
+              périmètre des Coup de pouce&nbsp;: les bonifications sur les chaudières au gaz, déjà
+              très encadrées, sont en voie d’extinction, dans la ligne de la stratégie nationale bas
+              carbone. Les PAC, les chaudières biomasse et les raccordements à des réseaux de
+              chaleur EnR&R concentrent désormais l’essentiel de l’effort.
             </p>
             <p>
-              <strong>Chartes clôtur&eacute;es &agrave; ne pas confondre.</strong> Plusieurs chartes
-              Coup de pouce historiquement connues ne sont <em>plus actives</em> en 2026 et doivent
-              &ecirc;tre &eacute;cart&eacute;es de toute communication commerciale. Le
-              <strong> Coup de pouce Isolation</strong>, qui a aliment&eacute; les offres
-              &laquo;&nbsp;&agrave; 1&nbsp;euro&nbsp;&raquo; entre 2019 et 2021, a &eacute;t&eacute;
-              cl&ocirc;tur&eacute; le
+              <strong>Chartes clôturées à ne pas confondre.</strong> Plusieurs chartes Coup de pouce
+              historiquement connues ne sont <em>plus actives</em> en 2026 et doivent être écartées
+              de toute communication commerciale. Le
+              <strong> Coup de pouce Isolation</strong>, qui a alimenté les offres «&nbsp;à
+              1&nbsp;euro&nbsp;» entre 2019 et 2021, a été clôturé le
               <strong> 30 juin 2022</strong>. Le{' '}
-              <strong>Coup de pouce Pilotage connect&eacute; du chauffage</strong> (fiche
-              BAR-TH-173), qui bonifiait l&rsquo;installation de syst&egrave;mes de
-              r&eacute;gulation pi&egrave;ce par pi&egrave;ce, a &eacute;t&eacute;
-              <strong>
-                {' '}
-                supprim&eacute; par l&rsquo;arr&ecirc;t&eacute; du 18 novembre 2024
-              </strong>{' '}
-              (JORFTEXT000050626971). Ces deux bonifications ne peuvent plus &ecirc;tre
-              propos&eacute;es en 2026&nbsp;; toute promesse commerciale les &eacute;voquant comme
-              actives constitue une information trompeuse.
+              <strong>Coup de pouce Pilotage connecté du chauffage</strong> (fiche BAR-TH-173), qui
+              bonifiait l’installation de systèmes de régulation pièce par pièce, a été
+              <strong> supprimé par l’arrêté du 18 novembre 2024</strong> (JORFTEXT000050626971).
+              Ces deux bonifications ne peuvent plus être proposées en 2026&nbsp;; toute promesse
+              commerciale les évoquant comme actives constitue une information trompeuse.
             </p>
             <p>
-              Ces tendances sont fact&eacute;es&nbsp;; les calendriers pr&eacute;cis de sortie
-              d&eacute;pendent toutefois de chaque arr&ecirc;t&eacute; modificatif et peuvent
-              &eacute;voluer. C&rsquo;est une raison suppl&eacute;mentaire de v&eacute;rifier la
-              version &agrave; jour de chaque texte avant de s&rsquo;engager.
+              Ces tendances sont factées&nbsp;; les calendriers précis de sortie dépendent toutefois
+              de chaque arrêté modificatif et peuvent évoluer. C’est une raison supplémentaire de
+              vérifier la version à jour de chaque texte avant de s’engager.
             </p>
           </div>
         </div>
@@ -627,44 +591,40 @@ export default function CoupDePouce2026Page() {
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6 flex items-center gap-3">
           <AlertTriangle className="w-7 h-7 text-amber-600" />
-          Pi&egrave;ges et arnaques fr&eacute;quentes
+          Pièges et arnaques fréquentes
         </h2>
         <div className="space-y-5">
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
             <h3 className="font-semibold text-charcoal-900 mb-1">
-              Le mirage du &laquo;&nbsp;1&nbsp;euro symbolique&nbsp;&raquo;
+              Le mirage du «&nbsp;1&nbsp;euro symbolique&nbsp;»
             </h3>
             <p className="text-sm text-charcoal-700 leading-relaxed">
-              Certaines offres agressives annoncent une installation &agrave; 1&nbsp;euro en
-              omettant le reste &agrave; charge minimum impos&eacute; par la r&eacute;glementation
-              pour les op&eacute;rations aid&eacute;es, ou en facturant des prestations annexes
-              &agrave; part. Depuis 2021, les offres &laquo;&nbsp;&agrave; 1&nbsp;euro&nbsp;&raquo;
-              ne sont plus autoris&eacute;es pour la majorit&eacute; des gestes de
-              r&eacute;novation. M&eacute;fiance absolue en cas de promesse de ce type.
+              Certaines offres agressives annoncent une installation à 1&nbsp;euro en omettant le
+              reste à charge minimum imposé par la réglementation pour les opérations aidées, ou en
+              facturant des prestations annexes à part. Depuis 2021, les offres «&nbsp;à
+              1&nbsp;euro&nbsp;» ne sont plus autorisées pour la majorité des gestes de rénovation.
+              Méfiance absolue en cas de promesse de ce type.
             </p>
           </div>
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
             <h3 className="font-semibold text-charcoal-900 mb-1">
-              D&eacute;marchage t&eacute;l&eacute;phonique illicite
+              Démarchage téléphonique illicite
             </h3>
             <p className="text-sm text-charcoal-700 leading-relaxed">
-              La loi n&deg;&nbsp;2020-901 du 24 juillet 2020 interdit le d&eacute;marchage
-              t&eacute;l&eacute;phonique pour la vente d&rsquo;&eacute;quipements ou la
-              r&eacute;alisation de travaux d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie dans les
-              logements. Tout appel non sollicit&eacute; vantant un &laquo;&nbsp;Coup de
-              pouce&nbsp;&raquo; est donc pr&eacute;sum&eacute; ill&eacute;gal. Raccrochez et
-              signalez &agrave; la DGCCRF via SignalConso.
+              La loi n&deg;&nbsp;2020-901 du 24 juillet 2020 interdit le démarchage téléphonique
+              pour la vente d’équipements ou la réalisation de travaux d’économies d’énergie dans
+              les logements. Tout appel non sollicité vantant un «&nbsp;Coup de pouce&nbsp;» est
+              donc présumé illégal. Raccrochez et signalez à la DGCCRF via SignalConso.
             </p>
           </div>
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
             <h3 className="font-semibold text-charcoal-900 mb-1">Fausse promesse de cumul</h3>
             <p className="text-sm text-charcoal-700 leading-relaxed">
-              Certains interm&eacute;diaires annoncent un cumul &laquo;&nbsp;gratuit&nbsp;&raquo;
-              entre plusieurs chartes Coup de pouce pour la m&ecirc;me op&eacute;ration, alors
-              qu&rsquo;un m&ecirc;me kWh cumac ne peut &ecirc;tre bonifi&eacute; deux fois.
-              R&eacute;sultat pratique&nbsp;: la prime effectivement vers&eacute;e au
-              d&eacute;p&ocirc;t est inf&eacute;rieure &agrave; celle annonc&eacute;e, et le
-              b&eacute;n&eacute;ficiaire se retrouve avec un reste &agrave; charge inattendu.
+              Certains intermédiaires annoncent un cumul «&nbsp;gratuit&nbsp;» entre plusieurs
+              chartes Coup de pouce pour la même opération, alors qu’un même kWh cumac ne peut être
+              bonifié deux fois. Résultat pratique&nbsp;: la prime effectivement versée au dépôt est
+              inférieure à celle annoncée, et le bénéficiaire se retrouve avec un reste à charge
+              inattendu.
             </p>
           </div>
         </div>
@@ -675,7 +635,7 @@ export default function CoupDePouce2026Page() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-8 flex items-center gap-3">
             <BookOpen className="w-7 h-7 text-emerald-700" />
-            Questions fr&eacute;quentes
+            Questions fréquentes
           </h2>
           <div className="space-y-4">
             {FAQ.map((f, i) => (
@@ -698,8 +658,8 @@ export default function CoupDePouce2026Page() {
             Aller plus loin
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-6">
-            Quatre ressources compl&eacute;mentaires pour ma&icirc;triser votre dossier CEE avant de
-            signer un devis&nbsp;:
+            Quatre ressources complémentaires pour ma&icirc;triser votre dossier CEE avant de signer
+            un devis&nbsp;:
           </p>
           <div className="grid sm:grid-cols-2 gap-4">
             <Link
@@ -709,10 +669,10 @@ export default function CoupDePouce2026Page() {
               <ShieldCheck className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-charcoal-900">
-                  Primes CEE&nbsp;: panorama g&eacute;n&eacute;ral
+                  Primes CEE&nbsp;: panorama général
                 </div>
                 <div className="text-sm text-charcoal-600">
-                  Le dispositif, les acteurs, les op&eacute;rations
+                  Le dispositif, les acteurs, les opérations
                 </div>
               </div>
             </Link>
@@ -722,9 +682,7 @@ export default function CoupDePouce2026Page() {
             >
               <BookOpen className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-charcoal-900">
-                  Guides CEE par op&eacute;ration
-                </div>
+                <div className="font-semibold text-charcoal-900">Guides CEE par opération</div>
                 <div className="text-sm text-charcoal-600">Isolation, chauffage, ventilation</div>
               </div>
             </Link>
@@ -734,10 +692,8 @@ export default function CoupDePouce2026Page() {
             >
               <FileCheck2 className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-charcoal-900">
-                  MaPrimeR&eacute;nov&rsquo; + CEE
-                </div>
-                <div className="text-sm text-charcoal-600">R&egrave;gles de cumul et plafonds</div>
+                <div className="font-semibold text-charcoal-900">MaPrimeRénov’ + CEE</div>
+                <div className="text-sm text-charcoal-600">Règles de cumul et plafonds</div>
               </div>
             </Link>
             <Link
@@ -747,17 +703,16 @@ export default function CoupDePouce2026Page() {
               <ShieldCheck className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-charcoal-900">
-                  Oblig&eacute;, d&eacute;l&eacute;gataire, mandataire
+                  Obligé, délégataire, mandataire
                 </div>
-                <div className="text-sm text-charcoal-600">Les 3 r&ocirc;les du circuit CEE</div>
+                <div className="text-sm text-charcoal-600">Les 3 rôles du circuit CEE</div>
               </div>
             </Link>
           </div>
           <p className="text-xs text-charcoal-900 mt-6 flex items-center gap-2">
             <ExternalLink className="w-3 h-3" />
             Sources officielles&nbsp;: legifrance.gouv.fr, france-renov.gouv.fr,
-            maprimerenov.gouv.fr, Bulletin officiel du minist&egrave;re charg&eacute; de
-            l&rsquo;&eacute;nergie.
+            maprimerenov.gouv.fr, Bulletin officiel du ministère chargé de l’énergie.
           </p>
         </div>
       </section>

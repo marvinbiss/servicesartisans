@@ -164,6 +164,7 @@ export default async function MediationPage() {
             En cas de litige, {companyIdentity.name} met en place un processus de médiation pour
             faciliter la résolution amiable des différends.
           </p>
+          <p className="text-charcoal-500 mt-4 text-sm">Dernière mise à jour : avril 2026</p>
         </div>
       </section>
 

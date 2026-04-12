@@ -1,4 +1,8 @@
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr').trim().replace(/\/+$/, '')
+import { getDeptPreposition, getRegionPreposition } from '@/lib/geo-strings'
+
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr')
+  .trim()
+  .replace(/\/+$/, '')
 export const SITE_NAME = 'ServicesArtisans'
 export const PHONE_NUMBER = '07 56 87 27 87'
 export const PHONE_TEL = 'tel:+33756872787'
@@ -8,7 +12,7 @@ export const defaultSEOConfig = {
   titleTemplate: '%s | ServicesArtisans',
   defaultTitle: 'ServicesArtisans — Annuaire des artisans référencés en France',
   description:
-    'Annuaire d\'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements. Devis gratuits.',
+    "Annuaire d'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements. Devis gratuits.",
   canonical: SITE_URL,
   openGraph: {
     type: 'website',
@@ -90,17 +94,20 @@ export function getServiceSEO(serviceName: string, location?: string) {
 }
 
 // SEO pour les pages de localisation
-export function getLocationSEO(locationType: 'ville' | 'region' | 'departement', locationName: string) {
+export function getLocationSEO(
+  locationType: 'ville' | 'region' | 'departement',
+  locationName: string
+) {
   const titles: Record<string, string> = {
     ville: `Artisans à ${locationName} — Annuaire référencés`,
-    region: `Artisans en ${locationName} — Tous les métiers du bâtiment`,
-    departement: `Artisans dans le ${locationName} — Annuaire & Devis gratuits`,
+    region: `Artisans ${getRegionPreposition(locationName)} — Tous les métiers du bâtiment`,
+    departement: `Artisans ${getDeptPreposition(locationName)} — Annuaire & Devis gratuits`,
   }
 
   const descriptions: Record<string, string> = {
     ville: `Annuaire complet des artisans à ${locationName}. Des milliers de professionnels référencés : plombiers, électriciens, menuisiers et plus. 100% gratuit.`,
-    region: `Trouvez un artisan en ${locationName} parmi des milliers de professionnels référencés. Tous les corps de métier, tous les départements.`,
-    departement: `Artisans référencés dans le ${locationName}. 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
+    region: `Trouvez un artisan ${getRegionPreposition(locationName)} parmi des milliers de professionnels référencés. Tous les corps de métier, tous les départements.`,
+    departement: `Artisans référencés ${getDeptPreposition(locationName)}. 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
   }
 
   return {
@@ -129,7 +136,12 @@ export function getAlternates(path: string) {
 }
 
 // SEO pour les artisans
-export function getArtisanSEO(artisanName: string, service: string, location: string, rating?: number) {
+export function getArtisanSEO(
+  artisanName: string,
+  service: string,
+  location: string,
+  rating?: number
+) {
   const title = `${artisanName} — ${service} à ${location}`
   const description = rating
     ? `${artisanName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise référencée par SIREN. Consultez le profil et demandez un devis gratuit.`

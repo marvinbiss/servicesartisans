@@ -78,17 +78,16 @@ export default function CeeGuidesIndexPage() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <BookOpen className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              Guides &eacute;ditoriaux r&eacute;novation &eacute;nerg&eacute;tique
+              Guides éditoriaux rénovation énergétique
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             Guides des primes CEE 2026
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            Conditions techniques, montants de la prime classique et bonifi&eacute;e
-            pr&eacute;carit&eacute;, cumul MaPrimeR&eacute;nov&rsquo; et pi&egrave;ges &agrave;
-            &eacute;viter pour les 5 op&eacute;rations CEE r&eacute;sidentielles les plus
-            mobilis&eacute;es.
+            Conditions techniques, montants de la prime classique et bonifiée précarité, cumul
+            MaPrimeRénov’ et pièges à éviter pour les 5 opérations CEE résidentielles les plus
+            mobilisées.
           </p>
         </div>
       </section>
@@ -137,10 +136,9 @@ export default function CeeGuidesIndexPage() {
             Vous cherchez une autre prime CEE&nbsp;?
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-6 leading-relaxed">
-            Le catalogue complet recense 19 op&eacute;rations standardis&eacute;es
-            r&eacute;sidentielles (enveloppe, chauffage, ECS, ventilation, services). Chaque
-            op&eacute;ration dispose de sa fiche d&eacute;taill&eacute;e et de sa liste
-            d&rsquo;artisans RGE par ville.
+            Le catalogue complet recense 19 opérations standardisées résidentielles (enveloppe,
+            chauffage, ECS, ventilation, services). Chaque opération dispose de sa fiche détaillée
+            et de sa liste d’artisans RGE par ville.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -166,7 +164,7 @@ export default function CeeGuidesIndexPage() {
               href="/maprimerenov-cumulaison-cee"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
             >
-              Cumul MaPrimeR&eacute;nov&rsquo; &amp; CEE
+              Cumul MaPrimeRénov’ &amp; CEE
             </Link>
             <Link
               href="/rge/qualifications"
@@ -184,7 +182,7 @@ export default function CeeGuidesIndexPage() {
               href="/leads-exclusifs-vs-partages"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
             >
-              Leads exclusifs vs partag&eacute;s
+              Leads exclusifs vs partagés
             </Link>
             <Link
               href="/ademe"
@@ -199,11 +197,11 @@ export default function CeeGuidesIndexPage() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
-            Pr&ecirc;t &agrave; lancer votre projet&nbsp;?
+            Prêt à lancer votre projet&nbsp;?
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute; et
-            s&eacute;curisez votre prime CEE d&egrave;s la signature.
+            Demandez un devis gratuit auprès d’un artisan RGE qualifié et sécurisez votre prime CEE
+            dès la signature.
           </p>
           <Link
             href="/devis"

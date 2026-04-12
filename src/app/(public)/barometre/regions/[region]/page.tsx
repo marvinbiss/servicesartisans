@@ -14,6 +14,7 @@ import {
 import { getStatsByRegion } from '@/lib/barometre/queries'
 import { regionalIndices } from '@/lib/data/barometre'
 import RelatedHubs from '@/components/seo/RelatedHubs'
+import { getRegionPreposition, getRegionArticle } from '@/lib/geo-strings'
 
 // ---------------------------------------------------------------------------
 // Static params (13 régions métropolitaines)
@@ -43,8 +44,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const region = getBarometreRegionBySlug(regionSlug)
   if (!region) return { title: 'Région non trouvée' }
 
-  const title = `Artisans en ${region.name} — Baromètre et statistiques`
-  const description = `Baromètre des artisans en ${region.name} : top métiers, ${region.departements.length} départements, notes moyennes et taux de vérification. Données actualisées ${SITE_NAME}.`
+  const title = `Artisans ${getRegionPreposition(region.name)} — Baromètre et statistiques`
+  const description = `Baromètre des artisans ${getRegionPreposition(region.name)} : top métiers, ${region.departements.length} départements, notes moyennes et taux de vérification. Données actualisées ${SITE_NAME}.`
   const canonicalUrl = `${SITE_URL}/barometre/regions/${regionSlug}`
 
   return {
@@ -63,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: `${SITE_URL}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: `Artisans en ${region.name}`,
+          alt: `Artisans ${getRegionPreposition(region.name)}`,
         },
       ],
     },
@@ -102,27 +103,27 @@ export default async function BarometreRegionPage({ params }: PageProps) {
 
   const faqItems = [
     {
-      question: `Combien d'artisans sont référencés en ${region.name} ?`,
+      question: `Combien d'artisans sont référencés ${getRegionPreposition(region.name)} ?`,
       answer:
         totalArtisans > 0
-          ? `Notre annuaire recense ${totalArtisans.toLocaleString('fr-FR')} artisans actifs en ${region.name}, répartis dans ${region.departements.length} départements et couvrant plus de ${stats.length} corps de métier.`
-          : `Des milliers d'artisans du bâtiment sont référencés en ${region.name} dans notre annuaire.`,
+          ? `Notre annuaire recense ${totalArtisans.toLocaleString('fr-FR')} artisans actifs ${getRegionPreposition(region.name)}, répartis dans ${region.departements.length} départements et couvrant plus de ${stats.length} corps de métier.`
+          : `Des milliers d'artisans du bâtiment sont référencés ${getRegionPreposition(region.name)} dans notre annuaire.`,
     },
     {
-      question: `Quel est l'indice de prix en ${region.name} ?`,
+      question: `Quel est l'indice de prix ${getRegionPreposition(region.name)} ?`,
       answer: index
-        ? `L'indice de prix en ${region.name} est de ${index.index} (base 100 = moyenne nationale). ${index.index > 100 ? `Les prix sont ${index.index - 100}% au-dessus de la moyenne nationale.` : index.index < 100 ? `Les prix sont ${100 - index.index}% en dessous de la moyenne nationale.` : 'Les prix sont dans la moyenne nationale.'}`
-        : `Consultez notre baromètre des prix pour connaître l'indice régional en ${region.name}.`,
+        ? `L'indice de prix ${getRegionPreposition(region.name)} est de ${index.index} (base 100 = moyenne nationale). ${index.index > 100 ? `Les prix sont ${index.index - 100}% au-dessus de la moyenne nationale.` : index.index < 100 ? `Les prix sont ${100 - index.index}% en dessous de la moyenne nationale.` : 'Les prix sont dans la moyenne nationale.'}`
+        : `Consultez notre baromètre des prix pour connaître l'indice régional ${getRegionPreposition(region.name)}.`,
     },
     {
-      question: `Quels sont les métiers les plus demandés en ${region.name} ?`,
+      question: `Quels sont les métiers les plus demandés ${getRegionPreposition(region.name)} ?`,
       answer:
         stats.length > 0
-          ? `Les métiers les plus représentés en ${region.name} sont : ${stats
+          ? `Les métiers les plus représentés ${getRegionPreposition(region.name)} sont : ${stats
               .slice(0, 5)
               .map((s) => s.metier)
               .join(', ')}. Ces données reflètent la demande locale en services artisanaux.`
-          : `Consultez le détail par métier pour connaître les artisans les plus représentés en ${region.name}.`,
+          : `Consultez le détail par métier pour connaître les artisans les plus représentés ${getRegionPreposition(region.name)}.`,
     },
   ]
 
@@ -166,7 +167,8 @@ export default async function BarometreRegionPage({ params }: PageProps) {
               )}
             </div>
             <p className="text-lg text-charcoal-600">
-              Baromètre des artisans en {region.name} : {region.departements.length} départements,
+              Baromètre des artisans {getRegionPreposition(region.name)} :{' '}
+              {region.departements.length} départements,
               {totalArtisans > 0
                 ? ` ${totalArtisans.toLocaleString('fr-FR')} artisans référencés,`
                 : ''}{' '}
@@ -211,7 +213,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
         {stats.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
             <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
-              Top métiers en {region.name}
+              Top métiers {getRegionPreposition(region.name)}
             </h2>
             <div className="space-y-3">
               {stats.slice(0, 15).map((row, idx) => {
@@ -267,7 +269,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
         <section className="bg-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
-              Départements de {region.name}
+              Départements {getRegionArticle(region.name)}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {region.departements.map((dept) => (

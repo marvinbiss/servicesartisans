@@ -283,8 +283,8 @@ export default function DevenirPartenaireCeePage() {
             Artisan RGE&nbsp;? Recevez des leads exclusifs et gagnez plus sur chaque chantier.
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed mb-6">
-            1&nbsp;demande = 1&nbsp;artisan. Jamais partag&eacute;. On g&egrave;re vos primes CEE,
-            vous vous concentrez sur le chantier.{' '}
+            1&nbsp;demande = 1&nbsp;artisan. Jamais partagé. On gère vos primes CEE, vous vous
+            concentrez sur le chantier.{' '}
             <strong>0&nbsp;&euro; pendant la phase de lancement.</strong>
           </p>
           <div className="flex flex-wrap gap-3">
@@ -331,23 +331,22 @@ export default function DevenirPartenaireCeePage() {
       {/* ============================================================ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-4">
-          Marre des leads partag&eacute;s&nbsp;?
+          Marre des leads partagés&nbsp;?
         </h2>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            Vous payez un abonnement ou un co&ucirc;t au lead. La m&ecirc;me demande est
-            envoy&eacute;e &agrave; 5 artisans. Le premier qui d&eacute;croche gagne. Les 4 autres
-            perdent leur temps et leur argent.
+            Vous payez un abonnement ou un co&ucirc;t au lead. La même demande est envoyée à 5
+            artisans. Le premier qui décroche gagne. Les 4 autres perdent leur temps et leur argent.
           </p>
           <p>
-            Et quand le chantier est &eacute;ligible aux primes CEE&nbsp;? Vous laissez 2&nbsp;000
-            &agrave; 5&nbsp;000&nbsp;&euro; sur la table parce que le montage du dossier est trop
-            complexe, les d&eacute;l&eacute;gataires exigent du volume, et le suivi prend des mois.
+            Et quand le chantier est éligible aux primes CEE&nbsp;? Vous laissez 2&nbsp;000 à
+            5&nbsp;000&nbsp;&euro; sur la table parce que le montage du dossier est trop complexe,
+            les délégataires exigent du volume, et le suivi prend des mois.
           </p>
           <p>
-            <strong>On a construit l&rsquo;inverse.</strong> Un service o&ugrave; chaque lead est
-            exclusif, o&ugrave; les primes CEE sont g&eacute;r&eacute;es pour vous, et o&ugrave;
-            vous gardez votre ind&eacute;pendance.
+            <strong>On a construit l’inverse.</strong> Un service o&ugrave; chaque lead est
+            exclusif, o&ugrave; les primes CEE sont gérées pour vous, et o&ugrave; vous gardez votre
+            indépendance.
           </p>
         </div>
       </section>
@@ -392,7 +391,7 @@ export default function DevenirPartenaireCeePage() {
         <div className="flex items-center gap-2 mb-6">
           <CheckCircle2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Comment &ccedil;a marche&nbsp;?
+            Comment ça marche&nbsp;?
           </h2>
         </div>
         <ol className="space-y-5">
@@ -430,7 +429,7 @@ export default function DevenirPartenaireCeePage() {
             <table className="w-full text-sm">
               <thead className="bg-sand-200 text-charcoal-700">
                 <tr>
-                  <th className="text-left p-4 font-semibold">Crit&egrave;re</th>
+                  <th className="text-left p-4 font-semibold">Critère</th>
                   <th className="text-left p-4 font-semibold text-emerald-700">ServicesArtisans</th>
                   <th className="text-left p-4 font-semibold text-charcoal-500">
                     Plateformes classiques
@@ -467,9 +466,9 @@ export default function DevenirPartenaireCeePage() {
           </h2>
         </div>
         <p className="text-charcoal-600 mb-6 max-w-3xl leading-relaxed">
-          Vos clients peuvent toucher entre 800 et 5&nbsp;500&nbsp;&euro; de primes &eacute;nergie
-          sur les travaux que vous r&eacute;alisez d&eacute;j&agrave;. On g&egrave;re le dossier,
-          vous augmentez votre taux de conversion.
+          Vos clients peuvent toucher entre 800 et 5&nbsp;500&nbsp;&euro; de primes énergie sur les
+          travaux que vous réalisez déjà. On gère le dossier, vous augmentez votre taux de
+          conversion.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {ELIGIBLE_OPERATIONS.map((op) => (
@@ -493,7 +492,7 @@ export default function DevenirPartenaireCeePage() {
             href="/cee"
             className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-900 transition"
           >
-            Voir les 19 op&eacute;rations CEE &eacute;ligibles
+            Voir les 19 opérations CEE éligibles
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
@@ -513,11 +512,10 @@ export default function DevenirPartenaireCeePage() {
                 Combien pouvez-vous gagner en primes CEE&nbsp;?
               </h2>
               <p className="text-charcoal-600 leading-relaxed max-w-2xl">
-                Exemple&nbsp;: un chauffagiste RGE qui installe 4 pompes &agrave; chaleur par mois
-                peut g&eacute;n&eacute;rer{' '}
-                <strong>10&nbsp;000 &agrave; 20&nbsp;000&nbsp;&euro;/mois</strong> de primes CEE
-                pour ses clients, tout en am&eacute;liorant son taux de conversion. Le simulateur de
-                revenus artisan arrive bient&ocirc;t.
+                Exemple&nbsp;: un chauffagiste RGE qui installe 4 pompes à chaleur par mois peut
+                générer <strong>10&nbsp;000 à 20&nbsp;000&nbsp;&euro;/mois</strong> de primes CEE
+                pour ses clients, tout en améliorant son taux de conversion. Le simulateur de
+                revenus artisan arrive bientôt.
               </p>
             </div>
             <Link
@@ -536,7 +534,7 @@ export default function DevenirPartenaireCeePage() {
       {/* ============================================================ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-          Questions fr&eacute;quentes
+          Questions fréquentes
         </h2>
         <div className="space-y-4">
           {FAQS.map((faq) => (
@@ -562,11 +560,11 @@ export default function DevenirPartenaireCeePage() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
-            Pr&ecirc;t &agrave; recevoir vos premiers leads exclusifs&nbsp;?
+            Prêt à recevoir vos premiers leads exclusifs&nbsp;?
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Inscription gratuite en 2 minutes. Z&eacute;ro engagement. Vos qualifications RGE sont
-            v&eacute;rifi&eacute;es automatiquement via la base ADEME.
+            Inscription gratuite en 2 minutes. Zéro engagement. Vos qualifications RGE sont
+            vérifiées automatiquement via la base ADEME.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
@@ -580,7 +578,7 @@ export default function DevenirPartenaireCeePage() {
               href="/cee"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
             >
-              D&eacute;couvrir les primes CEE
+              Découvrir les primes CEE
             </Link>
             <Link
               href="/rge/comment-devenir-rge"

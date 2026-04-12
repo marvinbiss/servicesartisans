@@ -83,7 +83,7 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Artisans référencés SIREN</p>
-                <p className="text-sand-500 text-xs mt-0.5">Référencés par SIREN</p>
+                <p className="text-sand-500 text-xs mt-0.5">Identité vérifiée</p>
               </div>
             </div>
             <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-charcoal-700 hover:border-charcoal-600 p-5 transition-all duration-300">
@@ -110,7 +110,7 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Devis gratuit</p>
-                <p className="text-sand-500 text-xs mt-0.5">Sans engagement</p>
+                <p className="text-sand-500 text-xs mt-0.5">Comparez jusqu'à 3 offres</p>
               </div>
             </div>
           </div>
@@ -270,7 +270,7 @@ export default function Footer() {
                   href="/droit-acces"
                   className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
-                  Droit d&apos;acc&egrave;s
+                  Droit d&apos;accès
                 </Link>
               </li>
               <li>

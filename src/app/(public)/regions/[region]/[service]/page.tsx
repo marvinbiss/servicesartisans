@@ -36,6 +36,7 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import { relatedServices } from '@/lib/constants/navigation'
+import { getRegionPreposition, getRegionArticle } from '@/lib/geo-strings'
 
 export function generateStaticParams() {
   // Pre-render top 5 services per region (16 × 5 = 80 pages) — rest via ISR
@@ -50,7 +51,7 @@ interface PageProps {
   params: Promise<{ region: string; service: string }>
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -70,7 +71,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleTemplates = [
     `${trade.name} ${region.name} — Devis Gratuit`,
     `${trade.name} ${region.name} — Annuaire`,
-    `${trade.name} en ${region.name} : artisans`,
+    `${trade.name} ${getRegionPreposition(region.name)} : artisans`,
     `${trade.name} ${region.name} — Tarifs et devis`,
     `${trade.name} ${region.name} : comparez`,
   ]
@@ -78,9 +79,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`desc-region-svc-${regionSlug}-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts. Devis gratuit.`,
-    `${trade.name} en ${region.name} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans référencés dans ${deptCount} départements.`,
-    `Besoin d’un ${trade.name.toLowerCase()} en ${region.name} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
+    `Trouvez un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts. Devis gratuit.`,
+    `${trade.name} ${getRegionPreposition(region.name)} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans référencés dans ${deptCount} départements.`,
+    `Besoin d’un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
     `${region.name} : ${trade.name.toLowerCase()} disponible dans ${deptCount} départements. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuits.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -98,7 +99,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'website',
       url: `${SITE_URL}/regions/${regionSlug}/${serviceSlug}`,
       images: [
-        { url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} en ${region.name}` },
+        {
+          url: serviceImage.src,
+          width: 800,
+          height: 600,
+          alt: `${trade.name} ${getRegionPreposition(region.name)}`,
+        },
       ],
     },
     twitter: {
@@ -178,8 +184,8 @@ export default async function RegionServicePage({ params }: PageProps) {
   const faqSchema = getFAQSchema(allFaq)
 
   const serviceSchema = getServiceSchema({
-    name: `${trade.name} en ${region.name}`,
-    description: `Service de ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts.`,
+    name: `${trade.name} ${getRegionPreposition(region.name)}`,
+    description: `Service de ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts.`,
     areaServed: region.name,
     category: trade.name,
   })
@@ -244,11 +250,11 @@ export default async function RegionServicePage({ params }: PageProps) {
             {(() => {
               const h1Hash = Math.abs(hashCode(`h1-region-svc-${regionSlug}-${serviceSlug}`))
               const h1Templates = [
-                `${trade.name} en ${region.name}`,
-                `Trouver un ${trade.name.toLowerCase()} en ${region.name}`,
+                `${trade.name} ${getRegionPreposition(region.name)}`,
+                `Trouver un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)}`,
                 `${region.name} : ${trade.name.toLowerCase()} par département`,
-                `${trade.name} qualifié en ${region.name}`,
-                `Tous les ${trade.name.toLowerCase()}s de ${region.name}`,
+                `${trade.name} qualifié ${getRegionPreposition(region.name)}`,
+                `Tous les ${trade.name.toLowerCase()}s ${getRegionArticle(region.name)}`,
               ]
               return (
                 <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
@@ -258,9 +264,9 @@ export default async function RegionServicePage({ params }: PageProps) {
             })()}
 
             <p className="text-lg text-charcoal-400 max-w-2xl leading-relaxed mb-8">
-              Trouvez un {trade.name.toLowerCase()} qualifié en {region.name}. {deptCount}{' '}
-              départements, {cityCount} villes couvertes. Tarif moyen régional : {minPrice} à{' '}
-              {maxPrice} {trade.priceRange.unit}.
+              Trouvez un {trade.name.toLowerCase()} qualifié {getRegionPreposition(region.name)}.{' '}
+              {deptCount} départements, {cityCount} villes couvertes. Tarif moyen régional :{' '}
+              {minPrice} à {maxPrice} {trade.priceRange.unit}.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
@@ -299,7 +305,7 @@ export default async function RegionServicePage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* ─── CTA CONVERSION — above the fold ─────────────── */}
         <GeoPageCTA
-          title={`Besoin d'un ${trade.name.toLowerCase()} en ${region.name} ?`}
+          title={`Besoin d'un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)} ?`}
           subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
           service={serviceSlug}
         />
@@ -312,7 +318,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-                Tarifs {trade.name.toLowerCase()} en {region.name}
+                Tarifs {trade.name.toLowerCase()} {getRegionPreposition(region.name)}
               </h2>
               <p className="text-sm text-charcoal-500">
                 Coefficient régional : {multiplier.toFixed(2)}x
@@ -343,7 +349,7 @@ export default async function RegionServicePage({ params }: PageProps) {
               </div>
             </div>
             <p className="text-sm text-charcoal-500">
-              Les tarifs en {region.name} sont{' '}
+              Les tarifs {getRegionPreposition(region.name)} sont{' '}
               {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'}{' '}
               la moyenne nationale (coefficient {multiplier.toFixed(2)}).{' '}
               {content.profile.economyLabel}.
@@ -370,7 +376,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-                {trade.name} par département en {region.name}
+                {trade.name} par département {getRegionPreposition(region.name)}
               </h2>
               <p className="text-sm text-charcoal-500">
                 {deptCount} département{deptCount > 1 ? 's' : ''}
@@ -462,7 +468,8 @@ export default async function RegionServicePage({ params }: PageProps) {
               <CheckCircle className="w-5 h-5 text-amber-600" />
             </div>
             <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-              Conseils pour choisir votre {trade.name.toLowerCase()} en {region.name}
+              Conseils pour choisir votre {trade.name.toLowerCase()}{' '}
+              {getRegionPreposition(region.name)}
             </h2>
           </div>
           <div className="space-y-4">
@@ -502,7 +509,7 @@ export default async function RegionServicePage({ params }: PageProps) {
                 <Wrench className="w-5 h-5 text-violet-600" />
               </div>
               <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
-                Services complémentaires en {region.name}
+                Services complémentaires {getRegionPreposition(region.name)}
               </h2>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -512,7 +519,7 @@ export default async function RegionServicePage({ params }: PageProps) {
                   href={`/regions/${regionSlug}/${s.slug}`}
                   className="bg-white border border-violet-200 hover:bg-violet-50 hover:border-violet-300 text-charcoal-700 hover:text-violet-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
                 >
-                  {s.name} en {region.name}
+                  {s.name} {getRegionPreposition(region.name)}
                 </Link>
               ))}
             </div>
@@ -526,7 +533,7 @@ export default async function RegionServicePage({ params }: PageProps) {
               <Wrench className="w-5 h-5 text-accent-600" />
             </div>
             <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
-              Autres services en {region.name}
+              Autres services {getRegionPreposition(region.name)}
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -592,7 +599,7 @@ export default async function RegionServicePage({ params }: PageProps) {
         />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d'un {trade.name.toLowerCase()} en {region.name} ?
+            Besoin d'un {trade.name.toLowerCase()} {getRegionPreposition(region.name)} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
             Devis gratuit et sans engagement de professionnels qualifiés.
@@ -685,7 +692,7 @@ export default async function RegionServicePage({ params }: PageProps) {
                   className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
                 >
                   <ChevronRight className="w-3 h-3" />
-                  Artisans en {region.name}
+                  Artisans {getRegionPreposition(region.name)}
                 </Link>
                 <Link
                   href="/services"

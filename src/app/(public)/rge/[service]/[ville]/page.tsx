@@ -252,11 +252,10 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
-            {serviceName} certifi&eacute; RGE &agrave; {villeName}
+            {serviceName} certifié RGE à {villeName}
           </h1>
           <p className="mt-3 text-charcoal-600">
-            {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} &agrave;{' '}
-            {villeName}
+            {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} à {villeName}
           </p>
         </header>
 
@@ -268,8 +267,8 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-          <strong className="font-semibold">Source officielle&nbsp;:</strong> Les donn&eacute;es de
-          certification RGE affich&eacute;es sont sourc&eacute;es depuis{' '}
+          <strong className="font-semibold">Source officielle&nbsp;:</strong> Les données de
+          certification RGE affichées sont sourcées depuis{' '}
           <a
             href="https://data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/"
             target="_blank"
@@ -278,12 +277,12 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           >
             data.gouv.fr
           </a>{' '}
-          &mdash; ADEME / France R&eacute;nov&rsquo; (Licence Etalab 2.0).
+          — ADEME / France Rénov’ (Licence Etalab 2.0).
           {qualif && (
             <>
               {' '}
-              Qualification de r&eacute;f&eacute;rence pour ce m&eacute;tier&nbsp;:{' '}
-              <strong>{qualif.label}</strong> ({qualif.organisme}).
+              Qualification de référence pour ce métier&nbsp;: <strong>{qualif.label}</strong> (
+              {qualif.organisme}).
             </>
           )}
         </section>
@@ -292,8 +291,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           {count === 0 ? (
             <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
               <p className="text-charcoal-700">
-                Aucun {serviceName.toLowerCase()} RGE actif actuellement
-                r&eacute;f&eacute;renc&eacute; &agrave; {villeName}.
+                Aucun {serviceName.toLowerCase()} RGE actif actuellement référencé à {villeName}.
               </p>
               <p className="mt-2 text-sm text-charcoal-500">
                 Consultez{' '}
@@ -301,11 +299,11 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                   href={`/services/${serviceSlug}/${villeSlug}`}
                   className="text-clay-500 underline"
                 >
-                  tous les {serviceName.toLowerCase()} &agrave; {villeName}
+                  tous les {serviceName.toLowerCase()} à {villeName}
                 </Link>{' '}
                 ou{' '}
                 <Link href={`/artisans-rge/${villeSlug}`} className="text-clay-500 underline">
-                  tous les artisans RGE &agrave; {villeName}
+                  tous les artisans RGE à {villeName}
                 </Link>
                 .
               </p>
@@ -326,11 +324,9 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
               >
                 <div className="font-semibold text-charcoal-900">
-                  Tous les artisans RGE &agrave; {villeName}
+                  Tous les artisans RGE à {villeName}
                 </div>
-                <div className="text-sm text-charcoal-500">
-                  Tous m&eacute;tiers &eacute;nerg&eacute;tiques confondus
-                </div>
+                <div className="text-sm text-charcoal-500">Tous métiers énergétiques confondus</div>
               </Link>
             </li>
             <li>
@@ -339,10 +335,10 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
               >
                 <div className="font-semibold text-charcoal-900">
-                  Tous les {serviceName.toLowerCase()} &agrave; {villeName}
+                  Tous les {serviceName.toLowerCase()} à {villeName}
                 </div>
                 <div className="text-sm text-charcoal-500">
-                  RGE ou non, l&rsquo;annuaire complet du m&eacute;tier
+                  RGE ou non, l’annuaire complet du métier
                 </div>
               </Link>
             </li>
@@ -354,7 +350,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 <div className="font-semibold text-charcoal-900">
                   Guide&nbsp;: comprendre la certification RGE
                 </div>
-                <div className="text-sm text-charcoal-500">Aides, labels, v&eacute;rification</div>
+                <div className="text-sm text-charcoal-500">Aides, labels, vérification</div>
               </Link>
             </li>
             {hasGuide && (
@@ -364,7 +360,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                   className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
                 >
                   <div className="font-semibold text-charcoal-900">
-                    Guide m&eacute;tier&nbsp;: {serviceName.toLowerCase()}
+                    Guide métier&nbsp;: {serviceName.toLowerCase()}
                   </div>
                   <div className="text-sm text-charcoal-500">Prix, aides, bonnes pratiques</div>
                 </Link>
@@ -376,7 +372,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         {otherCities.length > 0 && (
           <section aria-labelledby="other-cities" className="mb-12">
             <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-jakarta mb-2">
-              {serviceName} RGE dans d&rsquo;autres villes
+              {serviceName} RGE dans d’autres villes
             </h2>
             <p className="text-sm text-charcoal-500 mb-4">
               Les villes o&ugrave; les {serviceName.toLowerCase()} RGE sont les plus nombreux.
@@ -388,7 +384,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                   href={`/rge/${serviceSlug}/${c.slug}`}
                   className="inline-flex items-center px-4 py-2 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
                 >
-                  {serviceName} RGE &agrave; {c.name}
+                  {serviceName} RGE à {c.name}
                 </Link>
               ))}
             </div>
@@ -401,7 +397,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               id="faq"
               className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-6"
             >
-              Questions fr&eacute;quentes : {serviceName.toLowerCase()} RGE &agrave; {villeName}
+              Questions fréquentes : {serviceName.toLowerCase()} RGE à {villeName}
             </h2>
             <div className="space-y-3">
               {faqItems.map((item, i) => (

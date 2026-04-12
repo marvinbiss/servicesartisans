@@ -66,17 +66,17 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Mon artisan doit-il \u00eatre RGE pour obtenir une prime CEE\u00a0?',
     answer:
-      'Oui, sans exception depuis 2020 pour la quasi-totalit\u00e9 des op\u00e9rations standardis\u00e9es r\u00e9sidentielles. La qualification RGE (Reconnu Garant de l\u2019Environnement) doit \u00eatre en cours de validit\u00e9 \u00e0 la date de signature du devis (et non au d\u00e9marrage du chantier). Elle est d\u00e9livr\u00e9e par un organisme accr\u00e9dit\u00e9 COFRAC : Qualibat, Qualit\u2019EnR, Qualifelec, Certibat ou Eco Artisan. Chaque fiche d\u2019op\u00e9ration standardis\u00e9e pr\u00e9cise la ou les qualifications accept\u00e9es \u2014 par exemple Qualibat-7141/7143 pour l\u2019isolation de toiture, QualiPAC pour les pompes \u00e0 chaleur, Qualibois pour les po\u00eales et chaudi\u00e8res bois.',
+      'Oui, sans exception depuis 2020 pour la quasi-totalit\u00e9 des op\u00e9rations standardis\u00e9es r\u00e9sidentielles. La qualification RGE (Reconnu Garant de l\u2019Environnement) doit \u00eatre en cours de validit\u00e9 \u00e0 la date de signature du devis (et non au d\u00e9marrage du chantier). Elle est d\u00e9livr\u00e9e par un organisme accr\u00e9dit\u00e9 COFRAC : Qualibat, Qualit\u2019EnR, Qualifelec, Certibat ou OPQIBI. Chaque fiche d\u2019op\u00e9ration standardis\u00e9e pr\u00e9cise la ou les qualifications accept\u00e9es \u2014 par exemple Qualibat-7141/7143 pour l\u2019isolation de toiture, QualiPAC pour les pompes \u00e0 chaleur, QualiBois pour les po\u00eales et chaudi\u00e8res bois.',
   },
   {
     question: 'Combien de temps prend le versement d\u2019une prime CEE\u00a0?',
     answer:
-      'Le d\u00e9lai standard est de 4 \u00e0 12 semaines apr\u00e8s la r\u00e9ception du dossier complet par le d\u00e9l\u00e9gataire obligor. Le dossier doit contenir : la facture de travaux acquitt\u00e9e, l\u2019attestation sur l\u2019honneur sign\u00e9e, les photos avant/apr\u00e8s chantier g\u00e9otagg\u00e9es et horodat\u00e9es (obligatoires depuis la loi du 30 juin 2025), et l\u2019avis d\u2019imposition N-2 pour le segment pr\u00e9carit\u00e9. La dur\u00e9e varie fortement selon l\u2019obligor choisi : les acteurs sp\u00e9cialis\u00e9s CEE (Effy, Sonergia) sont historiquement plus rapides que les obligor g\u00e9n\u00e9ralistes. C\u2019est un crit\u00e8re de choix \u00e0 prendre en compte.',
+      'Le d\u00e9lai standard est de 4 \u00e0 12 semaines apr\u00e8s la r\u00e9ception du dossier complet par le d\u00e9l\u00e9gataire obligé. Le dossier doit contenir : la facture de travaux acquitt\u00e9e, l\u2019attestation sur l\u2019honneur sign\u00e9e, les photos avant/apr\u00e8s chantier g\u00e9otagg\u00e9es et horodat\u00e9es (obligatoires depuis la loi du 30 juin 2025), et l\u2019avis d\u2019imposition N-2 pour le segment pr\u00e9carit\u00e9. La dur\u00e9e varie fortement selon l\u2019obligé choisi : les acteurs sp\u00e9cialis\u00e9s CEE (Effy, Sonergia) sont historiquement plus rapides que les obligés g\u00e9n\u00e9ralistes. C\u2019est un crit\u00e8re de choix \u00e0 prendre en compte.',
   },
   {
     question: 'Puis-je obtenir une prime CEE sans passer par un mandataire\u00a0?',
     answer:
-      'Oui, c\u2019est m\u00eame la voie historique : vous pouvez d\u00e9poser votre dossier directement aupr\u00e8s d\u2019un d\u00e9l\u00e9gataire obligor (Effy, Sonergia, TotalEnergies\u2026) ou de votre fournisseur d\u2019\u00e9nergie. Le passage par un mandataire CEE tiers s\u2019av\u00e8re utile quand vous voulez comparer plusieurs obligor, mutualiser plusieurs op\u00e9rations sur un m\u00eame chantier, ou s\u00e9curiser la conformit\u00e9 r\u00e9glementaire (photos, AH, OCR factures). Dans tous les cas, la prime finale est identique \u2014 seul le service d\u2019accompagnement et le d\u00e9lai de versement varient.',
+      'Oui, c\u2019est m\u00eame la voie historique : vous pouvez d\u00e9poser votre dossier directement aupr\u00e8s d\u2019un d\u00e9l\u00e9gataire obligé (Effy, Sonergia, TotalEnergies\u2026) ou de votre fournisseur d\u2019\u00e9nergie. Le passage par un mandataire CEE tiers s\u2019av\u00e8re utile quand vous voulez comparer plusieurs obligés, mutualiser plusieurs op\u00e9rations sur un m\u00eame chantier, ou s\u00e9curiser la conformit\u00e9 r\u00e9glementaire (photos, AH, OCR factures). Dans tous les cas, la prime finale est identique \u2014 seul le service d\u2019accompagnement et le d\u00e9lai de versement varient.',
   },
 ]
 
@@ -151,13 +151,13 @@ export default async function CeeHubPage() {
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
-            Primes CEE 2026 : certificats d&rsquo;&eacute;conomies d&rsquo;&eacute;nergie
+            Primes CEE 2026 : certificats d’économies d’énergie
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
-            Catalogue complet des op&eacute;rations standardis&eacute;es CEE r&eacute;sidentielles.{' '}
-            {totalOps > 0 ? totalOps : 19} fiches DGEC couvertes, cumulables avec
-            MaPrimeR&eacute;nov&rsquo; et la TVA r&eacute;duite &agrave; 5,5 %. Versement par les
-            d&eacute;l&eacute;gataires obligor (Effy, Sonergia, TotalEnergies, EDF, Engie).
+            Catalogue complet des opérations standardisées CEE résidentielles.{' '}
+            {totalOps > 0 ? totalOps : 19} fiches DGEC couvertes, cumulables avec MaPrimeRénov’ et
+            la TVA réduite à 5,5 %. Versement par les obligés et délégataires (EDF, Engie,
+            TotalEnergies, Effy, Sonergia).
           </p>
           {/* Freshness signal — date de révision éditoriale du catalogue CEE
               (barèmes kWh cumac, bonifications précarité, MPR 2026). TODO :
@@ -194,23 +194,21 @@ export default async function CeeHubPage() {
               {totalOps > 0 ? totalOps : 19}
             </div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              Op&eacute;rations standardis&eacute;es couvertes, secteur r&eacute;sidentiel. Source
-              DGEC &mdash; arr&ecirc;t&eacute;s officiels publi&eacute;s au Journal Officiel.
+              Opérations standardisées couvertes, secteur résidentiel. Source DGEC — arrêtés
+              officiels publiés au Journal Officiel.
             </div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">1050</div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              TWhc/an d&rsquo;obligation annuelle sur la p&eacute;riode P6 (2026-2030), dont 280
-              TWhc r&eacute;serv&eacute;s au segment pr&eacute;carit&eacute;
-              &eacute;nerg&eacute;tique.
+              TWhc/an d’obligation annuelle sur la période P6 (2026-2030), dont 280 TWhc réservés au
+              segment précarité énergétique.
             </div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">5</div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              D&eacute;l&eacute;gataires obligor majeurs : Effy, Sonergia, TotalEnergies, EDF,
-              Engie.
+              Obligés (EDF, Engie, TotalEnergies) et délégataires (Effy, Sonergia).
             </div>
           </div>
         </div>
@@ -225,21 +223,18 @@ export default async function CeeHubPage() {
               aria-hidden="true"
             />
             <div>
-              <div className="font-semibold text-charcoal-900">
-                Cumul MaPrimeR&eacute;nov&rsquo;
-              </div>
+              <div className="font-semibold text-charcoal-900">Cumul MaPrimeRénov’</div>
               <div className="text-sm text-charcoal-600">
-                La prime CEE se cumule avec l&rsquo;aide Anah sans plafond sp&eacute;cifique.
+                La prime CEE se cumule avec l’aide Anah sans plafond spécifique.
               </div>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Percent className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <div>
-              <div className="font-semibold text-charcoal-900">TVA &agrave; 5,5 %</div>
+              <div className="font-semibold text-charcoal-900">TVA à 5,5 %</div>
               <div className="text-sm text-charcoal-600">
-                Taux r&eacute;duit automatique sur main-d&rsquo;&oelig;uvre et mat&eacute;riaux
-                &eacute;nerg&eacute;tiques.
+                Taux réduit automatique sur main-d’&oelig;uvre et matériaux énergétiques.
               </div>
             </div>
           </div>
@@ -249,12 +244,9 @@ export default async function CeeHubPage() {
               aria-hidden="true"
             />
             <div>
-              <div className="font-semibold text-charcoal-900">
-                Artisans RGE v&eacute;rifi&eacute;s
-              </div>
+              <div className="font-semibold text-charcoal-900">Artisans RGE vérifiés</div>
               <div className="text-sm text-charcoal-600">
-                Synchronisation hebdomadaire du r&eacute;f&eacute;rentiel ADEME France
-                R&eacute;nov&rsquo;.
+                Synchronisation hebdomadaire du référentiel ADEME France Rénov’.
               </div>
             </div>
           </div>
@@ -269,13 +261,12 @@ export default async function CeeHubPage() {
       {/* Catalogue par domaine */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
-          Les 19 op&eacute;rations CEE r&eacute;sidentielles 2026
+          Les 19 opérations CEE résidentielles 2026
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
-          Chaque fiche d&rsquo;op&eacute;ration standardis&eacute;e est identifi&eacute;e par un
-          code officiel (ex. BAR-EN-101) qui en d&eacute;finit les crit&egrave;res techniques.
-          Cliquez sur une op&eacute;ration pour acc&eacute;der aux conditions
-          d&eacute;taill&eacute;es et aux artisans RGE qualifi&eacute;s, ville par ville.
+          Chaque fiche d’opération standardisée est identifiée par un code officiel (ex. BAR-EN-101)
+          qui en définit les critères techniques. Cliquez sur une opération pour accéder aux
+          conditions détaillées et aux artisans RGE qualifiés, ville par ville.
         </p>
 
         <div className="space-y-10">
@@ -314,7 +305,7 @@ export default async function CeeHubPage() {
                         </div>
                       )}
                       <div className="text-sm font-semibold text-emerald-700 mt-3 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                        D&eacute;tails <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                        Détails <ArrowRight className="w-4 h-4" aria-hidden="true" />
                       </div>
                     </Link>
                   ))}
@@ -369,7 +360,7 @@ export default async function CeeHubPage() {
       {/* FAQ */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
-          Questions fr&eacute;quentes sur les primes CEE
+          Questions fréquentes sur les primes CEE
         </h2>
         <div className="space-y-4">
           {FAQ.map((item, idx) => (
@@ -396,9 +387,9 @@ export default async function CeeHubPage() {
             Comprendre le circuit CEE
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-            Trois d&eacute;cisions structurantes avant de lancer un projet&nbsp;: choisir entre
-            mandataire et d&eacute;p&ocirc;t direct, profiter des bonifications Coup de pouce 2026,
-            et orchestrer le cumul avec MaPrimeR&eacute;nov&rsquo;.
+            Trois décisions structurantes avant de lancer un projet&nbsp;: choisir entre mandataire
+            et dépôt direct, profiter des bonifications Coup de pouce 2026, et orchestrer le cumul
+            avec MaPrimeRénov’.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <Link
@@ -412,8 +403,8 @@ export default async function CeeHubPage() {
                 Coup de pouce CEE 2026
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Bonifications CEE en vigueur&nbsp;: chauffage biomasse, r&eacute;novation globale,
-                pr&eacute;carit&eacute; &eacute;nerg&eacute;tique. Montants major&eacute;s.
+                Bonifications CEE en vigueur&nbsp;: chauffage biomasse, rénovation globale,
+                précarité énergétique. Montants majorés.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Voir les bonifications <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -428,11 +419,11 @@ export default async function CeeHubPage() {
                 <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
               <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
-                Mandataire CEE ou d&eacute;p&ocirc;t direct&nbsp;?
+                Mandataire CEE ou dépôt direct&nbsp;?
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Comparatif des deux circuits de valorisation&nbsp;: d&eacute;lais, garanties, cas
-                d&rsquo;usage. Montant de la prime identique.
+                Comparatif des deux circuits de valorisation&nbsp;: délais, garanties, cas d’usage.
+                Montant de la prime identique.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Comparer les circuits <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -447,15 +438,14 @@ export default async function CeeHubPage() {
                 <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
               <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
-                R&egrave;gles de cumul MaPrimeR&eacute;nov&rsquo; &amp; CEE 2026
+                Règles de cumul MaPrimeRénov’ &amp; CEE 2026
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Plafonds par profil de revenus, ordre des aides, pi&egrave;ges &agrave;
-                &eacute;viter et simulateur des aides cumulables.
+                Plafonds par profil de revenus, ordre des aides, pièges à éviter et simulateur des
+                aides cumulables.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                Lire les r&egrave;gles de cumul{' '}
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                Lire les règles de cumul <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </div>
             </Link>
 
@@ -470,8 +460,8 @@ export default async function CeeHubPage() {
                 Comparatif primes CEE 2026
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Effy, Hellio, Sonergia, PrimesEnergie&nbsp;: montants, d&eacute;lais de paiement,
-                avis clients, forces et faiblesses.
+                Effy, Hellio, Sonergia, PrimesEnergie&nbsp;: montants, délais de paiement, avis
+                clients, forces et faiblesses.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Voir le comparatif <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -505,7 +495,7 @@ export default async function CeeHubPage() {
                 <ShieldCheck className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
               <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
-                Leads exclusifs vs partag&eacute;s
+                Leads exclusifs vs partagés
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
                 Pourquoi les leads exclusifs convertissent 3x plus&nbsp;: co&ucirc;ts, taux de
@@ -522,12 +512,11 @@ export default async function CeeHubPage() {
       {/* Ressources compl\u00e9mentaires — cross-linking RGE / Qualifications / ADEME */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
-          Comprendre l&rsquo;&eacute;cosyst&egrave;me RGE
+          Comprendre l’écosystème RGE
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-          Toute prime CEE n&eacute;cessite un artisan RGE qualifi&eacute;. D&eacute;couvrez les
-          m&eacute;tiers concern&eacute;s, les qualifications officielles et la source des
-          donn&eacute;es que nous v&eacute;rifions.
+          Toute prime CEE nécessite un artisan RGE qualifié. Découvrez les métiers concernés, les
+          qualifications officielles et la source des données que nous vérifions.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <Link
@@ -541,11 +530,11 @@ export default async function CeeHubPage() {
               Annuaire artisans RGE
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              14 m&eacute;tiers &eacute;nerg&eacute;tiques (PAC, ITI, PV, po&ecirc;le bois&hellip;)
-              et 500+ villes couvertes avec qualifications actives.
+              14 métiers énergétiques (PAC, ITI, PV, poêle bois…) et 500+ villes couvertes avec
+              qualifications actives.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-              Explorer l&rsquo;annuaire <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              Explorer l’annuaire <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </div>
           </Link>
 
@@ -561,7 +550,7 @@ export default async function CeeHubPage() {
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec&nbsp;: ce que couvre chaque
-              qualification et comment la v&eacute;rifier.
+              qualification et comment la vérifier.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
               Lire les guides <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -579,11 +568,11 @@ export default async function CeeHubPage() {
               Source officielle ADEME
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              165&nbsp;000 qualifications synchronis&eacute;es chaque semaine avec France
-              R&eacute;nov&rsquo;. M&eacute;thodologie transparente.
+              165&nbsp;000 qualifications synchronisées chaque semaine avec France Rénov’.
+              Méthodologie transparente.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-              Voir la m&eacute;thodologie <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              Voir la méthodologie <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </div>
           </Link>
         </div>
@@ -598,11 +587,11 @@ export default async function CeeHubPage() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold mb-4">
-            Lancez votre projet avec une prime CEE s&eacute;curis&eacute;e
+            Lancez votre projet avec une prime CEE sécurisée
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Demandez un devis gratuit, v&eacute;rifiez la qualification d&rsquo;un artisan, ou
-            approfondissez le sujet avec nos guides d&eacute;di&eacute;s.
+            Demandez un devis gratuit, vérifiez la qualification d’un artisan, ou approfondissez le
+            sujet avec nos guides dédiés.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
@@ -616,7 +605,7 @@ export default async function CeeHubPage() {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
-              V&eacute;rifier un artisan
+              Vérifier un artisan
             </Link>
             <Link
               href="/guides/aides-renovation-2026"

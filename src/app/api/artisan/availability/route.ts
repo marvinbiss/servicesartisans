@@ -89,7 +89,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: 'Donnees invalides', details: parsed.error.flatten() },
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
         },
         { status: 400 }
       )

@@ -42,6 +42,7 @@ import { getRgeProviderCountByCity } from '@/lib/rge/city-listings'
 import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import CityHubLinks from '@/components/seo/CityHubLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import { getRegionPreposition } from '@/lib/geo-strings'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
@@ -65,7 +66,7 @@ interface PageProps {
   params: Promise<{ ville: string }>
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -94,7 +95,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `${ville.name}, ${ville.departement} : artisans référencés SIREN. ${metaContent.profile.citySizeLabel}, climat ${metaContent.profile.climateLabel.toLowerCase()}. Devis gratuit.`,
     `Annuaire de ${services.length} métiers à ${ville.name} (${ville.departementCode}), ${ville.region}. ${metaContent.profile.climateLabel}. Comparez les devis.`,
     `Artisans à ${ville.name} : plombier, électricien, serrurier et plus. ${ville.population} hab., ${ville.departement}. Devis gratuits en ligne.`,
-    `Tous les artisans de ${ville.name} (${ville.departementCode}). ${metaContent.profile.citySizeLabel} en ${ville.region}. ${services.length} spécialités, devis gratuit.`,
+    `Tous les artisans de ${ville.name} (${ville.departementCode}). ${metaContent.profile.citySizeLabel} ${getRegionPreposition(ville.region)}. ${services.length} spécialités, devis gratuit.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 

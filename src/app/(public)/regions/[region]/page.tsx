@@ -27,6 +27,7 @@ import {
 import { getProviderCountByRegion, formatProviderCount } from '@/lib/data/stats'
 import { getRegionImage } from '@/lib/data/images'
 import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
+import { getRegionPreposition, getRegionArticle } from '@/lib/geo-strings'
 import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
 import problems from '@/lib/data/problems'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
@@ -44,7 +45,7 @@ interface PageProps {
   params: Promise<{ region: string }>
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -67,7 +68,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `Artisans ${region.name} — Devis Gratuit`,
     `Artisan ${region.name} : annuaire vérifiés`,
     `${region.name} : artisans qualifiés — Devis`,
-    `Artisans en ${region.name} — Comparez`,
+    `Artisans ${getRegionPreposition(region.name)} — Comparez`,
     `${region.name} — Annuaire artisans vérifiés`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
@@ -75,10 +76,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
   const descTemplates = [
-    `Trouvez un artisan en ${region.name}. ${artisanStr}${deptCount} départements, ${cityCount} villes. Devis gratuits.`,
+    `Trouvez un artisan ${getRegionPreposition(region.name)}. ${artisanStr}${deptCount} départements, ${cityCount} villes. Devis gratuits.`,
     `${region.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
-    `Artisans en ${region.name} : ${cityCount} villes couvertes, ${allServices.length} corps de métier. ${artisanStr}${metaContent.profile.economyLabel}. Devis gratuit.`,
-    `Tous les artisans de ${region.name}. ${artisanStr}${deptCount} départements, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
+    `Artisans ${getRegionPreposition(region.name)} : ${cityCount} villes couvertes, ${allServices.length} corps de métier. ${artisanStr}${metaContent.profile.economyLabel}. Devis gratuit.`,
+    `Tous les artisans ${getRegionArticle(region.name)}. ${artisanStr}${deptCount} départements, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
     `${region.name} — ${deptCount} dép., ${cityCount} villes${artisanCount > 0 ? `, ${formatProviderCount(artisanCount)} artisans` : ''}. ${metaContent.profile.climateLabel}. Devis gratuits en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -98,7 +99,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'website',
       url: `${SITE_URL}/regions/${regionSlug}`,
       images: [
-        { url: regionImage.src, width: 1200, height: 630, alt: `Artisans en ${region.name}` },
+        {
+          url: regionImage.src,
+          width: 1200,
+          height: 630,
+          alt: `Artisans ${getRegionPreposition(region.name)}`,
+        },
       ],
     },
     twitter: {
@@ -144,8 +150,8 @@ export default async function RegionPage({ params }: PageProps) {
     { name: region.name, url: `/regions/${regionSlug}` },
   ])
   const collectionSchema = getCollectionPageSchema({
-    name: `Artisans en ${region.name}`,
-    description: `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes.`,
+    name: `Artisans ${getRegionPreposition(region.name)}`,
+    description: `Trouvez un artisan qualifié ${getRegionPreposition(region.name)}. ${deptCount} départements, ${cityCount} villes couvertes.`,
     url: `/regions/${regionSlug}`,
     itemCount: cityCount,
   })
@@ -210,11 +216,11 @@ export default async function RegionPage({ params }: PageProps) {
             {(() => {
               const h1Hash = Math.abs(hashCode(`h1-region-${region.slug}`))
               const h1Templates = [
-                `Artisans en ${region.name}`,
-                `Trouver un artisan en ${region.name}`,
+                `Artisans ${getRegionPreposition(region.name)}`,
+                `Trouver un artisan ${getRegionPreposition(region.name)}`,
                 `${region.name} : artisans par département`,
-                `Artisans qualifiés en ${region.name}`,
-                `Tous les artisans de ${region.name}`,
+                `Artisans qualifiés ${getRegionPreposition(region.name)}`,
+                `Tous les artisans ${getRegionArticle(region.name)}`,
               ]
               return (
                 <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
@@ -283,7 +289,7 @@ export default async function RegionPage({ params }: PageProps) {
                 href={`/regions/${regionSlug}/${service.slug}`}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${topServiceSlugsSet.has(service.slug) ? 'bg-accent-50 text-accent-700 border-accent-200 hover:bg-accent-100' : 'bg-sand-50 text-charcoal-700 border-sand-300 hover:bg-sand-100'}`}
               >
-                {service.name} en {region.name}
+                {service.name} {getRegionPreposition(region.name)}
               </Link>
             ))}
           </div>
@@ -293,7 +299,7 @@ export default async function RegionPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* ─── CTA CONVERSION — above the fold ─────────────── */}
         <GeoPageCTA
-          title={`Besoin d'un artisan en ${region.name} ?`}
+          title={`Besoin d'un artisan ${getRegionPreposition(region.name)} ?`}
           subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
         />
 
@@ -376,7 +382,7 @@ export default async function RegionPage({ params }: PageProps) {
               <TrendingUp className="w-5 h-5 text-primary-400" />
             </div>
             <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-              Artisanat en {region.name}
+              Artisanat {getRegionPreposition(region.name)}
             </h2>
           </div>
           <div className="space-y-6">
@@ -462,7 +468,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-                Services par ville en {region.name}
+                Services par ville {getRegionPreposition(region.name)}
               </h2>
               <p className="text-sm text-charcoal-500">
                 Top {Math.min(3, allCities.length)} villes · {allServices.length} corps de métier
@@ -503,7 +509,7 @@ export default async function RegionPage({ params }: PageProps) {
                 className="inline-flex items-center gap-2 bg-primary-50 hover:bg-primary-100 text-primary-600 hover:text-primary-700 font-semibold px-6 py-3 rounded-xl transition-colors border border-primary-200"
               >
                 <MapPin className="w-4 h-4" />
-                Voir tous les artisans en {region.name} ({cityCount} villes)
+                Voir tous les artisans {getRegionPreposition(region.name)} ({cityCount} villes)
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -518,7 +524,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-                Principales villes de {region.name}
+                Principales villes {getRegionArticle(region.name)}
               </h2>
               <p className="text-sm text-charcoal-500">
                 {Math.min(30, allCities.length)} villes par population
@@ -554,7 +560,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-                Tous les métiers en {region.name}
+                Tous les métiers {getRegionPreposition(region.name)}
               </h2>
               <p className="text-sm text-charcoal-500">{allServices.length} corps de métier</p>
             </div>
@@ -569,7 +575,9 @@ export default async function RegionPage({ params }: PageProps) {
                 <span className="font-semibold text-charcoal-800 group-hover:text-accent-700 transition-colors text-sm">
                   {service.name}
                 </span>
-                <span className="block text-xs text-charcoal-400 mt-0.5">en {region.name}</span>
+                <span className="block text-xs text-charcoal-400 mt-0.5">
+                  {getRegionPreposition(region.name)}
+                </span>
               </Link>
             ))}
           </div>
@@ -683,7 +691,7 @@ export default async function RegionPage({ params }: PageProps) {
         />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d'un artisan en {region.name} ?
+            Besoin d'un artisan {getRegionPreposition(region.name)} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
             Devis gratuit et sans engagement de professionnels qualifiés.
@@ -715,7 +723,7 @@ export default async function RegionPage({ params }: PageProps) {
             {/* Services */}
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
-                Services en {region.name}
+                Services {getRegionPreposition(region.name)}
               </h3>
               <div className="space-y-2">
                 {allServices.slice(0, 6).map((s) => (
@@ -725,7 +733,7 @@ export default async function RegionPage({ params }: PageProps) {
                     className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
                   >
                     <ChevronRight className="w-3 h-3" />
-                    {s.name} en {region.name}
+                    {s.name} {getRegionPreposition(region.name)}
                   </Link>
                 ))}
               </div>
@@ -765,7 +773,7 @@ export default async function RegionPage({ params }: PageProps) {
             {/* Cities in this region */}
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
-                Villes en {region.name}
+                Villes {getRegionPreposition(region.name)}
               </h3>
               <div className="space-y-2">
                 {allCities.slice(0, 4).map((city) => (
@@ -792,7 +800,7 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="mt-10 grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
-                Devis en {region.name}
+                Devis {getRegionPreposition(region.name)}
               </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 3).flatMap((city) =>
@@ -811,7 +819,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
-                Avis en {region.name}
+                Avis {getRegionPreposition(region.name)}
               </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 3).flatMap((city) =>
@@ -830,7 +838,7 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
-                Tarifs en {region.name}
+                Tarifs {getRegionPreposition(region.name)}
               </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 3).flatMap((city) =>
@@ -850,7 +858,7 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
           <div className="mt-8">
             <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">
-              Urgences en {region.name}
+              Urgences {getRegionPreposition(region.name)}
             </h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 3).flatMap((city) =>
@@ -868,7 +876,7 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
           <div className="mt-8">
             <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">
-              Problèmes courants en {region.name}
+              Problèmes courants {getRegionPreposition(region.name)}
             </h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 3).flatMap((city) =>

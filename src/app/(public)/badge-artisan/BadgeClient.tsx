@@ -1,7 +1,19 @@
-"use client"
+'use client'
 
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { Shield, Copy, Check, Code, Globe, ExternalLink, ChevronDown, Search, Sparkles, TrendingUp, Users } from 'lucide-react'
+import {
+  Shield,
+  Copy,
+  Check,
+  Code,
+  Globe,
+  ExternalLink,
+  ChevronDown,
+  Search,
+  Sparkles,
+  TrendingUp,
+  Users,
+} from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
 
 interface BadgeClientProps {
@@ -80,8 +92,10 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
 
   // Build badge URL and embed code
   const isVerifiedBadge = mode === 'search' && selectedProvider
-  const displayName = isVerifiedBadge ? selectedProvider.name : (name || 'Mon Entreprise')
-  const displayService = isVerifiedBadge ? (selectedProvider.specialty || 'Artisan') : (service || 'Artisan')
+  const displayName = isVerifiedBadge ? selectedProvider.name : name || 'Mon Entreprise'
+  const displayService = isVerifiedBadge
+    ? selectedProvider.specialty || 'Artisan'
+    : service || 'Artisan'
 
   let badgeUrl: string
   let linkUrl: string
@@ -94,32 +108,45 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
 
     // Build link to artisan page
     const serviceSlug = (selectedProvider.specialty || 'artisan')
-      .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
     const citySlug = (selectedProvider.city || 'france')
-      .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
     const publicId = selectedProvider.slug || selectedProvider.stable_id || ''
     linkUrl = `${SITE_URL}/services/${serviceSlug}/${citySlug}/${publicId}`
   } else {
     const badgeParams = new URLSearchParams({
       name: displayName,
       service: displayService,
-      rating: '4.8',
-      reviews: '12',
       style,
     })
     badgeUrl = `${SITE_URL}/api/badge?${badgeParams.toString()}`
     const serviceSlug = service
-      ? service.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      ? service
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '')
       : 'artisan'
     linkUrl = `${SITE_URL}/services/${serviceSlug}`
   }
 
-  const badgeW = style === 'minimal' ? (isVerifiedBadge ? '220' : '200') : (isVerifiedBadge ? '320' : '300')
-  const badgeH = style === 'minimal' ? (isVerifiedBadge ? '54' : '50') : (isVerifiedBadge ? '110' : '100')
+  const badgeW =
+    style === 'minimal' ? (isVerifiedBadge ? '220' : '200') : isVerifiedBadge ? '320' : '300'
+  const badgeH =
+    style === 'minimal' ? (isVerifiedBadge ? '54' : '50') : isVerifiedBadge ? '110' : '100'
 
   const embedCode = `<a href="${linkUrl}" target="_blank" rel="noopener" title="${displayName} — Artisan sur ServicesArtisans.fr">
   <img src="${badgeUrl}"
-       alt="${displayName} — Artisan ${isVerifiedBadge && selectedProvider.is_verified ? 'Verifie' : 'Reference'} sur ServicesArtisans"
+       alt="${displayName} — Artisan ${isVerifiedBadge && selectedProvider.is_verified ? 'Vérifié' : 'Référencé'} sur ServicesArtisans"
        width="${badgeW}" height="${badgeH}" loading="lazy" />
 </a>`
 
@@ -143,7 +170,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
   // Preview URL (relative for same-origin)
   const previewBadgeUrl = isVerifiedBadge
     ? `/api/badge/verified?${selectedProvider.slug ? `slug=${encodeURIComponent(selectedProvider.slug)}` : `id=${encodeURIComponent(selectedProvider.stable_id || '')}`}&style=${style}`
-    : `/api/badge?${new URLSearchParams({ name: displayName, service: displayService, rating: '4.8', reviews: '12', style }).toString()}`
+    : `/api/badge?${new URLSearchParams({ name: displayName, service: displayService, style }).toString()}`
 
   return (
     <>
@@ -165,7 +192,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                 className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${mode === 'manual' ? 'bg-white text-charcoal-900 shadow-soft' : 'text-charcoal-500 hover:text-charcoal-700'}`}
               >
                 <Code className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
-                Badge personnalise
+                Badge personnalisé
               </button>
             </div>
           </div>
@@ -175,8 +202,8 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
           </h2>
           <p className="text-charcoal-500 text-sm text-center mb-10">
             {mode === 'search'
-              ? 'Recherchez votre entreprise pour generer un badge avec vos vraies donnees (note, avis, verification).'
-              : 'Remplissez les champs ci-dessous et votre badge se met a jour en temps reel.'}
+              ? 'Recherchez votre entreprise pour générer un badge avec vos vraies données (note, avis, vérification).'
+              : 'Remplissez les champs ci-dessous et votre badge se met à jour en temps réel.'}
           </p>
 
           <div className="grid md:grid-cols-2 gap-10">
@@ -185,7 +212,10 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               {mode === 'search' ? (
                 <>
                   <div ref={searchRef} className="relative">
-                    <label htmlFor="badge-search" className="block text-sm font-medium text-charcoal-700 mb-1.5">
+                    <label
+                      htmlFor="badge-search"
+                      className="block text-sm font-medium text-charcoal-700 mb-1.5"
+                    >
                       Nom de votre entreprise
                     </label>
                     <div className="relative">
@@ -196,7 +226,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                         value={searchQuery}
                         onChange={(e) => handleSearchInput(e.target.value)}
                         onFocus={() => searchResults.length > 0 && setShowResults(true)}
-                        placeholder="Ex : Dupont Plomberie, Martin Electricite..."
+                        placeholder="Ex : Dupont Plomberie, Martin Électricité..."
                         className="w-full pl-10 pr-4 py-2.5 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none transition-shadow"
                         autoComplete="off"
                       />
@@ -206,10 +236,13 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                     {showResults && (
                       <div className="absolute z-20 w-full mt-1 bg-white border border-sand-200 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                         {searching ? (
-                          <div className="p-4 text-center text-charcoal-500 text-sm">Recherche...</div>
+                          <div className="p-4 text-center text-charcoal-500 text-sm">
+                            Recherche...
+                          </div>
                         ) : searchResults.length === 0 ? (
                           <div className="p-4 text-center text-charcoal-500 text-sm">
-                            Aucun resultat. Essayez un autre nom ou passez en mode « Badge personnalise ».
+                            Aucun résultat. Essayez un autre nom ou passez en mode « Badge
+                            personnalisé ».
                           </div>
                         ) : (
                           searchResults.map((p) => (
@@ -218,19 +251,27 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                               onClick={() => selectProvider(p)}
                               className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-sand-50 transition-colors border-b border-sand-100 last:border-b-0"
                             >
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${p.is_verified ? 'bg-accent-50' : 'bg-sand-100'}`}>
-                                <Shield className={`w-4 h-4 ${p.is_verified ? 'text-accent-600' : 'text-charcoal-400'}`} />
+                              <div
+                                className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${p.is_verified ? 'bg-accent-50' : 'bg-sand-100'}`}
+                              >
+                                <Shield
+                                  className={`w-4 h-4 ${p.is_verified ? 'text-accent-600' : 'text-charcoal-400'}`}
+                                />
                               </div>
                               <div className="min-w-0 flex-1">
-                                <div className="text-sm font-medium text-charcoal-900 truncate">{p.name}</div>
+                                <div className="text-sm font-medium text-charcoal-900 truncate">
+                                  {p.name}
+                                </div>
                                 <div className="text-xs text-charcoal-500 truncate">
                                   {[p.specialty, p.city].filter(Boolean).join(' — ')}
-                                  {p.rating ? ` — ${p.rating.toFixed(1)}/5 (${p.reviews} avis)` : ''}
+                                  {p.rating
+                                    ? ` — ${p.rating.toFixed(1)}/5 (${p.reviews} avis)`
+                                    : ''}
                                 </div>
                               </div>
                               {p.is_verified && (
                                 <span className="text-xs font-medium text-accent-700 bg-accent-50 px-2 py-0.5 rounded-full flex-shrink-0">
-                                  Verifie
+                                  Vérifié
                                 </span>
                               )}
                             </button>
@@ -244,10 +285,14 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                     <div className="bg-accent-50 border border-accent-200 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-1">
                         <Shield className="w-4 h-4 text-accent-600" />
-                        <span className="text-sm font-semibold text-accent-800">{selectedProvider.name}</span>
+                        <span className="text-sm font-semibold text-accent-800">
+                          {selectedProvider.name}
+                        </span>
                       </div>
                       <p className="text-xs text-accent-700">
-                        {selectedProvider.is_verified ? 'Artisan verifie' : 'Artisan reference'} — {selectedProvider.specialty || 'Artisan'} {selectedProvider.city ? `a ${selectedProvider.city}` : ''}
+                        {selectedProvider.is_verified ? 'Artisan vérifié' : 'Artisan référencé'} —{' '}
+                        {selectedProvider.specialty || 'Artisan'}{' '}
+                        {selectedProvider.city ? `à ${selectedProvider.city}` : ''}
                       </p>
                     </div>
                   )}
@@ -255,7 +300,10 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               ) : (
                 <>
                   <div>
-                    <label htmlFor="badge-name" className="block text-sm font-medium text-charcoal-700 mb-1.5">
+                    <label
+                      htmlFor="badge-name"
+                      className="block text-sm font-medium text-charcoal-700 mb-1.5"
+                    >
                       Nom de votre entreprise
                     </label>
                     <input
@@ -269,8 +317,11 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                     />
                   </div>
                   <div>
-                    <label htmlFor="badge-service" className="block text-sm font-medium text-charcoal-700 mb-1.5">
-                      Metier / Service
+                    <label
+                      htmlFor="badge-service"
+                      className="block text-sm font-medium text-charcoal-700 mb-1.5"
+                    >
+                      Métier / Service
                     </label>
                     <input
                       id="badge-service"
@@ -286,7 +337,10 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               )}
 
               <div>
-                <label htmlFor="badge-style" className="block text-sm font-medium text-charcoal-700 mb-1.5">
+                <label
+                  htmlFor="badge-style"
+                  className="block text-sm font-medium text-charcoal-700 mb-1.5"
+                >
                   Style du badge
                 </label>
                 <select
@@ -304,8 +358,10 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
 
             {/* Preview */}
             <div>
-              <p className="text-sm font-medium text-charcoal-700 mb-3">Apercu en direct</p>
-              <div className={`rounded-xl border p-8 flex items-center justify-center min-h-[160px] ${style === 'dark' ? 'bg-charcoal-800 border-charcoal-700' : 'bg-sand-100 border-sand-200'}`}>
+              <p className="text-sm font-medium text-charcoal-700 mb-3">Aperçu en direct</p>
+              <div
+                className={`rounded-xl border p-8 flex items-center justify-center min-h-[160px] ${style === 'dark' ? 'bg-charcoal-800 border-charcoal-700' : 'bg-sand-100 border-sand-200'}`}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={previewBadgeUrl}
@@ -317,7 +373,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               </div>
               {isVerifiedBadge && (
                 <p className="text-xs text-charcoal-500 mt-2 text-center">
-                  Donnees en temps reel depuis votre fiche ServicesArtisans
+                  Données en temps réel depuis votre fiche ServicesArtisans
                 </p>
               )}
             </div>
@@ -329,11 +385,11 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
-            Code HTML a copier
+            Code HTML à copier
           </h2>
           <p className="text-charcoal-500 text-sm text-center mb-8">
             Collez ce code dans votre site pour afficher le badge.
-            {isVerifiedBadge && ' Les donnees se mettent a jour automatiquement.'}
+            {isVerifiedBadge && ' Les données se mettent à jour automatiquement.'}
           </p>
           <div className="bg-charcoal-900 rounded-xl p-6 relative">
             <div className="flex items-center gap-2 mb-4">
@@ -351,7 +407,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               {copied ? (
                 <>
                   <Check className="w-4 h-4 text-accent-400" />
-                  <span className="text-accent-400">Code copie !</span>
+                  <span className="text-accent-400">Code copié !</span>
                 </>
               ) : (
                 <>
@@ -368,7 +424,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
-            Comment integrer le badge sur votre site
+            Comment intégrer le badge sur votre site
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -376,28 +432,31 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                 step: '1',
                 icon: Search,
                 title: 'Trouvez votre fiche',
-                desc: "Recherchez votre entreprise dans notre base ou creez un badge personnalise avec vos informations.",
+                desc: 'Recherchez votre entreprise dans notre base ou créez un badge personnalisé avec vos informations.',
               },
               {
                 step: '2',
                 icon: Copy,
                 title: 'Copiez le code HTML',
-                desc: "Cliquez sur le bouton \"Copier le code\" pour copier le code dans votre presse-papiers.",
+                desc: 'Cliquez sur le bouton "Copier le code" pour copier le code dans votre presse-papiers.',
               },
               {
                 step: '3',
                 icon: Code,
                 title: 'Collez sur votre site',
-                desc: "Integrez le code dans votre site WordPress, Wix, Squarespace ou tout autre CMS.",
+                desc: 'Intégrez le code dans votre site WordPress, Wix, Squarespace ou tout autre CMS.',
               },
               {
                 step: '4',
                 icon: Globe,
                 title: 'Badge actif !',
-                desc: "Le badge apparait avec vos vraies donnees. Note et avis se mettent a jour automatiquement.",
+                desc: 'Le badge apparaît avec vos vraies données. Note et avis se mettent à jour automatiquement.',
               },
             ].map((item) => (
-              <div key={item.step} className="bg-sand-50 rounded-xl border border-sand-200 p-6 text-center shadow-soft hover:shadow-card-hover transition-shadow">
+              <div
+                key={item.step}
+                className="bg-sand-50 rounded-xl border border-sand-200 p-6 text-center shadow-soft hover:shadow-card-hover transition-shadow"
+              >
                 <div className="w-10 h-10 bg-primary-400 text-white rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-4">
                   {item.step}
                 </div>
@@ -421,40 +480,45 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               {
                 icon: Shield,
                 title: 'Inspirez confiance aux clients',
-                desc: "Le badge \"Artisan Verifie\" rassure instantanement vos visiteurs. 73 % des internautes declarent faire davantage confiance aux sites avec un badge de verification.",
+                desc: 'Le badge "Artisan Vérifié" rassure instantanément vos visiteurs. 73 % des internautes déclarent faire davantage confiance aux sites avec un badge de vérification.',
               },
               {
                 icon: TrendingUp,
-                title: 'Boostez votre referencement SEO',
-                desc: "Le badge inclut un lien vers votre fiche ServicesArtisans, ce qui ameliore votre visibilite sur Google. C'est un backlink gratuit et permanent.",
+                title: 'Boostez votre référencement SEO',
+                desc: "Le badge inclut un lien vers votre fiche ServicesArtisans, ce qui améliore votre visibilité sur Google. C'est un backlink gratuit et permanent.",
               },
               {
                 icon: Users,
                 title: 'Plus de demandes de devis',
-                desc: "Les artisans qui affichent un badge de confiance recoivent en moyenne 35 % de demandes de contact en plus sur leur site.",
+                desc: 'Les artisans qui affichent un badge de confiance reçoivent en moyenne plus de demandes de contact sur leur site.',
               },
               {
                 icon: Sparkles,
-                title: 'Donnees en temps reel',
-                desc: "Votre note, nombre d'avis et statut de verification se mettent a jour automatiquement. Aucune maintenance requise de votre part.",
+                title: 'Données en temps réel',
+                desc: "Votre note, nombre d'avis et statut de vérification se mettent à jour automatiquement. Aucune maintenance requise de votre part.",
               },
               {
                 icon: ExternalLink,
                 title: 'Gratuit et sans engagement',
-                desc: "Le badge est 100 % gratuit. Aucun abonnement, aucun frais cache. Vous pouvez le retirer a tout moment.",
+                desc: 'Le badge est 100 % gratuit. Aucun abonnement, aucun frais caché. Vous pouvez le retirer à tout moment.',
               },
               {
                 icon: Globe,
                 title: 'Compatible avec tous les sites',
-                desc: "Le badge fonctionne sur WordPress, Wix, Squarespace, Shopify, Webflow et tout site acceptant du HTML. Moins de 3 Ko, zero JavaScript.",
+                desc: 'Le badge fonctionne sur WordPress, Wix, Squarespace, Shopify, Webflow et tout site acceptant du HTML. Moins de 3 Ko, zero JavaScript.',
               },
             ].map((benefit) => (
-              <div key={benefit.title} className="flex items-start gap-4 bg-white rounded-xl border border-sand-200 p-5 shadow-soft hover:shadow-card-hover transition-shadow">
+              <div
+                key={benefit.title}
+                className="flex items-start gap-4 bg-white rounded-xl border border-sand-200 p-5 shadow-soft hover:shadow-card-hover transition-shadow"
+              >
                 <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">
                   <benefit.icon className="w-5 h-5 text-primary-400" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-semibold text-charcoal-900 mb-1">{benefit.title}</h3>
+                  <h3 className="font-heading font-semibold text-charcoal-900 mb-1">
+                    {benefit.title}
+                  </h3>
                   <p className="text-charcoal-600 text-sm">{benefit.desc}</p>
                 </div>
               </div>
@@ -467,13 +531,15 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
-            Questions frequentes
+            Questions fréquentes
           </h2>
           <div className="space-y-4">
             {faqItems.map((item, i) => (
               <details key={i} className="bg-sand-50 rounded-xl border border-sand-200 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">{item.question}</h3>
+                  <h3 className="text-base font-semibold text-charcoal-900 pr-4">
+                    {item.question}
+                  </h3>
                   <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
                 <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">

@@ -304,8 +304,8 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               ))}
             </div>
             <p className="text-xs text-charcoal-900 mt-5 leading-relaxed max-w-3xl">
-              Les primes CEE sont cumulables avec MaPrimeRénov&rsquo;. Le montant exact dépend de
-              vos revenus, de la zone climatique et du délégataire choisi.
+              Les primes CEE sont cumulables avec MaPrimeRénov’. Le montant exact dépend de vos
+              revenus, de la zone climatique et du délégataire choisi.
             </p>
           </div>
         </section>
@@ -426,13 +426,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
-            Chercher par d&eacute;partement
+            Chercher par département
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-            Acc&eacute;dez &agrave; l&rsquo;annuaire {label?.label ?? 'RGE'} de chaque
-            d&eacute;partement fran&ccedil;ais pour couvrir les zones rurales et les communes
-            o&ugrave; la densit&eacute; d&rsquo;artisans qualifi&eacute;s est plus faible
-            qu&rsquo;en centre-ville.
+            Accédez à l’annuaire {label?.label ?? 'RGE'} de chaque département français pour couvrir
+            les zones rurales et les communes o&ugrave; la densité d’artisans qualifiés est plus
+            faible qu’en centre-ville.
           </p>
           <div className="flex flex-wrap gap-2">
             {departements.map((d) => (

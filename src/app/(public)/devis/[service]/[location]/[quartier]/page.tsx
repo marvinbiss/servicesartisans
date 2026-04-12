@@ -17,6 +17,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import DevisForm from '@/components/DevisForm'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import { getRegionPreposition } from '@/lib/geo-strings'
 
 // ---------------------------------------------------------------------------
 // Static params: top 3 services x top 10 cities x their quartiers
@@ -45,7 +46,7 @@ export const revalidate = 86400
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -329,8 +330,8 @@ export default async function DevisQuartierPage({
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${ville.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                  : `Les tarifs en ${ville.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                  ? `Les tarifs ${getRegionPreposition(ville.region)} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs ${getRegionPreposition(ville.region)} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>

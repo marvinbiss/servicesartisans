@@ -428,7 +428,7 @@ export default function CEE2026Page() {
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
-                <span>Qualibois pour les appareils de chauffage bois</span>
+                <span>QualiBois pour les appareils de chauffage bois</span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />

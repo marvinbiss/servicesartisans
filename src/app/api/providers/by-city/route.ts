@@ -37,7 +37,9 @@ export async function GET(request: NextRequest) {
 
     const { data: providers, error } = await supabase
       .from('providers')
-      .select('id, name, slug, latitude, longitude, rating_average, review_count, specialty, address_city')
+      .select(
+        'id, name, slug, latitude, longitude, rating_average, review_count, specialty, address_city'
+      )
       .eq('is_active', true)
       .not('latitude', 'is', null)
       .not('longitude', 'is', null)
@@ -48,26 +50,22 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('Error fetching providers by city:', error)
-      return NextResponse.json(
-        { error: 'Failed to fetch providers' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to fetch providers' }, { status: 500 })
     }
 
-    return NextResponse.json({
-      providers: providers || [],
-      count: providers?.length || 0
-    }, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    return NextResponse.json(
+      {
+        providers: providers || [],
+        count: providers?.length || 0,
       },
-    })
-
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        },
+      }
+    )
   } catch (error) {
     logger.error('Error in providers by city API:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur interne du serveur' }, { status: 500 })
   }
 }

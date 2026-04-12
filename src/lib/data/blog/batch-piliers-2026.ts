@@ -8,20 +8,20 @@ import type { BlogArticle } from './articles'
  */
 
 export const piliersArticles: Record<string, BlogArticle> = {
-
   // ────────────────────────────────────────────────────────────────────────────
   // 1. RÉNOVATION MAISON — GUIDE ULTIME 2026 (~3 500 mots)
   // ────────────────────────────────────────────────────────────────────────────
   'renovation-maison-guide-ultime-2026': {
-    title: 'Rénovation Maison : Le Guide Ultime 2026 (Budget, Étapes, Aides)',
+    title: 'Rénovation Maison : Le Guide complet 2026 (Budget, Étapes, Aides)',
     excerpt:
-      'Tout ce qu\'il faut savoir pour rénover sa maison en 2026 : budget par type de rénovation et par pièce, chronologie d\'un chantier de 3 mois, check-list administrative, 10 erreurs qui coûtent cher et tableau des aides cumulables.',
-    metaTitle: 'Rénovation Maison 2026 : Guide Ultime Budget',
+      "Tout ce qu'il faut savoir pour rénover sa maison en 2026 : budget par type de rénovation et par pièce, chronologie d'un chantier de 3 mois, check-list administrative, 10 erreurs qui coûtent cher et tableau des aides cumulables.",
+    metaTitle: 'Rénovation Maison 2026 : Guide complet Budget',
     metaDescription:
       'Guide complet rénovation maison 2026 : budget 200-2 000 €/m², chronologie chantier, permis, aides cumulables. 10 erreurs à éviter.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-01',
     readTime: '18 min',
     category: 'Guides',
@@ -30,8 +30,8 @@ export const piliersArticles: Record<string, BlogArticle> = {
       'Rénovation légère : 200-500 €/m² — peinture, sols, petites réparations',
       'Rénovation moyenne : 500-1 200 €/m² — cuisine, salle de bain, isolation ciblée',
       'Rénovation lourde : 1 200-2 200 €/m² — remise aux normes complète, structure',
-      'Les aides cumulées (MaPrimeRénov\' + CEE + Éco-PTZ + TVA 5,5 %) couvrent 30 à 70 % du budget énergétique',
-      'Toujours prévoir 10-15 % de marge pour les imprévus, surtout dans l\'ancien',
+      "Les aides cumulées (MaPrimeRénov' + CEE + Éco-PTZ + TVA 5,5 %) couvrent 30 à 70 % du budget énergétique",
+      "Toujours prévoir 10-15 % de marge pour les imprévus, surtout dans l'ancien",
       'Un planning réaliste dure 3 à 6 mois pour une rénovation complète de 100 m²',
     ],
     content: [
@@ -253,12 +253,12 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       {
         question: 'Quel est le prix moyen pour rénover entièrement une maison de 100 m² ?',
         answer:
-          'Le prix moyen pour une rénovation complète (moyenne) d\'une maison de 100 m² se situe entre 50 000 et 120 000 € en 2026, selon l\'état initial et le niveau de finition souhaité. Une rénovation lourde (mise aux normes complète) peut atteindre 150 000 à 220 000 €.',
+          "Le prix moyen pour une rénovation complète (moyenne) d'une maison de 100 m² se situe entre 50 000 et 120 000 € en 2026, selon l'état initial et le niveau de finition souhaité. Une rénovation lourde (mise aux normes complète) peut atteindre 150 000 à 220 000 €.",
       },
       {
         question: 'Combien de temps durent des travaux de rénovation complète ?',
         answer:
-          'Comptez 3 à 6 mois pour une rénovation complète de 100 m², auxquels s\'ajoutent 1 à 3 mois de préparation (devis, administratif). Un simple rafraîchissement prend 2 à 4 semaines.',
+          "Comptez 3 à 6 mois pour une rénovation complète de 100 m², auxquels s'ajoutent 1 à 3 mois de préparation (devis, administratif). Un simple rafraîchissement prend 2 à 4 semaines.",
       },
       {
         question: 'Faut-il un architecte pour rénover sa maison ?',
@@ -268,37 +268,37 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       {
         question: 'Peut-on vivre dans la maison pendant les travaux ?',
         answer:
-          'C\'est possible pour un rafraîchissement ou une rénovation partielle pièce par pièce. Pour une rénovation lourde, il est fortement déconseillé d\'habiter sur place (poussière, bruit, coupures d\'eau/électricité). Prévoyez un budget logement temporaire de 800 à 1 500 €/mois.',
+          "C'est possible pour un rafraîchissement ou une rénovation partielle pièce par pièce. Pour une rénovation lourde, il est fortement déconseillé d'habiter sur place (poussière, bruit, coupures d'eau/électricité). Prévoyez un budget logement temporaire de 800 à 1 500 €/mois.",
       },
       {
         question: 'Comment financer sa rénovation sans apport ?',
         answer:
-          'L\'Éco-PTZ permet d\'emprunter jusqu\'à 50 000 € à taux zéro sur 20 ans. Un prêt travaux classique (taux 3-5 % en 2026) complète le financement. Les aides (MaPrimeRénov\' + CEE) sont versées après travaux mais certaines banques acceptent de les déduire du plan de financement.',
+          "L'Éco-PTZ permet d'emprunter jusqu'à 50 000 € à taux zéro sur 20 ans. Un prêt travaux classique (taux 3-5 % en 2026) complète le financement. Les aides (MaPrimeRénov' + CEE) sont versées après travaux mais certaines banques acceptent de les déduire du plan de financement.",
       },
       {
         question: 'Quelles sont les aides pour la rénovation en 2026 ?',
         answer:
-          'Les principales aides sont : MaPrimeRénov\' (jusqu\'à 63 000 € en parcours accompagné), les CEE (2 000-5 000 €), l\'Éco-PTZ (50 000 € à taux zéro), la TVA à 5,5 % sur les travaux énergétiques et les aides locales. Elles sont cumulables.',
+          "Les principales aides sont : MaPrimeRénov' (jusqu'à 63 000 € en parcours accompagné), les CEE (2 000-5 000 €), l'Éco-PTZ (50 000 € à taux zéro), la TVA à 5,5 % sur les travaux énergétiques et les aides locales. Elles sont cumulables.",
       },
       {
-        question: 'Quelle est la rentabilité d\'une rénovation énergétique ?',
+        question: "Quelle est la rentabilité d'une rénovation énergétique ?",
         answer:
           'Une rénovation énergétique bien menée (isolation + chauffage performant) réduit la facture de 40 à 70 % et augmente la valeur du bien de 5 à 15 %. Le retour sur investissement se situe entre 8 et 15 ans, ramené à 3-7 ans après déduction des aides.',
       },
       {
-        question: 'Faut-il un permis de construire pour rénover l\'intérieur ?',
+        question: "Faut-il un permis de construire pour rénover l'intérieur ?",
         answer:
-          'Non, la rénovation intérieure sans modification de l\'aspect extérieur ni de la structure ne nécessite ni permis ni déclaration. En revanche, le changement de fenêtres, la modification de la façade ou la création d\'ouvertures nécessitent une déclaration préalable.',
+          "Non, la rénovation intérieure sans modification de l'aspect extérieur ni de la structure ne nécessite ni permis ni déclaration. En revanche, le changement de fenêtres, la modification de la façade ou la création d'ouvertures nécessitent une déclaration préalable.",
       },
       {
         question: 'Comment éviter les arnaques en rénovation ?',
         answer:
-          'Vérifiez systématiquement le SIRET, l\'assurance décennale et la qualification RGE de chaque artisan. Ne versez jamais plus de 30 % d\'acompte. Méfiez-vous des démarchages à domicile et des prix anormalement bas. Consultez notre guide anti-arnaque détaillé.',
+          "Vérifiez systématiquement le SIRET, l'assurance décennale et la qualification RGE de chaque artisan. Ne versez jamais plus de 30 % d'acompte. Méfiez-vous des démarchages à domicile et des prix anormalement bas. Consultez notre guide anti-arnaque détaillé.",
       },
       {
         question: 'Rénovation partielle ou globale : que choisir ?',
         answer:
-          'La rénovation globale est plus économique au m² (mutualisation des frais de chantier) et offre de meilleures aides (Parcours Accompagné MaPrimeRénov\'). La rénovation partielle convient si le budget est limité ou si seule une pièce nécessite des travaux.',
+          "La rénovation globale est plus économique au m² (mutualisation des frais de chantier) et offre de meilleures aides (Parcours Accompagné MaPrimeRénov'). La rénovation partielle convient si le budget est limité ou si seule une pièce nécessite des travaux.",
       },
     ],
   },
@@ -315,18 +315,27 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       'Prix rénovation salle de bain 2026 : douche italienne, baignoire, carrelage, plomberie. 3 devis réels commentés. Obtenez un devis gratuit.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-04',
     readTime: '16 min',
     category: 'Tarifs',
-    tags: ['salle de bain', 'rénovation', 'prix', 'douche italienne', 'carrelage', 'plomberie', '2026'],
+    tags: [
+      'salle de bain',
+      'rénovation',
+      'prix',
+      'douche italienne',
+      'carrelage',
+      'plomberie',
+      '2026',
+    ],
     keyTakeaways: [
       'Budget éco (rafraîchissement) : 2 500 – 5 000 € sans modification de plomberie',
       'Budget standard (rénovation complète) : 8 000 – 15 000 € incluant plomberie et carrelage',
-      'Budget haut de gamme : 15 000 – 30 000 € avec matériaux nobles et douche à l\'italienne',
+      "Budget haut de gamme : 15 000 – 30 000 € avec matériaux nobles et douche à l'italienne",
       'La douche italienne coûte 1 800 – 6 000 € posée selon les dimensions et finitions',
-      'Conserver la disposition existante des arrivées d\'eau permet d\'économiser 2 000 – 5 000 €',
-      'Les aides MaPrimeAdapt\' couvrent jusqu\'à 70 % pour l\'adaptation PMR',
+      "Conserver la disposition existante des arrivées d'eau permet d'économiser 2 000 – 5 000 €",
+      "Les aides MaPrimeAdapt' couvrent jusqu'à 70 % pour l'adaptation PMR",
     ],
     content: [
       `## Ce qui détermine le prix d'une rénovation de salle de bain
@@ -563,22 +572,22 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       {
         question: 'Vaut-il mieux une douche ou une baignoire pour la valeur du bien ?',
         answer:
-          'Dans un logement avec une seule salle d\'eau, une douche à l\'italienne est plus valorisante (perception de modernité). Si vous avez deux salles d\'eau, gardez une baignoire dans l\'une et une douche dans l\'autre. Les familles avec enfants recherchent au moins une baignoire.',
+          "Dans un logement avec une seule salle d'eau, une douche à l'italienne est plus valorisante (perception de modernité). Si vous avez deux salles d'eau, gardez une baignoire dans l'une et une douche dans l'autre. Les familles avec enfants recherchent au moins une baignoire.",
       },
       {
         question: 'Quelles aides pour adapter sa salle de bain seniors ?',
         answer:
-          'MaPrimeAdapt\' finance jusqu\'à 70 % des travaux d\'adaptation (max 22 000 €) pour les personnes de 60+ ans en perte d\'autonomie ou les personnes handicapées. Le crédit d\'impôt de 25 % s\'applique aussi sur les équipements spécifiques.',
+          "MaPrimeAdapt' finance jusqu'à 70 % des travaux d'adaptation (max 22 000 €) pour les personnes de 60+ ans en perte d'autonomie ou les personnes handicapées. Le crédit d'impôt de 25 % s'applique aussi sur les équipements spécifiques.",
       },
       {
         question: 'Faut-il un plombier pour rénover sa salle de bain ?',
         answer:
-          'Oui, un plombier qualifié est indispensable pour les raccordements eau et la pose du receveur de douche (étanchéité). Il travaille souvent avec un carreleur et un électricien. Comptez 1 500 à 4 000 € de main-d\'œuvre plomberie selon la complexité.',
+          "Oui, un plombier qualifié est indispensable pour les raccordements eau et la pose du receveur de douche (étanchéité). Il travaille souvent avec un carreleur et un électricien. Comptez 1 500 à 4 000 € de main-d'œuvre plomberie selon la complexité.",
       },
       {
         question: 'Quel carrelage choisir pour une salle de bain ?',
         answer:
-          'Privilégiez un grès cérame pleine masse (résistant à l\'eau) classé R10 minimum au sol. Format tendance 2026 : 60×60 ou 60×120 au sol, 30×60 en faïence murale. Le carrelage imitation bois (50-100 €/m² posé) offre un rendu chaleureux sans les inconvénients du bois.',
+          "Privilégiez un grès cérame pleine masse (résistant à l'eau) classé R10 minimum au sol. Format tendance 2026 : 60×60 ou 60×120 au sol, 30×60 en faïence murale. Le carrelage imitation bois (50-100 €/m² posé) offre un rendu chaleureux sans les inconvénients du bois.",
       },
     ],
   },
@@ -595,7 +604,8 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       'Prix rénovation cuisine 2026 : 5 000-35 000 € selon la configuration. Comparatif matériaux, budget électroménager, planning. Devis gratuit.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-07',
     readTime: '16 min',
     category: 'Tarifs',
@@ -605,7 +615,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       'Cuisine en L (5-6 ml) : 8 000 – 20 000 € tout compris',
       'Cuisine en U ou avec îlot : 15 000 – 35 000 €+ tout compris',
       'Le plan de travail pèse 10-20 % du budget meubles : de 50 €/ml (stratifié) à 500 €/ml (granit)',
-      'L\'électroménager représente 15-30 % du budget total selon la gamme',
+      "L'électroménager représente 15-30 % du budget total selon la gamme",
       'Planning type : 6 à 10 semaines de la commande à la fin de pose',
     ],
     content: [
@@ -776,14 +786,14 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
     ],
     faq: [
       {
-        question: 'Quel est le prix moyen d\'une rénovation de cuisine ?',
+        question: "Quel est le prix moyen d'une rénovation de cuisine ?",
         answer:
-          'En 2026, le prix moyen d\'une rénovation complète de cuisine (meubles + électroménager + pose + travaux techniques) se situe entre 8 000 et 20 000 € pour un projet standard en milieu de gamme. Une cuisine haut de gamme avec îlot peut dépasser 30 000 €.',
+          "En 2026, le prix moyen d'une rénovation complète de cuisine (meubles + électroménager + pose + travaux techniques) se situe entre 8 000 et 20 000 € pour un projet standard en milieu de gamme. Une cuisine haut de gamme avec îlot peut dépasser 30 000 €.",
       },
       {
         question: 'Cuisiniste ou artisans séparés : que choisir ?',
         answer:
-          'Le cuisiniste propose un forfait tout compris (conception, fourniture, pose) avec un seul interlocuteur. Les artisans séparés permettent souvent d\'économiser 10 à 20 % mais nécessitent de coordonner vous-même plombier, électricien et poseur. Pour un premier projet, le cuisiniste est plus sécurisant.',
+          "Le cuisiniste propose un forfait tout compris (conception, fourniture, pose) avec un seul interlocuteur. Les artisans séparés permettent souvent d'économiser 10 à 20 % mais nécessitent de coordonner vous-même plombier, électricien et poseur. Pour un premier projet, le cuisiniste est plus sécurisant.",
       },
       {
         question: 'Combien de temps pour rénover une cuisine ?',
@@ -803,7 +813,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       {
         question: 'Quelles aides pour rénover sa cuisine ?',
         answer:
-          'La rénovation de cuisine ne bénéficie pas d\'aides spécifiques (MaPrimeRénov\' est réservée à l\'énergie). La TVA à 10 % s\'applique sur la main-d\'œuvre et les matériaux si le logement a plus de 2 ans. L\'Éco-PTZ peut financer le remplacement d\'équipements énergivores (chauffe-eau, éclairage).',
+          "La rénovation de cuisine ne bénéficie pas d'aides spécifiques (MaPrimeRénov' est réservée à l'énergie). La TVA à 10 % s'applique sur la main-d'œuvre et les matériaux si le logement a plus de 2 ans. L'Éco-PTZ peut financer le remplacement d'équipements énergivores (chauffe-eau, éclairage).",
       },
       {
         question: 'IKEA ou cuisiniste indépendant ?',
@@ -813,7 +823,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       {
         question: 'Comment financer sa rénovation de cuisine ?',
         answer:
-          'Les options principales sont : le prêt travaux (taux 3-5 % en 2026, durée 3 à 10 ans), le crédit affecté proposé par le cuisiniste (souvent à taux promotionnel), et l\'Éco-PTZ si les travaux incluent une amélioration énergétique. Comparez toujours le TAEG (Taux Annuel Effectif Global).',
+          "Les options principales sont : le prêt travaux (taux 3-5 % en 2026, durée 3 à 10 ans), le crédit affecté proposé par le cuisiniste (souvent à taux promotionnel), et l'Éco-PTZ si les travaux incluent une amélioration énergétique. Comparez toujours le TAEG (Taux Annuel Effectif Global).",
       },
     ],
   },
@@ -822,26 +832,27 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
   // 4. ISOLATION MAISON — GUIDE COMPLET 2026 (~3 500 mots)
   // ────────────────────────────────────────────────────────────────────────────
   'isolation-maison-guide-ultime-2026': {
-    title: 'Isolation Maison 2026 : Guide Ultime (Prix, Techniques, ROI, Aides)',
+    title: 'Isolation Maison 2026 : Guide complet (Prix, Techniques, ROI, Aides)',
     excerpt:
-      'Prix par technique (ITE, ITI, combles, sol), ROI par type d\'isolation avec calculs de rentabilité, aides cumulables avec simulation chiffrée et cas concret : maison F à D en 18 mois.',
+      "Prix par technique (ITE, ITI, combles, sol), ROI par type d'isolation avec calculs de rentabilité, aides cumulables avec simulation chiffrée et cas concret : maison F à D en 18 mois.",
     metaTitle: 'Isolation Maison 2026 : Prix, ROI et Aides',
     metaDescription:
       'Guide isolation maison 2026 : prix ITE 120-200 €/m², ITI 40-80 €/m², combles 20-60 €/m². ROI, aides cumulables, cas concret F→D.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-10',
     readTime: '18 min',
     category: 'Énergie',
     tags: ['isolation', 'ITE', 'ITI', 'combles', 'aides', 'MaPrimeRénov', 'DPE', '2026'],
     keyTakeaways: [
       'Combles perdus : 20-40 €/m² — ROI en 3-5 ans, priorité n°1',
-      'Murs par l\'intérieur (ITI) : 40-90 €/m² — ROI en 8-12 ans',
-      'Murs par l\'extérieur (ITE) : 120-220 €/m² — ROI en 12-18 ans mais performance supérieure',
+      "Murs par l'intérieur (ITI) : 40-90 €/m² — ROI en 8-12 ans",
+      "Murs par l'extérieur (ITE) : 120-220 €/m² — ROI en 12-18 ans mais performance supérieure",
       'Plancher bas : 25-60 €/m² — ROI en 5-8 ans, souvent oublié',
-      'Aides cumulées : MaPrimeRénov\' + CEE + TVA 5,5 % couvrent 40-75 % du budget',
-      'Prioriser l\'isolation AVANT le changement de chauffage pour un dimensionnement correct',
+      "Aides cumulées : MaPrimeRénov' + CEE + TVA 5,5 % couvrent 40-75 % du budget",
+      "Prioriser l'isolation AVANT le changement de chauffage pour un dimensionnement correct",
     ],
     content: [
       `## Pourquoi l'isolation est la priorité n°1 de la rénovation énergétique
@@ -1045,49 +1056,49 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
     ],
     faq: [
       {
-        question: 'Quelle est l\'isolation la plus rentable ?',
+        question: "Quelle est l'isolation la plus rentable ?",
         answer:
-          'L\'isolation des combles perdus est la plus rentable : 20-40 €/m² posé avec un retour sur investissement en 3-5 ans. C\'est le premier geste à réaliser dans toute rénovation énergétique.',
+          "L'isolation des combles perdus est la plus rentable : 20-40 €/m² posé avec un retour sur investissement en 3-5 ans. C'est le premier geste à réaliser dans toute rénovation énergétique.",
       },
       {
         question: 'ITE ou ITI : que choisir ?',
         answer:
-          'L\'ITE est plus performante (suppression des ponts thermiques, pas de perte de surface habitable) mais 2 à 3 fois plus chère. L\'ITI est préférable en copropriété, en zone classée ou quand le budget est limité. L\'ITE est idéale si la façade nécessite aussi un ravalement.',
+          "L'ITE est plus performante (suppression des ponts thermiques, pas de perte de surface habitable) mais 2 à 3 fois plus chère. L'ITI est préférable en copropriété, en zone classée ou quand le budget est limité. L'ITE est idéale si la façade nécessite aussi un ravalement.",
       },
       {
-        question: 'Combien coûte l\'isolation complète d\'une maison ?',
+        question: "Combien coûte l'isolation complète d'une maison ?",
         answer:
-          'Pour une maison de 100 m² : combles (3 000 €) + murs ITI (5 500 €) + plancher bas (3 500 €) + fenêtres (8 000 €) = environ 20 000 € brut. Après aides (profil Jaune) : reste à charge d\'environ 8 000 à 12 000 €.',
+          "Pour une maison de 100 m² : combles (3 000 €) + murs ITI (5 500 €) + plancher bas (3 500 €) + fenêtres (8 000 €) = environ 20 000 € brut. Après aides (profil Jaune) : reste à charge d'environ 8 000 à 12 000 €.",
       },
       {
-        question: 'L\'isolation est-elle obligatoire en 2026 ?',
+        question: "L'isolation est-elle obligatoire en 2026 ?",
         answer:
-          'L\'isolation n\'est pas obligatoire pour les propriétaires occupants. En revanche, les logements classés G au DPE ne peuvent plus être loués depuis 2025, et les F seront interdits en 2028. De plus, en cas de ravalement de façade, l\'isolation est obligatoire si techniquement possible (loi Énergie-Climat).',
+          "L'isolation n'est pas obligatoire pour les propriétaires occupants. En revanche, les logements classés G au DPE ne peuvent plus être loués depuis 2025, et les F seront interdits en 2028. De plus, en cas de ravalement de façade, l'isolation est obligatoire si techniquement possible (loi Énergie-Climat).",
       },
       {
         question: 'Quel est le gain DPE après isolation ?',
         answer:
-          'L\'isolation complète (combles + murs + plancher) permet typiquement un gain de 1 à 3 classes DPE. Exemple : une maison classée F (350 kWh/m²/an) peut descendre à D (200 kWh/m²/an) voire C (150 kWh/m²/an) avec isolation + VMC.',
+          "L'isolation complète (combles + murs + plancher) permet typiquement un gain de 1 à 3 classes DPE. Exemple : une maison classée F (350 kWh/m²/an) peut descendre à D (200 kWh/m²/an) voire C (150 kWh/m²/an) avec isolation + VMC.",
       },
       {
         question: 'Peut-on isoler soi-même ses combles ?',
         answer:
-          'Oui, la pose de rouleaux de laine de verre dans des combles perdus accessibles est réalisable en auto-construction. Attention : vous perdez le bénéfice des aides (MaPrimeRénov\' et CEE exigent un artisan RGE). Économie de main-d\'œuvre : 5-10 €/m², soit 500-1 000 € pour 100 m².',
+          "Oui, la pose de rouleaux de laine de verre dans des combles perdus accessibles est réalisable en auto-construction. Attention : vous perdez le bénéfice des aides (MaPrimeRénov' et CEE exigent un artisan RGE). Économie de main-d'œuvre : 5-10 €/m², soit 500-1 000 € pour 100 m².",
       },
       {
         question: 'Isolation et ventilation : faut-il les coupler ?',
         answer:
-          'Oui, absolument. Isoler sans ventiler crée des problèmes d\'humidité et de qualité de l\'air. Une VMC simple flux hygroréglable B suffit dans la plupart des cas (1 500-3 000 € posée). La VMC double flux (3 000-6 000 €) est recommandée pour les rénovations performantes (BBC rénovation).',
+          "Oui, absolument. Isoler sans ventiler crée des problèmes d'humidité et de qualité de l'air. Une VMC simple flux hygroréglable B suffit dans la plupart des cas (1 500-3 000 € posée). La VMC double flux (3 000-6 000 €) est recommandée pour les rénovations performantes (BBC rénovation).",
       },
       {
         question: 'Quelles sont les aides pour isoler sa maison en 2026 ?',
         answer:
-          'MaPrimeRénov\' (15-75 €/m² selon les travaux et le profil), les CEE (5-25 €/m²), la TVA à 5,5 %, l\'Éco-PTZ (jusqu\'à 50 000 € à taux zéro) et les aides locales. Toutes sont cumulables. Un ménage modeste peut couvrir 60 à 75 % du budget isolation.',
+          "MaPrimeRénov' (15-75 €/m² selon les travaux et le profil), les CEE (5-25 €/m²), la TVA à 5,5 %, l'Éco-PTZ (jusqu'à 50 000 € à taux zéro) et les aides locales. Toutes sont cumulables. Un ménage modeste peut couvrir 60 à 75 % du budget isolation.",
       },
       {
-        question: 'Combien de temps durent des travaux d\'isolation ?',
+        question: "Combien de temps durent des travaux d'isolation ?",
         answer:
-          'Combles perdus : 1 jour. Combles aménagés : 3-5 jours. ITI d\'une maison : 1-2 semaines. ITE : 3-6 semaines. Fenêtres (10 unités) : 2-3 jours. L\'ITE est la plus longue car elle nécessite un échafaudage et plusieurs passes d\'enduit.',
+          "Combles perdus : 1 jour. Combles aménagés : 3-5 jours. ITI d'une maison : 1-2 semaines. ITE : 3-6 semaines. Fenêtres (10 unités) : 2-3 jours. L'ITE est la plus longue car elle nécessite un échafaudage et plusieurs passes d'enduit.",
       },
     ],
   },
@@ -1096,7 +1107,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
   // 5. POMPE À CHALEUR — GUIDE ACHAT 2026 (~3 000 mots)
   // ────────────────────────────────────────────────────────────────────────────
   'pompe-a-chaleur-guide-achat-2026': {
-    title: 'Pompe à Chaleur : Guide d\'Achat Complet 2026 (Comparatif, Prix, Marques)',
+    title: "Pompe à Chaleur : Guide d'Achat Complet 2026 (Comparatif, Prix, Marques)",
     excerpt:
       'Comparatif PAC air-eau vs air-air vs géothermique, prix par marque (Daikin, Atlantic, Mitsubishi), COP et économies réelles par climat, entretien annuel et durée de vie.',
     metaTitle: 'PAC 2026 : Guide Achat Comparatif Marques',
@@ -1104,7 +1115,8 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
       'Guide achat pompe à chaleur 2026 : comparatif air-eau/air-air/géothermique, prix Daikin, Atlantic, Mitsubishi. COP réel par climat.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-13',
     readTime: '16 min',
     category: 'Énergie',
@@ -1112,7 +1124,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
     keyTakeaways: [
       'PAC air-eau : le choix n°1 pour les maisons individuelles avec chauffage central',
       'PAC air-air : solution économique pour les appartements et le rafraîchissement',
-      'Daikin Altherma 3 : référence milieu/haut de gamme, SCOP jusqu\'à 5,1',
+      "Daikin Altherma 3 : référence milieu/haut de gamme, SCOP jusqu'à 5,1",
       'Atlantic Alfea Extensa : meilleur rapport qualité-prix français',
       'COP réel : 3,0-3,5 en zone H1 (Nord), 3,5-4,5 en zone H3 (Sud)',
       'Budget moyen après aides : 3 000-8 000 € pour une PAC air-eau de 10-12 kW',
@@ -1301,37 +1313,37 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
       {
         question: 'PAC air-eau ou chaudière gaz : que choisir en 2026 ?',
         answer:
-          'La PAC air-eau est plus économique en fonctionnement (COP 3,5-4,5 vs 1,0 pour le gaz) et bénéficie d\'aides généreuses. Le gaz reste pertinent en rénovation si les radiateurs sont haute température et que le budget est très serré. À moyen terme, la PAC est systématiquement gagnante.',
+          "La PAC air-eau est plus économique en fonctionnement (COP 3,5-4,5 vs 1,0 pour le gaz) et bénéficie d'aides généreuses. Le gaz reste pertinent en rénovation si les radiateurs sont haute température et que le budget est très serré. À moyen terme, la PAC est systématiquement gagnante.",
       },
       {
         question: 'Combien coûte une PAC air-eau après aides ?',
         answer:
-          'Pour une PAC de 10-12 kW, le prix installé est de 10 000-15 000 €. Après MaPrimeRénov\' (3 000-5 000 €), CEE (2 500-4 000 €) et TVA 5,5 % (~1 500 €), le reste à charge descend à 3 000-8 000 € selon le profil de revenus.',
+          "Pour une PAC de 10-12 kW, le prix installé est de 10 000-15 000 €. Après MaPrimeRénov' (3 000-5 000 €), CEE (2 500-4 000 €) et TVA 5,5 % (~1 500 €), le reste à charge descend à 3 000-8 000 € selon le profil de revenus.",
       },
       {
         question: 'Une PAC est-elle rentable dans le Nord de la France ?',
         answer:
-          'Oui, avec un SCOP de 3,0-3,5 en zone H1, une PAC air-eau reste 2 à 3 fois plus efficace qu\'une résistance électrique. L\'économie annuelle est de 1 000-2 000 € vs fioul. La Mitsubishi Zubadan ou la Daikin Altherma HT sont spécifiquement conçues pour le grand froid.',
+          "Oui, avec un SCOP de 3,0-3,5 en zone H1, une PAC air-eau reste 2 à 3 fois plus efficace qu'une résistance électrique. L'économie annuelle est de 1 000-2 000 € vs fioul. La Mitsubishi Zubadan ou la Daikin Altherma HT sont spécifiquement conçues pour le grand froid.",
       },
       {
         question: 'Peut-on garder ses vieux radiateurs avec une PAC ?',
         answer:
-          'Oui, à condition qu\'ils soient surdimensionnés (ce qui est souvent le cas dans les maisons anciennes). Si vos radiateurs chauffaient correctement avec une eau à 70°C, ils chaufferont avec une PAC à 50-55°C en étant peut-être un peu plus grands. Un test en abaissant la température de départ de votre chaudière actuelle permet de vérifier.',
+          "Oui, à condition qu'ils soient surdimensionnés (ce qui est souvent le cas dans les maisons anciennes). Si vos radiateurs chauffaient correctement avec une eau à 70°C, ils chaufferont avec une PAC à 50-55°C en étant peut-être un peu plus grands. Un test en abaissant la température de départ de votre chaudière actuelle permet de vérifier.",
       },
       {
         question: 'La PAC fait-elle du bruit ?',
         answer:
-          'Les modèles récents émettent 40-50 dB(A) à 1 m (niveau d\'une conversation). En mode nuit, certains modèles descendent à 35 dB(A). Installez l\'unité extérieure à au moins 3 m des fenêtres de chambres et des limites de propriété pour éviter tout litige de voisinage.',
+          "Les modèles récents émettent 40-50 dB(A) à 1 m (niveau d'une conversation). En mode nuit, certains modèles descendent à 35 dB(A). Installez l'unité extérieure à au moins 3 m des fenêtres de chambres et des limites de propriété pour éviter tout litige de voisinage.",
       },
       {
         question: 'Faut-il un entretien annuel pour sa PAC ?',
         answer:
-          'Oui, c\'est obligatoire pour les PAC > 4 kW (décret 2010). L\'entretien annuel coûte 150-300 € et conditionne la validité de la garantie constructeur. Un contrat de maintenance (200-450 €/an) inclut le dépannage prioritaire et parfois les pièces détachées.',
+          "Oui, c'est obligatoire pour les PAC > 4 kW (décret 2010). L'entretien annuel coûte 150-300 € et conditionne la validité de la garantie constructeur. Un contrat de maintenance (200-450 €/an) inclut le dépannage prioritaire et parfois les pièces détachées.",
       },
       {
         question: 'Quelle puissance de PAC pour ma maison ?',
         answer:
-          'La puissance dépend de l\'isolation : 40-60 W/m² pour une maison bien isolée (DPE A-C), 60-80 W/m² pour une isolation correcte (DPE D), 80-120 W/m² pour une maison mal isolée (DPE E-F). Pour 100 m² DPE D : environ 7-8 kW. Exigez un calcul de déperditions par l\'installateur.',
+          "La puissance dépend de l'isolation : 40-60 W/m² pour une maison bien isolée (DPE A-C), 60-80 W/m² pour une isolation correcte (DPE D), 80-120 W/m² pour une maison mal isolée (DPE E-F). Pour 100 m² DPE D : environ 7-8 kW. Exigez un calcul de déperditions par l'installateur.",
       },
     ],
   },
@@ -1348,14 +1360,15 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
       'Guide travaux maison 2026 : ordre logique gros œuvre → finitions, planning mois par mois, budget par phase. Coordonner artisans sans stress.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-16',
     readTime: '15 min',
     category: 'Guides',
-    tags: ['travaux', 'maison', 'planning', 'artisans', 'gros oeuvre', 'finitions', '2026'],
+    tags: ['travaux', 'maison', 'planning', 'artisans', 'gros œuvre', 'finitions', '2026'],
     keyTakeaways: [
-      'Toujours commencer par le hors d\'eau hors d\'air (toiture, façade, fenêtres) avant le second œuvre',
-      'L\'ordre logique : structure → enveloppe → réseaux → cloisons → revêtements → finitions',
+      "Toujours commencer par le hors d'eau hors d'air (toiture, façade, fenêtres) avant le second œuvre",
+      "L'ordre logique : structure → enveloppe → réseaux → cloisons → revêtements → finitions",
       'Prévoir 2-3 mois de préparation avant le premier coup de pioche',
       'Un planning réaliste = durée estimée × 1,3 (coefficient de marge)',
       'Désigner un "chef de file" parmi les artisans simplifie la coordination',
@@ -1563,34 +1576,34 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
     ],
     faq: [
       {
-        question: 'Quel est l\'ordre des travaux de rénovation d\'une maison ?',
+        question: "Quel est l'ordre des travaux de rénovation d'une maison ?",
         answer:
-          'L\'ordre logique est : (1) gros œuvre / structure, (2) toiture et façade (hors d\'eau/hors d\'air), (3) réseaux en encastré (électricité, plomberie, chauffage, VMC), (4) isolation et cloisons, (5) revêtements de sol, (6) revêtements muraux, (7) équipements (cuisine, sanitaires), (8) peinture et finitions.',
+          "L'ordre logique est : (1) gros œuvre / structure, (2) toiture et façade (hors d'eau/hors d'air), (3) réseaux en encastré (électricité, plomberie, chauffage, VMC), (4) isolation et cloisons, (5) revêtements de sol, (6) revêtements muraux, (7) équipements (cuisine, sanitaires), (8) peinture et finitions.",
       },
       {
-        question: 'Faut-il un maître d\'œuvre pour gérer ses travaux ?',
+        question: "Faut-il un maître d'œuvre pour gérer ses travaux ?",
         answer:
-          'Ce n\'est pas obligatoire mais fortement recommandé pour les budgets > 50 000 €. Un maître d\'œuvre (8-12 % du budget) coordonne les artisans, vérifie la qualité et gère le planning. Pour les petits projets, vous pouvez assurer cette coordination vous-même.',
+          "Ce n'est pas obligatoire mais fortement recommandé pour les budgets > 50 000 €. Un maître d'œuvre (8-12 % du budget) coordonne les artisans, vérifie la qualité et gère le planning. Pour les petits projets, vous pouvez assurer cette coordination vous-même.",
       },
       {
-        question: 'Combien de temps dure la rénovation complète d\'une maison ?',
+        question: "Combien de temps dure la rénovation complète d'une maison ?",
         answer:
           'Pour 100 m² en rénovation complète : 3 à 6 mois de travaux + 2 à 3 mois de préparation. Un rafraîchissement simple prend 2 à 4 semaines. Multipliez toujours le planning estimé par 1,3 pour intégrer les aléas.',
       },
       {
         question: 'Peut-on faire plusieurs lots de travaux en même temps ?',
         answer:
-          'Oui, certains lots peuvent se chevaucher : l\'électricien et le plombier interviennent souvent en parallèle lors de la phase réseaux. Le maçon et le couvreur peuvent travailler simultanément si les zones de travail sont distinctes. En revanche, le peintre ne peut intervenir qu\'après tous les autres.',
+          "Oui, certains lots peuvent se chevaucher : l'électricien et le plombier interviennent souvent en parallèle lors de la phase réseaux. Le maçon et le couvreur peuvent travailler simultanément si les zones de travail sont distinctes. En revanche, le peintre ne peut intervenir qu'après tous les autres.",
       },
       {
         question: 'Comment payer ses artisans en toute sécurité ?',
         answer:
-          'Payez en 30/40/30 : 30 % à la commande (légal : max 30 % en acompte), 40 % à mi-chantier sur présentation de l\'avancement, 30 % à la réception après vérification. Ne payez jamais en espèces (interdit > 1 000 €) et conservez toutes les factures.',
+          "Payez en 30/40/30 : 30 % à la commande (légal : max 30 % en acompte), 40 % à mi-chantier sur présentation de l'avancement, 30 % à la réception après vérification. Ne payez jamais en espèces (interdit > 1 000 €) et conservez toutes les factures.",
       },
       {
         question: 'Que faire si un artisan ne vient pas au chantier ?',
         answer:
-          'Envoyez une mise en demeure par courrier recommandé avec un délai de 15 jours. Si l\'artisan ne réagit pas, vous pouvez résilier le contrat et faire appel à un autre artisan. Conservez les preuves (courriers, photos, témoignages) pour un éventuel recours juridique.',
+          "Envoyez une mise en demeure par courrier recommandé avec un délai de 15 jours. Si l'artisan ne réagit pas, vous pouvez résilier le contrat et faire appel à un autre artisan. Conservez les preuves (courriers, photos, témoignages) pour un éventuel recours juridique.",
       },
       {
         question: 'Faut-il vider la maison avant les travaux ?',
@@ -1600,7 +1613,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       {
         question: 'Comment limiter la poussière pendant les travaux ?',
         answer:
-          'Fermez les portes des pièces non concernées et colmatez les interstices avec du ruban de masquage. Installez des bâches en polyane (film plastique) devant les ouvertures. L\'artisan doit utiliser des outils avec aspiration intégrée pour la découpe et le ponçage.',
+          "Fermez les portes des pièces non concernées et colmatez les interstices avec du ruban de masquage. Installez des bâches en polyane (film plastique) devant les ouvertures. L'artisan doit utiliser des outils avec aspiration intégrée pour la découpe et le ponçage.",
       },
     ],
   },
@@ -1611,24 +1624,33 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
   'extension-maison-prix-demarches-2026': {
     title: 'Extension Maison 2026 : Prix, Démarches Urbanisme et Comparatif Solutions',
     excerpt:
-      'Prix au m² par type d\'extension (surélévation, latérale, véranda), démarches urbanisme complètes, comparatif constructeur vs architecte vs artisans, et contraintes PLU.',
+      "Prix au m² par type d'extension (surélévation, latérale, véranda), démarches urbanisme complètes, comparatif constructeur vs architecte vs artisans, et contraintes PLU.",
     metaTitle: 'Extension Maison 2026 : Prix et Démarches',
     metaDescription:
       'Extension maison 2026 : prix 1 200-3 500 €/m², démarches urbanisme, comparatif surélévation/extension/véranda. Permis de construire.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-19',
     readTime: '15 min',
     category: 'Guides',
-    tags: ['extension', 'maison', 'prix', 'surélévation', 'véranda', 'permis de construire', '2026'],
+    tags: [
+      'extension',
+      'maison',
+      'prix',
+      'surélévation',
+      'véranda',
+      'permis de construire',
+      '2026',
+    ],
     keyTakeaways: [
       'Extension latérale : 1 200-2 800 €/m² — la solution la plus courante',
       'Surélévation : 2 000-3 500 €/m² — idéale quand le terrain est petit',
       'Véranda : 800-2 500 €/m² — la plus économique mais fiscalité différente',
       'Permis de construire obligatoire > 20 m² (ou 40 m² en zone PLU)',
       'Architecte obligatoire si surface totale > 150 m² après extension',
-      'Délai moyen d\'un projet d\'extension : 6 à 12 mois du permis à la livraison',
+      "Délai moyen d'un projet d'extension : 6 à 12 mois du permis à la livraison",
     ],
     content: [
       `## Extension de maison : les chiffres clés en 2026
@@ -1796,29 +1818,29 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
     ],
     faq: [
       {
-        question: 'Quel est le prix moyen d\'une extension de 20 m² ?',
+        question: "Quel est le prix moyen d'une extension de 20 m² ?",
         answer:
-          'Le prix moyen d\'une extension de 20 m² tout compris (structure + finitions) se situe entre 30 000 et 50 000 € en 2026. Une extension en ossature bois est dans la fourchette basse, une surélévation dans la fourchette haute.',
+          "Le prix moyen d'une extension de 20 m² tout compris (structure + finitions) se situe entre 30 000 et 50 000 € en 2026. Une extension en ossature bois est dans la fourchette basse, une surélévation dans la fourchette haute.",
       },
       {
         question: 'Faut-il un permis de construire pour une extension ?',
         answer:
-          'En zone PLU : déclaration préalable jusqu\'à 40 m², permis de construire au-delà. Hors zone PLU : déclaration préalable jusqu\'à 20 m², permis au-delà. Un architecte est obligatoire si la surface totale (existant + extension) dépasse 150 m².',
+          "En zone PLU : déclaration préalable jusqu'à 40 m², permis de construire au-delà. Hors zone PLU : déclaration préalable jusqu'à 20 m², permis au-delà. Un architecte est obligatoire si la surface totale (existant + extension) dépasse 150 m².",
       },
       {
         question: 'Quelle extension coûte le moins cher ?',
         answer:
-          'La véranda en PVC est la solution la moins chère (800-1 500 €/m²), suivie de l\'extension ossature bois (1 500-2 500 €/m²). La surélévation est la plus coûteuse (2 000-3 500 €/m²) mais ne consomme pas de terrain.',
+          "La véranda en PVC est la solution la moins chère (800-1 500 €/m²), suivie de l'extension ossature bois (1 500-2 500 €/m²). La surélévation est la plus coûteuse (2 000-3 500 €/m²) mais ne consomme pas de terrain.",
       },
       {
-        question: 'Combien de temps durent les travaux d\'extension ?',
+        question: "Combien de temps durent les travaux d'extension ?",
         answer:
           'Extension latérale : 3-5 mois. Ossature bois : 2-4 mois (préfabrication en atelier). Surélévation : 4-6 mois. Véranda : 1-3 mois. Ajoutez 2-3 mois de démarches administratives en amont.',
       },
       {
         question: 'Une extension augmente-t-elle la taxe foncière ?',
         answer:
-          'Oui, toute extension augmente la surface taxable et donc la taxe foncière. L\'augmentation dépend de la valeur locative cadastrale de votre commune. Pour une extension de 20 m², comptez 200-600 €/an d\'augmentation. Vous bénéficiez d\'une exonération de 2 ans pour les constructions nouvelles.',
+          "Oui, toute extension augmente la surface taxable et donc la taxe foncière. L'augmentation dépend de la valeur locative cadastrale de votre commune. Pour une extension de 20 m², comptez 200-600 €/an d'augmentation. Vous bénéficiez d'une exonération de 2 ans pour les constructions nouvelles.",
       },
       {
         question: 'Peut-on faire une extension sans toucher au terrain du voisin ?',
@@ -1828,12 +1850,12 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
       {
         question: 'Quelles aides pour financer une extension ?',
         answer:
-          'Les extensions ne sont pas éligibles à MaPrimeRénov\' (réservée à la rénovation énergétique). En revanche : TVA à 10 % si le logement a plus de 2 ans, Éco-PTZ si l\'extension inclut des travaux d\'isolation, et PTZ pour les primo-accédants dans certaines zones.',
+          "Les extensions ne sont pas éligibles à MaPrimeRénov' (réservée à la rénovation énergétique). En revanche : TVA à 10 % si le logement a plus de 2 ans, Éco-PTZ si l'extension inclut des travaux d'isolation, et PTZ pour les primo-accédants dans certaines zones.",
       },
       {
         question: 'Extension ou aménagement de combles : que choisir ?',
         answer:
-          'Si vos combles ont une hauteur sous faîtage > 1,80 m et une pente > 30°, l\'aménagement de combles est 30-50 % moins cher qu\'une extension (800-1 500 €/m² vs 1 500-2 500 €/m²). Sinon, l\'extension est la seule option pour gagner de la surface habitable.',
+          "Si vos combles ont une hauteur sous faîtage > 1,80 m et une pente > 30°, l'aménagement de combles est 30-50 % moins cher qu'une extension (800-1 500 €/m² vs 1 500-2 500 €/m²). Sinon, l'extension est la seule option pour gagner de la surface habitable.",
       },
     ],
   },
@@ -1844,21 +1866,22 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
   'choisir-artisan-guide-anti-arnaque-2026': {
     title: 'Choisir son Artisan en 2026 : Le Guide Anti-Arnaque Complet',
     excerpt:
-      'Les 15 signaux d\'alerte d\'un artisan malhonnête, check-list vérification (SIRET, assurance, avis, qualifications), modèle de devis commenté et recours en cas de litige.',
+      "Les 15 signaux d'alerte d'un artisan malhonnête, check-list vérification (SIRET, assurance, avis, qualifications), modèle de devis commenté et recours en cas de litige.",
     metaTitle: 'Guide Anti-Arnaque Artisan 2026 : 15 Signaux',
     metaDescription:
-      'Choisir un artisan fiable en 2026 : 15 signaux d\'alerte, vérification SIRET/assurance, modèle de devis, recours litiges. Protégez-vous.',
+      "Choisir un artisan fiable en 2026 : 15 signaux d'alerte, vérification SIRET/assurance, modèle de devis, recours litiges. Protégez-vous.",
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-22',
     readTime: '15 min',
     category: 'Conseils',
     tags: ['artisan', 'arnaque', 'devis', 'SIRET', 'assurance décennale', 'litige', '2026'],
     keyTakeaways: [
       'Toujours vérifier le SIRET sur societe.com ou infogreffe.fr AVANT de signer',
-      'Exiger l\'attestation d\'assurance décennale datée de moins de 3 mois',
-      'Ne jamais verser plus de 30 % d\'acompte (maximum légal recommandé)',
+      "Exiger l'attestation d'assurance décennale datée de moins de 3 mois",
+      "Ne jamais verser plus de 30 % d'acompte (maximum légal recommandé)",
       'Un devis doit obligatoirement mentionner 12 informations légales',
       'En cas de litige, la médiation est gratuite et obligatoire avant le tribunal',
       'Les 3 vérifications qui prennent 5 minutes et évitent 90 % des arnaques',
@@ -2035,27 +2058,27 @@ Dernière mise à jour : avril 2026.`,
     ],
     faq: [
       {
-        question: 'Comment vérifier qu\'un artisan est fiable ?',
+        question: "Comment vérifier qu'un artisan est fiable ?",
         answer:
-          'Vérifiez en 5 minutes : (1) SIRET actif sur societe.com, (2) attestation d\'assurance décennale en cours de validité, (3) avis clients sur Google et Pages Jaunes, (4) qualification RGE si travaux énergétiques sur france-renov.gouv.fr. Demandez aussi 2-3 références de chantiers récents.',
+          "Vérifiez en 5 minutes : (1) SIRET actif sur societe.com, (2) attestation d'assurance décennale en cours de validité, (3) avis clients sur Google et Pages Jaunes, (4) qualification RGE si travaux énergétiques sur france-renov.gouv.fr. Demandez aussi 2-3 références de chantiers récents.",
       },
       {
         question: 'Peut-on annuler un devis signé ?',
         answer:
-          'Si le devis a été signé à votre domicile (hors établissement), vous bénéficiez d\'un délai de rétractation de 14 jours. Si vous avez signé dans les locaux de l\'artisan, l\'annulation n\'est possible qu\'en cas de vice du consentement (erreur, dol, violence) ou si le devis prévoit des conditions d\'annulation.',
+          "Si le devis a été signé à votre domicile (hors établissement), vous bénéficiez d'un délai de rétractation de 14 jours. Si vous avez signé dans les locaux de l'artisan, l'annulation n'est possible qu'en cas de vice du consentement (erreur, dol, violence) ou si le devis prévoit des conditions d'annulation.",
       },
       {
-        question: 'Quel est le montant maximum d\'acompte légal ?',
+        question: "Quel est le montant maximum d'acompte légal ?",
         answer:
-          'La loi ne fixe pas de maximum d\'acompte, mais la pratique recommandée est de 30 %. Au-delà, vous prenez un risque en cas de défaillance de l\'artisan. L\'acompte versé vous engage (tout comme l\'artisan) : si vous annulez, l\'artisan peut conserver l\'acompte à titre de dédommagement.',
+          "La loi ne fixe pas de maximum d'acompte, mais la pratique recommandée est de 30 %. Au-delà, vous prenez un risque en cas de défaillance de l'artisan. L'acompte versé vous engage (tout comme l'artisan) : si vous annulez, l'artisan peut conserver l'acompte à titre de dédommagement.",
       },
       {
-        question: 'Que faire si l\'artisan disparaît pendant le chantier ?',
+        question: "Que faire si l'artisan disparaît pendant le chantier ?",
         answer:
-          'Envoyez une mise en demeure par LRAR avec un délai de 15 jours. Sans réponse, faites constater l\'abandon par huissier (300-500 €). Signalez à la DGCCRF. Si l\'artisan est assuré en décennale, contactez son assureur. Faites établir un constat par un autre artisan pour chiffrer les travaux restants.',
+          "Envoyez une mise en demeure par LRAR avec un délai de 15 jours. Sans réponse, faites constater l'abandon par huissier (300-500 €). Signalez à la DGCCRF. Si l'artisan est assuré en décennale, contactez son assureur. Faites établir un constat par un autre artisan pour chiffrer les travaux restants.",
       },
       {
-        question: 'L\'artisan peut-il augmenter le prix après signature du devis ?',
+        question: "L'artisan peut-il augmenter le prix après signature du devis ?",
         answer:
           'Non, le devis signé est un contrat à prix ferme. L\'artisan ne peut facturer des suppléments que pour des travaux supplémentaires demandés par écrit par le client (avenant). Les "imprévus" font partie du risque de l\'artisan, sauf clause contractuelle spécifique.',
       },
@@ -2067,12 +2090,12 @@ Dernière mise à jour : avril 2026.`,
       {
         question: 'Peut-on exiger une retenue de garantie ?',
         answer:
-          'Oui, vous pouvez négocier une retenue de garantie de 5 % du montant total, libérable 1 an après la réception (garantie de parfait achèvement). Ce n\'est pas obligatoire entre particulier et artisan mais c\'est une pratique recommandée pour les chantiers > 10 000 €.',
+          "Oui, vous pouvez négocier une retenue de garantie de 5 % du montant total, libérable 1 an après la réception (garantie de parfait achèvement). Ce n'est pas obligatoire entre particulier et artisan mais c'est une pratique recommandée pour les chantiers > 10 000 €.",
       },
       {
         question: 'La garantie décennale couvre-t-elle tous les travaux ?',
         answer:
-          'Non, la garantie décennale couvre uniquement les dommages qui compromettent la solidité de l\'ouvrage ou le rendent impropre à sa destination (fondations, toiture, étanchéité, structure). Les finitions relèvent de la garantie de parfait achèvement (1 an) ou de la garantie biennale (2 ans pour les équipements dissociables).',
+          "Non, la garantie décennale couvre uniquement les dommages qui compromettent la solidité de l'ouvrage ou le rendent impropre à sa destination (fondations, toiture, étanchéité, structure). Les finitions relèvent de la garantie de parfait achèvement (1 an) ou de la garantie biennale (2 ans pour les équipements dissociables).",
       },
     ],
   },
@@ -2081,24 +2104,26 @@ Dernière mise à jour : avril 2026.`,
   // 9. AIDES RÉNOVATION ÉNERGÉTIQUE — CUMUL 2026 (~3 000 mots)
   // ────────────────────────────────────────────────────────────────────────────
   'aides-renovation-energetique-cumul-2026': {
-    title: 'Aides Rénovation Énergétique 2026 : Tableau Complet et Cumul (MaPrimeRénov\', CEE, Éco-PTZ)',
+    title:
+      "Aides Rénovation Énergétique 2026 : Tableau Complet et Cumul (MaPrimeRénov', CEE, Éco-PTZ)",
     excerpt:
-      'Tableau complet MaPrimeRénov\' + CEE + Éco-PTZ + TVA 5,5 %, simulation par profil de revenus, parcours accompagné vs par geste, et calendrier des changements 2026.',
-    metaTitle: 'Aides Rénovation 2026 : Cumul MaPrimeRénov\'',
+      "Tableau complet MaPrimeRénov' + CEE + Éco-PTZ + TVA 5,5 %, simulation par profil de revenus, parcours accompagné vs par geste, et calendrier des changements 2026.",
+    metaTitle: "Aides Rénovation 2026 : Cumul MaPrimeRénov'",
     metaDescription:
-      'Aides rénovation 2026 : MaPrimeRénov\' + CEE + Éco-PTZ cumulables. Simulation par revenus, parcours accompagné, calendrier 2026.',
+      "Aides rénovation 2026 : MaPrimeRénov' + CEE + Éco-PTZ cumulables. Simulation par revenus, parcours accompagné, calendrier 2026.",
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-25',
     readTime: '16 min',
     category: 'Aides & Subventions',
     tags: ['aides', 'MaPrimeRénov', 'CEE', 'Éco-PTZ', 'TVA 5.5', 'rénovation énergétique', '2026'],
     keyTakeaways: [
-      'MaPrimeRénov\' par geste : jusqu\'à 11 000 € par équipement installé',
-      'MaPrimeRénov\' Parcours Accompagné : jusqu\'à 63 000 € (90 % du budget pour les plus modestes)',
-      'CEE : 2 000-5 000 € cumulables avec MaPrimeRénov\' pour la même opération',
-      'Éco-PTZ : jusqu\'à 50 000 € à taux zéro sur 20 ans',
+      "MaPrimeRénov' par geste : jusqu'à 11 000 € par équipement installé",
+      "MaPrimeRénov' Parcours Accompagné : jusqu'à 63 000 € (90 % du budget pour les plus modestes)",
+      "CEE : 2 000-5 000 € cumulables avec MaPrimeRénov' pour la même opération",
+      "Éco-PTZ : jusqu'à 50 000 € à taux zéro sur 20 ans",
       'TVA 5,5 % : économie automatique de ~15 % sur les travaux énergétiques',
       'Toutes les aides sont cumulables — seul le reste à charge ne peut pas être négatif',
     ],
@@ -2305,14 +2330,14 @@ Dernière mise à jour : avril 2026.`,
     ],
     faq: [
       {
-        question: 'MaPrimeRénov\' et CEE sont-ils cumulables ?',
+        question: "MaPrimeRénov' et CEE sont-ils cumulables ?",
         answer:
-          'Oui, MaPrimeRénov\' et les CEE sont cumulables pour les mêmes travaux. Vous pouvez aussi cumuler avec l\'Éco-PTZ et la TVA à 5,5 %. Le seul plafond est que le total des aides ne peut pas dépasser le coût des travaux.',
+          "Oui, MaPrimeRénov' et les CEE sont cumulables pour les mêmes travaux. Vous pouvez aussi cumuler avec l'Éco-PTZ et la TVA à 5,5 %. Le seul plafond est que le total des aides ne peut pas dépasser le coût des travaux.",
       },
       {
-        question: 'Quel est le montant maximum d\'aides en 2026 ?',
+        question: "Quel est le montant maximum d'aides en 2026 ?",
         answer:
-          'En Parcours Accompagné, un ménage très modeste (Bleu) peut obtenir jusqu\'à 63 000 € de MaPrimeRénov\' (90 % de 70 000 €) + CEE + TVA 5,5 %. Le montant total des aides peut couvrir 100 % du budget pour les profils Bleu et Jaune sur les projets bien montés.',
+          "En Parcours Accompagné, un ménage très modeste (Bleu) peut obtenir jusqu'à 63 000 € de MaPrimeRénov' (90 % de 70 000 €) + CEE + TVA 5,5 %. Le montant total des aides peut couvrir 100 % du budget pour les profils Bleu et Jaune sur les projets bien montés.",
       },
       {
         question: 'Faut-il un artisan RGE pour obtenir les aides ?',
@@ -2322,32 +2347,32 @@ Dernière mise à jour : avril 2026.`,
       {
         question: 'Peut-on demander les aides pour une résidence secondaire ?',
         answer:
-          'MaPrimeRénov\' est réservée aux résidences principales. Les CEE sont accessibles pour les résidences secondaires. L\'Éco-PTZ est réservé aux résidences principales. La TVA à 5,5 % s\'applique à tous les logements de plus de 2 ans (résidence principale ou secondaire).',
+          "MaPrimeRénov' est réservée aux résidences principales. Les CEE sont accessibles pour les résidences secondaires. L'Éco-PTZ est réservé aux résidences principales. La TVA à 5,5 % s'applique à tous les logements de plus de 2 ans (résidence principale ou secondaire).",
       },
       {
-        question: 'Combien de temps pour recevoir MaPrimeRénov\' ?',
+        question: "Combien de temps pour recevoir MaPrimeRénov' ?",
         answer:
-          'Le délai entre le dépôt du dossier et le versement est de 2 à 4 mois en moyenne. L\'instruction du dossier prend 2-6 semaines, puis le versement intervient 4-8 semaines après envoi de la facture finale. Un retard de l\'ANAH peut allonger le délai à 6 mois.',
+          "Le délai entre le dépôt du dossier et le versement est de 2 à 4 mois en moyenne. L'instruction du dossier prend 2-6 semaines, puis le versement intervient 4-8 semaines après envoi de la facture finale. Un retard de l'ANAH peut allonger le délai à 6 mois.",
       },
       {
         question: 'Peut-on cumuler les aides avec un crédit immobilier ?',
         answer:
-          'Oui, l\'Éco-PTZ est compatible avec un crédit immobilier classique. Vous pouvez aussi utiliser un prêt travaux classique pour compléter le financement. Les aides (MaPrimeRénov\', CEE) viennent en déduction du montant à financer.',
+          "Oui, l'Éco-PTZ est compatible avec un crédit immobilier classique. Vous pouvez aussi utiliser un prêt travaux classique pour compléter le financement. Les aides (MaPrimeRénov', CEE) viennent en déduction du montant à financer.",
       },
       {
-        question: 'Qu\'est-ce que Mon Accompagnateur Rénov\' (MAR) ?',
+        question: "Qu'est-ce que Mon Accompagnateur Rénov' (MAR) ?",
         answer:
-          'Le MAR est un conseiller agréé par l\'ANAH qui vous accompagne dans votre projet de rénovation globale : audit énergétique, plan de travaux, aide au montage des dossiers, suivi du chantier. Il est obligatoire pour le Parcours Accompagné. Son coût (1 500-2 000 €) est pris en charge à 100 % pour les profils Bleu et Jaune.',
+          "Le MAR est un conseiller agréé par l'ANAH qui vous accompagne dans votre projet de rénovation globale : audit énergétique, plan de travaux, aide au montage des dossiers, suivi du chantier. Il est obligatoire pour le Parcours Accompagné. Son coût (1 500-2 000 €) est pris en charge à 100 % pour les profils Bleu et Jaune.",
       },
       {
         question: 'Les aides sont-elles rétroactives ?',
         answer:
-          'Non. MaPrimeRénov\' et les CEE doivent être demandés AVANT la signature des devis. Si vous signez d\'abord et demandez ensuite, le dossier sera refusé. L\'Éco-PTZ peut être demandé après signature du devis mais avant le début des travaux.',
+          "Non. MaPrimeRénov' et les CEE doivent être demandés AVANT la signature des devis. Si vous signez d'abord et demandez ensuite, le dossier sera refusé. L'Éco-PTZ peut être demandé après signature du devis mais avant le début des travaux.",
       },
       {
         question: 'Parcours Accompagné ou par geste : lequel choisir ?',
         answer:
-          'Le Parcours Accompagné est toujours plus avantageux financièrement si votre projet permet un gain d\'au moins 2 classes DPE. Pour un geste isolé (ex : seul changement de chaudière), le parcours par geste est plus simple et rapide. Faites la simulation sur france-renov.gouv.fr.',
+          "Le Parcours Accompagné est toujours plus avantageux financièrement si votre projet permet un gain d'au moins 2 classes DPE. Pour un geste isolé (ex : seul changement de chaudière), le parcours par geste est plus simple et rapide. Faites la simulation sur france-renov.gouv.fr.",
       },
     ],
   },
@@ -2364,7 +2389,8 @@ Dernière mise à jour : avril 2026.`,
       'Prix réfection toiture 2026 : tuile 60-120 €/m², ardoise 100-200 €/m², zinc 80-180 €/m². Charpente, isolation, diagnostic complet.',
     image: '📋',
     author: "L'équipe ServicesArtisans",
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-28',
     readTime: '16 min',
     category: 'Tarifs',
@@ -2375,7 +2401,7 @@ Dernière mise à jour : avril 2026.`,
       'Isolation sous toiture (sarking) : 100-200 €/m² — ajouter à la réfection réduit le coût global',
       'Un diagnostic toiture coûte 200-500 € et peut éviter 10 000-30 000 € de dégâts',
       'Durée de vie : tuile terre cuite 50-100 ans, ardoise 75-150 ans, zinc 40-80 ans',
-      'La réfection de toiture est éligible à la TVA 10 % et à MaPrimeRénov\' si isolation intégrée',
+      "La réfection de toiture est éligible à la TVA 10 % et à MaPrimeRénov' si isolation intégrée",
     ],
     content: [
       `## Quand faut-il refaire sa toiture ?
@@ -2580,7 +2606,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
       {
         question: 'Quel est le prix moyen pour refaire une toiture de 100 m² ?',
         answer:
-          'Le prix moyen d\'une réfection de toiture de 100 m² (120 m² de couverture) se situe entre 16 000 et 34 000 € selon le matériau et l\'état de la charpente. Avec isolation sarking intégrée, comptez 25 000 à 50 000 €.',
+          "Le prix moyen d'une réfection de toiture de 100 m² (120 m² de couverture) se situe entre 16 000 et 34 000 € selon le matériau et l'état de la charpente. Avec isolation sarking intégrée, comptez 25 000 à 50 000 €.",
       },
       {
         question: 'Quel est le matériau de toiture le moins cher ?',
@@ -2595,12 +2621,12 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
       {
         question: 'Faut-il un permis pour refaire sa toiture ?',
         answer:
-          'Un simple remplacement à l\'identique (même matériau, même aspect) ne nécessite aucune autorisation. Un changement de matériau ou de couleur nécessite une déclaration préalable de travaux. En zone ABF, l\'avis de l\'Architecte des Bâtiments de France est obligatoire.',
+          "Un simple remplacement à l'identique (même matériau, même aspect) ne nécessite aucune autorisation. Un changement de matériau ou de couleur nécessite une déclaration préalable de travaux. En zone ABF, l'avis de l'Architecte des Bâtiments de France est obligatoire.",
       },
       {
         question: 'Quelles aides pour refaire sa toiture ?',
         answer:
-          'La réfection de toiture seule (sans isolation) bénéficie uniquement de la TVA à 10 %. Avec isolation intégrée : MaPrimeRénov\' (7-75 €/m²), CEE (5-10 €/m²), TVA 5,5 % sur la partie isolation et Éco-PTZ. L\'isolation sous toiture est le geste le plus aidé.',
+          "La réfection de toiture seule (sans isolation) bénéficie uniquement de la TVA à 10 %. Avec isolation intégrée : MaPrimeRénov' (7-75 €/m²), CEE (5-10 €/m²), TVA 5,5 % sur la partie isolation et Éco-PTZ. L'isolation sous toiture est le geste le plus aidé.",
       },
       {
         question: 'Comment savoir si ma charpente est saine ?',
@@ -2610,17 +2636,17 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3).
       {
         question: 'Peut-on refaire sa toiture en hiver ?',
         answer:
-          'Oui, les couvreurs travaillent toute l\'année. Les seules contraintes : pas de pose de tuiles par gel (risque de casse), pas de travaux d\'étanchéité par pluie continue. Les meilleures périodes sont mars-juin et septembre-novembre. Évitez juillet-août (congés, forte chaleur sous les toits).',
+          "Oui, les couvreurs travaillent toute l'année. Les seules contraintes : pas de pose de tuiles par gel (risque de casse), pas de travaux d'étanchéité par pluie continue. Les meilleures périodes sont mars-juin et septembre-novembre. Évitez juillet-août (congés, forte chaleur sous les toits).",
       },
       {
         question: 'Toiture en fibrociment : que faire ?',
         answer:
-          'Si votre couverture en fibrociment date d\'avant 1997, elle contient probablement de l\'amiante. Un diagnostic amiante (150-300 €) est obligatoire avant toute intervention. Le désamiantage coûte 30-80 €/m² en supplément de la réfection. Ne tentez jamais de retirer vous-même des plaques d\'amiante-ciment.',
+          "Si votre couverture en fibrociment date d'avant 1997, elle contient probablement de l'amiante. Un diagnostic amiante (150-300 €) est obligatoire avant toute intervention. Le désamiantage coûte 30-80 €/m² en supplément de la réfection. Ne tentez jamais de retirer vous-même des plaques d'amiante-ciment.",
       },
       {
         question: 'Tuile ou ardoise : que choisir ?',
         answer:
-          'La tuile terre cuite est moins chère (55-120 €/m² posé vs 100-200 €/m² pour l\'ardoise) et plus facile à poser/réparer. L\'ardoise offre une durée de vie supérieure (75-150 ans vs 50-100 ans) et une esthétique unique. Le choix est souvent dicté par le PLU de votre commune et le style architectural local.',
+          "La tuile terre cuite est moins chère (55-120 €/m² posé vs 100-200 €/m² pour l'ardoise) et plus facile à poser/réparer. L'ardoise offre une durée de vie supérieure (75-150 ans vs 50-100 ans) et une esthétique unique. Le choix est souvent dicté par le PLU de votre commune et le style architectural local.",
       },
     ],
   },

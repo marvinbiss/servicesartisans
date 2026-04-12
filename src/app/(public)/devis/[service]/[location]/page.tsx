@@ -37,6 +37,12 @@ import {
 } from '@/lib/supabase'
 import { shouldNoindex } from '@/lib/seo/pruning'
 import FallbackProviders from '@/components/seo/FallbackProviders'
+import {
+  getDeptPreposition,
+  getDeptArticle,
+  getRegionPreposition,
+  getRegionArticle,
+} from '@/lib/geo-strings'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import IntentNavBar from '@/components/seo/IntentNavBar'
 import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
@@ -165,7 +171,7 @@ export async function generateMetadata({
     `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Réponse rapide.`,
     `${trade.name} à ${villeData.name} : obtenez un devis gratuit et comparez les artisans vérifiés. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}–${maxPrice} ${trade.priceRange.unit}) et choisissez le meilleur artisan. Gratuit.`,
-    `Besoin d'un ${tradeLower} à ${villeData.name} ? Devis gratuit d'artisans vérifiés dans le ${dept}.`,
+    `Besoin d'un ${tradeLower} à ${villeData.name} ? Devis gratuit d'artisans vérifiés ${getDeptPreposition(dept)}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -383,7 +389,7 @@ export default async function DevisServiceLocationPage({
       ],
     },
     {
-      intro: `Pour obtenir un devis ${tradeLower} fiable à ${villeData.name}, la qualité de votre description fait toute la différence. Les professionnels du ${villeData.departement} apprécient les demandes bien structurées.`,
+      intro: `Pour obtenir un devis ${tradeLower} fiable à ${villeData.name}, la qualité de votre description fait toute la différence. Les professionnels ${getDeptArticle(villeData.departement)} apprécient les demandes bien structurées.`,
       tips: [
         `Identifiez le problème ou le besoin principal : fuite, panne, rénovation, mise aux normes ? Un diagnostic précis permet un chiffrage précis.`,
         `Listez les matériaux souhaités si vous avez une préférence (marque, gamme, coloris). Sinon, demandez des alternatives avec les écarts de prix.`,
@@ -422,7 +428,7 @@ export default async function DevisServiceLocationPage({
         `Exigez la mention « Devis gratuit et sans engagement » : certains ${tradeLower}s facturent le déplacement pour établir un devis, surtout en zone rurale autour de ${villeData.name}.`,
         `Le devis doit détailler chaque poste séparément : fournitures, main-d'œuvre, frais de déplacement, enlèvement des gravats. Méfiez-vous des devis « tout compris » sans détail.`,
         `Vérifiez les délais annoncés : un bon ${tradeLower} à ${villeData.name} s'engage sur un planning réaliste, avec une date de début et une durée estimée.`,
-        `Renseignez-vous sur les aides financières : certains travaux de ${tradeLower} à ${villeData.name} peuvent bénéficier de MaPrimeRénov', de l'éco-PTZ ou des aides locales du ${villeData.departement}.`,
+        `Renseignez-vous sur les aides financières : certains travaux de ${tradeLower} à ${villeData.name} peuvent bénéficier de MaPrimeRénov', de l'éco-PTZ ou des aides locales ${getDeptArticle(villeData.departement)}.`,
         `Ne versez jamais plus de 30 % d'acompte à la signature : c'est un seuil raisonnable qui protège les deux parties. Le solde se règle à la réception des travaux.`,
       ],
     },
@@ -441,13 +447,13 @@ export default async function DevisServiceLocationPage({
   // Section 3: "Tarifs indicatifs" (~100 mots)
   const tarifsVariants = [
     {
-      text: `À ${villeData.name} (${villeData.departementCode}), les tarifs de ${tradeLower} se situent entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit} en moyenne. Ce prix varie selon la complexité de l'intervention, les matériaux utilisés et l'urgence de la demande. En ${villeData.region}, ${multiplier > 1.0 ? `les tarifs sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale, en raison du coût de la vie et de la forte demande` : multiplier < 1.0 ? `les tarifs sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale, ce qui avantage les particuliers` : `les tarifs sont proches de la moyenne nationale`}. Pour obtenir le meilleur rapport qualité-prix, comparez systématiquement plusieurs devis d'artisans locaux vérifiés.`,
+      text: `À ${villeData.name} (${villeData.departementCode}), les tarifs de ${tradeLower} se situent entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit} en moyenne. Ce prix varie selon la complexité de l'intervention, les matériaux utilisés et l'urgence de la demande. ${getRegionPreposition(villeData.region)}, ${multiplier > 1.0 ? `les tarifs sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale, en raison du coût de la vie et de la forte demande` : multiplier < 1.0 ? `les tarifs sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale, ce qui avantage les particuliers` : `les tarifs sont proches de la moyenne nationale`}. Pour obtenir le meilleur rapport qualité-prix, comparez systématiquement plusieurs devis d'artisans locaux vérifiés.`,
     },
     {
-      text: `Le budget moyen pour un ${tradeLower} à ${villeData.name} oscille entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit}, fournitures et main-d'œuvre incluses selon la prestation. Ces chiffres sont ajustés au marché local du ${villeData.departement}. Les interventions d'urgence (nuit, week-end, jours fériés) entraînent généralement une majoration de 30 à 80 %. Conseil : demandez toujours un devis détaillé avant le début des travaux. Un devis gratuit ne vous engage à rien et vous permet de comparer sereinement les offres des ${tradeLower}s à ${villeData.name}.`,
+      text: `Le budget moyen pour un ${tradeLower} à ${villeData.name} oscille entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit}, fournitures et main-d'œuvre incluses selon la prestation. Ces chiffres sont ajustés au marché local ${getDeptArticle(villeData.departement)}. Les interventions d'urgence (nuit, week-end, jours fériés) entraînent généralement une majoration de 30 à 80 %. Conseil : demandez toujours un devis détaillé avant le début des travaux. Un devis gratuit ne vous engage à rien et vous permet de comparer sereinement les offres des ${tradeLower}s à ${villeData.name}.`,
     },
     {
-      text: `Fourchette de prix constatée à ${villeData.name} pour un ${tradeLower} : de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Cette estimation intègre les spécificités tarifaires de la région ${villeData.region} et du département ${villeData.departement}. Les facteurs qui influencent le prix final sont la nature des travaux, la difficulté d'accès, le choix des matériaux et la période d'intervention. Pour un chiffrage précis et adapté à votre situation, remplissez le formulaire ci-dessus : vous recevrez un devis gratuit et personnalisé de ${tradeLower}s référencés à ${villeData.name}.`,
+      text: `Fourchette de prix constatée à ${villeData.name} pour un ${tradeLower} : de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Cette estimation intègre les spécificités tarifaires ${getRegionArticle(villeData.region)} et ${getDeptArticle(villeData.departement)}. Les facteurs qui influencent le prix final sont la nature des travaux, la difficulté d'accès, le choix des matériaux et la période d'intervention. Pour un chiffrage précis et adapté à votre situation, remplissez le formulaire ci-dessus : vous recevrez un devis gratuit et personnalisé de ${tradeLower}s référencés à ${villeData.name}.`,
     },
   ]
 
@@ -668,8 +674,8 @@ export default async function DevisServiceLocationPage({
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                  ? `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>

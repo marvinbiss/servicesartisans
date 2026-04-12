@@ -82,7 +82,7 @@ function calculateYearsOfExperience(dateCreation: string): number | null {
 }
 
 function formatDate(dateStr: string): string {
-  if (!dateStr) return 'Non renseigne'
+  if (!dateStr) return 'Non renseigné'
   try {
     const d = new Date(dateStr)
     return d.toLocaleDateString('fr-FR', {
@@ -132,7 +132,7 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
         const data: SiretResult = await res.json()
 
         if (data.rateLimited) {
-          setError('Trop de requetes. Veuillez patienter une minute avant de reessayer.')
+          setError('Trop de requêtes. Veuillez patienter une minute avant de réessayer.')
           return
         }
 
@@ -144,7 +144,7 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
         setResult(data)
       } catch {
         setError(
-          'Impossible de contacter le service de verification. Verifiez votre connexion internet.'
+          'Impossible de contacter le service de vérification. Vérifiez votre connexion internet.'
         )
       } finally {
         setLoading(false)
@@ -160,14 +160,14 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 mb-6">
             <Shield className="w-5 h-5" />
-            <span className="text-sm font-medium">Verification gratuite et instantanee</span>
+            <span className="text-sm font-medium">Vérification gratuite et instantanée</span>
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            Verifiez votre artisan en 30 secondes
+            Vérifiez votre artisan en 30 secondes
           </h1>
           <p className="text-primary-100 text-lg sm:text-xl mb-10 max-w-2xl mx-auto">
-            Entrez un numero SIREN (9 chiffres) ou SIRET (14 chiffres) pour verifier instantanement
-            qu{"'"}un artisan est fiable et exerce legalement.
+            Entrez un numéro SIREN (9 chiffres) ou SIRET (14 chiffres) pour vérifier instantanément
+            qu{"'"}un artisan est fiable et exerce légalement.
           </p>
 
           {/* Search form */}
@@ -184,7 +184,7 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
                   inputMode="numeric"
                   autoComplete="off"
                   maxLength={17}
-                  aria-label="Numero SIREN ou SIRET"
+                  aria-label="Numéro SIREN ou SIRET"
                 />
               </div>
               <button
@@ -198,12 +198,12 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
                 {loading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Verification...
+                    Vérification...
                   </>
                 ) : (
                   <>
                     <Shield className="w-5 h-5" />
-                    Verifier
+                    Vérifier
                   </>
                 )}
               </button>
@@ -237,8 +237,8 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
                 className="flex items-center justify-between bg-white rounded-xl p-5 shadow-sm border border-sand-300 hover:border-primary-300 hover:shadow-md transition-all group"
               >
                 <div>
-                  <p className="font-semibold text-charcoal-900">Trouver des artisans verifies</p>
-                  <p className="text-sm text-charcoal-500">Pres de chez vous</p>
+                  <p className="font-semibold text-charcoal-900">Trouver des artisans vérifiés</p>
+                  <p className="text-sm text-charcoal-500">Près de chez vous</p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-charcoal-400 group-hover:text-primary-400 transition-colors" />
               </Link>
@@ -261,36 +261,36 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-center text-charcoal-900 mb-4">
-            Pourquoi verifier un artisan ?
+            Pourquoi vérifier un artisan ?
           </h2>
           <p className="text-center text-charcoal-600 mb-12 max-w-2xl mx-auto">
-            Chaque annee, des milliers de particuliers sont victimes d{"'"}
-            arnaques dans le secteur du batiment. La verification est votre meilleure protection.
+            Chaque année, des milliers de particuliers sont victimes d{"'"}
+            arnaques dans le secteur du bâtiment. La vérification est votre meilleure protection.
           </p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <TrustCard
               icon={<AlertTriangle className="w-7 h-7 text-red-500" />}
               title="Arnaques en hausse"
-              description="Plus de 60 000 plaintes par an pour arnaques aux travaux. Verifiez avant de payer."
+              description="Plus de 60 000 plaintes par an pour arnaques aux travaux. Vérifiez avant de payer."
               bgColor="bg-red-50"
             />
             <TrustCard
               icon={<Shield className="w-7 h-7 text-primary-400" />}
-              title="Garantie decennale"
+              title="Garantie décennale"
               description="Obligatoire pour les travaux de structure. Assurez-vous que l'artisan est couvert."
               bgColor="bg-primary-50"
             />
             <TrustCard
               icon={<Scale className="w-7 h-7 text-purple-500" />}
               title="Assurance obligatoire"
-              description="Tout artisan doit avoir une RC Pro. Sans elle, vous n'etes pas protege."
+              description="Tout artisan doit avoir une RC Pro. Sans elle, vous n'êtes pas protégé."
               bgColor="bg-purple-50"
             />
             <TrustCard
               icon={<BadgeCheck className="w-7 h-7 text-green-500" />}
               title="Qualifications RGE"
-              description="Indispensable pour les aides de l'Etat (MaPrimeRenov, CEE). Verifiez le label."
+              description="Indispensable pour les aides de l'État (MaPrimeRénov', CEE). Vérifiez le label."
               bgColor="bg-green-50"
             />
           </div>
@@ -301,38 +301,38 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
       <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-center text-charcoal-900 mb-4">
-            Comment verifier un artisan ?
+            Comment vérifier un artisan ?
           </h2>
           <p className="text-center text-charcoal-600 mb-12 max-w-2xl mx-auto">
-            Suivez ces 5 etapes pour vous assurer de la fiabilite de votre artisan avant de lui
+            Suivez ces 5 étapes pour vous assurer de la fiabilité de votre artisan avant de lui
             confier vos travaux.
           </p>
 
           <div className="space-y-6">
             <GuideStep
               number={1}
-              title="Demandez le numero SIRET"
-              description="Tout artisan en regle doit pouvoir vous communiquer son numero SIRET. Il figure obligatoirement sur ses devis et factures. S'il refuse de le donner, c'est un signal d'alerte."
+              title="Demandez le numéro SIRET"
+              description="Tout artisan en règle doit pouvoir vous communiquer son numéro SIRET. Il figure obligatoirement sur ses devis et factures. S'il refuse de le donner, c'est un signal d'alerte."
             />
             <GuideStep
               number={2}
-              title="Verifiez avec notre outil"
-              description="Entrez le SIRET dans notre outil de verification gratuit ci-dessus. Vous saurez instantanement si l'entreprise existe, est active, et quel est son secteur d'activite."
+              title="Vérifiez avec notre outil"
+              description="Entrez le SIRET dans notre outil de vérification gratuit ci-dessus. Vous saurez instantanément si l'entreprise existe, est active, et quel est son secteur d'activité."
             />
             <GuideStep
               number={3}
-              title="Verifiez les assurances"
-              description="Demandez l'attestation d'assurance responsabilite civile professionnelle et, pour les travaux de construction, l'attestation de garantie decennale. Contactez l'assureur pour confirmer."
+              title="Vérifiez les assurances"
+              description="Demandez l'attestation d'assurance responsabilité civile professionnelle et, pour les travaux de construction, l'attestation de garantie décennale. Contactez l'assureur pour confirmer."
             />
             <GuideStep
               number={4}
-              title="Demandez des references"
-              description="Un artisan serieux pourra vous montrer des photos de chantiers precedents et vous fournir des contacts de clients satisfaits. Consultez egalement les avis en ligne sur plusieurs plateformes."
+              title="Demandez des références"
+              description="Un artisan sérieux pourra vous montrer des photos de chantiers précédents et vous fournir des contacts de clients satisfaits. Consultez également les avis en ligne sur plusieurs plateformes."
             />
             <GuideStep
               number={5}
               title="Comparez les devis"
-              description="Demandez au moins 3 devis detailles pour le meme travail. Mefiance envers les prix anormalement bas ou les demandes d'acompte superieur a 30%. Le devis doit etre precis et detaille."
+              description="Demandez au moins 3 devis détaillés pour le même travail. Méfiance envers les prix anormalement bas ou les demandes d'acompte supérieur à 30%. Le devis doit être précis et détaillé."
             />
           </div>
         </div>
@@ -342,7 +342,7 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
       <section className="py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-center text-charcoal-900 mb-12">
-            Questions frequentes
+            Questions fréquentes
           </h2>
 
           <div className="space-y-3">
@@ -375,10 +375,10 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
       <section className="py-16 bg-gradient-to-r from-primary-500 to-primary-600">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-4">
-            Trouvez un artisan verifie sur ServicesArtisans
+            Trouvez un artisan vérifié sur ServicesArtisans
           </h2>
           <p className="text-primary-100 mb-8 text-lg">
-            Des milliers d{"'"}artisans references par donnees SIREN officielles dans toute la
+            Des milliers d{"'"}artisans référencés par données SIREN officielles dans toute la
             France.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -428,7 +428,7 @@ function ResultCard({
       bg: 'bg-orange-50',
       headerBg: 'bg-orange-100',
       icon: <AlertTriangle className="w-6 h-6 text-orange-600" />,
-      title: 'Entreprise fermee',
+      title: 'Entreprise fermée',
       titleColor: 'text-orange-800',
     },
     error: {
@@ -436,7 +436,7 @@ function ResultCard({
       bg: 'bg-red-50',
       headerBg: 'bg-red-100',
       icon: <XCircle className="w-6 h-6 text-red-600" />,
-      title: 'SIRET non trouve',
+      title: 'SIRET non trouvé',
       titleColor: 'text-red-800',
     },
   }
@@ -456,12 +456,12 @@ function ResultCard({
         {variant === 'error' ? (
           <div className="text-center py-4">
             <p className="text-charcoal-700 text-lg mb-2">
-              {result.message || 'Aucune entreprise trouvee pour ce numero SIRET.'}
+              {result.message || 'Aucune entreprise trouvée pour ce numéro SIRET.'}
             </p>
-            <p className="text-charcoal-500 text-sm">SIRET recherche : {result.siret}</p>
+            <p className="text-charcoal-500 text-sm">SIRET recherché : {result.siret}</p>
             <p className="text-charcoal-500 text-sm mt-4">
-              Verifiez que le numero est correct, ou demandez a l{"'"}artisan de vous fournir son
-              numero SIRET exact.
+              Vérifiez que le numéro est correct, ou demandez à l{"'"}artisan de vous fournir son
+              numéro SIRET exact.
             </p>
           </div>
         ) : (
@@ -470,9 +470,9 @@ function ResultCard({
             <div className="flex items-start gap-3">
               <Building2 className="w-5 h-5 text-charcoal-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm text-charcoal-500">Denomination</p>
+                <p className="text-sm text-charcoal-500">Dénomination</p>
                 <p className="font-semibold text-charcoal-900 text-lg">
-                  {result.denomination || 'Non renseigne'}
+                  {result.denomination || 'Non renseigné'}
                 </p>
               </div>
             </div>
@@ -509,7 +509,7 @@ function ResultCard({
               <div className="flex items-start gap-3">
                 <Hammer className="w-5 h-5 text-charcoal-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-charcoal-500">Activite principale (NAF)</p>
+                  <p className="text-sm text-charcoal-500">Activité principale (NAF)</p>
                   <p className="font-medium text-charcoal-900">
                     {result.activitePrincipale}
                     {result.libelleActivite && ` — ${result.libelleActivite}`}
@@ -534,12 +534,12 @@ function ResultCard({
               <div className="flex items-start gap-3">
                 <Calendar className="w-5 h-5 text-charcoal-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-charcoal-500">Date de creation</p>
+                  <p className="text-sm text-charcoal-500">Date de création</p>
                   <p className="font-medium text-charcoal-900">
                     {formatDate(result.dateCreation)}
                     {years !== null && years > 0 && (
                       <span className="ml-2 text-sm text-green-600 font-normal">
-                        ({years} an{years > 1 ? 's' : ''} d{"'"}experience)
+                        ({years} an{years > 1 ? 's' : ''} d{"'"}expérience)
                       </span>
                     )}
                   </p>
@@ -548,7 +548,7 @@ function ResultCard({
             )}
 
             {/* Employee range */}
-            {result.trancheEffectifs && result.trancheEffectifs !== 'Non renseigne' && (
+            {result.trancheEffectifs && result.trancheEffectifs !== 'Non renseigné' && (
               <div className="flex items-start gap-3">
                 <Users className="w-5 h-5 text-charcoal-400 mt-0.5 flex-shrink-0" />
                 <div>
@@ -565,11 +565,11 @@ function ResultCard({
                   <AlertTriangle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-semibold text-orange-800">
-                      Attention : cette entreprise est fermee
+                      Attention : cette entreprise est fermée
                     </p>
                     <p className="text-orange-700 text-sm mt-1">
-                      Cette entreprise n{"'"}est plus en activite. Ne confiez pas de travaux a un
-                      artisan dont l{"'"}entreprise est radiee.
+                      Cette entreprise n{"'"}est plus en activité. Ne confiez pas de travaux à un
+                      artisan dont l{"'"}entreprise est radiée.
                     </p>
                   </div>
                 </div>

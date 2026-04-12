@@ -93,7 +93,8 @@ export default function DroitOppositionPage() {
               <strong>Base légale du traitement :</strong> le référencement des fiches artisans
               repose sur notre intérêt légitime (Art. 6.1.f du RGPD). Les données proviennent de
               sources publiques, notamment les registres professionnels officiels (répertoire
-              SIREN/SIRET). Vous pouvez vous opposer à ce traitement à tout moment.
+              SIREN/SIRET) et la base ADEME des entreprises RGE (open data). Vous pouvez vous
+              opposer à ce traitement à tout moment.
             </p>
 
             <h2>2. Comment exercer votre droit</h2>
@@ -102,8 +103,7 @@ export default function DroitOppositionPage() {
             <h3>Option 1 — Depuis votre fiche artisan</h3>
             <p>
               Rendez-vous sur votre fiche artisan sur {companyIdentity.name} et cliquez sur le
-              bouton{' '}
-              <strong>&laquo;&nbsp;Demander la suppression de cette fiche&nbsp;&raquo;</strong>. Un
+              bouton <strong>«&nbsp;Demander la suppression de cette fiche&nbsp;»</strong>. Un
               formulaire vous permettra de soumettre votre demande directement.
             </p>
 
@@ -181,8 +181,13 @@ export default function DroitOppositionPage() {
               </li>
               <li>
                 <strong>Conservation légale :</strong> conformément à nos obligations légales, les
-                données sont conservées pendant 1 an à des fins de preuve, puis définitivement
-                supprimées.
+                données sont conservées pendant 1 an après la suppression de la fiche à des fins de
+                preuve, puis définitivement supprimées. La durée générale de conservation des
+                données actives est de 3 ans (cf. notre{' '}
+                <Link href="/confidentialite" className="text-primary-500 hover:underline">
+                  politique de confidentialité
+                </Link>
+                ).
               </li>
             </ol>
 

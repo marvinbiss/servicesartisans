@@ -6,7 +6,12 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { signUpSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
-import { createErrorResponse, createSuccessResponse, ErrorCode, getHttpStatus as _getHttpStatus } from '@/lib/errors/types'
+import {
+  createErrorResponse,
+  createSuccessResponse,
+  ErrorCode,
+  getHttpStatus as _getHttpStatus,
+} from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
@@ -22,8 +27,11 @@ export async function POST(request: Request) {
     const rl = await checkRateLimit(`signup:${ip}`, { window: 900_000, max: 5 })
     if (!rl.allowed) {
       return NextResponse.json(
-        { error: 'Trop de tentatives d\'inscription, veuillez réessayer plus tard' },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        { error: "Trop de tentatives d'inscription, veuillez réessayer plus tard" },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
@@ -43,11 +51,9 @@ export async function POST(request: Request) {
 
     if (!validation.success) {
       return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          'Donnees invalides',
-          { fields: formatZodErrors(validation.errors) }
-        ),
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Données invalides', {
+          fields: formatZodErrors(validation.errors),
+        }),
         { status: 400 }
       )
     }
@@ -88,7 +94,10 @@ export async function POST(request: Request) {
     if (authError || !authData.user) {
       logger.error('Auth error:', authError)
       return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, authError?.message || 'Erreur lors de la creation du compte'),
+        createErrorResponse(
+          ErrorCode.INTERNAL_ERROR,
+          authError?.message || 'Erreur lors de la creation du compte'
+        ),
         { status: 500 }
       )
     }
@@ -122,7 +131,7 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('Signup error:', error)
     return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de l\'inscription'),
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, "Erreur lors de l'inscription"),
       { status: 500 }
     )
   }

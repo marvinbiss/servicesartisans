@@ -23,7 +23,17 @@ function seededDailyNumber(seed: string, min: number, max: number): number {
   return min + Math.abs(hash % (max - min + 1))
 }
 
-export default function DemandIndicator({ serviceSlug, cityName, variant = 'inline' }: DemandIndicatorProps) {
+export default function DemandIndicator({
+  serviceSlug,
+  cityName,
+  variant = 'inline',
+}: DemandIndicatorProps) {
+  // Disabled: deterministic seed generates fake numbers — deceptive for users
+  void serviceSlug
+  void cityName
+  void variant
+  return null
+
   const weeklyRequests = seededDailyNumber(serviceSlug + '-requests', 8, 35)
   const viewsToday = seededDailyNumber(serviceSlug + '-views', 15, 85)
 

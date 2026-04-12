@@ -18,6 +18,7 @@ import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 import type { Service, Location } from '@/types'
 import { getServiceImage } from '@/lib/data/images'
+import { getRegionPreposition } from '@/lib/geo-strings'
 
 /** Raw provider row from select('*') — includes all DB columns the mapper reads */
 interface ProviderRecord {
@@ -424,7 +425,7 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
   }
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -466,12 +467,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const dHash = Math.abs(hashCode(`sq-desc-${serviceSlug}-${locationSlug}-${publicId}`))
     const descTemplates = hasProviders
       ? [
-          `${providerCount} ${svcLower}s référencés à ${quartierName}, ${ville.name} (${ville.departementCode}). Devis gratuit en ${ville.region}.`,
+          `${providerCount} ${svcLower}s référencés à ${quartierName}, ${ville.name} (${ville.departementCode}). Devis gratuit ${getRegionPreposition(ville.region)}.`,
           `Comparez les ${svcLower}s à ${quartierName} (${ville.name}). ${providerCount} artisans vérifiés SIREN. Devis gratuit.`,
         ]
       : [
           `Trouvez un ${svcLower} qualifié à ${quartierName}, ${ville.name} (${ville.departementCode}). Artisans vérifiés, devis gratuit.`,
-          `${svcLower} à ${quartierName} (${ville.name}) : annuaire d'artisans référencés en ${ville.region}. Devis gratuit.`,
+          `${svcLower} à ${quartierName} (${ville.name}) : annuaire d'artisans référencés ${getRegionPreposition(ville.region)}. Devis gratuit.`,
         ]
     const description = descTemplates[dHash % descTemplates.length]
 

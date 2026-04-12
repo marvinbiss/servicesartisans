@@ -66,7 +66,7 @@ const typesPAC = [
     avantages:
       'Prix accessible, installation rapide, rafraîchissement en été, idéale en rénovation',
     inconvenients:
-      'Ne produit pas d’eau chaude sanitaire, non éligible à MaPrimeRénov’, performances réduites sous −5 °C',
+      'Ne produit pas d’eau chaude sanitaire, non éligible à MaPrimeRénov’, performances réduites sous −5&nbsp;°C',
   },
   {
     name: 'PAC air-eau',
@@ -77,7 +77,7 @@ const typesPAC = [
     avantages:
       'Compatible avec radiateurs et plancher chauffant existants, éligible MaPrimeRénov’, COP élevé',
     inconvenients:
-      'Unité extérieure parfois bruyante, performances moindres sous −7 °C, nécessite un appoint en zone très froide',
+      'Unité extérieure parfois bruyante, performances moindres sous −7&nbsp;°C, nécessite un appoint en zone très froide',
   },
   {
     name: 'PAC géothermique (sol-eau)',
@@ -126,14 +126,14 @@ const prixInstallation = [
     prixFourniture: '8 000 – 12 000 €',
     prixPose: '7 000 – 12 000 €',
     prixTotal: '15 000 – 24 000 €',
-    details: 'Terrain décaisssé sur 60 cm, surface ≥ 1,5× surface chauffée',
+    details: 'Terrain décaissé sur 60&nbsp;cm, surface ≥ 1,5× surface chauffée',
   },
   {
     type: 'PAC géothermique (forage vertical)',
     prixFourniture: '10 000 – 15 000 €',
     prixPose: '10 000 – 15 000 €',
     prixTotal: '20 000 – 30 000 €',
-    details: 'Forage 80–150 m, peu d’emprise au sol, autorisation préfectorale',
+    details: 'Forage 80–150&nbsp;m, peu d’emprise au sol, autorisation préfectorale',
   },
 ]
 
@@ -240,7 +240,7 @@ const faqItems = [
   {
     question: 'Peut-on remplacer une chaudière gaz par une pompe à chaleur ?',
     answer:
-      'Oui, c’est l’une des installations les plus courantes. La PAC air-eau se raccorde directement sur le circuit de chauffage existant (radiateurs haute température ou plancher chauffant). Si vos radiateurs sont anciens, optez pour une PAC haute température (jusqu’à 65 °C en sortie). L’opération est fortement subventionnée dans le cadre de la décarbonation du chauffage.',
+      'Oui, c’est l’une des installations les plus courantes. La PAC air-eau se raccorde directement sur le circuit de chauffage existant (radiateurs haute température ou plancher chauffant). Si vos radiateurs sont anciens, optez pour une PAC haute température (jusqu’à 65&nbsp;°C en sortie). L’opération est fortement subventionnée dans le cadre de la décarbonation du chauffage.',
   },
   {
     question: 'Quel entretien pour une pompe à chaleur ?',
@@ -445,7 +445,7 @@ export default function PompeAChaleurPage() {
               </div>
               <p className="text-charcoal-600">
                 {
-                  'En zone H1 (Nord, Est, montagne), privilégiez une PAC air-eau haute température ou géothermique. En zone H3 (Méditerranée), une PAC air-air peut suffire. Le COP diminue avec le froid : vérifiez les performances à −7 °C (norme EN14511).'
+                  'En zone H1 (Nord, Est, montagne), privilégiez une PAC air-eau haute température ou géothermique. En zone H3 (Méditerranée), une PAC air-air peut suffire. Le COP diminue avec le froid : vérifiez les performances à −7&nbsp;°C (norme EN14511).'
                 }
               </p>
             </div>
@@ -458,7 +458,7 @@ export default function PompeAChaleurPage() {
               </div>
               <p className="text-charcoal-600">
                 {
-                  'Plancher chauffant : idéal, fonctionne à basse température (35 °C). Radiateurs basse température : compatibles. Radiateurs haute température (fonte ancienne) : choisissez une PAC haute température (jusqu’à 65 °C). Ventilo-convecteurs : PAC air-air.'
+                  'Plancher chauffant : idéal, fonctionne à basse température (35&nbsp;°C). Radiateurs basse température : compatibles. Radiateurs haute température (fonte ancienne) : choisissez une PAC haute température (jusqu’à 65&nbsp;°C). Ventilo-convecteurs : PAC air-air.'
                 }
               </p>
             </div>

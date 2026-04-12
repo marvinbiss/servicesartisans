@@ -216,7 +216,7 @@ export default function CarteClient() {
                 {selectedRegion ? `Artisans en ${selectedRegion}` : 'Total artisans référencés'}
               </p>
               <p className="text-2xl font-bold">
-                {selectedRegion ? totalArtisans.toLocaleString('fr-FR') : '350 000+'}
+                {selectedRegion ? totalArtisans.toLocaleString('fr-FR') : '350&nbsp;000+'}
               </p>
             </div>
           </div>

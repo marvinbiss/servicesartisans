@@ -27,7 +27,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualif RGE ?',
   description:
-    'Comparatif des qualifications RGE 2026 : Qualibat, QualiPAC, QualiSol, QualiPV, Qualifelec, Qualibois. Quelle qualification pour quels travaux ?',
+    'Comparatif des qualifications RGE 2026 : Qualibat, QualiPAC, QualiSol, QualiPV, Qualifelec, QualiBois. Quelle qualification pour quels travaux ?',
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: 'Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualification RGE choisir ?',
@@ -117,7 +117,7 @@ const qualifs = [
       "Qualifelec est l'organisme historique des électriciens. Il propose plusieurs mentions RGE dont « Efficacité énergétique » pour les travaux qui génèrent des économies d'énergie électrique. Indispensable pour les bornes de recharge IRVE financées par les primes Advenir et les CEE.",
   },
   {
-    nom: 'Qualibois',
+    nom: 'QualiBois',
     organisme: "Qualit'EnR",
     icon: TreePine,
     couleur: 'bg-green-100 text-green-800',
@@ -128,7 +128,7 @@ const qualifs = [
       'Insert et foyer fermé bois',
     ],
     details:
-      "Qualibois certifie les installateurs d'appareils de chauffage bois. Elle est exigée pour MaPrimeRénov' sur les poêles et chaudières biomasse, ainsi que pour le Coup de pouce Chauffage lors du remplacement d'une chaudière fossile.",
+      "QualiBois certifie les installateurs d'appareils de chauffage bois. Elle est exigée pour MaPrimeRénov' sur les poêles et chaudières biomasse, ainsi que pour le Coup de pouce Chauffage lors du remplacement d'une chaudière fossile.",
   },
 ]
 
@@ -150,7 +150,7 @@ const cas = [
   },
   {
     situation: 'Je remplace ma chaudière fioul par un poêle à granulés',
-    recommandation: 'Qualibois module air',
+    recommandation: 'QualiBois module air',
     aide: "MaPrimeRénov' Bois + Coup de pouce Chauffage CEE + prime sortie fioul",
   },
   {
@@ -169,12 +169,12 @@ const faqItems = [
   {
     question: 'Peut-on avoir plusieurs qualifications RGE ?',
     answer:
-      "Oui, et c'est même fréquent. Une entreprise générale peut cumuler Qualibat RGE pour l'isolation, QualiPAC pour la pompe à chaleur et Qualibois pour les poêles à granulés. Chaque qualification est délivrée par l'organisme compétent sur un périmètre précis, avec audit de chantier spécifique.",
+      "Oui, et c'est même fréquent. Une entreprise générale peut cumuler Qualibat RGE pour l'isolation, QualiPAC pour la pompe à chaleur et QualiBois pour les poêles à granulés. Chaque qualification est délivrée par l'organisme compétent sur un périmètre précis, avec audit de chantier spécifique.",
   },
   {
     question: 'Qui délivre réellement la certification RGE ?',
     answer:
-      "Seuls quatre organismes accrédités par le COFRAC délivrent des qualifications RGE : Qualibat (bâtiment), Qualit'EnR (énergies renouvelables : QualiPAC, QualiSol, QualiPV, Qualibois), Qualifelec (électricité) et Certibat (audit). Toute société se disant « RGE » sans qualification d'un de ces organismes est en infraction.",
+      "Seuls quatre organismes accrédités par le COFRAC délivrent des qualifications RGE : Qualibat (bâtiment), Qualit'EnR (énergies renouvelables : QualiPAC, QualiSol, QualiPV, QualiBois), Qualifelec (électricité) et Certibat (audit). Toute société se disant « RGE » sans qualification d'un de ces organismes est en infraction.",
   },
   {
     question: "Combien coûte une qualification RGE pour l'artisan ?",
@@ -220,7 +220,7 @@ export default function QualificationsRgePage() {
     headline:
       'Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualification RGE choisir selon vos travaux ?',
     description:
-      'Comparatif des qualifications RGE 2026 : Qualibat, QualiPAC, QualiSol, QualiPV, Qualifelec, Qualibois.',
+      'Comparatif des qualifications RGE 2026 : Qualibat, QualiPAC, QualiSol, QualiPV, Qualifelec, QualiBois.',
     author: { '@type': 'Organization', name: SITE_NAME },
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     datePublished: '2026-04-09',
@@ -308,7 +308,7 @@ export default function QualificationsRgePage() {
                   </td>
                 </tr>
                 <tr className="border-t border-sand-200">
-                  <td className="p-4 font-semibold text-charcoal-900">Qualibois</td>
+                  <td className="p-4 font-semibold text-charcoal-900">QualiBois</td>
                   <td className="p-4 text-charcoal-600">Qualit&apos;EnR</td>
                   <td className="p-4 text-charcoal-600">Poêles et chaudières biomasse</td>
                 </tr>

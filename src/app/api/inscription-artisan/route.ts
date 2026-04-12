@@ -23,7 +23,7 @@ const getResend = () => getResendClient()
 
 const artisanSchema = z.object({
   // Step 1 - Company
-  entreprise: z.string().min(2, 'Le nom d\'entreprise est requis'),
+  entreprise: z.string().min(2, "Le nom d'entreprise est requis"),
   siret: z.string().min(14, 'SIRET invalide').max(17),
   metier: z.string().min(1, 'Le métier est requis'),
   autreMetier: z.string().optional(),
@@ -33,7 +33,7 @@ const artisanSchema = z.object({
   email: z.string().email('Email invalide'),
   telephone: z.string().min(10, 'Téléphone invalide'),
   // Step 3 - Location
-  adresse: z.string().min(5, 'L\'adresse est requise'),
+  adresse: z.string().min(5, "L'adresse est requise"),
   codePostal: z.string().min(5, 'Code postal invalide'),
   ville: z.string().min(2, 'La ville est requise'),
   rayonIntervention: z.string(),
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const validation = artisanSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Donnees invalides', details: validation.error.flatten() },
+        { error: 'Données invalides', details: validation.error.flatten() },
         { status: 400 }
       )
     }
@@ -129,9 +129,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Artisan registration API error', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

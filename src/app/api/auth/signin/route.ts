@@ -24,7 +24,10 @@ export async function POST(request: Request) {
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de tentatives de connexion, veuillez réessayer plus tard' },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
@@ -42,11 +45,9 @@ export async function POST(request: Request) {
 
     if (!validation.success) {
       return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          'Donnees invalides',
-          { fields: formatZodErrors(validation.errors) }
-        ),
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Données invalides', {
+          fields: formatZodErrors(validation.errors),
+        }),
         { status: 400 }
       )
     }
@@ -55,23 +56,19 @@ export async function POST(request: Request) {
 
     // Create Supabase client with cookie handling
     const cookieStore = await cookies()
-    const supabase = createServerClient(
-      supabaseUrl,
-      supabaseAnonKey,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value
-          },
-          set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options })
-          },
-          remove(name: string, options: CookieOptions) {
-            cookieStore.set({ name, value: '', ...options })
-          },
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
         },
-      }
-    )
+        set(name: string, value: string, options: CookieOptions) {
+          cookieStore.set({ name, value, ...options })
+        },
+        remove(name: string, options: CookieOptions) {
+          cookieStore.set({ name, value: '', ...options })
+        },
+      },
+    })
 
     // Attempt sign in
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -89,19 +86,22 @@ export async function POST(request: Request) {
       }
       if (error.message.includes('Email not confirmed')) {
         return NextResponse.json(
-          createErrorResponse(ErrorCode.UNAUTHORIZED, 'Veuillez confirmer votre email avant de vous connecter'),
+          createErrorResponse(
+            ErrorCode.UNAUTHORIZED,
+            'Veuillez confirmer votre email avant de vous connecter'
+          ),
           { status: 401 }
         )
       }
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Erreur d\'authentification'),
+        createErrorResponse(ErrorCode.UNAUTHORIZED, "Erreur d'authentification"),
         { status: 401 }
       )
     }
 
     if (!data.user || !data.session) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Echec de l\'authentification'),
+        createErrorResponse(ErrorCode.UNAUTHORIZED, "Echec de l'authentification"),
         { status: 401 }
       )
     }
@@ -123,7 +123,11 @@ export async function POST(request: Request) {
         user: {
           id: data.user.id,
           email: data.user.email,
-          fullName: profile?.full_name || data.user.user_metadata?.full_name || `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() || null,
+          fullName:
+            profile?.full_name ||
+            data.user.user_metadata?.full_name ||
+            `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() ||
+            null,
           role: profile?.role || 'user',
           userType: profile?.role === 'artisan' ? 'artisan' : 'client',
           isArtisan,

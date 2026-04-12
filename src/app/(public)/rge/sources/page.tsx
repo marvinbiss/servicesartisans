@@ -74,7 +74,7 @@ const OFFICIAL_SOURCES = [
     url: 'https://www.qualibat.com/rechercher-entreprise/',
     role: 'Organisme certificateur',
     description:
-      'Premier organisme de qualification du b\u00e2timent en France. D\u00e9livre les qualifications RGE \u00e9quivalentes (5911, 7131, 7141, 8621, etc.) reconnues par MaPrimeR\u00e9nov\u2019 et les obligors CEE.',
+      'Premier organisme de qualification du b\u00e2timent en France. D\u00e9livre les qualifications RGE \u00e9quivalentes (5911, 7131, 7141, 8621, etc.) reconnues par MaPrimeR\u00e9nov\u2019 et les obligés CEE.',
     frequency: 'V\u00e9rification ponctuelle cas par cas',
     license: 'Site officiel (consultation)',
   },
@@ -164,17 +164,16 @@ export default function RgeSourcesPage() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              Transparence &eacute;ditoriale E-E-A-T
+              Transparence éditoriale E-E-A-T
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-            Sources et m&eacute;thodologie RGE
+            Sources et méthodologie RGE
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            D&rsquo;o&ugrave; proviennent les donn&eacute;es RGE affich&eacute;es sur
-            ServicesArtisans, &agrave; quelle fr&eacute;quence elles sont mises &agrave; jour et
-            comment v&eacute;rifier vous-m&ecirc;me la qualification d&rsquo;un artisan
-            aupr&egrave;s des organismes officiels.
+            D’o&ugrave; proviennent les données RGE affichées sur ServicesArtisans, à quelle
+            fréquence elles sont mises à jour et comment vérifier vous-même la qualification d’un
+            artisan auprès des organismes officiels.
           </p>
         </div>
       </section>
@@ -183,7 +182,7 @@ export default function RgeSourcesPage() {
         <div className="flex items-center gap-2 mb-6">
           <Database className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Sources officielles mobilis&eacute;es
+            Sources officielles mobilisées
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -203,9 +202,7 @@ export default function RgeSourcesPage() {
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">{src.description}</p>
               <dl className="mt-4 text-xs text-charcoal-900 space-y-1">
                 <div>
-                  <dt className="inline font-semibold text-charcoal-700">
-                    Mise &agrave; jour&nbsp;:{' '}
-                  </dt>
+                  <dt className="inline font-semibold text-charcoal-700">Mise à jour&nbsp;: </dt>
                   <dd className="inline">{src.frequency}</dd>
                 </div>
                 <div>
@@ -232,16 +229,16 @@ export default function RgeSourcesPage() {
           <div className="flex items-center gap-2 mb-6">
             <RefreshCw className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Cadence de mise &agrave; jour
+              Cadence de mise à jour
             </h2>
           </div>
           <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
             <table className="w-full text-sm">
               <thead className="bg-sand-200 text-charcoal-700">
                 <tr>
-                  <th className="text-left p-4 font-semibold">Op&eacute;ration</th>
-                  <th className="text-left p-4 font-semibold">Fr&eacute;quence</th>
-                  <th className="text-left p-4 font-semibold">M&eacute;canisme</th>
+                  <th className="text-left p-4 font-semibold">Opération</th>
+                  <th className="text-left p-4 font-semibold">Fréquence</th>
+                  <th className="text-left p-4 font-semibold">Mécanisme</th>
                 </tr>
               </thead>
               <tbody>
@@ -262,13 +259,12 @@ export default function RgeSourcesPage() {
         <div className="flex items-center gap-2 mb-6">
           <FileCheck2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            V&eacute;rifier vous-m&ecirc;me une qualification RGE
+            Vérifier vous-même une qualification RGE
           </h2>
         </div>
         <p className="text-charcoal-600 max-w-3xl mb-6 leading-relaxed">
-          Avant de signer un devis, v&eacute;rifiez la qualification de l&rsquo;artisan
-          aupr&egrave;s des organismes officiels. C&rsquo;est la seule garantie
-          d&rsquo;&eacute;ligibilit&eacute; aux primes CEE et &agrave; MaPrimeR&eacute;nov&rsquo;.
+          Avant de signer un devis, vérifiez la qualification de l’artisan auprès des organismes
+          officiels. C’est la seule garantie d’éligibilité aux primes CEE et à MaPrimeRénov’.
         </p>
         <ol className="space-y-3 list-decimal pl-6 marker:text-emerald-600 marker:font-bold">
           {VERIFICATION_STEPS.map((step, i) => (
@@ -284,13 +280,12 @@ export default function RgeSourcesPage() {
           />
           <div>
             <h3 className="font-semibold text-amber-900 mb-1">
-              Signalement d&rsquo;une donn&eacute;e incorrecte
+              Signalement d’une donnée incorrecte
             </h3>
             <p className="text-sm text-amber-900/90 leading-relaxed">
-              Si vous constatez qu&rsquo;une qualification affich&eacute;e sur ServicesArtisans ne
-              correspond plus &agrave; la r&eacute;alit&eacute; (expiration, suspension, retrait),
-              contactez-nous. Nous v&eacute;rifions chaque signalement sous 48&nbsp;heures
-              ouvr&eacute;es et mettons &agrave; jour la fiche concern&eacute;e.
+              Si vous constatez qu’une qualification affichée sur ServicesArtisans ne correspond
+              plus à la réalité (expiration, suspension, retrait), contactez-nous. Nous vérifions
+              chaque signalement sous 48&nbsp;heures ouvrées et mettons à jour la fiche concernée.
             </p>
           </div>
         </div>
@@ -299,11 +294,11 @@ export default function RgeSourcesPage() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
-            Explorer l&rsquo;annuaire RGE
+            Explorer l’annuaire RGE
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Consultez les artisans RGE qualifi&eacute;s par m&eacute;tier et par ville, ou
-            approfondissez votre connaissance des qualifications officielles.
+            Consultez les artisans RGE qualifiés par métier et par ville, ou approfondissez votre
+            connaissance des qualifications officielles.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link

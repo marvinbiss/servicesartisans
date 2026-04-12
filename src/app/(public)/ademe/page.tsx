@@ -37,7 +37,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: "Qu'est-ce que l'ADEME et quel est son rôle dans la rénovation énergétique ?",
     answer:
-      "L'ADEME — Agence de l'Environnement et de la Maîtrise de l'Énergie — est l'établissement public à caractère industriel et commercial (EPIC) sous la tutelle conjointe des ministères de la Transition écologique et de la Recherche. Créée en 1991, elle pilote la politique nationale de transition énergétique et gère notamment le référentiel officiel des artisans RGE (Reconnu Garant de l'Environnement) consultable sur france-renov.gouv.fr. C'est l'unique source de vérité légale pour vérifier qu'une entreprise du bâtiment est bien qualifiée RGE et donc éligible aux aides publiques (MaPrimeRénov', CEE, TVA 5,5 %, Éco-PTZ).",
+      "L'ADEME — Agence de la transition écologique (anciennement Agence de l'Environnement et de la Maîtrise de l'Énergie) — est l'établissement public à caractère industriel et commercial (EPIC) sous la tutelle conjointe des ministères de la Transition écologique et de la Recherche. Créée en 1991, elle pilote la politique nationale de transition énergétique et gère notamment le référentiel officiel des artisans RGE (Reconnu Garant de l'Environnement) consultable sur france-renov.gouv.fr. C'est l'unique source de vérité légale pour vérifier qu'une entreprise du bâtiment est bien qualifiée RGE et donc éligible aux aides publiques (MaPrimeRénov', CEE, TVA 5,5 %, Éco-PTZ).",
   },
   {
     question: "D'où viennent les données d'artisans RGE affichées sur ServicesArtisans ?",
@@ -69,7 +69,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
 export const metadata: Metadata = {
   title: 'Données ADEME & sources officielles — Méthodologie RGE',
   description:
-    "Transparence totale sur la source de nos données RGE : référentiel officiel ADEME / France Rénov', synchronisation hebdomadaire, méthodologie de vérification. 165 000 qualifications recensées.",
+    "Source de nos données RGE : référentiel officiel ADEME / France Rénov', synchronisation hebdomadaire. 165 000 qualifications recensées.",
   alternates: { canonical: PAGE_URL },
   openGraph: {
     locale: 'fr_FR',
@@ -492,7 +492,7 @@ export default async function AdemePage() {
                 name: 'Qualit\u2019EnR',
                 url: 'https://www.qualit-enr.org',
                 description:
-                  'Organisme certificateur des qualifications RGE énergies renouvelables : QualiPAC, QualiSol, QualiPV, Qualibois.',
+                  'Organisme certificateur des qualifications RGE énergies renouvelables : QualiPAC, QualiSol, QualiPV, QualiBois.',
               },
             ].map((resource) => (
               <a
@@ -531,8 +531,8 @@ export default async function AdemePage() {
                 Attribution et mention légale
               </h3>
               <p className="text-sm text-charcoal-600 leading-relaxed">
-                Données issues du référentiel &laquo; Annuaire des entreprises RGE &raquo; publié
-                par l&apos;ADEME sur data.ademe.fr, mis à disposition sous{' '}
+                Données issues du référentiel « Annuaire des entreprises RGE » publié par
+                l&apos;ADEME sur data.ademe.fr, mis à disposition sous{' '}
                 <a
                   href="https://www.etalab.gouv.fr/licence-ouverte-open-licence"
                   target="_blank"

@@ -1,11 +1,13 @@
 import type { BlogArticle } from './articles'
 
 export const metiers3Articles: Record<string, BlogArticle> = {
-  "comment-choisir-solier-guide": {
-    title: "Choisir son Solier en 2026 : Le Guide Complet",
-    excerpt: "Revêtements de sol souples, PVC, moquette, linoléum : tous les critères pour sélectionner un solier compétent. Devis, certifications, prix détaillés.",
-    metaTitle: "Choisir son Solier 2026 : Guide + Devis Gratuit",
-    metaDescription: "Découvrez comment choisir un solier qualifié : certifications Qualibat, prix PVC et moquette en 2026. Comparez les devis gratuits.",
+  'comment-choisir-solier-guide': {
+    title: 'Choisir son Solier en 2026 : Le Guide Complet',
+    excerpt:
+      'Revêtements de sol souples, PVC, moquette, linoléum : tous les critères pour sélectionner un solier compétent. Devis, certifications, prix détaillés.',
+    metaTitle: 'Choisir son Solier 2026 : Guide + Devis Gratuit',
+    metaDescription:
+      'Découvrez comment choisir un solier qualifié : certifications Qualibat, prix PVC et moquette en 2026. Comparez les devis gratuits.',
     content: [
       "En France, le marché des revêtements de sol souples représente **1,2 milliard d'euros** par an, selon la Fédération Française du Bâtiment. Pourtant, le métier de solier reste méconnu du grand public, souvent confondu avec celui de carreleur ou de poseur de parquet. Le solier — ou solier-moquettiste — est le spécialiste des revêtements de sol souples : PVC, vinyle, linoléum, moquette, caoutchouc, résine coulée. Son expertise va bien au-delà de la simple pose : il prépare le support (ragréage, mise à niveau), choisit la technique de collage adaptée et assure les finitions (soudure à chaud, plinthes, barres de seuil). Un sol mal posé, c'est un sol qui gondole au bout de six mois, des joints qui s'ouvrent, des décollements en zone de passage. Ce guide vous donne toutes les clés pour trouver un solier qualifié et éviter les déconvenues. Consultez notre annuaire de [soliers vérifiés près de chez vous](/services/solier).",
 
@@ -19,31 +21,58 @@ export const metiers3Articles: Record<string, BlogArticle> = {
 
       "## Solier vs poseur de parquet vs carreleur : qui choisir ?\n\nLa confusion entre ces trois métiers est fréquente, et elle peut coûter cher. Le solier est spécialisé dans les revêtements **souples** : PVC, vinyle, linoléum, moquette, caoutchouc, résine. Le [poseur de parquet](/blog/comment-choisir-poseur-parquet-guide) travaille le bois (massif, contrecollé, stratifié). Le [carreleur](/services/carreleur) pose des revêtements **durs** : carreaux de céramique, grès cérame, pierre naturelle.\n\nPourquoi cette distinction est-elle importante ? Parce que chaque métier a ses techniques propres, ses DTU, ses colles et ses outils. Un carreleur qui pose du PVC — et cela arrive — ne maîtrise pas nécessairement la soudure à chaud, le calepinage des lés ou le traitement des remontées en plinthe. Le résultat sera souvent décevant.\n\nIl existe cependant des **soliers polyvalents** (Qualibat 6231 + 6232 + 6233) capables d'intervenir sur plusieurs types de revêtements. Ces profils sont particulièrement intéressants pour les projets mixtes (par exemple, PVC dans les pièces humides et moquette dans les chambres).\n\nPour les revêtements de sol LVT (Luxury Vinyl Tile) clipsables, certains [poseurs de parquet](/services/poseur-de-parquet) sont également compétents, car la technique de pose flottante est similaire à celle du parquet stratifié. Vérifiez simplement que l'artisan a une expérience documentée sur ce type de produit.\n\n:::expert Avis d'expert\nContrairement à une idée reçue, le linoléum naturel (Marmoleum de Forbo, par exemple) est un matériau noble et écologique, composé d'huile de lin, de farine de bois et de résine. Sa pose est **plus exigeante** que celle du PVC : il se fissure s'il est posé à froid, et nécessite un encollage irréprochable. Seul un solier expérimenté devrait manipuler ce matériau. Le surcoût de 20-30 % par rapport au PVC est justifié par une durabilité de 25 à 40 ans.\n:::",
 
-      "## Les étapes d'un chantier bien mené\n\nUn chantier de pose de sol souple se déroule en phases clairement identifiées. Voici le déroulé type pour une rénovation :\n\n**Phase 1 — Diagnostic et préparation (J-7 à J-1)** : Dépose de l'ancien revêtement, nettoyage du support, mesure d'hygrométrie, ponçage des résidus de colle. Application du primaire d'accrochage si nécessaire. Ragréage autolissant (épaisseur 3 à 10 mm) et séchage (24 à 48 heures selon le produit et les conditions ambiantes).\n\n**Phase 2 — Acclimatation du matériau (J-2 à J-1)** : Les rouleaux ou dalles sont stockés debout dans la pièce à température ambiante (18-25°C) pendant au moins 48 heures. Cette étape est non négociable : elle permet au matériau de se stabiliser dimensionnellement.\n\n**Phase 3 — Pose (Jour J)** : Calepinage (disposition optimale des lés pour minimiser les chutes et placer les joints hors des zones de passage), encollage du support (colle acrylique ou polyuréthane selon le matériau), marouflage au rouleau lesté (minimum 50 kg) pour chasser les bulles d'air, découpe de précision aux murs.\n\n**Phase 4 — Finitions (J+1)** : Soudure à chaud des joints (pour PVC en lés), pose des barres de seuil, réalisation des remontées en plinthe dans les pièces humides, nettoyage du chantier.\n\n**Phase 5 — Réception (J+2)** : Vérification conjointe avec le client, livraison du PV de réception, remise des documents (attestation décennale, fiches techniques des produits, recommandations d'entretien).\n\n:::takeaway\n- Vérifier la qualification **Qualibat 6232** et l'assurance décennale\n- Exiger une **mesure d'hygrométrie** du support avant tout devis\n- Respecter les **48 heures d'acclimatation** du matériau\n- Comparer **3 devis minimum** détaillant fournitures, ragréage et finitions\n- Budget : **45 à 90 €/m² TTC** tout compris en province pour du PVC de qualité\n- Ne jamais confier un sol souple à un carreleur ou un peintre non qualifié\n:::"
+      "## Les étapes d'un chantier bien mené\n\nUn chantier de pose de sol souple se déroule en phases clairement identifiées. Voici le déroulé type pour une rénovation :\n\n**Phase 1 — Diagnostic et préparation (J-7 à J-1)** : Dépose de l'ancien revêtement, nettoyage du support, mesure d'hygrométrie, ponçage des résidus de colle. Application du primaire d'accrochage si nécessaire. Ragréage autolissant (épaisseur 3 à 10 mm) et séchage (24 à 48 heures selon le produit et les conditions ambiantes).\n\n**Phase 2 — Acclimatation du matériau (J-2 à J-1)** : Les rouleaux ou dalles sont stockés debout dans la pièce à température ambiante (18-25°C) pendant au moins 48 heures. Cette étape est non négociable : elle permet au matériau de se stabiliser dimensionnellement.\n\n**Phase 3 — Pose (Jour J)** : Calepinage (disposition optimale des lés pour minimiser les chutes et placer les joints hors des zones de passage), encollage du support (colle acrylique ou polyuréthane selon le matériau), marouflage au rouleau lesté (minimum 50 kg) pour chasser les bulles d'air, découpe de précision aux murs.\n\n**Phase 4 — Finitions (J+1)** : Soudure à chaud des joints (pour PVC en lés), pose des barres de seuil, réalisation des remontées en plinthe dans les pièces humides, nettoyage du chantier.\n\n**Phase 5 — Réception (J+2)** : Vérification conjointe avec le client, livraison du PV de réception, remise des documents (attestation décennale, fiches techniques des produits, recommandations d'entretien).\n\n:::takeaway\n- Vérifier la qualification **Qualibat 6232** et l'assurance décennale\n- Exiger une **mesure d'hygrométrie** du support avant tout devis\n- Respecter les **48 heures d'acclimatation** du matériau\n- Comparer **3 devis minimum** détaillant fournitures, ragréage et finitions\n- Budget : **45 à 90 €/m² TTC** tout compris en province pour du PVC de qualité\n- Ne jamais confier un sol souple à un carreleur ou un peintre non qualifié\n:::",
     ],
-    image: "🏗️",
+    image: '🏗️',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-07",
-    readTime: "14 min",
-    category: "Fiches métier",
-    tags: ["Solier", "Revêtement de sol", "PVC", "Moquette", "Linoléum", "Artisan"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-07',
+    readTime: '14 min',
+    category: 'Fiches métier',
+    tags: ['Solier', 'Revêtement de sol', 'PVC', 'Moquette', 'Linoléum', 'Artisan'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre un solier et un carreleur ?", answer: "Le solier est spécialisé dans les revêtements de sol souples (PVC, vinyle, linoléum, moquette, caoutchouc, résine), tandis que le carreleur pose des revêtements durs (céramique, grès cérame, pierre naturelle). Chaque métier a ses DTU, ses techniques et ses outils spécifiques. Confier un sol souple à un carreleur peut entraîner des malfaçons." },
-      { question: "Le ragréage est-il toujours nécessaire avant la pose d'un sol souple ?", answer: "Pas systématiquement, mais dans 80 % des cas en rénovation, oui. Le DTU 53.2 impose une planéité de 5 mm maximum sous une règle de 2 mètres pour la pose de PVC collé. Si votre sol existant ne respecte pas cette tolérance, le ragréage est indispensable. Comptez 8 à 20 €/m² selon l'épaisseur nécessaire." },
-      { question: "Combien coûte la pose d'un sol PVC par un solier professionnel ?", answer: "En 2026, comptez 18 à 35 €/m² HT en province pour un PVC en lés collé (fourniture et pose), et 25 à 45 €/m² pour du LVT clipsable. En Île-de-France, ajoutez 20 à 30 %. Le ragréage et la dépose de l'ancien sol sont en sus. Pour un appartement de 60 m², le budget total se situe entre 2 800 et 5 500 € TTC en province." },
-      { question: "Quelle certification vérifier pour un solier ?", answer: "La certification Qualibat 6232 (pose de revêtements de sol souples) est la référence. Elle atteste d'un audit des compétences techniques, des références chantier et de la solidité financière de l'entreprise. Pour les sols coulés (résine, béton ciré), vérifiez la Qualibat 6233. L'assurance décennale est obligatoire pour tous les travaux intégrés au bâti." },
-      { question: "Pourquoi faut-il acclimater le revêtement avant la pose ?", answer: "Les revêtements souples (PVC, linoléum, moquette) sont sensibles aux variations de température et d'humidité. Un matériau posé sans acclimatation (minimum 48 heures dans la pièce à 18-25°C) peut se dilater ou se rétracter après la pose, provoquant des gondolements, des décollements ou des joints ouverts. C'est une exigence des DTU 53.1 et 53.2." },
-      { question: "Le solier doit-il avoir une assurance décennale ?", answer: "Oui, obligatoirement. La pose de revêtements de sol intégrés au bâti est couverte par la garantie décennale (article 1792 du Code civil). Cette assurance vous protège pendant 10 ans contre les désordres compromettant la solidité ou rendant l'ouvrage impropre à sa destination. Exigez l'attestation en cours de validité avant de signer le devis." }
-    ]
+      {
+        question: 'Quelle est la différence entre un solier et un carreleur ?',
+        answer:
+          'Le solier est spécialisé dans les revêtements de sol souples (PVC, vinyle, linoléum, moquette, caoutchouc, résine), tandis que le carreleur pose des revêtements durs (céramique, grès cérame, pierre naturelle). Chaque métier a ses DTU, ses techniques et ses outils spécifiques. Confier un sol souple à un carreleur peut entraîner des malfaçons.',
+      },
+      {
+        question: "Le ragréage est-il toujours nécessaire avant la pose d'un sol souple ?",
+        answer:
+          "Pas systématiquement, mais dans 80 % des cas en rénovation, oui. Le DTU 53.2 impose une planéité de 5 mm maximum sous une règle de 2 mètres pour la pose de PVC collé. Si votre sol existant ne respecte pas cette tolérance, le ragréage est indispensable. Comptez 8 à 20 €/m² selon l'épaisseur nécessaire.",
+      },
+      {
+        question: "Combien coûte la pose d'un sol PVC par un solier professionnel ?",
+        answer:
+          "En 2026, comptez 18 à 35 €/m² HT en province pour un PVC en lés collé (fourniture et pose), et 25 à 45 €/m² pour du LVT clipsable. En Île-de-France, ajoutez 20 à 30 %. Le ragréage et la dépose de l'ancien sol sont en sus. Pour un appartement de 60 m², le budget total se situe entre 2 800 et 5 500 € TTC en province.",
+      },
+      {
+        question: 'Quelle certification vérifier pour un solier ?',
+        answer:
+          "La certification Qualibat 6232 (pose de revêtements de sol souples) est la référence. Elle atteste d'un audit des compétences techniques, des références chantier et de la solidité financière de l'entreprise. Pour les sols coulés (résine, béton ciré), vérifiez la Qualibat 6233. L'assurance décennale est obligatoire pour tous les travaux intégrés au bâti.",
+      },
+      {
+        question: 'Pourquoi faut-il acclimater le revêtement avant la pose ?',
+        answer:
+          "Les revêtements souples (PVC, linoléum, moquette) sont sensibles aux variations de température et d'humidité. Un matériau posé sans acclimatation (minimum 48 heures dans la pièce à 18-25°C) peut se dilater ou se rétracter après la pose, provoquant des gondolements, des décollements ou des joints ouverts. C'est une exigence des DTU 53.1 et 53.2.",
+      },
+      {
+        question: 'Le solier doit-il avoir une assurance décennale ?',
+        answer:
+          "Oui, obligatoirement. La pose de revêtements de sol intégrés au bâti est couverte par la garantie décennale (article 1792 du Code civil). Cette assurance vous protège pendant 10 ans contre les désordres compromettant la solidité ou rendant l'ouvrage impropre à sa destination. Exigez l'attestation en cours de validité avant de signer le devis.",
+      },
+    ],
   },
 
-  "comment-choisir-poseur-parquet-guide": {
-    title: "Choisir son Poseur de Parquet en 2026 : Le Guide Ultime",
-    excerpt: "Parquet massif, contrecollé ou stratifié : comment sélectionner un poseur de parquet compétent. Certifications, prix, techniques et pièges à éviter.",
-    metaTitle: "Choisir son Poseur de Parquet 2026 : Guide",
-    metaDescription: "Comparez les poseurs de parquet : certifications, prix et techniques en 2026. Massif, contrecollé ou stratifié. Devis gratuit.",
+  'comment-choisir-poseur-parquet-guide': {
+    title: 'Choisir son Poseur de Parquet en 2026 : Le Guide complet',
+    excerpt:
+      'Parquet massif, contrecollé ou stratifié : comment sélectionner un poseur de parquet compétent. Certifications, prix, techniques et pièges à éviter.',
+    metaTitle: 'Choisir son Poseur de Parquet 2026 : Guide',
+    metaDescription:
+      'Comparez les poseurs de parquet : certifications, prix et techniques en 2026. Massif, contrecollé ou stratifié. Devis gratuit.',
     content: [
       "Le parquet reste le revêtement de sol préféré des Français : selon une étude FranceAgriMer de 2025, **11,8 millions de m²** de parquet sont posés chaque année en France, dont 62 % en rénovation. Mais tous les poseurs ne se valent pas, et la différence entre un parquet magnifiquement posé et un chantier raté tient souvent à quelques détails techniques que seul un professionnel qualifié maîtrise. Un parquet massif posé en point de Hongrie représente un investissement de 120 à 250 €/m² : autant ne pas confier ce budget à un amateur. Ce guide vous accompagne dans le choix d'un artisan compétent, qu'il s'agisse d'une pose neuve ou d'une [rénovation de parquet ancien](/services/poseur-de-parquet). Découvrez nos [poseurs de parquet vérifiés](/services/poseur-de-parquet) partout en France.",
 
@@ -57,33 +86,60 @@ export const metiers3Articles: Record<string, BlogArticle> = {
 
       "## Rénovation de parquet ancien : un savoir-faire spécifique\n\nLa rénovation d'un parquet ancien (ponçage, traitement, finition) est un métier dans le métier. Elle exige des compétences spécifiques que tous les poseurs ne maîtrisent pas.\n\nLe **ponçage** s'effectue en trois passes minimum : gros grain (40-60) pour enlever l'ancienne finition et aplanir, grain moyen (80-100) pour affiner, grain fin (120-150) pour préparer la finition. Chaque passe suit un angle différent par rapport au fil du bois. Un ponçage mal réalisé laisse des traces visibles sous la finition — et il est alors trop tard pour corriger sans recommencer.\n\nLa **finition** offre trois options principales : le vitrificateur (polyuréthane aqueux ou en phase solvant) pour un entretien minimal ; l'huile dure pour un aspect naturel et mat ; la cire pour un rendu traditionnel mais exigeant en entretien. Chaque finition a son protocole d'application et son temps de séchage.\n\nCas particulier : les **parquets anciens avec motifs** (point de Hongrie, Versailles, Chantilly) nécessitent un ponçage adapté pour ne pas altérer les géométries. Les lames abîmées doivent être remplacées à l'identique — un travail de patience qui demande un sourcing de bois ancien chez des récupérateurs spécialisés.\n\nPour les parquets présentant des **jeux importants entre les lames** (courant dans l'ancien), le masticage au mélange de sciure fine et de résine est indispensable avant la finition. Un bon artisan utilise la sciure issue du ponçage du même parquet pour garantir un accord de teinte parfait.\n\n:::tip Conseil pro\nAvant de poncer un parquet ancien dans un immeuble haussmannien, faites vérifier l'état du **plancher porteur** par un charpentier ou un bureau d'études structure. Des lames qui « dansent » peuvent signaler un affaiblissement des solives. Le ponçage ne résoudra pas un problème structurel — il le masquera temporairement.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de poseur de parquet en 2026](/blog/prix-poseur-de-parquet-2026-tarifs-pose) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de poseur de parquet en 2026](/blog/prix-poseur-de-parquet-2026-tarifs-pose) avec les prix moyens constatés dans toute la France.',
 
-      ":::takeaway\n- Vérifier les qualifications **Qualibat 6221/6222/6223** selon le type de pose\n- Exiger une **mesure d'hygrométrie** du support et du bois (hygromètre professionnel)\n- Respecter les **48 heures d'acclimatation** des lames dans la pièce\n- Le **jeu de dilatation** périphérique de 8 mm est non négociable\n- Budget contrecollé collé : **50 à 110 €/m² HT** fourni-posé (province)\n- Budget massif cloué : **90 à 200 €/m² HT** fourni-posé selon essence et motif\n- Privilégier la **pose collée** sur chauffage au sol\n- Pour la rénovation, exiger un artisan expérimenté en **ponçage 3 passes**\n:::"
+      ":::takeaway\n- Vérifier les qualifications **Qualibat 6221/6222/6223** selon le type de pose\n- Exiger une **mesure d'hygrométrie** du support et du bois (hygromètre professionnel)\n- Respecter les **48 heures d'acclimatation** des lames dans la pièce\n- Le **jeu de dilatation** périphérique de 8 mm est non négociable\n- Budget contrecollé collé : **50 à 110 €/m² HT** fourni-posé (province)\n- Budget massif cloué : **90 à 200 €/m² HT** fourni-posé selon essence et motif\n- Privilégier la **pose collée** sur chauffage au sol\n- Pour la rénovation, exiger un artisan expérimenté en **ponçage 3 passes**\n:::",
     ],
-    image: "🪵",
+    image: '🪵',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-10",
-    readTime: "15 min",
-    category: "Fiches métier",
-    tags: ["Parquet", "Poseur de parquet", "Bois", "Rénovation", "Ponçage", "Artisan"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-10',
+    readTime: '15 min',
+    category: 'Fiches métier',
+    tags: ['Parquet', 'Poseur de parquet', 'Bois', 'Rénovation', 'Ponçage', 'Artisan'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre parquet massif, contrecollé et stratifié ?", answer: "Le parquet massif est une lame de bois pleine (14 à 23 mm d'épaisseur) d'une seule essence. Le parquet contrecollé est composé de 2 ou 3 couches dont une couche d'usure en bois noble (2,5 à 6 mm) sur un support en contreplaqué ou HDF. Le stratifié n'est pas du parquet : c'est un panneau HDF recouvert d'un décor photographique protégé par une couche d'usure en résine." },
-      { question: "Combien coûte la pose d'un parquet contrecollé chêne ?", answer: "En 2026, comptez 50 à 90 €/m² HT en province (fourniture et pose collée) pour un contrecollé chêne de qualité avec couche d'usure de 3,5 mm minimum. En Île-de-France, ajoutez 20 à 25 %. La pose flottante est moins chère (40 à 70 €/m² HT) mais offre un confort acoustique inférieur et limite les possibilités de rénovation future." },
-      { question: "Peut-on poser du parquet sur un chauffage au sol ?", answer: "Oui, mais uniquement en pose collée en plein. La pose flottante crée une lame d'air isolante qui réduit le rendement du chauffage. La pose clouée sur lambourdes est contre-indiquée. Choisissez un parquet de faible épaisseur (14 mm max) avec une résistance thermique inférieure à 0,15 m².K/W. Le chêne et le noyer sont les essences les plus stables." },
-      { question: "Combien de fois peut-on poncer un parquet ?", answer: "Un parquet massif de 22 mm peut être poncé 7 à 8 fois (chaque ponçage retire 0,5 à 1 mm). Un contrecollé avec une couche d'usure de 3,5 mm permet 2 à 3 ponçages. Un contrecollé avec 2,5 mm de couche d'usure n'autorise qu'un seul ponçage léger. Le stratifié ne peut pas être poncé du tout." },
-      { question: "Quel sens de pose choisir pour le parquet ?", answer: "La règle classique : dans le sens de la lumière principale (perpendiculaire à la fenêtre) pour sublimer les veinures du bois. Alternative : dans le sens de la longueur de la pièce pour un effet d'allongement. Dans un couloir, toujours dans le sens de la circulation. Un bon poseur vous propose un calepinage adapté à votre configuration." },
-      { question: "Le poseur de parquet doit-il avoir une assurance décennale ?", answer: "Oui, obligatoirement pour les poses collées et clouées (revêtements intégrés au bâti). Pour la pose flottante, la garantie décennale n'est pas systématiquement exigible car le revêtement est considéré comme dissociable du bâti. Cependant, un professionnel sérieux dispose toujours de cette assurance. Exigez l'attestation avant de signer le devis." }
-    ]
+      {
+        question: 'Quelle est la différence entre parquet massif, contrecollé et stratifié ?',
+        answer:
+          "Le parquet massif est une lame de bois pleine (14 à 23 mm d'épaisseur) d'une seule essence. Le parquet contrecollé est composé de 2 ou 3 couches dont une couche d'usure en bois noble (2,5 à 6 mm) sur un support en contreplaqué ou HDF. Le stratifié n'est pas du parquet : c'est un panneau HDF recouvert d'un décor photographique protégé par une couche d'usure en résine.",
+      },
+      {
+        question: "Combien coûte la pose d'un parquet contrecollé chêne ?",
+        answer:
+          "En 2026, comptez 50 à 90 €/m² HT en province (fourniture et pose collée) pour un contrecollé chêne de qualité avec couche d'usure de 3,5 mm minimum. En Île-de-France, ajoutez 20 à 25 %. La pose flottante est moins chère (40 à 70 €/m² HT) mais offre un confort acoustique inférieur et limite les possibilités de rénovation future.",
+      },
+      {
+        question: 'Peut-on poser du parquet sur un chauffage au sol ?',
+        answer:
+          "Oui, mais uniquement en pose collée en plein. La pose flottante crée une lame d'air isolante qui réduit le rendement du chauffage. La pose clouée sur lambourdes est contre-indiquée. Choisissez un parquet de faible épaisseur (14 mm max) avec une résistance thermique inférieure à 0,15 m².K/W. Le chêne et le noyer sont les essences les plus stables.",
+      },
+      {
+        question: 'Combien de fois peut-on poncer un parquet ?',
+        answer:
+          "Un parquet massif de 22 mm peut être poncé 7 à 8 fois (chaque ponçage retire 0,5 à 1 mm). Un contrecollé avec une couche d'usure de 3,5 mm permet 2 à 3 ponçages. Un contrecollé avec 2,5 mm de couche d'usure n'autorise qu'un seul ponçage léger. Le stratifié ne peut pas être poncé du tout.",
+      },
+      {
+        question: 'Quel sens de pose choisir pour le parquet ?',
+        answer:
+          "La règle classique : dans le sens de la lumière principale (perpendiculaire à la fenêtre) pour sublimer les veinures du bois. Alternative : dans le sens de la longueur de la pièce pour un effet d'allongement. Dans un couloir, toujours dans le sens de la circulation. Un bon poseur vous propose un calepinage adapté à votre configuration.",
+      },
+      {
+        question: 'Le poseur de parquet doit-il avoir une assurance décennale ?',
+        answer:
+          "Oui, obligatoirement pour les poses collées et clouées (revêtements intégrés au bâti). Pour la pose flottante, la garantie décennale n'est pas systématiquement exigible car le revêtement est considéré comme dissociable du bâti. Cependant, un professionnel sérieux dispose toujours de cette assurance. Exigez l'attestation avant de signer le devis.",
+      },
+    ],
   },
 
-  "comment-choisir-zingueur-guide": {
-    title: "Choisir son Zingueur en 2026 : Le Guide Complet",
-    excerpt: "Gouttières, chéneaux, habillage de toiture en zinc : comment trouver un zingueur qualifié. Certifications, tarifs détaillés, normes et pièges à éviter.",
-    metaTitle: "Choisir son Zingueur 2026 : Guide + Devis",
-    metaDescription: "Découvrez comment choisir un zingueur qualifié : gouttières, zinc, tarifs 2026 et certifications. Obtenez un devis gratuit.",
+  'comment-choisir-zingueur-guide': {
+    title: 'Choisir son Zingueur en 2026 : Le Guide Complet',
+    excerpt:
+      'Gouttières, chéneaux, habillage de toiture en zinc : comment trouver un zingueur qualifié. Certifications, tarifs détaillés, normes et pièges à éviter.',
+    metaTitle: 'Choisir son Zingueur 2026 : Guide + Devis',
+    metaDescription:
+      'Découvrez comment choisir un zingueur qualifié : gouttières, zinc, tarifs 2026 et certifications. Obtenez un devis gratuit.',
     content: [
       "Le zinc est le matériau de couverture le plus emblématique du paysage urbain français : **70 % des toitures parisiennes** sont en zinc, selon le Syndicat National du Zinc. Pourtant, le métier de zingueur est l'un des plus pénuriques du bâtiment — la France manque de plus de 3 000 zingueurs qualifiés selon les données CAPEB 2025. Cette rareté entraîne des délais longs, des prix élevés, et surtout un risque accru de tomber sur des artisans insuffisamment formés. Car la zinguerie est un métier de haute précision : un millimètre d'erreur sur un joint debout, et c'est l'infiltration garantie. Ce guide vous arme pour identifier les vrais professionnels et protéger votre patrimoine. Trouvez un [zingueur qualifié](/services/zingueur) sur notre annuaire.",
 
@@ -95,33 +151,60 @@ export const metiers3Articles: Record<string, BlogArticle> = {
 
       "## Zingueur vs couvreur : complémentarité et différences\n\nDans la pratique, beaucoup de [couvreurs](/services/couvreur) réalisent aussi la zinguerie courante (gouttières, descentes). Inversement, certains zingueurs posent des couvertures complètes en zinc. Mais les deux métiers ont des spécificités techniques distinctes :\n\nLe **couvreur** est le spécialiste des matériaux de couverture : tuiles (terre cuite, béton), ardoises, bardeaux. Il maîtrise les techniques de pose spécifiques à chaque matériau (crochetage des ardoises, emboîtement des tuiles). Sa compétence s'étend à la charpente et à l'isolation sous rampant.\n\nLe **zingueur** est le spécialiste du métal en toiture. Il travaille le zinc à la plieuse, au maillet et à la cisaille. Il réalise les raccords d'étanchéité entre la couverture et les émergences (cheminées, lucarnes, velux). Il façonne les pièces sur mesure à partir de feuilles de zinc planes — un travail d'ajustement manuel qui demande des années de pratique.\n\nSur un chantier de toiture complet, l'idéal est de faire intervenir un couvreur pour la couverture principale et un zingueur pour tous les éléments métalliques. Si un artisan se présente comme « couvreur-zingueur », vérifiez qu'il détient les deux qualifications (Qualibat 3121 pour la couverture + Qualibat 3211/3212 pour la zinguerie).\n\nLes travaux de zinguerie les plus critiques sont les **noues** (raccords en angle rentrant entre deux pans de toiture) et les **entourages de cheminée** (abergements). Ce sont les points les plus vulnérables aux infiltrations. Sur ces ouvrages, seul un zingueur expérimenté garantit une étanchéité durable.\n\n:::info Bon à savoir\nLe zinc a une durée de vie de **50 à 80 ans** en toiture lorsqu'il est correctement posé et ventilé. C'est deux à trois fois plus que des gouttières en PVC (15-25 ans) et comparable à l'ardoise. Le surcoût initial par rapport au PVC est amorti en 15 à 20 ans grâce à l'absence d'entretien et de remplacement.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de zingueur en 2026](/blog/prix-zingueur-2026-tarifs-gouttiere) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de zingueur en 2026](/blog/prix-zingueur-2026-tarifs-gouttiere) avec les prix moyens constatés dans toute la France.',
 
-      "## L'entretien de la zinguerie : prévenir plutôt que guérir\n\nUne zinguerie bien posée demande peu d'entretien, mais pas zéro entretien. Voici les bonnes pratiques à connaître et à exiger dans le devis :\n\n**Inspection annuelle** (automne, avant la saison des pluies) : vérification visuelle de l'état du zinc (pas de percement, pas de déformation), nettoyage des gouttières et chéneaux (feuilles, mousse, débris), contrôle des descentes (pas de bouchon), vérification des fixations. Un zingueur sérieux propose un contrat d'entretien annuel (120 à 250 € par intervention selon la surface).\n\n**Nettoyage des gouttières** : à réaliser au minimum deux fois par an (automne et printemps). Une gouttière bouchée provoque un débordement qui humidifie les façades et peut dégrader l'enduit ou le bois de la corniche. En zone boisée, l'installation de crapaudines (grilles pare-feuilles) aux entrées de descente est recommandée.\n\n**Traitement des mousses et lichens** : sur les surfaces zinc horizontales ou peu inclinées, les mousses peuvent s'installer. Ne jamais utiliser de nettoyeur haute pression (risque de percement) ni de produits acides. Un brossage doux à la brosse nylon suffit, suivi éventuellement d'un traitement anti-mousse spécifique zinc.\n\n**Réparation ponctuelle** : un petit percement peut être réparé par brasure à l'étain (intervention de 150 à 300 €). Au-delà de 3 réparations sur un même élément, le remplacement est plus économique à long terme. Un zingueur honnête vous le dira.\n\nLe décret n°2011-321 du 23 mars 2011 impose un **entretien régulier des systèmes d'évacuation des eaux pluviales** dans les copropriétés. Le syndic est tenu de faire vérifier la zinguerie au moins une fois par an. En maison individuelle, cette obligation n'existe pas formellement, mais votre assurance habitation peut refuser un sinistre (dégât des eaux par infiltration) si un défaut d'entretien manifeste est constaté.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 3211/3212** et le label **VMZINC Partner**\n- Exiger l'**assurance décennale** mentionnant la couverture et la zinguerie\n- Contrôler que le zingueur prévoit la **ventilation sous-zinc** (DTU 40.41)\n- Budget gouttières complètes (maison individuelle) : **4 500 – 8 500 € TTC** en province\n- Le zinc dure **50 à 80 ans** : l'investissement est amorti sur le long terme\n- Faire inspecter la zinguerie **une fois par an** (automne)\n- Ne jamais accepter des vis apparentes dans le zinc\n:::"
+      "## L'entretien de la zinguerie : prévenir plutôt que guérir\n\nUne zinguerie bien posée demande peu d'entretien, mais pas zéro entretien. Voici les bonnes pratiques à connaître et à exiger dans le devis :\n\n**Inspection annuelle** (automne, avant la saison des pluies) : vérification visuelle de l'état du zinc (pas de percement, pas de déformation), nettoyage des gouttières et chéneaux (feuilles, mousse, débris), contrôle des descentes (pas de bouchon), vérification des fixations. Un zingueur sérieux propose un contrat d'entretien annuel (120 à 250 € par intervention selon la surface).\n\n**Nettoyage des gouttières** : à réaliser au minimum deux fois par an (automne et printemps). Une gouttière bouchée provoque un débordement qui humidifie les façades et peut dégrader l'enduit ou le bois de la corniche. En zone boisée, l'installation de crapaudines (grilles pare-feuilles) aux entrées de descente est recommandée.\n\n**Traitement des mousses et lichens** : sur les surfaces zinc horizontales ou peu inclinées, les mousses peuvent s'installer. Ne jamais utiliser de nettoyeur haute pression (risque de percement) ni de produits acides. Un brossage doux à la brosse nylon suffit, suivi éventuellement d'un traitement anti-mousse spécifique zinc.\n\n**Réparation ponctuelle** : un petit percement peut être réparé par brasure à l'étain (intervention de 150 à 300 €). Au-delà de 3 réparations sur un même élément, le remplacement est plus économique à long terme. Un zingueur honnête vous le dira.\n\nLe décret n°2011-321 du 23 mars 2011 impose un **entretien régulier des systèmes d'évacuation des eaux pluviales** dans les copropriétés. Le syndic est tenu de faire vérifier la zinguerie au moins une fois par an. En maison individuelle, cette obligation n'existe pas formellement, mais votre assurance habitation peut refuser un sinistre (dégât des eaux par infiltration) si un défaut d'entretien manifeste est constaté.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 3211/3212** et le label **VMZINC Partner**\n- Exiger l'**assurance décennale** mentionnant la couverture et la zinguerie\n- Contrôler que le zingueur prévoit la **ventilation sous-zinc** (DTU 40.41)\n- Budget gouttières complètes (maison individuelle) : **4 500 – 8 500 € TTC** en province\n- Le zinc dure **50 à 80 ans** : l'investissement est amorti sur le long terme\n- Faire inspecter la zinguerie **une fois par an** (automne)\n- Ne jamais accepter des vis apparentes dans le zinc\n:::",
     ],
-    image: "🔩",
+    image: '🔩',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-13",
-    readTime: "14 min",
-    category: "Fiches métier",
-    tags: ["Zingueur", "Zinc", "Toiture", "Gouttières", "Couverture", "Artisan"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-13',
+    readTime: '14 min',
+    category: 'Fiches métier',
+    tags: ['Zingueur', 'Zinc', 'Toiture', 'Gouttières', 'Couverture', 'Artisan'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre un zingueur et un couvreur ?", answer: "Le couvreur pose les matériaux de couverture (tuiles, ardoises), tandis que le zingueur est spécialisé dans le travail du métal en toiture : couverture zinc, gouttières, chéneaux, descentes, habillages de lucarne et entourages de cheminée. Beaucoup d'artisans cumulent les deux compétences (couvreur-zingueur), mais vérifiez les qualifications Qualibat correspondantes." },
-      { question: "Combien coûte le remplacement de gouttières en zinc ?", answer: "En 2026, comptez 40 à 65 €/ml HT en province pour une gouttière zinc pendante demi-ronde (fourniture et pose), et 55 à 85 €/ml pour une gouttière havraise (encastrée). En Île-de-France, ajoutez 25 à 30 %. Pour une maison individuelle standard (60 ml de gouttières + 4 descentes), le budget total se situe entre 4 500 et 8 500 € TTC." },
-      { question: "Quelle est la durée de vie du zinc en toiture ?", answer: "Le zinc correctement posé et ventilé dure 50 à 80 ans, voire plus d'un siècle sur les toitures parisiennes. Cette longévité suppose une ventilation sous-zinc conforme au DTU 40.41, l'absence de contact avec des matériaux incompatibles (cuivre, fer, chêne), et un entretien minimal (nettoyage annuel des gouttières)." },
-      { question: "Le zinc est-il compatible avec tous les environnements ?", answer: "Le zinc résiste bien en milieu urbain et continental. En revanche, en bord de mer (moins de 3 km), le zinc standard est déconseillé : il faut utiliser du zinc prélaqué ou de l'aluminium laqué. En milieu industriel acide, la durée de vie peut être réduite. Un zingueur compétent adapte ses préconisations à votre environnement géographique." },
-      { question: "Peut-on peindre le zinc de toiture ?", answer: "Oui, mais pas n'importe comment. Le zinc neuf doit être patiné (attendre 6 à 12 mois ou utiliser un primaire d'accrochage spécifique zinc). Utilisez uniquement des peintures compatibles zinc (alkyde, acrylique avec primaire adapté). Le zinc prépatiné ANTHRA-ZINC ou PIGMENTO de VMZINC offre des teintes variées sans peinture." },
-      { question: "L'assurance décennale est-elle obligatoire pour la zinguerie ?", answer: "Oui, absolument. Les travaux de zinguerie en toiture relèvent du clos et couvert et sont couverts par la garantie décennale (article 1792 du Code civil). Vérifiez que l'attestation d'assurance mentionne explicitement les activités de couverture et de zinguerie. Un sinistre d'infiltration dû à un défaut de zinguerie engage la responsabilité décennale de l'artisan." }
-    ]
+      {
+        question: 'Quelle est la différence entre un zingueur et un couvreur ?',
+        answer:
+          "Le couvreur pose les matériaux de couverture (tuiles, ardoises), tandis que le zingueur est spécialisé dans le travail du métal en toiture : couverture zinc, gouttières, chéneaux, descentes, habillages de lucarne et entourages de cheminée. Beaucoup d'artisans cumulent les deux compétences (couvreur-zingueur), mais vérifiez les qualifications Qualibat correspondantes.",
+      },
+      {
+        question: 'Combien coûte le remplacement de gouttières en zinc ?',
+        answer:
+          'En 2026, comptez 40 à 65 €/ml HT en province pour une gouttière zinc pendante demi-ronde (fourniture et pose), et 55 à 85 €/ml pour une gouttière havraise (encastrée). En Île-de-France, ajoutez 25 à 30 %. Pour une maison individuelle standard (60 ml de gouttières + 4 descentes), le budget total se situe entre 4 500 et 8 500 € TTC.',
+      },
+      {
+        question: 'Quelle est la durée de vie du zinc en toiture ?',
+        answer:
+          "Le zinc correctement posé et ventilé dure 50 à 80 ans, voire plus d'un siècle sur les toitures parisiennes. Cette longévité suppose une ventilation sous-zinc conforme au DTU 40.41, l'absence de contact avec des matériaux incompatibles (cuivre, fer, chêne), et un entretien minimal (nettoyage annuel des gouttières).",
+      },
+      {
+        question: 'Le zinc est-il compatible avec tous les environnements ?',
+        answer:
+          "Le zinc résiste bien en milieu urbain et continental. En revanche, en bord de mer (moins de 3 km), le zinc standard est déconseillé : il faut utiliser du zinc prélaqué ou de l'aluminium laqué. En milieu industriel acide, la durée de vie peut être réduite. Un zingueur compétent adapte ses préconisations à votre environnement géographique.",
+      },
+      {
+        question: 'Peut-on peindre le zinc de toiture ?',
+        answer:
+          "Oui, mais pas n'importe comment. Le zinc neuf doit être patiné (attendre 6 à 12 mois ou utiliser un primaire d'accrochage spécifique zinc). Utilisez uniquement des peintures compatibles zinc (alkyde, acrylique avec primaire adapté). Le zinc prépatiné ANTHRA-ZINC ou PIGMENTO de VMZINC offre des teintes variées sans peinture.",
+      },
+      {
+        question: "L'assurance décennale est-elle obligatoire pour la zinguerie ?",
+        answer:
+          "Oui, absolument. Les travaux de zinguerie en toiture relèvent du clos et couvert et sont couverts par la garantie décennale (article 1792 du Code civil). Vérifiez que l'attestation d'assurance mentionne explicitement les activités de couverture et de zinguerie. Un sinistre d'infiltration dû à un défaut de zinguerie engage la responsabilité décennale de l'artisan.",
+      },
+    ],
   },
 
-  "comment-choisir-miroitier-guide": {
-    title: "Choisir son Miroitier en 2026 : Le Guide Complet",
-    excerpt: "Vitrerie, doubles vitrages, parois de douche, crédences en verre : comment sélectionner un miroitier-vitrier qualifié. Certifications, prix et conseils.",
-    metaTitle: "Choisir son Miroitier 2026 : Guide Complet",
-    metaDescription: "Découvrez comment choisir un miroitier-vitrier qualifié : double vitrage, paroi de douche, prix 2026. Obtenez un devis gratuit.",
+  'comment-choisir-miroitier-guide': {
+    title: 'Choisir son Miroitier en 2026 : Le Guide Complet',
+    excerpt:
+      'Vitrerie, doubles vitrages, parois de douche, crédences en verre : comment sélectionner un miroitier-vitrier qualifié. Certifications, prix et conseils.',
+    metaTitle: 'Choisir son Miroitier 2026 : Guide Complet',
+    metaDescription:
+      'Découvrez comment choisir un miroitier-vitrier qualifié : double vitrage, paroi de douche, prix 2026. Obtenez un devis gratuit.',
     content: [
       "Le verre est devenu un matériau architectural incontournable : selon la Fédération Française des Professionnels du Verre, le marché français de la miroiterie-vitrerie pèse **4,3 milliards d'euros** en 2025, porté par la rénovation énergétique (remplacement des simples vitrages) et les tendances décoratives (douches vitrées, garde-corps, crédences). Le miroitier — ou miroitier-vitrier — est bien plus qu'un poseur de carreaux : c'est un spécialiste du verre sous toutes ses formes, du double vitrage isolant à la verrière d'atelier en passant par les miroirs sur mesure et les parois de douche en verre trempé. Un vitrage mal posé, c'est un risque d'infiltration, de déperdition thermique ou, pire, de casse dangereuse. Ce guide vous donne les clés pour choisir un professionnel compétent et sécurisé. Consultez notre annuaire de [miroitiers-vitriers qualifiés](/services/miroitier) près de chez vous.",
 
@@ -133,32 +216,55 @@ export const metiers3Articles: Record<string, BlogArticle> = {
 
       "## Vitrerie d'urgence : comment ne pas se faire piéger\n\nComme pour la [serrurerie](/blog/comment-choisir-serrurier-conseils), la vitrerie d'urgence est un secteur exposé aux abus tarifaires. Après un bris de glace (effraction, accident, tempête), le stress pousse à accepter n'importe quel tarif.\n\n**Les bons réflexes** :\n\n- **Sécurisez d'abord** : en attendant le vitrier, obturez l'ouverture avec du contreplaqué, du carton épais ou une bâche fixée avec du ruban adhésif. Cela vous laisse le temps de comparer.\n- **Contactez votre assurance** : la plupart des contrats multirisque habitation couvrent le bris de glace (franchise de 75 à 150 € généralement). Votre assureur peut vous orienter vers un vitrier agréé.\n- **Demandez un devis avant intervention** : même en urgence, un professionnel sérieux vous donne un ordre de prix au téléphone avant de se déplacer.\n- **Refusez les prix exorbitants** : un remplacement de carreau simple vitrage en urgence ne devrait pas dépasser 200 à 350 € en journée. Au-delà, cherchez un autre vitrier.\n\nAttention aux faux vitriers qui référencent des dizaines de numéros locaux sur Google : ils centralisent les appels et envoient des sous-traitants peu qualifiés avec des tarifs gonflés. Privilégiez un [miroitier identifié localement](/services/miroitier) avec pignon sur rue.\n\n:::expert Avis d'expert\nLe bris de glace accidentel est couvert par votre assurance habitation, mais le montant de remboursement est souvent plafonné (500 à 1 500 € selon les contrats). Pour une baie vitrée haut de gamme en triple vitrage (valeur 800 à 1 500 €), vérifiez que votre plafond de garantie est suffisant. Un avenant « bris de glace étendu » coûte 3 à 5 €/mois et peut vous éviter un reste à charge conséquent.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de miroitier en 2026](/blog/prix-miroitier-2026-tarifs-vitrage) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de miroitier en 2026](/blog/prix-miroitier-2026-tarifs-vitrage) avec les prix moyens constatés dans toute la France.',
 
-      "## Les tendances 2026 : verre et design intérieur\n\nLe verre vit une révolution dans l'aménagement intérieur, bien au-delà de la simple fenêtre. Un bon miroitier maîtrise ces applications modernes :\n\n**La verrière d'atelier** reste la star incontestée. Ce type de cloison vitrée (structure acier ou aluminium + verre feuilleté ou trempé) apporte lumière et caractère dans les intérieurs. Le miroitier doit maîtriser à la fois le travail du métal et celui du verre. Attention aux verrières « kit » vendues en grande surface de bricolage : la qualité du verre et des assemblages est souvent médiocre.\n\n**La paroi de douche à l'italienne** exige un verre trempé de 8 à 10 mm d'épaisseur, avec traitement anticalcaire (type EasyClean). La fixation doit être irréprochable (charnières inox, pinces de sol) car une paroi de douche en verre de 2 m² pèse 40 à 50 kg.\n\n**La crédence de cuisine en verre laqué** remplace le carrelage mural avec élégance. Le verre est laqué en face arrière dans la couleur de votre choix, puis trempé pour résister à la chaleur des plaques de cuisson. Le miroitier doit prendre les mesures après la pose de la cuisine pour un ajustement parfait autour des prises et interrupteurs.\n\n**Le garde-corps en verre** (balcon, mezzanine, escalier) est soumis à des normes structurelles strictes : la norme **NF P 01-012** impose une résistance à une charge de 100 daN/ml en partie courante. Seul un verre feuilleté (44.2 minimum pour les garde-corps remplis, 88.4 pour les garde-corps autoportants) est admis. Le miroitier doit fournir une note de calcul validant le dimensionnement.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 4421/4422** et le label RGE pour la rénovation thermique\n- Exiger du **verre de sécurité** (trempé ou feuilleté) dans toutes les zones à risque\n- Le DTU 39 est la référence : calage, épaisseur minimale, type de verre selon l'usage\n- Budget remplacement 6 fenêtres en VIR : **2 000 – 4 500 € TTC** en province\n- En urgence, contactez votre **assurance** avant d'accepter un tarif de vitrier\n- Pour les garde-corps, exiger une **note de calcul** et du verre feuilleté\n- Comparer **3 devis minimum** avec références précises des verres utilisés\n:::"
+      "## Les tendances 2026 : verre et design intérieur\n\nLe verre vit une révolution dans l'aménagement intérieur, bien au-delà de la simple fenêtre. Un bon miroitier maîtrise ces applications modernes :\n\n**La verrière d'atelier** reste la star incontestée. Ce type de cloison vitrée (structure acier ou aluminium + verre feuilleté ou trempé) apporte lumière et caractère dans les intérieurs. Le miroitier doit maîtriser à la fois le travail du métal et celui du verre. Attention aux verrières « kit » vendues en grande surface de bricolage : la qualité du verre et des assemblages est souvent médiocre.\n\n**La paroi de douche à l'italienne** exige un verre trempé de 8 à 10 mm d'épaisseur, avec traitement anticalcaire (type EasyClean). La fixation doit être irréprochable (charnières inox, pinces de sol) car une paroi de douche en verre de 2 m² pèse 40 à 50 kg.\n\n**La crédence de cuisine en verre laqué** remplace le carrelage mural avec élégance. Le verre est laqué en face arrière dans la couleur de votre choix, puis trempé pour résister à la chaleur des plaques de cuisson. Le miroitier doit prendre les mesures après la pose de la cuisine pour un ajustement parfait autour des prises et interrupteurs.\n\n**Le garde-corps en verre** (balcon, mezzanine, escalier) est soumis à des normes structurelles strictes : la norme **NF P 01-012** impose une résistance à une charge de 100 daN/ml en partie courante. Seul un verre feuilleté (44.2 minimum pour les garde-corps remplis, 88.4 pour les garde-corps autoportants) est admis. Le miroitier doit fournir une note de calcul validant le dimensionnement.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 4421/4422** et le label RGE pour la rénovation thermique\n- Exiger du **verre de sécurité** (trempé ou feuilleté) dans toutes les zones à risque\n- Le DTU 39 est la référence : calage, épaisseur minimale, type de verre selon l'usage\n- Budget remplacement 6 fenêtres en VIR : **2 000 – 4 500 € TTC** en province\n- En urgence, contactez votre **assurance** avant d'accepter un tarif de vitrier\n- Pour les garde-corps, exiger une **note de calcul** et du verre feuilleté\n- Comparer **3 devis minimum** avec références précises des verres utilisés\n:::",
     ],
-    image: "🪟",
+    image: '🪟',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-16",
-    readTime: "14 min",
-    category: "Fiches métier",
-    tags: ["Miroitier", "Vitrier", "Verre", "Double vitrage", "Verrière", "Artisan"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-16',
+    readTime: '14 min',
+    category: 'Fiches métier',
+    tags: ['Miroitier', 'Vitrier', 'Verre', 'Double vitrage', 'Verrière', 'Artisan'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre un miroitier et un vitrier ?", answer: "Les deux termes désignent historiquement le même métier. Le vitrier se concentre sur la pose et le remplacement de vitrages dans les fenêtres et portes. Le miroitier a un champ plus large : miroirs, vitrines, parois de douche, garde-corps, verrières. Aujourd'hui, l'appellation officielle est « miroitier-vitrier ». Dans la pratique, vérifiez les qualifications Qualibat spécifiques au type de travail envisagé." },
-      { question: "Combien coûte le remplacement d'un double vitrage ?", answer: "En 2026, comptez 80 à 150 € TTC par m² en province pour un double vitrage standard, et 120 à 220 € par m² pour un double vitrage à isolation renforcée (VIR). En Île-de-France, ajoutez 25 à 30 %. Le prix inclut la fourniture du vitrage, la dépose de l'ancien et la pose avec calage et masticage conformes au DTU 39." },
-      { question: "Quel type de verre pour une paroi de douche ?", answer: "Une paroi de douche doit impérativement être en verre trempé de sécurité (NF EN 12150), épaisseur 8 mm minimum pour une paroi fixe, 10 mm pour une porte pivotante. Le traitement anticalcaire (type EasyClean) est fortement recommandé pour faciliter l'entretien. Le verre recuit classique est interdit dans cette application car il se brise en éclats coupants dangereux." },
-      { question: "Le miroitier doit-il avoir une assurance décennale ?", answer: "Oui, pour tous les vitrages intégrés au bâti (fenêtres, baies vitrées, verrières, garde-corps). L'assurance décennale couvre les désordres compromettant la solidité ou rendant l'ouvrage impropre à sa destination pendant 10 ans. Pour les éléments mobiliers (miroir non fixé, table en verre), elle n'est pas requise mais une RC professionnelle reste indispensable." },
-      { question: "Les aides financières couvrent-elles le changement de vitrage ?", answer: "Oui, le remplacement de simples vitrages par du double ou triple vitrage est éligible à MaPrimeRénov' (40 à 100 € par équipement selon revenus), aux CEE (primes énergie de 30 à 80 € par fenêtre) et à l'éco-PTZ. Condition impérative : le vitrier doit être certifié RGE. Les performances thermiques minimales requises sont Uw ≤ 1,3 W/m².K pour les fenêtres." }
-    ]
+      {
+        question: 'Quelle est la différence entre un miroitier et un vitrier ?',
+        answer:
+          "Les deux termes désignent historiquement le même métier. Le vitrier se concentre sur la pose et le remplacement de vitrages dans les fenêtres et portes. Le miroitier a un champ plus large : miroirs, vitrines, parois de douche, garde-corps, verrières. Aujourd'hui, l'appellation officielle est « miroitier-vitrier ». Dans la pratique, vérifiez les qualifications Qualibat spécifiques au type de travail envisagé.",
+      },
+      {
+        question: "Combien coûte le remplacement d'un double vitrage ?",
+        answer:
+          "En 2026, comptez 80 à 150 € TTC par m² en province pour un double vitrage standard, et 120 à 220 € par m² pour un double vitrage à isolation renforcée (VIR). En Île-de-France, ajoutez 25 à 30 %. Le prix inclut la fourniture du vitrage, la dépose de l'ancien et la pose avec calage et masticage conformes au DTU 39.",
+      },
+      {
+        question: 'Quel type de verre pour une paroi de douche ?',
+        answer:
+          "Une paroi de douche doit impérativement être en verre trempé de sécurité (NF EN 12150), épaisseur 8 mm minimum pour une paroi fixe, 10 mm pour une porte pivotante. Le traitement anticalcaire (type EasyClean) est fortement recommandé pour faciliter l'entretien. Le verre recuit classique est interdit dans cette application car il se brise en éclats coupants dangereux.",
+      },
+      {
+        question: 'Le miroitier doit-il avoir une assurance décennale ?',
+        answer:
+          "Oui, pour tous les vitrages intégrés au bâti (fenêtres, baies vitrées, verrières, garde-corps). L'assurance décennale couvre les désordres compromettant la solidité ou rendant l'ouvrage impropre à sa destination pendant 10 ans. Pour les éléments mobiliers (miroir non fixé, table en verre), elle n'est pas requise mais une RC professionnelle reste indispensable.",
+      },
+      {
+        question: 'Les aides financières couvrent-elles le changement de vitrage ?',
+        answer:
+          "Oui, le remplacement de simples vitrages par du double ou triple vitrage est éligible à MaPrimeRénov' (40 à 100 € par équipement selon revenus), aux CEE (primes énergie de 30 à 80 € par fenêtre) et à l'éco-PTZ. Condition impérative : le vitrier doit être certifié RGE. Les performances thermiques minimales requises sont Uw ≤ 1,3 W/m².K pour les fenêtres.",
+      },
+    ],
   },
 
-  "comment-choisir-storiste-guide": {
-    title: "Choisir son Storiste en 2026 : Le Guide Complet",
-    excerpt: "Stores, volets roulants, pergolas bioclimatiques : comment sélectionner un storiste qualifié. Certifications, prix régionaux et pièges à éviter.",
-    metaTitle: "Choisir son Storiste 2026 : Guide + Devis",
-    metaDescription: "Comparez les storistes : stores, volets roulants, pergolas. Certifications et prix régionaux 2026. Obtenez un devis gratuit.",
+  'comment-choisir-storiste-guide': {
+    title: 'Choisir son Storiste en 2026 : Le Guide Complet',
+    excerpt:
+      'Stores, volets roulants, pergolas bioclimatiques : comment sélectionner un storiste qualifié. Certifications, prix régionaux et pièges à éviter.',
+    metaTitle: 'Choisir son Storiste 2026 : Guide + Devis',
+    metaDescription:
+      'Comparez les storistes : stores, volets roulants, pergolas. Certifications et prix régionaux 2026. Obtenez un devis gratuit.',
     content: [
       "Le marché français de la protection solaire et des fermetures représente **6,8 milliards d'euros** par an selon le Syndicat National de la Fermeture, de la Protection Solaire et des Professions Associées (SNFPSA). Avec le réchauffement climatique et les canicules récurrentes, la demande de stores, pergolas bioclimatiques et protections solaires a explosé : **+32 %** sur les pergolas entre 2022 et 2025. Le storiste est le professionnel qui conçoit, fabrique sur mesure et installe ces équipements. Mais entre le storiste artisan qui travaille l'aluminium sur mesure et le revendeur de produits standardisés qui sous-traite la pose, la qualité varie considérablement. Ce guide vous aide à faire le tri. Découvrez nos [storistes vérifiés](/services/storiste) sur ServicesArtisans.",
 
@@ -170,33 +276,60 @@ export const metiers3Articles: Record<string, BlogArticle> = {
 
       "## Store banne, BSO, pergola : quel choix pour quel besoin ?\n\nLe choix de la protection solaire dépend de votre configuration, de votre budget et de vos attentes. Voici un comparatif objectif :\n\n**Le store banne** est la solution classique pour ombrager une terrasse. Avantages : prix accessible, installation rapide (une demi-journée), large choix de toiles et de couleurs. Limites : sensible au vent (repli obligatoire au-delà de 30-50 km/h selon le modèle), durée de vie de la toile limitée (8 à 12 ans), pas de protection contre la pluie. Convient pour un usage occasionnel sur une terrasse protégée du vent.\n\n**Le BSO (Brise-Soleil Orientable)** est une alternative technique au store extérieur pour les fenêtres et baies vitrées. Composé de lames orientables en aluminium, il bloque la chaleur solaire tout en préservant la vue et la lumière naturelle. Avantages : très efficace thermiquement (réduit les apports solaires de 80 à 95 %), résistant au vent (jusqu'à classe 6), esthétique moderne. Limites : prix élevé par fenêtre, nécessite un coffre d'intégration. Le BSO est la solution privilégiée par les architectes pour les constructions neuves RE 2020.\n\n**La pergola bioclimatique** est le haut de gamme de la protection solaire extérieure. Ses lames orientables en aluminium permettent de moduler la lumière et la ventilation, et de se protéger de la pluie en position fermée. Avantages : utilisable par tous les temps, valorise le bien immobilier (+3 à 5 % selon les notaires), possibilité d'ajouter des parois vitrées coulissantes, éclairage LED, chauffage radiant. Limites : prix élevé, déclaration préalable ou permis de construire nécessaire, entretien annuel recommandé.\n\nPour un [domoticien](/blog/comment-choisir-domoticien-guide), l'intégration de l'ensemble de ces protections solaires dans un système centralisé (scénarios automatiques selon l'ensoleillement, la température et le vent) représente l'approche la plus aboutie du confort thermique.\n\n:::expert Avis d'expert\nLe BSO (Brise-Soleil Orientable) est la solution la plus efficace en termes de performance thermique, mais la moins connue du grand public. Dans le cadre de la RE 2020, il est devenu quasi incontournable pour respecter les seuils de confort d'été (indicateur DH ≤ 1 250 DH) sans climatisation. Si votre maison souffre de surchauffe estivale, le BSO est un investissement plus pertinent qu'une climatisation réversible : il traite la cause (apport solaire) plutôt que le symptôme (chaleur intérieure).\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de storiste en 2026](/blog/prix-storiste-2026-tarifs-stores-volets) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de storiste en 2026](/blog/prix-storiste-2026-tarifs-stores-volets) avec les prix moyens constatés dans toute la France.',
 
-      "## L'installation : les étapes clés et les points de contrôle\n\nUne installation de qualité passe par un processus rigoureux que tout bon storiste respecte :\n\n**1. Étude technique sur site** (30 min à 1 h) : prise de cotes, analyse du support de fixation, évaluation de l'exposition au vent (hauteur, orientation, environnement), vérification des alimentations électriques existantes, étude de l'ombrage (course du soleil). Pour une pergola, le storiste doit vérifier les règles d'urbanisme (PLU, copropriété) et les servitudes éventuelles.\n\n**2. Devis détaillé** : marque et modèle du produit, dimensions, coloris structure et toile/lames, type de motorisation (filaire, radio, solaire), options (capteurs, télécommande, domotique), conditions de fixation, délai de fabrication (3 à 8 semaines pour du sur mesure) et de pose.\n\n**3. Fabrication sur mesure** : les stores et volets de qualité sont fabriqués aux dimensions exactes de votre installation. Méfiez-vous des produits « standards ajustés sur place » — les découpes de chantier altèrent les finitions.\n\n**4. Installation** (1/2 journée pour un store banne, 1 à 3 jours pour une pergola) : fixation conforme au support, raccordement électrique aux normes NF C 15-100, paramétrage de la motorisation et des capteurs, essais de fonctionnement.\n\n**5. Réception** : démonstration complète du fonctionnement (ouverture, fermeture, positions intermédiaires, modes automatiques), remise de la notice d'utilisation et d'entretien, explications sur les gestes de maintenance (nettoyage de la toile, graissage des bras). Le PV de réception signé déclenche les garanties.\n\nPour les volets roulants, l'alimentation électrique doit être prévue dans chaque tableau de fenêtre. En rénovation, le passage de câbles peut représenter un poste significatif. Alternative : les **volets roulants solaires** intègrent un panneau photovoltaïque et une batterie, supprimant le câblage — un avantage majeur en rénovation, avec en bonus l'éligibilité au crédit d'impôt.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 3522/3523/3582** selon le type de produit\n- Exiger le label **RGE** pour bénéficier des aides (volets isolants)\n- Connaître la **classe de résistance au vent** du produit (NF EN 1932)\n- Budget volets roulants alu (maison 4 chambres) : **5 500 – 10 000 € TTC** en province\n- Budget pergola bioclimatique 15 m² : **8 000 – 16 000 € TTC** en province\n- Vérifier les **obligations d'urbanisme** pour les pergolas (déclaration/permis)\n- Le BSO est la solution la plus efficace contre la surchauffe estivale\n:::"
+      "## L'installation : les étapes clés et les points de contrôle\n\nUne installation de qualité passe par un processus rigoureux que tout bon storiste respecte :\n\n**1. Étude technique sur site** (30 min à 1 h) : prise de cotes, analyse du support de fixation, évaluation de l'exposition au vent (hauteur, orientation, environnement), vérification des alimentations électriques existantes, étude de l'ombrage (course du soleil). Pour une pergola, le storiste doit vérifier les règles d'urbanisme (PLU, copropriété) et les servitudes éventuelles.\n\n**2. Devis détaillé** : marque et modèle du produit, dimensions, coloris structure et toile/lames, type de motorisation (filaire, radio, solaire), options (capteurs, télécommande, domotique), conditions de fixation, délai de fabrication (3 à 8 semaines pour du sur mesure) et de pose.\n\n**3. Fabrication sur mesure** : les stores et volets de qualité sont fabriqués aux dimensions exactes de votre installation. Méfiez-vous des produits « standards ajustés sur place » — les découpes de chantier altèrent les finitions.\n\n**4. Installation** (1/2 journée pour un store banne, 1 à 3 jours pour une pergola) : fixation conforme au support, raccordement électrique aux normes NF C 15-100, paramétrage de la motorisation et des capteurs, essais de fonctionnement.\n\n**5. Réception** : démonstration complète du fonctionnement (ouverture, fermeture, positions intermédiaires, modes automatiques), remise de la notice d'utilisation et d'entretien, explications sur les gestes de maintenance (nettoyage de la toile, graissage des bras). Le PV de réception signé déclenche les garanties.\n\nPour les volets roulants, l'alimentation électrique doit être prévue dans chaque tableau de fenêtre. En rénovation, le passage de câbles peut représenter un poste significatif. Alternative : les **volets roulants solaires** intègrent un panneau photovoltaïque et une batterie, supprimant le câblage — un avantage majeur en rénovation, avec en bonus l'éligibilité au crédit d'impôt.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 3522/3523/3582** selon le type de produit\n- Exiger le label **RGE** pour bénéficier des aides (volets isolants)\n- Connaître la **classe de résistance au vent** du produit (NF EN 1932)\n- Budget volets roulants alu (maison 4 chambres) : **5 500 – 10 000 € TTC** en province\n- Budget pergola bioclimatique 15 m² : **8 000 – 16 000 € TTC** en province\n- Vérifier les **obligations d'urbanisme** pour les pergolas (déclaration/permis)\n- Le BSO est la solution la plus efficace contre la surchauffe estivale\n:::",
     ],
-    image: "☀️",
+    image: '☀️',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-19",
-    readTime: "15 min",
-    category: "Fiches métier",
-    tags: ["Storiste", "Store", "Volet roulant", "Pergola", "Protection solaire", "Artisan"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-19',
+    readTime: '15 min',
+    category: 'Fiches métier',
+    tags: ['Storiste', 'Store', 'Volet roulant', 'Pergola', 'Protection solaire', 'Artisan'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre un store banne et une pergola bioclimatique ?", answer: "Le store banne est une toile rétractable fixée en façade, idéale pour un ombrage occasionnel (800 à 4 500 € TTC posé). La pergola bioclimatique est une structure autoportante ou adossée en aluminium avec lames orientables, utilisable par tous les temps et personnalisable (6 000 à 20 000 € TTC). La pergola est un investissement durable qui valorise le bien immobilier." },
-      { question: "Combien coûte la motorisation de volets roulants existants ?", answer: "La motorisation d'un volet roulant existant (remplacement du treuil manuel par un moteur tubulaire) coûte 250 à 450 € TTC par volet en province (pose comprise). La solution la plus simple en rénovation est le moteur solaire (pas de câblage à tirer), pour 400 à 650 € TTC par volet. Comptez 150 à 300 € supplémentaires pour une commande centralisée (box domotique)." },
-      { question: "Les volets roulants sont-ils éligibles aux aides financières ?", answer: "Oui, les volets isolants (coefficient de résistance thermique ΔR ≥ 0,22 m².K/W) sont éligibles à MaPrimeRénov' (55 à 110 € par volet selon revenus) et aux CEE (15 à 30 € par volet). Condition : le storiste doit être certifié RGE. Ces aides ne couvrent qu'une fraction du coût total (500 à 900 € par volet) : méfiez-vous des offres « volets gratuits »." },
-      { question: "Faut-il un permis de construire pour une pergola ?", answer: "Pour une pergola de moins de 5 m² d'emprise au sol, aucune formalité n'est requise (sauf en secteur protégé). De 5 à 20 m² (ou 40 m² en zone couverte par un PLU), une déclaration préalable de travaux suffit. Au-delà, un permis de construire est obligatoire. En copropriété, l'accord de l'assemblée générale est toujours nécessaire." },
-      { question: "Comment entretenir un store banne ?", answer: "Nettoyez la toile une à deux fois par an à l'eau tiède avec un savon doux (jamais de nettoyeur haute pression). Laissez sécher complètement avant de replier. Vérifiez les bras articulés et graissez les articulations une fois par an. Repliez le store dès que le vent dépasse 30 km/h (ou activez le capteur vent automatique). La toile se remplace tous les 8 à 12 ans (300 à 800 € selon les dimensions)." },
-      { question: "Qu'est-ce qu'un BSO et pourquoi est-il recommandé en RE 2020 ?", answer: "Le BSO (Brise-Soleil Orientable) est un store extérieur à lames orientables en aluminium. Il bloque 80 à 95 % des apports solaires tout en laissant passer la lumière et la vue. La RE 2020 impose un confort d'été sans climatisation (indicateur DH ≤ 1 250 DH) : le BSO est la solution technique la plus efficace pour y parvenir. Prix : 700 à 1 400 € TTC posé par fenêtre en province." }
-    ]
+      {
+        question: 'Quelle est la différence entre un store banne et une pergola bioclimatique ?',
+        answer:
+          'Le store banne est une toile rétractable fixée en façade, idéale pour un ombrage occasionnel (800 à 4 500 € TTC posé). La pergola bioclimatique est une structure autoportante ou adossée en aluminium avec lames orientables, utilisable par tous les temps et personnalisable (6 000 à 20 000 € TTC). La pergola est un investissement durable qui valorise le bien immobilier.',
+      },
+      {
+        question: 'Combien coûte la motorisation de volets roulants existants ?',
+        answer:
+          "La motorisation d'un volet roulant existant (remplacement du treuil manuel par un moteur tubulaire) coûte 250 à 450 € TTC par volet en province (pose comprise). La solution la plus simple en rénovation est le moteur solaire (pas de câblage à tirer), pour 400 à 650 € TTC par volet. Comptez 150 à 300 € supplémentaires pour une commande centralisée (box domotique).",
+      },
+      {
+        question: 'Les volets roulants sont-ils éligibles aux aides financières ?',
+        answer:
+          "Oui, les volets isolants (coefficient de résistance thermique ΔR ≥ 0,22 m².K/W) sont éligibles à MaPrimeRénov' (55 à 110 € par volet selon revenus) et aux CEE (15 à 30 € par volet). Condition : le storiste doit être certifié RGE. Ces aides ne couvrent qu'une fraction du coût total (500 à 900 € par volet) : méfiez-vous des offres « volets gratuits ».",
+      },
+      {
+        question: 'Faut-il un permis de construire pour une pergola ?',
+        answer:
+          "Pour une pergola de moins de 5 m² d'emprise au sol, aucune formalité n'est requise (sauf en secteur protégé). De 5 à 20 m² (ou 40 m² en zone couverte par un PLU), une déclaration préalable de travaux suffit. Au-delà, un permis de construire est obligatoire. En copropriété, l'accord de l'assemblée générale est toujours nécessaire.",
+      },
+      {
+        question: 'Comment entretenir un store banne ?',
+        answer:
+          "Nettoyez la toile une à deux fois par an à l'eau tiède avec un savon doux (jamais de nettoyeur haute pression). Laissez sécher complètement avant de replier. Vérifiez les bras articulés et graissez les articulations une fois par an. Repliez le store dès que le vent dépasse 30 km/h (ou activez le capteur vent automatique). La toile se remplace tous les 8 à 12 ans (300 à 800 € selon les dimensions).",
+      },
+      {
+        question: "Qu'est-ce qu'un BSO et pourquoi est-il recommandé en RE 2020 ?",
+        answer:
+          "Le BSO (Brise-Soleil Orientable) est un store extérieur à lames orientables en aluminium. Il bloque 80 à 95 % des apports solaires tout en laissant passer la lumière et la vue. La RE 2020 impose un confort d'été sans climatisation (indicateur DH ≤ 1 250 DH) : le BSO est la solution technique la plus efficace pour y parvenir. Prix : 700 à 1 400 € TTC posé par fenêtre en province.",
+      },
+    ],
   },
 
-  "comment-choisir-domoticien-guide": {
-    title: "Choisir son Domoticien en 2026 : Le Guide Complet",
-    excerpt: "Maison connectée, automatisation, KNX, Zigbee : comment sélectionner un domoticien qualifié. Certifications, prix, technologies et pièges à éviter.",
-    metaTitle: "Choisir son Domoticien 2026 : Guide Complet",
-    metaDescription: "Découvrez comment choisir un domoticien qualifié : KNX, Zigbee, prix et certifications 2026. Obtenez un devis gratuit.",
+  'comment-choisir-domoticien-guide': {
+    title: 'Choisir son Domoticien en 2026 : Le Guide Complet',
+    excerpt:
+      'Maison connectée, automatisation, KNX, Zigbee : comment sélectionner un domoticien qualifié. Certifications, prix, technologies et pièges à éviter.',
+    metaTitle: 'Choisir son Domoticien 2026 : Guide Complet',
+    metaDescription:
+      'Découvrez comment choisir un domoticien qualifié : KNX, Zigbee, prix et certifications 2026. Obtenez un devis gratuit.',
     content: [
       "Le marché français de la maison connectée a franchi le cap des **2,1 milliards d'euros** en 2025 selon l'institut GfK, avec une croissance annuelle de 18 %. Pourtant, **67 % des installations domotiques** réalisées par des non-spécialistes présentent au moins un dysfonctionnement dans les 12 premiers mois, selon une étude de la Fédération Française de Domotique (FFD). Car la domotique n'est pas un simple assemblage de gadgets connectés : c'est une ingénierie de systèmes qui exige des compétences en électricité, en réseaux informatiques, en automatisation et en intégration multi-protocoles. Le domoticien est l'architecte de votre maison intelligente — et son rôle est bien plus technique qu'on ne l'imagine. Ce guide vous aide à distinguer le vrai professionnel du bricoleur technophile. Trouvez un [domoticien qualifié](/services/domoticien) sur notre annuaire.",
 
@@ -208,31 +341,58 @@ export const metiers3Articles: Record<string, BlogArticle> = {
 
       "## KNX, Zigbee, Z-Wave, Wi-Fi : quel protocole choisir ?\n\nLe choix du protocole domotique est la décision technique la plus structurante. Voici un comparatif objectif :\n\n**KNX** (filaire, bus EIB) : le standard professionnel par excellence. Avantages : fiabilité maximale (pas d'interférences radio), interopérabilité totale (500+ fabricants compatibles), pérennité prouvée (30 ans de recul), pas de box centrale (intelligence distribuée). Inconvénients : prix élevé (câblage bus dédié), installation uniquement en neuf ou grosse rénovation, programmation par un certifié KNX. Recommandé pour : construction neuve, rénovation lourde, exigence de fiabilité maximale.\n\n**Zigbee 3.0** (radio maillé, 2,4 GHz) : le protocole radio le plus répandu. Avantages : large écosystème de produits (Philips Hue, IKEA, Aqara, Sonoff), réseau maillé auto-organisé, faible consommation. Inconvénients : portée limitée (10-20 m en intérieur), interférences possibles avec le Wi-Fi 2,4 GHz, nécessite une passerelle (bridge). Avec l'arrivée de **Matter/Thread**, Zigbee évolue vers plus d'interopérabilité. Recommandé pour : rénovation, budgets modérés, projets évolutifs.\n\n**Z-Wave** (radio maillé, 868 MHz en Europe) : protocole radio professionnel. Avantages : bande de fréquence dédiée (pas d'interférence Wi-Fi), portée supérieure au Zigbee (30-40 m), protocole certifié (tous les produits Z-Wave sont interopérables). Inconvénients : écosystème plus restreint, prix des modules supérieur au Zigbee, avenir incertain face à Matter. Recommandé pour : rénovation, fiabilité radio supérieure.\n\n**Wi-Fi** : à éviter comme protocole domotique principal. Les modules Wi-Fi (Shelly, Sonoff Wi-Fi) sont abordables mais surchargent le réseau, consomment plus d'énergie, et dépendent du routeur Wi-Fi (point de défaillance unique). Acceptable pour quelques modules isolés, mais pas pour une installation intégrée de plus de 15-20 appareils.\n\n**Matter/Thread** : le nouveau standard (2023+), soutenu par Apple, Google, Amazon et Samsung. Il promet l'interopérabilité universelle entre toutes les marques. Thread est le protocole réseau maillé sous-jacent (basé sur IPv6), Matter est la couche applicative. En 2026, l'écosystème Matter est encore jeune mais progresse rapidement. Un bon domoticien intègre déjà des produits Matter-compatibles dans ses préconisations.\n\n:::expert Avis d'expert\nPour une maison neuve en 2026, ma recommandation est un **système hybride KNX + Matter/Thread**. Le KNX assure le pilotage fiable des fonctions critiques (éclairage, volets, chauffage) via un câblage bus pérenne. Matter/Thread gère les périphériques complémentaires (capteurs de présence, détecteurs d'ouverture, multimédia) via radio. Cette architecture combine la fiabilité du filaire et la flexibilité du sans-fil. Budget : +15 à 20 % par rapport au tout-KNX, mais une évolutivité incomparable.\n:::",
 
-      "## Le cahier des charges : la clé d'un projet réussi\n\nAvant de contacter un domoticien, structurez vos besoins. Un bon cahier des charges couvre ces fonctions :\n\n**Éclairage** : quelles pièces en variation d'intensité ? Quels scénarios (arrivée, départ, nuit, cinéma) ? Éclairage extérieur automatisé (détection de présence, crépusculaire) ?\n\n**Volets et stores** : commande centralisée « tout fermer » ? Automatismes liés à l'ensoleillement et au vent (voir le guide du [storiste](/blog/comment-choisir-storiste-guide)) ? Position intermédiaire programmable ?\n\n**Chauffage et climatisation** : régulation pièce par pièce ? Programmation horaire ? Mode absence automatique (géolocalisation) ? Intégration avec une [pompe à chaleur](/services/pompe-a-chaleur) ?\n\n**Sécurité** : alarme intrusion ? Vidéosurveillance ? Détection incendie et fuite d'eau connectées ? Simulation de présence ?\n\n**Contrôle d'accès** : portier vidéo connecté ? Serrure électronique ? Gestion des accès à distance (livraison, ménage) ?\n\n**Multimédia** : audio multiroom ? Home cinéma intégré ? Distribution vidéo multi-écrans ?\n\n**Interfaces** : interrupteurs intelligents ? Écrans tactiles muraux ? Commande vocale (Alexa, Google, Siri) ? Application smartphone ?\n\nUn domoticien compétent traduit ce cahier des charges en **architecture technique** (choix de protocole, nombre et type de modules, topologie réseau) puis en **budget prévisionnel détaillé**. Ce travail de conception représente généralement 5 à 10 % du budget total de l'installation — mais c'est l'investissement le plus rentable du projet.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 5412** ou **Qualifelec D** et la certification **KNX** si protocole KNX\n- Exiger un **cahier des charges fonctionnel** et un **schéma d'architecture** avant les travaux\n- En construction neuve, privilégier le **KNX** pour la fiabilité et la pérennité\n- En rénovation, le **Zigbee/Matter** offre le meilleur rapport qualité-prix\n- Budget neuf KNX (120 m²) : **12 000 – 25 000 € TTC** en province\n- Budget rénovation radio : **3 000 – 7 000 € TTC** en province\n- Exiger une **documentation technique complète** à la livraison\n- Prévoir un **contrat de maintenance** annuel (300 – 800 €)\n:::"
+      "## Le cahier des charges : la clé d'un projet réussi\n\nAvant de contacter un domoticien, structurez vos besoins. Un bon cahier des charges couvre ces fonctions :\n\n**Éclairage** : quelles pièces en variation d'intensité ? Quels scénarios (arrivée, départ, nuit, cinéma) ? Éclairage extérieur automatisé (détection de présence, crépusculaire) ?\n\n**Volets et stores** : commande centralisée « tout fermer » ? Automatismes liés à l'ensoleillement et au vent (voir le guide du [storiste](/blog/comment-choisir-storiste-guide)) ? Position intermédiaire programmable ?\n\n**Chauffage et climatisation** : régulation pièce par pièce ? Programmation horaire ? Mode absence automatique (géolocalisation) ? Intégration avec une [pompe à chaleur](/services/pompe-a-chaleur) ?\n\n**Sécurité** : alarme intrusion ? Vidéosurveillance ? Détection incendie et fuite d'eau connectées ? Simulation de présence ?\n\n**Contrôle d'accès** : portier vidéo connecté ? Serrure électronique ? Gestion des accès à distance (livraison, ménage) ?\n\n**Multimédia** : audio multiroom ? Home cinéma intégré ? Distribution vidéo multi-écrans ?\n\n**Interfaces** : interrupteurs intelligents ? Écrans tactiles muraux ? Commande vocale (Alexa, Google, Siri) ? Application smartphone ?\n\nUn domoticien compétent traduit ce cahier des charges en **architecture technique** (choix de protocole, nombre et type de modules, topologie réseau) puis en **budget prévisionnel détaillé**. Ce travail de conception représente généralement 5 à 10 % du budget total de l'installation — mais c'est l'investissement le plus rentable du projet.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat 5412** ou **Qualifelec D** et la certification **KNX** si protocole KNX\n- Exiger un **cahier des charges fonctionnel** et un **schéma d'architecture** avant les travaux\n- En construction neuve, privilégier le **KNX** pour la fiabilité et la pérennité\n- En rénovation, le **Zigbee/Matter** offre le meilleur rapport qualité-prix\n- Budget neuf KNX (120 m²) : **12 000 – 25 000 € TTC** en province\n- Budget rénovation radio : **3 000 – 7 000 € TTC** en province\n- Exiger une **documentation technique complète** à la livraison\n- Prévoir un **contrat de maintenance** annuel (300 – 800 €)\n:::",
     ],
-    image: "🏠",
+    image: '🏠',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-22",
-    readTime: "16 min",
-    category: "Fiches métier",
-    tags: ["Domoticien", "Domotique", "Maison connectée", "KNX", "Smart home", "Artisan"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-22',
+    readTime: '16 min',
+    category: 'Fiches métier',
+    tags: ['Domoticien', 'Domotique', 'Maison connectée', 'KNX', 'Smart home', 'Artisan'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre un domoticien et un électricien ?", answer: "L'électricien installe le réseau électrique (tableau, câblage, prises, éclairage) selon la NF C 15-100. Le domoticien va plus loin : il conçoit et programme l'intelligence du bâtiment (automatismes, scénarios, intégration multi-systèmes). Un bon domoticien est aussi un bon électricien, mais l'inverse n'est pas vrai. Vérifiez la qualification Qualibat 5412 (domotique), distincte de la qualification électricité." },
-      { question: "Combien coûte une installation domotique pour une maison neuve ?", answer: "Pour une maison de 120 m² avec domotique KNX (éclairage, volets, chauffage, alarme), comptez 12 000 à 25 000 € TTC en province. En protocole radio (Zigbee/Z-Wave), le budget descend à 4 000 à 8 000 € TTC. Le haut de gamme intégral (KNX + multiroom audio + vidéosurveillance + home cinéma) peut atteindre 50 000 à 100 000 € pour une villa de 200 m²." },
-      { question: "Peut-on installer de la domotique en rénovation sans gros travaux ?", answer: "Oui, grâce aux protocoles radio (Zigbee, Z-Wave, EnOcean, Wi-Fi). Les modules se placent derrière les interrupteurs existants ou se clipsent sur le tableau électrique, sans nouveau câblage. Une box domotique (Home Assistant, Jeedom, Homey) centralise le pilotage. Budget : 2 000 à 5 000 € TTC pour un appartement, 3 000 à 7 000 € pour une maison." },
-      { question: "Le protocole KNX est-il encore pertinent face à Matter et Thread ?", answer: "Absolument. KNX et Matter répondent à des besoins différents. KNX est un bus filaire professionnel offrant une fiabilité maximale pour les fonctions critiques (éclairage, volets, chauffage) — idéal en construction neuve. Matter/Thread est un protocole radio pour les périphériques complémentaires (capteurs, multimédia). Les deux sont complémentaires, et les passerelles KNX-Matter existent déjà." },
-      { question: "La domotique est-elle sécurisée contre le piratage ?", answer: "Pas par défaut. Les objets connectés sont des cibles de cyberattaque si le réseau n'est pas sécurisé. Un domoticien compétent isole les objets IoT sur un VLAN dédié, utilise des mots de passe uniques, désactive l'UPnP, et met à jour régulièrement les firmwares. Le protocole KNX filaire est intrinsèquement plus sécurisé que les protocoles radio. Le protocole Matter intègre des mécanismes de chiffrement et d'authentification dès sa conception." },
-      { question: "Que se passe-t-il si la box domotique tombe en panne ?", answer: "Sur un système bien conçu, les fonctions essentielles (éclairage, volets) restent opérables manuellement via les interrupteurs physiques. En KNX, l'intelligence est distribuée dans les modules — pas de point de défaillance unique. En système radio centralisé (box Jeedom, Home Assistant), une panne de la box désactive les automatismes mais les commandes manuelles restent fonctionnelles si l'installation a été conçue correctement." }
-    ]
+      {
+        question: 'Quelle est la différence entre un domoticien et un électricien ?',
+        answer:
+          "L'électricien installe le réseau électrique (tableau, câblage, prises, éclairage) selon la NF C 15-100. Le domoticien va plus loin : il conçoit et programme l'intelligence du bâtiment (automatismes, scénarios, intégration multi-systèmes). Un bon domoticien est aussi un bon électricien, mais l'inverse n'est pas vrai. Vérifiez la qualification Qualibat 5412 (domotique), distincte de la qualification électricité.",
+      },
+      {
+        question: 'Combien coûte une installation domotique pour une maison neuve ?',
+        answer:
+          'Pour une maison de 120 m² avec domotique KNX (éclairage, volets, chauffage, alarme), comptez 12 000 à 25 000 € TTC en province. En protocole radio (Zigbee/Z-Wave), le budget descend à 4 000 à 8 000 € TTC. Le haut de gamme intégral (KNX + multiroom audio + vidéosurveillance + home cinéma) peut atteindre 50 000 à 100 000 € pour une villa de 200 m².',
+      },
+      {
+        question: 'Peut-on installer de la domotique en rénovation sans gros travaux ?',
+        answer:
+          'Oui, grâce aux protocoles radio (Zigbee, Z-Wave, EnOcean, Wi-Fi). Les modules se placent derrière les interrupteurs existants ou se clipsent sur le tableau électrique, sans nouveau câblage. Une box domotique (Home Assistant, Jeedom, Homey) centralise le pilotage. Budget : 2 000 à 5 000 € TTC pour un appartement, 3 000 à 7 000 € pour une maison.',
+      },
+      {
+        question: 'Le protocole KNX est-il encore pertinent face à Matter et Thread ?',
+        answer:
+          'Absolument. KNX et Matter répondent à des besoins différents. KNX est un bus filaire professionnel offrant une fiabilité maximale pour les fonctions critiques (éclairage, volets, chauffage) — idéal en construction neuve. Matter/Thread est un protocole radio pour les périphériques complémentaires (capteurs, multimédia). Les deux sont complémentaires, et les passerelles KNX-Matter existent déjà.',
+      },
+      {
+        question: 'La domotique est-elle sécurisée contre le piratage ?',
+        answer:
+          "Pas par défaut. Les objets connectés sont des cibles de cyberattaque si le réseau n'est pas sécurisé. Un domoticien compétent isole les objets IoT sur un VLAN dédié, utilise des mots de passe uniques, désactive l'UPnP, et met à jour régulièrement les firmwares. Le protocole KNX filaire est intrinsèquement plus sécurisé que les protocoles radio. Le protocole Matter intègre des mécanismes de chiffrement et d'authentification dès sa conception.",
+      },
+      {
+        question: 'Que se passe-t-il si la box domotique tombe en panne ?',
+        answer:
+          "Sur un système bien conçu, les fonctions essentielles (éclairage, volets) restent opérables manuellement via les interrupteurs physiques. En KNX, l'intelligence est distribuée dans les modules — pas de point de défaillance unique. En système radio centralisé (box Jeedom, Home Assistant), une panne de la box désactive les automatismes mais les commandes manuelles restent fonctionnelles si l'installation a été conçue correctement.",
+      },
+    ],
   },
 
-  "comment-choisir-diagnostiqueur-guide": {
-    title: "Choisir son Diagnostiqueur Immobilier en 2026 : Le Guide Complet",
-    excerpt: "DPE, amiante, plomb, électricité : comment sélectionner un diagnostiqueur immobilier certifié. Tarifs, obligations légales et pièges à éviter.",
-    metaTitle: "Diagnostiqueur Immobilier 2026 : Guide Choix",
-    metaDescription: "Découvrez comment choisir un diagnostiqueur certifié : DPE, amiante, plomb. Tarifs et obligations 2026. Obtenez un devis gratuit.",
+  'comment-choisir-diagnostiqueur-guide': {
+    title: 'Choisir son Diagnostiqueur Immobilier en 2026 : Le Guide Complet',
+    excerpt:
+      'DPE, amiante, plomb, électricité : comment sélectionner un diagnostiqueur immobilier certifié. Tarifs, obligations légales et pièges à éviter.',
+    metaTitle: 'Diagnostiqueur Immobilier 2026 : Guide Choix',
+    metaDescription:
+      'Découvrez comment choisir un diagnostiqueur certifié : DPE, amiante, plomb. Tarifs et obligations 2026. Obtenez un devis gratuit.',
     content: [
       "En 2025, plus de **1,2 million de diagnostics immobiliers** ont été réalisés en France, selon la Chambre des Diagnostiqueurs Immobiliers de la FNAIM. Le Diagnostic de Performance Énergétique (DPE) est devenu un enjeu majeur depuis la loi Climat et Résilience : depuis le 1er janvier 2025, les logements classés **G** sont interdits à la location, et les **F** le seront au 1er janvier 2028. Un DPE erroné peut faire perdre des dizaines de milliers d'euros à un propriétaire (surcoût de travaux injustifiés) ou exposer un acquéreur à un gouffre énergétique non anticipé. Pourtant, une étude UFC-Que Choisir de 2024 a révélé que **sur un même logement, les diagnostiqueurs attribuent des notes DPE différentes dans 43 % des cas**. Le choix du diagnostiqueur n'est donc pas anodin — il est stratégique. Trouvez un [diagnostiqueur certifié](/services/diagnostiqueur) sur notre annuaire.",
 
@@ -244,25 +404,50 @@ export const metiers3Articles: Record<string, BlogArticle> = {
 
       "## Le DPE en 2026 : ce qui a changé et ce qui change\n\nLe DPE est le diagnostic le plus scruté et le plus contesté. Depuis la réforme du 1er juillet 2021, il repose sur la **méthode 3CL-2021** (Calcul de la Consommation Conventionnelle des Logements), qui analyse le bâti (isolation, menuiseries, ponts thermiques) plutôt que les factures d'énergie.\n\n**Les enjeux du DPE en 2026** :\n\n- **Logements G interdits à la location** depuis le 1er janvier 2025 : les propriétaires bailleurs doivent rénover ou retirer leur bien du marché locatif.\n- **Logements F interdits à la location** à compter du 1er janvier 2028 : cela concerne environ 1,2 million de logements en France.\n- **Audit énergétique obligatoire** pour la vente de maisons individuelles classées F ou G (depuis avril 2023) et E (depuis le 1er janvier 2025) : cet audit, plus poussé que le DPE, propose des scénarios de travaux chiffrés.\n- **Correction des DPE pour les petites surfaces** (arrêté du 25 mars 2024) : les logements de moins de 40 m² bénéficient d'un correctif qui atténue le biais défavorable de la méthode 3CL sur les petites surfaces. Un DPE réalisé avant cette correction peut être recalculé gratuitement.\n\nLe choix du diagnostiqueur est crucial car la méthode 3CL-2021 laisse une part d'interprétation sur certains paramètres : épaisseur d'isolation non visible, type de vitrage sans marquage, année de construction estimée. Un diagnostiqueur expérimenté identifie les bons paramètres ; un novice applique des valeurs par défaut qui pénalisent systématiquement le résultat.\n\n:::expert Avis d'expert\nSi votre logement est à la frontière entre deux classes DPE (par exemple E/F à 330 kWh/m².an), le choix du diagnostiqueur peut faire basculer le résultat d'un côté ou de l'autre. Ce n'est pas de la complaisance — c'est la conséquence de marges d'interprétation sur des paramètres techniques. Ma recommandation : choisissez un diagnostiqueur qui prend le temps de justifier chaque paramètre saisi dans le logiciel (épaisseur d'isolation, type de vitrage, performance de la chaudière) et qui vous montre les résultats intermédiaires avant de finaliser le rapport.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de diagnostiqueur en 2026](/blog/prix-diagnostiqueur-2026-tarifs) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de diagnostiqueur en 2026](/blog/prix-diagnostiqueur-2026-tarifs) avec les prix moyens constatés dans toute la France.',
 
-      "## Comment contester un DPE : la procédure à suivre\n\nDepuis que le DPE est devenu opposable (1er juillet 2021), les contestations se multiplient. Voici la marche à suivre :\n\n**Étape 1 — Contre-diagnostic** : faites réaliser un second DPE par un autre diagnostiqueur certifié, indépendant du premier. Si les résultats divergent significativement (changement de classe énergétique), vous avez un argument solide.\n\n**Étape 2 — Réclamation amiable** : adressez une lettre recommandée au diagnostiqueur initial, accompagnée du contre-diagnostic, en demandant la rectification ou le remboursement. Le diagnostiqueur dispose de 30 jours pour répondre.\n\n**Étape 3 — Médiation** : en l'absence de réponse satisfaisante, saisissez le médiateur de la consommation dont dépend le diagnostiqueur (ses coordonnées figurent obligatoirement dans ses CGV). La médiation est gratuite et aboutit dans 60 à 70 % des cas.\n\n**Étape 4 — Action en justice** : si la médiation échoue, vous pouvez saisir le tribunal judiciaire (compétent pour les litiges immobiliers). L'assurance RCP du diagnostiqueur couvre les préjudices liés à un diagnostic erroné. Les indemnisations constatées vont de quelques milliers d'euros (différentiel de prix de vente dû à un DPE trop favorable) à plusieurs dizaines de milliers d'euros (coût de travaux de rénovation non anticipés par un DPE trop optimiste).\n\nVous pouvez également signaler un diagnostiqueur auprès de son **organisme certificateur** (Bureau Veritas, Dekra, etc.) : celui-ci peut diligenter un contrôle et, en cas de manquement avéré, suspendre ou retirer la certification.\n\nPour les transactions immobilières en cours, demandez toujours à l'agent immobilier ou au notaire de vous fournir le **numéro ADEME** du DPE : ce numéro unique, attribué par l'ADEME lors de l'enregistrement du diagnostic, permet de vérifier son authenticité et sa date de réalisation sur l'observatoire DPE de l'ADEME.\n\n:::takeaway\n- Vérifier les **certifications** du diagnostiqueur sur l'annuaire officiel du ministère\n- Exiger l'**attestation d'assurance RCP** spécifique diagnostic immobilier\n- Un DPE sérieux dure **1 h 30 à 2 h** minimum pour un appartement\n- Budget pack vente complet : **450 – 750 € TTC** en province\n- Le DPE est **opposable** depuis 2021 : un DPE erroné engage la responsabilité du diagnostiqueur\n- Logements **G** interdits à la location depuis 2025, **F** en 2028\n- Privilégier un diagnostiqueur **indépendant** de l'agence immobilière\n- En cas de doute, faire un **contre-diagnostic** par un autre professionnel\n:::"
+      "## Comment contester un DPE : la procédure à suivre\n\nDepuis que le DPE est devenu opposable (1er juillet 2021), les contestations se multiplient. Voici la marche à suivre :\n\n**Étape 1 — Contre-diagnostic** : faites réaliser un second DPE par un autre diagnostiqueur certifié, indépendant du premier. Si les résultats divergent significativement (changement de classe énergétique), vous avez un argument solide.\n\n**Étape 2 — Réclamation amiable** : adressez une lettre recommandée au diagnostiqueur initial, accompagnée du contre-diagnostic, en demandant la rectification ou le remboursement. Le diagnostiqueur dispose de 30 jours pour répondre.\n\n**Étape 3 — Médiation** : en l'absence de réponse satisfaisante, saisissez le médiateur de la consommation dont dépend le diagnostiqueur (ses coordonnées figurent obligatoirement dans ses CGV). La médiation est gratuite et aboutit dans 60 à 70 % des cas.\n\n**Étape 4 — Action en justice** : si la médiation échoue, vous pouvez saisir le tribunal judiciaire (compétent pour les litiges immobiliers). L'assurance RCP du diagnostiqueur couvre les préjudices liés à un diagnostic erroné. Les indemnisations constatées vont de quelques milliers d'euros (différentiel de prix de vente dû à un DPE trop favorable) à plusieurs dizaines de milliers d'euros (coût de travaux de rénovation non anticipés par un DPE trop optimiste).\n\nVous pouvez également signaler un diagnostiqueur auprès de son **organisme certificateur** (Bureau Veritas, Dekra, etc.) : celui-ci peut diligenter un contrôle et, en cas de manquement avéré, suspendre ou retirer la certification.\n\nPour les transactions immobilières en cours, demandez toujours à l'agent immobilier ou au notaire de vous fournir le **numéro ADEME** du DPE : ce numéro unique, attribué par l'ADEME lors de l'enregistrement du diagnostic, permet de vérifier son authenticité et sa date de réalisation sur l'observatoire DPE de l'ADEME.\n\n:::takeaway\n- Vérifier les **certifications** du diagnostiqueur sur l'annuaire officiel du ministère\n- Exiger l'**attestation d'assurance RCP** spécifique diagnostic immobilier\n- Un DPE sérieux dure **1 h 30 à 2 h** minimum pour un appartement\n- Budget pack vente complet : **450 – 750 € TTC** en province\n- Le DPE est **opposable** depuis 2021 : un DPE erroné engage la responsabilité du diagnostiqueur\n- Logements **G** interdits à la location depuis 2025, **F** en 2028\n- Privilégier un diagnostiqueur **indépendant** de l'agence immobilière\n- En cas de doute, faire un **contre-diagnostic** par un autre professionnel\n:::",
     ],
-    image: "📋",
+    image: '📋',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-25",
-    readTime: "15 min",
-    category: "Fiches métier",
-    tags: ["Diagnostiqueur", "DPE", "Diagnostic immobilier", "Amiante", "Plomb", "Immobilier"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-25',
+    readTime: '15 min',
+    category: 'Fiches métier',
+    tags: ['Diagnostiqueur', 'DPE', 'Diagnostic immobilier', 'Amiante', 'Plomb', 'Immobilier'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quels diagnostics sont obligatoires pour une vente immobilière ?", answer: "Pour une vente en 2026 : DPE (tous logements), amiante (permis de construire avant juillet 1997), plomb/CREP (construction avant 1949), électricité et gaz (installations de plus de 15 ans), termites (zones concernées par arrêté préfectoral), mesurage Carrez (lots de copropriété), ERP (État des Risques et Pollutions), et audit énergétique (maisons individuelles classées E, F ou G)." },
-      { question: "Combien de temps un DPE est-il valable ?", answer: "Un DPE est valable 10 ans. Attention cependant : les DPE réalisés avant le 1er juillet 2021 (ancienne méthode) sont devenus obsolètes ou arrivent en fin de validité (les DPE du 1er janvier 2018 au 30 juin 2021 sont valides jusqu'au 31 décembre 2024 — donc expirés en 2026). Pour toute transaction en 2026, un nouveau DPE selon la méthode 3CL-2021 est recommandé." },
-      { question: "Comment vérifier qu'un diagnostiqueur est certifié ?", answer: "Consultez l'annuaire officiel des diagnostiqueurs certifiés sur le site du ministère de la Transition écologique. Vous pouvez rechercher par nom, commune ou numéro de certification. Vérifiez que chaque certification est en cours de validité (renouvelée tous les 7 ans) et couvre le diagnostic dont vous avez besoin." },
-      { question: "Peut-on contester un DPE ?", answer: "Oui, depuis le 1er juillet 2021, le DPE est opposable juridiquement. Si vous estimez que le résultat est erroné, faites réaliser un contre-diagnostic par un autre professionnel. En cas de divergence significative, vous pouvez engager la responsabilité du premier diagnostiqueur (réclamation amiable, puis médiation, puis action en justice). Son assurance RCP couvre les préjudices liés à un diagnostic fautif." },
-      { question: "Quelle est la différence entre le DPE et l'audit énergétique ?", answer: "Le DPE est un diagnostic standardisé qui classe le logement de A à G. L'audit énergétique est une analyse approfondie qui inclut des scénarios de travaux chiffrés (parcours de rénovation par étapes ou en une fois) avec estimation des gains énergétiques et des coûts. L'audit est obligatoire pour la vente de maisons individuelles classées E, F ou G. Il est plus coûteux (500 à 1 200 € vs 120 à 200 € pour le DPE) mais plus utile pour planifier des travaux." },
-      { question: "Un diagnostiqueur peut-il réaliser tous les diagnostics ?", answer: "Pas nécessairement. Chaque diagnostic (DPE, amiante, plomb, électricité, gaz, termites) requiert une certification spécifique. Un diagnostiqueur peut détenir toutes les certifications (c'est le cas des professionnels expérimentés) ou seulement certaines. Vérifiez que votre diagnostiqueur est certifié pour chaque diagnostic dont vous avez besoin. Le pack complet par un seul professionnel est plus pratique et souvent moins cher." }
-    ]
+      {
+        question: 'Quels diagnostics sont obligatoires pour une vente immobilière ?',
+        answer:
+          'Pour une vente en 2026 : DPE (tous logements), amiante (permis de construire avant juillet 1997), plomb/CREP (construction avant 1949), électricité et gaz (installations de plus de 15 ans), termites (zones concernées par arrêté préfectoral), mesurage Carrez (lots de copropriété), ERP (État des Risques et Pollutions), et audit énergétique (maisons individuelles classées E, F ou G).',
+      },
+      {
+        question: 'Combien de temps un DPE est-il valable ?',
+        answer:
+          "Un DPE est valable 10 ans. Attention cependant : les DPE réalisés avant le 1er juillet 2021 (ancienne méthode) sont devenus obsolètes ou arrivent en fin de validité (les DPE du 1er janvier 2018 au 30 juin 2021 sont valides jusqu'au 31 décembre 2024 — donc expirés en 2026). Pour toute transaction en 2026, un nouveau DPE selon la méthode 3CL-2021 est recommandé.",
+      },
+      {
+        question: "Comment vérifier qu'un diagnostiqueur est certifié ?",
+        answer:
+          "Consultez l'annuaire officiel des diagnostiqueurs certifiés sur le site du ministère de la Transition écologique. Vous pouvez rechercher par nom, commune ou numéro de certification. Vérifiez que chaque certification est en cours de validité (renouvelée tous les 7 ans) et couvre le diagnostic dont vous avez besoin.",
+      },
+      {
+        question: 'Peut-on contester un DPE ?',
+        answer:
+          'Oui, depuis le 1er juillet 2021, le DPE est opposable juridiquement. Si vous estimez que le résultat est erroné, faites réaliser un contre-diagnostic par un autre professionnel. En cas de divergence significative, vous pouvez engager la responsabilité du premier diagnostiqueur (réclamation amiable, puis médiation, puis action en justice). Son assurance RCP couvre les préjudices liés à un diagnostic fautif.',
+      },
+      {
+        question: "Quelle est la différence entre le DPE et l'audit énergétique ?",
+        answer:
+          "Le DPE est un diagnostic standardisé qui classe le logement de A à G. L'audit énergétique est une analyse approfondie qui inclut des scénarios de travaux chiffrés (parcours de rénovation par étapes ou en une fois) avec estimation des gains énergétiques et des coûts. L'audit est obligatoire pour la vente de maisons individuelles classées E, F ou G. Il est plus coûteux (500 à 1 200 € vs 120 à 200 € pour le DPE) mais plus utile pour planifier des travaux.",
+      },
+      {
+        question: 'Un diagnostiqueur peut-il réaliser tous les diagnostics ?',
+        answer:
+          "Pas nécessairement. Chaque diagnostic (DPE, amiante, plomb, électricité, gaz, termites) requiert une certification spécifique. Un diagnostiqueur peut détenir toutes les certifications (c'est le cas des professionnels expérimentés) ou seulement certaines. Vérifiez que votre diagnostiqueur est certifié pour chaque diagnostic dont vous avez besoin. Le pack complet par un seul professionnel est plus pratique et souvent moins cher.",
+      },
+    ],
   },
 }

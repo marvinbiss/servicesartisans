@@ -8,6 +8,7 @@ import {
 } from '@/lib/data/france'
 import { getAnchorText } from '@/lib/seo/anchor-variants'
 import { getServiceWeight } from '@/lib/constants/navigation'
+import { getDeptPreposition, getRegionPreposition } from '@/lib/geo-strings'
 
 // ---------------------------------------------------------------------------
 // Services d'urgence et services populaires (slugs)
@@ -47,57 +48,92 @@ export default function CityHubLinks({
   const topServices = [...topServiceSlugs]
     .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
     .slice(0, 6)
-    .map(slug => services.find(s => s.slug === slug))
+    .map((slug) => services.find((s) => s.slug === slug))
     .filter((s): s is (typeof services)[number] => s != null)
 
   // ── Module 2 : Villes proches du même département (6 liens) ──
   // Sort by city score (population + capital bonus) for better internal linking
   const nearbyDeptCities = dept
     ? getVillesByDepartement(ville.departementCode)
-        .filter(v => v.slug !== villeSlug)
+        .filter((v) => v.slug !== villeSlug)
         .sort((a, b) => getCityScore(b) - getCityScore(a))
         .slice(0, 6)
     : []
 
   // ── Module 3 : Intent variants — devis & tarifs (8 liens) ──
-  const devisTarifsLinks = DEVIS_TARIFS_SERVICES.flatMap(slug => {
-    const s = services.find(sv => sv.slug === slug)
+  const devisTarifsLinks = DEVIS_TARIFS_SERVICES.flatMap((slug) => {
+    const s = services.find((sv) => sv.slug === slug)
     if (!s) return []
     return [
-      { href: `/devis/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'devis', seed: 'city-hub' }) },
-      { href: `/tarifs/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'tarifs', seed: 'city-hub' }) },
+      {
+        href: `/devis/${slug}/${villeSlug}`,
+        label: getAnchorText({
+          serviceSlug: slug,
+          serviceName: s.name,
+          villeName: ville.name,
+          intent: 'devis',
+          seed: 'city-hub',
+        }),
+      },
+      {
+        href: `/tarifs/${slug}/${villeSlug}`,
+        label: getAnchorText({
+          serviceSlug: slug,
+          serviceName: s.name,
+          villeName: ville.name,
+          intent: 'tarifs',
+          seed: 'city-hub',
+        }),
+      },
     ]
   })
 
   // ── Module 4 : Urgence (3 liens) ──
-  const urgenceLinks = URGENCE_SERVICES
-    .map(slug => {
-      const s = services.find(sv => sv.slug === slug)
-      if (!s) return null
-      return { href: `/urgence/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'urgence', seed: 'city-hub' }) }
-    })
-    .filter((x): x is { href: string; label: string } => x != null)
+  const urgenceLinks = URGENCE_SERVICES.map((slug) => {
+    const s = services.find((sv) => sv.slug === slug)
+    if (!s) return null
+    return {
+      href: `/urgence/${slug}/${villeSlug}`,
+      label: getAnchorText({
+        serviceSlug: slug,
+        serviceName: s.name,
+        villeName: ville.name,
+        intent: 'urgence',
+        seed: 'city-hub',
+      }),
+    }
+  }).filter((x): x is { href: string; label: string } => x != null)
 
   // ── Module 5 : Avis (3 liens) ──
-  const avisLinks = AVIS_SERVICES
-    .map(slug => {
-      const s = services.find(sv => sv.slug === slug)
-      if (!s) return null
-      return { href: `/avis/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'avis', seed: 'city-hub' }) }
-    })
-    .filter((x): x is { href: string; label: string } => x != null)
+  const avisLinks = AVIS_SERVICES.map((slug) => {
+    const s = services.find((sv) => sv.slug === slug)
+    if (!s) return null
+    return {
+      href: `/avis/${slug}/${villeSlug}`,
+      label: getAnchorText({
+        serviceSlug: slug,
+        serviceName: s.name,
+        villeName: ville.name,
+        intent: 'avis',
+        seed: 'city-hub',
+      }),
+    }
+  }).filter((x): x is { href: string; label: string } => x != null)
 
   // ── Module 6 : Département parent (4 liens) ──
   const deptLinks: { href: string; label: string }[] = []
   if (dept && deptSlug) {
-    deptLinks.push({ href: `/departements/${deptSlug}`, label: `Artisans dans le ${dept.name}` })
+    deptLinks.push({
+      href: `/departements/${deptSlug}`,
+      label: `Artisans ${getDeptPreposition(dept.name)}`,
+    })
     // Top 3 services dans le département
-    topServiceSlugs.slice(0, 3).forEach(slug => {
-      const s = services.find(sv => sv.slug === slug)
+    topServiceSlugs.slice(0, 3).forEach((slug) => {
+      const s = services.find((sv) => sv.slug === slug)
       if (s) {
         deptLinks.push({
           href: `/departements/${deptSlug}/${slug}`,
-          label: `${s.name} dans le ${dept.name}`,
+          label: `${s.name} ${getDeptPreposition(dept.name)}`,
         })
       }
     })
@@ -106,13 +142,16 @@ export default function CityHubLinks({
   // ── Module 7 : Région parent (2 liens) ──
   const regionLinks: { href: string; label: string }[] = []
   if (regionSlug) {
-    regionLinks.push({ href: `/regions/${regionSlug}`, label: `Artisans en ${ville.region}` })
+    regionLinks.push({
+      href: `/regions/${regionSlug}`,
+      label: `Artisans ${getRegionPreposition(ville.region)}`,
+    })
     const topSlug = topServiceSlugs[0]
-    const topS = topSlug ? services.find(s => s.slug === topSlug) : null
+    const topS = topSlug ? services.find((s) => s.slug === topSlug) : null
     if (topS) {
       regionLinks.push({
         href: `/regions/${regionSlug}/${topSlug}`,
-        label: `${topS.name} en ${ville.region}`,
+        label: `${topS.name} ${getRegionPreposition(ville.region)}`,
       })
     }
   }
@@ -123,17 +162,23 @@ export default function CityHubLinks({
   if (topServices.length > 0) {
     modules.push({
       title: `Services populaires à ${ville.name}`,
-      links: topServices.map(s => ({
+      links: topServices.map((s) => ({
         href: `/services/${s.slug}/${villeSlug}`,
-        label: getAnchorText({ serviceSlug: s.slug, serviceName: s.name, villeName: ville.name, intent: 'services', seed: 'city-hub-top' }),
+        label: getAnchorText({
+          serviceSlug: s.slug,
+          serviceName: s.name,
+          villeName: ville.name,
+          intent: 'services',
+          seed: 'city-hub-top',
+        }),
       })),
     })
   }
 
   if (nearbyDeptCities.length > 0) {
     modules.push({
-      title: `Villes proches dans le ${ville.departement}`,
-      links: nearbyDeptCities.map(v => ({
+      title: `Villes proches ${getDeptPreposition(ville.departement)}`,
+      links: nearbyDeptCities.map((v) => ({
         href: `/villes/${v.slug}`,
         label: `Artisans à ${v.name}`,
       })),

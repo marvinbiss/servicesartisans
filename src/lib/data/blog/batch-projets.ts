@@ -97,7 +97,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       '## Budget global',
       "Aménagement simple (isolation, plancher, finitions) : 600 à 1 000 euros/m². Aménagement complet avec salle d'eau : 1 000 à 1 800 euros/m². Pour 30 m² de combles, prévoyez un budget total de 18 000 à 54 000 euros. La plus-value immobilière compense largement cet investissement.",
       '## Durée des travaux',
-      "Comptez six à douze semaines pour un aménagement complet. La phase de gros oeuvre (charpente, plancher) dure deux à trois semaines. L'isolation et le cloisonnement prennent une à deux semaines. Les réseaux et les finitions occupent les trois à quatre semaines restantes.",
+      "Comptez six à douze semaines pour un aménagement complet. La phase de gros œuvre (charpente, plancher) dure deux à trois semaines. L'isolation et le cloisonnement prennent une à deux semaines. Les réseaux et les finitions occupent les trois à quatre semaines restantes.",
       '## Erreurs à éviter',
       "Ne négligez pas la ventilation : une VMC est indispensable dans les combles aménagés. Prévoyez des rangements intégrés dans les parties basses (moins de 1,40 m de hauteur) pour exploiter chaque recoin. Vérifiez la portance du plancher avant d'installer une baignoire ou un meuble lourd.",
     ],
@@ -343,7 +343,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     content: [
       "Quand la famille s'agrandit ou que les besoins évoluent, l'agrandissement de la maison est souvent préférable à un [déménagement](/services/demenageur). Trois solutions s'offrent à vous : l'extension latérale, la surélévation et la véranda. Chacune présente des avantages, des contraintes et des budgets très différents. Consultez un [maçon qualifié](/services/macon) pour évaluer la faisabilité.",
       "## L'extension latérale : la solution classique",
-      "L'extension au sol est la plus courante. Elle permet de créer une ou plusieurs pièces en prolongement de la maison existante. Les matériaux possibles sont le parpaing (le plus économique), le bois (rapidité de mise en oeuvre) ou l'ossature métallique (grandes portées). Budget : 1 200 à 2 500 euros/m² selon les matériaux et les finitions.",
+      "L'extension au sol est la plus courante. Elle permet de créer une ou plusieurs pièces en prolongement de la maison existante. Les matériaux possibles sont le parpaing (le plus économique), le bois (rapidité de mise en œuvre) ou l'ossature métallique (grandes portées). Budget : 1 200 à 2 500 euros/m² selon les matériaux et les finitions.",
       '## La surélévation : quand le terrain manque',
       'La surélévation consiste à ajouter un étage partiel ou complet sur la structure existante. Elle est idéale en milieu urbain où le terrain est limité. Elle nécessite une étude de structure pour vérifier que les fondations et les murs porteurs supportent la charge supplémentaire. Budget : 1 800 à 3 500 euros/m².',
       '## La véranda : lumière et polyvalence',
@@ -351,7 +351,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       '## Les démarches administratives',
       "Extension de moins de 20 m² (40 m² en zone PLU) : déclaration préalable de travaux. Extension de plus de 20 m² : permis de construire. Surface totale dépassant 150 m² après travaux : recours obligatoire à un architecte. Délai d'instruction : un mois pour une déclaration, deux à trois mois pour un permis.",
       '## Comparer les trois solutions',
-      "Extension latérale : meilleur rapport surface/prix, mais consomme du terrain. Surélévation : préserve le jardin, mais chantier plus technique et plus coûteux. Véranda : mise en oeuvre rapide (deux à quatre semaines), mais confort thermique moindre en été comme en hiver si le vitrage n'est pas performant.",
+      "Extension latérale : meilleur rapport surface/prix, mais consomme du terrain. Surélévation : préserve le jardin, mais chantier plus technique et plus coûteux. Véranda : mise en œuvre rapide (deux à quatre semaines), mais confort thermique moindre en été comme en hiver si le vitrage n'est pas performant.",
       '## Les fondations',
       "L'extension latérale nécessite des fondations indépendantes de celles de la maison existante, avec un joint de dilatation. La profondeur des fondations dépend de la nature du sol : 50 à 80 cm en sol stable, jusqu'à 1,20 m en sol argileux. Budget fondations : 100 à 200 euros par mètre linéaire.",
       "## L'isolation et la réglementation thermique",
@@ -637,7 +637,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       {
         question: "Combien coûte la rénovation électrique d'une maison ancienne ?",
         answer:
-          "Rénovation partielle (mise en sécurité du tableau et des protections) : 3 000 à 6 000 euros. Rénovation totale (reprise de tout le câblage) : 8 000 à 20 000 euros pour une maison de 100 m². La main-d'oeuvre représente 40 à 70 % du budget total.",
+          "Rénovation partielle (mise en sécurité du tableau et des protections) : 3 000 à 6 000 euros. Rénovation totale (reprise de tout le câblage) : 8 000 à 20 000 euros pour une maison de 100 m². La main-d'œuvre représente 40 à 70 % du budget total.",
       },
       {
         question: "Ma maison a plus de 30 ans : faut-il refaire l'électricité ?",
@@ -683,7 +683,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       '## 8. Les canalisations de gaz',
       'Si votre maison est alimentée au gaz, les canalisations doivent être vérifiées en même temps que la plomberie. Le remplacement des tuyaux en cuivre par des conduites en acier inoxydable onduleux gainé (CSST) est recommandé. Le certificat de conformité gaz est obligatoire après travaux.',
       '## Budget global',
-      "Rénovation partielle (remplacement des alimentations et de la robinetterie) : 3 000 à 6 000 euros pour une maison de 100 m². Rénovation complète (alimentations, évacuations, production d'eau chaude, équipements sanitaires) : 8 000 à 18 000 euros. Ces budgets incluent la fourniture et la main-d'oeuvre.",
+      "Rénovation partielle (remplacement des alimentations et de la robinetterie) : 3 000 à 6 000 euros pour une maison de 100 m². Rénovation complète (alimentations, évacuations, production d'eau chaude, équipements sanitaires) : 8 000 à 18 000 euros. Ces budgets incluent la fourniture et la main-d'œuvre.",
       '## Durée des travaux',
       "Rénovation partielle : trois à cinq jours. Rénovation complète : deux à quatre semaines. L'eau sera coupée par intermittence pendant les travaux. Prévoyez des solutions temporaires (bidons d'eau, douche chez un voisin) pour les jours de coupure prolongée.",
       '## Points de vigilance',
@@ -702,7 +702,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       {
         question: "Combien coûte la rénovation de la plomberie d'une maison ?",
         answer:
-          "Rénovation partielle (alimentations et robinetterie) : 3 000 à 6 000 euros pour une maison de 100 m². Rénovation complète (alimentations, évacuations, eau chaude, sanitaires) : 8 000 à 18 000 euros fourniture et main-d'oeuvre incluses.",
+          "Rénovation partielle (alimentations et robinetterie) : 3 000 à 6 000 euros pour une maison de 100 m². Rénovation complète (alimentations, évacuations, eau chaude, sanitaires) : 8 000 à 18 000 euros fourniture et main-d'œuvre incluses.",
       },
       {
         question: 'Faut-il remplacer les canalisations en plomb ?',
@@ -862,7 +862,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Découvrez le budget pour construire un garage en 2026 : accolé ou indépendant, démarches et fondations. Obtenez un devis gratuit.',
     content: [
-      "Le garage protège votre véhicule, augmente l'espace de rangement et valorise votre propriété de 5 à 10 %. C'est un projet de construction à part entière qui nécessite des fondations solides, des démarches administratives et un budget bien défini. Faites appel à un [maçon](/services/macon) pour la construction du gros oeuvre.",
+      "Le garage protège votre véhicule, augmente l'espace de rangement et valorise votre propriété de 5 à 10 %. C'est un projet de construction à part entière qui nécessite des fondations solides, des démarches administratives et un budget bien défini. Faites appel à un [maçon](/services/macon) pour la construction du gros œuvre.",
       '## 1. Choisir le type de garage',
       "Garage accolé à la maison : pratique (accès direct au logement), il partage un mur avec la maison. Garage indépendant : plus de liberté d'implantation, idéal si le terrain est vaste. Garage enterré ou semi-enterré : exploite la pente naturelle du terrain mais coûte plus cher. Carport (abri ouvert) : solution économique mais sans protection contre le vol.",
       '## 2. Les dimensions standard',

@@ -16,10 +16,7 @@
 
 import type { Ville } from '@/lib/data/france'
 import { villes } from '@/lib/data/france'
-import {
-  RGE_QUALIFICATION_LABELS,
-  type RgeAllowedService,
-} from '@/lib/rge/service-city-listings'
+import { RGE_QUALIFICATION_LABELS, type RgeAllowedService } from '@/lib/rge/service-city-listings'
 
 export interface RgeFaqItem {
   question: string
@@ -53,10 +50,7 @@ function fmtCount(count: number): string {
  * Génère 3-4 paragraphes uniques pour /artisans-rge/[ville].
  * Variation : tier ville, count, departement, mention saisonnière, rang.
  */
-export function buildGenericRgeParagraphs(
-  ville: Ville,
-  count: number,
-): string[] {
+export function buildGenericRgeParagraphs(ville: Ville, count: number): string[] {
   const tier = getVilleTier(ville.slug)
   const rank = getVilleRank(ville.slug)
   const countLabel = count > 0 ? fmtCount(count) : 'plusieurs'
@@ -86,9 +80,10 @@ export function buildGenericRgeParagraphs(
   const p3 = `À ${ville.name} comme partout en France, un foyer aux revenus "bleus" (très modestes) peut cumuler MaPrimeRénov' Sérénité (jusqu'à 50 % du montant TTC des travaux) avec les primes CEE versées par les délégataires (Effy, Sonergia, TotalEnergies, Engie). Pour un remplacement de chaudière fioul par une pompe à chaleur air/eau, l'addition des aides dépasse fréquemment 10 000 € sur un projet de 18 000 €. L'éco-PTZ permet ensuite de financer le reste à charge sans intérêts, jusqu'à 50 000 € remboursables sur 20 ans.`
 
   // Paragraphe 4 — comment vérifier / variation saisonnière
-  const p4Rank = rank && rank <= 20
-    ? `Dans les grandes agglomérations comme ${ville.name}, les carnets de commandes des artisans RGE se tendent fortement entre octobre et février — période où la demande d'audits énergétiques et de remplacements de chaudières culmine. Anticiper sa demande dès le printemps garantit un chantier réalisé avant l'hiver suivant.`
-    : `Les artisans RGE du secteur de ${ville.name} sont particulièrement sollicités à l'automne, au moment où les propriétaires anticipent l'hiver. Déposer ses demandes d'aides en amont (MaPrimeRénov' et CEE) permet d'éviter la bousculade de fin d'année.`
+  const p4Rank =
+    rank && rank <= 20
+      ? `Dans les grandes agglomérations comme ${ville.name}, les carnets de commandes des artisans RGE se tendent fortement entre octobre et février — période où la demande d'audits énergétiques et de remplacements de chaudières culmine. Anticiper sa demande dès le printemps garantit un chantier réalisé avant l'hiver suivant.`
+      : `Les artisans RGE du secteur de ${ville.name} sont particulièrement sollicités à l'automne, au moment où les propriétaires anticipent l'hiver. Déposer ses demandes d'aides en amont (MaPrimeRénov' et CEE) permet d'éviter la bousculade de fin d'année.`
 
   const p4 = `${p4Rank} Avant de signer un devis, vérifiez la validité du label via l'annuaire officiel France Rénov' ou directement sur le site de l'organisme certificateur (Qualibat, Qualit'EnR, Qualifelec, Certibat) : une qualification RGE est valable 4 ans et doit être suivie d'un audit tous les 2 ans. Un artisan dont le label est expiré ou suspendu ne permet pas d'obtenir les aides.`
 
@@ -99,10 +94,7 @@ export function buildGenericRgeParagraphs(
  * FAQ générique pour /artisans-rge/[ville] (4-5 questions).
  * Contextualisé via count + ville + departement.
  */
-export function buildGenericRgeFaq(
-  ville: Ville,
-  count: number,
-): RgeFaqItem[] {
+export function buildGenericRgeFaq(ville: Ville, count: number): RgeFaqItem[] {
   const countLabel = count > 0 ? fmtCount(count) : 'Plusieurs'
   const artisanWord = count > 1 ? 'artisans' : 'artisan'
 
@@ -178,11 +170,11 @@ const SERVICE_COPY: Record<
     intro: `L'isolation représente le premier levier d'économie d'énergie selon l'ADEME : jusqu'à 30 % des déperditions passent par la toiture, 25 % par les murs et 10 % par les planchers bas. Deux approches existent — l'ITI (isolation par l'intérieur), moins coûteuse mais qui réduit la surface habitable, et l'ITE (isolation par l'extérieur), plus performante thermiquement, qui ne traite pas les ponts thermiques des planchers et permet un ravalement simultané. Les deux exigent une qualification Qualibat RGE spécifique.`,
     aides: `Le dispositif "Coup de pouce isolation" CEE a été fortement recentré en 2026 sur les ménages modestes et très modestes, mais l'ITE et l'ITI restent éligibles à MaPrimeRénov' (forfait jusqu'à 75 €/m² pour l'ITE en ménage "bleu"), aux CEE classiques, à l'éco-PTZ et à la TVA à 5,5 %. L'isolation des combles perdus reste le poste le plus rentable avec un temps de retour moyen de 3 à 5 ans.`,
   },
-  'chauffagiste': {
+  chauffagiste: {
     intro: `Un chauffagiste RGE peut installer et entretenir des chaudières gaz à condensation, des chaudières bois (bûches, granulés), des systèmes hybrides (PAC + appoint gaz), et des chauffe-eau thermodynamiques. Les qualifications de référence sont Qualibat RGE "chauffage +" et QualiBois délivrée par Qualit'EnR pour les appareils à bois. Depuis le 1er juillet 2022, l'installation de nouvelles chaudières au fioul est interdite dans les logements — seul le remplacement par une solution décarbonée reste éligible aux aides.`,
     aides: `En 2026, un chauffagiste RGE donne accès à MaPrimeRénov' pour la chaudière biomasse (jusqu'à 10 000 € pour les chaudières à granulés en ménage "bleu"), à la prime CEE "Coup de pouce chauffage" pour le remplacement d'une chaudière fioul ou gaz, à l'éco-PTZ et à la TVA 5,5 %. Les chaudières gaz à condensation ne sont plus éligibles à MaPrimeRénov' depuis 2023, mais restent éligibles aux CEE.`,
   },
-  'electricien': {
+  electricien: {
     intro: `Un électricien RGE Qualifelec intervient sur trois segments éligibles aux aides : l'installation de bornes de recharge pour véhicules électriques (IRVE), l'installation et le raccordement d'installations photovoltaïques en autoconsommation, et les systèmes de régulation/pilotage de chauffage électrique performants. La mention "IRVE" est une qualification spécifique à la certification Qualifelec, obligatoire pour débloquer le crédit d'impôt de 500 € sur les bornes.`,
     aides: `Une borne de recharge installée par un électricien Qualifelec IRVE ouvre droit au crédit d'impôt de 500 € (75 % du montant plafonné) et, dans certains cas, à une prime CEE Advenir pour les installations en copropriété. Le photovoltaïque en autoconsommation bénéficie de la prime EDF OA et d'un tarif d'achat du surplus.`,
   },
@@ -190,36 +182,36 @@ const SERVICE_COPY: Record<
     intro: `La rénovation énergétique globale couvre les projets qui combinent plusieurs gestes simultanés : isolation + changement de chauffage + ventilation. Depuis 2024, l'État concentre ses aides sur ces rénovations d'ampleur via MaPrimeRénov' Parcours accompagné, qui impose un accompagnement par "Mon Accompagnateur Rénov'" (MAR) agréé, un audit énergétique préalable et un gain minimum de 2 classes au DPE.`,
     aides: `Le parcours accompagné MaPrimeRénov' 2026 peut couvrir jusqu'à 80 % du montant des travaux (plafond 70 000 €) pour les ménages "bleus" passant d'une classe F/G à B, cumulable avec les CEE "Rénovation globale". Un accompagnement MAR est obligatoire et pris en charge partiellement par l'aide. L'éco-PTZ "performance globale" peut atteindre 50 000 €.`,
   },
-  'menuisier': {
+  menuisier: {
     intro: `Le remplacement des fenêtres simple vitrage par du double ou triple vitrage représente environ 10 à 15 % des déperditions thermiques. La qualification Qualibat RGE menuiserie couvre la pose de menuiseries extérieures (fenêtres, portes-fenêtres, portes d'entrée, volets isolants) avec des critères stricts sur le coefficient Uw (≤ 1,3 W/m²·K pour les fenêtres) et sur la mise en œuvre (étanchéité à l'air).`,
     aides: `En 2026, le remplacement de fenêtres par un menuisier RGE donne droit à MaPrimeRénov' (forfait 40 à 100 €/équipement selon revenus), aux CEE, à l'éco-PTZ et à la TVA 5,5 %. La rentabilité pure du changement de fenêtres étant plus faible que l'isolation des combles, c'est un geste qui s'intègre généralement dans une rénovation plus large.`,
   },
-  'couvreur': {
+  couvreur: {
     intro: `L'isolation des combles perdus et rampants est la première mesure recommandée par l'ADEME pour réduire la facture énergétique. Un couvreur Qualibat RGE "couverture isolation" peut intervenir sur l'isolation par soufflage de ouate, laine de verre ou laine de roche en combles perdus, sur l'isolation entre chevrons ou en sarking pour les combles aménagés, et sur la couverture éco-performante (tuiles photovoltaïques, toiture végétalisée).`,
     aides: `L'isolation de combles perdus reste éligible à MaPrimeRénov' et aux CEE en 2026. Le "Coup de pouce isolation" a été recentré sur les ménages très modestes, mais les forfaits CEE classiques demeurent pour tous les revenus. La TVA à 5,5 % s'applique à la main d'œuvre et aux matériaux, et l'éco-PTZ peut financer le reste à charge.`,
   },
-  'zingueur': {
+  zingueur: {
     intro: `Un zingueur RGE peut intervenir sur la couverture métallique (zinc, aluminium, acier), l'étanchéité toiture-terrasse et l'isolation thermique de toiture, avec une qualification Qualibat RGE couverture. Les travaux d'isolation par sarking (par l'extérieur de la charpente) sont particulièrement efficaces pour les combles aménagés car ils ne sacrifient pas la hauteur sous plafond.`,
     aides: `Tous les travaux d'isolation de toiture menés par un zingueur Qualibat RGE couverture sont éligibles à MaPrimeRénov', aux CEE, à l'éco-PTZ et à la TVA 5,5 %, à condition de respecter les résistances thermiques minimales imposées par l'arrêté du 30 mars 2009 (R ≥ 7 m²·K/W pour les combles perdus, R ≥ 6 en rampants).`,
   },
-  'facadier': {
+  facadier: {
     intro: `L'isolation thermique par l'extérieur (ITE) est la solution la plus performante pour traiter en une seule opération les déperditions par les murs et les ponts thermiques des planchers. Un façadier Qualibat RGE ITE maîtrise les systèmes sous enduit mince sur polystyrène expansé, les bardages ventilés sur ossature bois et les systèmes hydrauliques avec laine minérale. Les contraintes urbanistiques (PLU, secteurs sauvegardés) peuvent nécessiter une déclaration préalable.`,
     aides: `L'ITE est l'un des gestes les mieux soutenus par MaPrimeRénov' 2026 (forfait jusqu'à 75 €/m² pour les ménages "bleus"), par les CEE et par l'éco-PTZ. Le "Coup de pouce isolation" a été maintenu pour les murs en façade extérieure pour les ménages modestes. Le temps de retour moyen d'une ITE se situe entre 10 et 15 ans sans aides, 5 à 8 ans avec le montage complet.`,
   },
-  'platrier': {
+  platrier: {
     intro: `L'isolation thermique par l'intérieur (ITI) reste la solution la plus accessible et la moins coûteuse pour isoler des murs existants : mise en œuvre rapide, pas d'autorisation d'urbanisme, et possibilité de traiter pièce par pièce. Un plâtrier Qualibat RGE ITI pose des doublages collés (complexes PSE + placo) ou des contre-cloisons sur ossature métallique avec isolant semi-rigide, selon l'état du support.`,
     aides: `L'ITI est éligible à MaPrimeRénov' (forfait jusqu'à 25 €/m² pour les ménages "bleus"), aux CEE, à l'éco-PTZ et à la TVA 5,5 %. La contrepartie de son moindre coût est qu'elle ne traite pas les ponts thermiques des planchers et qu'elle réduit la surface habitable d'environ 8 à 12 cm par mur traité.`,
   },
-  'plombier': {
+  plombier: {
     intro: `Un plombier RGE peut installer des chauffe-eau thermodynamiques (qui captent les calories de l'air ambiant pour chauffer l'eau sanitaire) et des systèmes solaires combinés. Les qualifications de référence sont "Chauffage +" et "QualiPAC CET" délivrées par Qualibat et Qualit'EnR. Un CET bien dimensionné divise par 3 la consommation d'un ballon électrique classique.`,
     aides: `L'installation d'un chauffe-eau thermodynamique par un plombier RGE ouvre droit à MaPrimeRénov' (forfait 400 à 1 200 € selon revenus), aux CEE "Coup de pouce chauffe-eau", à l'éco-PTZ et à la TVA 5,5 %.`,
   },
-  'climaticien': {
+  climaticien: {
     intro: `Une PAC air/air (climatisation réversible) est classée par la réglementation française comme système de refroidissement prioritaire, pas comme chauffage principal : elle n'est donc PAS éligible à MaPrimeRénov' en rénovation depuis 2021. Elle reste toutefois une solution de confort d'été pertinente, notamment dans les régions à fortes chaleurs estivales. La qualification QualiPAC couvre cette technologie.`,
     aides: `Contrairement à la PAC air/eau, la PAC air/air n'est pas éligible à MaPrimeRénov' ni aux principaux CEE résidentiels. Seule la TVA à 10 % s'applique pour les équipements en résidence principale de plus de 2 ans. Pour un investissement 100 % finançable par les aides, orientez-vous vers une PAC air/eau ou géothermique.`,
   },
-  'ramoneur': {
-    intro: `L'entretien annuel d'un appareil de chauffage bois est obligatoire : il conditionne la validité de l'assurance habitation et le maintien des performances énergétiques. Un ramoneur qualifié Qualibois Entretien (Qualit'EnR) réalise un ramonage mécanique, un contrôle du tirage et un nettoyage du foyer. Deux ramonages par an sont exigés en période d'usage continu pour les appareils à bois.`,
+  ramoneur: {
+    intro: `L'entretien annuel d'un appareil de chauffage bois est obligatoire : il conditionne la validité de l'assurance habitation et le maintien des performances énergétiques. Un ramoneur qualifié QualiBois Entretien (Qualit'EnR) réalise un ramonage mécanique, un contrôle du tirage et un nettoyage du foyer. Deux ramonages par an sont exigés en période d'usage continu pour les appareils à bois.`,
     aides: `L'entretien lui-même n'est pas éligible aux aides à la rénovation, mais la mise en conformité d'une installation bois (changement d'appareil vers un modèle Flamme Verte 7 étoiles, mise aux normes du conduit) peut relever des forfaits MaPrimeRénov' chaudière biomasse et CEE via un artisan QualiBois Installation.`,
   },
 }
@@ -237,7 +229,7 @@ export function buildServiceCityParagraphs(
   serviceSlug: string,
   serviceName: string,
   ville: Ville,
-  count: number,
+  count: number
 ): string[] {
   const tier = getVilleTier(ville.slug)
   const copy = SERVICE_COPY[serviceSlug] ?? SERVICE_COPY_FALLBACK
@@ -277,7 +269,7 @@ export function buildServiceCityFaq(
   serviceSlug: string,
   serviceName: string,
   ville: Ville,
-  count: number,
+  count: number
 ): RgeFaqItem[] {
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
   const qualifLabel = qualif?.label ?? 'RGE'
@@ -294,7 +286,7 @@ export function buildServiceCityFaq(
     'pompe-a-chaleur': `Pour installer une pompe à chaleur air/eau à ${ville.name} en 2026, un ménage "bleu" (très modeste) peut obtenir jusqu'à 11 000 € de MaPrimeRénov', cumulables avec 5 000 € de prime CEE "Coup de pouce chauffage" pour le remplacement d'une chaudière fioul ou gaz, l'éco-PTZ jusqu'à 50 000 € et la TVA à 5,5 %.`,
     'panneaux-solaires': `Pour une installation photovoltaïque en autoconsommation à ${ville.name} en 2026, vous pouvez obtenir la prime à l'autoconsommation EDF OA (80 à 380 €/kWc selon puissance), le tarif d'achat du surplus fixé par la CRE, et la TVA à 10 % pour les installations ≤ 3 kWc. Le solaire thermique (QualiSol) reste éligible à MaPrimeRénov' et aux CEE.`,
     'isolation-thermique': `À ${ville.name}, les travaux d'isolation (ITI ou ITE) réalisés par un artisan Qualibat RGE donnent droit en 2026 à MaPrimeRénov' (jusqu'à 75 €/m² en ITE pour les ménages "bleus"), aux CEE classiques, à l'éco-PTZ et à la TVA 5,5 %.`,
-    'chauffagiste': `À ${ville.name}, un chauffagiste RGE donne accès en 2026 à MaPrimeRénov' chaudière biomasse (jusqu'à 10 000 € pour les chaudières granulés en ménage "bleu"), à la prime CEE "Coup de pouce chauffage", à l'éco-PTZ et à la TVA 5,5 %.`,
+    chauffagiste: `À ${ville.name}, un chauffagiste RGE donne accès en 2026 à MaPrimeRénov' chaudière biomasse (jusqu'à 10 000 € pour les chaudières granulés en ménage "bleu"), à la prime CEE "Coup de pouce chauffage", à l'éco-PTZ et à la TVA 5,5 %.`,
     'renovation-energetique': `Pour une rénovation globale à ${ville.name} en 2026, le parcours accompagné MaPrimeRénov' peut financer jusqu'à 80 % des travaux (plafond 70 000 €) pour les ménages "bleus" passant d'une classe F/G à B, avec accompagnement MAR obligatoire.`,
   }
   const aidesAnswer =
@@ -332,7 +324,7 @@ export function buildServiceCityFaq(
  */
 export function getNeighborVilles(
   villeSlug: string,
-  limit = 5,
+  limit = 5
 ): Array<{ slug: string; name: string }> {
   const current = villes.find((v) => v.slug === villeSlug)
   if (!current) {
@@ -352,7 +344,7 @@ export function getNeighborVilles(
       (v) =>
         v.slug !== villeSlug &&
         v.region === current.region &&
-        v.departementCode !== current.departementCode,
+        v.departementCode !== current.departementCode
     )
     .slice(0, limit - sameDept.length)
 
@@ -362,10 +354,7 @@ export function getNeighborVilles(
   }
 
   const topFallback = villes
-    .filter(
-      (v) =>
-        v.slug !== villeSlug && !combined.some((c) => c.slug === v.slug),
-    )
+    .filter((v) => v.slug !== villeSlug && !combined.some((c) => c.slug === v.slug))
     .slice(0, limit - combined.length)
 
   return [...combined, ...topFallback].map((v) => ({

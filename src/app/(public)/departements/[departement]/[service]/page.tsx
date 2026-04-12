@@ -40,6 +40,7 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { relatedServices } from '@/lib/constants/navigation'
+import { getDeptPreposition } from '@/lib/geo-strings'
 
 const topServices = ['plombier']
 
@@ -54,7 +55,7 @@ interface PageProps {
   params: Promise<{ departement: string; service: string }>
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -73,7 +74,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleTemplates = [
     `${trade.name} ${dept.name} (${dept.code})`,
     `${trade.name} ${dept.name} — Devis gratuit`,
-    `${trade.name} dans le ${dept.code} — Devis`,
+    `${trade.name} ${getDeptPreposition(dept.name)} — Devis`,
     `${trade.name} ${dept.code} : tarifs et devis`,
     `${trade.name} ${dept.name} — Artisans vérifiés`,
   ]
@@ -81,9 +82,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`desc-dept-svc-${deptSlug}-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${trade.name.toLowerCase()} qualifié dans le ${dept.name} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans vérifiés.`,
-    `${trade.name} en ${dept.name} : comparez les devis de professionnels référencés SIREN. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuit.`,
-    `Besoin d’un ${trade.name.toLowerCase()} dans le ${dept.code} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Artisans certifiés, devis gratuits en ligne.`,
+    `Trouvez un ${trade.name.toLowerCase()} qualifié ${getDeptPreposition(dept.name)} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans vérifiés.`,
+    `${trade.name} ${getDeptPreposition(dept.name)} : comparez les devis de professionnels référencés SIREN. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuit.`,
+    `Besoin d’un ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Artisans certifiés, devis gratuits en ligne.`,
     `${dept.name} (${dept.code}) : ${trade.name.toLowerCase()} disponible. Tarifs de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -101,7 +102,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'website',
       url: `${SITE_URL}/departements/${deptSlug}/${serviceSlug}`,
       images: [
-        { url: serviceImage.src, width: 800, height: 600, alt: `${trade.name} en ${dept.name}` },
+        {
+          url: serviceImage.src,
+          width: 800,
+          height: 600,
+          alt: `${trade.name} ${getDeptPreposition(dept.name)}`,
+        },
       ],
     },
     twitter: {
@@ -178,8 +184,8 @@ export default async function DeptServicePage({ params }: PageProps) {
   const faqSchema = getFAQSchema(allFaq)
 
   const serviceSchema = getServiceSchema({
-    name: `${trade.name} en ${dept.name}`,
-    description: `Service de ${trade.name.toLowerCase()} dans le ${dept.name} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
+    name: `${trade.name} ${getDeptPreposition(dept.name)}`,
+    description: `Service de ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
     areaServed: dept.name,
     category: trade.name,
   })
@@ -254,11 +260,11 @@ export default async function DeptServicePage({ params }: PageProps) {
                 {(() => {
                   const h1Hash = Math.abs(hashCode(`h1-dept-svc-${deptSlug}-${serviceSlug}`))
                   const h1Templates = [
-                    `${trade.name} dans le ${dept.name}`,
-                    `Trouver un ${trade.name.toLowerCase()} en ${dept.name}`,
+                    `${trade.name} ${getDeptPreposition(dept.name)}`,
+                    `Trouver un ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)}`,
                     `${trade.name} ${dept.name} (${dept.code})`,
                     `${dept.name} : votre ${trade.name.toLowerCase()} qualifié`,
-                    `${trade.name} dans le ${dept.code} — ${dept.name}`,
+                    `${trade.name} ${getDeptPreposition(dept.name)} (${dept.code})`,
                   ]
                   return (
                     <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
@@ -271,8 +277,8 @@ export default async function DeptServicePage({ params }: PageProps) {
             </div>
 
             <p className="text-lg text-charcoal-400 max-w-2xl leading-relaxed mb-8">
-              Trouvez un {trade.name.toLowerCase()} qualifié dans le {dept.name} ({dept.code}).
-              Tarif moyen régional : {minPrice} à {maxPrice} {trade.priceRange.unit}.{' '}
+              Trouvez un {trade.name.toLowerCase()} qualifié {getDeptPreposition(dept.name)} (
+              {dept.code}). Tarif moyen régional : {minPrice} à {maxPrice} {trade.priceRange.unit}.{' '}
               {content.profile.climateLabel}, {content.profile.housingLabel.toLowerCase()}.
             </p>
 
@@ -308,7 +314,7 @@ export default async function DeptServicePage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* ─── HERO CTA ───────────────────────────────────────── */}
         <GeoPageCTA
-          title={`Besoin d'un ${trade.name.toLowerCase()} dans le ${dept.name} ?`}
+          title={`Besoin d'un ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)} ?`}
           subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
           ville={dept.chefLieu}
           service={serviceSlug}
@@ -322,7 +328,7 @@ export default async function DeptServicePage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
-                {trade.name} dans le {dept.name}
+                {trade.name} {getDeptPreposition(dept.name)}
               </h2>
               <p className="text-sm text-charcoal-500">Prestations courantes et certifications</p>
             </div>
@@ -781,7 +787,7 @@ export default async function DeptServicePage({ params }: PageProps) {
 
       {/* ─── STICKY CTA + EXIT INTENT ─────────────────────── */}
       <GeoPageCTA
-        title={`Comparez les devis ${trade.name.toLowerCase()} dans le ${dept.name}`}
+        title={`Comparez les devis ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)}`}
         subtitle="Gratuit, sans engagement, artisans vérifiés SIREN"
         ville={dept.chefLieu}
         service={serviceSlug}

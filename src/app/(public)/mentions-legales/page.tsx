@@ -91,6 +91,7 @@ export default async function MentionsLegalesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <Breadcrumb items={[{ label: 'Mentions légales' }]} className="mb-4" />
           <h1 className="font-heading text-3xl font-bold text-charcoal-900">Mentions légales</h1>
+          <p className="text-charcoal-600 mt-2">Dernière mise à jour : avril 2026</p>
         </div>
       </section>
 

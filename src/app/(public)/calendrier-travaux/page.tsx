@@ -23,9 +23,9 @@ import RelatedHubs from '@/components/seo/RelatedHubs'
 const PAGE_URL = `${SITE_URL}/calendrier-travaux`
 
 export const metadata: Metadata = {
-  title: 'Calendrier des Travaux : Guide Mois par Mois',
+  title: 'Calendrier des Travaux 2026 : Guide Mois par Mois',
   description:
-    'Calendrier saisonnier des travaux de la maison : quels travaux faire chaque mois, lesquels éviter et les conseils pratiques pour planifier votre rénovation au bon moment.',
+    'Calendrier saisonnier des travaux : quels travaux faire chaque mois, lesquels éviter. Conseils pratiques pour planifier.',
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: 'Calendrier des travaux : quand faire quoi ?',
@@ -43,29 +43,33 @@ const breadcrumbItems = [{ label: 'Calendrier des travaux' }]
 
 const seasonInfo: Record<
   string,
-  { icon: typeof Sun; color: string; label: string; months: string[] }
+  { icon: typeof Sun; bgClass: string; textClass: string; label: string; months: string[] }
 > = {
   hiver: {
     icon: Snowflake,
-    color: 'blue',
+    bgClass: 'bg-blue-100',
+    textClass: 'text-blue-600',
     label: 'Hiver',
     months: ['Janvier', 'Février', 'Décembre'],
   },
   printemps: {
     icon: Flower2,
-    color: 'green',
+    bgClass: 'bg-green-100',
+    textClass: 'text-green-600',
     label: 'Printemps',
     months: ['Mars', 'Avril', 'Mai'],
   },
   ete: {
     icon: Sun,
-    color: 'amber',
+    bgClass: 'bg-amber-100',
+    textClass: 'text-amber-600',
     label: 'Été',
     months: ['Juin', 'Juillet', 'Août'],
   },
   automne: {
     icon: Leaf,
-    color: 'orange',
+    bgClass: 'bg-orange-100',
+    textClass: 'text-orange-600',
     label: 'Automne',
     months: ['Septembre', 'Octobre', 'Novembre'],
   },
@@ -158,9 +162,9 @@ export default function CalendrierTravauxPage() {
                   className={`flex items-center gap-3 bg-white rounded-xl shadow-sm border border-sand-200 p-4 hover:shadow-md transition-all group`}
                 >
                   <div
-                    className={`w-10 h-10 bg-${info.color}-100 rounded-lg flex items-center justify-center`}
+                    className={`w-10 h-10 ${info.bgClass} rounded-lg flex items-center justify-center`}
                   >
-                    <Icon className={`w-5 h-5 text-${info.color}-600`} />
+                    <Icon className={`w-5 h-5 ${info.textClass}`} />
                   </div>
                   <div>
                     <div className="font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">

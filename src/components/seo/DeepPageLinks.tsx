@@ -15,6 +15,7 @@ import { allArticles } from '@/lib/data/blog/articles'
 import { getNearbyVilleSlugs, getCommuneScore } from '@/lib/data/commune-data'
 import { isMoneyPage, TOP_CITIES } from '@/lib/seo/top-pages'
 import { getProblemsByService } from '@/lib/data/problems'
+import { getDeptPreposition, getRegionPreposition } from '@/lib/geo-strings'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -553,7 +554,7 @@ export default async function DeepPageLinks({
       if (module8Links.length >= 3) break
       const link = {
         href: `/departements/${d.slug}/${currentService}`,
-        label: `${serviceName} dans le ${d.name}`,
+        label: `${serviceName} ${getDeptPreposition(d.name)}`,
       }
       if (!usedHrefs.has(link.href)) {
         usedHrefs.add(link.href)
@@ -667,14 +668,14 @@ export default async function DeepPageLinks({
     usedHrefs.add(deptServiceHref)
     module3Links.push({
       href: deptServiceHref,
-      label: `${serviceName} dans le ${dept.name}`,
+      label: `${serviceName} ${getDeptPreposition(dept.name)}`,
     })
 
     // Other dept links go through normal dedup
     const deptCandidates: { href: string; label: string }[] = []
     deptCandidates.push({
       href: `/departements/${dept.slug}`,
-      label: `Artisans dans le ${dept.name}`,
+      label: `Artisans ${getDeptPreposition(dept.name)}`,
     })
     const deptCities = getVillesByDepartement(ville.departementCode)
       .filter((v) => v.slug !== currentVille)
@@ -712,7 +713,7 @@ export default async function DeepPageLinks({
     for (const r of metroRegions.slice(0, 8)) {
       module5Links.push({
         href: `/regions/${r.slug}/${currentService}`,
-        label: `${serviceName} en ${r.name}`,
+        label: `${serviceName} ${getRegionPreposition(r.name)}`,
       })
     }
   } else {
@@ -726,7 +727,7 @@ export default async function DeepPageLinks({
       if (regionSlug) {
         module5Links.push({
           href: `/regions/${regionSlug}/${currentService}`,
-          label: `${serviceName} en ${ville.region}`,
+          label: `${serviceName} ${getRegionPreposition(ville.region)}`,
         })
       }
     }
@@ -822,7 +823,7 @@ export default async function DeepPageLinks({
     })
   }
   if (module3Links.length > 0 && dept) {
-    modules.push({ title: `${serviceName} dans le ${dept.name}`, links: module3Links })
+    modules.push({ title: `${serviceName} ${getDeptPreposition(dept.name)}`, links: module3Links })
   }
   if (module5Links.length > 0) {
     modules.push({

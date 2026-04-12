@@ -210,16 +210,15 @@ export default function LeadsExclusifsVsPartagesPage() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Target className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              Guide artisan &mdash; acquisition clients
+              Guide artisan — acquisition clients
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-            Leads exclusifs vs leads partag&eacute;s&nbsp;: le vrai co&ucirc;t pour un artisan
+            Leads exclusifs vs leads partagés&nbsp;: le vrai co&ucirc;t pour un artisan
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            Vous payez des leads. Mais combien vous co&ucirc;te vraiment un chantier
-            sign&eacute;&nbsp;? Comparatif objectif avec les chiffres r&eacute;els des principales
-            plateformes.
+            Vous payez des leads. Mais combien vous co&ucirc;te vraiment un chantier signé&nbsp;?
+            Comparatif objectif avec les chiffres réels des principales plateformes.
           </p>
         </div>
       </section>
@@ -231,27 +230,23 @@ export default function LeadsExclusifsVsPartagesPage() {
         <div className="flex items-center gap-2 mb-6">
           <AlertTriangle className="w-5 h-5 text-amber-600" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Le probl&egrave;me des leads partag&eacute;s
+            Le problème des leads partagés
           </h2>
         </div>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            Quand une plateforme envoie la m&ecirc;me demande de devis &agrave; 5 artisans, elle
-            multiplie ses revenus par 5. L&rsquo;artisan, lui, divise ses chances de conversion par
-            5.
+            Quand une plateforme envoie la même demande de devis à 5 artisans, elle multiplie ses
+            revenus par 5. L’artisan, lui, divise ses chances de conversion par 5.
           </p>
           <p>
-            Le client re&ccedil;oit 5 appels en 10 minutes. Il signe avec le premier qui
-            d&eacute;croche (ou le moins cher). Les 4 autres artisans ont perdu leur temps, leur
-            argent, et parfois une demi-journ&eacute;e de rendez-vous commercial.
+            Le client reçoit 5 appels en 10 minutes. Il signe avec le premier qui décroche (ou le
+            moins cher). Les 4 autres artisans ont perdu leur temps, leur argent, et parfois une
+            demi-journée de rendez-vous commercial.
           </p>
           <p>
-            <strong>
-              Le co&ucirc;t r&eacute;el d&rsquo;un lead partag&eacute; n&rsquo;est pas son prix
-              unitaire.
-            </strong>{' '}
-            C&rsquo;est son prix divis&eacute; par le taux de conversion r&eacute;el (5 &agrave;
-            12&nbsp;%), multipli&eacute; par le temps perdu en rendez-vous non-convertis.
+            <strong>Le co&ucirc;t réel d’un lead partagé n’est pas son prix unitaire.</strong> C’est
+            son prix divisé par le taux de conversion réel (5 à 12&nbsp;%), multiplié par le temps
+            perdu en rendez-vous non-convertis.
           </p>
         </div>
       </section>
@@ -264,14 +259,14 @@ export default function LeadsExclusifsVsPartagesPage() {
           <div className="flex items-center gap-2 mb-6">
             <TrendingUp className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Comparatif chiffr&eacute;
+              Comparatif chiffré
             </h2>
           </div>
           <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
             <table className="w-full text-sm">
               <thead className="bg-sand-200 text-charcoal-700">
                 <tr>
-                  <th className="text-left p-4 font-semibold">Crit&egrave;re</th>
+                  <th className="text-left p-4 font-semibold">Critère</th>
                   <th className="text-left p-4 font-semibold text-emerald-700">
                     <div className="flex items-center gap-1.5">
                       <Lock className="w-4 h-4" aria-hidden="true" />
@@ -281,7 +276,7 @@ export default function LeadsExclusifsVsPartagesPage() {
                   <th className="text-left p-4 font-semibold text-charcoal-500">
                     <div className="flex items-center gap-1.5">
                       <Users className="w-4 h-4" aria-hidden="true" />
-                      Lead partag&eacute;
+                      Lead partagé
                     </div>
                   </th>
                 </tr>
@@ -300,9 +295,8 @@ export default function LeadsExclusifsVsPartagesPage() {
             </table>
           </div>
           <p className="text-xs text-charcoal-500 mt-4 italic">
-            Ordres de grandeur bas&eacute;s sur les retours terrain d&rsquo;artisans et les
-            donn&eacute;es publiques des plateformes. Les taux de conversion varient selon le
-            m&eacute;tier, la zone et la saisonnalit&eacute;.
+            Ordres de grandeur basés sur les retours terrain d’artisans et les données publiques des
+            plateformes. Les taux de conversion varient selon le métier, la zone et la saisonnalité.
           </p>
         </div>
       </section>
@@ -323,7 +317,7 @@ export default function LeadsExclusifsVsPartagesPage() {
             <div className="flex items-center gap-2 mb-4">
               <XCircle className="w-5 h-5 text-red-500" aria-hidden="true" />
               <h3 className="font-heading font-bold text-lg text-charcoal-900">
-                Sc&eacute;nario leads partag&eacute;s
+                Scénario leads partagés
               </h3>
             </div>
             <ul className="space-y-3 text-sm text-charcoal-700">
@@ -335,7 +329,7 @@ export default function LeadsExclusifsVsPartagesPage() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
-                <span>20 leads re&ccedil;us par mois (partag&eacute;s &agrave; 5)</span>
+                <span>20 leads reçus par mois (partagés à 5)</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
@@ -346,7 +340,7 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
                 <span>
-                  Co&ucirc;t par chantier sign&eacute;&nbsp;:{' '}
+                  Co&ucirc;t par chantier signé&nbsp;:{' '}
                   <strong className="text-red-600">90&nbsp;&euro;</strong>
                 </span>
               </li>
@@ -362,7 +356,7 @@ export default function LeadsExclusifsVsPartagesPage() {
             <div className="flex items-center gap-2 mb-4">
               <CheckCircle2 className="w-5 h-5 text-emerald-600" aria-hidden="true" />
               <h3 className="font-heading font-bold text-lg text-charcoal-900">
-                Sc&eacute;nario leads exclusifs
+                Scénario leads exclusifs
               </h3>
             </div>
             <ul className="space-y-3 text-sm text-charcoal-700">
@@ -375,7 +369,7 @@ export default function LeadsExclusifsVsPartagesPage() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
-                <span>8 leads exclusifs par mois (moins de volume, meilleure qualit&eacute;)</span>
+                <span>8 leads exclusifs par mois (moins de volume, meilleure qualité)</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
@@ -386,15 +380,13 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
                 <span>
-                  Co&ucirc;t par chantier sign&eacute;&nbsp;:{' '}
+                  Co&ucirc;t par chantier signé&nbsp;:{' '}
                   <strong className="text-emerald-700">0&nbsp;&euro;</strong>
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
-                <span>
-                  + temps lib&eacute;r&eacute; pour faire les chantiers (pas de course au rappel)
-                </span>
+                <span>+ temps libéré pour faire les chantiers (pas de course au rappel)</span>
               </li>
             </ul>
           </div>
@@ -466,8 +458,8 @@ export default function LeadsExclusifsVsPartagesPage() {
             ))}
           </div>
           <p className="text-xs text-charcoal-500 mt-4 italic">
-            Donn&eacute;es collect&eacute;es en avril 2026 sur les sites officiels, Trustpilot et
-            retours d&rsquo;artisans. Les tarifs et conditions peuvent &eacute;voluer.
+            Données collectées en avril 2026 sur les sites officiels, Trustpilot et retours
+            d’artisans. Les tarifs et conditions peuvent évoluer.
           </p>
         </div>
       </section>
@@ -484,25 +476,24 @@ export default function LeadsExclusifsVsPartagesPage() {
         </div>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            Avant de souscrire &agrave; une plateforme de leads, calculez votre{' '}
-            <strong>co&ucirc;t r&eacute;el par chantier sign&eacute;</strong> (CPA). La formule est
-            simple&nbsp;:
+            Avant de souscrire à une plateforme de leads, calculez votre{' '}
+            <strong>co&ucirc;t réel par chantier signé</strong> (CPA). La formule est simple&nbsp;:
           </p>
           <div className="bg-sand-50 border border-charcoal-200 rounded-xl p-5 my-6 not-prose">
             <p className="font-heading font-bold text-charcoal-900 text-center text-lg">
-              CPA = co&ucirc;t mensuel total &divide; nombre de chantiers sign&eacute;s
+              CPA = co&ucirc;t mensuel total &divide; nombre de chantiers signés
             </p>
           </div>
           <p>
-            Incluez tout&nbsp;: abonnement, co&ucirc;t au lead, temps pass&eacute; en rappels et
-            rendez-vous non-convertis (valorisez votre heure &agrave; 40-60 &euro;). Un artisan qui
-            passe 2h par semaine &agrave; rappeler des leads partag&eacute;s qui ne convertissent
-            pas perd 320 &agrave; 480 &euro;/mois en temps.
+            Incluez tout&nbsp;: abonnement, co&ucirc;t au lead, temps passé en rappels et
+            rendez-vous non-convertis (valorisez votre heure à 40-60 &euro;). Un artisan qui passe
+            2h par semaine à rappeler des leads partagés qui ne convertissent pas perd 320 à 480
+            &euro;/mois en temps.
           </p>
           <p>
-            <strong>R&egrave;gle simple&nbsp;:</strong> si votre CPA d&eacute;passe 3 % du montant
-            moyen de vos devis, le canal n&rsquo;est pas rentable. Sur un devis moyen de 5 000
-            &euro;, c&rsquo;est 150 &euro; max par chantier sign&eacute;.
+            <strong>Règle simple&nbsp;:</strong> si votre CPA dépasse 3 % du montant moyen de vos
+            devis, le canal n’est pas rentable. Sur un devis moyen de 5 000 &euro;, c’est 150 &euro;
+            max par chantier signé.
           </p>
         </div>
       </section>
@@ -513,7 +504,7 @@ export default function LeadsExclusifsVsPartagesPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-            Questions fr&eacute;quentes
+            Questions fréquentes
           </h2>
           <div className="space-y-4">
             {FAQS.map((faq) => (
@@ -543,8 +534,8 @@ export default function LeadsExclusifsVsPartagesPage() {
             Passez aux leads exclusifs
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Inscription gratuite, z&eacute;ro engagement. Chaque demande de devis vous est
-            envoy&eacute;e en exclusivit&eacute;.
+            Inscription gratuite, zéro engagement. Chaque demande de devis vous est envoyée en
+            exclusivité.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
@@ -558,7 +549,7 @@ export default function LeadsExclusifsVsPartagesPage() {
               href="/cee"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
             >
-              D&eacute;couvrir les primes CEE
+              Découvrir les primes CEE
             </Link>
           </div>
         </div>

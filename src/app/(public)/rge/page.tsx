@@ -131,7 +131,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Qu\u2019est-ce que la certification RGE exactement ?',
     answer:
-      'RGE signifie « Reconnu Garant de l\u2019Environnement ». C\u2019est une mention délivrée par des organismes de qualification accrédités COFRAC (Qualibat, Qualit\u2019EnR, Qualifelec, Certibat, Eco Artisan) à des entreprises du bâtiment qui prouvent, preuves de formation et audits chantier à l\u2019appui, leur maîtrise des travaux de rénovation énergétique. La mention est valable quatre ans, renouvelable, et fait l\u2019objet de contrôles sur site périodiques. Sans qualification RGE active au moment de la signature du devis, aucune aide publique à la rénovation énergétique (MaPrimeRénov\u2019, CEE, Éco-PTZ, TVA 5,5 %) n\u2019est mobilisable.',
+      'RGE signifie « Reconnu Garant de l\u2019Environnement ». C\u2019est une mention délivrée par des organismes de qualification accrédités COFRAC (Qualibat, Qualit\u2019EnR, Qualifelec, Certibat, OPQIBI) à des entreprises du bâtiment qui prouvent, preuves de formation et audits chantier à l\u2019appui, leur maîtrise des travaux de rénovation énergétique. La mention est valable quatre ans, renouvelable, et fait l\u2019objet de contrôles sur site périodiques. Sans qualification RGE active au moment de la signature du devis, aucune aide publique à la rénovation énergétique (MaPrimeRénov\u2019, CEE, Éco-PTZ, TVA 5,5 %) n\u2019est mobilisable.',
   },
   {
     question: 'Comment vérifier qu\u2019un artisan est réellement RGE ?',
@@ -146,7 +146,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Quelle différence entre Qualibat, Qualit\u2019EnR, Qualifelec ?',
     answer:
-      'Ces trois organismes sont accrédités COFRAC pour délivrer la mention RGE, mais ils ne couvrent pas les mêmes métiers. Qualibat (le plus large) traite l\u2019isolation thermique (ITE, ITI), la maçonnerie, la couverture et l\u2019enveloppe du bâti via ses qualifications 7xxx et 8xxx. Qualit\u2019EnR est dédié aux énergies renouvelables avec ses signatures QualiPAC (pompes à chaleur), QualiSol et QualiPV (solaire thermique et photovoltaïque), Qualibois (chauffage bois). Qualifelec cible les électriciens pour les bornes IRVE, le photovoltaïque et les solutions électriques performantes. Un artisan peut cumuler plusieurs qualifications s\u2019il exerce plusieurs métiers — c\u2019est courant pour les plaquistes ITE et les chauffagistes PAC.',
+      'Ces trois organismes sont accrédités COFRAC pour délivrer la mention RGE, mais ils ne couvrent pas les mêmes métiers. Qualibat (le plus large) traite l\u2019isolation thermique (ITE, ITI), la maçonnerie, la couverture et l\u2019enveloppe du bâti via ses qualifications 7xxx et 8xxx. Qualit\u2019EnR est dédié aux énergies renouvelables avec ses signatures QualiPAC (pompes à chaleur), QualiSol et QualiPV (solaire thermique et photovoltaïque), QualiBois (chauffage bois). Qualifelec cible les électriciens pour les bornes IRVE, le photovoltaïque et les solutions électriques performantes. Un artisan peut cumuler plusieurs qualifications s\u2019il exerce plusieurs métiers — c\u2019est courant pour les plaquistes ITE et les chauffagistes PAC.',
   },
   {
     question: 'Comment trouver un artisan RGE près de chez moi ?',
@@ -466,9 +466,9 @@ export default async function RgeHubPage() {
             Guides RGE pratiques
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-            Trois ressources op&eacute;rationnelles&nbsp;: comment obtenir la qualification RGE,
-            comment v&eacute;rifier qu&rsquo;un artisan est r&eacute;ellement qualifi&eacute;, et
-            combien co&ucirc;te un audit &eacute;nerg&eacute;tique r&eacute;glementaire.
+            Trois ressources opérationnelles&nbsp;: comment obtenir la qualification RGE, comment
+            vérifier qu’un artisan est réellement qualifié, et combien co&ucirc;te un audit
+            énergétique réglementaire.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <Link
@@ -482,8 +482,8 @@ export default async function RgeHubPage() {
                 Comment devenir artisan RGE&nbsp;?
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Parcours complet de qualification (formation, audit, chantier t&eacute;moin),
-                co&ucirc;ts et d&eacute;lais pour chaque organisme.
+                Parcours complet de qualification (formation, audit, chantier témoin), co&ucirc;ts
+                et délais pour chaque organisme.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Lire le guide <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -498,14 +498,14 @@ export default async function RgeHubPage() {
                 <ShieldCheck className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
               <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
-                D&eacute;tecter la fraude RGE
+                Détecter la fraude RGE
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Signaux d&rsquo;alerte, v&eacute;rification officielle France R&eacute;nov&rsquo; et
-                recours en cas d&rsquo;abus ou d&rsquo;usurpation.
+                Signaux d’alerte, vérification officielle France Rénov’ et recours en cas d’abus ou
+                d’usurpation.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                V&eacute;rifier un artisan <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                Vérifier un artisan <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </div>
             </Link>
 
@@ -517,11 +517,11 @@ export default async function RgeHubPage() {
                 <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
               </div>
               <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
-                Tarifs audit &eacute;nerg&eacute;tique r&eacute;glementaire
+                Tarifs audit énergétique réglementaire
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Prix moyen par type de logement, conditions de prise en charge
-                MaPrimeR&eacute;nov&rsquo; et choix de l&rsquo;auditeur.
+                Prix moyen par type de logement, conditions de prise en charge MaPrimeRénov’ et
+                choix de l’auditeur.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Voir les tarifs <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -537,8 +537,8 @@ export default async function RgeHubPage() {
           Aller plus loin
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-          Comprendre les primes CEE mobilisables, les qualifications RGE exig&eacute;es et la source
-          officielle des donn&eacute;es que nous exposons.
+          Comprendre les primes CEE mobilisables, les qualifications RGE exigées et la source
+          officielle des données que nous exposons.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           <Link
@@ -549,11 +549,11 @@ export default async function RgeHubPage() {
               <Percent className="w-6 h-6 text-emerald-700" aria-hidden="true" />
             </div>
             <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
-              Les 19 primes CEE r&eacute;sidentielles
+              Les 19 primes CEE résidentielles
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              Catalogue DGEC complet : PAC, isolation, poêle bois, chaudi&egrave;re biomasse, VMC.
-              Montants 2026 d&eacute;taill&eacute;s.
+              Catalogue DGEC complet : PAC, isolation, poêle bois, chaudière biomasse, VMC. Montants
+              2026 détaillés.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
               Explorer les primes CEE <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -571,8 +571,8 @@ export default async function RgeHubPage() {
               Qualifications RGE officielles
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec&nbsp;: guides
-              d&eacute;taill&eacute;s de chaque qualification et v&eacute;rification.
+              QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec&nbsp;: guides détaillés de chaque
+              qualification et vérification.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
               Lire les guides <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -590,11 +590,11 @@ export default async function RgeHubPage() {
               Source officielle ADEME
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              165&nbsp;000 qualifications synchronis&eacute;es chaque semaine avec l&rsquo;annuaire
-              France R&eacute;nov&rsquo;. M&eacute;thodologie et attribution.
+              165&nbsp;000 qualifications synchronisées chaque semaine avec l’annuaire France
+              Rénov’. Méthodologie et attribution.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-              Voir la m&eacute;thodologie <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              Voir la méthodologie <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </div>
           </Link>
 
@@ -606,14 +606,14 @@ export default async function RgeHubPage() {
               <FileCheck2 className="w-6 h-6 text-emerald-700" aria-hidden="true" />
             </div>
             <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
-              Cumul MaPrimeR&eacute;nov&rsquo; &amp; CEE 2026
+              Cumul MaPrimeRénov’ &amp; CEE 2026
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              R&egrave;gles de cumul, plafonds par profil et ordre d&rsquo;imputation des aides pour
-              chaque type de travaux.
+              Règles de cumul, plafonds par profil et ordre d’imputation des aides pour chaque type
+              de travaux.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-              Lire les r&egrave;gles <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              Lire les règles <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </div>
           </Link>
         </div>

@@ -64,10 +64,10 @@ export default function GdprAccessForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-xl font-bold text-charcoal-900 mb-2">Demande envoy&eacute;e</h3>
+        <h3 className="text-xl font-bold text-charcoal-900 mb-2">Demande envoyée</h3>
         <p className="text-charcoal-600">
-          Votre demande a bien &eacute;t&eacute; enregistr&eacute;e. Vous recevrez un accus&eacute;
-          de r&eacute;ception sous 48h et une r&eacute;ponse compl&egrave;te sous 30 jours maximum.
+          Votre demande a bien été enregistrée. Vous recevrez un accusé de réception sous 48h et une
+          réponse complète sous 30 jours maximum.
         </p>
       </div>
     )
@@ -153,7 +153,7 @@ export default function GdprAccessForm() {
           {form.requestType === 'rectification' && (
             <span className="text-charcoal-500 font-normal">
               {' '}
-              — pr&eacute;cisez quelles donn&eacute;es corriger
+              — précisez quelles données corriger
             </span>
           )}
         </label>

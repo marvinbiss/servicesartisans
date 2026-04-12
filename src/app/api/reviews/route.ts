@@ -211,7 +211,7 @@ export async function POST(request: Request) {
     const validation = validateRequest(createReviewSchema, body)
     if (!validation.success) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Donnees invalides', {
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Données invalides', {
           fields: formatZodErrors(validation.errors),
         }),
         { status: 400 }

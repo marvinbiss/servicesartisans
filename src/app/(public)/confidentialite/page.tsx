@@ -3,6 +3,7 @@ import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -92,7 +93,12 @@ export default async function ConfidentialitePage() {
             <p className="lead">
               Chez ServicesArtisans, nous accordons une grande importance à la protection de vos
               données personnelles. Cette politique de confidentialité explique comment nous
-              collectons, utilisons et protégeons vos informations.
+              collectons, utilisons et protégeons vos informations. Le responsable de traitement est
+              identifié dans nos{' '}
+              <a href="/mentions-legales" className="text-primary-500 hover:underline">
+                mentions légales
+              </a>
+              .
             </p>
 
             <h2>1. Données collectées</h2>
@@ -196,7 +202,9 @@ export default async function ConfidentialitePage() {
                   </tr>
                   <tr>
                     <td className="px-4 py-3 font-medium text-charcoal-900">Stripe Inc.</td>
-                    <td className="px-4 py-3 text-charcoal-600">Traitement des paiements</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Traitement des paiements (sera utilisé pour les futurs services payants)
+                    </td>
                     <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
                     <td className="px-4 py-3 text-charcoal-600">
                       PCI DSS Level 1, Data Privacy Framework
@@ -298,8 +306,11 @@ export default async function ConfidentialitePage() {
             </ul>
             <p>
               Pour exercer ces droits, contactez-nous à :{' '}
-              <a href="mailto:dpo@servicesartisans.fr" className="text-primary-500 hover:underline">
-                <strong>dpo@servicesartisans.fr</strong>
+              <a
+                href={`mailto:${companyIdentity.dpoEmail}`}
+                className="text-primary-500 hover:underline"
+              >
+                <strong>{companyIdentity.dpoEmail}</strong>
               </a>
             </p>
 
@@ -313,7 +324,8 @@ export default async function ConfidentialitePage() {
                 <strong>Cookies analytiques :</strong> pour comprendre l'utilisation du site
               </li>
               <li>
-                <strong>Cookies marketing :</strong> pour personnaliser les publicités
+                <strong>Cookies marketing :</strong> pour personnaliser les contenus (le cas
+                échéant)
               </li>
             </ul>
             <p>
@@ -470,10 +482,10 @@ export default async function ConfidentialitePage() {
               <li>
                 <strong>Email :</strong>{' '}
                 <a
-                  href="mailto:dpo@servicesartisans.fr"
+                  href={`mailto:${companyIdentity.dpoEmail}`}
                   className="text-primary-500 hover:underline"
                 >
-                  <strong>dpo@servicesartisans.fr</strong>
+                  <strong>{companyIdentity.dpoEmail}</strong>
                 </a>{' '}
                 — réponse sous un délai maximal d&apos;un mois (article 12.3 du RGPD).
               </li>
@@ -524,10 +536,10 @@ export default async function ConfidentialitePage() {
               <li>
                 <strong>Email :</strong>{' '}
                 <a
-                  href="mailto:dpo@servicesartisans.fr"
+                  href={`mailto:${companyIdentity.dpoEmail}`}
                   className="text-primary-500 hover:underline"
                 >
-                  dpo@servicesartisans.fr
+                  {companyIdentity.dpoEmail}
                 </a>
               </li>
               <li>

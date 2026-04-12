@@ -248,30 +248,27 @@ export default function FraudeRgeVerifierPage() {
           <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldAlert className="w-4 h-4 text-amber-200" />
             <span className="text-sm font-medium text-amber-100">
-              Guide responsable &mdash; sources officielles France R&eacute;nov&rsquo; &amp; DGCCRF
+              Guide responsable — sources officielles France Rénov’ &amp; DGCCRF
             </span>
           </div>
           <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
-            Fraude RGE&nbsp;: comment v&eacute;rifier qu&rsquo;un artisan est vraiment
-            certifi&eacute;&nbsp;?
+            Fraude RGE&nbsp;: comment vérifier qu’un artisan est vraiment certifié&nbsp;?
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
-            Faux labels, attestations bidon, d&eacute;marchage t&eacute;l&eacute;phonique
-            ill&eacute;gal, promesses d&rsquo;aides &laquo;&nbsp;100&nbsp;%&nbsp;&raquo;&nbsp;: la
-            fraude &agrave; la r&eacute;novation &eacute;nerg&eacute;tique reste un angle mort pour
-            de nombreux m&eacute;nages.
+            Faux labels, attestations bidon, démarchage téléphonique illégal, promesses d’aides
+            «&nbsp;100&nbsp;%&nbsp;»&nbsp;: la fraude à la rénovation énergétique reste un angle
+            mort pour de nombreux ménages.
           </p>
           <div
             className="speakable-summary mt-6 text-base md:text-lg text-emerald-50/80 leading-relaxed border-l-2 border-emerald-400/40 pl-4"
             data-speakable="true"
           >
             <p>
-              Cinq v&eacute;rifications simples suffisent pour filtrer la quasi-totalit&eacute; des
-              arnaques&nbsp;: l&rsquo;annuaire France R&eacute;nov&rsquo;, l&rsquo;attestation RGE
-              compl&egrave;te, le site de l&rsquo;organisme certificateur, le SIREN et les avis
-              ind&eacute;pendants. Sept drapeaux rouges permettent de rep&eacute;rer un dossier
-              douteux avant toute signature, et six r&eacute;flexes structurent la r&eacute;action
-              si le pi&egrave;ge s&rsquo;est d&eacute;j&agrave; referm&eacute;.
+              Cinq vérifications simples suffisent pour filtrer la quasi-totalité des
+              arnaques&nbsp;: l’annuaire France Rénov’, l’attestation RGE complète, le site de
+              l’organisme certificateur, le SIREN et les avis indépendants. Sept drapeaux rouges
+              permettent de repérer un dossier douteux avant toute signature, et six réflexes
+              structurent la réaction si le piège s’est déjà refermé.
             </p>
           </div>
         </div>
@@ -280,32 +277,28 @@ export default function FraudeRgeVerifierPage() {
       {/* Intro éditoriale */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
-          La fraude aux aides &agrave; la r&eacute;novation &eacute;nerg&eacute;tique n&rsquo;est ni
-          marginale, ni nouvelle. Chaque ann&eacute;e, la
-          <strong> DGCCRF</strong> publie dans son rapport d&rsquo;activit&eacute; un bilan des
-          contr&ocirc;les men&eacute;s dans le secteur &laquo;&nbsp;r&eacute;novation
-          &eacute;nerg&eacute;tique&nbsp;&raquo;, o&ugrave; figurent des taux d&rsquo;anomalie
-          &eacute;lev&eacute;s ainsi que des proc&eacute;dures engag&eacute;es &agrave; la suite de
-          signalements via <strong>Signal Conso</strong>. Ces constats sont document&eacute;s par
-          l&rsquo;administration elle-m&ecirc;me&nbsp;: nous renvoyons aux rapports officiels
-          plut&ocirc;t que d&rsquo;avancer des chiffres reconstitu&eacute;s.
+          La fraude aux aides à la rénovation énergétique n’est ni marginale, ni nouvelle. Chaque
+          année, la
+          <strong> DGCCRF</strong> publie dans son rapport d’activité un bilan des contrôles menés
+          dans le secteur «&nbsp;rénovation énergétique&nbsp;», o&ugrave; figurent des taux
+          d’anomalie élevés ainsi que des procédures engagées à la suite de signalements via{' '}
+          <strong>Signal Conso</strong>. Ces constats sont documentés par l’administration
+          elle-même&nbsp;: nous renvoyons aux rapports officiels plutôt que d’avancer des chiffres
+          reconstitués.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          L&rsquo;objectif de ce guide est simple&nbsp;: donner &agrave; un particulier tous les
-          outils pour v&eacute;rifier en quelques minutes qu&rsquo;un artisan est bien reconnu
-          &laquo;&nbsp;Reconnu garant de l&rsquo;environnement&nbsp;&raquo; (RGE), rep&eacute;rer
-          les signaux qui distinguent un professionnel s&eacute;rieux d&rsquo;un op&eacute;rateur
-          douteux, et savoir r&eacute;agir si un dossier a d&eacute;j&agrave; &eacute;t&eacute;
-          sign&eacute; dans la pr&eacute;cipitation.
+          L’objectif de ce guide est simple&nbsp;: donner à un particulier tous les outils pour
+          vérifier en quelques minutes qu’un artisan est bien reconnu «&nbsp;Reconnu garant de
+          l’environnement&nbsp;» (RGE), repérer les signaux qui distinguent un professionnel sérieux
+          d’un opérateur douteux, et savoir réagir si un dossier a déjà été signé dans la
+          précipitation.
         </p>
         <p className="text-charcoal-700 leading-relaxed">
-          Le label RGE lui-m&ecirc;me est encadr&eacute; par l&rsquo;arr&ecirc;t&eacute; du 1er
-          d&eacute;cembre 2015 modifi&eacute;, qui fixe les crit&egrave;res de qualification et la
-          liste des organismes accr&eacute;dit&eacute;s par le Cofrac. Les aides auxquelles il
-          conditionne l&rsquo;&eacute;ligibilit&eacute; (MaPrimeR&eacute;nov&rsquo;, CEE,
-          &eacute;co-PTZ) sont des fonds publics ou quasi publics&nbsp;: leur versement sur la base
-          d&rsquo;une fausse qualification est constitutif d&rsquo;escroquerie au sens de
-          l&rsquo;article 313-1 du code p&eacute;nal.
+          Le label RGE lui-même est encadré par l’arrêté du 1er décembre 2015 modifié, qui fixe les
+          critères de qualification et la liste des organismes accrédités par le Cofrac. Les aides
+          auxquelles il conditionne l’éligibilité (MaPrimeRénov’, CEE, éco-PTZ) sont des fonds
+          publics ou quasi publics&nbsp;: leur versement sur la base d’une fausse qualification est
+          constitutif d’escroquerie au sens de l’article 313-1 du code pénal.
         </p>
       </section>
 
@@ -317,33 +310,29 @@ export default function FraudeRgeVerifierPage() {
               <AlertTriangle className="w-5 h-5 text-amber-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              L&rsquo;ampleur du probl&egrave;me
+              L’ampleur du problème
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            La r&eacute;novation &eacute;nerg&eacute;tique figure depuis plusieurs exercices parmi
-            les <strong>priorit&eacute;s d&rsquo;enqu&ecirc;te de la DGCCRF</strong>.
-            L&rsquo;administration a multipli&eacute; les proc&eacute;dures &mdash; avertissements,
-            injonctions, proc&egrave;s-verbaux p&eacute;naux, sanctions administratives &mdash;
-            contre des op&eacute;rateurs se pr&eacute;sentant comme RGE sans l&rsquo;&ecirc;tre,
-            d&eacute;marchant ill&eacute;galement par t&eacute;l&eacute;phone ou usurpant les logos
-            officiels de MaPrimeR&eacute;nov&rsquo;.
+            La rénovation énergétique figure depuis plusieurs exercices parmi les{' '}
+            <strong>priorités d’enquête de la DGCCRF</strong>. L’administration a multiplié les
+            procédures — avertissements, injonctions, procès-verbaux pénaux, sanctions
+            administratives — contre des opérateurs se présentant comme RGE sans l’être, démarchant
+            illégalement par téléphone ou usurpant les logos officiels de MaPrimeRénov’.
           </p>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Les signalements d&eacute;pos&eacute;s sur <strong>Signal Conso</strong>,
-            t&eacute;l&eacute;service officiel de la DGCCRF, progressent &eacute;galement
-            d&rsquo;ann&eacute;e en ann&eacute;e pour cette cat&eacute;gorie. Le m&ecirc;me constat
-            ressort des signalements collect&eacute;s via <em>signal-arnaques.com</em> et des
-            alertes publi&eacute;es par les associations de consommateurs (UFC Que Choisir, CLCV,
-            Familles Rurales).
+            Les signalements déposés sur <strong>Signal Conso</strong>, téléservice officiel de la
+            DGCCRF, progressent également d’année en année pour cette catégorie. Le même constat
+            ressort des signalements collectés via <em>signal-arnaques.com</em> et des alertes
+            publiées par les associations de consommateurs (UFC Que Choisir, CLCV, Familles
+            Rurales).
           </p>
           <p className="text-charcoal-700 leading-relaxed">
-            Pour les chiffres pr&eacute;cis et actualis&eacute;s, la r&eacute;f&eacute;rence reste
-            le <strong>rapport annuel de la DGCCRF</strong>, publi&eacute; sur economie.gouv.fr,
-            ainsi que les communications officielles du service public{' '}
-            <strong>France R&eacute;nov&rsquo;</strong>. Nous nous gardons de diffuser des chiffres
-            que nous ne saurions sourcer&nbsp;: mieux vaut renvoyer &agrave; la source
-            qu&rsquo;inventer un ordre de grandeur.
+            Pour les chiffres précis et actualisés, la référence reste le{' '}
+            <strong>rapport annuel de la DGCCRF</strong>, publié sur economie.gouv.fr, ainsi que les
+            communications officielles du service public <strong>France Rénov’</strong>. Nous nous
+            gardons de diffuser des chiffres que nous ne saurions sourcer&nbsp;: mieux vaut renvoyer
+            à la source qu’inventer un ordre de grandeur.
           </p>
         </div>
       </section>
@@ -351,12 +340,11 @@ export default function FraudeRgeVerifierPage() {
       {/* 5 méthodes de vérification */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
-          Les 5 m&eacute;thodes pour v&eacute;rifier qu&rsquo;un artisan est vraiment RGE
+          Les 5 méthodes pour vérifier qu’un artisan est vraiment RGE
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
-          Ces cinq v&eacute;rifications sont cumulatives&nbsp;: chacune filtre un type
-          d&rsquo;arnaque diff&eacute;rent. Compter moins de quinze minutes pour les r&eacute;aliser
-          toutes.
+          Ces cinq vérifications sont cumulatives&nbsp;: chacune filtre un type d’arnaque différent.
+          Compter moins de quinze minutes pour les réaliser toutes.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {METHODS.map((m) => (
@@ -398,12 +386,12 @@ export default function FraudeRgeVerifierPage() {
               <Flag className="w-5 h-5 text-red-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Les 7 drapeaux rouges &agrave; rep&eacute;rer
+              Les 7 drapeaux rouges à repérer
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-8">
-            Un seul de ces signaux ne suffit pas toujours &agrave; qualifier une arnaque, mais leur
-            cumul, lui, est sans ambigu&iuml;t&eacute;.
+            Un seul de ces signaux ne suffit pas toujours à qualifier une arnaque, mais leur cumul,
+            lui, est sans ambigu&iuml;té.
           </p>
           <ul className="space-y-3">
             {RED_FLAGS.map((f, i) => (
@@ -431,41 +419,39 @@ export default function FraudeRgeVerifierPage() {
             <Search className="w-5 h-5 text-primary-600" />
           </div>
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Que faire si vous pensez &ecirc;tre victime d&rsquo;une arnaque RGE&nbsp;?
+            Que faire si vous pensez être victime d’une arnaque RGE&nbsp;?
           </h2>
         </div>
         <p className="text-charcoal-700 leading-relaxed mb-6">
-          La pire des r&eacute;actions est l&rsquo;inaction. Les d&eacute;lais comptent&nbsp;:
-          r&eacute;tractation, prescription p&eacute;nale, suspension d&rsquo;un dossier
-          MaPrimeR&eacute;nov&rsquo; en cours d&rsquo;instruction. Voici la s&eacute;quence
-          recommand&eacute;e.
+          La pire des réactions est l’inaction. Les délais comptent&nbsp;: rétractation,
+          prescription pénale, suspension d’un dossier MaPrimeRénov’ en cours d’instruction. Voici
+          la séquence recommandée.
         </p>
         <ol className="space-y-4">
           {[
             {
-              title: 'Arr&ecirc;ter imm&eacute;diatement tout nouveau versement',
-              text: 'Premier r&eacute;flexe&nbsp;: ne signer aucun document suppl&eacute;mentaire, ne pas verser d&rsquo;acompte compl&eacute;mentaire, ne pas valider un avenant. Toute somme encore entre vos mains est beaucoup plus facile &agrave; d&eacute;fendre qu&rsquo;un versement d&eacute;j&agrave; effectu&eacute;.',
+              title: 'Arrêter immédiatement tout nouveau versement',
+              text: 'Premier réflexe&nbsp;: ne signer aucun document supplémentaire, ne pas verser d’acompte complémentaire, ne pas valider un avenant. Toute somme encore entre vos mains est beaucoup plus facile à défendre qu’un versement déjà effectué.',
             },
             {
-              title: 'Rassembler l&rsquo;ensemble des documents',
-              text: 'Devis, bon de commande, attestation sur l&rsquo;honneur, factures, mails, SMS, compte-rendu d&rsquo;appel, photos du chantier&nbsp;: tout doit &ecirc;tre conserv&eacute; dans un dossier unique, m&ecirc;me les &eacute;l&eacute;ments qui vous paraissent anodins. Un bon dossier est la condition d&rsquo;une proc&eacute;dure efficace.',
+              title: 'Rassembler l’ensemble des documents',
+              text: 'Devis, bon de commande, attestation sur l’honneur, factures, mails, SMS, compte-rendu d’appel, photos du chantier&nbsp;: tout doit être conservé dans un dossier unique, même les éléments qui vous paraissent anodins. Un bon dossier est la condition d’une procédure efficace.',
             },
             {
-              title: 'Signaler &agrave; Signal Conso (signal.conso.gouv.fr) et au 3939',
-              text: 'Signal Conso est le t&eacute;l&eacute;service officiel de la DGCCRF. Votre signalement est transmis &agrave; l&rsquo;entreprise, &agrave; la DGCCRF et peut d&eacute;clencher une enqu&ecirc;te. En parall&egrave;le, le 3939 &laquo;&nbsp;Allô Service Public&nbsp;&raquo; donne un premier conseil personnalis&eacute;.',
+              title: 'Signaler à Signal Conso (signal.conso.gouv.fr) et au 3939',
+              text: 'Signal Conso est le téléservice officiel de la DGCCRF. Votre signalement est transmis à l’entreprise, à la DGCCRF et peut déclencher une enquête. En parallèle, le 3939 «&nbsp;Allô Service Public&nbsp;» donne un premier conseil personnalisé.',
             },
             {
-              title: 'Porter plainte pour escroquerie (article 313-1 du code p&eacute;nal)',
-              text: 'Rendez-vous au commissariat ou &agrave; la gendarmerie pour d&eacute;poser plainte. L&rsquo;escroquerie est punie de cinq ans d&rsquo;emprisonnement et 375&nbsp;000 euros d&rsquo;amende, et les circonstances aggravantes (bande organis&eacute;e, usage d&rsquo;une fausse qualit&eacute;) alourdissent les peines. Une plainte est indispensable pour toute action civile ou r&eacute;cup&eacute;ration ult&eacute;rieure.',
+              title: 'Porter plainte pour escroquerie (article 313-1 du code pénal)',
+              text: 'Rendez-vous au commissariat ou à la gendarmerie pour déposer plainte. L’escroquerie est punie de cinq ans d’emprisonnement et 375&nbsp;000 euros d’amende, et les circonstances aggravantes (bande organisée, usage d’une fausse qualité) alourdissent les peines. Une plainte est indispensable pour toute action civile ou récupération ultérieure.',
             },
             {
-              title: 'Contacter une association de consommateurs agr&eacute;&eacute;e',
-              text: 'UFC Que Choisir, CLCV, Familles Rurales et les autres associations agr&eacute;&eacute;es au titre de l&rsquo;article L811-1 du code de la consommation disposent de juristes qui peuvent vous orienter gratuitement ou moyennant une adh&eacute;sion modique, et vous assister dans la constitution du dossier.',
+              title: 'Contacter une association de consommateurs agréée',
+              text: 'UFC Que Choisir, CLCV, Familles Rurales et les autres associations agréées au titre de l’article L811-1 du code de la consommation disposent de juristes qui peuvent vous orienter gratuitement ou moyennant une adhésion modique, et vous assister dans la constitution du dossier.',
             },
             {
-              title:
-                'Si MaPrimeR&eacute;nov&rsquo; ou CEE d&eacute;j&agrave; vers&eacute;s&nbsp;: alerter l&rsquo;Anah et la DGEC',
-              text: 'Si des aides ont d&eacute;j&agrave; &eacute;t&eacute; vers&eacute;es (par l&rsquo;Anah pour MaPrimeR&eacute;nov&rsquo;, par un d&eacute;l&eacute;gataire pour les CEE), signalez la situation &agrave; l&rsquo;Anah et &agrave; la Direction g&eacute;n&eacute;rale de l&rsquo;&eacute;nergie et du climat (DGEC). La suspension du dossier peut &eacute;viter des versements suppl&eacute;mentaires, et la restitution des fonds indus peut &ecirc;tre mise &agrave; la charge de l&rsquo;auteur de la fraude.',
+              title: 'Si MaPrimeRénov’ ou CEE déjà versés&nbsp;: alerter l’Anah et la DGEC',
+              text: 'Si des aides ont déjà été versées (par l’Anah pour MaPrimeRénov’, par un délégataire pour les CEE), signalez la situation à l’Anah et à la Direction générale de l’énergie et du climat (DGEC). La suspension du dossier peut éviter des versements supplémentaires, et la restitution des fonds indus peut être mise à la charge de l’auteur de la fraude.',
             },
           ].map((s, i) => (
             <li
@@ -494,20 +480,16 @@ export default function FraudeRgeVerifierPage() {
             <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" />
             <div>
               <div className="font-semibold text-emerald-900 mb-1">
-                Droit de r&eacute;tractation &mdash; 14 jours
+                Droit de rétractation — 14 jours
               </div>
               <p className="text-sm text-emerald-900/90 leading-relaxed">
-                Lorsque le devis a &eacute;t&eacute; sign&eacute; hors &eacute;tablissement
-                (&agrave; votre domicile, lors d&rsquo;une foire, sur un salon, par
-                t&eacute;l&eacute;phone apr&egrave;s d&eacute;marchage), vous disposez d&rsquo;un
-                d&eacute;lai de
-                <strong> 14 jours calendaires</strong> pour exercer votre droit de
-                r&eacute;tractation sans avoir &agrave; vous justifier, en application de
-                l&rsquo;article L221-18 du code de la consommation. Le vendeur est tenu de vous
-                rembourser l&rsquo;int&eacute;gralit&eacute; des sommes vers&eacute;es dans les 14
-                jours suivant la r&eacute;ception de votre r&eacute;tractation. Les clauses
-                contraires sont r&eacute;put&eacute;es non &eacute;crites au titre de
-                l&rsquo;article L132-1.
+                Lorsque le devis a été signé hors établissement (à votre domicile, lors d’une foire,
+                sur un salon, par téléphone après démarchage), vous disposez d’un délai de
+                <strong> 14 jours calendaires</strong> pour exercer votre droit de rétractation sans
+                avoir à vous justifier, en application de l’article L221-18 du code de la
+                consommation. Le vendeur est tenu de vous rembourser l’intégralité des sommes
+                versées dans les 14 jours suivant la réception de votre rétractation. Les clauses
+                contraires sont réputées non écrites au titre de l’article L132-1.
               </p>
             </div>
           </div>
@@ -522,32 +504,27 @@ export default function FraudeRgeVerifierPage() {
               <Building2 className="w-5 h-5 text-emerald-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Le r&ocirc;le de ServicesArtisans
+              Le rôle de ServicesArtisans
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            ServicesArtisans diffuse environ 50&nbsp;000 fiches d&rsquo;artisans titulaires
-            d&rsquo;une qualification RGE. Ces fiches sont int&eacute;gralement sourc&eacute;es du{' '}
-            <strong>
-              dataset officiel ADEME &laquo;&nbsp;Annuaire des professionnels RGE&nbsp;&raquo;
-            </strong>
-            , publi&eacute; sur data.gouv.fr sous licence ouverte Etalab 2.0, et
-            synchronis&eacute;es de fa&ccedil;on hebdomadaire pour refl&eacute;ter les
-            entr&eacute;es, sorties et renouvellements.
+            ServicesArtisans diffuse environ 50&nbsp;000 fiches d’artisans titulaires d’une
+            qualification RGE. Ces fiches sont intégralement sourcées du{' '}
+            <strong>dataset officiel ADEME «&nbsp;Annuaire des professionnels RGE&nbsp;»</strong>,
+            publié sur data.gouv.fr sous licence ouverte Etalab 2.0, et synchronisées de façon
+            hebdomadaire pour refléter les entrées, sorties et renouvellements.
           </p>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Nous ne sommes pas un organisme certificateur&nbsp;: nous ne d&eacute;livrons aucune
-            qualification, nous ne contr&ocirc;lons pas les chantiers et nous ne nous substituons
-            pas &agrave; France R&eacute;nov&rsquo; ni &agrave; la DGCCRF. Notre r&ocirc;le se
-            limite &agrave; rendre l&rsquo;information publique plus accessible &mdash; par
-            m&eacute;tier, par ville, par d&eacute;partement &mdash; et &agrave; renvoyer
-            syst&eacute;matiquement aux sources officielles.
+            Nous ne sommes pas un organisme certificateur&nbsp;: nous ne délivrons aucune
+            qualification, nous ne contrôlons pas les chantiers et nous ne nous substituons pas à
+            France Rénov’ ni à la DGCCRF. Notre rôle se limite à rendre l’information publique plus
+            accessible — par métier, par ville, par département — et à renvoyer systématiquement aux
+            sources officielles.
           </p>
           <p className="text-charcoal-700 leading-relaxed">
-            En cas de doute sur un artisan de notre annuaire, la v&eacute;rification finale se fait
-            toujours sur <em>france-renov.gouv.fr/annuaire-rge</em>&nbsp;: c&rsquo;est la source de
-            v&eacute;rit&eacute; &agrave; l&rsquo;instant T. Nos pages d&eacute;taillent notre
-            m&eacute;thodologie et nos sources.
+            En cas de doute sur un artisan de notre annuaire, la vérification finale se fait
+            toujours sur <em>france-renov.gouv.fr/annuaire-rge</em>&nbsp;: c’est la source de vérité
+            à l’instant T. Nos pages détaillent notre méthodologie et nos sources.
           </p>
           <div className="mt-6">
             <Link
@@ -555,7 +532,7 @@ export default function FraudeRgeVerifierPage() {
               className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
             >
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              Nos sources et notre m&eacute;thodologie
+              Nos sources et notre méthodologie
             </Link>
           </div>
         </div>
@@ -564,7 +541,7 @@ export default function FraudeRgeVerifierPage() {
       {/* FAQ */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
-          Questions fr&eacute;quentes
+          Questions fréquentes
         </h2>
         <div className="space-y-4">
           {FAQ.map((item, idx) => (
@@ -588,58 +565,56 @@ export default function FraudeRgeVerifierPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 mb-4">
-            Sources r&eacute;glementaires et officielles
+            Sources réglementaires et officielles
           </h2>
           <ul className="space-y-3 text-sm text-charcoal-700">
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                Arr&ecirc;t&eacute; du 1er d&eacute;cembre 2015 modifi&eacute;, relatif aux
-                crit&egrave;res de qualifications requis pour b&eacute;n&eacute;ficier du label
-                &laquo;&nbsp;Reconnu garant de l&rsquo;environnement&nbsp;&raquo; (RGE).
+                Arrêté du 1er décembre 2015 modifié, relatif aux critères de qualifications requis
+                pour bénéficier du label «&nbsp;Reconnu garant de l’environnement&nbsp;» (RGE).
               </span>
             </li>
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                Code de la consommation, articles L221-18 (droit de r&eacute;tractation) et L132-1
-                (clauses abusives).
+                Code de la consommation, articles L221-18 (droit de rétractation) et L132-1 (clauses
+                abusives).
               </span>
             </li>
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                Code p&eacute;nal, article 313-1 (escroquerie)&nbsp;: cinq ans
-                d&rsquo;emprisonnement et 375&nbsp;000 euros d&rsquo;amende.
+                Code pénal, article 313-1 (escroquerie)&nbsp;: cinq ans d’emprisonnement et
+                375&nbsp;000 euros d’amende.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                Loi n&deg; 2020-901 du 24 juillet 2020 encadrant le d&eacute;marchage
-                t&eacute;l&eacute;phonique &mdash; interdiction pour les travaux de
-                r&eacute;novation &eacute;nerg&eacute;tique.
+                Loi n&deg; 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique —
+                interdiction pour les travaux de rénovation énergétique.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                Rapport annuel de la DGCCRF (economie.gouv.fr) &mdash; bilan des contr&ocirc;les
-                dans le secteur de la r&eacute;novation &eacute;nerg&eacute;tique.
+                Rapport annuel de la DGCCRF (economie.gouv.fr) — bilan des contrôles dans le secteur
+                de la rénovation énergétique.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                France R&eacute;nov&rsquo; &mdash; annuaire officiel des professionnels RGE, tenu
-                par l&rsquo;ADEME pour le compte de l&rsquo;&Eacute;tat.
+                France Rénov’ — annuaire officiel des professionnels RGE, tenu par l’ADEME pour le
+                compte de l’&Eacute;tat.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                Signal Conso (signal.conso.gouv.fr) &mdash; t&eacute;l&eacute;service officiel de
-                signalement &agrave; la DGCCRF.
+                Signal Conso (signal.conso.gouv.fr) — téléservice officiel de signalement à la
+                DGCCRF.
               </span>
             </li>
           </ul>
@@ -651,8 +626,8 @@ export default function FraudeRgeVerifierPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-4">Aller plus loin</h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Consultez notre annuaire RGE sourc&eacute; du dataset officiel ADEME, notre
-            m&eacute;thodologie, et les sources gouvernementales de r&eacute;f&eacute;rence.
+            Consultez notre annuaire RGE sourcé du dataset officiel ADEME, notre méthodologie, et
+            les sources gouvernementales de référence.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
@@ -683,7 +658,7 @@ export default function FraudeRgeVerifierPage() {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
             >
               <ExternalLink className="w-5 h-5" aria-hidden="true" />
-              France R&eacute;nov&rsquo;
+              France Rénov’
             </a>
             <a
               href="https://signal.conso.gouv.fr"

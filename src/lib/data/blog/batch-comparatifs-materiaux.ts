@@ -2,10 +2,12 @@ import type { BlogArticle } from './articles'
 
 export const comparatifsArticles: Record<string, BlogArticle> = {
   'meilleur-isolant-thermique-comparatif': {
-    title: "Quel est le meilleur isolant thermique ? Comparatif 2026",
-    excerpt: "Laine de verre, laine de roche, polyuréthane, ouate de cellulose, liège : comparatif complet des isolants thermiques avec performances, prix et usages recommandés.",
-    metaTitle: "Meilleur Isolant Thermique : Comparatif 2026",
-    metaDescription: "Comparez laine de verre, polyuréthane, ouate de cellulose et liège : performances, prix au m² et usages. Obtenez un devis gratuit isolation.",
+    title: 'Quel est le meilleur isolant thermique ? Comparatif 2026',
+    excerpt:
+      'Laine de verre, laine de roche, polyuréthane, ouate de cellulose, liège : comparatif complet des isolants thermiques avec performances, prix et usages recommandés.',
+    metaTitle: 'Meilleur Isolant Thermique : Comparatif 2026',
+    metaDescription:
+      'Comparez laine de verre, polyuréthane, ouate de cellulose et liège : performances, prix au m² et usages. Obtenez un devis gratuit isolation.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-02',
@@ -14,15 +16,31 @@ export const comparatifsArticles: Record<string, BlogArticle> = {
     tags: ['isolation', 'isolant thermique', 'rénovation énergétique', 'matériaux'],
     keyTakeaways: [
       "La laine de verre reste le meilleur rapport qualité-prix pour l'isolation des combles (3 à 8 €/m²).",
-      "Le polyuréthane offre la meilleure performance thermique à faible épaisseur (lambda 0,022).",
+      'Le polyuréthane offre la meilleure performance thermique à faible épaisseur (lambda 0,022).',
       "Les isolants biosourcés (ouate de cellulose, fibre de bois) offrent un excellent confort d'été.",
       "Le choix de l'isolant dépend de la zone à isoler, du budget et des performances recherchées.",
     ],
     faq: [
-      { question: "Quel isolant a le meilleur lambda ?", answer: "Le polyuréthane (PUR) détient le meilleur coefficient lambda du marché : 0,022 à 0,028 W/m.K. Cela signifie qu'il offre la même résistance thermique qu'une laine de verre avec 30 à 40 % d'épaisseur en moins." },
-      { question: "Quel isolant pour les combles perdus ?", answer: "La laine de verre soufflée ou la ouate de cellulose soufflée sont les solutions les plus économiques et performantes pour les combles perdus. Comptez 15 à 25 €/m² pose comprise pour une résistance R = 7 m².K/W." },
-      { question: "Les isolants biosourcés sont-ils aussi performants ?", answer: "Oui, la fibre de bois (lambda 0,036-0,042) et la ouate de cellulose (lambda 0,038-0,042) offrent des performances proches des laines minérales, avec un meilleur confort d'été grâce à leur densité élevée." },
-      { question: "Quel isolant choisir pour une rénovation avec peu d'espace ?", answer: "Le polyuréthane ou le polyisocyanurate (PIR) sont les meilleurs choix quand l'espace est limité. Avec 8 cm de PUR, vous obtenez la même performance que 14 cm de laine de verre." },
+      {
+        question: 'Quel isolant a le meilleur lambda ?',
+        answer:
+          "Le polyuréthane (PUR) détient le meilleur coefficient lambda du marché : 0,022 à 0,028 W/m.K. Cela signifie qu'il offre la même résistance thermique qu'une laine de verre avec 30 à 40 % d'épaisseur en moins.",
+      },
+      {
+        question: 'Quel isolant pour les combles perdus ?',
+        answer:
+          'La laine de verre soufflée ou la ouate de cellulose soufflée sont les solutions les plus économiques et performantes pour les combles perdus. Comptez 15 à 25 €/m² pose comprise pour une résistance R = 7 m².K/W.',
+      },
+      {
+        question: 'Les isolants biosourcés sont-ils aussi performants ?',
+        answer:
+          "Oui, la fibre de bois (lambda 0,036-0,042) et la ouate de cellulose (lambda 0,038-0,042) offrent des performances proches des laines minérales, avec un meilleur confort d'été grâce à leur densité élevée.",
+      },
+      {
+        question: "Quel isolant choisir pour une rénovation avec peu d'espace ?",
+        answer:
+          "Le polyuréthane ou le polyisocyanurate (PIR) sont les meilleurs choix quand l'espace est limité. Avec 8 cm de PUR, vous obtenez la même performance que 14 cm de laine de verre.",
+      },
     ],
     content: [
       `## Les critères pour choisir un isolant thermique
@@ -68,10 +86,12 @@ Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur c
   },
 
   'peinture-interieure-guide-choix': {
-    title: "Peinture intérieure : guide pour choisir la bonne",
-    excerpt: "Acrylique, glycéro, alkyde : quel type de peinture choisir pour chaque pièce ? Finitions, rendement, prix et conseils de professionnels pour un résultat parfait.",
+    title: 'Peinture intérieure : guide pour choisir la bonne',
+    excerpt:
+      'Acrylique, glycéro, alkyde : quel type de peinture choisir pour chaque pièce ? Finitions, rendement, prix et conseils de professionnels pour un résultat parfait.',
     metaTitle: "Peinture Intérieure : Guide d'Achat 2026",
-    metaDescription: "Acrylique, glycéro ou alkyde ? Comparez finitions, rendement et prix pour chaque pièce. Obtenez un devis peintre gratuit.",
+    metaDescription:
+      'Acrylique, glycéro ou alkyde ? Comparez finitions, rendement et prix pour chaque pièce. Obtenez un devis peintre gratuit.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-04',
@@ -82,13 +102,29 @@ Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur c
       "La peinture acrylique (à l'eau) convient à 90 % des usages intérieurs et sèche en 1 à 2 heures.",
       "La glycéro reste préférable pour les pièces humides (salle de bain, cuisine) grâce à sa résistance à l'eau.",
       "Le choix de la finition (mat, satiné, brillant) dépend de l'état des murs et de l'usage de la pièce.",
-      "Comptez 25 à 40 €/m² pour une peinture professionnelle (2 couches, préparation incluse).",
+      'Comptez 25 à 40 €/m² pour une peinture professionnelle (2 couches, préparation incluse).',
     ],
     faq: [
-      { question: "Quelle peinture pour une chambre ?", answer: "Pour une chambre, choisissez une peinture acrylique mate ou velours, sans COV (composés organiques volatils) ou à faible émission (label A+). Les finitions mates masquent les imperfections des murs et créent une ambiance apaisante." },
-      { question: "Quelle peinture pour une salle de bain ?", answer: "Optez pour une peinture glycéro ou acrylique spéciale pièces humides, en finition satinée. Elle résiste à l'humidité, aux éclaboussures et se nettoie facilement. Appliquez un traitement anti-moisissure avant la peinture." },
-      { question: "Combien de couches faut-il appliquer ?", answer: "Deux couches minimum sont recommandées pour un résultat uniforme. Sur un mur neuf ou sur un changement de couleur important, une sous-couche (primaire d'accrochage) est indispensable avant les deux couches de finition." },
-      { question: "Quel est le rendement d'un pot de peinture ?", answer: "Le rendement moyen est de 10 à 12 m² par litre en une couche. Un pot de 10 litres couvre donc environ 50 m² en deux couches. Ce rendement varie selon la porosité du support et la méthode d'application (rouleau, pistolet)." },
+      {
+        question: 'Quelle peinture pour une chambre ?',
+        answer:
+          'Pour une chambre, choisissez une peinture acrylique mate ou velours, sans COV (composés organiques volatils) ou à faible émission (label A+). Les finitions mates masquent les imperfections des murs et créent une ambiance apaisante.',
+      },
+      {
+        question: 'Quelle peinture pour une salle de bain ?',
+        answer:
+          "Optez pour une peinture glycéro ou acrylique spéciale pièces humides, en finition satinée. Elle résiste à l'humidité, aux éclaboussures et se nettoie facilement. Appliquez un traitement anti-moisissure avant la peinture.",
+      },
+      {
+        question: 'Combien de couches faut-il appliquer ?',
+        answer:
+          "Deux couches minimum sont recommandées pour un résultat uniforme. Sur un mur neuf ou sur un changement de couleur important, une sous-couche (primaire d'accrochage) est indispensable avant les deux couches de finition.",
+      },
+      {
+        question: "Quel est le rendement d'un pot de peinture ?",
+        answer:
+          "Le rendement moyen est de 10 à 12 m² par litre en une couche. Un pot de 10 litres couvre donc environ 50 m² en deux couches. Ce rendement varie selon la porosité du support et la méthode d'application (rouleau, pistolet).",
+      },
     ],
     content: [
       `## Les types de peinture intérieure
@@ -134,10 +170,12 @@ Investissez dans des outils de qualité : rouleau anti-gouttes pour les grandes 
   },
 
   'robinetterie-laiton-vs-inox': {
-    title: "Robinetterie : laiton, inox ou zamak ?",
-    excerpt: "Laiton chromé, inox brossé ou zamak : comparatif des matériaux de robinetterie. Durabilité, prix, entretien et comment reconnaître la qualité.",
-    metaTitle: "Robinetterie : Laiton vs Inox vs Zamak 2026",
-    metaDescription: "Comparez laiton, inox et zamak pour votre robinetterie : durabilité, prix et entretien. Découvrez comment reconnaître la qualité.",
+    title: 'Robinetterie : laiton, inox ou zamak ?',
+    excerpt:
+      'Laiton chromé, inox brossé ou zamak : comparatif des matériaux de robinetterie. Durabilité, prix, entretien et comment reconnaître la qualité.',
+    metaTitle: 'Robinetterie : Laiton vs Inox vs Zamak 2026',
+    metaDescription:
+      'Comparez laiton, inox et zamak pour votre robinetterie : durabilité, prix et entretien. Découvrez comment reconnaître la qualité.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-06',
@@ -145,16 +183,32 @@ Investissez dans des outils de qualité : rouleau anti-gouttes pour les grandes 
     category: 'Matériaux',
     tags: ['robinetterie', 'plomberie', 'salle de bain', 'cuisine', 'matériaux'],
     keyTakeaways: [
-      "Le laiton chromé reste la référence en robinetterie : résistant, durable (15-20 ans) et disponible dans toutes les gammes.",
+      'Le laiton chromé reste la référence en robinetterie : résistant, durable (15-20 ans) et disponible dans toutes les gammes.',
       "L'inox 304/316 est le plus hygiénique et résistant à la corrosion, mais coûte 30 à 50 % de plus.",
-      "Le zamak (alliage de zinc) est à éviter : fragile, sensible à la corrosion, durée de vie de 2 à 5 ans.",
-      "Vérifiez la certification NF ou les marquages pour distinguer le laiton du zamak.",
+      'Le zamak (alliage de zinc) est à éviter : fragile, sensible à la corrosion, durée de vie de 2 à 5 ans.',
+      'Vérifiez la certification NF ou les marquages pour distinguer le laiton du zamak.',
     ],
     faq: [
-      { question: "Comment reconnaître un robinet en zamak ?", answer: "Le zamak est plus léger que le laiton. Soupesez le robinet : un mitigeur en zamak pèse 300-500 g contre 800-1 200 g en laiton. Le zamak est aussi plus froid au toucher et sonne creux quand on le tapote. Méfiez-vous des robinets très bon marché (moins de 30 €)." },
-      { question: "Quelle marque de robinetterie choisir ?", answer: "Les marques françaises et européennes de référence sont Grohe, Hansgrohe, Jacob Delafon, Ideal Standard et Roca. Elles utilisent du laiton de qualité et offrent des garanties de 5 à 10 ans. Évitez les marques inconnues vendues uniquement en ligne." },
-      { question: "Inox ou laiton chromé pour la cuisine ?", answer: "L'inox brossé est idéal en cuisine : hygiénique, facile à nettoyer, résistant aux produits ménagers. Le laiton chromé convient aussi mais le chromage peut s'user plus vite avec les nettoyages fréquents. Budget : +30 % pour l'inox." },
-      { question: "Combien coûte un bon mitigeur ?", answer: "Un mitigeur de qualité en laiton coûte 80 à 200 € pour un lavabo, 150 à 400 € pour une douche thermostatique et 100 à 300 € pour un évier de cuisine. Les modèles en inox sont 30 à 50 % plus chers." },
+      {
+        question: 'Comment reconnaître un robinet en zamak ?',
+        answer:
+          'Le zamak est plus léger que le laiton. Soupesez le robinet : un mitigeur en zamak pèse 300-500 g contre 800-1 200 g en laiton. Le zamak est aussi plus froid au toucher et sonne creux quand on le tapote. Méfiez-vous des robinets très bon marché (moins de 30 €).',
+      },
+      {
+        question: 'Quelle marque de robinetterie choisir ?',
+        answer:
+          'Les marques françaises et européennes de référence sont Grohe, Hansgrohe, Jacob Delafon, Ideal Standard et Roca. Elles utilisent du laiton de qualité et offrent des garanties de 5 à 10 ans. Évitez les marques inconnues vendues uniquement en ligne.',
+      },
+      {
+        question: 'Inox ou laiton chromé pour la cuisine ?',
+        answer:
+          "L'inox brossé est idéal en cuisine : hygiénique, facile à nettoyer, résistant aux produits ménagers. Le laiton chromé convient aussi mais le chromage peut s'user plus vite avec les nettoyages fréquents. Budget : +30 % pour l'inox.",
+      },
+      {
+        question: 'Combien coûte un bon mitigeur ?',
+        answer:
+          'Un mitigeur de qualité en laiton coûte 80 à 200 € pour un lavabo, 150 à 400 € pour une douche thermostatique et 100 à 300 € pour un évier de cuisine. Les modèles en inox sont 30 à 50 % plus chers.',
+      },
     ],
     content: [
       `## Les matériaux de robinetterie : un choix crucial
@@ -196,10 +250,12 @@ Pour un rapport qualité-prix optimal, choisissez du **laiton chromé** de marqu
   },
 
   'types-de-carrelage-guide': {
-    title: "Types de carrelage : grès cérame, faïence, pierre naturelle",
-    excerpt: "Grès cérame, faïence, pierre naturelle, terre cuite : guide complet des types de carrelage avec usages, avantages, prix et critères de choix pour chaque pièce.",
+    title: 'Types de carrelage : grès cérame, faïence, pierre naturelle',
+    excerpt:
+      'Grès cérame, faïence, pierre naturelle, terre cuite : guide complet des types de carrelage avec usages, avantages, prix et critères de choix pour chaque pièce.',
     metaTitle: "Types de Carrelage : Guide d'Achat 2026",
-    metaDescription: "Comparez grès cérame, faïence et pierre naturelle : usages, prix et critères de choix par pièce. Obtenez un devis carreleur gratuit.",
+    metaDescription:
+      'Comparez grès cérame, faïence et pierre naturelle : usages, prix et critères de choix par pièce. Obtenez un devis carreleur gratuit.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-08',
@@ -207,16 +263,32 @@ Pour un rapport qualité-prix optimal, choisissez du **laiton chromé** de marqu
     category: 'Matériaux',
     tags: ['carrelage', 'grès cérame', 'faïence', 'pierre naturelle', 'matériaux'],
     keyTakeaways: [
-      "Le grès cérame pleine masse est le carrelage le plus résistant et polyvalent (sol + mur, intérieur + extérieur).",
-      "La faïence est réservée aux murs : fragile mais idéale pour la crédence et la salle de bain.",
-      "La pierre naturelle (marbre, travertin, ardoise) offre un cachet unique mais exige un entretien régulier.",
+      'Le grès cérame pleine masse est le carrelage le plus résistant et polyvalent (sol + mur, intérieur + extérieur).',
+      'La faïence est réservée aux murs : fragile mais idéale pour la crédence et la salle de bain.',
+      'La pierre naturelle (marbre, travertin, ardoise) offre un cachet unique mais exige un entretien régulier.',
       "Le classement UPEC (Usure, Poinçonnement, Eau, Chimiques) guide le choix selon l'usage.",
     ],
     faq: [
-      { question: "Quel carrelage pour le sol d'une cuisine ?", answer: "Le grès cérame émaillé ou pleine masse en format 60x60 ou plus est idéal pour une cuisine. Choisissez un classement UPEC P3 minimum (résistance au poinçonnement) et un coefficient d'absorption d'eau inférieur à 0,5 %. Évitez le marbre poli qui tache facilement." },
-      { question: "Quelle épaisseur de carrelage pour le sol ?", answer: "Pour un sol intérieur, une épaisseur de 8 à 10 mm est standard. Pour un usage intensif (entrée, cuisine professionnelle), choisissez 10 à 12 mm. Pour l'extérieur (terrasse), préférez 20 mm de grès cérame sur plots ou collé." },
-      { question: "Le grès cérame imite-t-il bien le bois ?", answer: "Les technologies d'impression numérique actuelles rendent l'imitation bluffante : veinures, nœuds, texture en relief. Les lames de grès cérame effet bois (20x120 cm) sont quasiment indiscernables du parquet à l'œil. Avantage : aucun entretien et résistance à l'eau." },
-      { question: "Combien coûte la pose de carrelage ?", answer: "La pose par un carreleur professionnel coûte 30 à 60 €/m² hors fourniture. Le prix varie selon le format (les grands formats coûtent plus cher à poser), le type de pose (droite, diagonale, décalée) et la préparation du support. Fourniture + pose : 50 à 150 €/m² selon le carrelage choisi." },
+      {
+        question: "Quel carrelage pour le sol d'une cuisine ?",
+        answer:
+          "Le grès cérame émaillé ou pleine masse en format 60x60 ou plus est idéal pour une cuisine. Choisissez un classement UPEC P3 minimum (résistance au poinçonnement) et un coefficient d'absorption d'eau inférieur à 0,5 %. Évitez le marbre poli qui tache facilement.",
+      },
+      {
+        question: 'Quelle épaisseur de carrelage pour le sol ?',
+        answer:
+          "Pour un sol intérieur, une épaisseur de 8 à 10 mm est standard. Pour un usage intensif (entrée, cuisine professionnelle), choisissez 10 à 12 mm. Pour l'extérieur (terrasse), préférez 20 mm de grès cérame sur plots ou collé.",
+      },
+      {
+        question: 'Le grès cérame imite-t-il bien le bois ?',
+        answer:
+          "Les technologies d'impression numérique actuelles rendent l'imitation bluffante : veinures, nœuds, texture en relief. Les lames de grès cérame effet bois (20x120 cm) sont quasiment indiscernables du parquet à l'œil. Avantage : aucun entretien et résistance à l'eau.",
+      },
+      {
+        question: 'Combien coûte la pose de carrelage ?',
+        answer:
+          'La pose par un carreleur professionnel coûte 30 à 60 €/m² hors fourniture. Le prix varie selon le format (les grands formats coûtent plus cher à poser), le type de pose (droite, diagonale, décalée) et la préparation du support. Fourniture + pose : 50 à 150 €/m² selon le carrelage choisi.',
+      },
     ],
     content: [
       `## Les grandes familles de carrelage
@@ -258,10 +330,12 @@ Faites appel à un carreleur professionnel pour les grands formats (risque de ca
   },
 
   'parquet-massif-vs-contrecolle-vs-stratifie': {
-    title: "Parquet massif, contrecollé ou stratifié ?",
-    excerpt: "Parquet massif, contrecollé ou stratifié : comparatif détaillé des revêtements de sol en bois. Durabilité, confort, prix et guide de choix selon vos besoins.",
-    metaTitle: "Parquet : Massif vs Contrecollé vs Stratifié",
-    metaDescription: "Comparez parquet massif, contrecollé et stratifié : durabilité, confort et prix. Découvrez le meilleur choix pour votre sol en 2026.",
+    title: 'Parquet massif, contrecollé ou stratifié ?',
+    excerpt:
+      'Parquet massif, contrecollé ou stratifié : comparatif détaillé des revêtements de sol en bois. Durabilité, confort, prix et guide de choix selon vos besoins.',
+    metaTitle: 'Parquet : Massif vs Contrecollé vs Stratifié',
+    metaDescription:
+      'Comparez parquet massif, contrecollé et stratifié : durabilité, confort et prix. Découvrez le meilleur choix pour votre sol en 2026.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-10',
@@ -270,15 +344,31 @@ Faites appel à un carreleur professionnel pour les grands formats (risque de ca
     tags: ['parquet', 'revêtement sol', 'bois', 'stratifié', 'matériaux'],
     keyTakeaways: [
       "Le parquet massif dure plus de 100 ans et se ponce jusqu'à 5-7 fois, mais coûte 50 à 150 €/m² posé.",
-      "Le contrecollé offre le vrai bois en surface avec une stabilité supérieure, pour 40 à 100 €/m² posé.",
+      'Le contrecollé offre le vrai bois en surface avec une stabilité supérieure, pour 40 à 100 €/m² posé.',
       "Le stratifié n'est pas du bois (papier décor sur HDF) mais coûte 15 à 40 €/m² posé.",
-      "Pour un plancher chauffant, le contrecollé ou le stratifié sont préférables au massif.",
+      'Pour un plancher chauffant, le contrecollé ou le stratifié sont préférables au massif.',
     ],
     faq: [
-      { question: "Peut-on poncer un parquet contrecollé ?", answer: "Oui, à condition que la couche d'usure (parement en bois noble) fasse au moins 3,5 mm. Un contrecollé de qualité avec un parement de 4 à 6 mm peut être poncé 1 à 2 fois. En dessous de 2,5 mm, le ponçage est impossible." },
-      { question: "Le stratifié résiste-t-il à l'eau ?", answer: "Le stratifié classique craint l'eau : le panneau HDF gonfle au contact prolongé de l'humidité. Il existe des stratifiés résistants à l'eau (noyau SPC ou WPC) adaptés aux cuisines et salles de bain. Vérifiez la mention « résistant à l'eau » ou « waterproof » sur l'emballage." },
-      { question: "Quel parquet pour un plancher chauffant ?", answer: "Le contrecollé est le meilleur choix : sa structure multi-couches assure une bonne stabilité dimensionnelle. Le stratifié convient aussi. Le massif est déconseillé (risque de déformation) sauf en pose collée avec des lames étroites. La résistance thermique totale (parquet + sous-couche) ne doit pas dépasser 0,15 m².K/W." },
-      { question: "Parquet huilé ou vitrifié ?", answer: "Le vitrificateur (vernis) protège le bois en surface avec un film dur : entretien facile mais aspect plus « plastique ». L'huile pénètre dans le bois : aspect plus naturel, toucher plus chaleureux, mais entretien plus régulier (huile tous les 1-2 ans). Le choix est esthétique avant tout." },
+      {
+        question: 'Peut-on poncer un parquet contrecollé ?',
+        answer:
+          "Oui, à condition que la couche d'usure (parement en bois noble) fasse au moins 3,5 mm. Un contrecollé de qualité avec un parement de 4 à 6 mm peut être poncé 1 à 2 fois. En dessous de 2,5 mm, le ponçage est impossible.",
+      },
+      {
+        question: "Le stratifié résiste-t-il à l'eau ?",
+        answer:
+          "Le stratifié classique craint l'eau : le panneau HDF gonfle au contact prolongé de l'humidité. Il existe des stratifiés résistants à l'eau (noyau SPC ou WPC) adaptés aux cuisines et salles de bain. Vérifiez la mention « résistant à l'eau » ou « waterproof » sur l'emballage.",
+      },
+      {
+        question: 'Quel parquet pour un plancher chauffant ?',
+        answer:
+          'Le contrecollé est le meilleur choix : sa structure multi-couches assure une bonne stabilité dimensionnelle. Le stratifié convient aussi. Le massif est déconseillé (risque de déformation) sauf en pose collée avec des lames étroites. La résistance thermique totale (parquet + sous-couche) ne doit pas dépasser 0,15 m².K/W.',
+      },
+      {
+        question: 'Parquet huilé ou vitrifié ?',
+        answer:
+          "Le vitrificateur (vernis) protège le bois en surface avec un film dur : entretien facile mais aspect plus « plastique ». L'huile pénètre dans le bois : aspect plus naturel, toucher plus chaleureux, mais entretien plus régulier (huile tous les 1-2 ans). Le choix est esthétique avant tout.",
+      },
     ],
     content: [
       `## Parquet massif : le noble par excellence
@@ -332,10 +422,12 @@ Pour une **rénovation d'appartement**, le contrecollé chêne en pose flottante
   },
 
   'menuiseries-bois-pvc-alu-comparatif': {
-    title: "Menuiseries bois, PVC ou aluminium : le comparatif",
-    excerpt: "Fenêtres et portes en bois, PVC ou aluminium : comparatif performances thermiques, prix, entretien et durabilité pour choisir vos menuiseries en 2026.",
-    metaTitle: "Menuiseries : Bois vs PVC vs Alu - Comparatif",
-    metaDescription: "Comparez bois, PVC et aluminium pour vos fenêtres : isolation, prix et durabilité. Obtenez un devis menuisier gratuit en 2026.",
+    title: 'Menuiseries bois, PVC ou aluminium : le comparatif',
+    excerpt:
+      'Fenêtres et portes en bois, PVC ou aluminium : comparatif performances thermiques, prix, entretien et durabilité pour choisir vos menuiseries en 2026.',
+    metaTitle: 'Menuiseries : Bois vs PVC vs Alu - Comparatif',
+    metaDescription:
+      'Comparez bois, PVC et aluminium pour vos fenêtres : isolation, prix et durabilité. Obtenez un devis menuisier gratuit en 2026.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-12',
@@ -343,16 +435,32 @@ Pour une **rénovation d'appartement**, le contrecollé chêne en pose flottante
     category: 'Matériaux',
     tags: ['menuiserie', 'fenêtre', 'PVC', 'aluminium', 'bois', 'matériaux'],
     keyTakeaways: [
-      "Le PVC offre le meilleur rapport qualité-prix : bon isolant, sans entretien, à partir de 200 €/fenêtre.",
+      'Le PVC offre le meilleur rapport qualité-prix : bon isolant, sans entretien, à partir de 200 €/fenêtre.',
       "L'aluminium permet les plus grandes surfaces vitrées et les profils les plus fins, mais isole moins bien.",
-      "Le bois reste le meilleur isolant naturel et le plus écologique, mais demande un entretien régulier.",
-      "Le mixte bois-alu combine les avantages des deux : bois intérieur (chaleur) et alu extérieur (durabilité).",
+      'Le bois reste le meilleur isolant naturel et le plus écologique, mais demande un entretien régulier.',
+      'Le mixte bois-alu combine les avantages des deux : bois intérieur (chaleur) et alu extérieur (durabilité).',
     ],
     faq: [
-      { question: "Quel matériau isole le mieux ?", answer: "Le bois est le meilleur isolant naturel (Uw de 1,2 à 1,4 W/m².K pour une fenêtre double vitrage). Le PVC suit de près (Uw de 1,2 à 1,6). L'aluminium isole moins bien malgré les ruptures de pont thermique (Uw de 1,4 à 1,8). Pour atteindre les exigences RT 2020, les trois matériaux conviennent avec un double ou triple vitrage." },
-      { question: "Quelle est la durée de vie des menuiseries ?", answer: "Le PVC dure 30 à 50 ans, l'aluminium 40 à 60 ans, le bois 50 ans et plus avec un entretien régulier (lasure ou peinture tous les 5-8 ans). Le mixte bois-alu dépasse 50 ans grâce à la protection alu en extérieur." },
-      { question: "Le PVC jaunit-il avec le temps ?", answer: "Les PVC de qualité (blanc ou teinté dans la masse) résistent au jaunissement pendant 20 à 30 ans grâce aux stabilisants UV. Les PVC premiers prix peuvent jaunir en 10 ans. Choisissez des menuiseries certifiées NF ou Qualicoat pour une garantie de tenue des couleurs." },
-      { question: "Quelles aides pour changer ses fenêtres ?", answer: "MaPrimeRénov' offre 40 à 100 € par fenêtre selon vos revenus. Les CEE ajoutent 50 à 150 €. La TVA est réduite à 5,5 % pour les logements de plus de 2 ans. L'éco-PTZ finance le reste. Total des aides : 100 à 300 € par fenêtre, à condition de faire appel à un artisan RGE." },
+      {
+        question: 'Quel matériau isole le mieux ?',
+        answer:
+          "Le bois est le meilleur isolant naturel (Uw de 1,2 à 1,4 W/m².K pour une fenêtre double vitrage). Le PVC suit de près (Uw de 1,2 à 1,6). L'aluminium isole moins bien malgré les ruptures de pont thermique (Uw de 1,4 à 1,8). Pour atteindre les exigences RT 2020, les trois matériaux conviennent avec un double ou triple vitrage.",
+      },
+      {
+        question: 'Quelle est la durée de vie des menuiseries ?',
+        answer:
+          "Le PVC dure 30 à 50 ans, l'aluminium 40 à 60 ans, le bois 50 ans et plus avec un entretien régulier (lasure ou peinture tous les 5-8 ans). Le mixte bois-alu dépasse 50 ans grâce à la protection alu en extérieur.",
+      },
+      {
+        question: 'Le PVC jaunit-il avec le temps ?',
+        answer:
+          'Les PVC de qualité (blanc ou teinté dans la masse) résistent au jaunissement pendant 20 à 30 ans grâce aux stabilisants UV. Les PVC premiers prix peuvent jaunir en 10 ans. Choisissez des menuiseries certifiées NF ou Qualicoat pour une garantie de tenue des couleurs.',
+      },
+      {
+        question: 'Quelles aides pour changer ses fenêtres ?',
+        answer:
+          "MaPrimeRénov' offre 40 à 100 € par fenêtre selon vos revenus. Les CEE ajoutent 50 à 150 €. La TVA est réduite à 5,5 % pour les logements de plus de 2 ans. L'éco-PTZ finance le reste. Total des aides : 100 à 300 € par fenêtre, à condition de faire appel à un artisan RGE.",
+      },
     ],
     content: [
       `## PVC : le rapport qualité-prix imbattable
@@ -390,10 +498,12 @@ La pose de menuiseries doit être réalisée par un artisan RGE (Reconnu Garant 
   },
 
   'types-de-tuiles-guide': {
-    title: "Tuiles terre cuite, béton ou ardoise : que choisir ?",
-    excerpt: "Tuile terre cuite, tuile béton ou ardoise naturelle : comparatif complet des couvertures de toiture avec durée de vie, prix, esthétique et entretien.",
-    metaTitle: "Tuiles : Terre Cuite vs Béton vs Ardoise 2026",
-    metaDescription: "Comparez tuile terre cuite, béton et ardoise : durée de vie, prix et entretien. Obtenez un devis couvreur gratuit.",
+    title: 'Tuiles terre cuite, béton ou ardoise : que choisir ?',
+    excerpt:
+      'Tuile terre cuite, tuile béton ou ardoise naturelle : comparatif complet des couvertures de toiture avec durée de vie, prix, esthétique et entretien.',
+    metaTitle: 'Tuiles : Terre Cuite vs Béton vs Ardoise 2026',
+    metaDescription:
+      'Comparez tuile terre cuite, béton et ardoise : durée de vie, prix et entretien. Obtenez un devis couvreur gratuit.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-14',
@@ -401,16 +511,32 @@ La pose de menuiseries doit être réalisée par un artisan RGE (Reconnu Garant 
     category: 'Matériaux',
     tags: ['toiture', 'tuile', 'ardoise', 'couverture', 'matériaux'],
     keyTakeaways: [
-      "La tuile terre cuite dure 50 à 100 ans et offre le meilleur rapport qualité-prix (25 à 50 €/m² posé).",
+      'La tuile terre cuite dure 50 à 100 ans et offre le meilleur rapport qualité-prix (25 à 50 €/m² posé).',
       "La tuile béton est 20 à 30 % moins chère mais moins durable (30 à 50 ans) et s'encrasse plus vite.",
       "L'ardoise naturelle dure plus de 100 ans mais coûte 80 à 150 €/m² posé.",
       "Le choix est souvent imposé par le PLU et les règles locales d'urbanisme.",
     ],
     faq: [
-      { question: "Peut-on choisir librement sa couverture ?", answer: "Non, le PLU (Plan Local d'Urbanisme) de votre commune impose souvent le type de couverture et la couleur. En zone ABF (Architecte des Bâtiments de France), les contraintes sont encore plus strictes. Consultez votre mairie avant tout projet de couverture." },
-      { question: "Quelle est la durée de vie d'une toiture en tuiles ?", answer: "Les tuiles terre cuite durent 50 à 100 ans, les tuiles béton 30 à 50 ans et l'ardoise naturelle 75 à 150 ans. Ces durées supposent un entretien régulier (démoussage tous les 5-10 ans) et le remplacement ponctuel des éléments cassés." },
-      { question: "Tuile plate ou tuile canal ?", answer: "La tuile plate convient aux toitures à forte pente (45° et plus), typique du nord de la France. La tuile canal (ou tuile romane) s'utilise sur les pentes faibles (15 à 35°), caractéristique du sud. La tuile à emboîtement (Romane, Marseille) est un compromis universel adapté aux pentes de 25 à 60°." },
-      { question: "Combien coûte une réfection de toiture ?", answer: "Une réfection complète (dépose, écran sous-toiture, lattage et couverture) coûte 80 à 200 €/m² en tuile terre cuite et 150 à 300 €/m² en ardoise naturelle. Pour une maison de 100 m² au sol, le budget se situe entre 10 000 et 30 000 €." },
+      {
+        question: 'Peut-on choisir librement sa couverture ?',
+        answer:
+          "Non, le PLU (Plan Local d'Urbanisme) de votre commune impose souvent le type de couverture et la couleur. En zone ABF (Architecte des Bâtiments de France), les contraintes sont encore plus strictes. Consultez votre mairie avant tout projet de couverture.",
+      },
+      {
+        question: "Quelle est la durée de vie d'une toiture en tuiles ?",
+        answer:
+          "Les tuiles terre cuite durent 50 à 100 ans, les tuiles béton 30 à 50 ans et l'ardoise naturelle 75 à 150 ans. Ces durées supposent un entretien régulier (démoussage tous les 5-10 ans) et le remplacement ponctuel des éléments cassés.",
+      },
+      {
+        question: 'Tuile plate ou tuile canal ?',
+        answer:
+          "La tuile plate convient aux toitures à forte pente (45° et plus), typique du nord de la France. La tuile canal (ou tuile romane) s'utilise sur les pentes faibles (15 à 35°), caractéristique du sud. La tuile à emboîtement (Romane, Marseille) est un compromis universel adapté aux pentes de 25 à 60°.",
+      },
+      {
+        question: 'Combien coûte une réfection de toiture ?',
+        answer:
+          'Une réfection complète (dépose, écran sous-toiture, lattage et couverture) coûte 80 à 200 €/m² en tuile terre cuite et 150 à 300 €/m² en ardoise naturelle. Pour une maison de 100 m² au sol, le budget se situe entre 10 000 et 30 000 €.',
+      },
     ],
     content: [
       `## Tuile terre cuite : la tradition française
@@ -452,10 +578,12 @@ Pour un **budget maîtrisé**, la tuile terre cuite à emboîtement offre le mei
   },
 
   'plaque-de-platre-ba13-guide': {
-    title: "Plaque de plâtre BA13 : types et usages",
-    excerpt: "BA13 standard, hydrofuge, coupe-feu, phonique : guide complet des plaques de plâtre avec caractéristiques, prix et usages recommandés pour chaque situation.",
-    metaTitle: "Plaque de Plâtre BA13 : Guide Complet 2026",
-    metaDescription: "Découvrez les types de BA13 : standard, hydrofuge, coupe-feu. Caractéristiques, prix et usages pour chaque situation. Devis gratuit.",
+    title: 'Plaque de plâtre BA13 : types et usages',
+    excerpt:
+      'BA13 standard, hydrofuge, coupe-feu, phonique : guide complet des plaques de plâtre avec caractéristiques, prix et usages recommandés pour chaque situation.',
+    metaTitle: 'Plaque de Plâtre BA13 : Guide Complet 2026',
+    metaDescription:
+      'Découvrez les types de BA13 : standard, hydrofuge, coupe-feu. Caractéristiques, prix et usages pour chaque situation. Devis gratuit.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-16',
@@ -463,16 +591,32 @@ Pour un **budget maîtrisé**, la tuile terre cuite à emboîtement offre le mei
     category: 'Matériaux',
     tags: ['plaque de plâtre', 'BA13', 'cloison', 'plafond', 'matériaux'],
     keyTakeaways: [
-      "La BA13 standard (blanche) convient pour 80 % des usages : cloisons, doublages et plafonds en pièces sèches.",
-      "La BA13 hydrofuge (verte) est obligatoire dans les pièces humides : salle de bain, cuisine, WC.",
+      'La BA13 standard (blanche) convient pour 80 % des usages : cloisons, doublages et plafonds en pièces sèches.',
+      'La BA13 hydrofuge (verte) est obligatoire dans les pièces humides : salle de bain, cuisine, WC.',
       "La BA13 coupe-feu (rose) offre jusqu'à 2 heures de résistance au feu pour les locaux réglementés.",
-      "Comptez 3 à 5 € par plaque (250x120 cm) en standard, 5 à 8 € en hydrofuge ou coupe-feu.",
+      'Comptez 3 à 5 € par plaque (250x120 cm) en standard, 5 à 8 € en hydrofuge ou coupe-feu.',
     ],
     faq: [
-      { question: "Que signifie BA13 ?", answer: "BA signifie « Bord Aminci » : les bords longs de la plaque sont amincis pour faciliter le traitement des joints (bande + enduit). Le chiffre 13 correspond à l'épaisseur en millimètres. Il existe aussi des BA10 (plafond), BA15 et BA18 (haute résistance mécanique)." },
-      { question: "Quelle BA13 pour une salle de bain ?", answer: "Utilisez une BA13 hydrofuge (couleur verte, marquage H1) pour toutes les parois de la salle de bain. Dans la zone de douche directe (zone 1 et 2), complétez par un système d'étanchéité sous carrelage (SPEC). La BA13 hydrofuge résiste à l'humidité ambiante mais n'est pas étanche à l'eau directe." },
-      { question: "Peut-on visser directement dans du BA13 ?", answer: "Pour fixer des objets légers (moins de 3 kg), utilisez des chevilles à expansion (Molly). Pour des charges de 3 à 20 kg, des chevilles spéciales plaque de plâtre (autoforeuses). Pour des charges lourdes (étagère, meuble), fixez dans les montants métalliques (48 ou 70 mm) repérés au détecteur." },
-      { question: "Combien coûte la pose de cloisons en BA13 ?", answer: "La pose d'une cloison en BA13 par un plaquiste professionnel coûte 30 à 50 €/m² (fourniture et pose). Le prix varie selon la hauteur, le type de plaque, l'isolation intégrée et les finitions (bandes, enduit, ponçage). Prévoyez un supplément pour les découpes autour des prises et interrupteurs." },
+      {
+        question: 'Que signifie BA13 ?',
+        answer:
+          "BA signifie « Bord Aminci » : les bords longs de la plaque sont amincis pour faciliter le traitement des joints (bande + enduit). Le chiffre 13 correspond à l'épaisseur en millimètres. Il existe aussi des BA10 (plafond), BA15 et BA18 (haute résistance mécanique).",
+      },
+      {
+        question: 'Quelle BA13 pour une salle de bain ?',
+        answer:
+          "Utilisez une BA13 hydrofuge (couleur verte, marquage H1) pour toutes les parois de la salle de bain. Dans la zone de douche directe (zone 1 et 2), complétez par un système d'étanchéité sous carrelage (SPEC). La BA13 hydrofuge résiste à l'humidité ambiante mais n'est pas étanche à l'eau directe.",
+      },
+      {
+        question: 'Peut-on visser directement dans du BA13 ?',
+        answer:
+          'Pour fixer des objets légers (moins de 3 kg), utilisez des chevilles à expansion (Molly). Pour des charges de 3 à 20 kg, des chevilles spéciales plaque de plâtre (autoforeuses). Pour des charges lourdes (étagère, meuble), fixez dans les montants métalliques (48 ou 70 mm) repérés au détecteur.',
+      },
+      {
+        question: 'Combien coûte la pose de cloisons en BA13 ?',
+        answer:
+          "La pose d'une cloison en BA13 par un plaquiste professionnel coûte 30 à 50 €/m² (fourniture et pose). Le prix varie selon la hauteur, le type de plaque, l'isolation intégrée et les finitions (bandes, enduit, ponçage). Prévoyez un supplément pour les découpes autour des prises et interrupteurs.",
+      },
     ],
     content: [
       `## La plaque de plâtre BA13 : un incontournable du bâtiment
@@ -514,10 +658,12 @@ La qualité des finitions fait toute la différence. **Bande à joint** : papier
   },
 
   'types-enduit-facade': {
-    title: "Enduit de façade : monocouche, traditionnel ou chaux ?",
-    excerpt: "Enduit monocouche, traditionnel ou à la chaux : comparatif des enduits de façade avec avantages, prix, mise en œuvre et durabilité pour chaque type.",
-    metaTitle: "Enduit Façade : Comparatif et Prix 2026",
-    metaDescription: "Comparez enduit monocouche, traditionnel et chaux : prix, mise en oeuvre et durabilité. Obtenez un devis façadier gratuit.",
+    title: 'Enduit de façade : monocouche, traditionnel ou chaux ?',
+    excerpt:
+      'Enduit monocouche, traditionnel ou à la chaux : comparatif des enduits de façade avec avantages, prix, mise en œuvre et durabilité pour chaque type.',
+    metaTitle: 'Enduit Façade : Comparatif et Prix 2026',
+    metaDescription:
+      'Comparez enduit monocouche, traditionnel et chaux : prix, mise en œuvre et durabilité. Obtenez un devis façadier gratuit.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-18',
@@ -531,10 +677,26 @@ La qualité des finitions fait toute la différence. **Bande à joint** : papier
       "Le choix de la finition (grattée, talochée, écrasée) influence l'esthétique et le prix.",
     ],
     faq: [
-      { question: "Quel enduit pour une maison en pierre ?", answer: "Sur les murs en pierre, utilisez exclusivement un enduit à la chaux (aérienne ou hydraulique). Le ciment est à proscrire : il empêche le mur de respirer, emprisonne l'humidité et provoque des dégradations irréversibles (éclatement de la pierre, salpêtre)." },
-      { question: "Combien de temps dure un enduit de façade ?", answer: "Un enduit monocouche dure 20 à 30 ans. Un enduit traditionnel 3 couches dure 30 à 50 ans. Un enduit à la chaux bien entretenu peut durer plus de 100 ans. La durabilité dépend de l'exposition (pluie, UV), de la qualité de la mise en œuvre et de l'entretien." },
-      { question: "Faut-il un permis pour ravaler sa façade ?", answer: "Une déclaration préalable de travaux est obligatoire pour tout ravalement de façade (article R421-17 du Code de l'urbanisme). En zone ABF, l'accord de l'Architecte des Bâtiments de France est nécessaire. À Paris, le ravalement est obligatoire tous les 10 ans." },
-      { question: "Quel est le prix d'un ravalement de façade ?", answer: "Comptez 30 à 50 €/m² pour un enduit monocouche, 50 à 80 €/m² pour un enduit traditionnel et 60 à 100 €/m² pour un enduit à la chaux. Pour une maison de 100 m² de façade, le budget se situe entre 3 000 et 10 000 €. Ajoutez 15 à 30 €/m² pour l'échafaudage." },
+      {
+        question: 'Quel enduit pour une maison en pierre ?',
+        answer:
+          "Sur les murs en pierre, utilisez exclusivement un enduit à la chaux (aérienne ou hydraulique). Le ciment est à proscrire : il empêche le mur de respirer, emprisonne l'humidité et provoque des dégradations irréversibles (éclatement de la pierre, salpêtre).",
+      },
+      {
+        question: 'Combien de temps dure un enduit de façade ?',
+        answer:
+          "Un enduit monocouche dure 20 à 30 ans. Un enduit traditionnel 3 couches dure 30 à 50 ans. Un enduit à la chaux bien entretenu peut durer plus de 100 ans. La durabilité dépend de l'exposition (pluie, UV), de la qualité de la mise en œuvre et de l'entretien.",
+      },
+      {
+        question: 'Faut-il un permis pour ravaler sa façade ?',
+        answer:
+          "Une déclaration préalable de travaux est obligatoire pour tout ravalement de façade (article R421-17 du Code de l'urbanisme). En zone ABF, l'accord de l'Architecte des Bâtiments de France est nécessaire. À Paris, le ravalement est obligatoire tous les 10 ans.",
+      },
+      {
+        question: "Quel est le prix d'un ravalement de façade ?",
+        answer:
+          "Comptez 30 à 50 €/m² pour un enduit monocouche, 50 à 80 €/m² pour un enduit traditionnel et 60 à 100 €/m² pour un enduit à la chaux. Pour une maison de 100 m² de façade, le budget se situe entre 3 000 et 10 000 €. Ajoutez 15 à 30 €/m² pour l'échafaudage.",
+      },
     ],
     content: [
       `## Les trois familles d'enduit de façade
@@ -578,10 +740,12 @@ Un enduit de façade mal appliqué peut se fissurer, se décoller ou laisser pas
   },
 
   'beton-cire-vs-resine-vs-carrelage': {
-    title: "Béton ciré, résine ou carrelage : quel sol choisir ?",
-    excerpt: "Béton ciré, résine de sol ou carrelage grand format : comparatif des revêtements de sol sans joint. Esthétique, entretien, prix et guide de choix pour chaque pièce.",
-    metaTitle: "Béton Ciré vs Résine vs Carrelage : Guide 2026",
-    metaDescription: "Comparez béton ciré, résine et carrelage grand format : esthétique, entretien et prix. Découvrez le sol idéal pour chaque pièce.",
+    title: 'Béton ciré, résine ou carrelage : quel sol choisir ?',
+    excerpt:
+      'Béton ciré, résine de sol ou carrelage grand format : comparatif des revêtements de sol sans joint. Esthétique, entretien, prix et guide de choix pour chaque pièce.',
+    metaTitle: 'Béton Ciré vs Résine vs Carrelage : Guide 2026',
+    metaDescription:
+      'Comparez béton ciré, résine et carrelage grand format : esthétique, entretien et prix. Découvrez le sol idéal pour chaque pièce.',
     image: '⚖️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-20',
@@ -589,16 +753,32 @@ Un enduit de façade mal appliqué peut se fissurer, se décoller ou laisser pas
     category: 'Matériaux',
     tags: ['béton ciré', 'résine', 'carrelage', 'revêtement sol', 'matériaux'],
     keyTakeaways: [
-      "Le béton ciré coûte 100 à 200 €/m² posé et offre un rendu unique, mais exige un applicateur qualifié.",
-      "La résine de sol (époxy ou polyuréthane) coûte 80 à 150 €/m² et résiste mieux aux chocs et produits chimiques.",
-      "Le carrelage grand format (120x120 cm) avec joints fins imite le sans-joint pour 50 à 100 €/m² posé.",
-      "Le béton ciré et la résine nécessitent un support parfaitement plan et stable (ragréage obligatoire).",
+      'Le béton ciré coûte 100 à 200 €/m² posé et offre un rendu unique, mais exige un applicateur qualifié.',
+      'La résine de sol (époxy ou polyuréthane) coûte 80 à 150 €/m² et résiste mieux aux chocs et produits chimiques.',
+      'Le carrelage grand format (120x120 cm) avec joints fins imite le sans-joint pour 50 à 100 €/m² posé.',
+      'Le béton ciré et la résine nécessitent un support parfaitement plan et stable (ragréage obligatoire).',
     ],
     faq: [
-      { question: "Le béton ciré fissure-t-il ?", answer: "Le béton ciré peut développer des micro-fissures (faïençage) avec le temps, surtout si le support travaille ou si l'application est mal réalisée. Ces micro-fissures font partie du « cachet » du matériau et ne compromettent pas l'étanchéité si le vernis de protection est intact. Un support parfaitement stable et un applicateur expérimenté minimisent ce risque." },
-      { question: "La résine de sol est-elle adaptée à une cuisine ?", answer: "Oui, la résine époxy est très résistante aux taches, aux produits ménagers et aux chocs. Elle se nettoie d'un simple coup de serpillère. Attention : la résine époxy peut jaunir sous les UV (évitez les pièces très ensoleillées). La résine polyuréthane résiste mieux aux UV mais est moins dure." },
-      { question: "Peut-on poser du béton ciré sur du carrelage existant ?", answer: "Oui, à condition que le carrelage soit stable (pas de carreaux creux ni fissurés) et que les joints soient comblés. Un primaire d'accrochage est appliqué, puis 2 à 3 couches de béton ciré (épaisseur totale de 2 à 3 mm). C'est une solution idéale en rénovation pour éviter la dépose du carrelage." },
-      { question: "Quel est le sol le plus facile à entretenir ?", answer: "La résine de sol est la plus facile à entretenir : surface lisse et étanche, nettoyage à l'eau savonneuse. Le carrelage est également simple mais les joints peuvent noircir. Le béton ciré nécessite un vernis de protection et un entretien avec des produits spécifiques (pas de Javel ni d'acide)." },
+      {
+        question: 'Le béton ciré fissure-t-il ?',
+        answer:
+          "Le béton ciré peut développer des micro-fissures (faïençage) avec le temps, surtout si le support travaille ou si l'application est mal réalisée. Ces micro-fissures font partie du « cachet » du matériau et ne compromettent pas l'étanchéité si le vernis de protection est intact. Un support parfaitement stable et un applicateur expérimenté minimisent ce risque.",
+      },
+      {
+        question: 'La résine de sol est-elle adaptée à une cuisine ?',
+        answer:
+          "Oui, la résine époxy est très résistante aux taches, aux produits ménagers et aux chocs. Elle se nettoie d'un simple coup de serpillère. Attention : la résine époxy peut jaunir sous les UV (évitez les pièces très ensoleillées). La résine polyuréthane résiste mieux aux UV mais est moins dure.",
+      },
+      {
+        question: 'Peut-on poser du béton ciré sur du carrelage existant ?',
+        answer:
+          "Oui, à condition que le carrelage soit stable (pas de carreaux creux ni fissurés) et que les joints soient comblés. Un primaire d'accrochage est appliqué, puis 2 à 3 couches de béton ciré (épaisseur totale de 2 à 3 mm). C'est une solution idéale en rénovation pour éviter la dépose du carrelage.",
+      },
+      {
+        question: 'Quel est le sol le plus facile à entretenir ?',
+        answer:
+          "La résine de sol est la plus facile à entretenir : surface lisse et étanche, nettoyage à l'eau savonneuse. Le carrelage est également simple mais les joints peuvent noircir. Le béton ciré nécessite un vernis de protection et un entretien avec des produits spécifiques (pas de Javel ni d'acide).",
+      },
     ],
     content: [
       `## Trois solutions pour un sol contemporain

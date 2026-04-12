@@ -117,7 +117,7 @@ export default async function AccessibilitePage() {
             <h2 className="text-2xl font-bold text-charcoal-900 mb-4">État de conformité</h2>
             <p className="text-charcoal-600 mb-4">
               Le site ServicesArtisans est en <strong>conformité partielle</strong> avec le
-              Référentiel Général d'Amélioration de l'Accessibilité (RGAA) version 4.1.
+              Référentiel Général d'Amélioration de l'Accessibilité (RGAA) version 4.1.2.
             </p>
             <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
               <p className="text-primary-800">Audit de conformité en cours.</p>
@@ -264,8 +264,8 @@ export default async function AccessibilitePage() {
           {/* Date */}
           <section className="border-t pt-6">
             <p className="text-charcoal-500 text-sm">
-              Cette déclaration d'accessibilité a été établie le 1er janvier 2024. Dernière mise à
-              jour : 15 janvier 2024.
+              Cette déclaration d'accessibilité a été établie le 13 avril 2026. Dernière mise à jour
+              : 13 avril 2026.
             </p>
           </section>
         </div>

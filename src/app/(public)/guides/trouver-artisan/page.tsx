@@ -145,7 +145,7 @@ const labels = [
   {
     name: 'QualiEnR',
     description:
-      "Certification spécifique aux installateurs d'énergies renouvelables : panneaux solaires (QualiPV), pompes à chaleur (QualiPAC), bois énergie (Qualibois). Obligatoire pour les aides à la rénovation énergétique.",
+      "Certification spécifique aux installateurs d'énergies renouvelables : panneaux solaires (QualiPV), pompes à chaleur (QualiPAC), bois énergie (QualiBois). Obligatoire pour les aides à la rénovation énergétique.",
   },
   {
     name: "RGE (Reconnu Garant de l'Environnement)",

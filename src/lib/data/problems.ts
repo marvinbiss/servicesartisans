@@ -921,7 +921,7 @@ const problems: Problem[] = [
       },
       {
         q: 'Un robinet qui fuit consomme-t-il beaucoup d’eau ?',
-        a: 'Oui, un robinet qui goutte à raison d’une goutte par seconde gaspille environ 3 à 5 litres par jour, soit 1 100 à 1 800 litres par an. Cela représente 5 à 8 € sur la facture d’eau annuelle. Réparer une fuite est donc rapidement rentable.',
+        a: 'Oui, un robinet qui goutte à raison d’une goutte par seconde gaspille environ 3 à 5 litres par jour, soit 1&nbsp;100 à 1&nbsp;800 litres par an. Cela représente 5 à 8 € sur la facture d’eau annuelle. Réparer une fuite est donc rapidement rentable.',
       },
       {
         q: 'Puis-je remplacer un robinet moi-même ?',

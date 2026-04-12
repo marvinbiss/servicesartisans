@@ -190,7 +190,7 @@ export default async function BarometrePage() {
                 <Users className="w-6 h-6" />
               </div>
               <div className="text-3xl font-extrabold text-charcoal-900">
-                {stats.totalArtisans > 0 ? `${Math.round(stats.totalArtisans / 1000)}k+` : '940k+'}
+                {stats.totalArtisans > 0 ? `${Math.round(stats.totalArtisans / 1000)}k+` : '—'}
               </div>
               <div className="text-sm text-charcoal-500 mt-1">Artisans référencés</div>
             </div>

@@ -375,15 +375,14 @@ export default async function HomePage() {
                   d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                 />
               </svg>
-              R&eacute;novation &eacute;nerg&eacute;tique 2026
+              Rénovation énergétique 2026
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2 tracking-tight">
-              Jusqu&rsquo;&agrave; 15&nbsp;000&nbsp;&euro; d&rsquo;aides pour vos travaux
+              Jusqu'à 15&nbsp;000&nbsp;€ d'aides pour vos travaux
             </h2>
             <p className="text-emerald-100/90 max-w-2xl mx-auto">
-              Primes CEE, MaPrimeR&eacute;nov&rsquo;, artisans RGE qualifi&eacute;s : tout ce
-              qu&rsquo;il faut savoir pour financer votre r&eacute;novation
-              &eacute;nerg&eacute;tique.
+              Primes CEE, MaPrimeRénov', artisans RGE qualifiés : tout ce qu'il faut savoir pour
+              financer votre rénovation énergétique.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -391,13 +390,11 @@ export default async function HomePage() {
               href="/cee"
               className="group p-5 bg-white/5 hover:bg-white/10 border border-emerald-400/20 hover:border-emerald-300/50 rounded-2xl backdrop-blur transition"
             >
-              <div className="text-xs font-semibold text-emerald-300 mb-1">
-                19 op&eacute;rations
-              </div>
+              <div className="text-xs font-semibold text-emerald-300 mb-1">19 opérations</div>
               <h3 className="font-heading font-bold text-lg text-white mb-2">Primes CEE 2026</h3>
               <p className="text-sm text-emerald-100/80 leading-relaxed">
-                PAC, isolation, po&ecirc;le, chaudi&egrave;re biomasse&hellip; Montants classiques
-                et pr&eacute;carit&eacute; par op&eacute;ration.
+                PAC, isolation, poêle, chaudière biomasse… Montants classiques et précarité par
+                opération.
               </p>
               <div className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 inline-flex items-center gap-1">
                 Voir le catalogue →
@@ -407,13 +404,11 @@ export default async function HomePage() {
               href="/cee/guides"
               className="group p-5 bg-white/5 hover:bg-white/10 border border-emerald-400/20 hover:border-emerald-300/50 rounded-2xl backdrop-blur transition"
             >
-              <div className="text-xs font-semibold text-emerald-300 mb-1">
-                10 guides d&eacute;taill&eacute;s
-              </div>
+              <div className="text-xs font-semibold text-emerald-300 mb-1">10 guides détaillés</div>
               <h3 className="font-heading font-bold text-lg text-white mb-2">Guides primes CEE</h3>
               <p className="text-sm text-emerald-100/80 leading-relaxed">
-                Conditions techniques, cumul MaPrimeR&eacute;nov&rsquo; et pi&egrave;ges &agrave;
-                &eacute;viter, op&eacute;ration par op&eacute;ration.
+                Conditions techniques, cumul MaPrimeRénov' et pièges à éviter, opération par
+                opération.
               </p>
               <div className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 inline-flex items-center gap-1">
                 Lire les guides →
@@ -430,8 +425,8 @@ export default async function HomePage() {
                 Annuaire artisans RGE
               </h3>
               <p className="text-sm text-emerald-100/80 leading-relaxed">
-                QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV&nbsp;: artisans qualifi&eacute;s
-                par m&eacute;tier et par ville.
+                QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV : artisans qualifiés par métier
+                et par ville.
               </p>
               <div className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 inline-flex items-center gap-1">
                 Trouver un RGE →
@@ -449,13 +444,13 @@ export default async function HomePage() {
               href="/rge/sources"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
             >
-              Sources &amp; m&eacute;thodologie
+              Sources &amp; méthodologie
             </Link>
             <Link
               href="/ademe"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
             >
-              Donn&eacute;es ADEME
+              Données ADEME
             </Link>
           </div>
         </div>

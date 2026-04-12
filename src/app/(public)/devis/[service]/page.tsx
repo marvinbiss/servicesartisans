@@ -30,12 +30,16 @@ export function generateStaticParams() {
 
 export const dynamicParams = false
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ service: string }>
+}): Promise<Metadata> {
   const { service } = await params
   const trade = tradeContent[service]
   if (!trade) return {}
@@ -86,7 +90,11 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
 const topCities = villes.slice(0, 20)
 
-export default async function DevisServicePage({ params }: { params: Promise<{ service: string }> }) {
+export default async function DevisServicePage({
+  params,
+}: {
+  params: Promise<{ service: string }>
+}) {
   const { service } = await params
 
   const trade = tradeContent[service]
@@ -100,9 +108,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
     { name: `Devis ${tradeLower}`, url: `/devis/${service}` },
   ])
 
-  const faqSchema = getFAQSchema(
-    trade.faq.map((f) => ({ question: f.q, answer: f.a }))
-  )
+  const faqSchema = getFAQSchema(trade.faq.map((f) => ({ question: f.q, answer: f.a })))
 
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -145,9 +151,10 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
   }
 
   const relatedSlugs = relatedServices[service] || []
-  const otherTrades = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 4).filter((s) => tradeContent[s])
-    : tradeSlugs.filter((s) => s !== service).slice(0, 4)
+  const otherTrades =
+    relatedSlugs.length > 0
+      ? relatedSlugs.slice(0, 4).filter((s) => tradeContent[s])
+      : tradeSlugs.filter((s) => s !== service).slice(0, 4)
 
   // H1 variation
   const h1Text = (() => {
@@ -173,18 +180,15 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       <section className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
           <Breadcrumb
-            items={[
-              { label: 'Devis', href: '/devis' },
-              { label: `Devis ${tradeLower}` },
-            ]}
+            items={[{ label: 'Devis', href: '/devis' }, { label: `Devis ${tradeLower}` }]}
             className="mb-4 text-charcoal-400"
           />
           <h1 className="font-heading text-3xl font-bold text-charcoal-900 tracking-tight">
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Devis gratuit de {tradeLower}s référencés et vérifiés.
-            Prix indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
+            Devis gratuit de {tradeLower}s référencés et vérifiés. Prix indicatif :{' '}
+            {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
           </p>
         </div>
       </section>
@@ -248,7 +252,10 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           </h2>
           <div className="space-y-4">
             {trade.commonTasks.map((task, i) => (
-              <div key={i} className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5 hover:bg-primary-50 hover:border-primary-200 transition-colors">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5 hover:bg-primary-50 hover:border-primary-200 transition-colors"
+              >
                 <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Euro className="w-4 h-4 text-primary-500" />
                 </div>
@@ -279,7 +286,10 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
-                <div key={cert} className="flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-3 rounded-xl text-sm font-medium">
+                <div
+                  key={cert}
+                  className="flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-3 rounded-xl text-sm font-medium"
+                >
                   <Shield className="w-4 h-4 flex-shrink-0" />
                   {cert}
                 </div>
@@ -302,9 +312,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
                   <h3 className="text-base font-semibold text-charcoal-900 pr-4">{item.q}</h3>
                   <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
-                  {item.a}
-                </div>
+                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">{item.a}</div>
               </details>
             ))}
           </div>
@@ -342,7 +350,9 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       {/* ─── Devis associés ──────────────────────────────── */}
       <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Devis pour d'autres métiers</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
+            Devis pour d'autres métiers
+          </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
@@ -374,13 +384,32 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Ce service</h3>
               <div className="space-y-2">
-                <Link href={`/services/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">{trade.name} — tous les artisans</Link>
-                <Link href={`/tarifs/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Tarifs {tradeLower}</Link>
+                <Link
+                  href={`/services/${service}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  {trade.name} — tous les artisans
+                </Link>
+                <Link
+                  href={`/tarifs/${service}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Tarifs {tradeLower}
+                </Link>
                 {trade.emergencyInfo && (
-                  <Link href={`/urgence/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">{trade.name} urgence</Link>
+                  <Link
+                    href={`/urgence/${service}`}
+                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                  >
+                    {trade.name} urgence
+                  </Link>
                 )}
                 {topCities.slice(0, 3).map((v) => (
-                  <Link key={v.slug} href={`/devis/${service}/${v.slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                  <Link
+                    key={v.slug}
+                    href={`/devis/${service}/${v.slug}`}
+                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                  >
                     Devis {tradeLower} à {v.name}
                   </Link>
                 ))}
@@ -393,7 +422,11 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (
-                    <Link key={slug} href={`/devis/${slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                    <Link
+                      key={slug}
+                      href={`/devis/${slug}`}
+                      className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                    >
                       Devis {t.name.toLowerCase()}
                     </Link>
                   )
@@ -403,11 +436,36 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/devis" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Demander un devis</Link>
-                <Link href="/tarifs" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Comment ça marche</Link>
-                <Link href="/faq" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">FAQ</Link>
-                <Link href="/notre-processus-de-verification" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Processus de vérification</Link>
+                <Link
+                  href="/devis"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Demander un devis
+                </Link>
+                <Link
+                  href="/tarifs"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Guide complet des tarifs
+                </Link>
+                <Link
+                  href="/comment-ca-marche"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Comment ça marche
+                </Link>
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  FAQ
+                </Link>
+                <Link
+                  href="/notre-processus-de-verification"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Processus de vérification
+                </Link>
               </div>
             </div>
           </div>
@@ -421,7 +479,10 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-primary-500 hover:text-primary-700">
+            <Link
+              href="/notre-processus-de-verification"
+              className="text-primary-500 hover:text-primary-700"
+            >
               Comment nous référençons les artisans
             </Link>
             <Link href="/politique-avis" className="text-primary-500 hover:text-primary-700">
@@ -438,7 +499,11 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
 
       <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="devis" />
 
-      <TopicalClusterLinks serviceSlug={service} serviceName={trade.name} currentPath={`/devis/${service}`} />
+      <TopicalClusterLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        currentPath={`/devis/${service}`}
+      />
 
       <DeepPageLinks currentService={service} currentIntent="devis" skipCrossIntent />
 
@@ -450,7 +515,10 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
+              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées
+              en France. Ils varient selon la région, la complexité du chantier, les matériaux et
+              l'urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire
+              indépendant.
             </p>
           </div>
         </div>

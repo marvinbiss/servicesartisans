@@ -28,6 +28,7 @@ import { getProviderCountByDepartment, formatProviderCount } from '@/lib/data/st
 import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { getTradeContent } from '@/lib/data/trade-content'
+import { getDeptPreposition, getDeptArticle } from '@/lib/geo-strings'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
@@ -46,7 +47,7 @@ interface PageProps {
   params: Promise<{ departement: string }>
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -72,11 +73,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const descHash = Math.abs(hashCode(`desc-dept-${dept.slug}`))
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
   const descTemplates = [
-    `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuit.`,
+    `Trouvez des artisans qualifiés ${getDeptPreposition(dept.name)} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuit.`,
     `${dept.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.housingLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
     `Artisans en ${dept.name} (${dept.code}), ${dept.region}. ${artisanStr}${dept.population} hab., chef-lieu ${dept.chefLieu}. Devis gratuits en ligne.`,
-    `${artisanStr}${services.length} corps de métier dans le ${dept.name}. ${metaContent.profile.economyLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. Devis gratuit.`,
-    `Tous les artisans du ${dept.name} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${metaContent.profile.economyLabel.toLowerCase()}. Comparez gratuitement.`,
+    `${artisanStr}${services.length} corps de métier ${getDeptPreposition(dept.name)}. ${metaContent.profile.economyLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. Devis gratuit.`,
+    `Tous les artisans ${getDeptArticle(dept.name)} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${metaContent.profile.economyLabel.toLowerCase()}. Comparez gratuitement.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -150,7 +151,7 @@ export default async function DepartementPage({ params }: PageProps) {
 
   const collectionPageSchema = getCollectionPageSchema({
     name: `Artisans en ${dept.name} (${dept.code})`,
-    description: `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${services.length} corps de métier, artisans référencés.`,
+    description: `Trouvez des artisans qualifiés ${getDeptPreposition(dept.name)} (${dept.code}). ${services.length} corps de métier, artisans référencés.`,
     url: `/departements/${dept.slug}`,
     itemCount: services.length,
   })
@@ -225,11 +226,11 @@ export default async function DepartementPage({ params }: PageProps) {
                 {(() => {
                   const h1Hash = Math.abs(hashCode(`h1-dept-${dept.slug}`))
                   const h1Templates = [
-                    `Artisans dans le ${dept.name}`,
-                    `Trouver un artisan en ${dept.name} (${dept.code})`,
+                    `Artisans ${getDeptPreposition(dept.name)}`,
+                    `Trouver un artisan ${getDeptPreposition(dept.name)} (${dept.code})`,
                     `${dept.name} : artisans qualifiés par ville`,
-                    `Artisans du ${dept.code} — ${dept.name}`,
-                    `Tous les artisans en ${dept.name}, ${dept.region}`,
+                    `Artisans ${getDeptArticle(dept.name)} (${dept.code})`,
+                    `Tous les artisans ${getDeptPreposition(dept.name)}, ${dept.region}`,
                   ]
                   return (
                     <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
@@ -292,7 +293,7 @@ export default async function DepartementPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* ─── HERO CTA ───────────────────────────────────────── */}
         <GeoPageCTA
-          title={`Besoin d'un artisan dans le ${dept.name} ?`}
+          title={`Besoin d'un artisan ${getDeptPreposition(dept.name)} ?`}
           subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
           ville={dept.chefLieu}
         />
@@ -970,7 +971,7 @@ export default async function DepartementPage({ params }: PageProps) {
 
       {/* ─── STICKY CTA + EXIT INTENT ─────────────────────── */}
       <GeoPageCTA
-        title={`Comparez les devis d'artisans dans le ${dept.name}`}
+        title={`Comparez les devis d'artisans ${getDeptPreposition(dept.name)}`}
         subtitle="Gratuit, sans engagement, artisans vérifiés SIREN"
         ville={dept.chefLieu}
         variant="sticky-only"

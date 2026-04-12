@@ -83,11 +83,11 @@ export default async function RgeQualificationsHubPage() {
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-            Qualifications RGE&nbsp;: le r&eacute;f&eacute;rentiel complet
+            Qualifications RGE&nbsp;: le référentiel complet
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            Comprendre ce que couvre chaque qualification RGE, quelles primes elle d&eacute;bloque
-            et comment la v&eacute;rifier avant de signer un devis.
+            Comprendre ce que couvre chaque qualification RGE, quelles primes elle débloque et
+            comment la vérifier avant de signer un devis.
           </p>
           <LastUpdated
             label="Référentiel ADEME mis à jour le"
@@ -133,17 +133,17 @@ export default async function RgeQualificationsHubPage() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
-            Trouvez un artisan RGE qualifi&eacute;
+            Trouvez un artisan RGE qualifié
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Annuaire synchronis&eacute; hebdomadairement avec la base officielle ADEME.
+            Annuaire synchronisé hebdomadairement avec la base officielle ADEME.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/rge"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
             >
-              Explorer l&rsquo;annuaire RGE
+              Explorer l’annuaire RGE
             </Link>
             <Link
               href="/devis"

@@ -15,11 +15,13 @@ interface ProviderCardProps {
   isHovered?: boolean
 }
 
-export default function ProviderCard({
-  provider,
-  isHovered = false,
-}: ProviderCardProps) {
-  const providerUrl = getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
+export default function ProviderCard({ provider, isHovered = false }: ProviderCardProps) {
+  const providerUrl = getArtisanUrl({
+    stable_id: provider.stable_id,
+    slug: provider.slug,
+    specialty: provider.specialty,
+    city: provider.address_city,
+  })
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
 
@@ -43,11 +45,13 @@ export default function ProviderCard({
         href={providerUrl}
         className="absolute inset-0 z-10 md:hidden"
         aria-label={`Voir le profil de ${provider.name}`}
-        onClick={() => trackEvent('artisan_listing_click', {
-          artisanId: provider.stable_id || provider.id,
-          artisanName: provider.name,
-          source: 'card_mobile',
-        })}
+        onClick={() =>
+          trackEvent('artisan_listing_click', {
+            artisanId: provider.stable_id || provider.id,
+            artisanName: provider.name,
+            source: 'card_mobile',
+          })
+        }
       />
       {/* Mobile: right arrow indicator */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden z-0">
@@ -60,13 +64,17 @@ export default function ProviderCard({
         <Link
           href={providerUrl}
           className="flex-shrink-0"
-          onClick={() => trackEvent('artisan_listing_click', {
-            artisanId: provider.stable_id || provider.id,
-            artisanName: provider.name,
-            source: 'card_avatar',
-          })}
+          onClick={() =>
+            trackEvent('artisan_listing_click', {
+              artisanId: provider.stable_id || provider.id,
+              artisanName: provider.name,
+              source: 'card_avatar',
+            })
+          }
         >
-          <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-lg font-bold shadow-soft`}>
+          <div
+            className={`w-12 h-12 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-lg font-bold shadow-soft`}
+          >
             {provider.name.charAt(0).toUpperCase()}
           </div>
         </Link>
@@ -76,19 +84,21 @@ export default function ProviderCard({
             <Link
               href={providerUrl}
               className="font-heading text-lg font-bold text-charcoal-900 hover:text-primary-500 transition-colors duration-200 truncate"
-              onClick={() => trackEvent('artisan_listing_click', {
-                artisanId: provider.stable_id || provider.id,
-                artisanName: provider.name,
-                source: 'card_name',
-              })}
+              onClick={() =>
+                trackEvent('artisan_listing_click', {
+                  artisanId: provider.stable_id || provider.id,
+                  artisanName: provider.name,
+                  source: 'card_name',
+                })
+              }
             >
               {provider.name}
             </Link>
             {provider.is_verified && (
               <span
                 className="relative inline-flex items-center justify-center w-5 h-5 rounded-full overflow-hidden bg-gradient-to-br from-accent-400 to-accent-600"
-                aria-label="Artisan verifie"
-                title="Artisan verifie"
+                aria-label="Artisan vérifié"
+                title="Artisan vérifié"
               >
                 <svg
                   className="w-3.5 h-3.5 text-white relative z-10"
@@ -128,14 +138,14 @@ export default function ProviderCard({
           <div className="text-right flex-shrink-0">
             <div className="flex items-center gap-1.5 justify-end">
               <Star className="w-5 h-5 text-secondary-400 fill-secondary-400" />
-              <span className="text-lg font-bold text-charcoal-900">
-                {ratingValue}
-              </span>
+              <span className="text-lg font-bold text-charcoal-900">{ratingValue}</span>
             </div>
             <div className="flex items-center gap-1 justify-end mt-0.5">
               <span className="text-xs text-charcoal-500">{reviewCount} avis</span>
               {reviewCount > 10 && (
-                <span className="text-2xs font-semibold text-accent-700 bg-accent-50 px-1.5 py-0.5 rounded-full">Top</span>
+                <span className="text-2xs font-semibold text-accent-700 bg-accent-50 px-1.5 py-0.5 rounded-full">
+                  Top
+                </span>
               )}
             </div>
           </div>
@@ -153,8 +163,8 @@ export default function ProviderCard({
           <span>
             {provider.address_street}
             {provider.address_postal_code &&
-             !provider.address_street.includes(provider.address_postal_code) &&
-             `, ${provider.address_postal_code}${provider.address_city ? ` ${provider.address_city}` : ''}`}
+              !provider.address_street.includes(provider.address_postal_code) &&
+              `, ${provider.address_postal_code}${provider.address_city ? ` ${provider.address_city}` : ''}`}
           </span>
         </div>
       )}

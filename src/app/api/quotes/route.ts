@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 2001,
-            message: 'Donnees invalides',
+            message: 'Données invalides',
             details: validation.error.issues,
           },
         },

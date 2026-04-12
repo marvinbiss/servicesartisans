@@ -170,15 +170,14 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
       <main className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-12">
           <h1 className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4">
-            Prime CEE {opCode} &agrave; {villeName}
+            Prime CEE {opCode} à {villeName}
           </h1>
           <p className="text-charcoal-700">
-            Cette op&eacute;ration CEE n&rsquo;est pas actuellement disponible dans notre catalogue.
-            Consultez le{' '}
+            Cette opération CEE n’est pas actuellement disponible dans notre catalogue. Consultez le{' '}
             <Link href="/cee" className="text-emerald-700 underline">
               hub des primes CEE
             </Link>{' '}
-            pour d&eacute;couvrir les 19 op&eacute;rations r&eacute;sidentielles couvertes.
+            pour découvrir les 19 opérations résidentielles couvertes.
           </p>
         </div>
       </main>
@@ -272,18 +271,17 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             </span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
-            {operation.nom} : artisans RGE certifi&eacute;s &agrave; {villeName}
+            {operation.nom} : artisans RGE certifiés à {villeName}
           </h1>
           <p className="mt-3 text-charcoal-600">
             {count > 0 ? (
               <>
-                {count} artisan{count > 1 ? 's' : ''} RGE qualifi&eacute;{count > 1 ? 's' : ''} pour
-                cette op&eacute;ration CEE &agrave; {villeName}
+                {count} artisan{count > 1 ? 's' : ''} RGE qualifié{count > 1 ? 's' : ''} pour cette
+                opération CEE à {villeName}
               </>
             ) : (
               <>
-                Catalogue national de l&rsquo;op&eacute;ration CEE {operation.code} &agrave;{' '}
-                {villeName}
+                Catalogue national de l’opération CEE {operation.code} à {villeName}
               </>
             )}
           </p>
@@ -309,8 +307,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           {count === 0 ? (
             <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
               <p className="text-charcoal-700 mb-3">
-                Aucun artisan RGE qualifi&eacute; pour la fiche {operation.code} n&rsquo;est
-                actuellement r&eacute;f&eacute;renc&eacute; &agrave; {villeName}.
+                Aucun artisan RGE qualifié pour la fiche {operation.code} n’est actuellement
+                référencé à {villeName}.
               </p>
               <div className="flex flex-wrap justify-center gap-3 mt-4">
                 <Link
@@ -356,12 +354,12 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             </div>
             {operation.unite_mesure && (
               <div>
-                <dt className="font-semibold text-charcoal-900">Unit&eacute; de mesure</dt>
+                <dt className="font-semibold text-charcoal-900">Unité de mesure</dt>
                 <dd className="text-charcoal-700">{operation.unite_mesure}</dd>
               </div>
             )}
             <div>
-              <dt className="font-semibold text-charcoal-900">&Eacute;ligibilit&eacute;</dt>
+              <dt className="font-semibold text-charcoal-900">&Eacute;ligibilité</dt>
               <dd className="text-charcoal-700">
                 {operation.classique_eligible && 'Tous m\u00e9nages'}
                 {operation.classique_eligible && operation.precarite_eligible && ' + '}
@@ -398,7 +396,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               id="faq"
               className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-6"
             >
-              Questions fr&eacute;quentes &mdash; {operation.nom} &agrave; {villeName}
+              Questions fréquentes — {operation.nom} à {villeName}
             </h2>
             <div className="space-y-3">
               {faqItems.map((item, i) => (
@@ -426,10 +424,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {rgeServices.length > 0 && (
           <section aria-labelledby="rge-services" className="mb-12">
             <h2 id="rge-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
-              M&eacute;tiers RGE qualifi&eacute;s &agrave; {villeName}
+              Métiers RGE qualifiés à {villeName}
             </h2>
             <p className="text-sm text-charcoal-600 mb-4 max-w-3xl">
-              Explorer l&rsquo;annuaire des artisans RGE par m&eacute;tier &agrave; {villeName}
+              Explorer l’annuaire des artisans RGE par métier à {villeName}
               &nbsp;:
             </p>
             <div className="flex flex-wrap gap-2">
@@ -456,7 +454,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {otherCities.length > 0 && (
           <section aria-labelledby="other-cities" className="mb-12">
             <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
-              {operation.nom} dans d&rsquo;autres villes
+              {operation.nom} dans d’autres villes
             </h2>
             <div className="flex flex-wrap gap-2">
               {otherCities.map((c) => (
@@ -496,12 +494,12 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
 
         <section className="mb-12 rounded-2xl border border-sand-300 bg-white p-6 text-center">
           <h2 className="text-lg font-bold text-charcoal-900 font-jakarta mb-2">
-            Pr&ecirc;t &agrave; lancer votre projet &agrave; {villeName}&nbsp;?
+            Prêt à lancer votre projet à {villeName}&nbsp;?
           </h2>
           <p className="text-charcoal-600 text-sm mb-4 max-w-2xl mx-auto">
-            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute; pour la
-            fiche {operation.code}. Devis sans engagement, primes CEE et MaPrimeR&eacute;nov&rsquo;
-            calcul&eacute;es automatiquement.
+            Demandez un devis gratuit auprès d’un artisan RGE qualifié pour la fiche{' '}
+            {operation.code}. Devis sans engagement, primes CEE et MaPrimeRénov’ calculées
+            automatiquement.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

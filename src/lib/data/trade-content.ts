@@ -325,7 +325,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'PG (Professionnel du Gaz — obligatoire pour les installations gaz)',
       'Qualigaz (certificat de conformité gaz)',
       'QualiPAC (pompes à chaleur)',
-      'Qualibois (chauffage bois : poêles, chaudières)',
+      'QualiBois (chauffage bois : poêles, chaudières)',
       'Qualifioul (installations fioul)',
       'QualiSol (chauffe-eau solaire)',
     ],

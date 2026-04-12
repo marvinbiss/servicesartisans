@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       formData = await request.formData()
     } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides' } },
+        { success: false, error: { message: 'Données invalides' } },
         { status: 400 }
       )
     }
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides' } },
+        { success: false, error: { message: 'Données invalides' } },
         { status: 400 }
       )
     }
@@ -56,18 +56,29 @@ export async function POST(request: NextRequest) {
     const MAX_FILE_SIZE = 10 * 1024 * 1024
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: { message: 'Le fichier depasse la taille maximale autorisee (10 Mo)' } },
+        {
+          success: false,
+          error: { message: 'Le fichier depasse la taille maximale autorisee (10 Mo)' },
+        },
         { status: 400 }
       )
     }
 
     // Validate file type (only CSV/TSV allowed)
-    const allowedTypes = ['text/csv', 'text/tab-separated-values', 'application/vnd.ms-excel', 'text/plain']
+    const allowedTypes = [
+      'text/csv',
+      'text/tab-separated-values',
+      'application/vnd.ms-excel',
+      'text/plain',
+    ]
     const allowedExtensions = ['.csv', '.tsv', '.txt']
     const fileExtension = file.name ? '.' + file.name.split('.').pop()?.toLowerCase() : ''
     if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Type de fichier non autorise. Formats acceptes : CSV, TSV, TXT' } },
+        {
+          success: false,
+          error: { message: 'Type de fichier non autorise. Formats acceptes : CSV, TSV, TXT' },
+        },
         { status: 400 }
       )
     }
@@ -115,6 +126,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Import contacts error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

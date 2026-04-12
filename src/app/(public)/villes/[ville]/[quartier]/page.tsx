@@ -3,12 +3,34 @@ import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, BarChart3, Thermometer, Zap, Home } from 'lucide-react'
+import {
+  MapPin,
+  Users,
+  Building2,
+  ArrowRight,
+  Shield,
+  Clock,
+  ChevronRight,
+  Wrench,
+  HelpCircle,
+  BarChart3,
+  Thermometer,
+  Zap,
+  Home,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { villes, services, getQuartierBySlug, getQuartiersByVille, getNearbyCities, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
+import {
+  villes,
+  services,
+  getQuartierBySlug,
+  getQuartiersByVille,
+  getNearbyCities,
+  getRegionSlugByName,
+  getDepartementByCode,
+} from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
@@ -16,17 +38,14 @@ import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
 
-const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
-  { ssr: false }
-)
+const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
 
 // Pre-render top 5 cities × their quartiers — rest via ISR
 const TOP_CITIES = 3
 export function generateStaticParams() {
-  return villes.slice(0, TOP_CITIES).flatMap(v =>
-    getQuartiersByVille(v.slug).map(q => ({ ville: v.slug, quartier: q.slug }))
-  )
+  return villes
+    .slice(0, TOP_CITIES)
+    .flatMap((v) => getQuartiersByVille(v.slug).map((q) => ({ ville: v.slug, quartier: q.slug })))
 }
 
 export const dynamicParams = true
@@ -36,7 +55,7 @@ interface PageProps {
   params: Promise<{ ville: string; quartier: string }>
 }
 
-function truncateTitle(title: string, maxLen = 42): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -73,15 +92,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    robots: { index: false, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+    robots: {
+      index: false,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
     openGraph: {
       locale: 'fr_FR',
       title,
       description,
       type: 'website',
-      images: [cityImage
-        ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
-        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Artisans à ${quartierName}, ${ville.name}` }
+      images: [
+        cityImage
+          ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
+          : {
+              url: `${SITE_URL}/opengraph-image`,
+              width: 1200,
+              height: 630,
+              alt: `Artisans à ${quartierName}, ${ville.name}`,
+            },
       ],
     },
     twitter: {
@@ -100,7 +131,7 @@ export default async function QuartierPage({ params }: PageProps) {
   if (!result) notFound()
 
   const { ville, quartierName } = result
-  const quartiers = getQuartiersByVille(villeSlug).filter(q => q.slug !== quartierSlug)
+  const quartiers = getQuartiersByVille(villeSlug).filter((q) => q.slug !== quartierSlug)
   const nearbyVilles = getNearbyCities(villeSlug, 8)
   const regionSlug = getRegionSlugByName(ville.region)
   const dept = getDepartementByCode(ville.departementCode)
@@ -132,7 +163,9 @@ export default async function QuartierPage({ params }: PageProps) {
   const faqSchema = getFAQSchema(content.faqItems)
 
   // Region villes for SEO links
-  const regionVilles = villes.filter(v => v.region === ville.region && v.slug !== villeSlug).slice(0, 10)
+  const regionVilles = villes
+    .filter((v) => v.region === ville.region && v.slug !== villeSlug)
+    .slice(0, 10)
 
   return (
     <div className="min-h-screen bg-sand-50">
@@ -154,13 +187,21 @@ export default async function QuartierPage({ params }: PageProps) {
             />
           )}
           <div className="absolute inset-0 bg-charcoal-950/80" />
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(61,139,104,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
 
@@ -186,7 +227,9 @@ export default async function QuartierPage({ params }: PageProps) {
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
                 <Building2 className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-medium text-white/80">{content.profile.eraLabel}</span>
+                <span className="text-sm font-medium text-white/80">
+                  {content.profile.eraLabel}
+                </span>
               </div>
             </div>
 
@@ -206,17 +249,23 @@ export default async function QuartierPage({ params }: PageProps) {
               )
             })()}
             <p className="text-lg text-charcoal-400 max-w-2xl leading-relaxed mb-8">
-              {services.length} corps de métier disponibles dans le quartier {quartierName}. {content.profile.eraLabel} en {content.profile.densityLabel.toLowerCase()}. Devis gratuits.
+              {services.length} corps de métier disponibles dans le quartier {quartierName}.{' '}
+              {content.profile.eraLabel} en {content.profile.densityLabel.toLowerCase()}. Devis
+              gratuits.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-charcoal-300">
                 <MapPin className="w-4 h-4 text-accent-400" />
-                <span>{ville.name} ({ville.codePostal})</span>
+                <span>
+                  {ville.name} ({ville.codePostal})
+                </span>
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Building2 className="w-4 h-4 text-accent-400" />
-                <span>{ville.departement} ({ville.departementCode})</span>
+                <span>
+                  {ville.departement} ({ville.departementCode})
+                </span>
               </div>
               <div className="flex items-center gap-2 text-charcoal-300">
                 <Users className="w-4 h-4 text-accent-400" />
@@ -226,10 +275,12 @@ export default async function QuartierPage({ params }: PageProps) {
 
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
 
@@ -252,7 +303,9 @@ export default async function QuartierPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Caractéristiques du quartier {quartierName}
               </h2>
-              <p className="text-sm text-charcoal-500">{content.profile.eraLabel} · {content.profile.densityLabel}</p>
+              <p className="text-sm text-charcoal-500">
+                {content.profile.eraLabel} · {content.profile.densityLabel}
+              </p>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-sand-300 p-6">
@@ -285,15 +338,20 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
               </div>
             </div>
-            <p className="text-sm text-charcoal-600 leading-relaxed mb-4">{content.profile.architecturalNote}</p>
+            <p className="text-sm text-charcoal-600 leading-relaxed mb-4">
+              {content.profile.architecturalNote}
+            </p>
             <div>
-              <p className="text-sm font-semibold text-charcoal-900 mb-2">Problématiques courantes à {quartierName} :</p>
+              <p className="text-sm font-semibold text-charcoal-900 mb-2">
+                Problématiques courantes à {quartierName} :
+              </p>
               <ul className="grid sm:grid-cols-2 gap-2">
                 {(() => {
                   const issueHash = Math.abs(hashCode(`issues-${villeSlug}-${quartierSlug}`))
                   const allIssues = content.profile.commonIssues
-                  const selected = Array.from({ length: Math.min(3, allIssues.length) }, (_, i) =>
-                    allIssues[(issueHash + i) % allIssues.length]
+                  const selected = Array.from(
+                    { length: Math.min(3, allIssues.length) },
+                    (_, i) => allIssues[(issueHash + i) % allIssues.length]
                   )
                   return selected.map((issue, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-charcoal-600">
@@ -305,7 +363,8 @@ export default async function QuartierPage({ params }: PageProps) {
               </ul>
             </div>
             <p className="text-xs text-charcoal-400 mt-3 italic">
-              * Profil estimé à partir des caractéristiques urbaines de la ville. Les données réelles peuvent varier selon les constructions du quartier.
+              * Profil estimé à partir des caractéristiques urbaines de la ville. Les données
+              réelles peuvent varier selon les constructions du quartier.
             </p>
           </div>
         </section>
@@ -320,7 +379,9 @@ export default async function QuartierPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Services recommandés à {quartierName}
               </h2>
-              <p className="text-sm text-charcoal-500">{services.length} corps de métier · classés par pertinence pour ce bâti</p>
+              <p className="text-sm text-charcoal-500">
+                {services.length} corps de métier · classés par pertinence pour ce bâti
+              </p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -330,10 +391,14 @@ export default async function QuartierPage({ params }: PageProps) {
                 href={`/services/${service.slug}/${villeSlug}`}
                 className={`rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-accent-50 border-2 border-emerald-200' : 'bg-white border border-sand-200'}`}
               >
-                <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">{service.name}</h3>
+                <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">
+                  {service.name}
+                </h3>
                 <p className="text-xs text-charcoal-400 mt-1.5">à {quartierName}</p>
                 {topServiceSlugs.has(service.slug) && (
-                  <span className="inline-block mt-2 text-[10px] font-semibold text-accent-700 bg-accent-100 px-2 py-0.5 rounded-full">Prioritaire</span>
+                  <span className="inline-block mt-2 text-[10px] font-semibold text-accent-700 bg-accent-100 px-2 py-0.5 rounded-full">
+                    Prioritaire
+                  </span>
                 )}
               </Link>
             ))}
@@ -386,16 +451,22 @@ export default async function QuartierPage({ params }: PageProps) {
                   Immobilier dans le quartier {quartierName}
                 </h3>
               </div>
-              <p className="text-charcoal-600 leading-relaxed">{content.dataDriven.immobilierQuartier}</p>
+              <p className="text-charcoal-600 leading-relaxed">
+                {content.dataDriven.immobilierQuartier}
+              </p>
               {content.dataDriven.statCards.prixM2Quartier > 0 && (
                 <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                   <div className="text-center p-3 bg-white rounded-2xl border border-amber-100">
-                    <div className="text-lg font-bold text-amber-700">{formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²</div>
+                    <div className="text-lg font-bold text-amber-700">
+                      {formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²
+                    </div>
                     <div className="text-xs text-charcoal-500 mt-1">Prix estimé quartier</div>
                   </div>
                   {content.dataDriven.statCards.artisansProximite > 0 && (
                     <div className="text-center p-3 bg-white rounded-2xl border border-amber-100">
-                      <div className="text-lg font-bold text-amber-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
+                      <div className="text-lg font-bold text-amber-700">
+                        {formatNumber(content.dataDriven.statCards.artisansProximite)}
+                      </div>
                       <div className="text-xs text-charcoal-500 mt-1">Artisans à proximité</div>
                     </div>
                   )}
@@ -413,16 +484,22 @@ export default async function QuartierPage({ params }: PageProps) {
                   Artisans autour de {quartierName}
                 </h3>
               </div>
-              <p className="text-charcoal-600 leading-relaxed">{content.dataDriven.marcheArtisanalQuartier}</p>
+              <p className="text-charcoal-600 leading-relaxed">
+                {content.dataDriven.marcheArtisanalQuartier}
+              </p>
               {content.dataDriven.statCards.artisansBtp > 0 && (
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-white rounded-2xl border border-emerald-100">
-                    <div className="text-lg font-bold text-accent-700">{formatNumber(content.dataDriven.statCards.artisansBtp)}</div>
+                    <div className="text-lg font-bold text-accent-700">
+                      {formatNumber(content.dataDriven.statCards.artisansBtp)}
+                    </div>
                     <div className="text-xs text-charcoal-500 mt-1">Artisans BTP du secteur</div>
                   </div>
                   {content.dataDriven.statCards.artisansProximite > 0 && (
                     <div className="text-center p-3 bg-white rounded-2xl border border-emerald-100">
-                      <div className="text-lg font-bold text-accent-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
+                      <div className="text-lg font-bold text-accent-700">
+                        {formatNumber(content.dataDriven.statCards.artisansProximite)}
+                      </div>
                       <div className="text-xs text-charcoal-500 mt-1">Entreprises artisanales</div>
                     </div>
                   )}
@@ -440,12 +517,18 @@ export default async function QuartierPage({ params }: PageProps) {
                   Performance énergétique à {quartierName}
                 </h3>
               </div>
-              <p className="text-charcoal-600 leading-relaxed">{content.dataDriven.energetiqueQuartier}</p>
+              <p className="text-charcoal-600 leading-relaxed">
+                {content.dataDriven.energetiqueQuartier}
+              </p>
               {content.dataDriven.statCards.passoiresDpe > 0 && (
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-white rounded-2xl border border-orange-100">
-                    <div className="text-lg font-bold text-orange-700">{content.dataDriven.statCards.passoiresDpe} %</div>
-                    <div className="text-xs text-charcoal-500 mt-1">Passoires thermiques estimées</div>
+                    <div className="text-lg font-bold text-orange-700">
+                      {content.dataDriven.statCards.passoiresDpe} %
+                    </div>
+                    <div className="text-xs text-charcoal-500 mt-1">
+                      Passoires thermiques estimées
+                    </div>
                   </div>
                 </div>
               )}
@@ -461,17 +544,23 @@ export default async function QuartierPage({ params }: PageProps) {
                   Climat et travaux à {quartierName}
                 </h3>
               </div>
-              <p className="text-charcoal-600 leading-relaxed">{content.dataDriven.climatQuartier}</p>
+              <p className="text-charcoal-600 leading-relaxed">
+                {content.dataDriven.climatQuartier}
+              </p>
               <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {content.dataDriven.statCards.joursGel != null && (
                   <div className="text-center p-3 bg-white rounded-2xl border border-sky-100">
-                    <div className="text-lg font-bold text-sky-700">{content.dataDriven.statCards.joursGel}</div>
+                    <div className="text-lg font-bold text-sky-700">
+                      {content.dataDriven.statCards.joursGel}
+                    </div>
                     <div className="text-xs text-charcoal-500 mt-1">Jours de gel/an</div>
                   </div>
                 )}
                 {content.dataDriven.statCards.periodeTravaux && (
                   <div className="text-center p-3 bg-white rounded-2xl border border-sky-100">
-                    <div className="text-sm font-bold text-sky-700">{content.dataDriven.statCards.periodeTravaux}</div>
+                    <div className="text-sm font-bold text-sky-700">
+                      {content.dataDriven.statCards.periodeTravaux}
+                    </div>
                     <div className="text-xs text-charcoal-500 mt-1">Période travaux ext.</div>
                   </div>
                 )}
@@ -483,15 +572,30 @@ export default async function QuartierPage({ params }: PageProps) {
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-16">
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Méthodologie éditoriale
+            </h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les informations de cette page sont compilées à partir de données publiques (INSEE, base SIRENE, cadastre).
-              Le profil de bâti est estimé selon les caractéristiques urbaines de {ville.name} et peut varier d'un immeuble à l'autre.
-              {content.dataDriven?.statCards.prixM2Quartier
-                ? <> Le prix immobilier estimé à {quartierName} ({formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²) est dérivé des moyennes communales ajustées par époque de construction ({content.profile.eraLabel.toLowerCase()}) et densité urbaine ({content.profile.densityLabel.toLowerCase()}).</>
-                : <> Les tarifs sont indicatifs et basés sur des moyennes régionales ({ville.region}).</>
-              }{' '}
-              ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations des artisans référencés.
+              Les informations de cette page sont compilées à partir de données publiques (INSEE,
+              base SIRENE, cadastre). Le profil de bâti est estimé selon les caractéristiques
+              urbaines de {ville.name} et peut varier d'un immeuble à l'autre.
+              {content.dataDriven?.statCards.prixM2Quartier ? (
+                <>
+                  {' '}
+                  Le prix immobilier estimé à {quartierName} (
+                  {formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²) est dérivé des
+                  moyennes communales ajustées par époque de construction (
+                  {content.profile.eraLabel.toLowerCase()}) et densité urbaine (
+                  {content.profile.densityLabel.toLowerCase()}).
+                </>
+              ) : (
+                <>
+                  {' '}
+                  Les tarifs sont indicatifs et basés sur des moyennes régionales ({ville.region}).
+                </>
+              )}{' '}
+              ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne
+              garantissons pas les prestations des artisans référencés.
             </p>
             {content.dataDriven?.dataSources && content.dataDriven.dataSources.length > 0 && (
               <p className="text-xs text-charcoal-400 mt-2">
@@ -545,10 +649,16 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {nearbyVilles.map((v) => (
-                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-2xl border border-sand-300 p-3.5 hover:border-primary-200 hover:shadow-card-hover transition-all group">
+                <Link
+                  key={v.slug}
+                  href={`/villes/${v.slug}`}
+                  className="flex items-center gap-2.5 bg-white rounded-2xl border border-sand-300 p-3.5 hover:border-primary-200 hover:shadow-card-hover transition-all group"
+                >
                   <MapPin className="w-4 h-4 text-charcoal-400 group-hover:text-primary-400 flex-shrink-0 transition-colors" />
                   <div className="min-w-0">
-                    <span className="block text-sm font-medium text-charcoal-800 group-hover:text-primary-400 truncate transition-colors">{v.name}</span>
+                    <span className="block text-sm font-medium text-charcoal-800 group-hover:text-primary-400 truncate transition-colors">
+                      {v.name}
+                    </span>
                     <span className="text-xs text-charcoal-400">{v.population} hab.</span>
                   </div>
                 </Link>
@@ -580,16 +690,29 @@ export default async function QuartierPage({ params }: PageProps) {
 
       {/* ─── CTA ────────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(61,139,104,0.12) 0%, transparent 60%)',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(61,139,104,0.12) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           {(() => {
             const ctaHash = Math.abs(hashCode(`cta-${villeSlug}-${quartierSlug}`))
             const ctaTemplates = [
-              { h: `Besoin d'un artisan à ${quartierName} ?`, p: `Décrivez votre projet et recevez des devis gratuits d'artisans qualifiés à ${ville.name}.` },
-              { h: `Travaux sur du ${content.profile.eraLabel.toLowerCase()} à ${quartierName} ?`, p: `Nos artisans connaissent les spécificités du bâti de votre quartier. Devis gratuit et sans engagement.` },
-              { h: `Rénovation à ${quartierName}, ${ville.name}`, p: `Trouvez l'artisan adapté au ${content.profile.eraLabel.toLowerCase()} de votre quartier. ${services.length} métiers disponibles.` },
+              {
+                h: `Besoin d'un artisan à ${quartierName} ?`,
+                p: `Décrivez votre projet et recevez des devis gratuits d'artisans qualifiés à ${ville.name}.`,
+              },
+              {
+                h: `Travaux sur du ${content.profile.eraLabel.toLowerCase()} à ${quartierName} ?`,
+                p: `Nos artisans connaissent les spécificités du bâti de votre quartier. Devis gratuit et sans engagement.`,
+              },
+              {
+                h: `Rénovation à ${quartierName}, ${ville.name}`,
+                p: `Trouvez l'artisan adapté au ${content.profile.eraLabel.toLowerCase()} de votre quartier. ${services.length} métiers disponibles.`,
+              },
             ]
             const cta = ctaTemplates[ctaHash % ctaTemplates.length]
             return (
@@ -597,17 +720,21 @@ export default async function QuartierPage({ params }: PageProps) {
                 <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
                   {cta.h}
                 </h2>
-                <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-                  {cta.p}
-                </p>
+                <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">{cta.p}</p>
               </>
             )
           })()}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
+            >
               Obtenir mon devis gratuit
             </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors"
+            >
               Voir les services <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -622,16 +749,26 @@ export default async function QuartierPage({ params }: PageProps) {
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services à {quartierName}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Services à {quartierName}
+              </h3>
               <div className="space-y-2">
                 {services.slice(0, 6).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                  <Link
+                    key={s.slug}
+                    href={`/services/${s.slug}/${villeSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {quartierName}
                   </Link>
                 ))}
                 {services.slice(6, 10).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                  <Link
+                    key={s.slug}
+                    href={`/services/${s.slug}/${villeSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {ville.name}
                   </Link>
@@ -640,52 +777,84 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Villes en {ville.region}</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Villes en {ville.region}
+              </h3>
               <div className="space-y-2">
                 {regionVilles.map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                  <Link
+                    key={v.slug}
+                    href={`/villes/${v.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-accent-600 hover:text-accent-700 text-sm font-medium mt-3">
+              <Link
+                href="/villes"
+                className="inline-flex items-center gap-1 text-accent-600 hover:text-accent-700 text-sm font-medium mt-3"
+              >
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Navigation</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Navigation
+              </h3>
               <div className="space-y-2">
-                <Link href={`/villes/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                <Link
+                  href={`/villes/${villeSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Artisans à {ville.name}
                 </Link>
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                  <Link
+                    href={`/regions/${regionSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     Région {ville.region}
                   </Link>
                 )}
                 {deptSlug && (
-                  <Link href={`/departements/${deptSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                  <Link
+                    href={`/departements/${deptSlug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {ville.departement} ({ville.departementCode})
                   </Link>
                 )}
-                <Link href={`/devis/plombier/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                <Link
+                  href={`/devis/plombier/${villeSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Devis plombier à {ville.name}
                 </Link>
-                <Link href={`/devis/electricien/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                <Link
+                  href={`/devis/electricien/${villeSlug}`}
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Devis électricien à {ville.name}
                 </Link>
-                <Link href="/services" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                <Link
+                  href="/services"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Tous les services
                 </Link>
-                <Link href="/devis" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors">
+                <Link
+                  href="/devis"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
+                >
                   <ChevronRight className="w-3 h-3" />
                   Demander un devis
                 </Link>
@@ -700,16 +869,28 @@ export default async function QuartierPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-charcoal-900 mb-4">Confiance & Sécurité</h2>
           <div className="flex flex-wrap gap-4">
-            <Link href="/notre-processus-de-verification" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/notre-processus-de-verification"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               Processus de vérification
             </Link>
-            <Link href="/politique-avis" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/politique-avis"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               Politique d'avis
             </Link>
-            <Link href="/mediation" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/mediation"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               Médiation
             </Link>
-            <Link href="/cgv" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
+            <Link
+              href="/cgv"
+              className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5"
+            >
               CGV
             </Link>
           </div>

@@ -158,7 +158,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
           </div>
           <div className="rounded-xl border border-primary-100 bg-primary-50/60 p-5">
             <div className="text-xs font-semibold text-primary-600 uppercase tracking-wide mb-1">
-              MaPrimeR&eacute;nov&rsquo;
+              MaPrimeRénov’
             </div>
             <div className="text-xl font-bold text-charcoal-900">{guide.maPrimeRenov}</div>
           </div>
@@ -185,7 +185,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
         <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-6">
           <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-            Qualifications RGE exig&eacute;es
+            Qualifications RGE exigées
           </h2>
           <ul className="space-y-2">
             {guide.rgeRequises.map((qualif) => (
@@ -218,11 +218,11 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
           <div className="mt-6 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-white p-6">
             <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-2 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-              Qualifications RGE requises &mdash; nos guides
+              Qualifications RGE requises — nos guides
             </h2>
             <p className="text-sm text-charcoal-600 mb-4">
-              L&rsquo;artisan qui r&eacute;alise cette op&eacute;ration doit d&eacute;tenir
-              l&rsquo;une des qualifications RGE ci-dessous&nbsp;:
+              L’artisan qui réalise cette opération doit détenir l’une des qualifications RGE
+              ci-dessous&nbsp;:
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {guide.requiredQualifications.map((slug) => {
@@ -259,7 +259,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-            Questions fr&eacute;quentes &mdash; {guide.code}
+            Questions fréquentes — {guide.code}
           </h2>
           <div className="space-y-3">
             {guide.faq.map((item, i) => (
@@ -284,7 +284,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       {topCities.length > 0 && (
         <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-            Trouver un artisan RGE pour cette op&eacute;ration
+            Trouver un artisan RGE pour cette opération
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {topCities.slice(0, 12).map((city) => (
@@ -317,8 +317,8 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             Obtenez votre prime {guide.code}
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifi&eacute; et
-            s&eacute;curisez votre prime CEE d&egrave;s la signature.
+            Demandez un devis gratuit auprès d’un artisan RGE qualifié et sécurisez votre prime CEE
+            dès la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

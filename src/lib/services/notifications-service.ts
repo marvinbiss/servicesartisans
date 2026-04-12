@@ -195,7 +195,9 @@ export async function sendLeadAlert(
 
     // Send SMS
     if (provider.phone) {
-      const smsMessage = `Nouvelle demande ${service || 'devis'} à ${city || ''}. Répondez vite sur ServicesArtisans.fr`
+      const smsMessage = city
+        ? `Nouvelle demande ${service || 'devis'} à ${city}. Répondez vite sur ServicesArtisans.fr`
+        : `Nouvelle demande ${service || 'devis'}. Répondez vite sur ServicesArtisans.fr`
       const smsResult = await sendSMS(provider.phone, smsMessage)
       results.push({ provider_id: provider.id, channel: 'sms', ...smsResult })
     }

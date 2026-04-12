@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       rawBody = await request.json()
     } catch {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides' } },
+        { success: false, error: { message: 'Données invalides' } },
         { status: 400 }
       )
     }
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const result = previewSchema.safeParse(rawBody)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides' } },
+        { success: false, error: { message: 'Données invalides' } },
         { status: 400 }
       )
     }
@@ -50,6 +50,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Template preview error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

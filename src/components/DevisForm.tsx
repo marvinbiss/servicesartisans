@@ -675,9 +675,7 @@ export default function DevisForm({
               </div>
               <div className="flex items-center justify-center gap-2 text-sm text-charcoal-500">
                 <span className="text-amber-500">&#9733;</span>
-                <span>
-                  4.8/5 basé sur <strong>23 000+</strong> demandes traitées
-                </span>
+                <span>4.8/5 basé sur des milliers de demandes traitées</span>
               </div>
 
               <div>
@@ -798,7 +796,7 @@ export default function DevisForm({
 
               <div className="flex items-center gap-2 text-charcoal-400">
                 <Users className="w-4 h-4 flex-shrink-0" />
-                <p className="text-sm">14 500+ artisans référencés sur notre plateforme</p>
+                <p className="text-sm">Des artisans qualifiés référencés sur notre plateforme</p>
               </div>
 
               <CeePrimeEstimateCard
@@ -1249,7 +1247,7 @@ export default function DevisForm({
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                         />
                       </svg>
-                      Envoi en cours&hellip;
+                      Envoi en cours…
                     </>
                   ) : (
                     <>
@@ -1265,8 +1263,8 @@ export default function DevisForm({
         <div className="mt-6 pt-5 border-t border-sand-100 flex items-center justify-center gap-2">
           <Clock className="w-3.5 h-3.5 text-charcoal-300" />
           <p className="text-xs text-charcoal-400">
-            Rejoint les <span className="font-semibold text-charcoal-500">{monthlyCount}</span>{' '}
-            demandes ce mois
+            Rejoignez les <span className="font-semibold text-charcoal-500">{monthlyCount}</span>{' '}
+            demandes de devis ce mois-ci
           </p>
         </div>
       </form>

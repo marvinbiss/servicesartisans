@@ -327,10 +327,10 @@ export function ArtisanRgeEnrichedSection({
                 : 'Qualifications RGE \u0026 aides débloquées'}
             </h2>
             <p className="text-sm text-emerald-50/90 mt-1 leading-relaxed">
-              Certifications officielles issues de l&rsquo;annuaire ADEME.{' '}
+              Certifications officielles issues de l’annuaire ADEME.{' '}
               {validUntilLabel ? (
                 <>
-                  Valables jusqu&rsquo;au <strong>{validUntilLabel}</strong>.
+                  Valables jusqu’au <strong>{validUntilLabel}</strong>.
                 </>
               ) : null}
             </p>
@@ -400,7 +400,7 @@ export function ArtisanRgeEnrichedSection({
             ))}
           </div>
           <p className="text-xs text-charcoal-900 mt-3 leading-relaxed">
-            Les primes CEE sont cumulables avec MaPrimeRénov&rsquo;. Le montant exact dépend de vos
+            Les primes CEE sont cumulables avec MaPrimeRénov’. Le montant exact dépend de vos
             revenus et de la performance des équipements posés.
           </p>
         </div>
@@ -410,13 +410,12 @@ export function ArtisanRgeEnrichedSection({
       {fallback && (
         <div className="px-6 pt-6">
           <p className="text-sm text-charcoal-700 leading-relaxed">
-            Cet artisan est référencé dans l&rsquo;annuaire RGE officiel avec au moins une
-            qualification active
-            {validUntilLabel ? <> jusqu&rsquo;au {validUntilLabel}</> : null}. Son périmètre de
+            Cet artisan est référencé dans l’annuaire RGE officiel avec au moins une qualification
+            active
+            {validUntilLabel ? <> jusqu’au {validUntilLabel}</> : null}. Son périmètre de
             reconnaissance sort du cadre de nos guides éditoriaux (architecture, audit énergétique,
-            bureau d&rsquo;études, énergies fossiles historiques&hellip;). Consultez directement
-            l&rsquo;annuaire officiel pour voir le détail exact de sa qualification et les travaux
-            couverts.
+            bureau d’études, énergies fossiles historiques…). Consultez directement l’annuaire
+            officiel pour voir le détail exact de sa qualification et les travaux couverts.
           </p>
         </div>
       )}
@@ -432,8 +431,7 @@ export function ArtisanRgeEnrichedSection({
                 : 'Obtenez un devis pour ces travaux éligibles aux aides'}
             </div>
             <p className="text-sm text-charcoal-600 mt-1 leading-relaxed">
-              Devis gratuit, 100 % sans engagement. Les primes CEE et MaPrimeRénov&rsquo; sont
-              cumulables.
+              Devis gratuit, 100 % sans engagement. Les primes CEE et MaPrimeRénov’ sont cumulables.
             </p>
           </div>
           <Link

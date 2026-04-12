@@ -11,6 +11,7 @@ import {
   GitCompare,
 } from 'lucide-react'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
+import { getDeptPreposition } from '@/lib/geo-strings'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -130,7 +131,7 @@ function buildVotreVille(props: MaillageInterneProps): InternalLink[] {
   if (props.departementSlug && props.departementName) {
     links.push({
       href: `/departements/${props.departementSlug}`,
-      label: `Artisans dans le ${props.departementName}`,
+      label: `Artisans ${getDeptPreposition(props.departementName)}`,
       icon: MapPin,
     })
   }

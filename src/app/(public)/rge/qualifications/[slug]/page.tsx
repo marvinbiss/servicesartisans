@@ -142,7 +142,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <Award className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              D&eacute;livr&eacute;e par {guide.organisme}
+              Délivrée par {guide.organisme}
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
@@ -175,7 +175,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
           <div className="rounded-2xl border border-primary-100 bg-primary-50/40 p-6">
             <h2 className="font-heading text-lg font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
               <Award className="w-5 h-5 text-primary-600" aria-hidden="true" />
-              Primes CEE d&eacute;bloqu&eacute;es
+              Primes CEE débloquées
             </h2>
             <ul className="space-y-2">
               {guide.ceeDebloquees.map((cee) => (
@@ -208,11 +208,11 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
           <div className="mt-10 rounded-2xl border border-primary-100 bg-gradient-to-br from-primary-50/60 to-white p-6">
             <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-2 flex items-center gap-2">
               <Award className="w-5 h-5 text-primary-600" aria-hidden="true" />
-              Primes CEE d&eacute;bloqu&eacute;es par {guide.name}
+              Primes CEE débloquées par {guide.name}
             </h2>
             <p className="text-sm text-charcoal-600 mb-4">
-              Consultez le guide de chaque op&eacute;ration CEE standardis&eacute;e accessible
-              gr&acirc;ce &agrave; cette qualification.
+              Consultez le guide de chaque opération CEE standardisée accessible gr&acirc;ce à cette
+              qualification.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {guide.linkedCeeOperations.map((code) => (
@@ -245,7 +245,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-            Questions fr&eacute;quentes &mdash; {guide.name}
+            Questions fréquentes — {guide.name}
           </h2>
           <div className="space-y-3">
             {guide.faq.map((item, i) => (
@@ -270,11 +270,11 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-6">
           <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-3">
-            V&eacute;rifier une qualification {guide.name}
+            Vérifier une qualification {guide.name}
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Toujours v&eacute;rifier la qualification d&rsquo;un artisan sur les sources officielles
-            avant signature du devis. La v&eacute;rification prend moins de 2 minutes.
+            Toujours vérifier la qualification d’un artisan sur les sources officielles avant
+            signature du devis. La vérification prend moins de 2 minutes.
           </p>
           <div className="flex flex-wrap gap-3">
             <a
@@ -283,7 +283,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-100 transition text-sm"
             >
-              Annuaire France R&eacute;nov&rsquo;
+              Annuaire France Rénov’
               <ExternalLink className="w-4 h-4" aria-hidden="true" />
             </a>
             <Link
@@ -304,8 +304,8 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
             Trouvez un artisan {guide.name}
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Tous nos artisans sont v&eacute;rifi&eacute;s via la synchronisation hebdomadaire de
-            l&rsquo;annuaire ADEME officiel. Qualifications actives uniquement.
+            Tous nos artisans sont vérifiés via la synchronisation hebdomadaire de l’annuaire ADEME
+            officiel. Qualifications actives uniquement.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

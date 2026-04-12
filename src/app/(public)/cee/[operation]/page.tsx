@@ -123,7 +123,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Prime CEE {opCode}
           </h1>
           <p className="text-charcoal-700">
-            Cette op&eacute;ration n&rsquo;est pas actuellement disponible dans notre catalogue.{' '}
+            Cette opération n’est pas actuellement disponible dans notre catalogue.{' '}
             <Link href="/cee" className="text-emerald-700 underline">
               Voir toutes les primes CEE
             </Link>
@@ -191,8 +191,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Domaine{' '}
             <strong className="text-white">{domaineInfo?.label || operation.domaine}</strong>
             {operation.sous_domaine ? ` \u2014 ${operation.sous_domaine.replace(/_/g, ' ')}` : ''}.
-            Opération standardisée résidentielle éligible aux Certificats d&rsquo;&Eacute;conomies
-            d&rsquo;&Eacute;nergie, sous conditions de qualification RGE de l&rsquo;entreprise.
+            Opération standardisée résidentielle éligible aux Certificats d’&Eacute;conomies
+            d’&Eacute;nergie, sous conditions de qualification RGE de l’entreprise.
           </p>
           {/* Freshness signal — révision éditoriale des barèmes. TODO : brancher
               sur cee_operations.updated_at dès la persistance DGEC automatisée. */}
@@ -207,24 +207,22 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       {/* Explication compl\u00e8te */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-          Comprendre l&rsquo;opération {operation.code}
+          Comprendre l’opération {operation.code}
         </h2>
         <div className="prose prose-emerald max-w-none text-charcoal-700 leading-relaxed space-y-4">
           <p>
-            La fiche d&rsquo;opération standardisée <strong>{operation.code}</strong> encadre les
-            travaux de <strong>{operation.nom.toLowerCase()}</strong> dans le secteur résidentiel.
-            Publiée par la Direction Générale de l&rsquo;&Eacute;nergie et du Climat (DGEC) dans le
-            cadre du dispositif des Certificats d&rsquo;&Eacute;conomies d&rsquo;&Eacute;nergie,
-            elle fixe les exigences techniques minimales à respecter pour qu&rsquo;un chantier soit
-            valorisé en prime CEE.
+            La fiche d’opération standardisée <strong>{operation.code}</strong> encadre les travaux
+            de <strong>{operation.nom.toLowerCase()}</strong> dans le secteur résidentiel. Publiée
+            par la Direction Générale de l’&Eacute;nergie et du Climat (DGEC) dans le cadre du
+            dispositif des Certificats d’&Eacute;conomies d’&Eacute;nergie, elle fixe les exigences
+            techniques minimales à respecter pour qu’un chantier soit valorisé en prime CEE.
           </p>
           <p>
-            La prime est versée par un délégataire obligor (Effy, Sonergia, TotalEnergies, EDF,
+            La prime est versée par un délégataire obligé (Effy, Sonergia, TotalEnergies, EDF,
             Engie, etc.) qui achète en retour des certificats auprès du Pôle National des
-            Certificats d&rsquo;&Eacute;conomies d&rsquo;&Eacute;nergie (PNCEE). Le cours de la
-            prime évolue chaque semaine selon l&rsquo;offre et la demande, c&rsquo;est pourquoi nous
-            recommandons toujours de comparer au moins trois devis d&rsquo;artisans RGE avant de
-            signer.
+            Certificats d’&Eacute;conomies d’&Eacute;nergie (PNCEE). Le cours de la prime évolue
+            chaque semaine selon l’offre et la demande, c’est pourquoi nous recommandons toujours de
+            comparer au moins trois devis d’artisans RGE avant de signer.
           </p>
         </div>
 
@@ -265,7 +263,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             <div className="md:col-span-2">
               <dt className="font-semibold text-emerald-800">Coup de pouce actif</dt>
               <dd className="text-emerald-700">
-                {operation.coup_de_pouce_charte || 'Bonification obligor'}
+                {operation.coup_de_pouce_charte || 'Bonification obligé'}
               </dd>
             </div>
           )}
@@ -275,14 +273,13 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           <div className="mt-8 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 to-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">
               <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">
-                Guide d&eacute;taill&eacute;
+                Guide détaillé
               </div>
               <div className="font-bold text-charcoal-900 text-lg">
                 Tout savoir sur la prime CEE {operation.code}
               </div>
               <div className="text-sm text-charcoal-600 mt-1">
-                Conditions techniques, montants 2026, cumul MaPrimeR&eacute;nov&rsquo; et
-                pi&egrave;ges &agrave; &eacute;viter.
+                Conditions techniques, montants 2026, cumul MaPrimeRénov’ et pièges à éviter.
               </div>
             </div>
             <Link
@@ -319,12 +316,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       {rgeServices.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
-            M&eacute;tiers RGE qualifi&eacute;s pour cette op&eacute;ration
+            Métiers RGE qualifiés pour cette opération
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-6 leading-relaxed">
-            Seuls les artisans titulaires d&rsquo;une qualification RGE active peuvent
-            d&eacute;clencher la prime CEE {operation.code}. Voici les m&eacute;tiers
-            concern&eacute;s&nbsp;:
+            Seuls les artisans titulaires d’une qualification RGE active peuvent déclencher la prime
+            CEE {operation.code}. Voici les métiers concernés&nbsp;:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {rgeServices.map((slug) => {
@@ -345,7 +341,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                     </div>
                     {meta && (
                       <div className="text-xs text-charcoal-900 mt-0.5">
-                        {meta.label} &mdash; {meta.organisme}
+                        {meta.label} — {meta.organisme}
                       </div>
                     )}
                   </div>
@@ -364,8 +360,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
               Où trouver un artisan RGE qualifié
             </h2>
             <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-              Classement des villes françaises où notre annuaire recense le plus d&rsquo;artisans
-              RGE qualifiés pour l&rsquo;opération {operation.code}.
+              Classement des villes françaises où notre annuaire recense le plus d’artisans RGE
+              qualifiés pour l’opération {operation.code}.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {topCities.map((city) => (
@@ -394,7 +390,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       {sameDomain.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
-            Autres primes CEE &mdash; {domaineInfo?.label.toLowerCase() || operation.domaine}
+            Autres primes CEE — {domaineInfo?.label.toLowerCase() || operation.domaine}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sameDomain.map((op) => (
@@ -423,8 +419,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Obtenez votre prime CEE {operation.code}
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit aupr&egrave;s d&rsquo;un artisan RGE qualifié et sécurisez
-            votre prime CEE d&egrave;s la signature.
+            Demandez un devis gratuit auprès d’un artisan RGE qualifié et sécurisez votre prime CEE
+            dès la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

@@ -13,7 +13,7 @@ export const revalidate = false
 export const metadata: Metadata = {
   title: 'Avant/Après Travaux : Galeries de Rénovation',
   description:
-    'Découvrez 12 transformations de rénovation avant/après : salle de bain, cuisine, isolation, toiture, parquet, extension, électricité et plus. Budget et durée inclus.',
+    'Découvrez 12 rénovations avant/après : salle de bain, cuisine, isolation, toiture, parquet, extension. Budget et durée inclus.',
   alternates: { canonical: PAGE_URL },
   openGraph: {
     title: 'Avant/Après Travaux : Galeries de Rénovation',

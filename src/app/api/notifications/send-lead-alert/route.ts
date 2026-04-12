@@ -41,6 +41,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, results: result.data.results })
   } catch (err) {
     logger.error('[lead-alert] Error', err)
-    return NextResponse.json({ error: 'server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

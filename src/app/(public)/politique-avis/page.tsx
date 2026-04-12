@@ -172,6 +172,7 @@ export default async function PolitiqueAvisPage() {
             Transparence sur la manière dont les avis sont collectés, modérés et publiés sur{' '}
             {companyIdentity.name}.
           </p>
+          <p className="text-charcoal-500 mt-4 text-sm">Dernière mise à jour : avril 2026</p>
         </div>
       </section>
 

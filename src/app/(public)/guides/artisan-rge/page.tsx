@@ -83,7 +83,7 @@ const qualifications = [
     travaux: 'Installations électriques, bornes de recharge, domotique',
   },
   {
-    name: 'RGE Qualibois',
+    name: 'RGE QualiBois',
     icon: TreePine,
     description:
       "Certification pour l'installation d'appareils de chauffage au bois : poêles à bois, poêles à granulés, chaudières biomasse et inserts.",

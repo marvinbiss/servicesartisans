@@ -12,7 +12,7 @@
  *
  * Source des libellés : dataset data.gouv.fr `liste-des-entreprises-rge-2`
  * (échantillon réel : "QualiPAC Chauffage — Pose de pompe à chaleur",
- * "Qualibois module Eau", "Panneaux Solaires Photovoltaïques", etc.)
+ * "QualiBois module Eau", "Panneaux Solaires Photovoltaïques", etc.)
  */
 
 export interface RgeQualificationInput {

@@ -160,7 +160,7 @@ export default function FooterClusterLinks() {
             {/* Rénovation énergétique — primes CEE, RGE, ADEME */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
-                R&eacute;novation &eacute;nerg&eacute;tique
+                Rénovation énergétique
               </h4>
               <div className="flex flex-wrap gap-x-4 gap-y-1.5">
                 {renovationLinks.map((link) => (

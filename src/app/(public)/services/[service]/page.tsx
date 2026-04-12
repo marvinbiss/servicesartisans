@@ -2,10 +2,26 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText, BookOpen } from 'lucide-react'
+import {
+  MapPin,
+  ArrowRight,
+  Star,
+  Shield,
+  ChevronDown,
+  BadgeCheck,
+  Clock,
+  Wrench,
+  FileText,
+  BookOpen,
+} from 'lucide-react'
 import { getServiceBySlug, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getSpeakableSchema,
+  getServicePricingSchema,
+} from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -13,7 +29,13 @@ import PriceTable from '@/components/seo/PriceTable'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
-import { services as staticServicesList, villes, departements, getVillesByDepartement, parsePopulation } from '@/lib/data/france'
+import {
+  services as staticServicesList,
+  villes,
+  departements,
+  getVillesByDepartement,
+  parsePopulation,
+} from '@/lib/data/france'
 import { getProblemsByService } from '@/lib/data/problems'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
@@ -40,22 +62,13 @@ import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import dynamic from 'next/dynamic'
 
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
 
-const ExitIntentPopup = dynamic(
-  () => import('@/components/conversion/ExitIntentModal'),
-  { ssr: false }
-)
+const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
 
-const MicroConversions = dynamic(
-  () => import('@/components/MicroConversions'),
-  { ssr: false }
-)
-
-const FAQTracker = dynamic(
-  () => import('@/components/FAQTracker'),
-  { ssr: false }
-)
-
+const FAQTracker = dynamic(() => import('@/components/FAQTracker'), { ssr: false })
 
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {
@@ -85,7 +98,7 @@ export const dynamicParams = false
 
 // Pre-render all 15 service pages at build time
 export function generateStaticParams() {
-  return staticServicesList.map(s => ({ service: s.slug }))
+  return staticServicesList.map((s) => ({ service: s.slug }))
 }
 
 interface PageProps {
@@ -115,7 +128,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (!serviceName) {
-    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
     if (!staticSvc) notFound()
     serviceName = staticSvc.name
   }
@@ -177,13 +190,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 /** Convert static villes to Location-like shape for fallback display */
 function getStaticCities() {
-  return [...villes].sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population)).slice(0, 20).map(v => ({
-    id: v.slug,
-    name: v.name,
-    slug: v.slug,
-    department_code: v.departementCode,
-    region_name: v.region,
-  }))
+  return [...villes]
+    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+    .slice(0, 20)
+    .map((v) => ({
+      id: v.slug,
+      name: v.name,
+      slug: v.slug,
+      department_code: v.departementCode,
+      region_name: v.region,
+    }))
 }
 
 export default async function ServicePage({ params }: PageProps) {
@@ -196,9 +212,7 @@ export default async function ServicePage({ params }: PageProps) {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -236,7 +250,7 @@ export default async function ServicePage({ params }: PageProps) {
 
   // Fallback to static data if DB failed
   if (!service) {
-    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
     if (!staticSvc) notFound()
     service = { name: staticSvc.name, slug: staticSvc.slug }
   }
@@ -246,8 +260,8 @@ export default async function ServicePage({ params }: PageProps) {
 
   // Filter: only keep cities that exist in the validated villes array (2,280 cities)
   // This prevents links to tiny communes that would show "Page non trouvée"
-  const validSlugs = new Set(villes.map(v => v.slug))
-  topCities = topCities.filter(c => validSlugs.has(c.slug))
+  const validSlugs = new Set(villes.map((v) => v.slug))
+  topCities = topCities.filter((c) => validSlugs.has(c.slug))
 
   // Limit to top 50 cities (already sorted by population from DB/static data)
   const MAX_CITIES = 50
@@ -255,19 +269,23 @@ export default async function ServicePage({ params }: PageProps) {
   const limitedCities = topCities.slice(0, MAX_CITIES)
 
   // Grouper les villes par région (sur les 50 top villes uniquement)
-  const citiesByRegion = limitedCities.reduce((acc: Record<string, CityInfo[]>, city: CityInfo) => {
-    const region = city.region_name || 'Autres'
-    if (!acc[region]) acc[region] = []
-    acc[region].push(city)
-    return acc
-  }, {} as Record<string, CityInfo[]>)
+  const citiesByRegion = limitedCities.reduce(
+    (acc: Record<string, CityInfo[]>, city: CityInfo) => {
+      const region = city.region_name || 'Autres'
+      if (!acc[region]) acc[region] = []
+      acc[region].push(city)
+      return acc
+    },
+    {} as Record<string, CityInfo[]>
+  )
 
   // Trade-specific rich content (prices, FAQ, tips, certifications)
   const tradeBase = getTradeContent(serviceSlug)
   const cmsTradeOverride = await getTradeContentOverride(serviceSlug)
-  const trade = tradeBase && cmsTradeOverride
-    ? { ...tradeBase, ...cmsTradeOverride } as typeof tradeBase
-    : tradeBase
+  const trade =
+    tradeBase && cmsTradeOverride
+      ? ({ ...tradeBase, ...cmsTradeOverride } as typeof tradeBase)
+      : tradeBase
 
   // H1 variation for SEO
   const h1Hash = Math.abs(hashCode(`hub-h1-${serviceSlug}`))
@@ -289,7 +307,7 @@ export default async function ServicePage({ params }: PageProps) {
   ])
 
   const faqSchema = trade
-    ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a })))
+    ? getFAQSchema(trade.faq.map((f) => ({ question: f.q, answer: f.a })))
     : null
 
   const speakableSchema = getSpeakableSchema({
@@ -297,32 +315,36 @@ export default async function ServicePage({ params }: PageProps) {
     title: h1Text,
   })
 
-  const pricingSchema = trade ? getServicePricingSchema({
-    serviceName: service.name,
-    serviceSlug: serviceSlug,
-    description: service.description || `Services de ${service.name.toLowerCase()} en France`,
-    lowPrice: trade.priceRange.min,
-    highPrice: trade.priceRange.max,
-    priceCurrency: 'EUR',
-    priceUnit: trade.priceRange.unit,
-    offerCount: totalProviderCount || trade.commonTasks.length,
-    url: `${SITE_URL}/services/${serviceSlug}`,
-  }) : null
+  const pricingSchema = trade
+    ? getServicePricingSchema({
+        serviceName: service.name,
+        serviceSlug: serviceSlug,
+        description: service.description || `Services de ${service.name.toLowerCase()} en France`,
+        lowPrice: trade.priceRange.min,
+        highPrice: trade.priceRange.max,
+        priceCurrency: 'EUR',
+        priceUnit: trade.priceRange.unit,
+        offerCount: totalProviderCount || trade.commonTasks.length,
+        url: `${SITE_URL}/services/${serviceSlug}`,
+      })
+    : null
 
   return (
     <div className="min-h-screen bg-sand-50">
       {/* JSON-LD */}
-      <JsonLd data={[breadcrumbSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          speakableSchema,
+          ...(faqSchema ? [faqSchema] : []),
+          ...(pricingSchema ? [pricingSchema] : []),
+        ]}
+      />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb
-            items={[
-              { label: 'Services', href: '/services' },
-              { label: service.name },
-            ]}
-          />
+          <Breadcrumb items={[{ label: 'Services', href: '/services' }, { label: service.name }]} />
         </div>
       </div>
 
@@ -341,13 +363,21 @@ export default async function ServicePage({ params }: PageProps) {
         />
         <div className="absolute inset-0 bg-charcoal-900/75" />
         {/* Ambient glow — terracotta */}
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(232,107,75,0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(61,139,104,0.06) 0%, transparent 50%)',
-        }} />
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(232,107,75,0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(61,139,104,0.06) 0%, transparent 50%)',
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
@@ -404,7 +434,9 @@ export default async function ServicePage({ params }: PageProps) {
             {trade && (
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
                 <Clock className="w-4 h-4 text-primary-300" />
-                <span className="text-sm text-sand-200 font-medium">{trade.averageResponseTime.split(',')[0]}</span>
+                <span className="text-sm text-sand-200 font-medium">
+                  {trade.averageResponseTime.split(',')[0]}
+                </span>
               </div>
             )}
           </div>
@@ -452,9 +484,7 @@ export default async function ServicePage({ params }: PageProps) {
             <h2 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2">
               Besoin d'un {service.name.toLowerCase()} ?
             </h2>
-            <p className="text-primary-100 mb-6">
-              Devis gratuit et sans engagement
-            </p>
+            <p className="text-primary-100 mb-6">Devis gratuit et sans engagement</p>
             <Link
               href={`/devis/${serviceSlug}`}
               className="inline-flex items-center gap-2 bg-white text-primary-600 hover:bg-sand-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-cta"
@@ -467,11 +497,7 @@ export default async function ServicePage({ params }: PageProps) {
       </section>
 
       {/* Top 20 villes — maillage interne SEO avec anchor texts optimisés */}
-      <TopCitiesGrid
-        serviceSlug={serviceSlug}
-        serviceName={service.name}
-        intent="services"
-      />
+      <TopCitiesGrid serviceSlug={serviceSlug} serviceName={service.name} intent="services" />
 
       {/* Villes par région — liens complémentaires */}
       {Object.keys(citiesByRegion).length > 0 && (
@@ -481,25 +507,24 @@ export default async function ServicePage({ params }: PageProps) {
               {service.name} par région
             </h2>
             <div className="space-y-8">
-              {Object.entries(citiesByRegion)
-                .map(([region, cities]) => (
-                  <div key={region}>
-                    <h3 className="font-heading text-lg font-semibold text-charcoal-900 mb-4">
-                      {service.name} en {region}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {cities.map((city) => (
-                        <Link
-                          key={city.id}
-                          href={`/services/${serviceSlug}/${city.slug}`}
-                          className="text-sm bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 px-4 py-2.5 rounded-full transition-colors"
-                        >
-                          {city.name}
-                        </Link>
-                      ))}
-                    </div>
+              {Object.entries(citiesByRegion).map(([region, cities]) => (
+                <div key={region}>
+                  <h3 className="font-heading text-lg font-semibold text-charcoal-900 mb-4">
+                    {service.name} en {region}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {cities.map((city) => (
+                      <Link
+                        key={city.id}
+                        href={`/services/${serviceSlug}/${city.slug}`}
+                        className="text-sm bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 px-4 py-2.5 rounded-full transition-colors"
+                      >
+                        {city.name}
+                      </Link>
+                    ))}
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
 
             {/* CTA "Voir toutes les villes" if there are more than 50 */}
@@ -533,7 +558,10 @@ export default async function ServicePage({ params }: PageProps) {
               .map(({ dept, villes: deptVilles }) => (
                 <div key={dept.code} className="bg-sand-50 rounded-xl p-5">
                   <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">
-                    <Link href={`/departements/${dept.slug}`} className="hover:text-primary-500 transition-colors">
+                    <Link
+                      href={`/departements/${dept.slug}`}
+                      className="hover:text-primary-500 transition-colors"
+                    >
                       {dept.name} ({dept.code})
                     </Link>
                   </h3>
@@ -560,9 +588,15 @@ export default async function ServicePage({ params }: PageProps) {
               ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-4 text-sm">
-            <Link href="/departements" className="text-primary-500 hover:underline">Tous les départements →</Link>
-            <Link href="/regions" className="text-primary-500 hover:underline">Toutes les régions →</Link>
-            <Link href="/villes" className="text-primary-500 hover:underline">Toutes les villes →</Link>
+            <Link href="/departements" className="text-primary-500 hover:underline">
+              Tous les départements →
+            </Link>
+            <Link href="/regions" className="text-primary-500 hover:underline">
+              Toutes les régions →
+            </Link>
+            <Link href="/villes" className="text-primary-500 hover:underline">
+              Toutes les villes →
+            </Link>
           </div>
         </div>
       </section>
@@ -589,7 +623,11 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-soft">
-              <PriceTable tasks={trade.commonTasks} tradeName={service.name} priceRange={trade.priceRange} />
+              <PriceTable
+                tasks={trade.commonTasks}
+                tradeName={service.name}
+                priceRange={trade.priceRange}
+              />
             </div>
           </div>
         </section>
@@ -641,7 +679,9 @@ export default async function ServicePage({ params }: PageProps) {
                   <div className="bg-red-50 border border-red-100 rounded-xl p-6">
                     <div className="flex items-center gap-2 mb-3">
                       <Clock className="w-5 h-5 text-red-600" />
-                      <h3 className="font-semibold text-red-900">Urgence {service.name.toLowerCase()}</h3>
+                      <h3 className="font-semibold text-red-900">
+                        Urgence {service.name.toLowerCase()}
+                      </h3>
                     </div>
                     <p className="text-sm text-red-800 leading-relaxed">{trade.emergencyInfo}</p>
                   </div>
@@ -668,10 +708,11 @@ export default async function ServicePage({ params }: PageProps) {
               Pourquoi faire appel à un {service.name.toLowerCase()} professionnel ?
             </h2>
             <p className="text-charcoal-700 leading-relaxed">
-              Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail conforme aux normes en vigueur
-              et couvert par une assurance décennale. Un artisan qualifié dispose de l'expérience,
-              de l'outillage adapté et des certifications nécessaires pour réaliser vos travaux en toute sécurité.
-              De plus, recourir à un professionnel référencé vous protège en cas de malfaçon.
+              Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail
+              conforme aux normes en vigueur et couvert par une assurance décennale. Un artisan
+              qualifié dispose de l'expérience, de l'outillage adapté et des certifications
+              nécessaires pour réaliser vos travaux en toute sécurité. De plus, recourir à un
+              professionnel référencé vous protège en cas de malfaçon.
             </p>
 
             <h2 className="text-xl font-heading font-semibold text-charcoal-900">
@@ -680,8 +721,7 @@ export default async function ServicePage({ params }: PageProps) {
             <p className="text-charcoal-700 leading-relaxed">
               {trade.certifications.length > 0
                 ? `Un ${service.name.toLowerCase()} qualifié doit idéalement posséder les certifications suivantes : ${trade.certifications.slice(0, 3).join(', ')}. Ces labels garantissent un niveau de compétence reconnu et vous permettent, dans certains cas, de bénéficier d'aides financières de l'État.`
-                : `Un ${service.name.toLowerCase()} doit au minimum disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Vérifiez également son inscription au registre des métiers et son numéro SIRET.`
-              }
+                : `Un ${service.name.toLowerCase()} doit au minimum disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Vérifiez également son inscription au registre des métiers et son numéro SIRET.`}
             </p>
           </div>
         </section>
@@ -698,7 +738,10 @@ export default async function ServicePage({ params }: PageProps) {
             </div>
             <div className="space-y-4">
               {trade.faq.map((item, i) => (
-                <details key={i} className="group bg-white rounded-xl shadow-soft border border-sand-200">
+                <details
+                  key={i}
+                  className="group bg-white rounded-xl shadow-soft border border-sand-200"
+                >
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                     <h3 className="font-semibold text-charcoal-900 pr-4">{item.q}</h3>
                     <ChevronDown className="w-5 h-5 text-primary-400 group-open:rotate-180 transition-transform flex-shrink-0" />
@@ -730,20 +773,20 @@ export default async function ServicePage({ params }: PageProps) {
                 <h3>Les critères pour choisir votre {service.name.toLowerCase()}</h3>
                 <ul>
                   <li>
-                    <strong>Les avis clients</strong> : Consultez les retours d'expérience
-                    des autres clients pour vous faire une idée de la qualité du travail.
+                    <strong>Les avis clients</strong> : Consultez les retours d'expérience des
+                    autres clients pour vous faire une idée de la qualité du travail.
                   </li>
                   <li>
-                    <strong>Les certifications</strong> : Vérifiez que l'artisan dispose
-                    des qualifications nécessaires pour réaliser vos travaux.
+                    <strong>Les certifications</strong> : Vérifiez que l'artisan dispose des
+                    qualifications nécessaires pour réaliser vos travaux.
                   </li>
                   <li>
-                    <strong>La proximité</strong> : Un artisan proche de chez vous pourra
-                    intervenir plus rapidement et les frais de déplacement seront réduits.
+                    <strong>La proximité</strong> : Un artisan proche de chez vous pourra intervenir
+                    plus rapidement et les frais de déplacement seront réduits.
                   </li>
                   <li>
-                    <strong>Le devis détaillé</strong> : Demandez toujours un devis écrit
-                    avant de vous engager.
+                    <strong>Le devis détaillé</strong> : Demandez toujours un devis écrit avant de
+                    vous engager.
                   </li>
                 </ul>
               </div>
@@ -755,55 +798,56 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Guides utiles — maillage interne vers guides */}
       {(() => {
         const serviceGuidesMap: Record<string, { slug: string; title: string }[]> = {
-          'electricien': [
-            { slug: 'normes-electriques', title: 'Normes électriques NF C 15 100' },
+          electricien: [
+            { slug: 'normes-electriques', title: 'Normes électriques NF C 15&nbsp;100' },
             { slug: 'diagnostics-immobiliers', title: 'Diagnostics immobiliers obligatoires' },
           ],
-          'plombier': [
+          plombier: [
             { slug: 'aides-renovation-2026', title: 'Aides rénovation 2026' },
             { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
           ],
-          'chauffagiste': [
+          chauffagiste: [
             { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
-            { slug: 'maprimerenov-2026', title: 'MaPrimeRénov\' 2026' },
+            { slug: 'maprimerenov-2026', title: "MaPrimeRénov' 2026" },
             { slug: 'isolation-thermique', title: 'Guide isolation thermique' },
           ],
-          'couvreur': [
+          couvreur: [
             { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
             { slug: 'isolation-combles', title: 'Guide isolation des combles' },
           ],
-          'menuisier': [
+          menuisier: [
             { slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' },
             { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
           ],
           'peintre-en-batiment': [
-            { slug: 'renovation-energetique-complete', title: 'Guide rénovation énergétique complète' },
+            {
+              slug: 'renovation-energetique-complete',
+              title: 'Guide rénovation énergétique complète',
+            },
             { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
           ],
-          'macon': [
+          macon: [
             { slug: 'extension-maison', title: 'Guide extension maison' },
             { slug: 'permis-construire', title: 'Guide permis de construire' },
           ],
-          'carreleur': [
+          carreleur: [
             { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
             { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
           ],
-          'cuisiniste': [
+          cuisiniste: [
             { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
             { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
           ],
-          'climaticien': [
+          climaticien: [
             { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
-            { slug: 'maprimerenov-2026', title: 'MaPrimeRénov\' 2026' },
+            { slug: 'maprimerenov-2026', title: "MaPrimeRénov' 2026" },
           ],
-          'vitrier': [
-            { slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' },
-          ],
-          'charpentier': [
+          vitrier: [{ slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' }],
+          charpentier: [
             { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
             { slug: 'isolation-combles', title: 'Guide isolation des combles' },
           ],
-          'serrurier': [
+          serrurier: [
             { slug: 'eviter-arnaques-artisan', title: 'Éviter les arnaques artisan' },
             { slug: 'devis-travaux', title: 'Guide devis travaux' },
           ],
@@ -831,7 +875,9 @@ export default async function ServicePage({ params }: PageProps) {
                       <span className="font-medium text-charcoal-900 group-hover:text-amber-600 text-sm">
                         {guide.title}
                       </span>
-                      <span className="block text-xs text-charcoal-500 mt-1">Lire le guide complet</span>
+                      <span className="block text-xs text-charcoal-500 mt-1">
+                        Lire le guide complet
+                      </span>
                     </div>
                   </Link>
                 ))}
@@ -846,9 +892,13 @@ export default async function ServicePage({ params }: PageProps) {
 
       {/* CTA */}
       <section className="relative py-16 overflow-hidden bg-gradient-hero">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(232,107,75,0.08) 0%, transparent 60%)',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(232,107,75,0.08) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
             Vous êtes {service.name.toLowerCase()} ?
@@ -870,9 +920,14 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
+              Méthodologie éditoriale
+            </h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les tarifs et informations présentés sont indicatifs, basés sur des moyennes nationales et régionales. Les artisans sont référencés via leur numéro SIREN. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
+              Les tarifs et informations présentés sont indicatifs, basés sur des moyennes
+              nationales et régionales. Les artisans sont référencés via leur numéro SIREN.
+              ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne
+              garantissons pas les prestations.
             </p>
           </div>
         </div>
@@ -885,7 +940,10 @@ export default async function ServicePage({ params }: PageProps) {
             Confiance & Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-primary-500 hover:text-primary-700">
+            <Link
+              href="/notre-processus-de-verification"
+              className="text-primary-500 hover:text-primary-700"
+            >
               Comment nous référençons les artisans
             </Link>
             <Link href="/politique-avis" className="text-primary-500 hover:text-primary-700">
@@ -901,15 +959,20 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Voir aussi - Autres services */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">Voir aussi</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">
+            Voir aussi
+          </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-4">Services connexes</h3>
               <div className="flex flex-wrap gap-2">
-                {(relatedServices[serviceSlug] || popularServices.filter(s => s.slug !== serviceSlug).map(s => s.slug))
+                {(
+                  relatedServices[serviceSlug] ||
+                  popularServices.filter((s) => s.slug !== serviceSlug).map((s) => s.slug)
+                )
                   .slice(0, 6)
                   .map((slug) => {
-                    const svc = staticServicesList.find(s => s.slug === slug)
+                    const svc = staticServicesList.find((s) => s.slug === slug)
                     if (!svc) return null
                     return (
                       <Link
@@ -944,10 +1007,17 @@ export default async function ServicePage({ params }: PageProps) {
             {/* Articles de blog liés à ce métier */}
             {(() => {
               const svcLower = service.name.toLowerCase()
-              const relatedArticles = allArticlesMeta.filter((a) =>
-                a.tags.some((tag) => tag.toLowerCase().includes(svcLower) || svcLower.includes(tag.toLowerCase()))
-                || a.category === 'Fiches métier' && (a.title.toLowerCase().includes(svcLower) || a.slug.includes(serviceSlug))
-              ).slice(0, 4)
+              const relatedArticles = allArticlesMeta
+                .filter(
+                  (a) =>
+                    a.tags.some(
+                      (tag) =>
+                        tag.toLowerCase().includes(svcLower) || svcLower.includes(tag.toLowerCase())
+                    ) ||
+                    (a.category === 'Fiches métier' &&
+                      (a.title.toLowerCase().includes(svcLower) || a.slug.includes(serviceSlug)))
+                )
+                .slice(0, 4)
               if (relatedArticles.length === 0) return null
               return (
                 <div className="mt-8">
@@ -964,7 +1034,9 @@ export default async function ServicePage({ params }: PageProps) {
                           <div className="font-medium text-charcoal-900 group-hover:text-primary-500 text-sm leading-snug">
                             {article.title}
                           </div>
-                          <div className="text-xs text-charcoal-500 mt-1">{article.readTime} · {article.category}</div>
+                          <div className="text-xs text-charcoal-500 mt-1">
+                            {article.readTime} · {article.category}
+                          </div>
                         </div>
                       </Link>
                     ))}
@@ -976,7 +1048,9 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Intent variants — devis, avis, tarifs by city */}
           <div className="mt-8 grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4">Devis {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4">
+                Devis {service.name.toLowerCase()} par ville
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
@@ -990,7 +1064,9 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4">Avis {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4">
+                Avis {service.name.toLowerCase()} par ville
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
@@ -1004,7 +1080,9 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4">Tarifs {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4">
+                Tarifs {service.name.toLowerCase()} par ville
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
@@ -1057,7 +1135,9 @@ export default async function ServicePage({ params }: PageProps) {
                     href={`/problemes/${problem.slug}`}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors ${urgencyColors[problem.urgencyLevel]}`}
                   >
-                    <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${urgencyDots[problem.urgencyLevel]}`} />
+                    <span
+                      className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${urgencyDots[problem.urgencyLevel]}`}
+                    />
                     <span className="text-sm font-medium text-charcoal-800">{problem.name}</span>
                   </Link>
                 ))}
@@ -1094,7 +1174,6 @@ export default async function ServicePage({ params }: PageProps) {
 
       <MicroConversions pageType="service" serviceSlug={serviceSlug} />
       <FAQTracker pageType="service" serviceSlug={serviceSlug} />
-
     </div>
   )
 }

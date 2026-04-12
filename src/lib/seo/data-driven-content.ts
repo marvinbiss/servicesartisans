@@ -13,6 +13,7 @@ import type { CommuneData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getRegionalMultiplier } from '@/lib/seo/location-content'
+import { getDeptPreposition, getRegionPreposition } from '@/lib/geo-strings'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -110,7 +111,10 @@ function precipLabel(mm: number): string {
 
 function hashSvc(s: string): number {
   let h = 0
-  for (let i = 0; i < s.length; i++) { h = (h << 5) - h + s.charCodeAt(i); h |= 0 }
+  for (let i = 0; i < s.length; i++) {
+    h = (h << 5) - h + s.charCodeAt(i)
+    h |= 0
+  }
   return Math.abs(h)
 }
 
@@ -133,7 +137,7 @@ export function generateDataDrivenContent(
   commune: CommuneData,
   serviceSlug: string,
   serviceName: string,
-  providerCount: number,
+  providerCount: number
 ): DataDrivenContent {
   const svc = serviceName.toLowerCase()
   const de = deSvc(svc) // "de plombier" or "d'électricien"
@@ -164,9 +168,11 @@ export function generateDataDrivenContent(
   introParts.push(introTemplates[seed % introTemplates.length])
 
   // City characterization with real data
-  const sizeParts: string[] = [`${commune.name} est une ${citySize(pop)} de ${formatNumber(pop)} habitants`]
-  if (commune.departement_name) sizeParts.push(`dans le ${commune.departement_name}`)
-  if (commune.region_name) sizeParts.push(`en ${commune.region_name}`)
+  const sizeParts: string[] = [
+    `${commune.name} est une ${citySize(pop)} de ${formatNumber(pop)} habitants`,
+  ]
+  if (commune.departement_name) sizeParts.push(`${getDeptPreposition(commune.departement_name)}`)
+  if (commune.region_name) sizeParts.push(`${getRegionPreposition(commune.region_name)}`)
   introParts.push(sizeParts.join(', ') + '.')
 
   // Density context
@@ -231,13 +237,19 @@ export function generateDataDrivenContent(
 
     if (commune.part_maisons_pct !== null && commune.part_maisons_pct !== undefined) {
       const pct = commune.part_maisons_pct
-      parts.push(
-        `Le parc immobilier est ${housingType(pct)} (${pct}% de maisons individuelles).`
-      )
+      parts.push(`Le parc immobilier est ${housingType(pct)} (${pct}% de maisons individuelles).`)
 
       // Service-specific housing insight
       if (pct >= 60) {
-        const houseTrades = ['couvreur', 'paysagiste', 'jardinier', 'facadier', 'terrassier', 'ramoneur', 'pisciniste']
+        const houseTrades = [
+          'couvreur',
+          'paysagiste',
+          'jardinier',
+          'facadier',
+          'terrassier',
+          'ramoneur',
+          'pisciniste',
+        ]
         if (houseTrades.includes(serviceSlug)) {
           parts.push(
             `Cette forte proportion de maisons individuelles génère une demande soutenue en services ${de} pour l'entretien et la rénovation des propriétés.`
@@ -281,7 +293,12 @@ export function generateDataDrivenContent(
     }
 
     if (commune.nb_transactions_annuelles) {
-      const mktAdj = commune.nb_transactions_annuelles > 500 ? 'dynamique' : commune.nb_transactions_annuelles > 100 ? 'actif' : 'modéré'
+      const mktAdj =
+        commune.nb_transactions_annuelles > 500
+          ? 'dynamique'
+          : commune.nb_transactions_annuelles > 100
+            ? 'actif'
+            : 'modéré'
       const transTemplates = [
         `Avec ${formatNumber(commune.nb_transactions_annuelles)} transactions immobilières par an, le marché local est ${mktAdj}.`,
         `Le marché immobilier de ${commune.name} enregistre environ ${formatNumber(commune.nb_transactions_annuelles)} ventes par an, un rythme ${mktAdj}.`,
@@ -370,7 +387,11 @@ export function generateDataDrivenContent(
         parts.push(
           `Le métier ${de} étant une spécialité de niche, les professionnels disponibles à ${commune.name} couvrent généralement un périmètre plus large que les artisans du second œuvre.`
         )
-      } else if (commonTrades.includes(serviceSlug) && commune.nb_artisans_btp && commune.nb_artisans_btp > 20) {
+      } else if (
+        commonTrades.includes(serviceSlug) &&
+        commune.nb_artisans_btp &&
+        commune.nb_artisans_btp > 20
+      ) {
         parts.push(
           `Parmi les ${formatNumber(commune.nb_artisans_btp)} entreprises du BTP à ${commune.name}, les ${svc}s représentent une part significative, garantissant un choix suffisant pour comparer les offres et les tarifs.`
         )
@@ -403,7 +424,13 @@ export function generateDataDrivenContent(
     }
 
     // Service-specific energy renovation context (expanded for more trade differentiation)
-    const energyDirectTrades = ['chauffagiste', 'climaticien', 'isolation-thermique', 'pompe-a-chaleur', 'renovation-energetique']
+    const energyDirectTrades = [
+      'chauffagiste',
+      'climaticien',
+      'isolation-thermique',
+      'pompe-a-chaleur',
+      'renovation-energetique',
+    ]
     const energyIndirectTrades = ['menuisier', 'vitrier', 'couvreur', 'facadier', 'plaquiste']
     const plumbingTrades = ['plombier']
     const elecTrades = ['electricien']
@@ -445,7 +472,7 @@ export function generateDataDrivenContent(
       parts.push(
         `En ${commune.departement_name || commune.departement_code}, environ ${formatNumber(commune.nb_maprimerenov_annuel)} dossiers MaPrimeRénov' sont déposés chaque année, témoignant de l'engagement local pour la transition énergétique.`
       )
-      dataSources.push('SDES (statistiques MaPrimeRénov\')')
+      dataSources.push("SDES (statistiques MaPrimeRénov')")
     }
 
     energetique = parts.join(' ')
@@ -455,8 +482,12 @@ export function generateDataDrivenContent(
   // 6. CLIMATE-DRIVEN ADVICE WITH REAL DATA
   // =========================================================================
   let climatData: string | null = null
-  if (commune.jours_gel_annuels !== null || commune.precipitation_annuelle !== null ||
-      commune.temperature_moyenne_hiver !== null || commune.climat_zone) {
+  if (
+    commune.jours_gel_annuels !== null ||
+    commune.precipitation_annuelle !== null ||
+    commune.temperature_moyenne_hiver !== null ||
+    commune.climat_zone
+  ) {
     const parts: string[] = []
 
     if (commune.climat_zone) {
@@ -486,7 +517,15 @@ export function generateDataDrivenContent(
       parts.push(gelTemplates[(seed + 2) % gelTemplates.length])
 
       // Service-specific frost advice
-      const frostSensitive = ['plombier', 'couvreur', 'macon', 'facadier', 'peintre-en-batiment', 'carreleur', 'terrassier']
+      const frostSensitive = [
+        'plombier',
+        'couvreur',
+        'macon',
+        'facadier',
+        'peintre-en-batiment',
+        'carreleur',
+        'terrassier',
+      ]
       if (frostSensitive.includes(serviceSlug) && commune.jours_gel_annuels >= 30) {
         parts.push(
           `Ce nombre significatif de jours de gel impose aux ${svc}s de ${commune.name} d'adapter leur calendrier et leurs matériaux pour garantir la durabilité des travaux.`
@@ -508,8 +547,18 @@ export function generateDataDrivenContent(
       parts.push(
         `La période idéale pour les travaux extérieurs à ${commune.name} s'étend ${deMonth(commune.mois_travaux_ext_debut)} à ${monthName(commune.mois_travaux_ext_fin)}.`
       )
-      const exteriorTrades = ['couvreur', 'facadier', 'peintre-en-batiment', 'macon', 'terrassier',
-        'paysagiste', 'jardinier', 'charpentier', 'zingueur', 'etancheiste']
+      const exteriorTrades = [
+        'couvreur',
+        'facadier',
+        'peintre-en-batiment',
+        'macon',
+        'terrassier',
+        'paysagiste',
+        'jardinier',
+        'charpentier',
+        'zingueur',
+        'etancheiste',
+      ]
       if (exteriorTrades.includes(serviceSlug)) {
         parts.push(
           `Planifiez vos travaux ${de} durant cette fenêtre pour bénéficier de conditions optimales.`
@@ -549,9 +598,35 @@ export function generateDataDrivenContent(
   }
 
   // Service-specific demand drivers per trade category
-  const interiorTrades = ['plombier', 'electricien', 'serrurier', 'peintre-en-batiment', 'carreleur', 'cuisiniste', 'plaquiste', 'solier']
-  const exteriorTrades = ['couvreur', 'facadier', 'paysagiste', 'jardinier', 'terrassier', 'macon', 'charpentier', 'zingueur', 'etancheiste', 'pisciniste']
-  const energyTrades = ['chauffagiste', 'climaticien', 'isolation-thermique', 'pompe-a-chaleur', 'renovation-energetique']
+  const interiorTrades = [
+    'plombier',
+    'electricien',
+    'serrurier',
+    'peintre-en-batiment',
+    'carreleur',
+    'cuisiniste',
+    'plaquiste',
+    'solier',
+  ]
+  const exteriorTrades = [
+    'couvreur',
+    'facadier',
+    'paysagiste',
+    'jardinier',
+    'terrassier',
+    'macon',
+    'charpentier',
+    'zingueur',
+    'etancheiste',
+    'pisciniste',
+  ]
+  const energyTrades = [
+    'chauffagiste',
+    'climaticien',
+    'isolation-thermique',
+    'pompe-a-chaleur',
+    'renovation-energetique',
+  ]
 
   if (interiorTrades.includes(serviceSlug)) {
     if (commune.region_name === 'Île-de-France') {
@@ -618,23 +693,23 @@ export function generateDataDrivenContent(
   } else {
     // Generic demand context for other trades
     demandeLocaleParts.push(
-      `À ${commune.name}, en ${commune.region_name || 'France'}, les besoins en ${svc} sont liés à l'entretien courant du patrimoine bâti et aux projets d'amélioration de l'habitat. Les artisans référencés sur ServicesArtisans interviennent dans un périmètre adapté à la demande locale.`
+      `À ${commune.name}, ${getRegionPreposition(commune.region_name || 'France')}, les besoins en ${svc} sont liés à l'entretien courant du patrimoine bâti et aux projets d'amélioration de l'habitat. Les artisans référencés sur ServicesArtisans interviennent dans un périmètre adapté à la demande locale.`
     )
   }
 
   // Region-specific pricing context
   const regionMultiplier = getRegionalMultiplier(commune.region_name || '')
-  if (regionMultiplier >= 1.20) {
+  if (regionMultiplier >= 1.2) {
     demandeLocaleParts.push(
-      `Les tarifs des ${svc}s en ${commune.region_name} sont en moyenne 20 à 25 % supérieurs au reste de la France, en raison du coût de la vie et de la forte demande. Comparer plusieurs devis reste le meilleur moyen d'obtenir un tarif compétitif à ${commune.name}.`
+      `Les tarifs des ${svc}s ${getRegionPreposition(commune.region_name ?? '')} sont en moyenne 20 à 25 % supérieurs au reste de la France, en raison du coût de la vie et de la forte demande. Comparer plusieurs devis reste le meilleur moyen d'obtenir un tarif compétitif à ${commune.name}.`
     )
   } else if (regionMultiplier >= 1.05) {
     demandeLocaleParts.push(
-      `En ${commune.region_name}, les tarifs des artisans sont légèrement supérieurs à la moyenne nationale, reflétant un marché immobilier et un coût de la vie sensiblement plus élevés. Nous recommandons de solliciter au moins 3 devis pour vos travaux ${de} à ${commune.name}.`
+      `${getRegionPreposition(commune.region_name ?? '')}, les tarifs des artisans sont légèrement supérieurs à la moyenne nationale, reflétant un marché immobilier et un coût de la vie sensiblement plus élevés. Nous recommandons de solliciter au moins 3 devis pour vos travaux ${de} à ${commune.name}.`
     )
   } else if (regionMultiplier <= 0.95) {
     demandeLocaleParts.push(
-      `Les tarifs des ${svc}s en ${commune.region_name} sont généralement inférieurs à la moyenne nationale, un avantage pour les propriétaires de ${commune.name} souhaitant entreprendre des travaux de rénovation ou d'amélioration de leur logement.`
+      `Les tarifs des ${svc}s ${getRegionPreposition(commune.region_name ?? '')} sont généralement inférieurs à la moyenne nationale, un avantage pour les propriétaires de ${commune.name} souhaitant entreprendre des travaux de rénovation ou d'amélioration de leur logement.`
     )
   }
 
@@ -707,7 +782,7 @@ export function generateDataDrivenContent(
     reglParts.push(
       `Les artisans ${svc}s intervenant à ${commune.name} doivent disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale pour les travaux affectant le gros œuvre.`,
       `Avant tout chantier à ${commune.name}, vérifiez que le ${svc} fournit un devis détaillé conforme à l'arrêté du 24 janvier 2017, mentionnant la date de début et la durée estimée des travaux.`,
-      `Les travaux réalisés à ${commune.name} ouvrent droit à une TVA réduite à 10% (rénovation) ou 5,5% (amélioration de la performance énergétique) pour les logements de plus de 2 ans.`,
+      `Les travaux réalisés à ${commune.name} ouvrent droit à une TVA réduite à 10% (rénovation) ou 5,5% (amélioration de la performance énergétique) pour les logements de plus de 2 ans.`
     )
   }
 
@@ -781,9 +856,10 @@ export function generateDataDrivenContent(
     }
     if (commune.jours_gel_annuels !== null) {
       answer += ` Avec ${commune.jours_gel_annuels} jours de gel par an, `
-      answer += commune.jours_gel_annuels >= 40
-        ? `les ${svc}s doivent utiliser des matériaux résistants au gel et planifier les travaux extérieurs hors période hivernale.`
-        : `les conditions sont relativement clémentes pour les travaux ${de}.`
+      answer +=
+        commune.jours_gel_annuels >= 40
+          ? `les ${svc}s doivent utiliser des matériaux résistants au gel et planifier les travaux extérieurs hors période hivernale.`
+          : `les conditions sont relativement clémentes pour les travaux ${de}.`
     }
     if (commune.mois_travaux_ext_debut && commune.mois_travaux_ext_fin) {
       answer += ` Période idéale : ${monthName(commune.mois_travaux_ext_debut)} à ${monthName(commune.mois_travaux_ext_fin)}.`
@@ -796,7 +872,7 @@ export function generateDataDrivenContent(
 
   // Q5: Real estate context
   if (commune.prix_m2_moyen && commune.part_maisons_pct !== null) {
-    const answer = `Le marché immobilier de ${commune.name} affiche un prix moyen de ${formatEuro(commune.prix_m2_moyen)}/m² avec ${commune.part_maisons_pct}% de maisons individuelles. ${commune.part_maisons_pct >= 50 ? 'Les maisons nécessitent régulièrement des travaux d\'entretien et de rénovation.' : 'Les copropriétés représentent une part importante du parc, avec des besoins spécifiques en parties communes.'} ${commune.nb_transactions_annuelles ? `${formatNumber(commune.nb_transactions_annuelles)} transactions par an témoignent du dynamisme du marché local.` : ''}`
+    const answer = `Le marché immobilier de ${commune.name} affiche un prix moyen de ${formatEuro(commune.prix_m2_moyen)}/m² avec ${commune.part_maisons_pct}% de maisons individuelles. ${commune.part_maisons_pct >= 50 ? "Les maisons nécessitent régulièrement des travaux d'entretien et de rénovation." : 'Les copropriétés représentent une part importante du parc, avec des besoins spécifiques en parties communes.'} ${commune.nb_transactions_annuelles ? `${formatNumber(commune.nb_transactions_annuelles)} transactions par an témoignent du dynamisme du marché local.` : ''}`
     faqItems.push({
       question: `Quel est le contexte immobilier à ${commune.name} pour des travaux ${de} ?`,
       answer,

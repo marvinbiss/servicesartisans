@@ -11,7 +11,7 @@ const canonicalUrl = `${SITE_URL}/badge`
 export const metadata: Metadata = {
   title: 'Badge Artisan Vérifié — ServicesArtisans',
   description:
-    'Affichez le badge "Artisan Vérifié ServicesArtisans" sur votre site web. Renforcez la confiance de vos visiteurs, améliorez votre référencement local et obtenez un backlink gratuit. 3 variantes disponibles, 100% gratuit.',
+    'Affichez le badge "Artisan Vérifié" sur votre site web. Confiance visiteurs, référencement local et backlink gratuit. 3 variantes, 100% gratuit.',
   alternates: { canonical: canonicalUrl },
   openGraph: {
     locale: 'fr_FR',
@@ -175,7 +175,7 @@ export default function BadgePage() {
               <h3 className="font-heading font-semibold text-charcoal-900 mb-3">WordPress</h3>
               <ol className="text-charcoal-600 text-sm space-y-2 list-decimal list-inside">
                 <li>Allez dans Apparence &gt; Widgets ou ouvrez l&apos;éditeur de page</li>
-                <li>Ajoutez un bloc &laquo; HTML personnalisé &raquo;</li>
+                <li>Ajoutez un bloc « HTML personnalisé »</li>
                 <li>Collez le code du badge</li>
                 <li>Enregistrez et publiez</li>
               </ol>
@@ -208,7 +208,7 @@ export default function BadgePage() {
                 <li>Modifiez la page souhaitée</li>
                 <li>Ajoutez un bloc Code (dans la section Basique)</li>
                 <li>Collez le code HTML du badge</li>
-                <li>Désactivez &laquo; Afficher la source &raquo; et enregistrez</li>
+                <li>Désactivez « Afficher la source » et enregistrez</li>
               </ol>
             </div>
           </div>
@@ -230,8 +230,8 @@ export default function BadgePage() {
                 Renforcez la confiance de vos visiteurs
               </h3>
               <p className="text-charcoal-600 text-sm">
-                Le badge &laquo; Artisan Vérifié &raquo; rassure immédiatement vos clients
-                potentiels et augmente votre taux de conversion.
+                Le badge « Artisan Vérifié » rassure immédiatement vos clients potentiels et
+                augmente votre taux de conversion.
               </p>
             </div>
 

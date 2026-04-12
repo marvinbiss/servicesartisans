@@ -57,13 +57,7 @@ export default function UrgencyCountdown({ serviceName, cityName }: UrgencyCount
         }
       })
       .catch(() => {
-        // Deterministic fallback
-        const hour = new Date().getHours()
-        setStats({
-          requests_this_week: hour >= 8 && hour <= 20 ? 12 : 4,
-          requests_this_month: 47 + ((new Date().getDate() * 7) % 80),
-          active_providers: 8,
-        })
+        // API failed — leave stats null so the guard hides the component
       })
       .finally(() => setLoaded(true))
   }, [serviceName, cityName])

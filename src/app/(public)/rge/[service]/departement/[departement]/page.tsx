@@ -16,6 +16,7 @@ import {
   RGE_QUALIFICATION_LABELS,
   RGE_ALLOWED_SERVICES,
 } from '@/lib/rge/service-city-listings'
+import { getDeptPreposition, getDeptArticle } from '@/lib/geo-strings'
 
 // ISR : revalidation quotidienne
 export const revalidate = 86400
@@ -64,7 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `${serviceName} RGE ${dept.name} (${dept.code}) \u2014 MaPrimeR\u00e9nov\u2019`
   )
   const description = truncateTitle(
-    `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE dans le ${dept.name} (${dept.code}). \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Donn\u00e9es ADEME.`,
+    `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE ${getDeptPreposition(dept.name)} (${dept.code}). \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Donn\u00e9es ADEME.`,
     158
   )
 
@@ -121,8 +122,8 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
   ])
 
   const itemListSchema = getItemListSchema({
-    name: `${serviceName} RGE dans le ${dept.name}`,
-    description: `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE dans le d\u00e9partement ${dept.name} (${dept.code})`,
+    name: `${serviceName} RGE ${getDeptPreposition(dept.name)}`,
+    description: `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE ${getDeptPreposition(dept.name)} (${dept.code})`,
     url: path,
     items: providers.slice(0, 10).map((p, idx) => ({
       name: p.name,
@@ -136,7 +137,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${serviceName} RGE dans le ${dept.name}`,
+    name: `${serviceName} RGE ${getDeptPreposition(dept.name)}`,
     url: pageUrl,
     about: {
       '@type': 'Service',
@@ -175,18 +176,17 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
-            {serviceName} certifi&eacute; RGE dans le {dept.name} ({dept.code})
+            {serviceName} certifié RGE dans le {dept.name} ({dept.code})
           </h1>
           <p className="mt-3 text-charcoal-600">
             {count > 0 ? (
               <>
                 <strong>{count.toLocaleString('fr-FR')}</strong> {serviceName.toLowerCase()} RGE{' '}
-                {count > 1 ? 'actifs' : 'actif'} r&eacute;f&eacute;renc&eacute;s dans le
-                d&eacute;partement {dept.name}
+                {count > 1 ? 'actifs' : 'actif'} référencés {getDeptPreposition(dept.name)}
               </>
             ) : (
               <>
-                Annuaire des {serviceName.toLowerCase()} RGE du d&eacute;partement {dept.name}
+                Annuaire des {serviceName.toLowerCase()} RGE {getDeptArticle(dept.name)}
               </>
             )}
           </p>
@@ -196,35 +196,33 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
           <p>
             {qualif ? (
               <>
-                Les artisans {serviceName.toLowerCase()} certifi&eacute;s RGE du {dept.name}{' '}
-                d&eacute;tiennent le label <strong>{qualif.label}</strong> d&eacute;livr&eacute; par{' '}
-                {qualif.organisme}, garantissant leur comp&eacute;tence pour {qualif.specifics}.
+                Les artisans {serviceName.toLowerCase()} certifiés RGE {getDeptArticle(dept.name)}{' '}
+                détiennent le label <strong>{qualif.label}</strong> délivré par {qualif.organisme},
+                garantissant leur compétence pour {qualif.specifics}.
               </>
             ) : (
               <>
-                Les artisans {serviceName.toLowerCase()} certifi&eacute;s RGE (Reconnu Garant de
-                l&rsquo;Environnement) du {dept.name} r&eacute;pondent aux crit&egrave;res
-                d&rsquo;&eacute;co-conditionnalit&eacute; fix&eacute;s par l&rsquo;&Eacute;tat.
+                Les artisans {serviceName.toLowerCase()} certifiés RGE (Reconnu Garant de
+                l’Environnement) {getDeptArticle(dept.name)} répondent aux critères
+                d’éco-conditionnalité fixés par l’&Eacute;tat.
               </>
             )}{' '}
-            Cette qualification est indispensable pour b&eacute;n&eacute;ficier des aides publiques
-            &agrave; la r&eacute;novation &eacute;nerg&eacute;tique&nbsp;:
-            MaPrimeR&eacute;nov&rsquo;, Certificats d&rsquo;&Eacute;conomies d&rsquo;&Eacute;nergie
-            (CEE), &eacute;co-pr&ecirc;t &agrave; taux z&eacute;ro et TVA r&eacute;duite &agrave;
-            5,5&nbsp;%.
+            Cette qualification est indispensable pour bénéficier des aides publiques à la
+            rénovation énergétique&nbsp;: MaPrimeRénov’, Certificats d’&Eacute;conomies
+            d’&Eacute;nergie (CEE), éco-prêt à taux zéro et TVA réduite à 5,5&nbsp;%.
           </p>
           <p>
-            Le d&eacute;partement du {dept.name} compte {dept.population} habitants. Son chef-lieu
-            est <strong>{dept.chefLieu}</strong>, qui concentre historiquement une part importante
-            du tissu artisanal RGE local. Tous les professionnels list&eacute;s ci-dessous ont une
-            qualification v&eacute;rifi&eacute;e et toujours active, sourc&eacute;e directement
-            depuis le registre officiel ADEME / France R&eacute;nov&rsquo;.
+            Le département {getDeptArticle(dept.name)} compte {dept.population} habitants. Son
+            chef-lieu est <strong>{dept.chefLieu}</strong>, qui concentre historiquement une part
+            importante du tissu artisanal RGE local. Tous les professionnels listés ci-dessous ont
+            une qualification vérifiée et toujours active, sourcée directement depuis le registre
+            officiel ADEME / France Rénov’.
           </p>
         </section>
 
         <section className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-          <strong className="font-semibold">Source officielle&nbsp;:</strong> Donn&eacute;es
-          sourc&eacute;es depuis{' '}
+          <strong className="font-semibold">Source officielle&nbsp;:</strong> Données sourcées
+          depuis{' '}
           <a
             href="https://data.ademe.fr/datasets/liste-des-entreprises-rge-2"
             target="_blank"
@@ -233,9 +231,9 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
           >
             data.ademe.fr
           </a>{' '}
-          &mdash; Licence Etalab 2.0.{' '}
+          — Licence Etalab 2.0.{' '}
           <Link href="/rge/sources" className="underline hover:text-emerald-700">
-            M&eacute;thodologie compl&egrave;te
+            Méthodologie complète
           </Link>
           .
         </section>
@@ -244,8 +242,8 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
           {count === 0 ? (
             <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
               <p className="text-charcoal-700">
-                Aucun {serviceName.toLowerCase()} RGE actif actuellement
-                r&eacute;f&eacute;renc&eacute; dans le d&eacute;partement {dept.name}.
+                Aucun {serviceName.toLowerCase()} RGE actif actuellement référencé{' '}
+                {getDeptPreposition(dept.name)}.
               </p>
               <p className="mt-2 text-sm text-charcoal-500">
                 Consultez{' '}
@@ -257,7 +255,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                   href={`/departements/${deptSlug}/${serviceSlug}`}
                   className="text-clay-500 underline"
                 >
-                  tous les {serviceName.toLowerCase()} du {dept.name}
+                  tous les {serviceName.toLowerCase()} {getDeptArticle(dept.name)}
                 </Link>
                 .
               </p>
@@ -274,7 +272,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
             </h2>
             <p className="text-sm text-charcoal-600 mb-4">
               Affinez votre recherche en ciblant directement la commune o&ugrave; vos travaux seront
-              r&eacute;alis&eacute;s.
+              réalisés.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
               {topVilles.map((v) => (
@@ -292,7 +290,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
         <section aria-labelledby="other-services" className="mb-12">
           <h2 id="other-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
-            Autres m&eacute;tiers RGE dans le {dept.name}
+            Autres métiers RGE dans le {dept.name}
           </h2>
           <div className="flex flex-wrap gap-2">
             {RGE_ALLOWED_SERVICES.filter((s) => s !== serviceSlug).map((s) => {
@@ -324,7 +322,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                   Hub national {serviceName} RGE
                 </div>
                 <div className="text-sm text-charcoal-500">
-                  Vue d&rsquo;ensemble, guides et qualifications
+                  Vue d’ensemble, guides et qualifications
                 </div>
               </Link>
             </li>
@@ -334,11 +332,9 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                 className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
               >
                 <div className="font-semibold text-charcoal-900">
-                  Tous les artisans du {dept.name}
+                  Tous les artisans {getDeptArticle(dept.name)}
                 </div>
-                <div className="text-sm text-charcoal-500">
-                  Annuaire complet du d&eacute;partement
-                </div>
+                <div className="text-sm text-charcoal-500">Annuaire complet du département</div>
               </Link>
             </li>
             <li>
@@ -361,7 +357,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
               >
                 <div className="font-semibold text-charcoal-900">Guides primes CEE 2026</div>
                 <div className="text-sm text-charcoal-500">
-                  Montants et conditions par op&eacute;ration
+                  Montants et conditions par opération
                 </div>
               </Link>
             </li>

@@ -53,9 +53,9 @@ export default function DroitAccesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <Breadcrumb items={[{ label: "Droit d'accès et de rectification" }]} className="mb-4" />
           <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-            Droit d&apos;acc&egrave;s et de rectification
+            Droit d&apos;accès et de rectification
           </h1>
-          <p className="text-charcoal-600 mt-2">Derni&egrave;re mise &agrave; jour : Avril 2026</p>
+          <p className="text-charcoal-600 mt-2">Dernière mise à jour : Avril 2026</p>
         </div>
       </section>
 
@@ -64,35 +64,34 @@ export default function DroitAccesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm p-8 prose prose-gray max-w-none">
             <p className="lead">
-              Chez {companyIdentity.name}, nous respectons pleinement vos droits en mati&egrave;re
-              de protection des donn&eacute;es personnelles. Cette page vous explique comment
-              exercer votre droit d&apos;acc&egrave;s et de rectification.
+              Chez {companyIdentity.name}, nous respectons pleinement vos droits en matière de
+              protection des données personnelles. Cette page vous explique comment exercer votre
+              droit d&apos;accès et de rectification.
             </p>
 
             <h2>1. Vos droits</h2>
             <ul>
               <li>
-                <strong>Droit d&apos;acc&egrave;s (Art. 15 RGPD) :</strong> Vous avez le droit de
-                savoir si nous traitons vos donn&eacute;es personnelles et d&apos;en obtenir une
-                copie.
+                <strong>Droit d&apos;accès (Art. 15 RGPD) :</strong> Vous avez le droit de savoir si
+                nous traitons vos données personnelles et d&apos;en obtenir une copie.
               </li>
               <li>
                 <strong>Droit de rectification (Art. 16 RGPD) :</strong> Vous pouvez demander la
-                correction de donn&eacute;es inexactes ou incompl&egrave;tes vous concernant.
+                correction de données inexactes ou incomplètes vous concernant.
               </li>
             </ul>
 
-            <h2>2. Qui peut en b&eacute;n&eacute;ficier</h2>
+            <h2>2. Qui peut en bénéficier</h2>
             <ul>
               <li>Tout utilisateur inscrit (client ou artisan)</li>
               <li>
-                Tout professionnel dont les donn&eacute;es apparaissent sur la plateforme
-                (m&ecirc;me sans compte)
+                Tout professionnel dont les données apparaissent sur la plateforme (même sans
+                compte)
               </li>
             </ul>
 
             <h2>3. Comment exercer votre droit</h2>
-            <p>Trois options s&apos;offrent &agrave; vous :</p>
+            <p>Trois options s&apos;offrent à vous :</p>
 
             <h3>Option 1 — Formulaire ci-dessous</h3>
             <p>
@@ -102,14 +101,14 @@ export default function DroitAccesPage() {
 
             <h3>Option 2 — Par email</h3>
             <p>
-              Envoyez un email &agrave;{' '}
+              Envoyez un email à{' '}
               <a
                 href={`mailto:${companyIdentity.dpoEmail}`}
                 className="text-primary-500 hover:underline"
               >
                 <strong>{companyIdentity.dpoEmail}</strong>
               </a>{' '}
-              en pr&eacute;cisant votre demande.
+              en précisant votre demande.
             </p>
 
             <h3>Option 3 — Par courrier postal</h3>
@@ -137,29 +136,28 @@ export default function DroitAccesPage() {
               </p>
             )}
 
-            <h2>4. D&eacute;lais de traitement</h2>
+            <h2>4. Délais de traitement</h2>
             <ul>
               <li>
-                <strong>Accus&eacute; de r&eacute;ception :</strong> sous 48 heures ouvr&eacute;es
-                &agrave; compter de la r&eacute;ception de votre demande.
+                <strong>Accusé de réception :</strong> sous 48 heures ouvrées à compter de la
+                réception de votre demande.
               </li>
               <li>
-                <strong>R&eacute;ponse compl&egrave;te :</strong> sous 30 jours maximum,
-                conform&eacute;ment &agrave; l&apos;article 12.3 du RGPD.
+                <strong>Réponse complète :</strong> sous 30 jours maximum, conformément à
+                l&apos;article 12.3 du RGPD.
               </li>
               <li>
-                <strong>Prolongation :</strong> en cas de demande complexe, ce d&eacute;lai peut
-                &ecirc;tre prolong&eacute; de 2 mois suppl&eacute;mentaires. Vous en serez
-                inform&eacute;(e) dans le d&eacute;lai initial de 30 jours.
+                <strong>Prolongation :</strong> en cas de demande complexe, ce délai peut être
+                prolongé de 2 mois supplémentaires. Vous en serez informé(e) dans le délai initial
+                de 30 jours.
               </li>
             </ul>
 
             <h2>5. Recours</h2>
             <p>
-              Si vous estimez que votre demande n&apos;a pas &eacute;t&eacute; trait&eacute;e de
-              mani&egrave;re satisfaisante, vous pouvez introduire une r&eacute;clamation
-              aupr&egrave;s de la Commission Nationale de l&apos;Informatique et des Libert&eacute;s
-              (CNIL) :
+              Si vous estimez que votre demande n&apos;a pas été traitée de manière satisfaisante,
+              vous pouvez introduire une réclamation auprès de la Commission Nationale de
+              l&apos;Informatique et des Libertés (CNIL) :
             </p>
             <ul>
               <li>
@@ -190,10 +188,7 @@ export default function DroitAccesPage() {
           {/* Contact DPO */}
           <div className="bg-white rounded-xl shadow-sm p-8 mt-6 prose prose-gray max-w-none">
             <h2>7. Contact DPO</h2>
-            <p>
-              Pour toute question relative &agrave; la protection de vos donn&eacute;es personnelles
-              :
-            </p>
+            <p>Pour toute question relative à la protection de vos données personnelles :</p>
             <ul>
               <li>
                 <strong>Email :</strong>{' '}
@@ -212,11 +207,11 @@ export default function DroitAccesPage() {
               )}
             </ul>
             <p>
-              Consultez &eacute;galement notre{' '}
+              Consultez également notre{' '}
               <Link href="/confidentialite" className="text-primary-500 hover:underline">
-                politique de confidentialit&eacute;
+                politique de confidentialité
               </Link>{' '}
-              pour plus d&apos;informations sur le traitement de vos donn&eacute;es.
+              pour plus d&apos;informations sur le traitement de vos données.
             </p>
           </div>
         </div>

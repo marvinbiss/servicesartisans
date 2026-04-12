@@ -62,9 +62,7 @@ export default function LeadRecommendations({ serviceName, city }: LeadRecommend
 
   return (
     <div className="bg-white rounded-xl border border-sand-200 p-4 mt-2">
-      <p className="text-sm font-semibold text-charcoal-700 mb-3">
-        Artisans recommand&eacute;s &agrave; {city}
-      </p>
+      <p className="text-sm font-semibold text-charcoal-700 mb-3">Artisans recommandés à {city}</p>
       <div className="space-y-2">
         {providers.map((provider) => {
           const profileUrl = getArtisanUrl({

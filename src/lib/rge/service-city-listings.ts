@@ -127,7 +127,7 @@ export const RGE_QUALIFICATION_LABELS: Record<
     specifics: 'climatisation r\u00e9versible et pompes \u00e0 chaleur air/air',
   },
   ramoneur: {
-    label: 'Qualibois Entretien',
+    label: 'QualiBois Entretien',
     organisme: 'Qualit\u2019EnR',
     specifics: 'entretien d\u2019appareils de chauffage bois et ramonage certifi\u00e9',
   },
