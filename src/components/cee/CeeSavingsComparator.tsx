@@ -13,28 +13,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Leaf, Info, AlertTriangle } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
-
-/* ─── Types API ───────────────────────────────────────────────────── */
-
-interface PrimeEstimate {
-  euros_classique_min: number
-  euros_classique_max: number
-  euros_precarite_min: number
-  euros_precarite_max: number
-}
-
-interface EstimateItem {
-  code: string
-  nom: string
-  prime_estimate: PrimeEstimate | null
-}
-
-interface EstimateResponse {
-  eligible: boolean
-  codes: string[]
-  zone_climatique: 'H1' | 'H2' | 'H3' | null
-  items: EstimateItem[]
-}
+import type { EstimateItem, EstimateResponse } from '@/lib/cee/estimate-types'
 
 /* ─── Fourchettes de coûts typiques par métier ────────────────────── */
 

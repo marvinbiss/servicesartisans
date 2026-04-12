@@ -11,22 +11,14 @@
  *   - Pas de lien direct vers le dossier (le client n'a pas forcément de compte)
  */
 
+import { escapeHtml as esc } from './format'
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const REPLY_EMAIL = 'contact@servicesartisans.fr'
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-/** Escape HTML special chars to prevent XSS in email templates. */
-function esc(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
 
 function emailWrapper(body: string): string {
   return `<!DOCTYPE html>

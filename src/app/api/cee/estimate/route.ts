@@ -36,6 +36,7 @@ import { enrichCeeQualification } from '@/lib/cee/enrich'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import type { EstimateItem, EstimateResponse } from '@/lib/cee/estimate-types'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,28 +62,6 @@ const estimateBodySchema = z
       .optional(),
   })
   .strict()
-
-/**
- * Projection publique d'un item enrichi — ne laisse passer que les champs
- * sûrs pour affichage anonyme.
- */
-interface PublicEstimateItem {
-  code: string
-  nom: string
-  prime_estimate: {
-    euros_classique_min: number
-    euros_classique_max: number
-    euros_precarite_min: number
-    euros_precarite_max: number
-  } | null
-}
-
-interface PublicEstimateResponse {
-  eligible: boolean
-  codes: string[]
-  zone_climatique: 'H1' | 'H2' | 'H3' | null
-  items: PublicEstimateItem[]
-}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   // ---- Rate limiting (20 req/min par IP, fail-open) ---------------------
@@ -148,7 +127,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     })
 
     // ---- Étape 3 : projection publique (whitelist stricte) -------------
-    const items: PublicEstimateItem[] = enriched.items.map((item) => ({
+    const items: EstimateItem[] = enriched.items.map((item) => ({
       code: item.code,
       nom: item.nom,
       prime_estimate: item.prime_estimate
@@ -161,7 +140,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         : null,
     }))
 
-    const response: PublicEstimateResponse = {
+    const response: EstimateResponse = {
       eligible: enriched.eligible,
       codes: enriched.codes,
       zone_climatique: enriched.zone_climatique,
@@ -186,7 +165,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         codes: [],
         zone_climatique: null,
         items: [],
-      } satisfies PublicEstimateResponse,
+      } satisfies EstimateResponse,
       { status: 200, headers: { ...RESPONSE_HEADERS, ...rateLimitHeaders } }
     )
   }

@@ -13,6 +13,7 @@
 
 import { sendEmail } from '@/lib/api/resend-client'
 import { logger } from '@/lib/logger'
+import { escapeHtml as esc, formatEurosRaw as formatEuros } from './format'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -28,25 +29,6 @@ export interface CeeEligibilityEmailParams {
   primeEstimateMin: number | null
   primeEstimateMax: number | null
   justificatifs: Array<{ code: string; label: string; obligatoire: boolean }>
-}
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/** Escape HTML special chars to prevent XSS in email templates. */
-function esc(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
-/** Format euros with French locale (ex: "1 250"). */
-function formatEuros(amount: number): string {
-  return Math.round(amount).toLocaleString('fr-FR')
 }
 
 // ---------------------------------------------------------------------------

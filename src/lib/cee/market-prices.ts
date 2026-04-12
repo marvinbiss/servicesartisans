@@ -20,7 +20,16 @@ export interface CeeMarketPrices {
   precarite: number
 }
 
-// ---------- Cache mémoire module-level (TTL 1h) ----------
+/**
+ * Cache mémoire module-level — best-effort en serverless.
+ *
+ * Sur Vercel serverless, chaque cold start repart à zéro et les invocations
+ * concurrentes ont des instances séparées. Ce cache aide quand plusieurs
+ * appels tombent sur la même instance chaude (ex: 2 qualifications dans
+ * la même lambda invocation). invalidateCeePricesCache() n'invalide que
+ * l'instance locale — c'est acceptable car les cours changent ~1x/mois
+ * et le TTL de 1h garantit la convergence.
+ */
 
 const CACHE_TTL_MS = 60 * 60 * 1000 // 1 heure
 

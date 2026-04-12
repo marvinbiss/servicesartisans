@@ -14,30 +14,7 @@ import { useState, useRef, type FormEvent } from 'react'
 import Link from 'next/link'
 import { Search, Loader2, ArrowRight, MapPin, Info, AlertTriangle } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
-
-/* ------------------------------------------------------------------ */
-/*  Types (miroir de l'API /api/cee/estimate)                         */
-/* ------------------------------------------------------------------ */
-
-interface PrimeEstimate {
-  euros_classique_min: number
-  euros_classique_max: number
-  euros_precarite_min: number
-  euros_precarite_max: number
-}
-
-interface EstimateItem {
-  code: string
-  nom: string
-  prime_estimate: PrimeEstimate | null
-}
-
-interface EstimateResponse {
-  eligible: boolean
-  codes: string[]
-  zone_climatique: 'H1' | 'H2' | 'H3' | null
-  items: EstimateItem[]
-}
+import type { EstimateResponse } from '@/lib/cee/estimate-types'
 
 /* ------------------------------------------------------------------ */
 /*  Props                                                              */

@@ -15,6 +15,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/api/resend-client'
 import type { DispatchPrimeEstimate, DispatchJustificatif } from './dispatcher'
+import { escapeHtml, formatEuros } from './format'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
@@ -34,23 +35,6 @@ export interface CeeArtisanBriefingInput {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
-function formatEuros(amount: number): string {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(amount)
-}
 
 function buildPrimeSection(estimate: DispatchPrimeEstimate): string {
   if (estimate.euros_classique_min === 0 && estimate.euros_classique_max === 0) {
