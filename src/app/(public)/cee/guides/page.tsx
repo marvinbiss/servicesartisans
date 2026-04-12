@@ -61,7 +61,7 @@ export default function CeeGuidesIndexPage() {
       return {
         '@type': 'Article',
         name: g.h1,
-        url: `${SITE_URL}/cee/${code}/guide`,
+        url: `${SITE_URL}/cee/${code.toLowerCase()}/guide`,
       }
     }),
   }

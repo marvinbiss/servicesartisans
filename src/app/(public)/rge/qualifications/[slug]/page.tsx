@@ -218,7 +218,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
               {guide.linkedCeeOperations.map((code) => (
                 <li key={code}>
                   <Link
-                    href={`/cee/${code}/guide`}
+                    href={`/cee/${code.toLowerCase()}/guide`}
                     className="group flex items-start justify-between gap-3 p-4 bg-white rounded-xl border border-primary-100 hover:border-primary-300 hover:shadow-sm transition"
                   >
                     <span className="flex-1">

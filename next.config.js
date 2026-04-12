@@ -388,7 +388,7 @@ const nextConfig = {
       { source: '/cee/bar-th-160/:ville', destination: '/cee', permanent: true },
       // BAR-TH-164 (rénovation globale d'une maison individuelle) abrogée — arrêté du 19 décembre 2023 (JORFTEXT000048680133).
       // Remplacée par BAR-TH-174 (rénovation d'ampleur maison individuelle). Le guide éditorial BAR-TH-174 n'étant pas encore
-      // publié, on redirige vers la liste des fiches CEE plutôt que vers une 404. À rebasculer sur /cee/BAR-TH-174/... dès
+      // publié, on redirige vers la liste des fiches CEE plutôt que vers une 404. À rebasculer sur /cee/bar-th-174/... dès
       // que le guide existe dans operation-guides-content.ts.
       { source: '/cee/bar-th-164', destination: '/cee', permanent: true },
       { source: '/cee/bar-th-164/guide', destination: '/cee', permanent: true },

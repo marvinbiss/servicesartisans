@@ -7,7 +7,7 @@
  * Note abrogation : BAR-TH-104 (PAC air/eau standard) a été abrogée par la
  * DGEC au 01/01/2024 et remplacée par BAR-TH-171 (PAC air/eau haute perf,
  * SCOP ≥ 4). Le guide BAR-TH-104 a été dépublié ; toute URL legacy est
- * redirigée en 301 permanent vers `/cee/BAR-TH-171/guide` via next.config.js.
+ * redirigée en 301 permanent vers `/cee/bar-th-171/guide` via next.config.js.
  *
  * Ces guides alimentent la route `/cee/[operation]/guide` et sont
  * totalement indépendants de la DB (contenu statique versionné).

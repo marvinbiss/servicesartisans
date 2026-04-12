@@ -388,7 +388,7 @@ export function ArtisanRgeEnrichedSection({
             {match.ceeOpCodes.map((code) => (
               <Link
                 key={code}
-                href={`/cee/${code}/guide`}
+                href={`/cee/${code.toLowerCase()}/guide`}
                 data-testid={`rge-cee-link-${code}`}
                 onClick={() => handleClick('cee', code)}
                 className="inline-flex items-center gap-2 rounded-lg border border-primary-200 bg-primary-50/60 hover:border-primary-300 hover:bg-primary-50 transition px-3 py-2 text-sm"

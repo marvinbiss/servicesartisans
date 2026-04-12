@@ -7,7 +7,7 @@
  *   3. CeeCTA inline — href contient /devis et source=cee
  *   4. Sticky CTA mobile — apparaît après scroll 400px
  *   5. DevisBottomSheet mobile — s'ouvre au clic sur StickyMobileCTA
- *   6. Page opération CEE — /cee/BAR-TH-171 charge, CeeCTA inline visible
+ *   6. Page opération CEE — /cee/bar-th-171 charge, CeeCTA inline visible
  *
  * Mocks :
  *   - `POST /api/cee/estimate` intercepté via `page.route()` (pas de DB)
