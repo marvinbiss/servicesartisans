@@ -195,7 +195,7 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
       // Fetch reviews (provider_faq table does not exist in migrations — faq hardcoded to [])
       const { data: providerReviews } = await supabase
         .from('reviews')
-        .select('id, rating, author_name, content, created_at')
+        .select('id, rating, author_name, content, reply, reply_date, created_at')
         .eq('provider_id', provider.id)
         .order('created_at', { ascending: false })
         .limit(100)
@@ -354,6 +354,8 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
           hasPhoto: false,
           photoUrl: null,
           verified: false,
+          artisan_response: (r as { reply?: string | null }).reply ?? null,
+          artisan_responded_at: (r as { reply_date?: string | null }).reply_date ?? null,
         }))
       }
       // NO fake reviews! Return empty array if no real reviews in database

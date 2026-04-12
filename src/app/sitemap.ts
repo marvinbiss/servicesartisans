@@ -128,9 +128,17 @@ export async function generateSitemaps() {
       id: `tarifs-task-cities-${i}`,
     })),
     { id: 'avis-services' },
-    // avis-service-cities-* removed — reviews schema drift (comment/client_name
-    // /artisan_id vs content/author_name/provider_id in prod) makes /avis/{svc}/{ville}
-    // render empty reviews = thin page. Re-enable once schema is aligned.
+    // Reviews schema drift résolu 2026-04-12 (migrations 385+386 + bascule
+    // admin client + type canonical src/types/review.ts). Réactivation des
+    // shards /avis/{service}/{ville} dans le sitemap.
+    ...Array.from(
+      {
+        length: Math.ceil(
+          (Object.keys(tradeContent).length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH
+        ),
+      },
+      (_, i) => ({ id: `avis-service-cities-${i}` })
+    ),
     { id: 'problemes' },
     ...Array.from(
       { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
@@ -850,12 +858,34 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Avis service×city pages — BLOCKED until reviews schema drift fix.
-  // Reviews queries use columns that don't exist in prod (comment/client_name/artisan_id
-  // vs content/author_name/provider_id). Template renders empty reviews → thin page.
-  // Return empty sitemap to remove all /avis/{service}/{ville} from index.
+  // ── Avis service×city pages ─────────────────────────────────────────
+  // Réactivées 2026-04-12 après résolution du reviews schema drift
+  // (migrations 385_reviews_rls_hardening + 386_reviews_add_missing_columns,
+  // bascule POST /api/reviews sur admin client, type canonical review.ts).
   if (id.startsWith('avis-service-cities-')) {
-    return []
+    const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
+    const BATCH = STATIC_BATCH
+    const start = batchIndex * BATCH
+    const end = start + BATCH
+    const tradeSlugs = Object.keys(tradeContent)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
+
+    outer: for (const svc of tradeSlugs) {
+      for (const v of phase1Cities) {
+        if (count >= end) break outer
+        if (count >= start)
+          result.push({
+            url: `${SITE_URL}/avis/${svc}/${v.slug}`,
+            changeFrequency: 'monthly',
+            priority: 0.5,
+          })
+        count++
+      }
+    }
+
+    return result
   }
 
   // ── Problemes hub + individual pages ────────────────────────────────

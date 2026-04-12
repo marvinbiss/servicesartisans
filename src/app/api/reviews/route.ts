@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
 import { createClient as createServerClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { slugify } from '@/lib/utils'
@@ -316,7 +317,11 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = getSupabaseClient()
+    // Bascule service_role : depuis la migration 385 les policies RLS anon
+    // sur `reviews` sont deny-all en INSERT. Le POST est déjà verrouillé
+    // côté serveur (auth user + HMAC reviewToken + match client_id), donc
+    // l'insert passe par admin client pour bypass RLS en toute sécurité.
+    const supabase = createAdminClient()
 
     // Find the booking using exact match to prevent enumeration
     // Join profiles via client_id to get client name and email
@@ -422,7 +427,6 @@ export async function POST(request: Request) {
         content: cleanComment,
         would_recommend: wouldRecommend,
         status: fraudIndicators.length > 0 ? 'pending_review' : 'published',
-        fraud_indicators: fraudIndicators.length > 0 ? fraudIndicators : null,
         created_at: new Date().toISOString(),
       })
       .select()
