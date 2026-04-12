@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scrollbar-hide utility for horizontal scroll containers (IntentNavBar mobile) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ===========================================
    ServicesArtisans - Brand CSS Variables
    World-class design system
@@ -10,19 +19,19 @@
 @layer base {
   :root {
     /* Brand Colors — Terracotta-first palette */
-    --brand-primary: #E86B4B;
-    --brand-primary-light: #EF9171;
-    --brand-primary-dark: #C24B2A;
-    --brand-primary-50: #FDF1EC;
-    --brand-primary-100: #FADDCF;
+    --brand-primary: #e86b4b;
+    --brand-primary-light: #ef9171;
+    --brand-primary-dark: #c24b2a;
+    --brand-primary-50: #fdf1ec;
+    --brand-primary-100: #faddcf;
 
     --brand-secondary: #e8960a;
     --brand-secondary-light: #f2b523;
     --brand-secondary-dark: #c97308;
 
-    --brand-success: #3D8B68;
-    --brand-success-light: #55A882;
-    --brand-success-50: #F0F7F4;
+    --brand-success: #3d8b68;
+    --brand-success-light: #55a882;
+    --brand-success-50: #f0f7f4;
 
     --brand-warning: #e8960a;
     --brand-warning-50: #fefaec;
@@ -31,35 +40,35 @@
     --brand-error-50: #fef2f2;
 
     /* Brand Terracotta */
-    --tc: #E86B4B;
-    --tc-dark: #C24B2A;
-    --tc-light: #F5BAA0;
-    --sand: #F4EFE8;
-    --sand2: #EDE8E1;
-    --sand3: #E5DDD4;
-    --dark-text: #1C1917;
+    --tc: #e86b4b;
+    --tc-dark: #c24b2a;
+    --tc-light: #f5baa0;
+    --sand: #f4efe8;
+    --sand2: #ede8e1;
+    --sand3: #e5ddd4;
+    --dark-text: #1c1917;
 
     /* Warm Neutrals (sand-tinted, not cold gray) */
     --color-white: #ffffff;
-    --color-black: #0F0E0C;
-    --color-gray-50: #FDFAF7;
-    --color-gray-100: #F9F4EE;
-    --color-gray-200: #E5DDD4;
-    --color-gray-300: #D5C9BE;
-    --color-gray-400: #B8A99A;
-    --color-gray-500: #9A8879;
-    --color-gray-600: #7D6A5C;
-    --color-gray-700: #614F43;
-    --color-gray-800: #302C28;
-    --color-gray-900: #1C1917;
+    --color-black: #0f0e0c;
+    --color-gray-50: #fdfaf7;
+    --color-gray-100: #f9f4ee;
+    --color-gray-200: #e5ddd4;
+    --color-gray-300: #d5c9be;
+    --color-gray-400: #b8a99a;
+    --color-gray-500: #9a8879;
+    --color-gray-600: #7d6a5c;
+    --color-gray-700: #614f43;
+    --color-gray-800: #302c28;
+    --color-gray-900: #1c1917;
 
     /* Semantic Colors */
-    --color-background: #FDFAF7;
+    --color-background: #fdfaf7;
     --color-surface: var(--color-white);
-    --color-border: #E5DDD4;
-    --color-text-primary: #1C1917;
-    --color-text-secondary: #7D6A5C;
-    --color-text-muted: #B8A99A;
+    --color-border: #e5ddd4;
+    --color-text-primary: #1c1917;
+    --color-text-secondary: #7d6a5c;
+    --color-text-muted: #b8a99a;
 
     /* Typography */
     --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -286,27 +295,50 @@
 }
 
 @keyframes shimmerLoad {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* Star pulse animation for rating hover */
 @keyframes starPulse {
-  0%, 100% { transform: scale(1.1); filter: drop-shadow(0 0 0 rgba(232, 150, 10, 0)); }
-  50% { transform: scale(1.2); filter: drop-shadow(0 0 8px rgba(232, 150, 10, 0.4)); }
+  0%,
+  100% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 0 rgba(232, 150, 10, 0));
+  }
+  50% {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 8px rgba(232, 150, 10, 0.4));
+  }
 }
 
 /* Favorite button bounce animation */
 @keyframes favoriteScale {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.25); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Toast fade-in animation */
 @keyframes toastFadeIn {
-  0% { opacity: 0; transform: translateY(-4px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===========================================
@@ -321,14 +353,16 @@
 
 /* Improve tap feedback on mobile — haptic-like press effect */
 @media (hover: none) {
-  button, a[role="button"], [class*="btn"] {
+  button,
+  a[role='button'],
+  [class*='btn'] {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
 
   button:active,
   a:active,
-  a[role="button"]:active {
+  a[role='button']:active {
     transform: scale(0.97);
     transition: transform 100ms ease;
   }
@@ -341,11 +375,11 @@
 
 /* Better mobile input styling */
 @media (max-width: 640px) {
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="password"],
-  input[type="search"],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='password'],
+  input[type='search'],
   textarea,
   select {
     font-size: 16px !important; /* Prevents iOS zoom on focus */
@@ -354,10 +388,22 @@
 
 /* Mobile-optimized typography — tighter, more readable on small screens */
 @media (max-width: 640px) {
-  h1 { font-size: 1.75rem; line-height: 1.2; }
-  h2 { font-size: 1.375rem; line-height: 1.3; }
-  h3 { font-size: 1.125rem; line-height: 1.4; }
-  p { font-size: 0.9375rem; line-height: 1.7; }
+  h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 1.375rem;
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: 1.125rem;
+    line-height: 1.4;
+  }
+  p {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
 }
 
 /* Bottom navigation spacer */
@@ -402,7 +448,9 @@ html {
 }
 
 /* Ensure buttons and interactive elements are easily tappable */
-button, a, [role="button"] {
+button,
+a,
+[role='button'] {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -412,8 +460,15 @@ button {
 }
 
 /* Smooth transitions for interactive elements (links and buttons only, not form inputs — avoids INP penalty) */
-a, button, [role="button"] {
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+a,
+button,
+[role='button'] {
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
 /* Prevent layout shifts */
@@ -430,7 +485,9 @@ img {
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -459,17 +516,30 @@ img {
 
 /* Animated mesh gradient background */
 @keyframes meshGradient {
-  0%, 100% {
-    background-position: 0% 50%, 100% 50%, 50% 100%;
+  0%,
+  100% {
+    background-position:
+      0% 50%,
+      100% 50%,
+      50% 100%;
   }
   25% {
-    background-position: 50% 0%, 0% 100%, 100% 0%;
+    background-position:
+      50% 0%,
+      0% 100%,
+      100% 0%;
   }
   50% {
-    background-position: 100% 50%, 50% 0%, 0% 50%;
+    background-position:
+      100% 50%,
+      50% 0%,
+      0% 50%;
   }
   75% {
-    background-position: 50% 100%, 100% 0%, 50% 50%;
+    background-position:
+      50% 100%,
+      100% 0%,
+      50% 50%;
   }
 }
 
@@ -485,7 +555,8 @@ img {
 
 /* Subtle floating animation for background blobs */
 @keyframes blobFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -498,7 +569,7 @@ img {
 
 /* Smooth focus rings — terracotta brand accent */
 :focus-visible {
-  outline: 2px solid #E86B4B;
+  outline: 2px solid #e86b4b;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -521,8 +592,12 @@ img {
 
 /* Reviews carousel — infinite scroll */
 @keyframes scroll-carousel {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* ===========================================
@@ -857,8 +932,9 @@ img {
 .scroll-reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .scroll-reveal.visible {
   opacity: 1;
@@ -871,5 +947,3 @@ img {
     transition: none;
   }
 }
-
-

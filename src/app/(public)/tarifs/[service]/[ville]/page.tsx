@@ -256,7 +256,7 @@ export default async function TarifsServiceVillePage({
     providers = await getProvidersByServiceAndDepartment(service, villeData.departement, {
       limit: 6,
     })
-    isFallback = true
+    isFallback = providers.length > 0
   }
 
   const multiplier = getRegionalMultiplier(villeData.region)

@@ -53,6 +53,7 @@ export default function IntentNavBar({
   villeName,
   providerCount,
   avgRating,
+  reviewCount,
 }: IntentNavBarProps) {
   return (
     <nav
@@ -72,7 +73,9 @@ export default function IntentNavBar({
             }
             // Badge for Avis tab
             if (intent === 'avis' && avgRating && avgRating > 0) {
-              badge = `\u2605${avgRating.toFixed(1)}`
+              badge = reviewCount
+                ? `\u2605${avgRating.toFixed(1)} (${reviewCount})`
+                : `\u2605${avgRating.toFixed(1)}`
             }
 
             if (isCurrent) {

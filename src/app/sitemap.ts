@@ -281,7 +281,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       },
       {
         url: `${SITE_URL}/simulateur-prime-cee`,
-        lastModified: new Date().toISOString(),
+        lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.8,
       },

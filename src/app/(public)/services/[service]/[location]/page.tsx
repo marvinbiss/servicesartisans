@@ -506,13 +506,14 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   // Fallback: if 0 providers in this city, try the whole département
   let providers = directProviders
   let isFallback = false
-  if (providers.length === 0 && totalProviderCount === 0) {
-    const ville = getVilleBySlug(locationSlug)
-    if (ville) {
-      providers = await getProvidersByServiceAndDepartment(serviceSlug, ville.departement, {
+  if (providers.length === 0 && totalProviderCount <= 0) {
+    // Use already-resolved location (works for DB-only cities too, not just france.ts)
+    const deptName = location.department_name || getVilleBySlug(locationSlug)?.departement
+    if (deptName) {
+      providers = await getProvidersByServiceAndDepartment(serviceSlug, deptName, {
         limit: 6,
       })
-      isFallback = true
+      isFallback = providers.length > 0
     }
     // Hard 404: if BOTH direct and department fallback return 0 results
     if (providers.length === 0) {

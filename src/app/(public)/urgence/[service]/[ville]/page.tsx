@@ -304,7 +304,7 @@ export default async function UrgenceServiceVillePage({
     providers = await getProvidersByServiceAndDepartment(service, villeData.departement, {
       limit: 6,
     })
-    isFallback = true
+    isFallback = providers.length > 0
   }
 
   const meta = emergencyMeta[service] || {
