@@ -1,5 +1,5 @@
 -- =============================================================================
--- Migration 386 : reviews — ajout des colonnes manquantes (booking_id, would_recommend)
+-- Migration 415 : reviews — ajout des colonnes manquantes (booking_id, would_recommend)
 -- =============================================================================
 -- Date        : 2026-04-12
 -- Contexte    : Audit schema drift 2026-04-12 sur la table public.reviews.

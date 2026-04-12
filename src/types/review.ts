@@ -22,7 +22,7 @@ export type ReviewStatus = 'pending_review' | 'published' | 'rejected' | 'flagge
  * Représentation brute d'une ligne de `public.reviews` (snake_case).
  * Refléter exactement les colonnes prod vérifiées 2026-04-12.
  * Les colonnes `booking_id` et `would_recommend` sont ajoutées par la
- * migration 386_reviews_add_missing_columns.sql.
+ * migration 415_reviews_add_missing_columns.sql.
  */
 export interface ReviewRow {
   id: string

@@ -1,5 +1,5 @@
 -- =============================================================================
--- Migration 387 : DROP de la table orpheline `app.reviews`
+-- Migration 416 : DROP de la table orpheline `app.reviews`
 -- =============================================================================
 -- Date    : 2026-04-12
 -- Contexte:

@@ -317,7 +317,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Bascule service_role : depuis la migration 385 les policies RLS anon
+    // Bascule service_role : depuis la migration 414 les policies RLS anon
     // sur `reviews` sont deny-all en INSERT. Le POST est déjà verrouillé
     // côté serveur (auth user + HMAC reviewToken + match client_id), donc
     // l'insert passe par admin client pour bypass RLS en toute sécurité.

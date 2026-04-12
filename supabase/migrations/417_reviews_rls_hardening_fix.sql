@@ -1,14 +1,14 @@
 -- =====================================================================
--- Migration 388 : Correctif RLS reviews — clean sweep INSERT + FORCE RLS
+-- Migration 417 : Correctif RLS reviews — clean sweep INSERT + FORCE RLS
 -- =====================================================================
 -- Date    : 2026-04-12
 --
 -- Contexte :
---   Après application de la migration 385 (RLS hardening), un test
+--   Après application de la migration 414 (RLS hardening), un test
 --   d'intrusion via la clé anon Supabase a montré que l'INSERT anon
 --   passait toujours (HTTP 201 + ligne insérée). Diagnostic `pg_policies` :
 --   trois policies permissives INSERT/SELECT subsistaient alors que les
---   DROP POLICY IF EXISTS de la migration 385 auraient dû les supprimer.
+--   DROP POLICY IF EXISTS de la migration 414 auraient dû les supprimer.
 --
 --     - "Anyone can view reviews"                SELECT  USING (true)
 --     - "Anyone can create reviews"              INSERT  WITH CHECK (true)
@@ -47,7 +47,7 @@ BEGIN
       AND cmd = 'INSERT'
   LOOP
     EXECUTE format('DROP POLICY %I ON public.reviews', p.policyname);
-    RAISE NOTICE 'Migration 388: dropped residual INSERT policy: %', p.policyname;
+    RAISE NOTICE 'Migration 417: dropped residual INSERT policy: %', p.policyname;
   END LOOP;
 END $$;
 
@@ -66,7 +66,7 @@ BEGIN
       AND policyname ILIKE '%anyone%'
   LOOP
     EXECUTE format('DROP POLICY %I ON public.reviews', p.policyname);
-    RAISE NOTICE 'Migration 388: dropped residual SELECT policy: %', p.policyname;
+    RAISE NOTICE 'Migration 417: dropped residual SELECT policy: %', p.policyname;
   END LOOP;
 END $$;
 

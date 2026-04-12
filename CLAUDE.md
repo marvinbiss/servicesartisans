@@ -75,15 +75,15 @@ supabase/migrations/      # 47 fichiers de migration SQL
 
 ### Tables principales
 
-| Table | Colonnes clés | Notes |
-|-------|--------------|-------|
-| `profiles` | id, email, full_name, is_admin, role, user_type, phone_e164, average_rating, review_count | `user_type` = 'client' ou 'artisan' |
-| `providers` | id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_region, user_id, claimed_at, claimed_by | `name` (PAS company_name), colonnes dropped ci-dessous |
-| `provider_claims` | id, provider_id, user_id, siret_provided, status, rejection_reason, reviewed_by, reviewed_at, created_at | status IN ('pending', 'approved', 'rejected') |
-| `bookings` | artisan_id, provider_id, client_id, status, scheduled_date, slot_id | `artisan_id` = auth.uid() (FK profiles), `provider_id` = FK providers. Les deux colonnes existent. |
-| `audit_logs` | user_id → auth.users, action, resource_type, resource_id, old_value, new_value, metadata | FK vers auth.users (PAS profiles) |
-| `user_reports` | reviewed_by, reviewed_at, resolution | PAS resolved_by, resolved_at, resolution_notes |
-| `prospection_contacts` | company_name, ... | Distinct de providers.name |
+| Table                  | Colonnes clés                                                                                                                                  | Notes                                                                                              |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `profiles`             | id, email, full_name, is_admin, role, user_type, phone_e164, average_rating, review_count                                                      | `user_type` = 'client' ou 'artisan'                                                                |
+| `providers`            | id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_region, user_id, claimed_at, claimed_by | `name` (PAS company_name), colonnes dropped ci-dessous                                             |
+| `provider_claims`      | id, provider_id, user_id, siret_provided, status, rejection_reason, reviewed_by, reviewed_at, created_at                                       | status IN ('pending', 'approved', 'rejected')                                                      |
+| `bookings`             | artisan_id, provider_id, client_id, status, scheduled_date, slot_id                                                                            | `artisan_id` = auth.uid() (FK profiles), `provider_id` = FK providers. Les deux colonnes existent. |
+| `audit_logs`           | user_id → auth.users, action, resource_type, resource_id, old_value, new_value, metadata                                                       | FK vers auth.users (PAS profiles)                                                                  |
+| `user_reports`         | reviewed_by, reviewed_at, resolution                                                                                                           | PAS resolved_by, resolved_at, resolution_notes                                                     |
+| `prospection_contacts` | company_name, ...                                                                                                                              | Distinct de providers.name                                                                         |
 
 ### Colonnes SUPPRIMEES de `providers`
 
@@ -121,6 +121,7 @@ Ne jamais référencer : `is_premium`, `trust_badge`, `trust_score`, `company_na
 ## Dark Mode — Désactivé
 
 Le site est **light-only**. Le dark mode a été nettoyé le 2026-03-26 :
+
 - `ThemeProvider` et `ThemeToggle` supprimés (étaient du code mort, jamais montés)
 - Variables CSS `.dark {}` supprimées de `globals.css`
 - Classes `dark:*` supprimées de tous les composants publics (search, reviews, home, UI)
@@ -143,6 +144,7 @@ Le site est **light-only**. Le dark mode a été nettoyé le 2026-03-26 :
 ## Revendication de fiche artisan
 
 Flow complet :
+
 1. Page artisan publique → bouton "Revendiquez cette fiche" (si non revendiquée)
 2. Artisan entre son SIRET (14 chiffres)
 3. API vérifie le SIRET vs celui en base → si match, crée un `provider_claims` avec status `pending`
@@ -164,6 +166,7 @@ Flow complet :
 ## SEO
 
 Plan de domination SEO complet dans `SEO-DOMINATION-PLAN.md` à la racine du projet.
+
 - Cible : 1.5M+ pages via 47 métiers x 13 680 lieux x 5 intents
 - Lire ce fichier avant tout travail SEO
 
@@ -171,16 +174,17 @@ Plan de domination SEO complet dans `SEO-DOMINATION-PLAN.md` à la racine du pro
 
 Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + news).
 
-| Fichier | Rôle |
-|---------|------|
-| `src/app/sitemap.ts` | Génération des 17 sitemaps statiques via `generateSitemaps()` |
-| `src/app/api/sitemap-index/route.ts` | Index `/sitemap.xml` (workaround Next.js 14.2) |
-| `src/app/api/sitemap-providers/route.ts` | Sitemaps providers dynamiques (DB, `maxDuration=60`) |
-| `src/app/image-sitemap.xml/route.ts` | Sitemap images Google |
-| `src/app/news-sitemap.xml/route.ts` | Sitemap Google News (articles < 48h) |
-| `src/app/robots.ts` | robots.txt dynamique (déclare les 3 sitemaps) |
+| Fichier                                  | Rôle                                                          |
+| ---------------------------------------- | ------------------------------------------------------------- |
+| `src/app/sitemap.ts`                     | Génération des 17 sitemaps statiques via `generateSitemaps()` |
+| `src/app/api/sitemap-index/route.ts`     | Index `/sitemap.xml` (workaround Next.js 14.2)                |
+| `src/app/api/sitemap-providers/route.ts` | Sitemaps providers dynamiques (DB, `maxDuration=60`)          |
+| `src/app/image-sitemap.xml/route.ts`     | Sitemap images Google                                         |
+| `src/app/news-sitemap.xml/route.ts`      | Sitemap Google News (articles < 48h)                          |
+| `src/app/robots.ts`                      | robots.txt dynamique (déclare les 3 sitemaps)                 |
 
 **Constantes clés** (source unique : `src/lib/seo/sitemap-config.ts`, importée par `sitemap.ts` et `sitemap-index/route.ts`) :
+
 - `SITEMAP_CITY_COUNT = 2_267` — full scale : toutes les villes françaises 5K+ hab (~1.4M URLs)
 - `STATIC_BATCH = 10_000` — taille batch pages d'intention
 - `LARGE_BATCH = 25_000` — taille batch service×ville et dept×service
@@ -188,6 +192,7 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 - `MAX_PROVIDER_SITEMAPS = 20` — cap pour éviter les sitemaps fantômes
 
 **Rewrites** (`next.config.js`) :
+
 - `/sitemap.xml` → `/api/sitemap-index`
 - `/sitemap/providers-:id.xml` → `/api/sitemap-providers?id=:id`
 
@@ -196,6 +201,7 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 **Migration 348** : Index couvrant `idx_providers_sitemap_v2` — sert la requête provider sitemap entièrement depuis l'index (zero heap fetch).
 
 **Stratégie lastmod** (mise à jour 2026-03-22) :
+
 - `STATIC_DATE = '2025-11-01'` — pages statiques/hub dont le contenu ne change pas (honnête)
 - **Pages géo** (villes, départements, régions) — lastmod = `MAX(providers.updated_at)` dans la zone. Si aucun provider → lastmod omis
 - **Pages service hub** (`/services/{slug}`, `/tarifs/{slug}`, `/urgence/{slug}`) — lastmod = dernier provider modifié pour ce service. Fallback `STATIC_DATE`
@@ -214,7 +220,7 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
   - 46 services hub (/services/{slug} + /tarifs/{slug}) — rotation 1/3 par jour
   - Service × 10 villes top (/services/{slug}/{city}) — rotation 1/3 par jour
   - Devis pSEO (/devis/{slug}/{city}) × 30 villes — rotation 1/3 par jour
-  - Articles prix (blog/prix-*) — rotation quotidienne
+  - Articles prix (blog/prix-\*) — rotation quotidienne
   - Articles récents (<48h) — toujours
   - Guides — dimanche uniquement
   - Providers hub pages — dynamique (nouveaux providers dernières 24h)
@@ -238,8 +244,16 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 ## Environnement
 
 Variables requises (voir `.env.example`) :
+
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ADMIN_EMAILS` (liste séparée par virgules)
 - `CRON_SECRET` (authentification des crons Vercel, dont sitemap-health et indexnow-submit)
 - Variables Stripe, Resend, Twilio, etc. selon les features
+
+---
+
+## Appels HTTP vers prod
+
+- **Domaine canonical** : `servicesartisans.fr` (apex, sans `www`). `www.servicesartisans.fr` renvoie un 301 Vercel qui casse les POST : `curl -L` sur un 301 convertit le POST en GET et perd le body → 400 « Données invalides ». **Toujours taper l'apex directement** pour les endpoints API (`/api/revalidate`, `/api/indexnow`, etc.).
+- **CSRF** : `/api/revalidate` exige un header `Origin` (sinon 403 « En-tête Origin requis »). Ajouter `-H "Origin: https://servicesartisans.fr"` sur les curls directs.

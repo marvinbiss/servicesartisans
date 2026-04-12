@@ -860,7 +860,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Avis service×city pages ─────────────────────────────────────────
   // Réactivées 2026-04-12 après résolution du reviews schema drift
-  // (migrations 385_reviews_rls_hardening + 386_reviews_add_missing_columns,
+  // (migrations 414_reviews_rls_hardening + 415_reviews_add_missing_columns,
   // bascule POST /api/reviews sur admin client, type canonical review.ts).
   if (id.startsWith('avis-service-cities-')) {
     const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
