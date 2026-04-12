@@ -27,7 +27,9 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
         const parsed = JSON.parse(saved) as ChatMessage[]
         if (Array.isArray(parsed) && parsed.length > 0) return parsed
       }
-    } catch { /* SSR / private browsing */ }
+    } catch {
+      /* SSR / private browsing */
+    }
     return []
   })
   const [isStreaming, setIsStreaming] = useState(false)
@@ -41,7 +43,9 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
     if (messages.length === 0) return
     try {
       sessionStorage.setItem(CONVERSATION_STORAGE_KEY, JSON.stringify(messages))
-    } catch { /* noop */ }
+    } catch {
+      /* noop */
+    }
   }, [messages])
 
   // Abort on unmount
@@ -68,7 +72,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
       setInputValue('')
       setIsStreaming(true)
 
-      trackEvent('chat_message_sent' as any, {
+      trackEvent('chat_message_sent', {
         metier: context.metierSlug,
         message_count: updatedMessages.length,
       })
@@ -113,7 +117,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
         // Check if we should show the lead form
         if (shouldShowLeadForm(assistantMessage)) {
           setShowLeadForm(true)
-          trackEvent('chat_lead_form_shown' as any, {
+          trackEvent('chat_lead_form_shown', {
             metier: context.metierSlug,
             messages_before_form: updatedMessages.length + 1,
           })
@@ -127,7 +131,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
           updated[updated.length - 1] = {
             role: 'assistant',
             content:
-              "Désolé, une erreur est survenue. Veuillez réessayer ou nous contacter directement.",
+              'Désolé, une erreur est survenue. Veuillez réessayer ou nous contacter directement.',
           }
           return updated
         })
@@ -136,7 +140,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
         abortRef.current = null
       }
     },
-    [messages, isStreaming, context],
+    [messages, isStreaming, context]
   )
 
   const handleChatSubmit = useCallback(
@@ -144,7 +148,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
       e.preventDefault()
       sendMessage(inputValue)
     },
-    [sendMessage, inputValue],
+    [sendMessage, inputValue]
   )
 
   const addConfirmationMessage = useCallback((msg: string) => {

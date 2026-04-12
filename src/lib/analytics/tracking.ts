@@ -57,6 +57,7 @@ export type BookingEvent =
   | 'inline_form_abandoned'
   | 'scroll_depth'
   | 'time_on_page'
+  | 'page_not_found'
   | 'faq_click'
   | 'page_not_found'
   | 'search_query'

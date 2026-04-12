@@ -3,8 +3,19 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Loader2, Wrench, User } from 'lucide-react'
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  AlertCircle,
+  Loader2,
+  Wrench,
+  User,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import { getSafeRedirectPath } from '@/lib/safe-redirect'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export default function ConnexionPage() {
@@ -38,14 +49,16 @@ export default function ConnexionPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(typeof data.error === 'string' ? data.error : data.error?.message || 'Erreur de connexion')
+        setError(
+          typeof data.error === 'string' ? data.error : data.error?.message || 'Erreur de connexion'
+        )
         return
       }
 
       // Session managed by Supabase SSR cookies — no localStorage storage needed
 
       // Redirect: honor ?redirect= param, else default to dashboard
-      const safeRedirect = redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//') ? redirectTo : null
+      const safeRedirect = getSafeRedirectPath(redirectTo, '')
       if (safeRedirect) {
         router.push(safeRedirect)
       } else if (data.data?.user?.isArtisan) {
@@ -53,7 +66,7 @@ export default function ConnexionPage() {
       } else {
         router.push('/espace-client')
       }
-    } catch (_err) {
+    } catch {
       setError('Erreur de connexion au serveur')
     } finally {
       setIsLoading(false)
@@ -81,7 +94,6 @@ export default function ConnexionPage() {
     }
   }
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
       <div className="flex flex-1">
@@ -103,12 +115,8 @@ export default function ConnexionPage() {
                   Services<span className="text-blue-400">Artisans</span>
                 </span>
               </Link>
-              <h1 className="text-3xl font-bold text-white mb-2">
-                Connexion
-              </h1>
-              <p className="text-gray-400">
-                Accédez à votre espace personnel
-              </p>
+              <h1 className="text-3xl font-bold text-white mb-2">Connexion</h1>
+              <p className="text-gray-400">Accédez à votre espace personnel</p>
             </div>
 
             {/* User type toggle */}
@@ -148,9 +156,7 @@ export default function ConnexionPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Email
-                </label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                   <input
@@ -165,9 +171,7 @@ export default function ConnexionPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Mot de passe
-                </label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                   <input
@@ -182,7 +186,9 @@ export default function ConnexionPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                    aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                    aria-label={
+                      showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
+                    }
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -199,7 +205,10 @@ export default function ConnexionPage() {
                   />
                   <span className="text-sm text-gray-400">Se souvenir de moi</span>
                 </label>
-                <Link href="/mot-de-passe-oublie" className="text-sm text-blue-400 hover:text-blue-300">
+                <Link
+                  href="/mot-de-passe-oublie"
+                  className="text-sm text-blue-400 hover:text-blue-300"
+                >
                   Mot de passe oublié ?
                 </Link>
               </div>
@@ -253,10 +262,22 @@ export default function ConnexionPage() {
                   className="w-full flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 py-3 rounded-xl hover:bg-slate-700 transition-all text-white"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                    />
                   </svg>
                   Continuer avec Google
                 </button>
@@ -292,11 +313,10 @@ export default function ConnexionPage() {
             <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
               <Wrench className="w-12 h-12" />
             </div>
-            <h2 className="text-4xl font-bold mb-6">
-              Bienvenue sur ServicesArtisans
-            </h2>
+            <h2 className="text-4xl font-bold mb-6">Bienvenue sur ServicesArtisans</h2>
             <p className="text-blue-100 text-lg mb-8">
-              Connectez-vous pour accéder à votre espace personnel, suivre vos réservations et gérer votre compte.
+              Connectez-vous pour accéder à votre espace personnel, suivre vos réservations et gérer
+              votre compte.
             </p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
@@ -319,9 +339,7 @@ export default function ConnexionPage() {
       {/* Related Links Section */}
       <section className="bg-slate-800/50 py-10 border-t border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-semibold text-white mb-6">
-            Explorez nos services
-          </h2>
+          <h2 className="text-lg font-semibold text-white mb-6">Explorez nos services</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
             <PopularCitiesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />

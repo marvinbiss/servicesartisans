@@ -18,7 +18,9 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
       <div className="h-1.5 bg-gradient-to-r from-primary-400 via-primary-300 to-primary-600" />
 
       <div className="p-6">
-        <h3 className="text-lg font-semibold text-charcoal-900 font-heading mb-4">Contacter cet artisan</h3>
+        <h3 className="text-lg font-semibold text-charcoal-900 font-heading mb-4">
+          Contacter cet artisan
+        </h3>
 
         {/* Availability + rating row */}
         <div className="flex items-center gap-3 mb-5 flex-wrap">
@@ -39,7 +41,12 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
           <button
             type="button"
             onClick={() => {
-              trackEvent('artisan_devis_click' as any, { artisanId: artisan.id, artisanName: artisan.business_name || '', artisan_slug: artisan.slug, source: 'contact_card' })
+              trackEvent('artisan_devis_click', {
+                artisanId: artisan.id,
+                artisanName: artisan.business_name || '',
+                artisan_slug: artisan.slug,
+                source: 'contact_card',
+              })
               const devisSection = document.getElementById('devis')
               if (devisSection) {
                 devisSection.scrollIntoView({ behavior: 'smooth' })
@@ -47,19 +54,25 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
             }}
             className="w-full py-4 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-bold text-base flex items-center justify-center gap-2.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 group"
           >
-            <FileText className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
+            <FileText
+              className="w-5 h-5 transition-transform group-hover:scale-110"
+              aria-hidden="true"
+            />
             Devis gratuit en 2 min
           </button>
 
           {/* Trust reassurance */}
           <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
             <span className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
-              2 conseillers dispo
+              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />2 conseillers dispo
             </span>
-            <span className="text-charcoal-300" aria-hidden="true">·</span>
+            <span className="text-charcoal-300" aria-hidden="true">
+              ·
+            </span>
             <span>Gratuit</span>
-            <span className="text-charcoal-300" aria-hidden="true">·</span>
+            <span className="text-charcoal-300" aria-hidden="true">
+              ·
+            </span>
             <span>Sans engagement</span>
           </div>
 
@@ -68,12 +81,20 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
             <a
               href={`mailto:${artisan.email}`}
               onClick={() => {
-                trackEvent('artisan_email_click' as any, { artisanId: artisan.id, artisanName: artisan.business_name || '', artisan_slug: artisan.slug, source: 'contact_card' })
+                trackEvent('artisan_email_click', {
+                  artisanId: artisan.id,
+                  artisanName: artisan.business_name || '',
+                  artisan_slug: artisan.slug,
+                  source: 'contact_card',
+                })
               }}
               className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2.5 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2 group"
               aria-label={`Envoyer un email à ${artisan.email}`}
             >
-              <Mail className="w-5 h-5 text-charcoal-400 transition-colors group-hover:text-charcoal-600" aria-hidden="true" />
+              <Mail
+                className="w-5 h-5 text-charcoal-400 transition-colors group-hover:text-charcoal-600"
+                aria-hidden="true"
+              />
               Envoyer un email
             </a>
           )}
@@ -84,7 +105,6 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
               Contactez cet artisan via notre formulaire de devis ci-dessus.
             </p>
           )}
-
         </div>
 
         {/* Trust footer */}

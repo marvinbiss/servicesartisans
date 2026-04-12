@@ -54,13 +54,13 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
     (trigger: string) => {
       setIsOpen(true)
       engagement.dismissGreeting()
-      trackEvent('chat_opened' as any, {
+      trackEvent('chat_opened', {
         trigger,
         metier: context.metierSlug,
         ville: context.ville,
       })
     },
-    [engagement, context.metierSlug, context.ville],
+    [engagement, context.metierSlug, context.ville]
   )
 
   // --- Lock body scroll on mobile when fullscreen + hide mobile nav ---
@@ -106,6 +106,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
 
     function handleTab(e: KeyboardEvent) {
       if (e.key !== 'Tab') return
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const focusable = widget!.querySelectorAll<HTMLElement>(focusableSelector)
       if (focusable.length === 0) return
       const first = focusable[0]
@@ -189,9 +190,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                       ? `Devis avec ${context.artisan.name}`
                       : `${context.metier} à ${context.ville}`}
                   </p>
-                  <p className="text-[11px] text-white/80">
-                    Estimation gratuite IA
-                  </p>
+                  <p className="text-[11px] text-white/80">Estimation gratuite IA</p>
                 </div>
               </div>
               <button
@@ -231,17 +230,9 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
 
             {/* Tab Content */}
             {activeTab === 'chat' ? (
-              <ChatPanel
-                context={context}
-                chat={chat}
-                lead={lead}
-                prompts={prompts}
-              />
+              <ChatPanel context={context} chat={chat} lead={lead} prompts={prompts} />
             ) : (
-              <CallbackPanel
-                context={context}
-                lead={lead}
-              />
+              <CallbackPanel context={context} lead={lead} />
             )}
 
             {/* Footer with privacy link */}
@@ -258,11 +249,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 </a>
                 {' · '}Estimation non contractuelle
                 {' · '}
-                <a
-                  href="/confidentialite"
-                  target="_blank"
-                  className="hover:text-charcoal-500"
-                >
+                <a href="/confidentialite" target="_blank" className="hover:text-charcoal-500">
                   Confidentialité
                 </a>
               </p>

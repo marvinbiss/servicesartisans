@@ -1,13 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
+import { getSafeRedirectPath } from '@/lib/safe-redirect'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // Validate redirect path to prevent open redirect attacks
-  const rawNext = searchParams.get('next') ?? '/'
-  const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/'
+  const next = getSafeRedirectPath(searchParams.get('next'))
 
   if (code) {
     const supabase = await createClient()
@@ -45,7 +44,8 @@ export async function GET(request: Request) {
 
       // Redirect to appropriate dashboard if no specific next URL
       if (next === '/') {
-        const defaultRedirect = existingProfile?.role === 'artisan' ? '/espace-artisan' : '/espace-client'
+        const defaultRedirect =
+          existingProfile?.role === 'artisan' ? '/espace-artisan' : '/espace-client'
         return NextResponse.redirect(`${origin}${defaultRedirect}`)
       }
 

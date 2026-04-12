@@ -3,6 +3,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyVapiSignature } from '@/lib/voice/webhook-security'
 import {
+  checkWebhookIdempotency,
+  markWebhookCompleted,
+  markWebhookFailed,
+} from '@/lib/webhook-idempotency'
+import {
   VOICE_QUALIFICATION_SYSTEM_PROMPT,
   VAPI_FUNCTIONS,
   calculateQualificationScore,
@@ -16,6 +21,8 @@ import type {
 
 export const maxDuration = 30
 
+const IDEMPOTENT_EVENTS = new Set(['status-update', 'end-of-call-report'])
+
 // ---------------------------------------------------------------------------
 // POST /api/vapi/webhook — Main Vapi webhook handler
 // ---------------------------------------------------------------------------
@@ -28,7 +35,6 @@ export async function POST(request: NextRequest) {
 
   const rawBody = await request.text()
 
-  // Verify Vapi webhook signature
   const signature = request.headers.get('x-vapi-signature') || ''
   if (!verifyVapiSignature(rawBody, signature)) {
     logger.warn('Vapi webhook: invalid signature')
@@ -44,26 +50,53 @@ export async function POST(request: NextRequest) {
   }
 
   const eventType = event.message?.type
-  logger.info('Vapi webhook received', { type: eventType, callId: event.message?.call?.id })
+  const callId = event.message?.call?.id
+  logger.info('Vapi webhook received', { type: eventType, callId })
+
+  let idempotencyKey: string | null = null
+  if (callId && eventType && IDEMPOTENT_EVENTS.has(eventType)) {
+    const statusSuffix =
+      eventType === 'status-update' ? `:${event.message.status?.status || 'unknown'}` : ''
+    idempotencyKey = `vapi:${callId}:${eventType}${statusSuffix}`
+    const shouldSkip = await checkWebhookIdempotency(idempotencyKey, 'vapi')
+    if (shouldSkip) {
+      return NextResponse.json({ received: true, status: 'already_processed' })
+    }
+  }
 
   try {
+    let response: NextResponse
+
     switch (eventType) {
       case 'assistant-request':
         return handleAssistantRequest()
       case 'function-call':
         return await handleFunctionCall(event)
       case 'status-update':
-        return await handleStatusUpdate(event)
+        response = await handleStatusUpdate(event)
+        break
       case 'end-of-call-report':
-        return await handleEndOfCallReport(event)
+        response = await handleEndOfCallReport(event)
+        break
       case 'transcript':
-        // Real-time transcript — just acknowledge
         return NextResponse.json({ ok: true })
       default:
         return NextResponse.json({ ok: true })
     }
+
+    if (idempotencyKey) {
+      await markWebhookCompleted(idempotencyKey, `vapi:${eventType}`)
+    }
+
+    return response
   } catch (error) {
     logger.error('Vapi webhook error', { error, eventType })
+    if (idempotencyKey) {
+      await markWebhookFailed(
+        idempotencyKey,
+        error instanceof Error ? error.message : 'Unknown error'
+      )
+    }
     return NextResponse.json({ error: 'Internal error' }, { status: 500 })
   }
 }
@@ -134,9 +167,7 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
       logger.info('Voice qualification saved', { callId, score, projectType: data.project_type })
 
       if (score === 'disqualified') {
-        const reason = !data.is_homeowner
-          ? 'non propriétaire'
-          : 'zone non couverte'
+        const reason = !data.is_homeowner ? 'non propriétaire' : 'zone non couverte'
         return NextResponse.json({
           result: `Le prospect ne correspond pas à nos critères : ${reason}. Terminez poliment l'appel.`,
         })
@@ -147,8 +178,8 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
           score === 'A'
             ? 'Excellent prospect, proposez un transfert immédiat.'
             : score === 'B'
-            ? 'Bon prospect, proposez un rappel rapide.'
-            : 'Prospect à suivre, proposez un rappel.'
+              ? 'Bon prospect, proposez un rappel rapide.'
+              : 'Prospect à suivre, proposez un rappel.'
         }`,
       })
     }
@@ -173,7 +204,8 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
       })
 
       return NextResponse.json({
-        result: "Le transfert a été initié. Informez le prospect qu'un artisan va le rappeler dans les plus brefs délais.",
+        result:
+          "Le transfert a été initié. Informez le prospect qu'un artisan va le rappeler dans les plus brefs délais.",
       })
     }
 

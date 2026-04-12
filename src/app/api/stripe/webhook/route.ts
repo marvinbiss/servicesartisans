@@ -3,6 +3,11 @@ import { headers } from 'next/headers'
 import { stripe } from '@/lib/stripe/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import {
+  checkWebhookIdempotency,
+  markWebhookCompleted,
+  markWebhookFailed,
+} from '@/lib/webhook-idempotency'
 import { env } from '@/lib/env'
 import Stripe from 'stripe'
 
@@ -49,73 +54,6 @@ async function findProfileByCustomerId(customerId: string) {
   return data
 }
 
-/**
- * IDEMPOTENCY: Check if webhook event was already processed
- * Returns true if event should be skipped (already processed)
- */
-async function checkIdempotency(eventId: string): Promise<boolean> {
-  const supabase = createAdminClient()
-
-  // Try to insert the event - will fail if already exists due to UNIQUE constraint
-  const { error } = await supabase
-    .from('webhook_events')
-    .insert({
-      stripe_event_id: eventId,
-      type: 'stripe_webhook',
-      status: 'processing',
-      created_at: new Date().toISOString(),
-    })
-
-  if (error) {
-    // Event already exists - check its status
-    if (error.code === '23505') { // Unique violation
-      const { data: existing } = await supabase
-        .from('webhook_events')
-        .select('status')
-        .eq('stripe_event_id', eventId)
-        .single()
-
-      if (existing?.status === 'completed') {
-        logger.info(`Webhook event ${eventId} already processed, skipping`)
-        return true // Skip processing
-      }
-      // Event exists but not completed - might be a retry, allow processing
-    }
-  }
-
-  return false // Proceed with processing
-}
-
-/**
- * Mark webhook event as completed
- */
-async function markEventCompleted(eventId: string, eventType: string): Promise<void> {
-  const supabase = createAdminClient()
-  await supabase
-    .from('webhook_events')
-    .update({
-      type: eventType,
-      status: 'completed',
-      processed_at: new Date().toISOString(),
-    })
-    .eq('stripe_event_id', eventId)
-}
-
-/**
- * Mark webhook event as failed
- */
-async function markEventFailed(eventId: string, errorMsg: string): Promise<void> {
-  const supabase = createAdminClient()
-  await supabase
-    .from('webhook_events')
-    .update({
-      status: 'failed',
-      error: errorMsg.slice(0, 1000),
-      processed_at: new Date().toISOString(),
-    })
-    .eq('stripe_event_id', eventId)
-}
-
 export async function POST(request: Request) {
   const body = await request.text()
   const headersList = await headers()
@@ -123,10 +61,7 @@ export async function POST(request: Request) {
 
   if (!signature) {
     logger.error('Missing stripe-signature header')
-    return NextResponse.json(
-      { error: 'Missing signature' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
   }
 
   if (!env.STRIPE_WEBHOOK_SECRET) {
@@ -137,21 +72,13 @@ export async function POST(request: Request) {
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      env.STRIPE_WEBHOOK_SECRET
-    )
+    event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET)
   } catch (error) {
     logger.error('Webhook signature verification failed:', error)
-    return NextResponse.json(
-      { error: 'Webhook signature verification failed' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 })
   }
 
-  // IDEMPOTENCY CHECK: Skip if already processed
-  const shouldSkip = await checkIdempotency(event.id)
+  const shouldSkip = await checkWebhookIdempotency(event.id, 'stripe')
   if (shouldSkip) {
     return NextResponse.json({ received: true, status: 'already_processed' })
   }
@@ -192,21 +119,16 @@ export async function POST(request: Request) {
         logger.debug(`Unhandled event type: ${event.type}`)
     }
 
-    // Mark event as successfully processed
-    await markEventCompleted(event.id, event.type)
+    await markWebhookCompleted(event.id, event.type)
 
     return NextResponse.json({ received: true })
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     logger.error('Webhook handler error:', error)
 
-    // Mark event as failed for debugging
-    await markEventFailed(event.id, errorMessage)
+    await markWebhookFailed(event.id, errorMessage)
 
-    return NextResponse.json(
-      { error: 'Webhook handler failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 })
   }
 }
 
@@ -221,9 +143,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return
   }
 
-  const customerId = typeof session.customer === 'string'
-    ? session.customer
-    : session.customer?.id ?? null
+  const customerId =
+    typeof session.customer === 'string' ? session.customer : (session.customer?.id ?? null)
 
   const supabase = createAdminClient()
 
@@ -259,9 +180,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  const customerId = typeof subscription.customer === 'string'
-    ? subscription.customer
-    : subscription.customer.id
+  const customerId =
+    typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id
 
   const profile = await findProfileByCustomerId(customerId)
   if (!profile) return
@@ -296,9 +216,8 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  const customerId = typeof subscription.customer === 'string'
-    ? subscription.customer
-    : subscription.customer.id
+  const customerId =
+    typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id
 
   const profile = await findProfileByCustomerId(customerId)
   if (!profile) return
@@ -336,9 +255,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
-  const customerId = typeof invoice.customer === 'string'
-    ? invoice.customer
-    : invoice.customer?.id ?? null
+  const customerId =
+    typeof invoice.customer === 'string' ? invoice.customer : (invoice.customer?.id ?? null)
 
   if (!customerId) {
     logger.warn('Invoice payment succeeded but no customer ID', { invoiceId: invoice.id })
@@ -367,9 +285,8 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  const customerId = typeof invoice.customer === 'string'
-    ? invoice.customer
-    : invoice.customer?.id ?? null
+  const customerId =
+    typeof invoice.customer === 'string' ? invoice.customer : (invoice.customer?.id ?? null)
 
   if (!customerId) {
     logger.warn('Invoice payment failed but no customer ID', { invoiceId: invoice.id })

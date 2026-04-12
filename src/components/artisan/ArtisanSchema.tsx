@@ -25,7 +25,8 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       width: 512,
       height: 512,
     },
-    description: 'Plateforme de mise en relation entre particuliers et artisans qualifiés en France',
+    description:
+      'Plateforme de mise en relation entre particuliers et artisans qualifiés en France',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
@@ -52,7 +53,9 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     areaServed: {
       '@type': 'City',
       name: artisan.city,
-      ...(artisan.region && { containedInPlace: { '@type': 'AdministrativeArea', name: artisan.region } }),
+      ...(artisan.region && {
+        containedInPlace: { '@type': 'AdministrativeArea', name: artisan.region },
+      }),
     },
     ...(() => {
       if (!service.price) return {}
@@ -63,7 +66,9 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
           '@type': 'Offer',
           price: numericPrice,
           priceCurrency: 'EUR',
-          availability: artisan.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          availability: artisan.accepts_new_clients
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
         },
       }
     })(),
@@ -75,9 +80,11 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
   }))
 
   // LocalBusiness Schema — use more specific @type when possible for richer snippets
-  const businessType = artisan.specialty?.toLowerCase().includes('plomb') ? 'Plumber'
-    : artisan.specialty?.toLowerCase().includes('electr') ? 'Electrician'
-    : 'HomeAndConstructionBusiness'
+  const businessType = artisan.specialty?.toLowerCase().includes('plomb')
+    ? 'Plumber'
+    : artisan.specialty?.toLowerCase().includes('electr')
+      ? 'Electrician'
+      : 'HomeAndConstructionBusiness'
 
   const localBusinessSchema = {
     '@type': ['LocalBusiness', businessType],
@@ -87,9 +94,11 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
     // Add knowsAbout for E-E-A-T signals
     knowsAbout: artisan.specialty,
-    ...(isClaimed && artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
-      telephone: artisan.phone,
-    }),
+    ...(isClaimed &&
+      artisan.phone &&
+      artisan.phone.replace(/\D/g, '').length >= 10 && {
+        telephone: artisan.phone,
+      }),
     ...(isClaimed && artisan.email && { email: artisan.email }),
     url: artisanUrl,
     parentOrganization: {
@@ -102,19 +111,21 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       '@type': 'PostalAddress',
       ...(artisan.address ? { streetAddress: artisan.address } : {}),
       addressLocality: artisan.city,
-      ...(artisan.region || artisan.department ? { addressRegion: artisan.region || artisan.department } : {}),
+      ...(artisan.region || artisan.department
+        ? { addressRegion: artisan.region || artisan.department }
+        : {}),
       postalCode: artisan.postal_code,
       addressCountry: 'FR',
     },
 
-    ...(artisan.latitude && artisan.longitude && {
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: artisan.latitude,
-        longitude: artisan.longitude,
-      },
-    }),
-
+    ...(artisan.latitude &&
+      artisan.longitude && {
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: artisan.latitude,
+          longitude: artisan.longitude,
+        },
+      }),
 
     ...(artisan.service_prices.length > 0 && {
       hasOfferCatalog: {
@@ -143,25 +154,28 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       },
     }),
 
-    ...(artisan.intervention_radius_km && artisan.latitude && artisan.longitude && {
-      areaServed: {
-        '@type': 'GeoCircle',
-        geoMidpoint: {
-          '@type': 'GeoCoordinates',
-          latitude: artisan.latitude,
-          longitude: artisan.longitude,
+    ...(artisan.intervention_radius_km &&
+      artisan.latitude &&
+      artisan.longitude && {
+        areaServed: {
+          '@type': 'GeoCircle',
+          geoMidpoint: {
+            '@type': 'GeoCoordinates',
+            latitude: artisan.latitude,
+            longitude: artisan.longitude,
+          },
+          geoRadius: artisan.intervention_radius_km * 1000,
         },
-        geoRadius: artisan.intervention_radius_km * 1000,
-      },
-    }),
+      }),
 
-    ...(artisan.siret && /^\d{14}$/.test(artisan.siret.trim()) && {
-      identifier: {
-        '@type': 'PropertyValue',
-        name: 'SIRET',
-        value: artisan.siret.trim(),
-      },
-    }),
+    ...(artisan.siret &&
+      /^\d{14}$/.test(artisan.siret.trim()) && {
+        identifier: {
+          '@type': 'PropertyValue',
+          name: 'SIRET',
+          value: artisan.siret.trim(),
+        },
+      }),
 
     ...(() => {
       const links: string[] = []
@@ -180,22 +194,30 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     currenciesAccepted: 'EUR',
 
     // Opening hours for Google Knowledge Panel
-    ...(artisan.opening_hours && Object.keys(artisan.opening_hours).length > 0 && {
-      openingHoursSpecification: (() => {
-        const dayMap: Record<string, string> = {
-          lundi: 'Monday', mardi: 'Tuesday', mercredi: 'Wednesday',
-          jeudi: 'Thursday', vendredi: 'Friday', samedi: 'Saturday', dimanche: 'Sunday',
-        }
-        return Object.entries(artisan.opening_hours)
-          .filter(([, val]: [string, any]) => val?.ouvert)
-          .map(([day, val]: [string, any]) => ({
-            '@type': 'OpeningHoursSpecification',
-            dayOfWeek: dayMap[day] || day,
-            opens: val.debut || '08:00',
-            closes: val.fin || '18:00',
-          }))
-      })(),
-    }),
+    ...(artisan.opening_hours &&
+      Object.keys(artisan.opening_hours).length > 0 && {
+        openingHoursSpecification: (() => {
+          const dayMap: Record<string, string> = {
+            lundi: 'Monday',
+            mardi: 'Tuesday',
+            mercredi: 'Wednesday',
+            jeudi: 'Thursday',
+            vendredi: 'Friday',
+            samedi: 'Saturday',
+            dimanche: 'Sunday',
+          }
+          return Object.entries(artisan.opening_hours)
+            .filter(
+              ([, val]: [string, { ouvert: boolean; debut: string; fin: string }]) => val?.ouvert
+            )
+            .map(([day, val]: [string, { ouvert: boolean; debut: string; fin: string }]) => ({
+              '@type': 'OpeningHoursSpecification',
+              dayOfWeek: dayMap[day] || day,
+              opens: val.debut || '08:00',
+              closes: val.fin || '18:00',
+            }))
+        })(),
+      }),
 
     // Quote request action for rich results
     potentialAction: {
@@ -228,13 +250,15 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
         '@type': 'ListItem',
         position: index + 1,
         name: item.name,
-        ...(!isLast && item.item ? {
-          item: {
-            '@type': 'WebPage',
-            '@id': item.item,
-            name: item.name,
-          },
-        } : {}),
+        ...(!isLast && item.item
+          ? {
+              item: {
+                '@type': 'WebPage',
+                '@id': item.item,
+                name: item.name,
+              },
+            }
+          : {}),
       }
     }),
   }
@@ -244,14 +268,20 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     '@type': 'ProfilePage',
     '@id': `${artisanUrl}#profile`,
     mainEntity: { '@id': `${artisanUrl}#business` },
-    ...(artisan.created_at ? {
-      dateCreated: new Date(artisan.created_at).toISOString(),
-    } : artisan.member_since ? {
-      dateCreated: `${artisan.member_since}-01-01`,
-    } : {}),
-    ...(artisan.updated_at ? {
-      dateModified: new Date(artisan.updated_at).toISOString(),
-    } : {}),
+    ...(artisan.created_at
+      ? {
+          dateCreated: new Date(artisan.created_at).toISOString(),
+        }
+      : artisan.member_since
+        ? {
+            dateCreated: `${artisan.member_since}-01-01`,
+          }
+        : {}),
+    ...(artisan.updated_at
+      ? {
+          dateModified: new Date(artisan.updated_at).toISOString(),
+        }
+      : {}),
   }
 
   // Combined schema graph for better SEO (single JSON-LD with @graph)
@@ -274,7 +304,7 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(combinedSchema, null, 0)
             .replace(/</g, '\\u003c')
-            .replace(/>/g, '\\u003e')
+            .replace(/>/g, '\\u003e'),
         }}
       />
     </>

@@ -27,7 +27,7 @@ export function FormField({
 
   // Clone child element to add id and aria attributes if it's a valid element
   const childWithProps = isValidElement(children)
-    ? cloneElement(children as React.ReactElement<any>, {
+    ? cloneElement(children as React.ReactElement<Record<string, unknown>>, {
         id: fieldId,
         'aria-invalid': error ? 'true' : undefined,
         'aria-describedby': error ? errorId : hint ? hintId : undefined,
@@ -41,8 +41,16 @@ export function FormField({
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {childWithProps}
-      {error && <p id={errorId} className="text-sm text-red-600" role="alert">{error}</p>}
-      {hint && !error && <p id={hintId} className="text-sm text-gray-500">{hint}</p>}
+      {error && (
+        <p id={errorId} className="text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
+      {hint && !error && (
+        <p id={hintId} className="text-sm text-gray-500">
+          {hint}
+        </p>
+      )}
     </div>
   )
 }

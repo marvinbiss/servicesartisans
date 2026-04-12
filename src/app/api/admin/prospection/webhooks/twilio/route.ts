@@ -2,14 +2,21 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyTwilioSignature } from '@/lib/prospection/webhook-security'
+import {
+  checkWebhookIdempotency,
+  markWebhookCompleted,
+  markWebhookFailed,
+} from '@/lib/webhook-idempotency'
 import { z } from 'zod'
 
-const webhookSchema = z.object({
-  MessageSid: z.string().min(1, 'MessageSid requis'),
-  MessageStatus: z.string().min(1, 'MessageStatus requis'),
-  ErrorCode: z.string().optional(),
-  ErrorMessage: z.string().optional(),
-}).passthrough()
+const webhookSchema = z
+  .object({
+    MessageSid: z.string().min(1, 'MessageSid requis'),
+    MessageStatus: z.string().min(1, 'MessageStatus requis'),
+    ErrorCode: z.string().optional(),
+    ErrorMessage: z.string().optional(),
+  })
+  .passthrough()
 
 export const dynamic = 'force-dynamic'
 
@@ -18,28 +25,49 @@ export const dynamic = 'force-dynamic'
  * Reçoit les mises à jour de statut: queued, sent, delivered, read, failed
  */
 export async function POST(request: NextRequest) {
+  let idempotencyKey: string | null = null
+
   try {
     const formData = await request.formData()
     const params: Record<string, string> = {}
-    formData.forEach((value, key) => { params[key] = value.toString() })
+    formData.forEach((value, key) => {
+      params[key] = value.toString()
+    })
 
-    // Vérifier la signature Twilio
     const signature = request.headers.get('x-twilio-signature') || ''
     const url = request.url
     if (!verifyTwilioSignature(signature, url, params)) {
       logger.warn('Signature webhook Twilio invalide')
-      return NextResponse.json({ success: false, error: { message: 'Signature invalide' } }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Signature invalide' } },
+        { status: 403 }
+      )
     }
 
     const validated = webhookSchema.safeParse(params)
     if (!validated.success) {
-      return NextResponse.json({ success: false, error: { message: 'Paramètres manquants ou invalides', details: validated.error.flatten() } }, { status: 400 })
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            message: 'Paramètres manquants ou invalides',
+            details: validated.error.flatten(),
+          },
+        },
+        { status: 400 }
+      )
     }
 
     const messageSid = validated.data.MessageSid
     const messageStatus = validated.data.MessageStatus
     const errorCode = validated.data.ErrorCode
     const errorMessage = validated.data.ErrorMessage
+
+    idempotencyKey = `twilio:${messageSid}:${messageStatus}`
+    const shouldSkip = await checkWebhookIdempotency(idempotencyKey, 'twilio')
+    if (shouldSkip) {
+      return new NextResponse('OK', { status: 200 })
+    }
 
     const supabase = createAdminClient()
 
@@ -77,14 +105,19 @@ export async function POST(request: NextRequest) {
         break
     }
 
-    await supabase
-      .from('prospection_messages')
-      .update(updateData)
-      .eq('external_id', messageSid)
+    await supabase.from('prospection_messages').update(updateData).eq('external_id', messageSid)
+
+    await markWebhookCompleted(idempotencyKey, `twilio_status:${messageStatus}`)
 
     return new NextResponse('OK', { status: 200 })
   } catch (error) {
     logger.error('Twilio webhook error', error as Error)
+    if (idempotencyKey) {
+      await markWebhookFailed(
+        idempotencyKey,
+        error instanceof Error ? error.message : 'Unknown error'
+      )
+    }
     return new NextResponse('OK', { status: 200 })
   }
 }

@@ -104,29 +104,25 @@ export async function GET(request: Request) {
     const total = count ?? 0
     const totalPages = Math.ceil(total / limit)
 
-    // Calcul des stats via COUNT SQL (pas de fetch de toutes les lignes)
-    const [count1, count2, count3, count4, count5] = await Promise.all(
-      [1, 2, 3, 4, 5].map((rating) =>
-        supabase
-          .from('reviews')
-          .select('*', { count: 'exact', head: true })
-          .eq('provider_id', providerId)
-          .eq('rating', rating)
-      )
-    )
-
-    const counts = [count1, count2, count3, count4, count5]
-    const hasStatsError = counts.some((c) => c.error)
+    // Calcul des stats via une seule requête (GROUP BY côté JS)
+    const { data: allRatings, error: ratingsError } = await supabase
+      .from('reviews')
+      .select('rating')
+      .eq('provider_id', providerId)
 
     let stats
-    if (hasStatsError) {
+    if (ratingsError) {
       stats = {
         moyenne: 0,
         total: 0,
         distribution: [5, 4, 3, 2, 1].map((note) => ({ note, count: 0 })),
       }
     } else {
-      const ratingCounts = counts.map((c) => c.count || 0) // index 0 = rating 1, index 4 = rating 5
+      const ratingCounts = [0, 0, 0, 0, 0] // index 0 = rating 1, index 4 = rating 5
+      for (const row of allRatings) {
+        const r = row.rating
+        if (r >= 1 && r <= 5) ratingCounts[r - 1]++
+      }
       const totalReviews = ratingCounts.reduce((sum, c) => sum + c, 0)
       const weightedSum = ratingCounts.reduce((sum, c, i) => sum + (i + 1) * c, 0)
       const averageRating = totalReviews > 0 ? weightedSum / totalReviews : 0

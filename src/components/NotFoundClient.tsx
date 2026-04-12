@@ -116,7 +116,7 @@ export default function NotFoundClient() {
   const dynamicSuggestions = useMemo(() => getSuggestions(segments), [segments])
 
   useEffect(() => {
-    trackEvent('page_not_found' as any, {
+    trackEvent('page_not_found', {
       path: pathname,
       referrer: typeof document !== 'undefined' ? document.referrer : '',
     })
@@ -142,8 +142,8 @@ export default function NotFoundClient() {
             Page introuvable
           </h1>
           <p className="text-gray-600 mb-8">
-            Oups ! Il semble que cette page n&apos;existe pas ou a été déplacée.
-            Nos artisans sont peut-être en train de la réparer...
+            Oups ! Il semble que cette page n&apos;existe pas ou a été déplacée. Nos artisans sont
+            peut-être en train de la réparer...
           </p>
 
           {/* Primary actions */}
@@ -165,7 +165,11 @@ export default function NotFoundClient() {
           </div>
 
           {/* Search bar */}
-          <form action="/recherche" method="GET" className="mt-8 flex items-center gap-2 max-w-sm mx-auto">
+          <form
+            action="/recherche"
+            method="GET"
+            className="mt-8 flex items-center gap-2 max-w-sm mx-auto"
+          >
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -186,9 +190,7 @@ export default function NotFoundClient() {
           {/* Dynamic suggestions based on URL */}
           {dynamicSuggestions.length > 0 && (
             <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <p className="text-sm font-semibold text-blue-800 mb-3">
-                Peut-être cherchiez-vous :
-              </p>
+              <p className="text-sm font-semibold text-blue-800 mb-3">Peut-être cherchiez-vous :</p>
               <div className="flex flex-wrap justify-center gap-2">
                 {dynamicSuggestions.map((s) => (
                   <Link
@@ -205,9 +207,7 @@ export default function NotFoundClient() {
 
           {/* Default suggestions */}
           <div className="mt-8 pt-8 border-t border-gray-200">
-            <p className="text-sm text-gray-500 mb-4">
-              Pages populaires :
-            </p>
+            <p className="text-sm text-gray-500 mb-4">Pages populaires :</p>
             <div className="flex flex-wrap justify-center gap-2">
               {defaultLinks.map((s) => (
                 <Link
@@ -218,13 +218,22 @@ export default function NotFoundClient() {
                   {s.label}
                 </Link>
               ))}
-              <Link href="/services/plombier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
+              <Link
+                href="/services/plombier"
+                className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+              >
                 Plombier
               </Link>
-              <Link href="/services/electricien" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
+              <Link
+                href="/services/electricien"
+                className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+              >
                 Électricien
               </Link>
-              <Link href="/services/serrurier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
+              <Link
+                href="/services/serrurier"
+                className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+              >
                 Serrurier
               </Link>
             </div>
@@ -233,12 +242,8 @@ export default function NotFoundClient() {
           {/* CTA Conversion */}
           <div className="mt-10 p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-white">
             <FileText className="w-8 h-8 mx-auto mb-3 opacity-90" />
-            <p className="font-heading font-bold text-lg mb-2">
-              Vous cherchez un artisan ?
-            </p>
-            <p className="text-blue-100 text-sm mb-4">
-              Devis gratuit et sans engagement.
-            </p>
+            <p className="font-heading font-bold text-lg mb-2">Vous cherchez un artisan ?</p>
+            <p className="text-blue-100 text-sm mb-4">Devis gratuit et sans engagement.</p>
             <Link
               href="/devis"
               className="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors"
@@ -249,7 +254,9 @@ export default function NotFoundClient() {
             <p className="text-blue-200 text-sm mt-3 mb-2">Ou appelez-nous</p>
             <a
               href={PHONE_TEL}
-              onClick={() => { trackEvent('phone_click', { source: '404_page' }) }}
+              onClick={() => {
+                trackEvent('phone_click', { source: '404_page' })
+              }}
               className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg font-bold transition-colors"
               aria-label="Appeler ServicesArtisans"
             >

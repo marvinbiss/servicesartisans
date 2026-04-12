@@ -37,7 +37,7 @@ export function useLeadSubmit(
   context: EstimationContext,
   _messages?: ChatMessage[],
   onLeadSubmitted?: (confirmationMsg: string) => void,
-  onCallbackSubmitted?: () => void,
+  onCallbackSubmitted?: () => void
 ): UseLeadSubmitReturn {
   // Lead form fields
   const [leadName, setLeadName] = useState('')
@@ -91,7 +91,7 @@ export function useLeadSubmit(
           throw new Error(body?.error || `Erreur serveur (${response.status})`)
         }
 
-        trackEvent('estimation_lead_submitted' as any, {
+        trackEvent('estimation_lead_submitted', {
           source: 'chat',
           metier: context.metierSlug,
           ville: context.ville,
@@ -112,7 +112,7 @@ export function useLeadSubmit(
         setLeadLoading(false)
       }
     },
-    [leadPhone, leadName, leadEmail, rgpdConsent, context, onLeadSubmitted],
+    [leadPhone, leadName, leadEmail, rgpdConsent, context, onLeadSubmitted]
   )
 
   const handleCallbackSubmit = useCallback(
@@ -147,7 +147,7 @@ export function useLeadSubmit(
           throw new Error(body?.error || `Erreur serveur (${response.status})`)
         }
 
-        trackEvent('estimation_lead_submitted' as any, {
+        trackEvent('estimation_lead_submitted', {
           source: 'callback',
           metier: context.metierSlug,
           ville: context.ville,
@@ -162,7 +162,7 @@ export function useLeadSubmit(
         setCallbackLoading(false)
       }
     },
-    [callbackPhone, rgpdCallbackConsent, context, onCallbackSubmitted],
+    [callbackPhone, rgpdCallbackConsent, context, onCallbackSubmitted]
   )
 
   return {

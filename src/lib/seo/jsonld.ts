@@ -19,12 +19,22 @@ export function getOrganizationSchema() {
       width: 512,
       height: 512,
     },
-    description: 'Annuaire d\'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements.',
+    description:
+      "Annuaire d'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements.",
     knowsAbout: [
       'Artisanat du bâtiment',
-      'Plomberie', 'Électricité', 'Chauffage', 'Menuiserie', 'Maçonnerie',
-      'Couverture', 'Carrelage', 'Peinture', 'Serrurerie', 'Climatisation',
-      'Rénovation énergétique', 'Dépannage à domicile',
+      'Plomberie',
+      'Électricité',
+      'Chauffage',
+      'Menuiserie',
+      'Maçonnerie',
+      'Couverture',
+      'Carrelage',
+      'Peinture',
+      'Serrurerie',
+      'Climatisation',
+      'Rénovation énergétique',
+      'Dépannage à domicile',
     ],
     ...(socialLinks.length > 0 && {
       sameAs: [
@@ -208,15 +218,17 @@ export function getItemListSchema(params: {
         url: `${SITE_URL}${item.url}`,
         image: item.image,
         priceRange: '€€',
-        ...(item.rating && item.reviewCount && item.reviewCount > 0 && {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: item.rating,
-            reviewCount: item.reviewCount,
-            bestRating: 5,
-            worstRating: 1,
-          },
-        }),
+        ...(item.rating &&
+          item.reviewCount &&
+          item.reviewCount > 0 && {
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: item.rating,
+              reviewCount: item.reviewCount,
+              bestRating: 5,
+              worstRating: 1,
+            },
+          }),
       },
     })),
   }
@@ -240,19 +252,29 @@ export function getPlaceSchema(city: {
     url: `${SITE_URL}/villes/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
-    ...(city.region || city.department ? {
-      containedInPlace: [
-        ...(city.department ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: city.department,
-          ...(city.departmentCode && { identifier: city.departmentCode }),
-        }] : []),
-        ...(city.region ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: city.region,
-        }] : []),
-      ],
-    } : {}),
+    ...(city.region || city.department
+      ? {
+          containedInPlace: [
+            ...(city.department
+              ? [
+                  {
+                    '@type': 'AdministrativeArea' as const,
+                    name: city.department,
+                    ...(city.departmentCode && { identifier: city.departmentCode }),
+                  },
+                ]
+              : []),
+            ...(city.region
+              ? [
+                  {
+                    '@type': 'AdministrativeArea' as const,
+                    name: city.region,
+                  },
+                ]
+              : []),
+          ],
+        }
+      : {}),
     ...(city.population && { population: city.population }),
   }
 }
@@ -320,15 +342,17 @@ export function getServicePricingSchema(params: {
       ...(params.priceUnit && { unitText: params.priceUnit }),
       ...(params.offerCount != null && { offerCount: params.offerCount }),
     },
-    ...(params.ratingValue && params.reviewCount && params.reviewCount > 0 && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: params.ratingValue,
-        reviewCount: params.reviewCount,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    }),
+    ...(params.ratingValue &&
+      params.reviewCount &&
+      params.reviewCount > 0 && {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: params.ratingValue,
+          reviewCount: params.reviewCount,
+          bestRating: 5,
+          worstRating: 1,
+        },
+      }),
   }
 }
 
@@ -395,19 +419,25 @@ export function getComparisonReviewSchema(params: {
     },
     positiveNotes: {
       '@type': 'ItemList',
-      itemListElement: params.options.flatMap(o => o.avantages).slice(0, 8).map((note, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        name: note,
-      })),
+      itemListElement: params.options
+        .flatMap((o) => o.avantages)
+        .slice(0, 8)
+        .map((note, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: note,
+        })),
     },
     negativeNotes: {
       '@type': 'ItemList',
-      itemListElement: params.options.flatMap(o => o.inconvenients).slice(0, 8).map((note, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        name: note,
-      })),
+      itemListElement: params.options
+        .flatMap((o) => o.inconvenients)
+        .slice(0, 8)
+        .map((note, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: note,
+        })),
     },
   }
 }
@@ -441,16 +471,17 @@ export function getInsuranceProductSchema(params: {
       '@type': 'Country',
       name: 'France',
     },
-    ...(params.lowPrice != null && params.highPrice != null && {
-      offers: {
-        '@type': 'AggregateOffer',
-        lowPrice: params.lowPrice,
-        highPrice: params.highPrice,
-        priceCurrency: params.priceCurrency || 'EUR',
-        ...(params.priceUnit && { unitText: params.priceUnit }),
-        offerCount: 5 + Math.abs(hashCode(`insurance-offers-${params.insuranceType}`)) % 15,
-      },
-    }),
+    ...(params.lowPrice != null &&
+      params.highPrice != null && {
+        offers: {
+          '@type': 'AggregateOffer',
+          lowPrice: params.lowPrice,
+          highPrice: params.highPrice,
+          priceCurrency: params.priceCurrency || 'EUR',
+          ...(params.priceUnit && { unitText: params.priceUnit }),
+          offerCount: 5 + (Math.abs(hashCode(`insurance-offers-${params.insuranceType}`)) % 15),
+        },
+      }),
   }
 }
 
@@ -536,7 +567,9 @@ export function getLoanOrCreditSchema(params: {
   }
 }
 
-// Schema.org CollectionPage + AggregateRating (for /avis/[service] hub pages)
+// Schema.org Service + AggregateRating for /avis/[service] hub pages
+// Returns an array: [CollectionPage, Service with AggregateRating]
+// Google requires AggregateRating on a top-level entity (Service/LocalBusiness)
 export function getAvisHubSchema(params: {
   serviceName: string
   serviceSlug: string
@@ -550,8 +583,10 @@ export function getAvisHubSchema(params: {
     comment: string | null
     datePublished: string
   }>
-}) {
-  return {
+}): Record<string, unknown>[] {
+  const serviceId = `${SITE_URL}/avis/${params.serviceSlug}#service`
+
+  const collectionPage: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Avis ${params.serviceName} en France`,
@@ -562,39 +597,56 @@ export function getAvisHubSchema(params: {
       name: SITE_NAME,
       url: SITE_URL,
     },
-    about: {
-      '@type': 'Service',
-      name: params.serviceName,
-      serviceType: params.serviceName,
-      provider: {
-        '@type': 'Organization',
-        '@id': `${SITE_URL}#organization`,
-        name: SITE_NAME,
-      },
-      areaServed: {
-        '@type': 'Country',
-        name: 'France',
-      },
-      ...(params.ratingValue && params.reviewCount && params.reviewCount > 0 ? {
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: params.ratingValue,
-          reviewCount: params.reviewCount,
-          bestRating: 5,
-          worstRating: 1,
-        },
-      } : {}),
-      ...(params.reviews && params.reviews.length > 0 ? {
-        review: params.reviews.slice(0, 3).map(r => ({
-          '@type': 'Review',
-          author: { '@type': 'Person', name: r.authorName },
-          reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
-          reviewBody: r.comment,
-          datePublished: r.datePublished,
-        })),
-      } : {}),
-    },
+    about: { '@id': serviceId },
   }
+
+  const serviceSchema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': serviceId,
+    name: params.serviceName,
+    serviceType: params.serviceName,
+    description: params.description,
+    url: params.url,
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'France',
+    },
+    ...(params.ratingValue && params.reviewCount && params.reviewCount > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: params.ratingValue,
+            reviewCount: params.reviewCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
+    ...(params.reviews && params.reviews.length > 0
+      ? {
+          review: params.reviews.slice(0, 3).map((r) => ({
+            '@type': 'Review',
+            author: { '@type': 'Person', name: r.authorName },
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: r.rating,
+              bestRating: 5,
+              worstRating: 1,
+            },
+            reviewBody: r.comment,
+            datePublished: r.datePublished,
+          })),
+        }
+      : {}),
+  }
+
+  return [collectionPage, serviceSchema]
 }
 
 // Schema.org Service for emergency/urgency pages (/urgence/[service]/[ville])
@@ -638,15 +690,16 @@ export function getUrgencyServiceSchema(params: {
       opens: '00:00',
       closes: '23:59',
     },
-    ...(params.lowPrice != null && params.highPrice != null && {
-      offers: {
-        '@type': 'AggregateOffer',
-        priceCurrency: 'EUR',
-        lowPrice: params.lowPrice,
-        highPrice: params.highPrice,
-        ...(params.offerCount != null && { offerCount: params.offerCount }),
-      },
-    }),
+    ...(params.lowPrice != null &&
+      params.highPrice != null && {
+        offers: {
+          '@type': 'AggregateOffer',
+          priceCurrency: 'EUR',
+          lowPrice: params.lowPrice,
+          highPrice: params.highPrice,
+          ...(params.offerCount != null && { offerCount: params.offerCount }),
+        },
+      }),
   }
 }
 
@@ -734,14 +787,22 @@ export function getEnrichedLocalServiceSchema(params: {
       '@type': 'City',
       name: params.cityName,
       containedInPlace: [
-        ...(params.departmentName ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: params.departmentName,
-        }] : []),
-        ...(params.regionName ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: params.regionName,
-        }] : []),
+        ...(params.departmentName
+          ? [
+              {
+                '@type': 'AdministrativeArea' as const,
+                name: params.departmentName,
+              },
+            ]
+          : []),
+        ...(params.regionName
+          ? [
+              {
+                '@type': 'AdministrativeArea' as const,
+                name: params.regionName,
+              },
+            ]
+          : []),
       ],
     },
     provider: {
@@ -750,56 +811,63 @@ export function getEnrichedLocalServiceSchema(params: {
       name: SITE_NAME,
       url: SITE_URL,
     },
-    ...(params.tasks && params.tasks.length > 0 && {
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: `Prestations ${params.serviceName.toLowerCase()} à ${params.cityName}`,
-        itemListElement: params.tasks.map((task) => ({
+    ...(params.tasks &&
+      params.tasks.length > 0 && {
+        hasOfferCatalog: {
           '@type': 'OfferCatalog',
-          name: task.name,
-          itemListElement: [{
-            '@type': 'Offer',
-            itemOffered: {
-              '@type': 'Service',
-              name: task.name,
-              ...(task.description && { description: task.description }),
-            },
-            ...(() => {
-              if (!task.price) return {}
-              const numericPrice = task.price.replace(/[^0-9]/g, '')
-              if (!numericPrice || numericPrice === '0') return {}
-              return {
-                priceSpecification: {
-                  '@type': 'UnitPriceSpecification',
-                  price: numericPrice,
-                  priceCurrency: 'EUR',
-                  ...(params.priceUnit && { unitText: params.priceUnit }),
+          name: `Prestations ${params.serviceName.toLowerCase()} à ${params.cityName}`,
+          itemListElement: params.tasks.map((task) => ({
+            '@type': 'OfferCatalog',
+            name: task.name,
+            itemListElement: [
+              {
+                '@type': 'Offer',
+                itemOffered: {
+                  '@type': 'Service',
+                  name: task.name,
+                  ...(task.description && { description: task.description }),
                 },
-              }
-            })(),
-          }],
-        })),
-      },
-    }),
-    ...(params.lowPrice != null && params.highPrice != null && {
-      offers: {
-        '@type': 'AggregateOffer',
-        lowPrice: params.lowPrice,
-        highPrice: params.highPrice,
-        priceCurrency: 'EUR',
-        ...(params.priceUnit && { unitText: params.priceUnit }),
-        ...(params.providerCount != null && params.providerCount > 0 && { offerCount: params.providerCount }),
-      },
-    }),
-    ...(params.ratingValue && params.reviewCount && params.reviewCount > 0 && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: Number(params.ratingValue.toFixed(1)),
-        reviewCount: params.reviewCount,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    }),
+                ...(() => {
+                  if (!task.price) return {}
+                  const numericPrice = task.price.replace(/[^0-9]/g, '')
+                  if (!numericPrice || numericPrice === '0') return {}
+                  return {
+                    priceSpecification: {
+                      '@type': 'UnitPriceSpecification',
+                      price: numericPrice,
+                      priceCurrency: 'EUR',
+                      ...(params.priceUnit && { unitText: params.priceUnit }),
+                    },
+                  }
+                })(),
+              },
+            ],
+          })),
+        },
+      }),
+    ...(params.lowPrice != null &&
+      params.highPrice != null && {
+        offers: {
+          '@type': 'AggregateOffer',
+          lowPrice: params.lowPrice,
+          highPrice: params.highPrice,
+          priceCurrency: 'EUR',
+          ...(params.priceUnit && { unitText: params.priceUnit }),
+          ...(params.providerCount != null &&
+            params.providerCount > 0 && { offerCount: params.providerCount }),
+        },
+      }),
+    ...(params.ratingValue &&
+      params.reviewCount &&
+      params.reviewCount > 0 && {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: Number(params.ratingValue.toFixed(1)),
+          reviewCount: params.reviewCount,
+          bestRating: 5,
+          worstRating: 1,
+        },
+      }),
   }
 }
 
@@ -825,19 +893,29 @@ export function getEnrichedPlaceSchema(city: {
     url: `${SITE_URL}/villes/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
-    ...(city.region || city.department ? {
-      containedInPlace: [
-        ...(city.department ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: city.department,
-          ...(city.departmentCode && { identifier: city.departmentCode }),
-        }] : []),
-        ...(city.region ? [{
-          '@type': 'AdministrativeArea' as const,
-          name: city.region,
-        }] : []),
-      ],
-    } : {}),
+    ...(city.region || city.department
+      ? {
+          containedInPlace: [
+            ...(city.department
+              ? [
+                  {
+                    '@type': 'AdministrativeArea' as const,
+                    name: city.department,
+                    ...(city.departmentCode && { identifier: city.departmentCode }),
+                  },
+                ]
+              : []),
+            ...(city.region
+              ? [
+                  {
+                    '@type': 'AdministrativeArea' as const,
+                    name: city.region,
+                  },
+                ]
+              : []),
+          ],
+        }
+      : {}),
     ...(city.postalCode && {
       address: {
         '@type': 'PostalAddress',
@@ -847,13 +925,14 @@ export function getEnrichedPlaceSchema(city: {
         ...(city.department && { addressRegion: city.department }),
       },
     }),
-    ...(city.latitude && city.longitude && {
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: city.latitude,
-        longitude: city.longitude,
-      },
-    }),
+    ...(city.latitude &&
+      city.longitude && {
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: city.latitude,
+          longitude: city.longitude,
+        },
+      }),
     ...(city.population && { population: city.population }),
   }
 }
@@ -916,20 +995,22 @@ export function getDetailedPricingSchema(params: {
       itemListElement: params.tasks.map((task) => ({
         '@type': 'OfferCatalog',
         name: task.name,
-        itemListElement: [{
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: task.name,
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: task.name,
+            },
+            priceSpecification: {
+              '@type': 'UnitPriceSpecification',
+              minPrice: task.lowPrice,
+              maxPrice: task.highPrice,
+              priceCurrency: 'EUR',
+              unitText: task.unit || params.priceUnit || 'intervention',
+            },
           },
-          priceSpecification: {
-            '@type': 'UnitPriceSpecification',
-            minPrice: task.lowPrice,
-            maxPrice: task.highPrice,
-            priceCurrency: 'EUR',
-            unitText: task.unit || params.priceUnit || 'intervention',
-          },
-        }],
+        ],
       })),
     },
     offers: {
@@ -994,7 +1075,7 @@ export function getPersonSchema(author: {
       name: SITE_NAME,
     },
     ...(author.certifications.length > 0 && {
-      hasCredential: author.certifications.map(cert => ({
+      hasCredential: author.certifications.map((cert) => ({
         '@type': 'EducationalOccupationalCredential',
         name: cert,
       })),

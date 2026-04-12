@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { isSafeRedirectPath } from '@/lib/safe-redirect'
 
 // POST request schema
 const oauthSchema = z.object({
@@ -9,7 +10,9 @@ const oauthSchema = z.object({
   next: z.string().optional(),
 })
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export async function POST(request: NextRequest) {
@@ -27,8 +30,9 @@ export async function POST(request: NextRequest) {
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
-    const redirectTo = next
-      ? `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}`
+    const safeNext = next && isSafeRedirectPath(next) ? next : null
+    const redirectTo = safeNext
+      ? `${siteUrl}/auth/callback?next=${encodeURIComponent(safeNext)}`
       : `${siteUrl}/auth/callback`
 
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -44,18 +48,12 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       logger.error('OAuth error', error)
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: error.message }, { status: 400 })
     }
 
     return NextResponse.json({ url: data.url })
   } catch (error) {
     logger.error('OAuth error', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

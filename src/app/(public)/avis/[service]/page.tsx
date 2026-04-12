@@ -397,7 +397,7 @@ export default async function AvisServicePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, ...serviceSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">

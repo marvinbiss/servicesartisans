@@ -3,9 +3,18 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyTwilioSignature } from '@/lib/prospection/webhook-security'
 import { maskPhone } from '@/lib/prospection/message-queue'
-import { generateWithFallback, shouldEscalate, validateAIOutput } from '@/lib/prospection/ai-response'
+import {
+  generateWithFallback,
+  shouldEscalate,
+  validateAIOutput,
+} from '@/lib/prospection/ai-response'
 import { sendWhatsAppReply } from '@/lib/prospection/channels/whatsapp'
 import { sendProspectionSMS } from '@/lib/prospection/channels/sms'
+import {
+  checkWebhookIdempotency,
+  markWebhookCompleted,
+  markWebhookFailed,
+} from '@/lib/webhook-idempotency'
 import type { ProspectionContact, ProspectionConversationMessage } from '@/types/prospection'
 
 export const dynamic = 'force-dynamic'
@@ -15,15 +24,30 @@ export const dynamic = 'force-dynamic'
  * Gère les réponses des contacts et déclenche l'IA si configurée
  */
 export async function POST(request: NextRequest) {
+  let idempotencyKey: string | null = null
+
   try {
     const formData = await request.formData()
     const params: Record<string, string> = {}
-    formData.forEach((value, key) => { params[key] = value.toString() })
+    formData.forEach((value, key) => {
+      params[key] = value.toString()
+    })
 
-    // Vérifier la signature
     const signature = request.headers.get('x-twilio-signature') || ''
     if (!verifyTwilioSignature(signature, request.url, params)) {
-      return NextResponse.json({ success: false, error: { message: 'Signature invalide' } }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Signature invalide' } },
+        { status: 403 }
+      )
+    }
+
+    const messageSid = params.MessageSid || params.SmsSid || ''
+    if (messageSid) {
+      idempotencyKey = `twilio-in:${messageSid}`
+      const shouldSkip = await checkWebhookIdempotency(idempotencyKey, 'twilio_incoming')
+      if (shouldSkip) {
+        return new NextResponse('OK', { status: 200 })
+      }
     }
 
     const from = params.From?.replace('whatsapp:', '') || ''
@@ -40,7 +64,9 @@ export async function POST(request: NextRequest) {
     // Trouver le contact par numéro de téléphone
     const { data: contact } = await supabase
       .from('prospection_contacts')
-      .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, commune_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
+      .select(
+        'id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, commune_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at'
+      )
       .eq('phone_e164', from)
       .eq('is_active', true)
       .single()
@@ -51,7 +77,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Vérifier si c'est un opt-out (STOP)
-    if (['stop', 'arret', 'arrêt', 'desabonner', 'désabonner'].includes(body.trim().toLowerCase())) {
+    if (
+      ['stop', 'arret', 'arrêt', 'desabonner', 'désabonner'].includes(body.trim().toLowerCase())
+    ) {
       await supabase
         .from('prospection_contacts')
         .update({ consent_status: 'opted_out', opted_out_at: new Date().toISOString() })
@@ -63,7 +91,9 @@ export async function POST(request: NextRequest) {
     // Trouver ou créer la conversation
     let { data: conversation } = await supabase
       .from('prospection_conversations')
-      .select('id, campaign_id, contact_id, message_id, channel, status, ai_provider, ai_model, ai_replies_count, assigned_to, last_message_at, created_at, updated_at')
+      .select(
+        'id, campaign_id, contact_id, message_id, channel, status, ai_provider, ai_model, ai_replies_count, assigned_to, last_message_at, created_at, updated_at'
+      )
       .eq('contact_id', contact.id)
       .eq('channel', channel)
       .in('status', ['open', 'ai_handling'])
@@ -91,14 +121,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Sauvegarder le message entrant
-    await supabase
-      .from('prospection_conversation_messages')
-      .insert({
-        conversation_id: conversation.id,
-        direction: 'inbound',
-        sender_type: 'contact',
-        content: body,
-      })
+    await supabase.from('prospection_conversation_messages').insert({
+      conversation_id: conversation.id,
+      direction: 'inbound',
+      sender_type: 'contact',
+      content: body,
+    })
 
     // Mettre à jour la conversation
     await supabase
@@ -133,7 +161,9 @@ export async function POST(request: NextRequest) {
     // Vérifier si auto-reply IA est activée
     const { data: aiSettings } = await supabase
       .from('prospection_ai_settings')
-      .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt')
+      .select(
+        'id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, artisan_system_prompt, client_system_prompt, mairie_system_prompt'
+      )
       .limit(1)
       .single()
 
@@ -154,7 +184,9 @@ export async function POST(request: NextRequest) {
           // Charger l'historique
           const { data: history } = await supabase
             .from('prospection_conversation_messages')
-            .select('id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at')
+            .select(
+              'id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at'
+            )
             .eq('conversation_id', conversation.id)
             .order('created_at', { ascending: true })
 
@@ -163,9 +195,15 @@ export async function POST(request: NextRequest) {
 
           let systemPrompt = ''
           switch ((contact as ProspectionContact).contact_type) {
-            case 'artisan': systemPrompt = aiSettings.artisan_system_prompt; break
-            case 'client': systemPrompt = aiSettings.client_system_prompt; break
-            case 'mairie': systemPrompt = aiSettings.mairie_system_prompt; break
+            case 'artisan':
+              systemPrompt = aiSettings.artisan_system_prompt
+              break
+            case 'client':
+              systemPrompt = aiSettings.client_system_prompt
+              break
+            case 'mairie':
+              systemPrompt = aiSettings.mairie_system_prompt
+              break
           }
 
           const aiResult = await generateWithFallback({
@@ -174,8 +212,10 @@ export async function POST(request: NextRequest) {
             systemPrompt,
             conversationHistory: (history || []) as ProspectionConversationMessage[],
             contactContext: contact as ProspectionContact,
-            maxTokens: provider === 'claude' ? aiSettings.claude_max_tokens : aiSettings.openai_max_tokens,
-            temperature: provider === 'claude' ? aiSettings.claude_temperature : aiSettings.openai_temperature,
+            maxTokens:
+              provider === 'claude' ? aiSettings.claude_max_tokens : aiSettings.openai_max_tokens,
+            temperature:
+              provider === 'claude' ? aiSettings.claude_temperature : aiSettings.openai_temperature,
           })
 
           // Validate AI output before sending
@@ -192,19 +232,17 @@ export async function POST(request: NextRequest) {
           }
 
           // Sauvegarder la réponse IA
-          await supabase
-            .from('prospection_conversation_messages')
-            .insert({
-              conversation_id: conversation.id,
-              direction: 'outbound',
-              sender_type: 'ai',
-              content: replyContent,
-              ai_provider: aiResult.provider,
-              ai_model: aiResult.model,
-              ai_prompt_tokens: aiResult.tokens.prompt,
-              ai_completion_tokens: aiResult.tokens.completion,
-              ai_cost: aiResult.cost,
-            })
+          await supabase.from('prospection_conversation_messages').insert({
+            conversation_id: conversation.id,
+            direction: 'outbound',
+            sender_type: 'ai',
+            content: replyContent,
+            ai_provider: aiResult.provider,
+            ai_model: aiResult.model,
+            ai_prompt_tokens: aiResult.tokens.prompt,
+            ai_completion_tokens: aiResult.tokens.completion,
+            ai_cost: aiResult.cost,
+          })
 
           // Mettre à jour le compteur IA
           await supabase
@@ -233,9 +271,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    if (idempotencyKey) {
+      await markWebhookCompleted(idempotencyKey, `twilio_incoming:${channel}`)
+    }
+
     return new NextResponse('OK', { status: 200 })
   } catch (error) {
     logger.error('Twilio incoming webhook error', error as Error)
+    if (idempotencyKey) {
+      await markWebhookFailed(
+        idempotencyKey,
+        error instanceof Error ? error.message : 'Unknown error'
+      )
+    }
     return new NextResponse('OK', { status: 200 })
   }
 }

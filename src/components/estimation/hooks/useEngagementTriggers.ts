@@ -15,7 +15,7 @@ export interface UseEngagementTriggersReturn {
 export function useEngagementTriggers(
   isOpen: boolean,
   metierSlug?: string,
-  ville?: string,
+  ville?: string
 ): UseEngagementTriggersReturn {
   const [showGreeting, setShowGreeting] = useState(false)
   const [isLauncherExpanded, setIsLauncherExpanded] = useState(true)
@@ -34,7 +34,9 @@ export function useEngagementTriggers(
       } else {
         localStorage.setItem(RETURN_VISITOR_KEY, '1')
       }
-    } catch { /* SSR / private browsing */ }
+    } catch {
+      /* SSR / private browsing */
+    }
   }, [])
 
   // Show greeting bubble after 5s delay (unless dismissed this session)
@@ -42,7 +44,9 @@ export function useEngagementTriggers(
     if (isOpen) return
     try {
       if (sessionStorage.getItem(GREETING_STORAGE_KEY)) return
-    } catch { /* SSR / private browsing */ }
+    } catch {
+      /* SSR / private browsing */
+    }
 
     const timer = setTimeout(() => {
       if (!greetingTriggeredRef.current) {
@@ -69,14 +73,16 @@ export function useEngagementTriggers(
       if (greetingTriggeredRef.current) return
       try {
         if (sessionStorage.getItem(GREETING_STORAGE_KEY)) return
-      } catch { /* noop */ }
+      } catch {
+        /* noop */
+      }
 
       const scrollPercent =
         window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)
       if (scrollPercent >= 0.4) {
         greetingTriggeredRef.current = true
         setShowGreeting(true)
-        trackEvent('chat_opened' as any, {
+        trackEvent('chat_opened', {
           trigger: 'scroll',
           metier: metierSlug,
           ville,
@@ -98,7 +104,7 @@ export function useEngagementTriggers(
       if (e.clientY <= 5 && e.relatedTarget === null) {
         exitIntentFired.current = true
         setShowGreeting(true)
-        trackEvent('chat_opened' as any, {
+        trackEvent('chat_opened', {
           trigger: 'exit_intent_soft',
           metier: metierSlug,
           ville,
@@ -122,7 +128,9 @@ export function useEngagementTriggers(
     setShowGreeting(false)
     try {
       sessionStorage.setItem(GREETING_STORAGE_KEY, '1')
-    } catch { /* noop */ }
+    } catch {
+      /* noop */
+    }
   }, [])
 
   return {

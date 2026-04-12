@@ -1,8 +1,14 @@
 import { type NextRequest, NextResponse, type NextFetchEvent } from 'next/server'
 import { type CookieOptions } from '@supabase/ssr'
 import { updateSession } from '@/lib/supabase/middleware'
-import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
+import {
+  checkRateLimit,
+  getRateLimitConfig,
+  getRateLimitKey,
+  getClientIp,
+} from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
+import { isSafeRedirectPath } from '@/lib/safe-redirect'
 
 /**
  * Middleware v3 — performance-optimized
@@ -28,7 +34,8 @@ const STATIC_CSP =
 // CSP headers only — other security headers are set in next.config.js (more efficient, handled at CDN edge)
 function addCspHeaders(response: NextResponse, request: NextRequest): NextResponse {
   const userAgent = request.headers.get('user-agent') || ''
-  const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
+  const isCapacitor =
+    userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
   const isDev = process.env.NODE_ENV === 'development'
 
   if (isDev || isCapacitor) {
@@ -92,7 +99,8 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 }
 
 // Googlebot detection — includes Googlebot, Googlebot-Mobile, Googlebot-Image, AdsBot-Google, etc.
-const GOOGLEBOT_RE = /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool/i
+const GOOGLEBOT_RE =
+  /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool/i
 
 /** Fire-and-forget Googlebot log to Supabase (runs in waitUntil, never blocks response) */
 async function logGooglebotCrawl(url: string, userAgent: string) {
@@ -112,18 +120,36 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   if (pathname.startsWith('/tarifs-artisans')) {
     const newPath = pathname.replace('/tarifs-artisans', '/tarifs')
     const host = request.headers.get('host') || 'servicesartisans.fr'
-    const redirectResponse = NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
-    redirectResponse.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
-    redirectResponse.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    const redirectResponse = NextResponse.redirect(
+      `https://${host}${newPath}${request.nextUrl.search}`,
+      301
+    )
+    redirectResponse.headers.set(
+      'Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
+    redirectResponse.headers.set(
+      'CDN-Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
     return redirectResponse
   }
 
   // Redirect legacy/mistyped URLs → correct paths (301 permanent, cached at CDN edge)
   if (LEGACY_REDIRECTS[pathname]) {
     const host = request.headers.get('host') || 'servicesartisans.fr'
-    const legacyRedirect = NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
-    legacyRedirect.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
-    legacyRedirect.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    const legacyRedirect = NextResponse.redirect(
+      `https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`,
+      301
+    )
+    legacyRedirect.headers.set(
+      'Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
+    legacyRedirect.headers.set(
+      'CDN-Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
     return legacyRedirect
   }
 
@@ -143,7 +169,11 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // the already-rotated refresh token is rejected, destroying the session.
   // authGuardResponse carries refreshed Set-Cookie headers to the browser.
   let authGuardResponse: NextResponse | null = null
-  if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || (pathname.startsWith('/admin') && pathname !== '/admin/connexion')) {
+  if (
+    pathname.startsWith('/espace-client') ||
+    pathname.startsWith('/espace-artisan') ||
+    (pathname.startsWith('/admin') && pathname !== '/admin/connexion')
+  ) {
     try {
       const { createServerClient } = await import('@supabase/ssr')
 
@@ -152,7 +182,9 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       })
 
       const supabase = createServerClient(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
           cookies: {
@@ -177,12 +209,15 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         }
       )
 
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser()
 
       if (authError || !user) {
-        // Validate redirect URL (prevent open redirect)
-        const isValidRedirect = pathname.startsWith('/') && !pathname.includes('//') && !/^\/\w+:/.test(pathname)
-        const redirectUrl = isValidRedirect ? encodeURIComponent(pathname) : encodeURIComponent('/espace-client')
+        const redirectUrl = isSafeRedirectPath(pathname)
+          ? encodeURIComponent(pathname)
+          : encodeURIComponent('/espace-client')
         return NextResponse.redirect(new URL(`/connexion?redirect=${redirectUrl}`, request.url))
       }
 
@@ -206,7 +241,10 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     } catch (error) {
       logger.error('Middleware auth error:', error)
       const loginUrl = new URL('/connexion', request.url)
-      loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
+      loginUrl.searchParams.set(
+        'redirect',
+        isSafeRedirectPath(request.nextUrl.pathname) ? request.nextUrl.pathname : '/espace-client'
+      )
       return NextResponse.redirect(loginUrl)
     }
   }
@@ -247,7 +285,9 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // fail-closed si Origin absent (sauf Bearer token ou CRON_SECRET)
   const method = request.method
   if (
-    method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS' &&
+    method !== 'GET' &&
+    method !== 'HEAD' &&
+    method !== 'OPTIONS' &&
     pathname.startsWith('/api/') &&
     !pathname.startsWith('/api/webhooks/') &&
     !pathname.startsWith('/api/cron/') &&
@@ -261,17 +301,22 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     // peuvent légitimement ne pas avoir d'en-tête Origin
     const authHeader = request.headers.get('authorization') || ''
     const hasBearerToken = authHeader.startsWith('Bearer ')
-    const cronSecret = request.headers.get('x-cron-secret') || request.nextUrl.searchParams.get('cron_secret')
-    const hasValidCronSecret = !!(cronSecret && process.env.CRON_SECRET && cronSecret === process.env.CRON_SECRET)
+    const cronSecret =
+      request.headers.get('x-cron-secret') || request.nextUrl.searchParams.get('cron_secret')
+    const hasValidCronSecret = !!(
+      cronSecret &&
+      process.env.CRON_SECRET &&
+      cronSecret === process.env.CRON_SECRET
+    )
     const isExempted = hasBearerToken || hasValidCronSecret
 
     if (!origin) {
       // Fail-closed : rejeter si pas d'Origin sur les requêtes mutantes (sauf exceptions)
       if (!isExempted) {
-        return new NextResponse(
-          JSON.stringify({ error: 'En-tête Origin requis' }),
-          { status: 403, headers: { 'Content-Type': 'application/json' } }
-        )
+        return new NextResponse(JSON.stringify({ error: 'En-tête Origin requis' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        })
       }
     } else {
       // Vérification stricte du hostname (=== ou sous-domaine légitime)
@@ -279,19 +324,20 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       try {
         const allowedHostname = new URL(allowedOrigin).hostname
         const originHostname = new URL(origin).hostname
-        const isAllowed = originHostname === allowedHostname || originHostname.endsWith('.' + allowedHostname)
+        const isAllowed =
+          originHostname === allowedHostname || originHostname.endsWith('.' + allowedHostname)
         if (!isAllowed) {
-          return new NextResponse(
-            JSON.stringify({ error: 'Origine non autorisée' }),
-            { status: 403, headers: { 'Content-Type': 'application/json' } }
-          )
+          return new NextResponse(JSON.stringify({ error: 'Origine non autorisée' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' },
+          })
         }
       } catch {
         // Fail-closed : si le parsing URL échoue, rejeter la requête
-        return new NextResponse(
-          JSON.stringify({ error: 'Origine invalide' }),
-          { status: 403, headers: { 'Content-Type': 'application/json' } }
-        )
+        return new NextResponse(JSON.stringify({ error: 'Origine invalide' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        })
       }
     }
   }
@@ -299,7 +345,10 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // Refresh session — only for routes that need auth (skip Supabase call for public pages)
   // If auth guard already refreshed the session, reuse its response (carries Set-Cookie headers)
   let response: NextResponse
-  const needsAuth = pathname.startsWith('/espace-') || pathname.startsWith('/admin') || pathname.startsWith('/booking')
+  const needsAuth =
+    pathname.startsWith('/espace-') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/booking')
   if (authGuardResponse) {
     // Auth guard already refreshed the session — reuse its response with Set-Cookie headers
     response = authGuardResponse
@@ -405,9 +454,12 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     '/tarifs',
     // /recherche removed — 301-redirects to /services (never reaches middleware cache logic)
   ])
-  if (publicCacheExact.has(pathname) || publicCachePrefixes.some(p => pathname.startsWith(p))) {
+  if (publicCacheExact.has(pathname) || publicCachePrefixes.some((p) => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
-    response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+    response.headers.set(
+      'CDN-Cache-Control',
+      'public, s-maxage=86400, stale-while-revalidate=604800'
+    )
   }
 
   // Googlebot crawl logging — non-blocking via waitUntil

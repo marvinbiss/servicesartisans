@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyResendSignature } from '@/lib/prospection/webhook-security'
+import {
+  checkWebhookIdempotency,
+  markWebhookCompleted,
+  markWebhookFailed,
+} from '@/lib/webhook-idempotency'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,12 +16,14 @@ export const dynamic = 'force-dynamic'
  * email.complained, email.delivery_delayed
  */
 export async function POST(request: NextRequest) {
+  let idempotencyKey: string | null = null
+
   try {
     const rawBody = await request.text()
 
-    // Vérifier la signature Resend (svix)
+    const svixId = request.headers.get('svix-id') || undefined
     const svixHeaders = {
-      'svix-id': request.headers.get('svix-id') || undefined,
+      'svix-id': svixId,
       'svix-timestamp': request.headers.get('svix-timestamp') || undefined,
       'svix-signature': request.headers.get('svix-signature') || undefined,
     }
@@ -34,9 +41,16 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
+    idempotencyKey = svixId ? `resend:${svixId}` : null
+    if (idempotencyKey) {
+      const shouldSkip = await checkWebhookIdempotency(idempotencyKey, 'resend')
+      if (shouldSkip) {
+        return new NextResponse('OK', { status: 200 })
+      }
+    }
+
     const supabase = createAdminClient()
 
-    // Mapper les événements Resend → statuts prospection
     const statusMap: Record<string, string> = {
       'email.sent': 'sent',
       'email.delivered': 'delivered',
@@ -50,7 +64,6 @@ export async function POST(request: NextRequest) {
       return new NextResponse('OK', { status: 200 })
     }
 
-    // Resend envoie l'email_id dans data.email_id
     const emailId: string | undefined = data.email_id
     if (!emailId) {
       logger.warn('Resend webhook missing email_id', { eventType })
@@ -82,9 +95,19 @@ export async function POST(request: NextRequest) {
       logger.error('Resend webhook DB update error', error)
     }
 
+    if (idempotencyKey) {
+      await markWebhookCompleted(idempotencyKey, eventType)
+    }
+
     return new NextResponse('OK', { status: 200 })
   } catch (error) {
     logger.error('Resend webhook error', error as Error)
+    if (idempotencyKey) {
+      await markWebhookFailed(
+        idempotencyKey,
+        error instanceof Error ? error.message : 'Unknown error'
+      )
+    }
     return new NextResponse('OK', { status: 200 })
   }
 }
