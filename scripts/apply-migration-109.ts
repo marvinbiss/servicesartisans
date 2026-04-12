@@ -4,9 +4,13 @@
  * Usage: npx tsx scripts/apply-migration-109.ts
  */
 
+import 'dotenv/config'
 import pg from 'pg'
 
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 async function createClient(): Promise<InstanceType<typeof Client>> {
   const client = new Client({
@@ -14,7 +18,7 @@ async function createClient(): Promise<InstanceType<typeof Client>> {
     port: 5432,
     database: 'postgres',
     user: 'postgres',
-    password: 'Bulgarie93@',
+    password: PASSWORD,
     ssl: { rejectUnauthorized: false },
   })
   // Prevent unhandled 'error' event crash on connection drop
@@ -26,7 +30,7 @@ async function createClient(): Promise<InstanceType<typeof Client>> {
 }
 
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 const statements = [
@@ -217,7 +221,7 @@ async function main() {
       await cleanup.query('SELECT pg_terminate_backend($1)', [row.pid])
     }
     console.log(`  ${orphans.rows.length} processus termines, attente 5s...\n`)
-    await new Promise(r => setTimeout(r, 5000))
+    await new Promise((r) => setTimeout(r, 5000))
   } else {
     console.log('  Aucun processus orphelin\n')
   }
@@ -258,7 +262,11 @@ async function main() {
           console.log(`DEJA EXISTANT (${Math.round(ms / 1000)}s)`)
           skipped++
           done = true
-        } else if (err.code === 'ECONNRESET' || err.message.includes('ECONNRESET') || err.message.includes('connection')) {
+        } else if (
+          err.code === 'ECONNRESET' ||
+          err.message.includes('ECONNRESET') ||
+          err.message.includes('connection')
+        ) {
           console.log(`DECONNEXION (${Math.round(ms / 1000)}s)`)
           retries++
           if (retries > MAX_RETRIES) {
@@ -273,7 +281,11 @@ async function main() {
         }
       } finally {
         if (client) {
-          try { await client.end() } catch { /* ignore */ }
+          try {
+            await client.end()
+          } catch {
+            /* ignore */
+          }
         }
       }
     }
@@ -284,4 +296,7 @@ async function main() {
   console.log(`${'='.repeat(50)}`)
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

@@ -1,12 +1,16 @@
+import 'dotenv/config'
 import pg from 'pg'
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 const client = new Client({
   host: 'db.umjmbdbwcsxrvfqktiui.supabase.co',
   port: 5432,
   database: 'postgres',
   user: 'postgres',
-  password: 'Bulgarie93@',
+  password: PASSWORD,
   ssl: { rejectUnauthorized: false },
 })
 
@@ -21,7 +25,7 @@ async function main() {
   `)
   console.log('Columns matching noindex/index/seo/robot:')
   if (r.rows.length === 0) console.log('  (none found)')
-  r.rows.forEach(row => console.log(' ', row.column_name, '-', row.data_type))
+  r.rows.forEach((row) => console.log(' ', row.column_name, '-', row.data_type))
 
   // Also check all boolean columns
   const r2 = await client.query(`
@@ -30,9 +34,12 @@ async function main() {
     ORDER BY column_name
   `)
   console.log('\nAll boolean columns:')
-  r2.rows.forEach(row => console.log(' ', row.column_name))
+  r2.rows.forEach((row) => console.log(' ', row.column_name))
 
   await client.end()
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

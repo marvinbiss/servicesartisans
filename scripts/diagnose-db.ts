@@ -1,12 +1,16 @@
+import 'dotenv/config'
 import pg from 'pg'
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 const client = new Client({
   host: 'db.umjmbdbwcsxrvfqktiui.supabase.co',
   port: 5432,
   database: 'postgres',
   user: 'postgres',
-  password: 'Bulgarie93@',
+  password: PASSWORD,
   ssl: { rejectUnauthorized: false },
 })
 
@@ -25,7 +29,9 @@ async function main() {
     ORDER BY query_start
   `)
   console.log('Active queries:', r1.rows.length)
-  r1.rows.forEach(r => console.log('  -', r.state, '|', r.wait_event_type || '-', '|', r.query_preview))
+  r1.rows.forEach((r) =>
+    console.log('  -', r.state, '|', r.wait_event_type || '-', '|', r.query_preview)
+  )
 
   // 2. Locks on providers table
   const r2 = await client.query(`
@@ -36,7 +42,9 @@ async function main() {
     AND l.pid != pg_backend_pid()
   `)
   console.log('\nLocks on providers:', r2.rows.length)
-  r2.rows.forEach(r => console.log('  -', r.mode, '| granted:', r.granted, '|', r.state, '|', r.q))
+  r2.rows.forEach((r) =>
+    console.log('  -', r.mode, '| granted:', r.granted, '|', r.state, '|', r.q)
+  )
 
   // 3. Quick count test
   const t1 = Date.now()
@@ -52,7 +60,7 @@ async function main() {
   `)
   console.log('\nExisting custom indexes on providers:')
   if (r4.rows.length === 0) console.log('  (none)')
-  r4.rows.forEach(r => console.log('  -', r.indexname))
+  r4.rows.forEach((r) => console.log('  -', r.indexname))
 
   // 5. Check statement_timeout setting
   const r5 = await client.query('SHOW statement_timeout')
@@ -66,4 +74,7 @@ async function main() {
   await client.end()
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

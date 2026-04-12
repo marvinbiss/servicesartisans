@@ -1,12 +1,16 @@
+import 'dotenv/config'
 import pg from 'pg'
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 const client = new Client({
   host: 'db.umjmbdbwcsxrvfqktiui.supabase.co',
   port: 5432,
   database: 'postgres',
   user: 'postgres',
-  password: 'Bulgarie93@',
+  password: PASSWORD,
   ssl: { rejectUnauthorized: false },
 })
 
@@ -22,7 +26,7 @@ async function main() {
 
   // Test 2: Count with WHERE
   t = Date.now()
-  const r2 = await client.query("SELECT COUNT(*) FROM providers WHERE specialty IS NOT NULL")
+  const r2 = await client.query('SELECT COUNT(*) FROM providers WHERE specialty IS NOT NULL')
   console.log(`COUNT specialty NOT NULL: ${r2.rows[0].count} (${Date.now() - t}ms)`)
 
   // Test 3: Check if index specialty is being created
@@ -38,8 +42,10 @@ async function main() {
     AND query ILIKE '%CREATE%'
   `)
   console.log(`\nActive CREATE processes: ${r3.rows.length}`)
-  r3.rows.forEach(r => {
-    console.log(`  PID ${r.pid} | ${r.state} | wait: ${r.wait_event_type || '-'}/${r.wait_event || '-'} | duration: ${r.duration} | ${r.q}`)
+  r3.rows.forEach((r) => {
+    console.log(
+      `  PID ${r.pid} | ${r.state} | wait: ${r.wait_event_type || '-'}/${r.wait_event || '-'} | duration: ${r.duration} | ${r.q}`
+    )
   })
 
   // Test 4: Check table size
@@ -49,7 +55,9 @@ async function main() {
            pg_size_pretty(pg_relation_size('providers')) as table_only,
            pg_size_pretty(pg_indexes_size('providers')) as indexes
   `)
-  console.log(`\nTable size: ${r4.rows[0].table_only} (data) + ${r4.rows[0].indexes} (indexes) = ${r4.rows[0].total} (total)`)
+  console.log(
+    `\nTable size: ${r4.rows[0].table_only} (data) + ${r4.rows[0].indexes} (indexes) = ${r4.rows[0].total} (total)`
+  )
 
   // Test 5: Disk usage / IO stats
   t = Date.now()
@@ -60,10 +68,15 @@ async function main() {
   if (r5.rows.length > 0) {
     const s = r5.rows[0]
     const hitRate = s.heap_blks_hit / (s.heap_blks_read + s.heap_blks_hit + 1)
-    console.log(`Cache hit rate: ${(hitRate * 100).toFixed(1)}% (reads: ${s.heap_blks_read}, hits: ${s.heap_blks_hit})`)
+    console.log(
+      `Cache hit rate: ${(hitRate * 100).toFixed(1)}% (reads: ${s.heap_blks_read}, hits: ${s.heap_blks_hit})`
+    )
   }
 
   await client.end()
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

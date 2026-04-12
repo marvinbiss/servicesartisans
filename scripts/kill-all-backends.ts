@@ -1,12 +1,16 @@
+import 'dotenv/config'
 import pg from 'pg'
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 const client = new Client({
   host: 'db.umjmbdbwcsxrvfqktiui.supabase.co',
   port: 5432,
   database: 'postgres',
   user: 'postgres',
-  password: 'Bulgarie93@',
+  password: PASSWORD,
   ssl: { rejectUnauthorized: false },
 })
 
@@ -35,7 +39,7 @@ async function main() {
     }
   }
 
-  await new Promise(r => setTimeout(r, 3000))
+  await new Promise((r) => setTimeout(r, 3000))
 
   // Verify
   const check = await client.query(`
@@ -46,9 +50,12 @@ async function main() {
     AND state != 'idle'
   `)
   console.log('\nStill active after cleanup:', check.rows.length)
-  check.rows.forEach(r => console.log('  PID', r.pid, '|', r.state, '|', r.q))
+  check.rows.forEach((r) => console.log('  PID', r.pid, '|', r.state, '|', r.q))
 
   await client.end()
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

@@ -1,12 +1,16 @@
+import 'dotenv/config'
 import pg from 'pg'
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 const client = new Client({
   host: 'db.umjmbdbwcsxrvfqktiui.supabase.co',
   port: 5432,
   database: 'postgres',
   user: 'postgres',
-  password: 'Bulgarie93@',
+  password: PASSWORD,
   ssl: { rejectUnauthorized: false },
 })
 
@@ -23,7 +27,9 @@ async function main() {
     OR NOT i.indisready
   `)
   console.log('Invalid/not-ready indexes:', r1.rows.length)
-  r1.rows.forEach(r => console.log('  ', r.relname, '| valid:', r.indisvalid, '| ready:', r.indisready))
+  r1.rows.forEach((r) =>
+    console.log('  ', r.relname, '| valid:', r.indisvalid, '| ready:', r.indisready)
+  )
 
   // Check for any lock waits
   const r2 = await client.query(`
@@ -49,7 +55,7 @@ async function main() {
     WHERE NOT blocked_locks.granted
   `)
   console.log('\nBlocking lock chains:', r2.rows.length)
-  r2.rows.forEach(r => {
+  r2.rows.forEach((r) => {
     console.log(`  Blocked PID ${r.blocked_pid}: ${r.blocked_query?.slice(0, 60)}`)
     console.log(`    <- by PID ${r.blocking_pid}: ${r.blocking_query?.slice(0, 60)}`)
   })
@@ -66,11 +72,16 @@ async function main() {
     ORDER BY query_start
   `)
   console.log('\nActive queries:')
-  r3.rows.forEach(r => {
-    console.log(`  PID ${r.pid} | ${r.duration} | wait: ${r.wait_event_type || '-'}/${r.wait_event || '-'} | ${r.q}`)
+  r3.rows.forEach((r) => {
+    console.log(
+      `  PID ${r.pid} | ${r.duration} | wait: ${r.wait_event_type || '-'}/${r.wait_event || '-'} | ${r.q}`
+    )
   })
 
   await client.end()
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

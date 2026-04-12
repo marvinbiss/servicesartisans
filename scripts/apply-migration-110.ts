@@ -4,9 +4,13 @@
  * Usage: npx tsx scripts/apply-migration-110.ts
  */
 
+import 'dotenv/config'
 import pg from 'pg'
 
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 async function createClient(): Promise<InstanceType<typeof Client>> {
   const client = new Client({
@@ -14,7 +18,7 @@ async function createClient(): Promise<InstanceType<typeof Client>> {
     port: 5432,
     database: 'postgres',
     user: 'postgres',
-    password: 'Bulgarie93@',
+    password: PASSWORD,
     ssl: { rejectUnauthorized: false },
   })
   client.on('error', () => {})
@@ -25,7 +29,7 @@ async function createClient(): Promise<InstanceType<typeof Client>> {
 }
 
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 interface Block {
@@ -176,7 +180,8 @@ const blocks: Block[] = [
 
   // ===== 4b. ARTISANS INDEXES =====
   {
-    label: 'Index artisans (geo, city, dept, claimed, quality, slug, naf, trust, siren, phone, email)',
+    label:
+      'Index artisans (geo, city, dept, claimed, quality, slug, naf, trust, siren, phone, email)',
     sql: `
       CREATE INDEX IF NOT EXISTS artisans_geo_gist
         ON app.artisans USING gist(geo) WHERE deleted_at IS NULL;
@@ -1022,7 +1027,8 @@ const blocks: Block[] = [
     `,
   },
   {
-    label: 'RLS services + cities + plans + artisan_services + artisan_zones + subscriptions + contact_suppressions',
+    label:
+      'RLS services + cities + plans + artisan_services + artisan_zones + subscriptions + contact_suppressions',
     sql: `
       ALTER TABLE app.services ENABLE ROW LEVEL SECURITY;
       DROP POLICY IF EXISTS services_public_read ON app.services;
@@ -1175,7 +1181,7 @@ async function main() {
         const ms = Date.now() - start
         if (
           err.message?.includes('already exists') ||
-          err.message?.includes('does not exist') && err.message?.includes('DROP POLICY')
+          (err.message?.includes('does not exist') && err.message?.includes('DROP POLICY'))
         ) {
           console.log(`DEJA EXISTANT (${(ms / 1000).toFixed(1)}s)`)
           success++
@@ -1199,7 +1205,11 @@ async function main() {
         }
       } finally {
         if (client) {
-          try { await client.end() } catch { /* ignore */ }
+          try {
+            await client.end()
+          } catch {
+            /* ignore */
+          }
         }
       }
     }
@@ -1214,4 +1224,7 @@ async function main() {
   }
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

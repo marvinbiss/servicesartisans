@@ -1,12 +1,16 @@
+import 'dotenv/config'
 import pg from 'pg'
 const { Client } = pg
+
+const PASSWORD = process.env.SUPABASE_DB_PASSWORD
+if (!PASSWORD) throw new Error('SUPABASE_DB_PASSWORD required in .env.local')
 
 const client = new Client({
   host: 'db.umjmbdbwcsxrvfqktiui.supabase.co',
   port: 5432,
   database: 'postgres',
   user: 'postgres',
-  password: 'Bulgarie93@',
+  password: PASSWORD,
   ssl: { rejectUnauthorized: false },
 })
 
@@ -21,7 +25,7 @@ async function main() {
     ORDER BY indexname
   `)
   console.log('=== INDEXES ON providers ===')
-  r1.rows.forEach(r => console.log('  ', r.indexname))
+  r1.rows.forEach((r) => console.log('  ', r.indexname))
 
   // Check materialized views
   const r2 = await client.query(`
@@ -29,7 +33,7 @@ async function main() {
   `)
   console.log('\n=== MATERIALIZED VIEWS ===')
   if (r2.rows.length === 0) console.log('  (none)')
-  r2.rows.forEach(r => console.log('  ', r.matviewname))
+  r2.rows.forEach((r) => console.log('  ', r.matviewname))
 
   // Check constraints
   const r3 = await client.query(`
@@ -39,7 +43,7 @@ async function main() {
     ORDER BY conname
   `)
   console.log('\n=== CONSTRAINTS ON providers ===')
-  r3.rows.forEach(r => console.log('  ', r.conname))
+  r3.rows.forEach((r) => console.log('  ', r.conname))
 
   // Check views
   const r4 = await client.query(`
@@ -47,7 +51,7 @@ async function main() {
   `)
   console.log('\n=== VIEWS ===')
   if (r4.rows.length === 0) console.log('  (none)')
-  r4.rows.forEach(r => console.log('  ', r.viewname))
+  r4.rows.forEach((r) => console.log('  ', r.viewname))
 
   // Check functions
   const r5 = await client.query(`
@@ -67,9 +71,12 @@ async function main() {
   `)
   console.log('\n=== OTHER TABLE INDEXES ===')
   if (r6.rows.length === 0) console.log('  (none)')
-  r6.rows.forEach(r => console.log('  ', r.indexname))
+  r6.rows.forEach((r) => console.log('  ', r.indexname))
 
   await client.end()
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})
