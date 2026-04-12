@@ -85,6 +85,10 @@ vi.mock('@supabase/supabase-js', () => ({
   createClient: vi.fn().mockReturnValue(mockSupabaseClient),
 }))
 
+vi.mock('@/lib/supabase/admin', () => ({
+  createAdminClient: vi.fn().mockImplementation(() => mockSupabaseClient),
+}))
+
 // ============================================
 // Helpers
 // ============================================

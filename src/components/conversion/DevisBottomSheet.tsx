@@ -1,60 +1,17 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { X, CheckCircle, ArrowRight, ArrowLeft, MapPin, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
-import { services, villesLight } from '@/lib/data/france-light'
-import type { Ville } from '@/lib/data/france-light'
-
-// Full villes loaded on demand (lazy — only when user types)
-let _allVilles: Ville[] | null = null
-function getAllVilles(): Promise<Ville[]> {
-  if (_allVilles) return Promise.resolve(_allVilles)
-  return import('@/lib/data/france').then(m => { _allVilles = m.villes; return _allVilles! })
-}
+import { services } from '@/lib/data/france-light'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
+import { useDevisForm, urgencyOptions } from '@/hooks/useDevisForm'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
-
-/* ─── Types ────────────────────────────────────────────────────────── */
-
-interface FormData {
-  service: string
-  ville: string
-  description: string
-  urgence: string
-  nom: string
-  telephone: string
-  email: string
-  consentement: boolean
-}
-
-const initialFormData: FormData = {
-  service: '',
-  ville: '',
-  description: '',
-  urgence: '',
-  nom: '',
-  telephone: '',
-  email: '',
-  consentement: false,
-}
-
-const urgencyOptions = [
-  { value: 'flexible', label: 'Pas urgent' },
-  { value: 'mois', label: 'Ce mois-ci' },
-  { value: 'semaine', label: 'Cette semaine' },
-  { value: 'urgent', label: 'Urgent' },
-]
-
-/* ─── Component ────────────────────────────────────────────────────── */
 
 interface DevisBottomSheetProps {
   isOpen: boolean
   onClose: () => void
-  /** Pre-fill service slug */
   prefilledService?: string
-  /** Pre-fill city */
   prefilledCity?: string
 }
 
@@ -64,49 +21,44 @@ export default function DevisBottomSheet({
   prefilledService,
   prefilledCity,
 }: DevisBottomSheetProps) {
-  const [step, setStep] = useState<1 | 2 | 3>(1)
-  const [formData, setFormData] = useState<FormData>(initialFormData)
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
-  const [submitted, setSubmitted] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [villeQuery, setVilleQuery] = useState('')
-  const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
-  const [geoLoading, setGeoLoading] = useState(false)
+  const form = useDevisForm({
+    source: 'bottom_sheet',
+    initialData: {
+      service: prefilledService || '',
+      ville: prefilledCity || '',
+    },
+    initialStep: prefilledService && prefilledCity ? 3 : prefilledService ? 2 : 1,
+    initialVilleQuery: prefilledCity || '',
+  })
 
   const sheetRef = useRef<HTMLDivElement>(null)
   const dragStartY = useRef<number | null>(null)
   const currentTranslateY = useRef(0)
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  // Pre-fill on open
   useEffect(() => {
     if (isOpen) {
-      const newData = { ...initialFormData }
       let startStep: 1 | 2 | 3 = 1
+      const newData: Record<string, string> = {}
       if (prefilledService) {
         newData.service = prefilledService
         startStep = 2
       }
       if (prefilledCity) {
         newData.ville = prefilledCity
-        setVilleQuery(prefilledCity)
+        form.setVilleQuery(prefilledCity)
         startStep = 3
       }
-      setFormData(newData)
-      setStep(startStep)
-      setErrors({})
-      setSubmitted(false)
-      setSubmitError(null)
+      form.resetForm(newData, startStep)
 
       trackEvent('form_started', {
         service: prefilledService || '',
         source: 'bottom_sheet',
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, prefilledService, prefilledCity])
 
-  // Lock body scroll when open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -116,7 +68,6 @@ export default function DevisBottomSheet({
     }
   }, [isOpen])
 
-  // Trap focus inside sheet
   useEffect(() => {
     if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -142,8 +93,6 @@ export default function DevisBottomSheet({
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
-
-  /* ─── Drag-to-dismiss ──────────────────────────────── */
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     dragStartY.current = e.touches[0].clientY
@@ -184,161 +133,10 @@ export default function DevisBottomSheet({
     currentTranslateY.current = 0
   }, [onClose])
 
-  /* ─── Form logic ───────────────────────────────────── */
-
-  const updateField = useCallback(
-    <K extends keyof FormData>(field: K, value: FormData[K]) => {
-      setFormData((prev) => ({ ...prev, [field]: value }))
-      setErrors((prev) => {
-        const next = { ...prev }
-        delete next[field]
-        return next
-      })
-    },
-    []
-  )
-
-  const [filteredVilles, setFilteredVilles] = useState<Ville[]>([])
-  useEffect(() => {
-    if (villeQuery.length < 2) { setFilteredVilles([]); return }
-    const filterList = (list: Ville[]) => list
-      .filter((v) =>
-        v.name.toLowerCase().includes(villeQuery.toLowerCase()) ||
-        v.codePostal.startsWith(villeQuery)
-      )
-      .slice(0, 6)
-    setFilteredVilles(filterList(villesLight))
-    getAllVilles().then(full => setFilteredVilles(filterList(full)))
-  }, [villeQuery])
-
-  const handleGeolocation = useCallback(async () => {
-    if (!navigator.geolocation) return
-    setGeoLoading(true)
-    try {
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
-      })
-      const { latitude, longitude } = position.coords
-      const res = await fetch(
-        `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}&type=municipality`
-      )
-      const data = await res.json()
-      if (data.features?.length > 0) {
-        const cityName = data.features[0].properties.city || data.features[0].properties.name
-        if (cityName) {
-          updateField('ville', cityName)
-          setVilleQuery(cityName)
-        }
-      }
-    } catch {
-      // Silently fail
-    } finally {
-      setGeoLoading(false)
-    }
-  }, [updateField])
-
-  // --- Abandon tracking ---
-  const abandonTrackedRef = useRef(false)
-  const trackAbandon = useCallback(async (email: string) => {
-    if (abandonTrackedRef.current || !email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) return
-    abandonTrackedRef.current = true
-    try {
-      await fetch('/api/devis/abandon-tracking', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          service: formData.service || null,
-          city: formData.ville || null,
-          step: 2,
-        }),
-      })
-    } catch { /* non-blocking */ }
-  }, [formData.service, formData.ville])
-
-  const validateAndNext = () => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (step === 1) {
-      if (!formData.service) newErrors.service = 'Choisissez un service'
-      if (!formData.ville) newErrors.ville = 'Indiquez votre ville'
-      if (Object.keys(newErrors).length === 0) setStep(2)
-    } else if (step === 2) {
-      if (!formData.email.trim()) {
-        newErrors.email = 'Votre e-mail est requis'
-      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
-        newErrors.email = 'E-mail invalide'
-      }
-      if (!formData.urgence) newErrors.urgence = 'Choisissez un délai'
-      if (Object.keys(newErrors).length === 0) {
-        trackAbandon(formData.email.trim())
-        setStep(3)
-      }
-    }
-    setErrors(newErrors)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.nom.trim()) newErrors.nom = 'Votre nom est requis'
-    if (!formData.telephone.trim()) {
-      newErrors.telephone = 'Votre téléphone est requis'
-    } else if (!isValidFrenchPhone(formData.telephone.trim())) {
-      newErrors.telephone = 'Numéro invalide'
-    }
-    if (!formData.consentement) {
-      newErrors.consentement = 'Veuillez accepter'
-    }
-    setErrors(newErrors)
-    if (Object.keys(newErrors).length > 0) return
-
-    setSubmitting(true)
-    setSubmitError(null)
-    try {
-      const res = await fetch('/api/devis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service: formData.service,
-          ville: formData.ville,
-          description: formData.description,
-          urgency: formData.urgence,
-          nom: formData.nom,
-          telephone: cleanPhone(formData.telephone),
-          email: formData.email,
-        }),
-      })
-      if (!res.ok) {
-        const body = await res.json().catch(() => null)
-        throw new Error(body?.error || 'Erreur serveur')
-      }
-      // Mark abandon as completed
-      if (formData.email.trim()) {
-        fetch('/api/devis/abandon-complete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: formData.email.trim() }),
-        }).catch(() => {})
-      }
-      trackEvent('form_completed', {
-        service: formData.service,
-        source: 'bottom_sheet',
-      })
-      setSubmitted(true)
-    } catch (err) {
-      if (err instanceof TypeError && err.message === 'Failed to fetch') {
-        setSubmitError('Erreur de connexion. Vérifiez votre internet.')
-      } else if (err instanceof Error) {
-        setSubmitError(err.message)
-      } else {
-        setSubmitError('Une erreur est survenue. Veuillez réessayer.')
-      }
-    } finally {
-      setSubmitting(false)
-    }
+    await form.handleSubmit()
   }
-
-  /* ─── Render ───────────────────────────────────────── */
 
   if (!isOpen) return null
 
@@ -346,7 +144,6 @@ export default function DevisBottomSheet({
 
   return (
     <>
-      {/* Overlay */}
       <div
         ref={overlayRef}
         className="fixed inset-0 z-[55] bg-charcoal-900/60 backdrop-blur-sm transition-opacity duration-300 md:hidden"
@@ -354,7 +151,6 @@ export default function DevisBottomSheet({
         aria-hidden="true"
       />
 
-      {/* Sheet */}
       <div
         ref={sheetRef}
         role="dialog"
@@ -370,14 +166,12 @@ export default function DevisBottomSheet({
           className="bg-white rounded-t-2xl shadow-premium max-h-[85vh] flex flex-col"
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         >
-          {/* Handle + Header */}
           <div
             className="flex-shrink-0 pt-3 pb-2 cursor-grab active:cursor-grabbing"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            {/* Drag handle */}
             <div className="w-10 h-1 bg-sand-400 rounded-full mx-auto mb-3" />
             <div className="flex items-center justify-between px-4">
               <h2 className="font-heading font-semibold text-lg text-charcoal-900">
@@ -393,13 +187,12 @@ export default function DevisBottomSheet({
             </div>
           </div>
 
-          {/* Step indicator — compact */}
-          {!submitted && (
+          {!form.submitted && (
             <div className="flex-shrink-0 px-4 pb-3">
               <div
                 className="flex items-center gap-1"
                 role="progressbar"
-                aria-valuenow={step}
+                aria-valuenow={form.step}
                 aria-valuemin={1}
                 aria-valuemax={3}
                 aria-label="Progression du formulaire"
@@ -409,18 +202,20 @@ export default function DevisBottomSheet({
                     <div className="flex items-center gap-1.5 flex-1">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                          step > i + 1
+                          form.step > i + 1
                             ? 'bg-accent-500 text-white'
-                            : step === i + 1
-                            ? 'bg-primary-400 text-white shadow-cta scale-110'
-                            : 'bg-sand-200 text-charcoal-400'
+                            : form.step === i + 1
+                              ? 'bg-primary-400 text-white shadow-cta scale-110'
+                              : 'bg-sand-200 text-charcoal-400'
                         }`}
                       >
-                        {step > i + 1 ? <CheckCircle className="w-3.5 h-3.5" /> : i + 1}
+                        {form.step > i + 1 ? <CheckCircle className="w-3.5 h-3.5" /> : i + 1}
                       </div>
                       <span
                         className={`text-xs hidden min-[380px]:inline ${
-                          step === i + 1 ? 'font-semibold text-primary-500' : 'text-charcoal-400'
+                          form.step === i + 1
+                            ? 'font-semibold text-primary-500'
+                            : 'text-charcoal-400'
                         }`}
                       >
                         {label}
@@ -429,7 +224,7 @@ export default function DevisBottomSheet({
                     {i < 2 && (
                       <div
                         className={`h-0.5 flex-1 mx-1 rounded-full transition-colors ${
-                          step > i + 1 ? 'bg-accent-500' : 'bg-sand-200'
+                          form.step > i + 1 ? 'bg-accent-500' : 'bg-sand-200'
                         }`}
                       />
                     )}
@@ -439,22 +234,24 @@ export default function DevisBottomSheet({
             </div>
           )}
 
-          {/* SR-only step announcer */}
-          {!submitted && (
+          {!form.submitted && (
             <div className="sr-only" aria-live="assertive" aria-atomic="true">
-              Étape {step} sur 3{step === 1 ? ' : Votre besoin' : step === 2 ? ' : Vos coordonnées' : ' : Confirmation'}
+              Étape {form.step} sur 3
+              {form.step === 1
+                ? ' : Votre besoin'
+                : form.step === 2
+                  ? ' : Vos coordonnées'
+                  : ' : Confirmation'}
             </div>
           )}
 
-          {/* Content — scrollable */}
           <div className="flex-1 overflow-y-auto px-4 pb-4 overscroll-contain" aria-live="polite">
-            {submitted ? (
-              /* ── Success with matched providers ── */
+            {form.submitted ? (
               <div>
                 <DevisConfirmation
-                  service={formData.service}
-                  city={formData.ville}
-                  phone={formData.telephone}
+                  service={form.formData.service}
+                  city={form.formData.ville}
+                  phone={form.formData.telephone}
                   compact
                 />
                 <button
@@ -465,21 +262,19 @@ export default function DevisBottomSheet({
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate>
-                {/* ── Step 1: Service + Ville ── */}
-                {step === 1 && (
+              <form onSubmit={onFormSubmit} noValidate>
+                {form.step === 1 && (
                   <div className="space-y-4" aria-label="Étape 1 sur 3">
-                    {/* Service */}
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
                         Quel service recherchez-vous ?
                       </label>
                       <div className="relative">
                         <select
-                          value={formData.service}
-                          onChange={(e) => updateField('service', e.target.value)}
+                          value={form.formData.service}
+                          onChange={(e) => form.updateField('service', e.target.value)}
                           className={`w-full h-12 px-4 pr-10 bg-sand-50 border rounded-xl text-charcoal-900 appearance-none focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
-                            errors.service ? 'border-red-400' : 'border-sand-300'
+                            form.errors.service ? 'border-red-400' : 'border-sand-300'
                           }`}
                         >
                           <option value="">Choisir un service...</option>
@@ -491,12 +286,11 @@ export default function DevisBottomSheet({
                         </select>
                         <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none" />
                       </div>
-                      {errors.service && (
-                        <p className="text-red-500 text-xs mt-1">{errors.service}</p>
+                      {form.errors.service && (
+                        <p className="text-red-500 text-xs mt-1">{form.errors.service}</p>
                       )}
                     </div>
 
-                    {/* Ville */}
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
                         Dans quelle ville ?
@@ -504,49 +298,46 @@ export default function DevisBottomSheet({
                       <div className="relative">
                         <input
                           type="text"
-                          value={villeQuery}
+                          value={form.villeQuery}
                           onChange={(e) => {
-                            setVilleQuery(e.target.value)
-                            setShowVilleSuggestions(true)
-                            if (e.target.value.length < 2) updateField('ville', '')
+                            form.setVilleQuery(e.target.value)
+                            form.setShowVilleSuggestions(true)
+                            if (e.target.value.length < 2) form.updateField('ville', '')
                           }}
-                          onFocus={() => setShowVilleSuggestions(true)}
+                          onFocus={() => form.setShowVilleSuggestions(true)}
                           placeholder="Ville ou code postal"
                           className={`w-full h-12 px-4 pr-20 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
-                            errors.ville ? 'border-red-400' : 'border-sand-300'
+                            form.errors.ville ? 'border-red-400' : 'border-sand-300'
                           }`}
                           autoComplete="off"
                         />
                         <button
                           type="button"
-                          onClick={handleGeolocation}
-                          disabled={geoLoading}
+                          onClick={form.handleGeolocation}
+                          disabled={form.geoLoading}
                           className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-primary-400 hover:text-primary-600 transition-colors touch-manipulation"
                           aria-label="Utiliser ma position"
                         >
-                          <MapPin className={`w-5 h-5 ${geoLoading ? 'animate-pulse' : ''}`} />
+                          <MapPin className={`w-5 h-5 ${form.geoLoading ? 'animate-pulse' : ''}`} />
                         </button>
                       </div>
-                      {errors.ville && (
-                        <p className="text-red-500 text-xs mt-1">{errors.ville}</p>
+                      {form.errors.ville && (
+                        <p className="text-red-500 text-xs mt-1">{form.errors.ville}</p>
                       )}
-                      {/* Suggestions */}
-                      {showVilleSuggestions && filteredVilles.length > 0 && (
+                      {form.showVilleSuggestions && form.filteredVilles.length > 0 && (
                         <div className="mt-1 bg-white border border-sand-300 rounded-xl shadow-soft overflow-hidden max-h-48 overflow-y-auto">
-                          {filteredVilles.map((v) => (
+                          {form.filteredVilles.map((v) => (
                             <button
                               key={`${v.name}-${v.codePostal}`}
                               type="button"
-                              onClick={() => {
-                                updateField('ville', v.name)
-                                setVilleQuery(v.name)
-                                setShowVilleSuggestions(false)
-                              }}
+                              onClick={() => form.selectVille(v.name)}
                               className="w-full px-4 py-2.5 text-left text-sm hover:bg-sand-50 transition-colors flex items-center gap-2 touch-manipulation"
                             >
                               <MapPin className="w-3.5 h-3.5 text-charcoal-400 flex-shrink-0" />
                               <span className="text-charcoal-800">{v.name}</span>
-                              <span className="text-charcoal-400 text-xs ml-auto">{v.codePostal}</span>
+                              <span className="text-charcoal-400 text-xs ml-auto">
+                                {v.codePostal}
+                              </span>
                             </button>
                           ))}
                         </div>
@@ -555,7 +346,7 @@ export default function DevisBottomSheet({
 
                     <button
                       type="button"
-                      onClick={validateAndNext}
+                      onClick={form.validateAndNext}
                       className="w-full h-12 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
                     >
                       Continuer
@@ -564,34 +355,35 @@ export default function DevisBottomSheet({
                   </div>
                 )}
 
-                {/* ── Step 2: Email (early capture) + Urgence + Description ── */}
-                {step === 2 && (
+                {form.step === 2 && (
                   <div className="space-y-4" aria-label="Étape 2 sur 3">
-                    {/* Email — early capture */}
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
-                        Votre e-mail <span className="text-charcoal-400 font-normal">— pour recevoir vos devis</span>
+                        Votre e-mail{' '}
+                        <span className="text-charcoal-400 font-normal">
+                          — pour recevoir vos devis
+                        </span>
                       </label>
                       <input
                         type="email"
                         inputMode="email"
-                        value={formData.email}
-                        onChange={(e) => updateField('email', e.target.value)}
+                        value={form.formData.email}
+                        onChange={(e) => form.updateField('email', e.target.value)}
                         onBlur={() => {
-                          if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
-                            trackAbandon(formData.email.trim())
+                          if (form.isEmailValid(form.formData.email.trim())) {
+                            form.trackAbandon(form.formData.email.trim())
                           }
                         }}
                         placeholder="votre@email.fr"
                         className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
-                          errors.email ? 'border-red-400' : 'border-sand-300'
+                          form.errors.email ? 'border-red-400' : 'border-sand-300'
                         }`}
                         autoComplete="email"
                       />
-                      {errors.email && (
-                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                      {form.errors.email && (
+                        <p className="text-red-500 text-xs mt-1">{form.errors.email}</p>
                       )}
-                      {!errors.email && (
+                      {!form.errors.email && (
                         <p className="text-xs text-charcoal-400 mt-1">
                           Confidentiel — seul votre téléphone est transmis aux artisans
                         </p>
@@ -607,9 +399,9 @@ export default function DevisBottomSheet({
                           <button
                             key={opt.value}
                             type="button"
-                            onClick={() => updateField('urgence', opt.value)}
+                            onClick={() => form.updateField('urgence', opt.value)}
                             className={`h-11 px-3 rounded-xl text-sm font-medium border transition-all touch-manipulation ${
-                              formData.urgence === opt.value
+                              form.formData.urgence === opt.value
                                 ? 'border-primary-400 bg-primary-50 text-primary-700 shadow-cta'
                                 : 'border-sand-300 bg-sand-50 text-charcoal-600 hover:border-sand-400'
                             }`}
@@ -618,18 +410,19 @@ export default function DevisBottomSheet({
                           </button>
                         ))}
                       </div>
-                      {errors.urgence && (
-                        <p className="text-red-500 text-xs mt-1">{errors.urgence}</p>
+                      {form.errors.urgence && (
+                        <p className="text-red-500 text-xs mt-1">{form.errors.urgence}</p>
                       )}
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
-                        Décrivez votre projet <span className="text-charcoal-400 font-normal">(optionnel)</span>
+                        Décrivez votre projet{' '}
+                        <span className="text-charcoal-400 font-normal">(optionnel)</span>
                       </label>
                       <textarea
-                        value={formData.description}
-                        onChange={(e) => updateField('description', e.target.value)}
+                        value={form.formData.description}
+                        onChange={(e) => form.updateField('description', e.target.value)}
                         rows={3}
                         placeholder="Ex: fuite d'eau dans la cuisine, remplacement chauffe-eau..."
                         className="w-full px-4 py-3 bg-sand-50 border border-sand-300 rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors resize-none"
@@ -639,7 +432,7 @@ export default function DevisBottomSheet({
                     <div className="flex gap-3">
                       <button
                         type="button"
-                        onClick={() => setStep(1)}
+                        onClick={() => form.setStep(1)}
                         className="h-12 px-4 border border-sand-300 rounded-xl text-charcoal-600 font-medium hover:bg-sand-50 transition-colors flex items-center gap-1 touch-manipulation"
                       >
                         <ArrowLeft className="w-4 h-4" />
@@ -647,7 +440,7 @@ export default function DevisBottomSheet({
                       </button>
                       <button
                         type="button"
-                        onClick={validateAndNext}
+                        onClick={form.validateAndNext}
                         className="flex-1 h-12 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
                       >
                         Continuer
@@ -657,8 +450,7 @@ export default function DevisBottomSheet({
                   </div>
                 )}
 
-                {/* ── Step 3: Nom + Téléphone + Consentement ── */}
-                {step === 3 && (
+                {form.step === 3 && (
                   <div className="space-y-3" aria-label="Étape 3 sur 3">
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1">
@@ -666,15 +458,17 @@ export default function DevisBottomSheet({
                       </label>
                       <input
                         type="text"
-                        value={formData.nom}
-                        onChange={(e) => updateField('nom', e.target.value)}
+                        value={form.formData.nom}
+                        onChange={(e) => form.updateField('nom', e.target.value)}
                         placeholder="Votre nom complet"
                         className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
-                          errors.nom ? 'border-red-400' : 'border-sand-300'
+                          form.errors.nom ? 'border-red-400' : 'border-sand-300'
                         }`}
                         autoComplete="name"
                       />
-                      {errors.nom && <p className="text-red-500 text-xs mt-0.5">{errors.nom}</p>}
+                      {form.errors.nom && (
+                        <p className="text-red-500 text-xs mt-0.5">{form.errors.nom}</p>
+                      )}
                     </div>
 
                     <div>
@@ -683,58 +477,63 @@ export default function DevisBottomSheet({
                       </label>
                       <input
                         type="tel"
-                        value={formData.telephone}
-                        onChange={(e) => updateField('telephone', e.target.value)}
+                        value={form.formData.telephone}
+                        onChange={(e) => form.updateField('telephone', e.target.value)}
                         inputMode="tel"
                         placeholder="06 12 34 56 78"
                         className={`w-full h-12 px-4 bg-sand-50 border rounded-xl text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400 transition-colors ${
-                          errors.telephone ? 'border-red-400' : 'border-sand-300'
+                          form.errors.telephone ? 'border-red-400' : 'border-sand-300'
                         }`}
                         autoComplete="tel"
                       />
-                      {errors.telephone && (
-                        <p className="text-red-500 text-xs mt-0.5">{errors.telephone}</p>
+                      {form.errors.telephone && (
+                        <p className="text-red-500 text-xs mt-0.5">{form.errors.telephone}</p>
                       )}
                     </div>
 
                     <label className="flex items-start gap-2.5 pt-1">
                       <input
                         type="checkbox"
-                        checked={formData.consentement}
-                        onChange={(e) => updateField('consentement', e.target.checked)}
+                        checked={form.formData.consentement}
+                        onChange={(e) => form.updateField('consentement', e.target.checked)}
                         className="mt-0.5 w-5 h-5 rounded border-sand-400 text-primary-400 focus:ring-primary-400/40 flex-shrink-0"
                       />
                       <span className="text-xs text-charcoal-500 leading-relaxed">
-                        J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-                        <Link href="/confidentialite" className="underline text-primary-500 hover:text-primary-600">
+                        J&apos;accepte que mes données soient utilisées pour traiter ma demande et
+                        me mettre en relation avec des artisans partenaires. Voir notre{' '}
+                        <Link
+                          href="/confidentialite"
+                          className="underline text-primary-500 hover:text-primary-600"
+                        >
                           politique de confidentialité
-                        </Link>.
+                        </Link>
+                        .
                       </span>
                     </label>
-                    {errors.consentement && (
-                      <p className="text-red-500 text-xs">{errors.consentement}</p>
+                    {form.errors.consentement && (
+                      <p className="text-red-500 text-xs">{form.errors.consentement}</p>
                     )}
 
-                    {submitError && (
+                    {form.submitError && (
                       <p className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">
-                        {submitError}
+                        {form.submitError}
                       </p>
                     )}
 
                     <div className="flex gap-3 pt-1">
                       <button
                         type="button"
-                        onClick={() => setStep(2)}
+                        onClick={() => form.setStep(2)}
                         className="h-12 px-4 border border-sand-300 rounded-xl text-charcoal-600 font-medium hover:bg-sand-50 transition-colors flex items-center gap-1 touch-manipulation"
                       >
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <button
                         type="submit"
-                        disabled={submitting}
+                        disabled={form.submitting}
                         className="flex-1 h-12 bg-primary-400 hover:bg-primary-500 disabled:opacity-60 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
                       >
-                        {submitting ? (
+                        {form.submitting ? (
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                           <>Obtenir mon devis gratuit</>
@@ -753,9 +552,11 @@ export default function DevisBottomSheet({
         </div>
       </div>
 
-      {/* Noscript fallback */}
       <noscript>
-        <Link href="/devis" className="fixed bottom-4 left-4 right-4 z-[56] block text-center py-3 bg-primary-400 text-white font-semibold rounded-xl md:hidden">
+        <Link
+          href="/devis"
+          className="fixed bottom-4 left-4 right-4 z-[56] block text-center py-3 bg-primary-400 text-white font-semibold rounded-xl md:hidden"
+        >
           Obtenir mon devis gratuit
         </Link>
       </noscript>

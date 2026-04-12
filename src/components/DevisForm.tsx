@@ -2,18 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { services, villesLight } from '@/lib/data/france-light'
-import type { Ville } from '@/lib/data/france-light'
-
-// Full villes loaded on demand (lazy — only when user types)
-let _allVilles: Ville[] | null = null
-function getAllVilles(): Promise<Ville[]> {
-  if (_allVilles) return Promise.resolve(_allVilles)
-  return import('@/lib/data/france').then((m) => {
-    _allVilles = m.villes
-    return m.villes
-  })
-}
+import { services } from '@/lib/data/france-light'
 import {
   ArrowRight,
   ArrowLeft,
@@ -24,41 +13,12 @@ import {
   Shield,
   Clock,
 } from 'lucide-react'
+import { isValidFrenchPhone } from '@/lib/validation/phone'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
+import { useDevisForm, urgencyOptions, initialDevisFormData } from '@/hooks/useDevisForm'
+import type { DevisFormData } from '@/hooks/useDevisForm'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 import CeePrimeEstimateCard from '@/components/devis/CeePrimeEstimateCard'
-
-interface FormData {
-  service: string
-  ville: string
-  description: string
-  urgence: string
-  budget: string
-  nom: string
-  telephone: string
-  email: string
-  consentement: boolean
-}
-
-const initialFormData: FormData = {
-  service: '',
-  ville: '',
-  description: '',
-  urgence: '',
-  budget: '',
-  nom: '',
-  telephone: '',
-  email: '',
-  consentement: false,
-}
-
-const urgencyOptions = [
-  { value: 'flexible', label: 'Pas urgent' },
-  { value: 'mois', label: 'Ce mois-ci' },
-  { value: 'semaine', label: 'Cette semaine' },
-  { value: 'urgent', label: 'Urgent' },
-]
 
 const budgetOptions = [
   { value: 'moins-500', label: 'Moins de 500 \u20ac' },
@@ -68,7 +28,6 @@ const budgetOptions = [
   { value: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
-/** Common project types per service for quick selection */
 const serviceSubcategories: Record<string, string[]> = {
   plombier: [
     "Fuite d'eau",
@@ -133,20 +92,17 @@ const stepTitles = [
 
 const stepLabels = ['Projet', 'Détails', 'Contact']
 
-// --- Progress Bar (Typeform-style) ---
 function ProgressBar({ currentStep }: { currentStep: number }) {
   const progress = ((currentStep - 1) / 2) * 100
 
   return (
     <div className="mb-8">
-      {/* Step label */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm font-heading font-semibold text-charcoal-600">
           Étape {currentStep} sur 3
         </span>
         <span className="text-sm font-semibold text-primary-500">{Math.round(progress)}%</span>
       </div>
-      {/* Bar */}
       <div
         className="relative h-2 bg-sand-200 rounded-full overflow-hidden"
         role="progressbar"
@@ -160,7 +116,6 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
           style={{ width: `${progress}%` }}
         />
       </div>
-      {/* Step dots underneath */}
       <div className="flex justify-between mt-2">
         {stepLabels.map((label, i) => (
           <div key={label} className="flex flex-col items-center">
@@ -205,7 +160,6 @@ interface DevisFormProps {
   prefilledService?: string
   prefilledCity?: string
   prefilledCityPostal?: string
-  /** Code opération CEE source (ex: "BAR-TH-171") — metadata lead, non visible */
   prefilledOperation?: string
 }
 
@@ -215,17 +169,12 @@ export default function DevisForm({
   prefilledCityPostal,
   prefilledOperation,
 }: DevisFormProps = {}) {
-  // Service-only prefill is valid (no city required) — triggers just the
-  // service preselect without skipping to step 2.
   const isPrefilled = !!(prefilledService && prefilledCity)
-  // Validate prefilled service against the known services list; if unknown
-  // (typo, outdated query param), ignore it silently.
   const validPrefilledService =
     prefilledService && services.some((s) => s.slug === prefilledService)
       ? prefilledService
       : undefined
 
-  // Restore saved form progress from localStorage
   const savedState =
     typeof window !== 'undefined'
       ? (() => {
@@ -233,7 +182,6 @@ export default function DevisForm({
             const saved = localStorage.getItem(STORAGE_KEY)
             if (!saved) return null
             const parsed = JSON.parse(saved)
-            // Migrate old 4-step saves to 3-step
             if (parsed.step === 4) parsed.step = 3
             if (parsed.step > 3) parsed.step = 1
             return parsed
@@ -243,40 +191,48 @@ export default function DevisForm({
         })()
       : null
 
-  // If there's a saved state beyond step 1, start at step 1 and show resume banner
-  // The user can click "Reprendre" to restore or "Recommencer" to clear
   const hasSavedProgress = !isPrefilled && savedState?.step && savedState.step > 1
-  const [step, setStep] = useState<1 | 2 | 3>(
-    isPrefilled ? 2 : hasSavedProgress ? 1 : ((savedState?.step || 1) as 1 | 2 | 3)
-  )
-  const [formData, setFormData] = useState<FormData>(
-    isPrefilled
-      ? { ...initialFormData, service: validPrefilledService || '', ville: prefilledCity || '' }
-      : hasSavedProgress
-        ? initialFormData
-        : validPrefilledService
-          ? { ...(savedState?.formData || initialFormData), service: validPrefilledService }
-          : savedState?.formData || initialFormData
-  )
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
-  const [submitted, setSubmitted] = useState(false)
+
+  const resolvedInitialData = isPrefilled
+    ? { service: validPrefilledService || '', ville: prefilledCity || '' }
+    : hasSavedProgress
+      ? {}
+      : validPrefilledService
+        ? { ...(savedState?.formData || {}), service: validPrefilledService }
+        : savedState?.formData || {}
+
+  const resolvedInitialStep: 1 | 2 | 3 = isPrefilled
+    ? 2
+    : hasSavedProgress
+      ? 1
+      : ((savedState?.step || 1) as 1 | 2 | 3)
+
   const [ceeEligible, setCeeEligible] = useState(false)
   const [ceeOperationCodes, setCeeOperationCodes] = useState<string[]>([])
-  const [submitting, setSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [villeQuery, setVilleQuery] = useState(
-    prefilledCity || (hasSavedProgress ? '' : savedState?.villeQuery || '')
-  )
-  const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
   const [selectedVillePostal, setSelectedVillePostal] = useState(
     prefilledCityPostal || (hasSavedProgress ? '' : savedState?.selectedVillePostal || '')
   )
-  const [geoLoading, setGeoLoading] = useState(false)
-  const [debouncedVilleQuery, setDebouncedVilleQuery] = useState(villeQuery)
-  const [abandonTracked, setAbandonTracked] = useState(false)
   const [monthlyCount, setMonthlyCount] = useState<string>('1 200+')
 
-  // Resume banner: show if saved state exists at step > 1 and not prefilled
+  const form = useDevisForm({
+    source: 'devis_form',
+    initialData: resolvedInitialData,
+    initialStep: resolvedInitialStep,
+    initialVilleQuery: prefilledCity || (hasSavedProgress ? '' : savedState?.villeQuery || ''),
+    villeQueryDebounceMs: 300,
+    onSubmitSuccess: (responseBody) => {
+      const body = responseBody as {
+        cee_eligible?: boolean
+        cee_operation_codes?: string[]
+      } | null
+      if (body?.cee_eligible) {
+        setCeeEligible(true)
+        setCeeOperationCodes(body.cee_operation_codes || [])
+      }
+      localStorage.removeItem(STORAGE_KEY)
+    },
+  })
+
   const [showResumeBanner, setShowResumeBanner] = useState(false)
   const [savedService, setSavedService] = useState('')
   const [savedVille, setSavedVille] = useState('')
@@ -293,7 +249,7 @@ export default function DevisForm({
         setShowResumeBanner(true)
       }
     } catch {
-      // ignore : localStorage peut lever si quota/SSR/privacy mode
+      // ignore
     }
   }, [isPrefilled])
 
@@ -304,27 +260,27 @@ export default function DevisForm({
       const parsed = JSON.parse(saved)
       if (parsed.step) {
         const targetStep = (parsed.step === 4 ? 3 : parsed.step > 3 ? 1 : parsed.step) as 1 | 2 | 3
-        setStep(targetStep)
-        if (parsed.formData) setFormData(parsed.formData)
-        if (parsed.villeQuery) setVilleQuery(parsed.villeQuery)
+        form.setStep(targetStep)
+        if (parsed.formData) form.setFormData({ ...initialDevisFormData, ...parsed.formData })
+        if (parsed.villeQuery) form.setVilleQuery(parsed.villeQuery)
         if (parsed.selectedVillePostal) setSelectedVillePostal(parsed.selectedVillePostal)
       }
     } catch {
-      // ignore : localStorage peut lever si quota/SSR/privacy mode
+      // ignore
     }
     setShowResumeBanner(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleDismiss = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY)
-    setStep(1)
-    setFormData(initialFormData)
-    setVilleQuery('')
+    form.resetForm()
+    form.setVilleQuery('')
     setSelectedVillePostal('')
     setShowResumeBanner(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Fetch monthly demand count (social proof)
   useEffect(() => {
     try {
       const cached = sessionStorage.getItem('sa:devis-monthly-count')
@@ -336,7 +292,7 @@ export default function DevisForm({
         }
       }
     } catch {
-      // ignore : localStorage peut lever si quota/SSR/privacy mode
+      // ignore
     }
     fetch('/api/stats/demand')
       .then((r) => r.json())
@@ -350,30 +306,19 @@ export default function DevisForm({
               JSON.stringify({ count, ts: Date.now() })
             )
           } catch {
-            // ignore : sessionStorage quota/privacy mode
+            // ignore
           }
         }
       })
-      .catch(() => {
-        // ignore : fail-open sur stat démo (non bloquant)
-      })
+      .catch(() => {})
   }, [])
 
-  // Debounce ville search input (300ms)
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedVilleQuery(villeQuery), 300)
-    return () => clearTimeout(timer)
-  }, [villeQuery])
-
-  // Transition state
   const [transition, setTransition] = useState<
     'idle' | 'slide-out-left' | 'slide-out-right' | 'slide-in-left' | 'slide-in-right'
   >('idle')
 
-  // Ref for auto-focus
   const stepContainerRef = useRef<HTMLDivElement>(null)
 
-  // Auto-focus first input when step changes
   useEffect(() => {
     if (transition !== 'idle') return
     const timer = setTimeout(() => {
@@ -386,39 +331,28 @@ export default function DevisForm({
       }
     }, 450)
     return () => clearTimeout(timer)
-  }, [step, transition])
-
-  const updateField = useCallback(<K extends keyof FormData>(field: K, value: FormData[K]) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-    setErrors((prev) => {
-      const next = { ...prev }
-      delete next[field]
-      return next
-    })
-  }, [])
+  }, [form.step, transition])
 
   const validateField = useCallback(
-    (field: keyof FormData) => {
-      setErrors((prev) => {
+    (field: keyof DevisFormData) => {
+      form.setErrors((prev) => {
         const next = { ...prev }
         switch (field) {
           case 'nom':
-            if (!formData.nom.trim()) next.nom = 'Veuillez entrer votre nom'
+            if (!form.formData.nom.trim()) next.nom = 'Veuillez entrer votre nom'
             else delete next.nom
             break
           case 'telephone':
-            if (!formData.telephone.trim())
+            if (!form.formData.telephone.trim())
               next.telephone = 'Veuillez entrer votre numéro de téléphone'
-            else if (!isValidFrenchPhone(formData.telephone.trim()))
+            else if (!isValidFrenchPhone(form.formData.telephone.trim()))
               next.telephone =
                 'Le numéro de téléphone doit contenir 10 chiffres (ex : 06 12 34 56 78)'
             else delete next.telephone
             break
           case 'email':
-            if (!formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
-            else if (
-              !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())
-            )
+            if (!form.formData.email.trim()) next.email = 'Veuillez entrer votre adresse e-mail'
+            else if (!form.isEmailValid(form.formData.email.trim()))
               next.email = 'Veuillez entrer une adresse e-mail valide (ex : nom@exemple.fr)'
             else delete next.email
             break
@@ -428,314 +362,189 @@ export default function DevisForm({
         return next
       })
     },
-    [formData]
+    [form]
   )
 
-  // Persist form progress to localStorage (skip while resume banner is shown to avoid overwriting saved data)
   useEffect(() => {
-    if (submitted || showResumeBanner) return
+    if (form.submitted || showResumeBanner) return
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ formData, step, villeQuery, selectedVillePostal })
-      )
-    } catch {
-      // ignore : localStorage peut lever si quota/SSR/privacy mode
-    }
-  }, [formData, step, villeQuery, selectedVillePostal, submitted, showResumeBanner])
-
-  const [filteredVilles, setFilteredVilles] = useState<Ville[]>([])
-  useEffect(() => {
-    if (debouncedVilleQuery.length < 2) {
-      setFilteredVilles([])
-      return
-    }
-    const q = debouncedVilleQuery.toLowerCase()
-    const filterList = (list: Ville[]) => {
-      const results: Ville[] = []
-      for (const v of list) {
-        if (v.name.toLowerCase().startsWith(q) || v.codePostal.startsWith(debouncedVilleQuery)) {
-          results.push(v)
-          if (results.length >= 8) break
-        }
-      }
-      return results
-    }
-    setFilteredVilles(filterList(villesLight))
-    getAllVilles().then((full) => setFilteredVilles(filterList(full)))
-  }, [debouncedVilleQuery])
-
-  const handleGeolocation = useCallback(async () => {
-    if (!navigator.geolocation) return
-    setGeoLoading(true)
-    try {
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
-      })
-      const { latitude, longitude } = position.coords
-      const res = await fetch(
-        `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}&type=municipality`
-      )
-      const data = await res.json()
-      if (data.features && data.features.length > 0) {
-        const feature = data.features[0]
-        const cityName = feature.properties.city || feature.properties.name
-        const postcode = feature.properties.postcode
-        if (cityName) {
-          updateField('ville', cityName)
-          setVilleQuery(cityName)
-          if (postcode) setSelectedVillePostal(postcode)
-        }
-      }
-    } catch {
-      // Silently fail - user can still type manually
-    } finally {
-      setGeoLoading(false)
-    }
-  }, [updateField])
-
-  // --- Abandon tracking: fire when email is filled at step 2 ---
-  const trackAbandon = useCallback(
-    async (email: string) => {
-      if (
-        abandonTracked ||
-        !email ||
-        !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
-      )
-        return
-      setAbandonTracked(true)
-      try {
-        await fetch('/api/devis/abandon-tracking', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            service: formData.service || null,
-            city: formData.ville || null,
-            step: 2,
-          }),
+        JSON.stringify({
+          formData: form.formData,
+          step: form.step,
+          villeQuery: form.villeQuery,
+          selectedVillePostal,
         })
-      } catch {
-        // Non-blocking
-      }
-    },
-    [abandonTracked, formData.service, formData.ville]
-  )
+      )
+    } catch {
+      // ignore
+    }
+  }, [
+    form.formData,
+    form.step,
+    form.villeQuery,
+    selectedVillePostal,
+    form.submitted,
+    showResumeBanner,
+  ])
 
-  // --- Validation per step ---
-  const validateStep1 = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.service) newErrors.service = 'Veuillez sélectionner un service'
-    if (!formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
-    setErrors(newErrors)
+  const handleGeo = useCallback(async () => {
+    const result = await form.handleGeolocation()
+    if (result?.postcode) {
+      setSelectedVillePostal(result.postcode)
+    }
+  }, [form])
+
+  const validateStep1Extended = (): boolean => {
+    const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
+    if (!form.formData.service) newErrors.service = 'Veuillez sélectionner un service'
+    if (!form.formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
+    form.setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const validateStep2 = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.email.trim()) {
+  const validateStep2Extended = (): boolean => {
+    const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
+    if (!form.formData.email.trim()) {
       newErrors.email = 'Veuillez entrer votre adresse e-mail'
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
+    } else if (!form.isEmailValid(form.formData.email.trim())) {
       newErrors.email = 'Veuillez entrer une adresse e-mail valide (ex : nom@exemple.fr)'
     }
-    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
-    if (formData.description.trim().length > 0 && formData.description.trim().length < 5) {
+    if (!form.formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
+    if (
+      form.formData.description.trim().length > 0 &&
+      form.formData.description.trim().length < 5
+    ) {
       newErrors.description =
         'Veuillez détailler davantage votre projet (5 caractères minimum) ou laisser le champ vide'
     }
-    setErrors(newErrors)
+    form.setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const validateStep3 = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
-    if (!formData.telephone.trim()) {
+  const validateStep3Extended = (): boolean => {
+    const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
+    if (!form.formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
+    if (!form.formData.telephone.trim()) {
       newErrors.telephone = 'Veuillez entrer votre numéro de téléphone'
-    } else if (!isValidFrenchPhone(formData.telephone.trim())) {
+    } else if (!isValidFrenchPhone(form.formData.telephone.trim())) {
       newErrors.telephone = 'Le numéro de téléphone doit contenir 10 chiffres (ex : 06 12 34 56 78)'
     }
-    if (!formData.consentement) {
+    if (!form.formData.consentement) {
       newErrors.consentement = "Veuillez accepter d'être contacté par des artisans"
     }
-    setErrors(newErrors)
+    form.setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  // Animated step transition
   const animateToStep = useCallback((targetStep: 1 | 2 | 3, direction: 'forward' | 'backward') => {
     const outDirection = direction === 'forward' ? 'slide-out-left' : 'slide-out-right'
     const inDirection = direction === 'forward' ? 'slide-in-right' : 'slide-in-left'
 
     setTransition(outDirection)
     setTimeout(() => {
-      setStep(targetStep)
+      form.setStep(targetStep)
       setTransition(inDirection)
       setTimeout(() => {
         setTransition('idle')
       }, 400)
     }, 200)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleNext = () => {
-    if (step === 1 && validateStep1()) {
+    if (form.step === 1 && validateStep1Extended()) {
       trackEvent('form_started', {
-        service: formData.service || '',
+        service: form.formData.service || '',
         source: 'devis_form',
       })
       animateToStep(2, 'forward')
-    } else if (step === 2 && validateStep2()) {
-      // Track abandon with email captured at step 2
-      trackAbandon(formData.email.trim())
+    } else if (form.step === 2 && validateStep2Extended()) {
+      form.trackAbandon(form.formData.email.trim())
       animateToStep(3, 'forward')
     }
   }
 
   const handlePrev = () => {
-    if (step === 2) {
+    if (form.step === 2) {
       if (isPrefilled) return
       animateToStep(1, 'backward')
-    } else if (step === 3) {
+    } else if (form.step === 3) {
       animateToStep(2, 'backward')
     }
   }
 
-  // Enter = Next (Typeform pattern)
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && step < 3) {
+    if (e.key === 'Enter' && form.step < 3) {
       e.preventDefault()
       handleNext()
     }
   }
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const onFormSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
-    if (submitting) return // Guard against double-submit / Retry re-entry
-    if (!validateStep3()) return
+    if (form.submitting) return
+    if (!validateStep3Extended()) return
 
-    setSubmitting(true)
-    setSubmitError(null)
+    await form.handleSubmit({
+      budget: form.formData.budget,
+      codePostal: selectedVillePostal,
+      ...(prefilledOperation ? { sourceOperation: prefilledOperation } : {}),
+    })
 
-    try {
-      const res = await fetch('/api/devis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service: formData.service,
-          urgency: formData.urgence,
-          budget: formData.budget,
-          description: formData.description,
-          codePostal: selectedVillePostal,
-          ville: formData.ville,
-          nom: formData.nom,
-          email: formData.email,
-          telephone: cleanPhone(formData.telephone),
-          // Metadata : code CEE source (ex: depuis un CTA fiche artisan RGE).
-          // Le schéma Zod côté API ignore les champs inconnus, donc ce champ
-          // est safe à envoyer même si l'API ne le lit pas encore.
-          ...(prefilledOperation ? { sourceOperation: prefilledOperation } : {}),
-        }),
-      })
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => null)
-        throw new Error(body?.error || "Erreur lors de l'envoi")
-      }
-
-      // Extract CEE eligibility flags from response for confirmation UI
-      const responseBody = (await res.json().catch(() => null)) as {
-        cee_eligible?: boolean
-        cee_operation_codes?: string[]
-      } | null
-      if (responseBody?.cee_eligible) {
-        setCeeEligible(true)
-        setCeeOperationCodes(responseBody.cee_operation_codes || [])
-      }
-
-      // Mark abandon as completed
-      if (formData.email.trim()) {
-        fetch('/api/devis/abandon-complete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: formData.email.trim() }),
-        }).catch(() => {})
-      }
-
+    if (!form.submitError) {
       trackEvent('devis_submitted', {
-        service: formData.service || '',
-        city: formData.ville || '',
+        service: form.formData.service || '',
+        city: form.formData.ville || '',
         postalCode: selectedVillePostal || '',
-        urgency: formData.urgence || '',
+        urgency: form.formData.urgence || '',
         source: 'devis_form',
         value: 45,
         currency: 'EUR',
       })
-      setSubmitted(true)
-      localStorage.removeItem(STORAGE_KEY)
-    } catch (err) {
-      if (err instanceof TypeError && err.message === 'Failed to fetch') {
-        setSubmitError('Erreur de connexion. Vérifiez votre internet.')
-      } else {
-        setSubmitError(
-          err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
-        )
-      }
-    } finally {
-      setSubmitting(false)
     }
   }
 
-  // --- Step validation checks for smart button ---
-  const isStep1Valid = !!formData.service && !!formData.ville
   const isStep2Valid =
-    !!formData.email.trim() &&
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) &&
-    !!formData.urgence &&
-    (formData.description.trim().length === 0 || formData.description.trim().length >= 5)
-  const isStep3Valid =
-    !!formData.nom.trim() &&
-    !!formData.telephone.trim() &&
-    isValidFrenchPhone(formData.telephone.trim()) &&
-    formData.consentement
+    !!form.formData.email.trim() &&
+    form.isEmailValid(form.formData.email) &&
+    !!form.formData.urgence &&
+    (form.formData.description.trim().length === 0 || form.formData.description.trim().length >= 5)
 
-  // --- Validation state for inline feedback ---
-  const getFieldState = (field: keyof FormData): 'idle' | 'valid' | 'error' => {
-    if (errors[field]) return 'error'
+  const getFieldState = (field: keyof DevisFormData): 'idle' | 'valid' | 'error' => {
+    if (form.errors[field]) return 'error'
     switch (field) {
       case 'service':
-        return formData.service ? 'valid' : 'idle'
+        return form.formData.service ? 'valid' : 'idle'
       case 'ville':
-        return formData.ville ? 'valid' : 'idle'
+        return form.formData.ville ? 'valid' : 'idle'
       case 'urgence':
-        return formData.urgence ? 'valid' : 'idle'
+        return form.formData.urgence ? 'valid' : 'idle'
       case 'nom':
-        return formData.nom.trim() ? 'valid' : 'idle'
+        return form.formData.nom.trim() ? 'valid' : 'idle'
       case 'telephone':
-        if (!formData.telephone.trim()) return 'idle'
-        return isValidFrenchPhone(formData.telephone.trim()) ? 'valid' : 'idle'
+        if (!form.formData.telephone.trim()) return 'idle'
+        return isValidFrenchPhone(form.formData.telephone.trim()) ? 'valid' : 'idle'
       case 'email':
-        if (!formData.email.trim()) return 'idle'
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())
-          ? 'valid'
-          : 'idle'
+        if (!form.formData.email.trim()) return 'idle'
+        return form.isEmailValid(form.formData.email.trim()) ? 'valid' : 'idle'
       default:
         return 'idle'
     }
   }
 
-  const inputBorderClass = (field: keyof FormData) => {
+  const inputBorderClass = (field: keyof DevisFormData) => {
     const state = getFieldState(field)
     if (state === 'error') return 'border-red-400 ring-2 ring-red-50'
     if (state === 'valid') return 'border-accent-400 ring-1 ring-accent-100'
     return 'border-sand-300'
   }
 
-  // --- Premium label + input classes ---
   const labelClass = 'block font-heading text-sm font-semibold text-charcoal-800 mb-2'
   const inputBase =
     'w-full rounded-xl border bg-sand-50 px-4 py-3 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all duration-200'
 
-  // Transition CSS classes
   const getTransitionClass = () => {
     switch (transition) {
       case 'slide-out-left':
@@ -751,15 +560,14 @@ export default function DevisForm({
     }
   }
 
-  // --- CONFIRMATION PAGE ---
-  if (submitted) {
+  if (form.submitted) {
     return (
       <div className="bg-white rounded-3xl shadow-premium border border-sand-200 p-8 md:p-12 max-w-2xl mx-auto">
         <DevisConfirmation
-          service={formData.service}
-          city={formData.ville}
-          phone={formData.telephone}
-          budget={formData.budget || undefined}
+          service={form.formData.service}
+          city={form.formData.ville}
+          phone={form.formData.telephone}
+          budget={form.formData.budget || undefined}
           ceeEligible={ceeEligible}
           ceeOperationCodes={ceeOperationCodes}
         />
@@ -784,7 +592,6 @@ export default function DevisForm({
 
   return (
     <div className="max-w-2xl mx-auto" data-devis-form>
-      {/* Trust badges */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
         <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
           <Shield className="w-3.5 h-3.5" />
@@ -832,31 +639,31 @@ export default function DevisForm({
       )}
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={onFormSubmit}
         noValidate
         className="bg-white rounded-3xl shadow-premium border border-sand-200 p-6 md:p-10 overflow-hidden"
       >
-        {/* Hidden : code opération CEE source (transmis en metadata du lead) */}
         {prefilledOperation && (
           <input type="hidden" name="sourceOperation" value={prefilledOperation} />
         )}
-        <ProgressBar currentStep={step} />
+        <ProgressBar currentStep={form.step} />
 
-        {/* SR-only step announcer */}
         <div className="sr-only" aria-live="assertive" aria-atomic="true">
-          Étape {step} sur 3
-          {step === 1 ? ' : Votre besoin' : step === 2 ? ' : Vos coordonnées' : ' : Confirmation'}
+          Étape {form.step} sur 3
+          {form.step === 1
+            ? ' : Votre besoin'
+            : form.step === 2
+              ? ' : Vos coordonnées'
+              : ' : Confirmation'}
         </div>
 
-        {/* Step container with transitions */}
         <div
           ref={stepContainerRef}
           className={`min-h-[320px] ${getTransitionClass()}`}
           onKeyDown={handleKeyDown}
           aria-live="polite"
         >
-          {/* --- Step 1: Service + Ville (merged) --- */}
-          {step === 1 && (
+          {form.step === 1 && (
             <div className="space-y-6" aria-label="Étape 1 sur 3">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
@@ -871,7 +678,6 @@ export default function DevisForm({
                 </span>
               </div>
 
-              {/* Service */}
               <div>
                 <label htmlFor="service" className={labelClass}>
                   Type de service <span className="text-red-500">*</span>
@@ -879,10 +685,10 @@ export default function DevisForm({
                 <div className="relative">
                   <select
                     id="service"
-                    value={formData.service}
-                    onChange={(e) => updateField('service', e.target.value)}
-                    aria-describedby={errors.service ? 'service-error' : undefined}
-                    aria-invalid={!!errors.service}
+                    value={form.formData.service}
+                    onChange={(e) => form.updateField('service', e.target.value)}
+                    aria-describedby={form.errors.service ? 'service-error' : undefined}
+                    aria-invalid={!!form.errors.service}
                     style={{ fontSize: '16px' }}
                     className={`${inputBase} appearance-none pr-10 ${inputBorderClass('service')}`}
                   >
@@ -900,18 +706,17 @@ export default function DevisForm({
                     </span>
                   )}
                 </div>
-                {errors.service && (
+                {form.errors.service && (
                   <p
                     id="service-error"
                     role="alert"
                     className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
                   >
-                    {errors.service}
+                    {form.errors.service}
                   </p>
                 )}
               </div>
 
-              {/* Ville */}
               <div>
                 <label htmlFor="ville" className={labelClass}>
                   Ville <span className="text-red-500">*</span>
@@ -922,22 +727,22 @@ export default function DevisForm({
                     type="text"
                     autoComplete="address-level2"
                     placeholder="Ex : Paris, Lyon, Marseille..."
-                    value={villeQuery}
+                    value={form.villeQuery}
                     onChange={(e) => {
                       const newValue = e.target.value
-                      setVilleQuery(newValue)
-                      setShowVilleSuggestions(true)
-                      if (formData.ville && newValue !== formData.ville) {
-                        updateField('ville', '')
+                      form.setVilleQuery(newValue)
+                      form.setShowVilleSuggestions(true)
+                      if (form.formData.ville && newValue !== form.formData.ville) {
+                        form.updateField('ville', '')
                         setSelectedVillePostal('')
                       }
                     }}
-                    onFocus={() => setShowVilleSuggestions(true)}
+                    onFocus={() => form.setShowVilleSuggestions(true)}
                     onBlur={() => {
-                      setTimeout(() => setShowVilleSuggestions(false), 200)
+                      setTimeout(() => form.setShowVilleSuggestions(false), 200)
                     }}
-                    aria-describedby={errors.ville ? 'ville-error' : undefined}
-                    aria-invalid={!!errors.ville}
+                    aria-describedby={form.errors.ville ? 'ville-error' : undefined}
+                    aria-invalid={!!form.errors.ville}
                     style={{ fontSize: '16px' }}
                     className={`${inputBase} pr-10 ${inputBorderClass('ville')}`}
                   />
@@ -946,19 +751,17 @@ export default function DevisForm({
                       <Check className="w-4 h-4" />
                     </span>
                   )}
-                  {showVilleSuggestions && filteredVilles.length > 0 && (
+                  {form.showVilleSuggestions && form.filteredVilles.length > 0 && (
                     <ul className="absolute z-20 mt-1 w-full bg-white border border-sand-200 rounded-xl shadow-premium max-h-60 overflow-auto">
-                      {filteredVilles.map((v) => (
+                      {form.filteredVilles.map((v) => (
                         <li key={v.slug}>
                           <button
                             type="button"
                             className="w-full text-left px-4 py-3 hover:bg-primary-50 transition-colors text-sm first:rounded-t-xl last:rounded-b-xl"
                             onMouseDown={(e) => {
                               e.preventDefault()
-                              updateField('ville', v.name)
-                              setVilleQuery(v.name)
+                              form.selectVille(v.name)
                               setSelectedVillePostal(v.codePostal)
-                              setShowVilleSuggestions(false)
                             }}
                           >
                             <span className="font-medium text-charcoal-900">{v.name}</span>
@@ -973,42 +776,40 @@ export default function DevisForm({
                 </div>
                 <button
                   type="button"
-                  onClick={handleGeolocation}
-                  disabled={geoLoading}
+                  onClick={handleGeo}
+                  disabled={form.geoLoading}
                   className="mt-2 inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-700 font-medium transition-colors disabled:opacity-50"
                 >
                   <MapPin className="w-4 h-4" />
-                  {geoLoading ? 'Localisation en cours\u2026' : 'Utiliser ma position'}
+                  {form.geoLoading ? 'Localisation en cours\u2026' : 'Utiliser ma position'}
                 </button>
-                {errors.ville && (
+                {form.errors.ville && (
                   <p
                     id="ville-error"
                     role="alert"
                     className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
                   >
-                    {errors.ville}
+                    {form.errors.ville}
                   </p>
                 )}
               </div>
 
-              {/* Social proof */}
               <div className="flex items-center gap-2 text-charcoal-400">
                 <Users className="w-4 h-4 flex-shrink-0" />
                 <p className="text-sm">14 500+ artisans référencés sur notre plateforme</p>
               </div>
 
-              {/* Carte prime CEE — visible dès que service + CP sont saisis */}
               <CeePrimeEstimateCard
-                serviceSlug={formData.service}
+                serviceSlug={form.formData.service}
                 postalCode={selectedVillePostal}
               />
 
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={!isStep1Valid}
+                disabled={!form.isStep1Valid}
                 className={`w-full inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
-                  isStep1Valid
+                  form.isStep1Valid
                     ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
                     : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
                 }`}
@@ -1018,8 +819,7 @@ export default function DevisForm({
             </div>
           )}
 
-          {/* --- Step 2: Email (early capture) + Urgence + Description + Budget --- */}
-          {step === 2 && (
+          {form.step === 2 && (
             <div className="space-y-6" aria-label="Étape 2 sur 3">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
@@ -1028,7 +828,6 @@ export default function DevisForm({
                 <p className="text-charcoal-500 text-sm">{stepTitles[1].subtitle}</p>
               </div>
 
-              {/* Email — early capture */}
               <div>
                 <label htmlFor="email" className={labelClass}>
                   Votre e-mail{' '}
@@ -1042,21 +841,16 @@ export default function DevisForm({
                     inputMode="email"
                     autoComplete="email"
                     placeholder="jean.dupont@email.fr"
-                    value={formData.email}
-                    onChange={(e) => updateField('email', e.target.value)}
+                    value={form.formData.email}
+                    onChange={(e) => form.updateField('email', e.target.value)}
                     onBlur={() => {
                       validateField('email')
-                      // Track abandon on email blur if valid
-                      if (
-                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-                          formData.email.trim()
-                        )
-                      ) {
-                        trackAbandon(formData.email.trim())
+                      if (form.isEmailValid(form.formData.email.trim())) {
+                        form.trackAbandon(form.formData.email.trim())
                       }
                     }}
-                    aria-describedby={errors.email ? 'email-error' : undefined}
-                    aria-invalid={!!errors.email}
+                    aria-describedby={form.errors.email ? 'email-error' : undefined}
+                    aria-invalid={!!form.errors.email}
                     style={{ fontSize: '16px' }}
                     className={`${inputBase} pr-10 ${inputBorderClass('email')}`}
                   />
@@ -1066,23 +860,22 @@ export default function DevisForm({
                     </span>
                   )}
                 </div>
-                {errors.email && (
+                {form.errors.email && (
                   <p
                     id="email-error"
                     role="alert"
                     className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
                   >
-                    {errors.email}
+                    {form.errors.email}
                   </p>
                 )}
-                {!errors.email && (
+                {!form.errors.email && (
                   <p className="text-xs text-charcoal-400 mt-1">
                     Confidentiel — seul votre téléphone est transmis aux artisans
                   </p>
                 )}
               </div>
 
-              {/* Urgency chips */}
               <div>
                 <label className={labelClass}>
                   Délai souhaité <span className="text-red-500">*</span>
@@ -1092,7 +885,7 @@ export default function DevisForm({
                     <label
                       key={opt.value}
                       className={`relative flex items-center justify-center px-2 sm:px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium ${
-                        formData.urgence === opt.value
+                        form.formData.urgence === opt.value
                           ? 'border-primary-400 bg-primary-50 text-primary-700 ring-1 ring-primary-200 scale-[1.02]'
                           : 'border-sand-300 bg-sand-50 hover:border-sand-400 text-charcoal-700'
                       }`}
@@ -1101,26 +894,25 @@ export default function DevisForm({
                         type="radio"
                         name="urgence"
                         value={opt.value}
-                        checked={formData.urgence === opt.value}
-                        onChange={(e) => updateField('urgence', e.target.value)}
+                        checked={form.formData.urgence === opt.value}
+                        onChange={(e) => form.updateField('urgence', e.target.value)}
                         className="sr-only"
                       />
-                      {formData.urgence === opt.value && (
+                      {form.formData.urgence === opt.value && (
                         <Check className="w-3.5 h-3.5 mr-1.5 text-primary-500" />
                       )}
                       {opt.label}
                     </label>
                   ))}
                 </div>
-                {errors.urgence && (
+                {form.errors.urgence && (
                   <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">
-                    {errors.urgence}
+                    {form.errors.urgence}
                   </p>
                 )}
               </div>
 
-              {/* Quick project type selection */}
-              {formData.service && serviceSubcategories[formData.service] && (
+              {form.formData.service && serviceSubcategories[form.formData.service] && (
                 <div>
                   <label className={labelClass}>
                     Type de projet{' '}
@@ -1129,26 +921,28 @@ export default function DevisForm({
                     </span>
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {serviceSubcategories[formData.service].map((cat) => {
-                      const isSelected = formData.description.includes(cat)
+                    {serviceSubcategories[form.formData.service].map((cat) => {
+                      const isSelected = form.formData.description.includes(cat)
                       return (
                         <button
                           key={cat}
                           type="button"
                           onClick={() => {
                             if (isSelected) {
-                              updateField(
+                              form.updateField(
                                 'description',
-                                formData.description
+                                form.formData.description
                                   .replace(cat, '')
                                   .replace(/,\s*,/g, ',')
                                   .replace(/^,\s*|,\s*$/g, '')
                                   .trim()
                               )
                             } else {
-                              updateField(
+                              form.updateField(
                                 'description',
-                                formData.description ? `${formData.description}, ${cat}` : cat
+                                form.formData.description
+                                  ? `${form.formData.description}, ${cat}`
+                                  : cat
                               )
                             }
                           }}
@@ -1167,7 +961,6 @@ export default function DevisForm({
                 </div>
               )}
 
-              {/* Description */}
               <div>
                 <label htmlFor="description" className={labelClass}>
                   Décrivez votre projet{' '}
@@ -1177,50 +970,49 @@ export default function DevisForm({
                   id="description"
                   rows={3}
                   placeholder={
-                    formData.service && serviceSubcategories[formData.service]
+                    form.formData.service && serviceSubcategories[form.formData.service]
                       ? 'Précisions supplémentaires (optionnel)...'
                       : "Ex: fuite d'eau dans la cuisine, remplacement chauffe-eau..."
                   }
-                  value={formData.description}
-                  onChange={(e) => updateField('description', e.target.value)}
-                  aria-describedby={errors.description ? 'description-error' : undefined}
-                  aria-invalid={!!errors.description}
+                  value={form.formData.description}
+                  onChange={(e) => form.updateField('description', e.target.value)}
+                  aria-describedby={form.errors.description ? 'description-error' : undefined}
+                  aria-invalid={!!form.errors.description}
                   style={{ fontSize: '16px' }}
                   className={`${inputBase} resize-none ${
-                    errors.description
+                    form.errors.description
                       ? 'border-red-400 ring-2 ring-red-50'
-                      : formData.description.trim().length >= 5
+                      : form.formData.description.trim().length >= 5
                         ? 'border-accent-400 ring-1 ring-accent-100'
                         : 'border-sand-300'
                   }`}
                 />
                 <div className="flex justify-between mt-1">
-                  {errors.description ? (
+                  {form.errors.description ? (
                     <p
                       id="description-error"
                       role="alert"
                       className="text-sm text-red-600 animate-fade-in-down"
                     >
-                      {errors.description}
+                      {form.errors.description}
                     </p>
                   ) : (
                     <span />
                   )}
-                  {formData.description.length > 0 && (
+                  {form.formData.description.length > 0 && (
                     <span
                       className={`text-xs ${
-                        formData.description.trim().length >= 5
+                        form.formData.description.trim().length >= 5
                           ? 'text-accent-600'
                           : 'text-charcoal-400'
                       }`}
                     >
-                      {formData.description.length}/5 caract.
+                      {form.formData.description.length}/5 caract.
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Budget chips */}
               <div>
                 <label className={labelClass}>
                   Budget estimé <span className="text-charcoal-400 font-normal">(optionnel)</span>
@@ -1230,7 +1022,7 @@ export default function DevisForm({
                     <label
                       key={opt.value}
                       className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium text-center ${
-                        formData.budget === opt.value
+                        form.formData.budget === opt.value
                           ? 'border-primary-400 bg-primary-50 text-primary-700 ring-1 ring-primary-200 scale-[1.02]'
                           : 'border-sand-300 bg-sand-50 hover:border-sand-400 text-charcoal-700'
                       }`}
@@ -1239,8 +1031,8 @@ export default function DevisForm({
                         type="radio"
                         name="budget"
                         value={opt.value}
-                        checked={formData.budget === opt.value}
-                        onChange={(e) => updateField('budget', e.target.value)}
+                        checked={form.formData.budget === opt.value}
+                        onChange={(e) => form.updateField('budget', e.target.value)}
                         className="sr-only"
                       />
                       {opt.label}
@@ -1275,8 +1067,7 @@ export default function DevisForm({
             </div>
           )}
 
-          {/* --- Step 3: Nom + Téléphone + Consentement --- */}
-          {step === 3 && (
+          {form.step === 3 && (
             <div className="space-y-6" aria-label="Étape 3 sur 3">
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-1">
@@ -1285,7 +1076,6 @@ export default function DevisForm({
                 <p className="text-charcoal-500 text-sm">{stepTitles[2].subtitle}</p>
               </div>
 
-              {/* Nom */}
               <div>
                 <label htmlFor="nom" className={labelClass}>
                   Nom complet <span className="text-red-500">*</span>
@@ -1296,11 +1086,11 @@ export default function DevisForm({
                     type="text"
                     autoComplete="name"
                     placeholder="Votre nom complet"
-                    value={formData.nom}
-                    onChange={(e) => updateField('nom', e.target.value)}
+                    value={form.formData.nom}
+                    onChange={(e) => form.updateField('nom', e.target.value)}
                     onBlur={() => validateField('nom')}
-                    aria-describedby={errors.nom ? 'nom-error' : undefined}
-                    aria-invalid={!!errors.nom}
+                    aria-describedby={form.errors.nom ? 'nom-error' : undefined}
+                    aria-invalid={!!form.errors.nom}
                     style={{ fontSize: '16px' }}
                     className={`${inputBase} pr-10 ${inputBorderClass('nom')}`}
                   />
@@ -1310,18 +1100,17 @@ export default function DevisForm({
                     </span>
                   )}
                 </div>
-                {errors.nom && (
+                {form.errors.nom && (
                   <p
                     id="nom-error"
                     role="alert"
                     className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
                   >
-                    {errors.nom}
+                    {form.errors.nom}
                   </p>
                 )}
               </div>
 
-              {/* Phone */}
               <div>
                 <label htmlFor="telephone" className={labelClass}>
                   Téléphone <span className="text-red-500">*</span>
@@ -1333,11 +1122,11 @@ export default function DevisForm({
                     autoComplete="tel"
                     inputMode="tel"
                     placeholder="06 12 34 56 78"
-                    value={formData.telephone}
-                    onChange={(e) => updateField('telephone', e.target.value)}
+                    value={form.formData.telephone}
+                    onChange={(e) => form.updateField('telephone', e.target.value)}
                     onBlur={() => validateField('telephone')}
-                    aria-describedby={errors.telephone ? 'telephone-error' : undefined}
-                    aria-invalid={!!errors.telephone}
+                    aria-describedby={form.errors.telephone ? 'telephone-error' : undefined}
+                    aria-invalid={!!form.errors.telephone}
                     style={{ fontSize: '16px' }}
                     className={`${inputBase} pr-10 ${inputBorderClass('telephone')}`}
                   />
@@ -1347,33 +1136,32 @@ export default function DevisForm({
                     </span>
                   )}
                 </div>
-                {errors.telephone && (
+                {form.errors.telephone && (
                   <p
                     id="telephone-error"
                     role="alert"
                     className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
                   >
-                    {errors.telephone}
+                    {form.errors.telephone}
                   </p>
                 )}
               </div>
 
-              {/* Consent checkbox */}
               <div>
                 <label className="flex items-start gap-3 cursor-pointer group">
                   <div
                     className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
-                      formData.consentement
+                      form.formData.consentement
                         ? 'bg-primary-500 border-primary-500'
                         : 'border-sand-400 group-hover:border-primary-300'
                     }`}
                   >
-                    {formData.consentement && <Check className="w-3.5 h-3.5 text-white" />}
+                    {form.formData.consentement && <Check className="w-3.5 h-3.5 text-white" />}
                   </div>
                   <input
                     type="checkbox"
-                    checked={formData.consentement}
-                    onChange={(e) => updateField('consentement', e.target.checked)}
+                    checked={form.formData.consentement}
+                    onChange={(e) => form.updateField('consentement', e.target.checked)}
                     className="sr-only"
                   />
                   <span className="text-sm text-charcoal-600 leading-relaxed">
@@ -1388,23 +1176,23 @@ export default function DevisForm({
                     .
                   </span>
                 </label>
-                {errors.consentement && (
+                {form.errors.consentement && (
                   <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">
-                    {errors.consentement}
+                    {form.errors.consentement}
                   </p>
                 )}
               </div>
 
-              {submitError && (
+              {form.submitError && (
                 <div
                   role="alert"
                   className="bg-red-50 border border-red-200 rounded-xl p-4 text-center animate-fade-in-down"
                 >
-                  <p className="text-sm text-red-700">{submitError}</p>
+                  <p className="text-sm text-red-700">{form.submitError}</p>
                   <p className="text-xs text-red-500 mt-1">Vos données sont conservées.</p>
                   <button
                     type="button"
-                    onClick={() => handleSubmit()}
+                    onClick={() => onFormSubmit()}
                     className="mt-2 text-sm font-medium text-red-600 hover:text-red-800 underline"
                   >
                     Réessayer
@@ -1412,7 +1200,6 @@ export default function DevisForm({
                 </div>
               )}
 
-              {/* Trust line before submit */}
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-accent-600 font-medium">
                 <span className="flex items-center gap-1">
                   <Check className="w-3.5 h-3.5" /> Gratuit
@@ -1429,21 +1216,21 @@ export default function DevisForm({
                 <button
                   type="button"
                   onClick={handlePrev}
-                  disabled={submitting}
+                  disabled={form.submitting}
                   className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-4 rounded-xl transition-all duration-300 disabled:opacity-50"
                 >
                   <ArrowLeft className="w-4 h-4" /> Précédent
                 </button>
                 <button
                   type="submit"
-                  disabled={submitting || !isStep3Valid}
+                  disabled={form.submitting || !form.isStep3Valid}
                   className={`flex-1 inline-flex items-center justify-center gap-2 font-semibold px-6 py-5 rounded-xl transition-all duration-300 text-lg ${
-                    isStep3Valid && !submitting
+                    form.isStep3Valid && !form.submitting
                       ? 'bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1'
                       : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
                   }`}
                 >
-                  {submitting ? (
+                  {form.submitting ? (
                     <>
                       <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
                         <circle
@@ -1473,7 +1260,6 @@ export default function DevisForm({
           )}
         </div>
 
-        {/* Social proof counter (persistent across all steps) */}
         <div className="mt-6 pt-5 border-t border-sand-100 flex items-center justify-center gap-2">
           <Clock className="w-3.5 h-3.5 text-charcoal-300" />
           <p className="text-xs text-charcoal-400">
