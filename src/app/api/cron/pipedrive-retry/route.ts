@@ -9,13 +9,19 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { isPipedriveConfigured, syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
+import {
+  isPipedriveConfigured,
+  syncDevisRequestToPipedrive,
+  MAX_SYNC_ATTEMPTS,
+} from '@/lib/integrations/pipedrive'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-const MAX_ATTEMPTS = 5
-const LOOKBACK_DAYS = 7
+// Lookback extended to 30d now that dead-letter state exists: live leads
+// won't pile up past MAX_SYNC_ATTEMPTS (they flip to dead_letter and are
+// skipped), so the scan stays cheap thanks to idx_devis_requests_pipedrive_retry.
+const LOOKBACK_DAYS = 30
 const BATCH_SIZE = 50
 
 export async function GET(request: Request) {
@@ -32,13 +38,22 @@ export async function GET(request: Request) {
   }
 
   const supabase = createAdminClient()
+  const nowIso = new Date().toISOString()
   const lookback = new Date(Date.now() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString()
 
+  // Pull leads that are:
+  //   - not yet synced
+  //   - not dead-lettered (terminal state, alert already fired)
+  //   - under the max-attempts cap (belt + suspenders with dead_letter_at)
+  //   - due for retry: next_retry_at IS NULL (never failed yet) OR <= now
+  //   - within lookback window (garbage collection safety net)
   const { data: pending, error } = await supabase
     .from('devis_requests')
     .select('id')
     .is('pipedrive_synced_at', null)
-    .lt('pipedrive_sync_attempts', MAX_ATTEMPTS)
+    .is('pipedrive_dead_letter_at', null)
+    .lt('pipedrive_sync_attempts', MAX_SYNC_ATTEMPTS)
+    .or(`pipedrive_next_retry_at.is.null,pipedrive_next_retry_at.lte.${nowIso}`)
     .gte('created_at', lookback)
     .order('created_at', { ascending: true })
     .limit(BATCH_SIZE)

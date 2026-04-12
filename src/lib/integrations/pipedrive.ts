@@ -18,6 +18,24 @@
 
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { captureError } from '@/lib/monitoring/sentry'
+
+// ── DLQ / retry config ─────────────────────────────────────────────
+// Exponential backoff schedule (seconds): 30s, 2min, 8min, 32min, 2h.
+// Attempt N (0-indexed) after failure -> wait ~ 30 * 4^N seconds.
+// Past MAX_SYNC_ATTEMPTS, the lead is flipped to dead-letter and stops being retried.
+export const MAX_SYNC_ATTEMPTS = 5
+const BACKOFF_BASE_SECONDS = 30
+const BACKOFF_FACTOR = 4
+
+export function computeNextRetryAt(attempts: number, now: Date = new Date()): Date {
+  // attempts = total failures recorded so far (1 = after first failure, etc.).
+  // Schedule: 30s, 2min, 8min, 32min. Past MAX_SYNC_ATTEMPTS the lead is dead-lettered
+  // and this function is never called for it.
+  const n = Math.max(1, attempts) - 1
+  const delaySec = BACKOFF_BASE_SECONDS * Math.pow(BACKOFF_FACTOR, n)
+  return new Date(now.getTime() + delaySec * 1000)
+}
 
 // ── Types ───────────────────────────────────────────────────────────
 
@@ -64,7 +82,9 @@ function getConfig() {
   return {
     token,
     baseUrl: `https://${domain}.pipedrive.com/api/v1`,
-    pipelineId: process.env.PIPEDRIVE_PIPELINE_ID ? Number(process.env.PIPEDRIVE_PIPELINE_ID) : undefined,
+    pipelineId: process.env.PIPEDRIVE_PIPELINE_ID
+      ? Number(process.env.PIPEDRIVE_PIPELINE_ID)
+      : undefined,
     stageId: process.env.PIPEDRIVE_STAGE_ID ? Number(process.env.PIPEDRIVE_STAGE_ID) : undefined,
     fields: {
       service: process.env.PIPEDRIVE_FIELD_SERVICE,
@@ -130,8 +150,12 @@ async function upsertPerson(
 
   const body = {
     name: lead.client_name || lead.client_email || lead.client_phone || 'Lead anonyme',
-    ...(lead.client_email ? { email: [{ value: lead.client_email, primary: true, label: 'work' }] } : {}),
-    ...(lead.client_phone ? { phone: [{ value: lead.client_phone, primary: true, label: 'work' }] } : {}),
+    ...(lead.client_email
+      ? { email: [{ value: lead.client_email, primary: true, label: 'work' }] }
+      : {}),
+    ...(lead.client_phone
+      ? { phone: [{ value: lead.client_phone, primary: true, label: 'work' }] }
+      : {}),
   }
   const res = await pdFetch<PipedrivePerson>('/persons', {
     token: cfg.token,
@@ -208,9 +232,7 @@ export interface PipedriveSyncResult {
  * Sync a single lead to Pipedrive (person + deal + note).
  * Throws on failure — callers should catch and log.
  */
-export async function syncLeadToPipedrive(
-  lead: DevisLeadForSync
-): Promise<PipedriveSyncResult> {
+export async function syncLeadToPipedrive(lead: DevisLeadForSync): Promise<PipedriveSyncResult> {
   const cfg = getConfig()
   if (!cfg) throw new Error('Pipedrive not configured')
 
@@ -245,7 +267,9 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
 
   const { data: lead, error } = await supabase
     .from('devis_requests')
-    .select('id, client_name, client_email, client_phone, service_name, description, budget, urgency, city, postal_code, created_at, pipedrive_deal_id, pipedrive_sync_attempts')
+    .select(
+      'id, client_name, client_email, client_phone, service_name, description, budget, urgency, city, postal_code, created_at, pipedrive_deal_id, pipedrive_sync_attempts, pipedrive_dead_letter_at'
+    )
     .eq('id', devisId)
     .single()
 
@@ -257,6 +281,11 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
   // Idempotency guard — already synced
   if (lead.pipedrive_deal_id) return
 
+  // Dead-letter guard — stop retrying permanently failed leads
+  if ((lead as { pipedrive_dead_letter_at?: string | null }).pipedrive_dead_letter_at) {
+    return
+  }
+
   try {
     const result = await syncLeadToPipedrive(lead as DevisLeadForSync)
     await supabase
@@ -266,19 +295,42 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
         pipedrive_deal_id: result.dealId,
         pipedrive_synced_at: new Date().toISOString(),
         pipedrive_sync_error: null,
+        pipedrive_next_retry_at: null,
         pipedrive_sync_attempts: (lead.pipedrive_sync_attempts || 0) + 1,
       })
       .eq('id', devisId)
     logger.info('pipedrive: lead synced', { devisId, dealId: result.dealId })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
-    logger.error('pipedrive: sync failed', { devisId, message })
-    await supabase
-      .from('devis_requests')
-      .update({
-        pipedrive_sync_error: message.slice(0, 500),
-        pipedrive_sync_attempts: (lead.pipedrive_sync_attempts || 0) + 1,
+    const nextAttempts = (lead.pipedrive_sync_attempts || 0) + 1
+    const isDeadLetter = nextAttempts >= MAX_SYNC_ATTEMPTS
+    const nowIso = new Date().toISOString()
+
+    logger.error('pipedrive: sync failed', {
+      devisId,
+      message,
+      attempts: nextAttempts,
+      isDeadLetter,
+    })
+
+    const update: Record<string, unknown> = {
+      pipedrive_sync_error: message.slice(0, 500),
+      pipedrive_sync_attempts: nextAttempts,
+    }
+
+    if (isDeadLetter) {
+      update.pipedrive_dead_letter_at = nowIso
+      update.pipedrive_next_retry_at = null
+      // Alert on terminal failure — a human needs to look at this lead
+      captureError(err instanceof Error ? err : new Error(message), {
+        level: 'error',
+        tags: { integration: 'pipedrive', dead_letter: 'true' },
+        extra: { devisId, attempts: nextAttempts },
       })
-      .eq('id', devisId)
+    } else {
+      update.pipedrive_next_retry_at = computeNextRetryAt(nextAttempts).toISOString()
+    }
+
+    await supabase.from('devis_requests').update(update).eq('id', devisId)
   }
 }
