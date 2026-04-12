@@ -4,7 +4,8 @@
  * Usage: npx tsx scripts/apply-migration-110.ts
  */
 
-import 'dotenv/config'
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env.local' })
 import pg from 'pg'
 
 const { Client } = pg

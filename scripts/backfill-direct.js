@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: '.env.local' });
 const { Client } = require('pg');
 
 const PASSWORD = process.env.SUPABASE_DB_PASSWORD;
