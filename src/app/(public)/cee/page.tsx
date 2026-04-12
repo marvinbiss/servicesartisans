@@ -15,6 +15,7 @@ import {
   Percent,
   BookOpen,
   TrendingUp,
+  Users,
 } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
@@ -474,6 +475,44 @@ export default async function CeeHubPage() {
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Voir le comparatif <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
+            <Link
+              href="/devenir-partenaire-cee"
+              className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
+                Devenir partenaire CEE
+              </div>
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
+                Programme partenaire pour artisans RGE&nbsp;: leads exclusifs, gestion des primes,
+                accompagnement technique.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Rejoindre le programme <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
+            <Link
+              href="/leads-exclusifs-vs-partages"
+              className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <ShieldCheck className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
+                Leads exclusifs vs partag&eacute;s
+              </div>
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
+                Pourquoi les leads exclusifs convertissent 3x plus&nbsp;: co&ucirc;ts, taux de
+                conversion, comparatif des plateformes.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Lire le comparatif <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </div>
             </Link>
           </div>

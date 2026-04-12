@@ -296,7 +296,7 @@ export default function DevenirPartenaireCeePage() {
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <a
-              href="tel:+33XXXXXXXXX"
+              href="tel:+33756872787"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-emerald-400/30 text-emerald-100 font-semibold hover:bg-emerald-800/40 transition"
             >
               <Phone className="w-4 h-4" aria-hidden="true" />

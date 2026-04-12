@@ -286,6 +286,24 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.8,
       },
       {
+        url: `${SITE_URL}/devenir-partenaire-cee`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        url: `${SITE_URL}/leads-exclusifs-vs-partages`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        url: `${SITE_URL}/comparatif-primes-cee-2026`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
         url: `${SITE_URL}/ademe`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
