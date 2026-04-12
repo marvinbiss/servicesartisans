@@ -23,11 +23,12 @@ const ADEME_PAGE_SIZE = 10_000
 const ADEME_USER_AGENT = 'servicesartisans-rge-sync/1.0 (contact@servicesartisans.fr)'
 
 /**
- * Garde-fou P0 : seuil minimal de lignes ADEME en dessous duquel on refuse
- * de lancer clearStaleRge(). Le dataset complet fait ~165k lignes. Si on en
+ * Garde-fou P0 (TS-side) : seuil minimal de lignes ADEME en dessous duquel on
+ * refuse tout swap avec clear. Le dataset complet fait ~165k lignes. Si on en
  * récupère < 50k, c'est un signal d'alerte (API partiellement down, changement
- * de schéma, rate-limit silencieux, coupure réseau à mi-pagination...) et
- * effacer les providers actuels serait catastrophique (scénario ADEME vide).
+ * de schéma, rate-limit silencieux, coupure réseau à mi-pagination) et
+ * effacer les providers actuels serait catastrophique. La RPC
+ * `rge_apply_staging_atomic` a son propre garde-fou côté DB (défense en profondeur).
  */
 const ADEME_MIN_ROWS_FOR_CLEAR = 50_000
 
@@ -75,12 +76,10 @@ export interface RgeQualification {
 }
 
 /**
- * Note (migration 406 — 2026-04-11) : `providers.rge_categories_decret` est
- * désormais recalculé automatiquement par la RPC `rge_bulk_update_providers`
- * à chaque appel, via `derive_rge_categories_from_qualif` (migration 404).
- * Aucun calcul côté TypeScript — la source unique est Postgres. Le payload
- * envoyé ci-dessous reste identique : la colonne est dérivée inline depuis
- * `rge_qualifications` côté SQL.
+ * Note : `providers.rge_categories_decret` est recalculé automatiquement par la
+ * RPC atomique (`rge_apply_staging_atomic`, migration 413) via
+ * `derive_rge_categories_from_qualif` (migration 404). La source unique est
+ * Postgres — la colonne est dérivée inline depuis `rge_qualifications` côté SQL.
  */
 
 export interface AggregatedProvider {
@@ -103,10 +102,10 @@ export interface RgeSyncOptions {
   /** Si true, saute le backfill de communes.nb_artisans_rge. Default: false */
   skipBackfill?: boolean
   /**
-   * Si true, déclare explicitement une sync partielle — clearStaleRge() sera skippé
-   * pour éviter d'effacer des providers hors de la fenêtre limitée.
-   * Auto-activé si `limit` est défini et `< Infinity`.
-   * Default: false
+   * Si true, déclare explicitement une sync partielle — le clear des providers
+   * stale sera skippé (allow_clear_stale=false) pour éviter d'effacer des
+   * providers hors de la fenêtre limitée. Auto-activé si `limit` est défini
+   * et `< Infinity`. Default: false
    */
   isPartialSync?: boolean
   /** Logger injectable (console par défaut) */
@@ -317,198 +316,151 @@ export function aggregateBySiret(
 }
 
 // ---------------------------------------------------------------------------
-// 3. Match against providers.siret and UPDATE
+// 3. Stage aggregated rows + atomic swap (migration 413)
 // ---------------------------------------------------------------------------
 
 /**
- * Payload row envoyé à la RPC `rge_bulk_update_providers` (migration 385).
- * Shape doit matcher `jsonb_to_recordset(payload) AS upd(...)` côté SQL.
+ * Shape d'une ligne envoyée à `rge_stage_rows(payload)`. Doit correspondre à
+ * `jsonb_to_recordset(payload) AS s(...)` côté SQL (migration 413).
  */
-interface RgeBulkUpdateRow {
-  id: string
+interface StagingRow {
+  siret: string
   rge_qualifications: RgeQualification[]
   rge_valid_until: string
   rge_organismes: string[]
-  rge_last_synced_at: string
   rge_source_url: string
-  /** Téléphone ADEME — la RPC n'écrit que si providers.phone IS NULL ET claimed_at IS NULL */
   ademe_telephone: string | null
-  /** Email ADEME — la RPC n'écrit que si providers.email IS NULL ET claimed_at IS NULL */
   ademe_email: string | null
 }
 
-export async function matchAndUpdate(
+const STAGE_BATCH = 2_000
+
+/**
+ * Charge les lignes aggregées dans `rge_sync_staging` par batches. Non-atomique
+ * avec la table providers — aucun risque tant que le swap n'a pas été appelé.
+ * TRUNCATE préalable pour garantir qu'aucune ligne orpheline d'un run précédent
+ * ne traine dans staging.
+ */
+export async function stageAggregated(
   aggregated: Map<string, AggregatedProvider>,
   supabase: SupabaseClient,
   dryRun: boolean,
   log: Pick<Console, 'log' | 'warn' | 'error'> = console
-): Promise<{ matched: number; updated: number; contactsEnriched: number }> {
-  log.log('→ Matching against providers.siret...')
+): Promise<{ staged: number }> {
+  log.log(`→ Staging ${aggregated.size} SIRET into rge_sync_staging...`)
 
-  const sirets = Array.from(aggregated.keys())
-  const SELECT_BATCH = 500
-  const RPC_BATCH = 500
-  let matched = 0
-  let updated = 0
-  let contactsEnriched = 0
-  const now = new Date().toISOString()
+  if (dryRun) {
+    log.log(`  [dry-run] would truncate + stage ${aggregated.size} rows`)
+    return { staged: 0 }
+  }
 
-  for (let i = 0; i < sirets.length; i += SELECT_BATCH) {
-    const chunk = sirets.slice(i, i + SELECT_BATCH)
+  const { error: truncErr } = await supabase.rpc('rge_truncate_staging')
+  if (truncErr) {
+    throw new Error(`rge_truncate_staging failed: ${truncErr.message}`)
+  }
 
-    // Retry avec backoff sur timeout (57014) — charge Supabase variable
-    type ProviderRow = { id: string; siret: string | null }
-    let providers: ProviderRow[] | null = null
-    let selErr: { code?: string; message?: string } | null = null
+  const rows: StagingRow[] = []
+  aggregated.forEach((agg) => {
+    rows.push({
+      siret: agg.siret,
+      rge_qualifications: agg.qualifications,
+      rge_valid_until: agg.valid_until,
+      rge_organismes: agg.organismes,
+      rge_source_url: agg.source_url,
+      ademe_telephone: agg.telephone,
+      ademe_email: agg.email,
+    })
+  })
+
+  let staged = 0
+  for (let i = 0; i < rows.length; i += STAGE_BATCH) {
+    const slice = rows.slice(i, i + STAGE_BATCH)
+
+    let lastErr: { code?: string; message?: string } | null = null
     for (let attempt = 0; attempt < 4; attempt++) {
-      const res = await supabase.from('providers').select('id, siret').in('siret', chunk)
-      providers = (res.data ?? null) as ProviderRow[] | null
-      selErr = res.error as { code?: string; message?: string } | null
-      if (!selErr) break
-      if (selErr.code !== '57014') break // seulement retry sur timeout
+      const { data, error } = await supabase.rpc('rge_stage_rows', { payload: slice })
+      if (!error) {
+        staged += typeof data === 'number' ? data : slice.length
+        lastErr = null
+        break
+      }
+      lastErr = error as { code?: string; message?: string }
+      if (lastErr.code !== '57014') break
       const wait = 1000 * Math.pow(2, attempt)
-      log.warn(`  batch ${i}-${i + SELECT_BATCH}: timeout, retry ${attempt + 1}/4 dans ${wait}ms`)
+      log.warn(`  stage batch ${i}: timeout, retry ${attempt + 1}/4 dans ${wait}ms`)
       await sleep(wait)
     }
 
-    if (selErr) {
-      log.error(`  batch ${i}-${i + SELECT_BATCH}: SELECT failed (abandonné)`, selErr)
-      continue
-    }
-    if (!providers || providers.length === 0) continue
-
-    matched += providers.length
-
-    if (dryRun) {
-      log.log(`  [dry-run] would update ${providers.length} providers`)
-      continue
-    }
-
-    // Construit le payload RPC — uniquement les providers pour lesquels on a des données.
-    const payload: RgeBulkUpdateRow[] = []
-    for (const p of providers) {
-      if (!p.siret) continue
-      const agg = aggregated.get(p.siret)
-      if (!agg) continue
-      const hasAdemeContact = !!(agg.telephone || agg.email)
-      if (hasAdemeContact) contactsEnriched++
-      payload.push({
-        id: p.id,
-        rge_qualifications: agg.qualifications,
-        rge_valid_until: agg.valid_until,
-        rge_organismes: agg.organismes,
-        rge_last_synced_at: now,
-        rge_source_url: agg.source_url,
-        ademe_telephone: agg.telephone,
-        ademe_email: agg.email,
-      })
-    }
-
-    // Bulk UPDATE atomique via RPC (migration 385). Chaque appel = 1 transaction.
-    // Si la RPC échoue, AUCUN provider du sous-batch n'est modifié — pas de mix
-    // old-qualifs/new-last_synced_at possible (contrat atomicité).
-    for (let j = 0; j < payload.length; j += RPC_BATCH) {
-      const slice = payload.slice(j, j + RPC_BATCH)
-      let rpcErr: { code?: string; message?: string } | null = null
-      let updatedInBatch = 0
-      for (let attempt = 0; attempt < 4; attempt++) {
-        const { data, error } = await supabase.rpc('rge_bulk_update_providers', {
-          payload: slice,
-        })
-        if (!error) {
-          updatedInBatch = typeof data === 'number' ? data : 0
-          rpcErr = null
-          break
-        }
-        rpcErr = error as { code?: string; message?: string }
-        if (rpcErr.code !== '57014') break
-        const wait = 1000 * Math.pow(2, attempt)
-        log.warn(`  rpc batch ${i}/${j}: timeout, retry ${attempt + 1}/4 dans ${wait}ms`)
-        await sleep(wait)
-      }
-      if (rpcErr) {
-        // Atomicité garantie par la RPC : rien n'a été écrit en DB pour ce sous-batch.
-        // On skip proprement, surtout pas de `rge_last_synced_at = now` séparé.
-        log.error(
-          `  batch ${i}/${j}: RPC rge_bulk_update_providers failed — ${slice.length} providers unchanged`,
-          rpcErr.message
-        )
-        continue
-      }
-      updated += updatedInBatch
-      log.log(
-        `  ✓ rpc batch ${i}/${j}: updated ${updatedInBatch}/${slice.length} providers atomically`
+    if (lastErr) {
+      throw new Error(
+        `rge_stage_rows failed at batch offset ${i} (${slice.length} rows): ${lastErr.message}`
       )
     }
+
+    log.log(`  ✓ staged ${Math.min(i + STAGE_BATCH, rows.length)}/${rows.length}`)
   }
 
-  log.log(`✓ Matched ${matched} providers, updated ${updated}, contacts ADEME ${contactsEnriched}`)
-  return { matched, updated, contactsEnriched }
+  log.log(`✓ Staged ${staged} rows into rge_sync_staging`)
+  return { staged }
 }
 
-// ---------------------------------------------------------------------------
-// 4. Clear stale RGE on providers no longer in dataset
-// ---------------------------------------------------------------------------
+interface AtomicApplyResult {
+  staging_rows: number
+  providers_matched: number
+  providers_updated: number
+  contacts_enriched: number
+  stale_cleared: number
+}
 
-export async function clearStaleRge(
-  currentSirets: Set<string>,
+/**
+ * Applique staging → providers en UNE seule transaction côté Postgres via
+ * `rge_apply_staging_atomic()`. Remplace l'ancien couple
+ * `matchAndUpdate()` (batches de 500) + `clearStaleRge()` (phase séparée)
+ * qui laissait une fenêtre de mixed state inacceptable en prod.
+ */
+export async function applyStagingAtomic(
   supabase: SupabaseClient,
-  dryRun: boolean,
-  log: Pick<Console, 'log' | 'warn' | 'error'> = console,
-  isPartialSync: boolean = false
-): Promise<number> {
-  // Garde-fou P0 : refuser de s'exécuter en mode sync partielle.
-  // Sinon, currentSirets ne contient qu'une fraction du dataset et on effacerait
-  // tous les providers hors de la fenêtre limitée (documenté dans memory/servicesartisans-rge-integration.md).
-  if (isPartialSync) {
-    throw new Error(
-      'clearStaleRge() refuses to run in partial sync mode — would erase providers outside the limited window. Use --full-sync explicitly to override.'
-    )
+  options: {
+    lastSyncedAt: string
+    allowClearStale: boolean
+    minStagingRows: number
+    dryRun: boolean
+    log: Pick<Console, 'log' | 'warn' | 'error'>
   }
-
-  log.log('→ Clearing stale RGE on providers no longer in ADEME dataset...')
-
-  const { data: stale, error } = await supabase
-    .from('providers')
-    .select('id, siret')
-    .not('rge_valid_until', 'is', null)
-
-  if (error || !stale) {
-    log.error('  Failed to fetch stale:', error)
-    return 0
-  }
-
-  const toClear = stale.filter((p) => !p.siret || !currentSirets.has(p.siret))
-  if (toClear.length === 0) {
-    log.log('  No stale RGE to clear')
-    return 0
-  }
+): Promise<AtomicApplyResult> {
+  const { lastSyncedAt, allowClearStale, minStagingRows, dryRun, log } = options
+  log.log(
+    `→ Applying staging atomically (clear_stale=${allowClearStale}, min_staging=${minStagingRows})...`
+  )
 
   if (dryRun) {
-    log.log(`  [dry-run] would clear ${toClear.length} stale RGE`)
-    return toClear.length
+    log.log('  [dry-run] would call rge_apply_staging_atomic()')
+    return {
+      staging_rows: 0,
+      providers_matched: 0,
+      providers_updated: 0,
+      contacts_enriched: 0,
+      stale_cleared: 0,
+    }
   }
 
-  const { error: updErr } = await supabase
-    .from('providers')
-    .update({
-      rge_qualifications: null,
-      rge_valid_until: null,
-      rge_organismes: null,
-      rge_source_url: null,
+  const { data, error } = await supabase
+    .rpc('rge_apply_staging_atomic', {
+      p_last_synced_at: lastSyncedAt,
+      p_allow_clear_stale: allowClearStale,
+      p_min_staging_rows: minStagingRows,
     })
-    .in(
-      'id',
-      toClear.map((p) => p.id)
-    )
+    .single()
 
-  if (updErr) {
-    log.error('  Clear failed:', updErr)
-    return 0
+  if (error) {
+    throw new Error(`rge_apply_staging_atomic failed: ${error.message}`)
   }
 
-  log.log(`✓ Cleared ${toClear.length} stale RGE`)
-  return toClear.length
+  const result = data as AtomicApplyResult
+  log.log(
+    `✓ Atomic swap applied: matched=${result.providers_matched}, updated=${result.providers_updated}, contacts=${result.contacts_enriched}, cleared=${result.stale_cleared}`
+  )
+  return result
 }
 
 // ---------------------------------------------------------------------------
@@ -565,15 +517,13 @@ export async function syncRgeFromAdeme(
   log.log('═══ syncRgeFromAdeme ═══')
   log.log(`Mode: ${dryRun ? 'DRY-RUN' : 'WRITE'}`)
   log.log(`Limit: ${limit === Infinity ? 'none' : limit}`)
-  log.log(
-    `Partial sync: ${isPartialSync ? 'YES (clearStaleRge will be skipped)' : 'no (full sync)'}`
-  )
+  log.log(`Partial sync: ${isPartialSync ? 'YES (stale clear will be skipped)' : 'no (full sync)'}`)
   log.log('')
 
   // Garde-fou P0 : verrou distribué Redis — empêche deux syncs concurrentes.
   // Scénario cauchemar : cron hebdo déclenché pendant qu'un sync manuel tourne
-  // → race condition sur clearStaleRge(), double backfill, locks PostgreSQL
-  // qui s'accumulent. TTL 1h = durée max estimée + marge.
+  // → double stage/swap, double backfill, locks PostgreSQL qui s'accumulent.
+  // TTL 1h = durée max estimée + marge.
   // Dry-run ne pose pas de verrou (lecture seule).
   const LOCK_KEY = 'rge:sync'
   const LOCK_TTL_SECONDS = 3_600
@@ -593,41 +543,53 @@ export async function syncRgeFromAdeme(
   try {
     const rows = await fetchAllAdemeRows(limit, log)
     const { aggregated, expired, skipped } = aggregateBySiret(rows, log)
-    const { matched, updated, contactsEnriched } = await matchAndUpdate(
-      aggregated,
-      supabase,
-      dryRun,
-      log
-    )
 
-    let cleared = 0
+    // Garde-fou P0 (côté TS) : dataset ADEME anormalement petit — refuser tout
+    // swap avec clear. Redondant avec le check SQL (rge_apply_staging_atomic
+    // a son propre threshold) mais permet de planter AVANT de staging ~60k
+    // rows inutilement.
+    if (!isPartialSync && rows.length < ADEME_MIN_ROWS_FOR_CLEAR) {
+      log.error(
+        `✗ ADEME dataset anormalement petit (${rows.length} lignes < seuil ${ADEME_MIN_ROWS_FOR_CLEAR}).`
+      )
+      log.error('  Refus de lancer le swap atomique pour protéger les données existantes.')
+      log.error(
+        '  Causes probables : ADEME API partiellement down, schéma modifié, rate-limit, coupure réseau.'
+      )
+      log.error("  Aucun provider n'a été modifié à ce stade.")
+      throw new Error(
+        `ADEME returned only ${rows.length} rows (< ${ADEME_MIN_ROWS_FOR_CLEAR} threshold) — ` +
+          `refusing to apply staging swap to protect existing providers. Check ADEME API health.`
+      )
+    }
+
     if (isPartialSync) {
       log.warn(
-        '⚠ Partial sync detected — skipping clearStaleRge() to avoid erasing providers outside the limited window.'
+        '⚠ Partial sync detected — staging will be applied with clear_stale=false (no provider nulled out).'
       )
       log.warn(
         '  To run a full sync (with stale cleanup), omit `limit` or pass `isPartialSync: false` explicitly.'
       )
-    } else if (rows.length < ADEME_MIN_ROWS_FOR_CLEAR) {
-      // Garde-fou P0 : dataset ADEME anormalement petit — refuser le clear.
-      // Scénario cauchemar : ADEME renvoie 0 ou très peu de lignes (API down, schéma modifié,
-      // rate-limit silencieux, coupure réseau à mi-pagination). Si on clearStaleRge ici on efface
-      // TOUS les providers RGE actuels. Le sync doit planter proprement, PAS effacer les données.
-      log.error(
-        `✗ ADEME dataset anormalement petit (${rows.length} lignes < seuil ${ADEME_MIN_ROWS_FOR_CLEAR}).`
-      )
-      log.error('  Refus de lancer clearStaleRge() pour protéger les données existantes.')
-      log.error(
-        '  Causes probables : ADEME API partiellement down, schéma modifié, rate-limit, coupure réseau.'
-      )
-      log.error("  Les UPDATEs déjà appliqués sont conservés ; aucun provider n'est effacé.")
-      throw new Error(
-        `ADEME returned only ${rows.length} rows (< ${ADEME_MIN_ROWS_FOR_CLEAR} threshold) — ` +
-          `refusing to run clearStaleRge to protect existing providers. Check ADEME API health.`
-      )
-    } else {
-      cleared = await clearStaleRge(new Set(aggregated.keys()), supabase, dryRun, log, false)
     }
+
+    await stageAggregated(aggregated, supabase, dryRun, log)
+
+    // Threshold côté SQL : on attend au minimum la moitié du dataset unique
+    // habituel (~60k SIRET) pour autoriser le clear. En dessous, la RPC
+    // refuse atomiquement. Honoré par la RPC uniquement si allow_clear_stale=true.
+    const MIN_STAGING_ROWS_FOR_CLEAR = 30_000
+    const applyResult = await applyStagingAtomic(supabase, {
+      lastSyncedAt: new Date().toISOString(),
+      allowClearStale: !isPartialSync,
+      minStagingRows: MIN_STAGING_ROWS_FOR_CLEAR,
+      dryRun,
+      log,
+    })
+
+    const matched = applyResult.providers_matched
+    const updated = applyResult.providers_updated
+    const contactsEnriched = applyResult.contacts_enriched
+    const cleared = applyResult.stale_cleared
 
     let communesUpdated = 0
     let totalRgeActifs = 0
