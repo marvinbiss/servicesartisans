@@ -3,11 +3,10 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 // GET query params schema
-const reportsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const reportsQuerySchema = paginationSchema.extend({
   status: z.enum(['all', 'pending', 'reviewed', 'dismissed']).optional().default('all'),
   targetType: z.enum(['all', 'user', 'provider', 'review', 'message']).optional().default('all'),
 })
@@ -35,7 +34,10 @@ export async function GET(request: NextRequest) {
     const result = reportsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -43,9 +45,7 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit
 
-    let query = supabase
-      .from('user_reports')
-      .select('*', { count: 'exact' })
+    let query = supabase.from('user_reports').select('*', { count: 'exact' })
 
     if (status !== 'all') {
       query = query.eq('status', status)
@@ -55,12 +55,17 @@ export async function GET(request: NextRequest) {
       query = query.eq('target_type', targetType)
     }
 
-    const { data: reports, count, error } = await query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const {
+      data: reports,
+      count,
+      error,
+    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
 
     if (error) {
-      logger.warn('Reports query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('Reports query failed, returning empty list', {
+        code: error.code,
+        message: error.message,
+      })
       return NextResponse.json({
         success: true,
         reports: [],

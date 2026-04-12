@@ -36,9 +36,11 @@ export const nameSchema = z
 
 export const uuidSchema = z.string().uuid('ID invalide')
 
-export const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Format de date invalide (YYYY-MM-DD)')
+export const dateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format de date invalide (YYYY-MM-DD)')
 
-export const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, 'Format d\'heure invalide (HH:MM)')
+export const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, "Format d'heure invalide (HH:MM)")
 
 // ============================================
 // BOOKING SCHEMAS
@@ -95,20 +97,22 @@ export const getReviewsSchema = z.object({
 // USER SCHEMAS
 // ============================================
 
-export const signUpSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword: z.string(),
-  firstName: nameSchema,
-  lastName: nameSchema,
-  phone: phoneSchema.optional(),
-  acceptTerms: z.boolean().refine(val => val === true, {
-    message: 'Vous devez accepter les conditions',
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Les mots de passe ne correspondent pas',
-  path: ['confirmPassword'],
-})
+export const signUpSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    firstName: nameSchema,
+    lastName: nameSchema,
+    phone: phoneSchema.optional(),
+    acceptTerms: z.boolean().refine((val) => val === true, {
+      message: 'Vous devez accepter les conditions',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['confirmPassword'],
+  })
 
 export const signInSchema = z.object({
   email: emailSchema,
@@ -122,7 +126,10 @@ export const updateProfileSchema = z.object({
   phone: phoneSchema.optional(),
   address: z.string().max(500).optional(),
   city: z.string().max(100).optional(),
-  postalCode: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional(),
+  postalCode: z
+    .string()
+    .regex(/^\d{5}$/, 'Code postal invalide')
+    .optional(),
   bio: z.string().max(1000).optional(),
 })
 
@@ -130,25 +137,27 @@ export const updateProfileSchema = z.object({
 // ARTISAN SCHEMAS
 // ============================================
 
-export const artisanRegistrationSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword: z.string(),
-  businessName: z.string().min(2).max(200),
-  firstName: nameSchema,
-  lastName: nameSchema,
-  phone: phoneSchema,
-  specialty: z.string().min(2).max(100),
-  siret: z.string().regex(/^\d{14}$/, 'SIRET invalide'),
-  address: z.string().min(5).max(500),
-  city: z.string().min(2).max(100),
-  postalCode: z.string().regex(/^\d{5}$/, 'Code postal invalide'),
-  description: z.string().max(2000).optional(),
-  acceptTerms: z.literal(true),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Les mots de passe ne correspondent pas',
-  path: ['confirmPassword'],
-})
+export const artisanRegistrationSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    businessName: z.string().min(2).max(200),
+    firstName: nameSchema,
+    lastName: nameSchema,
+    phone: phoneSchema,
+    specialty: z.string().min(2).max(100),
+    siret: z.string().regex(/^\d{14}$/, 'SIRET invalide'),
+    address: z.string().min(5).max(500),
+    city: z.string().min(2).max(100),
+    postalCode: z.string().regex(/^\d{5}$/, 'Code postal invalide'),
+    description: z.string().max(2000).optional(),
+    acceptTerms: z.literal(true),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['confirmPassword'],
+  })
 
 // ============================================
 // PAYMENT SCHEMAS
@@ -185,17 +194,48 @@ export const searchSchema = z.object({
 export const createAvailabilitySchema = z.object({
   artisanId: uuidSchema,
   date: dateSchema,
-  slots: z.array(z.object({
-    startTime: timeSchema,
-    endTime: timeSchema,
-    isAvailable: z.boolean().default(true),
-  })),
+  slots: z.array(
+    z.object({
+      startTime: timeSchema,
+      endTime: timeSchema,
+      isAvailable: z.boolean().default(true),
+    })
+  ),
 })
 
 export const getAvailabilitySchema = z.object({
   artisanIds: z.string().transform((val) => val.split(',')),
   startDate: dateSchema.optional(),
   days: z.coerce.number().min(1).max(30).default(5),
+})
+
+// ============================================
+// PAGINATION SCHEMAS
+// ============================================
+
+/** Reusable page number field — coerces string to int, min 1, default 1 */
+export const pageSchema = z.coerce.number().int().min(1).optional().default(1)
+
+/** Reusable page size / limit field — coerces string to int, 1-100, default 20 */
+export const pageSizeSchema = z.coerce.number().int().min(1).max(100).optional().default(20)
+
+/** Standard pagination query params, reusable in any listing endpoint */
+export const paginationSchema = z.object({
+  page: pageSchema,
+  limit: pageSizeSchema,
+})
+
+// ============================================
+// NEWSLETTER SCHEMAS
+// ============================================
+
+export const newsletterEmailSchema = z.object({
+  email: z.string().email('Email invalide').max(254),
+})
+
+export const newsletterSubscribeSchema = z.object({
+  email: z.string().email('Email invalide').max(254),
+  source: z.string().max(50).optional(),
 })
 
 // ============================================
@@ -208,6 +248,38 @@ export const contactSchema = z.object({
   subject: z.string().min(5).max(200),
   message: z.string().min(20).max(5000),
   type: z.enum(['general', 'support', 'partnership', 'press']).default('general'),
+})
+
+/** Contact form schema (French field names, used by /api/contact) */
+export const contactFormSchema = z.object({
+  nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
+  email: z.string().email('Email invalide'),
+  sujet: z.string().min(1, 'Veuillez sélectionner un sujet'),
+  message: z.string().min(10, 'Le message doit contenir au moins 10 caractères'),
+})
+
+// ============================================
+// CLIENT REVIEW SCHEMAS
+// ============================================
+
+/** Review creation from client space (different from booking-based createReviewSchema) */
+export const clientCreateReviewSchema = z.object({
+  provider_id: z.string().uuid(),
+  booking_id: z.string().uuid().optional().nullable(),
+  rating: z.number().int().min(1).max(5),
+  content: z.string().min(10).max(2000),
+})
+
+/** Review update from client space */
+export const clientUpdateReviewSchema = z.object({
+  review_id: z.string().uuid(),
+  rating: z.number().int().min(1).max(5).optional(),
+  content: z.string().min(10).max(2000).optional(),
+})
+
+/** Review deletion query params */
+export const clientDeleteReviewSchema = z.object({
+  id: z.string().uuid(),
 })
 
 // ============================================

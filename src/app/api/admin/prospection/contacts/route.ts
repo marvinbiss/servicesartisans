@@ -3,10 +3,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
-const querySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const querySchema = paginationSchema.extend({
   type: z.enum(['all', 'artisan', 'client', 'mairie']).optional().default('all'),
   search: z.string().max(200).optional().default(''),
   department: z.string().max(10).optional(),
@@ -42,7 +41,10 @@ export async function GET(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -63,14 +65,19 @@ export async function GET(request: NextRequest) {
     if (tags) query = query.overlaps('tags', tags.split(','))
     if (search) {
       const escaped = search.replace(/%/g, '\\%').replace(/_/g, '\\_')
-      query = query.or(`contact_name.ilike.%${escaped}%,company_name.ilike.%${escaped}%,email.ilike.%${escaped}%,city.ilike.%${escaped}%`)
+      query = query.or(
+        `contact_name.ilike.%${escaped}%,company_name.ilike.%${escaped}%,email.ilike.%${escaped}%,city.ilike.%${escaped}%`
+      )
     }
 
     const { data, count, error } = await query
 
     if (error) {
       logger.error('Prospection contacts list error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la récupération des données' } },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({
@@ -85,7 +92,10 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Prospection contacts GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -100,7 +110,10 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -130,12 +143,18 @@ export async function POST(request: NextRequest) {
     if (error) {
       if (error.code === '23505') {
         return NextResponse.json(
-          { success: false, error: { message: 'Contact déjà existant (email ou téléphone en doublon)' } },
+          {
+            success: false,
+            error: { message: 'Contact déjà existant (email ou téléphone en doublon)' },
+          },
           { status: 409 }
         )
       }
       logger.error('Create contact error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la création' } },
+        { status: 500 }
+      )
     }
 
     await logAdminAction(authResult.admin.id, 'contact.create', 'prospection_contact', data.id, {
@@ -147,6 +166,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {
     logger.error('Prospection contacts POST error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

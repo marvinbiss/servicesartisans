@@ -7,12 +7,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 export const dynamic = 'force-dynamic'
 
-const querySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+const querySchema = paginationSchema.extend({
   source: z.enum(['all', 'chat', 'callback']).default('all'),
   search: z.string().optional(),
   metier: z.string().optional(),
@@ -22,6 +21,7 @@ const querySchema = z.object({
 
 export async function GET(request: NextRequest) {
   const auth = await requirePermission('audit', 'read')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json(
         { error: 'Paramètres invalides', details: parsed.error.flatten() },
-        { status: 400 },
+        { status: 400 }
       )
     }
 
@@ -50,7 +50,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (search) {
-      query = query.or(`telephone.ilike.%${search}%,nom.ilike.%${search}%,email.ilike.%${search}%,ville.ilike.%${search}%`)
+      query = query.or(
+        `telephone.ilike.%${search}%,nom.ilike.%${search}%,email.ilike.%${search}%,ville.ilike.%${search}%`
+      )
     }
 
     if (metier) {
@@ -70,7 +72,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       return NextResponse.json(
         { error: 'Erreur base de données', details: error.message },
-        { status: 500 },
+        { status: 500 }
       )
     }
 
@@ -80,9 +82,18 @@ export async function GET(request: NextRequest) {
 
     const [totalRes, todayRes, chatRes, callbackRes] = await Promise.all([
       supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
-      supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
-      supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).eq('source', 'chat'),
-      supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).eq('source', 'callback'),
+      supabase
+        .from('estimation_leads')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', todayStart),
+      supabase
+        .from('estimation_leads')
+        .select('id', { count: 'exact', head: true })
+        .eq('source', 'chat'),
+      supabase
+        .from('estimation_leads')
+        .select('id', { count: 'exact', head: true })
+        .eq('source', 'callback'),
     ])
 
     return NextResponse.json({
@@ -101,16 +112,14 @@ export async function GET(request: NextRequest) {
         callback: callbackRes.count ?? 0,
       },
     })
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 },
-    )
+  } catch {
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
 export async function DELETE(request: NextRequest) {
   const auth = await requirePermission('audit', 'read')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
@@ -120,20 +129,17 @@ export async function DELETE(request: NextRequest) {
     }
 
     const supabase = createAdminClient()
-    const { error } = await supabase
-      .from('estimation_leads')
-      .delete()
-      .eq('id', id)
+    const { error } = await supabase.from('estimation_leads').delete().eq('id', id)
 
     if (error) {
       return NextResponse.json(
         { error: 'Erreur suppression', details: error.message },
-        { status: 500 },
+        { status: 500 }
       )
     }
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

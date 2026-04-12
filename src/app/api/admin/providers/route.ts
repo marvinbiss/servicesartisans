@@ -4,11 +4,10 @@ import { requirePermission } from '@/lib/admin-auth'
 import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 // GET query params schema
-const providersQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const providersQuerySchema = paginationSchema.extend({
   filter: z.enum(['all', 'verified', 'pending', 'suspended']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
 })
@@ -54,7 +53,10 @@ export async function GET(request: NextRequest) {
     const result = providersQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -63,9 +65,7 @@ export async function GET(request: NextRequest) {
     const offset = (page - 1) * limit
 
     // Build query with filters
-    let query = supabase
-      .from('providers')
-      .select(SELECT_COLUMNS, { count: 'exact' })
+    let query = supabase.from('providers').select(SELECT_COLUMNS, { count: 'exact' })
 
     // Apply filters using in() for reliable boolean comparison
     if (filter === 'verified') {
@@ -80,19 +80,26 @@ export async function GET(request: NextRequest) {
     if (search) {
       const sanitized = sanitizeSearchQuery(search)
       if (sanitized) {
-        query = query.or(`name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,siret.ilike.%${sanitized}%`)
+        query = query.or(
+          `name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,siret.ilike.%${sanitized}%`
+        )
       }
     }
 
     // Execute query with ordering and pagination
-    const { data: providers, count, error } = await query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const {
+      data: providers,
+      count,
+      error,
+    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
 
     if (error) {
       logger.warn('Providers query failed', { code: error.code, message: error.message })
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des artisans', code: error.code } },
+        {
+          success: false,
+          error: { message: 'Erreur lors de la récupération des artisans', code: error.code },
+        },
         { status: 502 }
       )
     }

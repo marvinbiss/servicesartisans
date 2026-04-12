@@ -3,10 +3,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
-const querySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const querySchema = paginationSchema.extend({
   score: z.enum(['A', 'B', 'C', 'disqualified']).optional(),
   status: z.string().max(50).optional(),
 })
@@ -24,7 +23,10 @@ export async function GET(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }

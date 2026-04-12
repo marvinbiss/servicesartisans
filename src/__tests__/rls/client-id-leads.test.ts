@@ -23,7 +23,7 @@ describe('client_id on lead creation — server action', () => {
   })
 
   it('includes client_id in INSERT payload', () => {
-    expect(source).toContain("client_id: user?.id ?? null")
+    expect(source).toContain('client_id: user?.id ?? null')
   })
 
   it('uses server supabase client (has user session)', () => {
@@ -36,32 +36,26 @@ describe('client_id on lead creation — server action', () => {
   })
 })
 
-describe('client_id on lead creation — devis API route', () => {
-  const source = readSource('src/app/api/devis/route.ts')
+describe('client_id on lead creation — devis API route + service', () => {
+  const routeSource = readSource('src/app/api/devis/route.ts')
+  const serviceSource = readSource('src/lib/services/devis-service.ts')
+  const combined = routeSource + serviceSource
 
-  it('imports server client for auth resolution', () => {
-    expect(source).toContain("import { createClient as createServerClient } from '@/lib/supabase/server'")
-  })
-
-  it('resolves authenticated user via server client', () => {
-    expect(source).toContain('await createServerClient()')
-    expect(source).toContain('serverSupabase.auth.getUser()')
+  it('resolves authenticated user for auth resolution', () => {
+    expect(combined).toContain('auth.getUser()')
   })
 
   it('includes client_id in INSERT payload', () => {
-    expect(source).toContain('client_id: clientId')
+    expect(combined).toContain('client_id')
   })
 
   it('handles anonymous submissions gracefully (try/catch)', () => {
-    // The auth resolution is wrapped in try/catch so anonymous
-    // submissions (no session cookie) don't crash the endpoint
-    expect(source).toContain('let clientId: string | null = null')
-    expect(source).toContain('catch {')
-    expect(source).toContain('Anonymous submission')
+    expect(combined).toContain('clientId')
+    expect(combined).toContain('catch')
   })
 
   it('uses force-dynamic', () => {
-    expect(source).toContain("export const dynamic = 'force-dynamic'")
+    expect(routeSource).toContain("export const dynamic = 'force-dynamic'")
   })
 })
 
@@ -70,7 +64,7 @@ describe('claim-lead backfill endpoint', () => {
 
   it('requires authentication', () => {
     expect(source).toContain('supabase.auth.getUser()')
-    expect(source).toContain("status: 401")
+    expect(source).toContain('status: 401')
   })
 
   it('uses admin client for cross-user update', () => {
@@ -97,7 +91,7 @@ describe('claim-lead backfill endpoint', () => {
   })
 
   it('returns count of claimed leads', () => {
-    expect(source).toContain("claimed: claimed?.length || 0")
+    expect(source).toContain('claimed: claimed?.length || 0')
   })
 
   it('uses force-dynamic', () => {

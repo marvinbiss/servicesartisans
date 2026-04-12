@@ -11,14 +11,13 @@ import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 export const dynamic = 'force-dynamic'
 
 // GET query params
-const querySchema = z.object({
+const querySchema = paginationSchema.extend({
   status: z.enum(['pending', 'approved', 'rejected', 'all']).optional().default('pending'),
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
 })
 
 // PATCH body
@@ -56,7 +55,8 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('provider_removal_requests')
-      .select(`
+      .select(
+        `
         id,
         provider_id,
         requester_name,
@@ -69,7 +69,9 @@ export async function GET(request: NextRequest) {
         processed_by,
         created_at,
         provider:provider_id(id, name, slug, stable_id, specialty, address_city)
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
@@ -117,7 +119,10 @@ export async function PATCH(request: NextRequest) {
     const validation = actionSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides', details: validation.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Donnees invalides', details: validation.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -192,7 +197,10 @@ export async function PATCH(request: NextRequest) {
           error: providerError,
         })
         return NextResponse.json(
-          { success: false, error: { message: `Erreur desactivation fiche: ${providerError.message}` } },
+          {
+            success: false,
+            error: { message: `Erreur desactivation fiche: ${providerError.message}` },
+          },
           { status: 500 }
         )
       }

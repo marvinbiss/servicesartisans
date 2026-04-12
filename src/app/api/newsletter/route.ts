@@ -8,13 +8,9 @@ import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getResendClient } from '@/lib/api/resend-client'
-import { z } from 'zod'
+import { newsletterEmailSchema } from '@/lib/validations/schemas'
 
 export const dynamic = 'force-dynamic'
-
-const newsletterSchema = z.object({
-  email: z.string().email('Email invalide').max(254),
-})
 
 export async function POST(request: Request) {
   try {
@@ -24,19 +20,19 @@ export async function POST(request: Request) {
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
     const body = await request.json()
 
     // Validate input
-    const validation = newsletterSchema.safeParse(body)
+    const validation = newsletterEmailSchema.safeParse(body)
     if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Email invalide' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
     }
 
     const { email } = validation.data
@@ -45,17 +41,15 @@ export async function POST(request: Request) {
     // Store in Supabase (upsert — re-subscribe if previously unsubscribed)
     try {
       const supabase = createAdminClient()
-      await supabase
-        .from('newsletter_subscribers')
-        .upsert(
-          {
-            email: normalizedEmail,
-            subscribed_at: new Date().toISOString(),
-            unsubscribed_at: null,
-            source: 'legacy',
-          },
-          { onConflict: 'email' }
-        )
+      await supabase.from('newsletter_subscribers').upsert(
+        {
+          email: normalizedEmail,
+          subscribed_at: new Date().toISOString(),
+          unsubscribed_at: null,
+          source: 'legacy',
+        },
+        { onConflict: 'email' }
+      )
     } catch (dbError) {
       logger.error('Newsletter DB insert failed (legacy route)', dbError)
       // Don't fail the subscription if DB fails
@@ -96,9 +90,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Newsletter API error', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

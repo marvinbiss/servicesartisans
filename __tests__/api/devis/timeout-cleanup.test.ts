@@ -207,22 +207,22 @@ describe('/api/devis — race timeout cleanup', () => {
       }
     }
 
-    const armedDurations = setTimeoutSpy.mock.calls.map((c) => c[1])
+    const armedDurations = setTimeoutSpy.mock.calls.map((c: unknown[]) => c[1])
     // Sanity : on doit bien avoir armé au moins les deux timers d'intérêt
     expect(armedDurations).toContain(4000)
     expect(armedDurations).toContain(8000)
 
     // Les deux handles correspondants doivent avoir été clearés
     const cleared = new Set(
-      clearTimeoutSpy.mock.calls.map((c) => c[0] as ReturnType<typeof setTimeout>)
+      clearTimeoutSpy.mock.calls.map((c: unknown[]) => c[0] as ReturnType<typeof setTimeout>)
     )
 
     // Récupère les handles spécifiquement attachés à 4000 et 8000
     const handle4s = setTimeoutSpy.mock.results[
-      setTimeoutSpy.mock.calls.findIndex((c) => c[1] === 4000)
+      setTimeoutSpy.mock.calls.findIndex((c: unknown[]) => c[1] === 4000)
     ]?.value as ReturnType<typeof setTimeout> | undefined
     const handle8s = setTimeoutSpy.mock.results[
-      setTimeoutSpy.mock.calls.findIndex((c) => c[1] === 8000)
+      setTimeoutSpy.mock.calls.findIndex((c: unknown[]) => c[1] === 8000)
     ]?.value as ReturnType<typeof setTimeout> | undefined
 
     expect(handle4s).toBeDefined()

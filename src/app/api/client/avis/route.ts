@@ -11,27 +11,11 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
-import { z } from 'zod'
-
-// POST request schema
-const createReviewSchema = z.object({
-  provider_id: z.string().uuid(),
-  booking_id: z.string().uuid().optional().nullable(),
-  rating: z.number().int().min(1).max(5),
-  content: z.string().min(10).max(2000),
-})
-
-// PUT request schema
-const updateReviewSchema = z.object({
-  review_id: z.string().uuid(),
-  rating: z.number().int().min(1).max(5).optional(),
-  content: z.string().min(10).max(2000).optional(),
-})
-
-// DELETE query params schema
-const deleteReviewSchema = z.object({
-  id: z.string().uuid(),
-})
+import {
+  clientCreateReviewSchema,
+  clientUpdateReviewSchema,
+  clientDeleteReviewSchema,
+} from '@/lib/validations/schemas'
 
 export const dynamic = 'force-dynamic'
 
@@ -125,7 +109,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const result = createReviewSchema.safeParse(body)
+    const result = clientCreateReviewSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
         { error: 'Validation error', details: result.error.flatten() },
@@ -217,7 +201,7 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json()
-    const result = updateReviewSchema.safeParse(body)
+    const result = clientUpdateReviewSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
         { error: 'Validation error', details: result.error.flatten() },
@@ -293,7 +277,7 @@ export async function DELETE(request: Request) {
     const queryParams = {
       id: searchParams.get('id'),
     }
-    const result = deleteReviewSchema.safeParse(queryParams)
+    const result = clientDeleteReviewSchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
         { error: 'Invalid parameters', details: result.error.flatten() },

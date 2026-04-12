@@ -371,7 +371,8 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     pathname.startsWith('/espace-artisan') ||
     pathname.startsWith('/espace-client') ||
     pathname.startsWith('/admin') ||
-    pathname.startsWith('/booking')
+    pathname.startsWith('/booking') ||
+    pathname.startsWith('/auth/')
   ) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')

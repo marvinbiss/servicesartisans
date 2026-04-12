@@ -3,11 +3,10 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 // GET query params schema
-const reviewsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const reviewsQuerySchema = paginationSchema.extend({
   filter: z
     .enum(['pending', 'flagged', 'approved', 'rejected', 'all'])
     .optional()

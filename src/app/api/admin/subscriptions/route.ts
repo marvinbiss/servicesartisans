@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 // GET query params schema
-const subscriptionsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const subscriptionsQuerySchema = paginationSchema.extend({
   filter: z.enum(['all', 'active', 'past_due', 'canceled']).optional().default('all'),
 })
 
@@ -28,7 +27,10 @@ export async function GET(request: NextRequest) {
     const result = subscriptionsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Parametres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Parametres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }

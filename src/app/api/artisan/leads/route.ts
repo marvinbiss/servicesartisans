@@ -7,9 +7,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { pageSchema } from '@/lib/validations/schemas'
 
 const leadsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
+  page: pageSchema,
   pageSize: z.coerce.number().int().min(1).max(50).default(20),
   status: z.string().max(50).default('all'),
 })
@@ -45,7 +46,10 @@ export async function GET(request: NextRequest) {
     })
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Donnees invalides' } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Donnees invalides' } },
+        { status: 400 }
+      )
     }
 
     const { page, pageSize, status } = parsed.data
@@ -78,7 +82,8 @@ export async function GET(request: NextRequest) {
     // Data query with pagination
     let dataQuery = supabase
       .from('lead_assignments')
-      .select(`
+      .select(
+        `
         id,
         status,
         assigned_at,
@@ -96,7 +101,8 @@ export async function GET(request: NextRequest) {
           created_at,
           status
         )
-      `)
+      `
+      )
       .eq('provider_id', provider.id)
       .order('assigned_at', { ascending: false })
       .range(from, to)
@@ -115,21 +121,27 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    return NextResponse.json({
-      leads: assignments || [],
-      count: totalItems,
-      provider_city: provider.address_city || null,
-      pagination: {
-        page,
-        pageSize,
-        totalPages,
-        totalItems,
+    return NextResponse.json(
+      {
+        leads: assignments || [],
+        count: totalItems,
+        provider_city: provider.address_city || null,
+        pagination: {
+          page,
+          pageSize,
+          totalPages,
+          totalItems,
+        },
       },
-    }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Artisan leads GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

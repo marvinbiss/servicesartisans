@@ -3,11 +3,13 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
-const querySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'open', 'ai_handling', 'human_required', 'resolved', 'archived']).optional().default('all'),
+const querySchema = paginationSchema.extend({
+  status: z
+    .enum(['all', 'open', 'ai_handling', 'human_required', 'resolved', 'archived'])
+    .optional()
+    .default('all'),
   channel: z.enum(['all', 'email', 'sms', 'whatsapp']).optional().default('all'),
 })
 
@@ -23,7 +25,10 @@ export async function GET(request: NextRequest) {
     const parsed = querySchema.safeParse(params)
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Paramètres invalides' } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Paramètres invalides' } },
+        { status: 400 }
+      )
     }
 
     const { page, limit, status, channel } = parsed.data
@@ -31,7 +36,10 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('prospection_conversations')
-      .select('*, contact:prospection_contacts(id,contact_name,company_name,email,phone,contact_type)', { count: 'exact' })
+      .select(
+        '*, contact:prospection_contacts(id,contact_name,company_name,email,phone,contact_type)',
+        { count: 'exact' }
+      )
       .order('last_message_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + limit - 1)
 
@@ -42,7 +50,10 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('List conversations error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la récupération des données' } },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({
@@ -57,6 +68,9 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Conversations GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

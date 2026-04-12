@@ -4,10 +4,11 @@ import { requirePermission } from '@/lib/admin-auth'
 import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { pageSchema } from '@/lib/validations/schemas'
 
-// GET query params schema
+// GET query params schema (custom limit default=50 for audit logs)
 const auditQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
+  page: pageSchema,
   limit: z.coerce.number().int().min(1).max(100).optional().default(50),
   action: z.string().max(100).optional().default('all'),
   entityType: z.string().max(50).optional().default('all'),
@@ -42,7 +43,10 @@ export async function GET(request: NextRequest) {
     const result = auditQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -50,9 +54,7 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit
 
-    let query = supabase
-      .from('audit_logs')
-      .select('*', { count: 'exact' })
+    let query = supabase.from('audit_logs').select('*', { count: 'exact' })
 
     // Filtres
     if (action !== 'all') {
@@ -78,12 +80,17 @@ export async function GET(request: NextRequest) {
       query = query.lte('created_at', dateTo)
     }
 
-    const { data: logs, count, error } = await query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const {
+      data: logs,
+      count,
+      error,
+    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
 
     if (error) {
-      logger.warn('Audit logs query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('Audit logs query failed, returning empty list', {
+        code: error.code,
+        message: error.message,
+      })
       return NextResponse.json({
         success: true,
         logs: [],
@@ -95,7 +102,7 @@ export async function GET(request: NextRequest) {
 
     // Enrich logs with admin profile info (audit_logs.user_id -> profiles.id)
     const enrichedLogs = logs || []
-    const userIds = Array.from(new Set(enrichedLogs.map(l => l.user_id).filter(Boolean)))
+    const userIds = Array.from(new Set(enrichedLogs.map((l) => l.user_id).filter(Boolean)))
     const profilesMap = new Map<string, { email: string; full_name: string | null }>()
 
     if (userIds.length > 0) {
@@ -106,14 +113,14 @@ export async function GET(request: NextRequest) {
           .in('id', userIds)
 
         if (profiles) {
-          profiles.forEach(p => profilesMap.set(p.id, { email: p.email, full_name: p.full_name }))
+          profiles.forEach((p) => profilesMap.set(p.id, { email: p.email, full_name: p.full_name }))
         }
       } catch {
         // profiles table may not exist, continue without enrichment
       }
     }
 
-    const logsWithAdmin = enrichedLogs.map(log => ({
+    const logsWithAdmin = enrichedLogs.map((log) => ({
       ...log,
       admin: log.user_id ? profilesMap.get(log.user_id) || null : null,
     }))

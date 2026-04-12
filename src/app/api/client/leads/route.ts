@@ -8,28 +8,42 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { pageSchema } from '@/lib/validations/schemas'
 
 const clientLeadsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
+  page: pageSchema,
   pageSize: z.coerce.number().int().min(1).max(50).default(20),
   status: z.string().max(50).default('all'),
 })
 
 export const dynamic = 'force-dynamic'
 
-type DerivedStatus = 'en_attente' | 'en_traitement' | 'devis_recus' | 'accepte' | 'termine' | 'expire' | 'refuse'
+type DerivedStatus =
+  | 'en_attente'
+  | 'en_traitement'
+  | 'devis_recus'
+  | 'accepte'
+  | 'termine'
+  | 'expire'
+  | 'refuse'
 
 function deriveStatus(events: Array<{ event_type: string }>): DerivedStatus {
   if (events.length === 0) return 'en_attente'
 
   // Check for terminal states first (scan all events)
-  const types = new Set(events.map(e => e.event_type))
+  const types = new Set(events.map((e) => e.event_type))
   if (types.has('completed')) return 'termine'
   if (types.has('expired')) return 'expire'
   if (types.has('accepted')) return 'accepte'
   if (types.has('refused')) return 'refuse'
   if (types.has('quoted')) return 'devis_recus'
-  if (types.has('dispatched') || types.has('viewed') || types.has('declined') || types.has('reassigned')) return 'en_traitement'
+  if (
+    types.has('dispatched') ||
+    types.has('viewed') ||
+    types.has('declined') ||
+    types.has('reassigned')
+  )
+    return 'en_traitement'
   return 'en_attente'
 }
 
@@ -46,10 +60,16 @@ const STATUS_LABELS: Record<DerivedStatus, string> = {
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non authentifié' } },
+        { status: 401 }
+      )
     }
 
     // Parse and validate pagination from query params
@@ -61,7 +81,10 @@ export async function GET(request: NextRequest) {
     })
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Données invalides' } },
+        { status: 400 }
+      )
     }
 
     const { page, pageSize } = parsed.data
@@ -70,13 +93,18 @@ export async function GET(request: NextRequest) {
     // Fetch all devis_requests for this client
     const { data: demandes, error: demandesError } = await supabase
       .from('devis_requests')
-      .select('id, service_name, city, postal_code, description, budget, urgency, status, client_name, created_at')
+      .select(
+        'id, service_name, city, postal_code, description, budget, urgency, status, client_name, created_at'
+      )
       .eq('client_id', user.id)
       .order('created_at', { ascending: false })
 
     if (demandesError) {
       logger.error('Client leads fetch error:', demandesError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur serveur' } },
+        { status: 500 }
+      )
     }
 
     if (!demandes || demandes.length === 0) {
@@ -89,7 +117,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch lead_events for all of this client's leads (admin client — RLS is admin-only)
     const adminClient = createAdminClient()
-    const leadIds = demandes.map(d => d.id)
+    const leadIds = demandes.map((d) => d.id)
     const { data: allEvents, error: eventsError } = await adminClient
       .from('lead_events')
       .select('lead_id, event_type, created_at')
@@ -109,7 +137,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build enriched leads with derived status + last activity
-    const enrichedLeads = demandes.map(d => {
+    const enrichedLeads = demandes.map((d) => {
       const events = eventsByLead[d.id] || []
       const derivedStatus = deriveStatus(events)
       const lastActivity = events.length > 0 ? events[0].created_at : d.created_at
@@ -131,20 +159,25 @@ export async function GET(request: NextRequest) {
     })
 
     // Sort by last activity (most recent first)
-    enrichedLeads.sort((a, b) => new Date(b.last_activity).getTime() - new Date(a.last_activity).getTime())
+    enrichedLeads.sort(
+      (a, b) => new Date(b.last_activity).getTime() - new Date(a.last_activity).getTime()
+    )
 
     // Filter by derived status if requested
-    const filtered = statusFilter === 'all'
-      ? enrichedLeads
-      : enrichedLeads.filter(l => l.derived_status === statusFilter)
+    const filtered =
+      statusFilter === 'all'
+        ? enrichedLeads
+        : enrichedLeads.filter((l) => l.derived_status === statusFilter)
 
     // Stats (before filtering)
     const stats = {
       total: enrichedLeads.length,
-      en_attente: enrichedLeads.filter(l => l.derived_status === 'en_attente').length,
-      en_traitement: enrichedLeads.filter(l => l.derived_status === 'en_traitement').length,
-      devis_recus: enrichedLeads.filter(l => l.derived_status === 'devis_recus').length,
-      termine: enrichedLeads.filter(l => l.derived_status === 'termine' || l.derived_status === 'accepte').length,
+      en_attente: enrichedLeads.filter((l) => l.derived_status === 'en_attente').length,
+      en_traitement: enrichedLeads.filter((l) => l.derived_status === 'en_traitement').length,
+      devis_recus: enrichedLeads.filter((l) => l.derived_status === 'devis_recus').length,
+      termine: enrichedLeads.filter(
+        (l) => l.derived_status === 'termine' || l.derived_status === 'accepte'
+      ).length,
     }
 
     // Paginate
@@ -158,6 +191,9 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Client leads GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

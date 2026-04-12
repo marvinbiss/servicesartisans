@@ -3,11 +3,13 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
-const querySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'draft', 'scheduled', 'sending', 'paused', 'completed', 'cancelled']).optional().default('all'),
+const querySchema = paginationSchema.extend({
+  status: z
+    .enum(['all', 'draft', 'scheduled', 'sending', 'paused', 'completed', 'cancelled'])
+    .optional()
+    .default('all'),
   channel: z.enum(['all', 'email', 'sms', 'whatsapp']).optional().default('all'),
 })
 
@@ -56,7 +58,10 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('prospection_campaigns')
-      .select('*, template:prospection_templates(id,name,channel), list:prospection_lists(id,name,contact_count)', { count: 'exact' })
+      .select(
+        '*, template:prospection_templates(id,name,channel), list:prospection_lists(id,name,contact_count)',
+        { count: 'exact' }
+      )
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
@@ -66,7 +71,10 @@ export async function GET(request: NextRequest) {
     const { data, count, error } = await query
 
     if (error) {
-      logger.warn('List campaigns query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('List campaigns query failed, returning empty list', {
+        code: error.code,
+        message: error.message,
+      })
       return NextResponse.json({
         success: true,
         data: [],
@@ -86,7 +94,10 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Campaigns GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -101,7 +112,10 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -109,7 +123,8 @@ export async function POST(request: NextRequest) {
     // Strip HTML tags from text fields before storing
     const sanitizedData = { ...parsed.data }
     if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
-    if (sanitizedData.description) sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.description)
+      sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
 
     const { data, error } = await supabase
       .from('prospection_campaigns')
@@ -123,7 +138,10 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       logger.error('Create campaign error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la création' } },
+        { status: 500 }
+      )
     }
 
     await logAdminAction(authResult.admin.id, 'campaign.create', 'prospection_campaign', data.id, {
@@ -135,6 +153,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {
     logger.error('Campaigns POST error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

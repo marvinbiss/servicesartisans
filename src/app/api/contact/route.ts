@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { Resend } from 'resend'
-import { z } from 'zod'
+import { contactFormSchema } from '@/lib/validations/schemas'
 
 // HTML escape function to prevent XSS
 function escapeHtml(text: string): string {
@@ -19,7 +19,7 @@ function escapeHtml(text: string): string {
     "'": '&#39;',
     '/': '&#x2F;',
     '`': '&#x60;',
-    '=': '&#x3D;'
+    '=': '&#x3D;',
   }
   return text.replace(/[&<>"'`=/]/g, (char) => htmlEntities[char])
 }
@@ -34,13 +34,6 @@ const getResend = () => {
   return new Resend(process.env.RESEND_API_KEY)
 }
 
-const contactSchema = z.object({
-  nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
-  email: z.string().email('Email invalide'),
-  sujet: z.string().min(1, 'Veuillez sélectionner un sujet'),
-  message: z.string().min(10, 'Le message doit contenir au moins 10 caractères'),
-})
-
 export async function POST(request: Request) {
   try {
     // Rate limiting (public endpoint — 3 requests per 5 min per IP)
@@ -49,14 +42,17 @@ export async function POST(request: Request) {
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
     const body = await request.json()
 
     // Validate input
-    const validation = contactSchema.safeParse(body)
+    const validation = contactFormSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
         { error: 'Données invalides', details: validation.error.flatten() },
@@ -107,10 +103,7 @@ export async function POST(request: Request) {
 
     if (sendError) {
       logger.error('Error sending email', sendError)
-      return NextResponse.json(
-        { error: 'Erreur lors de l\'envoi du message' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: "Erreur lors de l'envoi du message" }, { status: 500 })
     }
 
     // Send confirmation email to user (non-critical — don't fail if this errors)
@@ -143,9 +136,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Contact API error', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

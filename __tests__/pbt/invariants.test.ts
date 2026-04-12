@@ -88,6 +88,15 @@ vi.mock('next/cache', () => ({
   revalidateTag: vi.fn(),
 }))
 
+// ─── Types ─────────────────────────────────────────────────────────────────
+
+/** Minimal response shape returned by Next.js route handlers */
+interface RouteResponse {
+  status: number
+  clone(): RouteResponse
+  text(): Promise<string>
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function makeRequest(path: string, method: string, body?: unknown): NextRequest {
@@ -166,8 +175,8 @@ describe('PBT: Auth invariant', () => {
           if (!handler) return // Method not exported, skip
 
           const req = makeRequest(route, method, payload)
-          const response = await handler(req)
-          const status = response.status || response?.status
+          const response = (await handler(req)) as RouteResponse
+          const status = response.status
 
           // INVARIANT: unauthenticated request MUST be rejected
           expect(status).toBeGreaterThanOrEqual(400)
@@ -193,7 +202,7 @@ describe('PBT: Auth invariant', () => {
           if (!handler) return
 
           const req = makeRequest(route, 'GET', payload)
-          const response = await handler(req)
+          const response = (await handler(req)) as RouteResponse
 
           expect(response.status).toBeGreaterThanOrEqual(400)
           expect(response.status).toBeLessThan(500)
@@ -246,7 +255,7 @@ describe('PBT: Validation invariant', () => {
       await fc.assert(
         fc.asyncProperty(arbitraryInvalidBody, async (body) => {
           const req = makeRequest('/api/test', 'POST', body)
-          const response = await handler(req)
+          const response = (await handler(req)) as RouteResponse
 
           // INVARIANT: invalid input → 4xx (auth or validation), NEVER 500
           expect(response.status).toBeLessThan(500)
@@ -333,7 +342,7 @@ describe('PBT: Response shape', () => {
           if (!handler) return
 
           const req = makeRequest('/api/test', method)
-          const response = await handler(req)
+          const response = (await handler(req)) as RouteResponse
 
           if (response.status >= 400) {
             // INVARIANT: error response body is valid JSON with error field
@@ -382,8 +391,8 @@ describe('PBT: GET idempotency', () => {
           const req1 = makeRequest(`/api/test?${qs1}`, 'GET')
           const req2 = makeRequest(`/api/test?${qs2}`, 'GET')
 
-          const res1 = await handler(req1)
-          const res2 = await handler(req2)
+          const res1 = (await handler(req1)) as RouteResponse
+          const res2 = (await handler(req2)) as RouteResponse
 
           // INVARIANT: both unauthenticated → same rejection status
           // (status might differ on query validation, but never 500)
@@ -429,7 +438,9 @@ describe('PBT: UUID parameter handling', () => {
           if (!handler) return
 
           const req = makeRequest(`/api/test/${badId}`, 'GET')
-          const response = await handler(req, { params: { [route.paramName]: badId } })
+          const response = (await handler(req, {
+            params: { [route.paramName]: badId },
+          })) as RouteResponse
 
           // INVARIANT: bad ID → 4xx, NEVER 500
           expect(response.status).toBeLessThan(500)

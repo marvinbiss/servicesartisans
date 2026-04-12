@@ -4,11 +4,10 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { sanitizeSearchQuery, isValidUuid } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 // GET query params schema
-const quotesQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const quotesQuerySchema = paginationSchema.extend({
   status: z
     .enum(['all', 'pending', 'sent', 'accepted', 'refused', 'completed'])
     .optional()

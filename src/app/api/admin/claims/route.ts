@@ -12,17 +12,17 @@ import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
 import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 import crypto from 'crypto'
 
-const redactEmail = (e: string) => e ? e.substring(0, 2) + '***@' + (e.split('@')[1] || '***') : '***'
+const redactEmail = (e: string) =>
+  e ? e.substring(0, 2) + '***@' + (e.split('@')[1] || '***') : '***'
 
 export const dynamic = 'force-dynamic'
 
 // GET query params
-const claimsQuerySchema = z.object({
+const claimsQuerySchema = paginationSchema.extend({
   status: z.enum(['pending', 'approved', 'rejected', 'all']).optional().default('pending'),
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
 })
 
 // PATCH body
@@ -60,7 +60,8 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('provider_claims')
-      .select(`
+      .select(
+        `
         id,
         status,
         siret_provided,
@@ -75,7 +76,9 @@ export async function GET(request: NextRequest) {
         user_id,
         provider:provider_id(id, name, siret, address_city, stable_id),
         user:user_id(id, email, full_name)
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
@@ -121,7 +124,10 @@ export async function PATCH(request: NextRequest) {
     const validation = claimActionSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: validation.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: validation.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -133,7 +139,9 @@ export async function PATCH(request: NextRequest) {
     // Fetch the claim (include contact fields for anonymous claims)
     const { data: claim, error: claimError } = await supabase
       .from('provider_claims')
-      .select('id, provider_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position')
+      .select(
+        'id, provider_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position'
+      )
       .eq('id', claimId)
       .single()
 
@@ -148,7 +156,10 @@ export async function PATCH(request: NextRequest) {
     if (action === 'unclaim') {
       if (claim.status !== 'approved') {
         return NextResponse.json(
-          { success: false, error: { message: 'Seule une revendication approuvée peut être dérevendiquée' } },
+          {
+            success: false,
+            error: { message: 'Seule une revendication approuvée peut être dérevendiquée' },
+          },
           { status: 409 }
         )
       }
@@ -167,7 +178,10 @@ export async function PATCH(request: NextRequest) {
       if (providerError) {
         logger.error('Error unclaiming provider', providerError)
         return NextResponse.json(
-          { success: false, error: { message: `Erreur dérevendication: ${providerError.message}` } },
+          {
+            success: false,
+            error: { message: `Erreur dérevendication: ${providerError.message}` },
+          },
           { status: 500 }
         )
       }
@@ -260,7 +274,10 @@ export async function PATCH(request: NextRequest) {
         const claimEmail = claim.claimant_email?.trim().toLowerCase()
         if (!claimEmail) {
           return NextResponse.json(
-            { success: false, error: { message: 'Claim anonyme sans email — impossible de créer le compte' } },
+            {
+              success: false,
+              error: { message: 'Claim anonyme sans email — impossible de créer le compte' },
+            },
             { status: 400 }
           )
         }
@@ -274,7 +291,11 @@ export async function PATCH(request: NextRequest) {
 
         if (existingProfile) {
           resolvedUserId = existingProfile.id
-          logger.info('Anonymous claim: reusing existing user from profiles', { claimId, email: redactEmail(claimEmail), userId: resolvedUserId })
+          logger.info('Anonymous claim: reusing existing user from profiles', {
+            claimId,
+            email: redactEmail(claimEmail),
+            userId: resolvedUserId,
+          })
         } else {
           // Try to create new account via Supabase admin auth
           const { data: newUser, error: createUserError } = await supabase.auth.admin.createUser({
@@ -297,22 +318,36 @@ export async function PATCH(request: NextRequest) {
 
             if (linkData?.user?.id) {
               resolvedUserId = linkData.user.id
-              logger.info('Anonymous claim: found existing auth user via recovery', { claimId, email: redactEmail(claimEmail), userId: resolvedUserId })
+              logger.info('Anonymous claim: found existing auth user via recovery', {
+                claimId,
+                email: redactEmail(claimEmail),
+                userId: resolvedUserId,
+              })
 
               // Ensure profile exists (upsert with role)
-              const { error: upsertError } = await supabase.from('profiles').upsert({
-                id: resolvedUserId,
-                email: claimEmail,
-                full_name: claim.claimant_name || '',
-                role: 'artisan',
-                created_at: now,
-                updated_at: now,
-              }, { onConflict: 'id' })
+              const { error: upsertError } = await supabase.from('profiles').upsert(
+                {
+                  id: resolvedUserId,
+                  email: claimEmail,
+                  full_name: claim.claimant_name || '',
+                  role: 'artisan',
+                  created_at: now,
+                  updated_at: now,
+                },
+                { onConflict: 'id' }
+              )
 
               if (upsertError) {
-                logger.error('Failed to upsert profile for existing auth user', { claimId, userId: resolvedUserId, error: upsertError })
+                logger.error('Failed to upsert profile for existing auth user', {
+                  claimId,
+                  userId: resolvedUserId,
+                  error: upsertError,
+                })
                 return NextResponse.json(
-                  { success: false, error: { message: `Erreur création profil: ${upsertError.message}` } },
+                  {
+                    success: false,
+                    error: { message: `Erreur création profil: ${upsertError.message}` },
+                  },
                   { status: 500 }
                 )
               }
@@ -323,7 +358,10 @@ export async function PATCH(request: NextRequest) {
                 createError: createUserError?.message,
               })
               return NextResponse.json(
-                { success: false, error: { message: 'Erreur lors de la création du compte artisan' } },
+                {
+                  success: false,
+                  error: { message: 'Erreur lors de la création du compte artisan' },
+                },
                 { status: 500 }
               )
             }
@@ -332,24 +370,38 @@ export async function PATCH(request: NextRequest) {
             accountCreated = true
 
             // Create profile row (upsert in case a trigger already created a partial row)
-            const { error: profileError } = await supabase.from('profiles').upsert({
-              id: resolvedUserId,
-              email: claimEmail,
-              full_name: claim.claimant_name || '',
-              role: 'artisan',
-              created_at: now,
-              updated_at: now,
-            }, { onConflict: 'id' })
+            const { error: profileError } = await supabase.from('profiles').upsert(
+              {
+                id: resolvedUserId,
+                email: claimEmail,
+                full_name: claim.claimant_name || '',
+                role: 'artisan',
+                created_at: now,
+                updated_at: now,
+              },
+              { onConflict: 'id' }
+            )
 
             if (profileError) {
-              logger.error('Failed to create profile for new user', { claimId, userId: resolvedUserId, error: profileError })
+              logger.error('Failed to create profile for new user', {
+                claimId,
+                userId: resolvedUserId,
+                error: profileError,
+              })
               return NextResponse.json(
-                { success: false, error: { message: `Erreur création profil: ${profileError.message}` } },
+                {
+                  success: false,
+                  error: { message: `Erreur création profil: ${profileError.message}` },
+                },
                 { status: 500 }
               )
             }
 
-            logger.info('Anonymous claim: created new user', { claimId, email: redactEmail(claimEmail), userId: resolvedUserId })
+            logger.info('Anonymous claim: created new user', {
+              claimId,
+              email: redactEmail(claimEmail),
+              userId: resolvedUserId,
+            })
           }
         }
       }
@@ -369,9 +421,13 @@ export async function PATCH(request: NextRequest) {
         .maybeSingle()
 
       if (providerError) {
-        logger.error('Error assigning provider during claim approval', { claimId, providerId: claim.provider_id, error: providerError })
+        logger.error('Error assigning provider during claim approval', {
+          claimId,
+          providerId: claim.provider_id,
+          error: providerError,
+        })
         return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de l\'attribution de la fiche' } },
+          { success: false, error: { message: "Erreur lors de l'attribution de la fiche" } },
           { status: 500 }
         )
       }
@@ -379,11 +435,19 @@ export async function PATCH(request: NextRequest) {
       if (!updatedProvider) {
         await supabase
           .from('provider_claims')
-          .update({ status: 'rejected', rejection_reason: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
+          .update({
+            status: 'rejected',
+            rejection_reason: 'Fiche déjà attribuée',
+            reviewed_by: authResult.admin.id,
+            reviewed_at: now,
+          })
           .eq('id', claimId)
 
         return NextResponse.json(
-          { success: false, error: { message: 'Cette fiche a déjà été attribuée à un autre utilisateur' } },
+          {
+            success: false,
+            error: { message: 'Cette fiche a déjà été attribuée à un autre utilisateur' },
+          },
           { status: 409 }
         )
       }
@@ -421,7 +485,11 @@ export async function PATCH(request: NextRequest) {
           .eq('id', resolvedUserId)
 
         if (roleError) {
-          logger.error('Failed to update profile role to artisan', { claimId, userId: resolvedUserId, error: roleError })
+          logger.error('Failed to update profile role to artisan', {
+            claimId,
+            userId: resolvedUserId,
+            error: roleError,
+          })
           return NextResponse.json(
             { success: false, error: { message: 'Erreur lors de la mise à jour du rôle artisan' } },
             { status: 500 }
@@ -439,7 +507,13 @@ export async function PATCH(request: NextRequest) {
       if (!claim.user_id) {
         if (!claim.claimant_email) {
           return NextResponse.json(
-            { success: false, error: { message: 'Email du demandeur manquant — impossible d\'envoyer l\'email de configuration' } },
+            {
+              success: false,
+              error: {
+                message:
+                  "Email du demandeur manquant — impossible d'envoyer l'email de configuration",
+              },
+            },
             { status: 400 }
           )
         }
@@ -470,7 +544,11 @@ export async function PATCH(request: NextRequest) {
             })
 
             emailStatus = emailResult?.id ? `sent (id: ${emailResult.id})` : 'sent (no id)'
-            logger.info('Claim approval email result', { claimId, email: redactEmail(claimEmail), emailResult })
+            logger.info('Claim approval email result', {
+              claimId,
+              email: redactEmail(claimEmail),
+              emailResult,
+            })
           }
         } catch (emailErr) {
           emailStatus = `exception: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`

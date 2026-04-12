@@ -1,35 +1,17 @@
 /**
  * Devis API - ServicesArtisans
- * Handles quote request submissions
+ * Thin handler: parse request, validate, call service, return response
  */
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient as createServerClient } from '@/lib/supabase/server'
-import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 import { cleanPhone } from '@/lib/validation/phone'
-import { dispatchLead } from '@/app/actions/dispatch'
-import { logLeadEvent } from '@/lib/dashboard/events'
-import { syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
-import { qualifyDevisForCee } from '@/lib/cee/qualify'
-import { runCeeDispatchFireAndForget } from '@/lib/cee/dispatcher-integration'
+import { processDevis } from '@/lib/services/devis-service'
 
 export const dynamic = 'force-dynamic'
-
-/** Escape HTML special chars to prevent XSS in email templates */
-function htmlEscape(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
-const getResend = () => getResendClient()
 
 const devisSchema = z.object({
   service: z.string().min(1, 'Veuillez sélectionner un service'),
@@ -53,39 +35,6 @@ const devisSchema = z.object({
     ),
 })
 
-const serviceNames: Record<string, string> = {
-  plombier: 'Plombier',
-  electricien: 'Électricien',
-  serrurier: 'Serrurier',
-  chauffagiste: 'Chauffagiste',
-  'peintre-en-batiment': 'Peintre en bâtiment',
-  couvreur: 'Couvreur',
-  menuisier: 'Menuisier',
-  macon: 'Maçon',
-  carreleur: 'Carreleur',
-  jardinier: 'Jardinier-paysagiste',
-  vitrier: 'Vitrier',
-  climaticien: 'Climaticien',
-  cuisiniste: 'Cuisiniste',
-  solier: 'Solier-moquettiste',
-  nettoyage: 'Nettoyage professionnel',
-  general: 'Demande générale',
-}
-
-/** Resolve a human-readable service name, with fallback for unknown slugs */
-function resolveServiceName(service: string): string {
-  return (
-    serviceNames[service] || service.charAt(0).toUpperCase() + service.slice(1).replace(/-/g, ' ')
-  )
-}
-
-const urgencyLabels: Record<string, string> = {
-  urgent: 'Urgent',
-  semaine: 'Cette semaine',
-  mois: 'Ce mois-ci',
-  flexible: 'Pas urgent',
-}
-
 export async function POST(request: Request) {
   try {
     // Rate limiting (public endpoint — 10 requests per minute per IP)
@@ -101,7 +50,6 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = createAdminClient()
     const body = await request.json()
 
     // Resolve authenticated user if present (null for anonymous submissions)
@@ -127,315 +75,42 @@ export async function POST(request: Request) {
 
     const data = validation.data
 
-    // Map urgency to devis_requests CHECK values
-    // DB constraint: ('normal', 'urgent', 'tres_urgent', 'semaine', 'mois', 'flexible')
-    // See migration 361_devis_urgency_values.sql
-    const urgencyDbMap: Record<string, string> = {
-      urgent: 'urgent',
-      semaine: 'semaine',
-      mois: 'mois',
-      flexible: 'flexible',
-    }
+    // Call service
+    const result = await processDevis(data, clientId)
 
-    // Vérifier doublon (même email + service + ville dans la dernière heure)
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
-    const serviceName = resolveServiceName(data.service)
-    const { data: existing } = await supabase
-      .from('devis_requests')
-      .select('id')
-      .eq('client_email', data.email || '')
-      .eq('service_name', serviceName)
-      .eq('city', data.ville || '')
-      .gte('created_at', oneHourAgo)
-      .limit(1)
-
-    if (existing && existing.length > 0) {
-      return NextResponse.json(
-        {
-          error: 'Vous avez déjà soumis une demande similaire. Vérifiez votre email pour le suivi.',
-        },
-        { status: 409 }
-      )
-    }
-
-    // Rate limiting per email — max 5 requests per 24h
-    if (data.email) {
-      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-      const { count } = await supabase
-        .from('devis_requests')
-        .select('id', { count: 'exact', head: true })
-        .eq('client_email', data.email)
-        .gte('created_at', oneDayAgo)
-
-      if (count !== null && count >= 5) {
-        return NextResponse.json(
-          { error: 'Vous avez atteint la limite de 5 demandes par jour. Réessayez demain.' },
-          { status: 429 }
-        )
-      }
-    }
-
-    // Store in devis_requests table
-    const { data: lead, error: dbError } = await supabase
-      .from('devis_requests')
-      .insert({
-        client_id: clientId,
-        client_name: data.nom || 'Rappel',
-        client_email: data.email || '',
-        client_phone: data.telephone,
-        service_name: serviceName,
-        description: data.description || 'Demande de devis',
-        budget: data.budget || null,
-        urgency: urgencyDbMap[data.urgency] || 'normal',
-        city: data.ville || null,
-        postal_code: data.codePostal || '',
-        status: 'pending',
-      })
-      .select()
-      .single()
-
-    if (dbError) {
-      logger.error('Database error', dbError)
-      return NextResponse.json(
-        { error: "Erreur lors de l'enregistrement de votre demande. Veuillez réessayer." },
-        { status: 500 }
-      )
-    }
-
-    // CEE qualification — flag devis potentiellement éligible à une prime CEE
-    // en fonction du slug de service demandé. Écriture best-effort : toute
-    // erreur ici ne doit pas bloquer le parcours devis (voir Brique 1 roadmap
-    // mandataire CEE).
-    let ceeResult: { eligible: boolean; codes: string[] } = { eligible: false, codes: [] }
-    if (lead) {
-      try {
-        ceeResult = await qualifyDevisForCee(supabase, data.service)
-        if (ceeResult.eligible) {
-          await supabase
-            .from('devis_requests')
-            .update({
-              cee_eligible: true,
-              cee_operation_codes: ceeResult.codes,
-              cee_qualified_at: new Date().toISOString(),
-            })
-            .eq('id', lead.id)
-        }
-      } catch (err) {
-        logger.error('CEE qualification failed', err)
-      }
-    }
-
-    // Log 'created' event - triggers "Demande bien reçue" notification to client
-    if (lead) {
-      logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) =>
-        logger.error('Failed to log lead created event', err)
-      )
-      // Pipedrive CRM sync — awaited inside a 4s timeout race so a slow Pipedrive
-      // call can't block the user response indefinitely. On Vercel serverless, a bare
-      // `void` promise is killed when the response returns, so we can't fire-and-forget.
-      // Failures (incl. timeout) are caught and replayed by /api/cron/pipedrive-retry.
-      // Timer extrait pour être cleared en finally : sans clear, le timeout continue
-      // de tourner jusqu'à 4s même après un succès rapide → fuite de handle qui
-      // maintient la lambda Vercel chaude. Même pattern que la race CEE plus bas.
-      let pipedriveTimeoutHandle: ReturnType<typeof setTimeout> | null = null
-      try {
-        await Promise.race([
-          syncDevisRequestToPipedrive(lead.id),
-          new Promise((_, reject) => {
-            pipedriveTimeoutHandle = setTimeout(
-              () => reject(new Error('Pipedrive sync timeout (4s)')),
-              4000
-            )
-          }),
-        ])
-      } catch (err) {
-        logger.error('Pipedrive sync error', err)
-      } finally {
-        if (pipedriveTimeoutHandle !== null) {
-          clearTimeout(pipedriveTimeoutHandle)
-        }
-      }
-    }
-
-    // Dispatch to eligible artisans
-    let assignedProviders: string[] = []
-    if (lead) {
-      const urgencyMap: Record<string, string> = {
-        urgent: 'urgent',
-        semaine: 'semaine',
-        mois: 'mois',
-        flexible: 'flexible',
-      }
-      assignedProviders = await dispatchLead(lead.id, {
-        serviceName: serviceName,
-        city: data.ville,
-        postalCode: data.codePostal,
-        urgency: urgencyMap[data.urgency] || 'normal',
-        sourceTable: 'devis_requests',
-        ceeEligible: ceeResult.eligible,
-      }).catch((err) => {
-        logger.error('Failed to dispatch lead', err)
-        return []
-      })
-      // Dispatcher CEE — brique 3 du pipeline mandataire. Fail-OPEN : toute
-      // erreur est absorbée par runCeeDispatchFireAndForget (logger.warn,
-      // jamais de throw). On applique quand même une race avec timeout car sur
-      // Vercel serverless, les promesses non-awaited sont killed quand la
-      // réponse repart. Si le dispatcher est lent, on laisse tomber côté
-      // tunnel — un reconcile futur pourra re-router depuis cee_dossiers.
-      if (ceeResult.eligible && assignedProviders.length > 0) {
-        const CEE_DISPATCH_TIMEOUT_MS = 8000
-        // 8s : enrich + getDelegatairesByOperation(N) + write cee_dossiers. À suivre via logs cee-dispatch.timeout_exceeded.
-        const TIMEOUT_SENTINEL = Symbol('cee-dispatch-timeout')
-        // Timer extrait pour pouvoir être cleared en try/finally : sans clear,
-        // le timeout continue de tourner jusqu'à 8s même après un dispatch
-        // rapide → fuite de handle sur la lambda Vercel.
-        let timeoutHandle: ReturnType<typeof setTimeout> | null = null
-        try {
-          const raceResult = await Promise.race([
-            runCeeDispatchFireAndForget(supabase, {
-              devisId: lead.id,
-              clientId: clientId ?? null,
-              serviceSlug: data.service,
-              postalCode: data.codePostal ?? null,
-              candidateProviderIds: assignedProviders,
-            }),
-            new Promise<typeof TIMEOUT_SENTINEL>((resolve) => {
-              timeoutHandle = setTimeout(() => resolve(TIMEOUT_SENTINEL), CEE_DISPATCH_TIMEOUT_MS)
-            }),
-          ])
-          if (raceResult === TIMEOUT_SENTINEL) {
-            logger.warn('cee-dispatch: timeout exceeded, fire-and-forget aborted', {
-              action: 'cee-dispatch',
-              reason: 'timeout_exceeded',
-              timeoutMs: CEE_DISPATCH_TIMEOUT_MS,
-              devisId: lead.id,
-            })
-          }
-        } catch (ceeErr) {
-          // Filet ultime — runCeeDispatchFireAndForget ne throw pas, mais on
-          // garde la ceinture. Zéro PII dans les logs (action + devisId only).
-          logger.warn('cee-dispatch: unexpected throw in fire-and-forget', {
-            action: 'cee-dispatch',
-            devisId: lead.id,
-            error: ceeErr instanceof Error ? ceeErr.message : String(ceeErr),
-          })
-        } finally {
-          // Garantit qu'aucun timer ne reste armé après la race (succès, timeout,
-          // ou throw). Évite toute fuite de handle même si le pattern est plus
-          // fragile qu'il n'y paraît.
-          if (timeoutHandle !== null) {
-            clearTimeout(timeoutHandle)
-          }
-        }
-      }
-
-      if (assignedProviders.length > 0) {
-        logLeadEvent(lead.id, 'dispatched', {
-          metadata: { count: assignedProviders.length },
-        }).catch((err) => logger.error('Failed to log lead dispatched event', err))
-        // Log devis_completed analytics event (server-side)
-        supabase
-          .from('analytics_events')
-          .insert({
-            event_type: 'devis_completed',
-            metadata: {
-              devisId: lead.id,
-              serviceSlug: data.service,
-              city: data.ville,
-              artisanCount: assignedProviders.length,
+    if (!result.success) {
+      switch (result.code) {
+        case 'duplicate':
+          return NextResponse.json(
+            {
+              error:
+                'Vous avez déjà soumis une demande similaire. Vérifiez votre email pour le suivi.',
             },
-          })
-          .then(({ error: analyticsErr }) => {
-            if (analyticsErr) logger.error('Failed to log devis_completed event', analyticsErr)
-          })
+            { status: 409 }
+          )
+        case 'email_rate_limit':
+          return NextResponse.json(
+            { error: 'Vous avez atteint la limite de 5 demandes par jour. Réessayez demain.' },
+            { status: 429 }
+          )
+        case 'db_error':
+          return NextResponse.json(
+            { error: "Erreur lors de l'enregistrement de votre demande. Veuillez réessayer." },
+            { status: 500 }
+          )
       }
     }
-
-    // Send both confirmation emails in parallel (use allSettled so one failure doesn't block the other)
-    let resend: ReturnType<typeof getResend> | null = null
-    try {
-      resend = getResend()
-    } catch (emailInitError) {
-      logger.error('Resend not configured, skipping emails', emailInitError)
-    }
-    const fromEmail = process.env.FROM_EMAIL || 'noreply@servicesartisans.fr'
-
-    const emailPromises: Promise<unknown>[] = []
-
-    // Confirmation to client (only if email provided)
-    if (resend && data.email) {
-      emailPromises.push(
-        resend.emails.send({
-          from: fromEmail,
-          to: data.email,
-          subject: 'Votre demande de devis - ServicesArtisans',
-          html: `
-            <h2>Bonjour ${htmlEscape(data.nom || 'Rappel')},</h2>
-            <p>Nous avons bien reçu votre demande de devis. Voici le récapitulatif :</p>
-            <ul>
-              <li><strong>Service :</strong> ${htmlEscape(resolveServiceName(data.service))}</li>
-              <li><strong>Délai :</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
-              ${data.ville ? `<li><strong>Ville :</strong> ${htmlEscape(data.ville)}</li>` : ''}
-              ${data.description ? `<li><strong>Description :</strong> ${htmlEscape(data.description)}</li>` : ''}
-            </ul>
-            <p><strong>Que se passe-t-il maintenant ?</strong></p>
-            <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Un conseiller vous rappelle rapidement.</p>
-            <p>Cordialement,<br />L'équipe ServicesArtisans</p>
-            <p style="color: #666; font-size: 12px;">
-              <a href="https://servicesartisans.fr">servicesartisans.fr</a>
-            </p>
-          `,
-        })
-      )
-    }
-
-    // Notification to admin
-    if (resend)
-      emailPromises.push(
-        resend.emails.send({
-          from: fromEmail,
-          to: 'contact@servicesartisans.fr',
-          subject: `[Nouveau Devis] ${resolveServiceName(data.service)} - ${data.ville || 'France'}`,
-          html: `
-          <h2>Nouvelle demande de devis</h2>
-          <h3>Client</h3>
-          <ul>
-            <li><strong>Nom :</strong> ${htmlEscape(data.nom || 'Rappel')}</li>
-            <li><strong>Email :</strong> ${htmlEscape(data.email || 'Non fourni')}</li>
-            <li><strong>Téléphone :</strong> ${htmlEscape(data.telephone)}</li>
-          </ul>
-          <h3>Demande</h3>
-          <ul>
-            <li><strong>Service :</strong> ${htmlEscape(resolveServiceName(data.service))}</li>
-            <li><strong>Délai :</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
-            <li><strong>Ville :</strong> ${htmlEscape(data.ville || 'Non précisé')}</li>
-            <li><strong>Code postal :</strong> ${htmlEscape(data.codePostal || 'Non précisé')}</li>
-            <li><strong>Budget :</strong> ${htmlEscape(data.budget || 'Non précisé')}</li>
-            <li><strong>Description :</strong> ${htmlEscape(data.description || 'Non précisé')}</li>
-          </ul>
-          ${lead ? `<p>ID: ${lead.id}</p>` : ''}
-        `,
-        })
-      )
-
-    const emailResults = await Promise.allSettled(emailPromises)
-
-    // Log any email failures (devis is already saved in DB, so we still return success)
-    emailResults.forEach((result, i) => {
-      if (result.status === 'rejected') {
-        logger.error(`Failed to send email ${i}`, result.reason)
-      }
-    })
 
     return NextResponse.json({
       success: true,
       message: 'Demande de devis envoyée avec succès',
-      id: lead?.id,
-      artisans_notified: assignedProviders.length,
-      ...(assignedProviders.length === 0 && { artisans_found: false }),
-      cee_eligible: ceeResult.eligible,
-      ...(ceeResult.eligible && { cee_operation_codes: ceeResult.codes }),
+      id: result.success ? result.id : undefined,
+      artisans_notified: result.success ? result.artisans_notified : 0,
+      ...(!result.success || !result.artisans_found ? { artisans_found: false } : {}),
+      cee_eligible: result.success ? result.cee_eligible : false,
+      ...(result.success && result.cee_eligible && result.cee_operation_codes
+        ? { cee_operation_codes: result.cee_operation_codes }
+        : {}),
     })
   } catch (error) {
     logger.error('Devis API error', error)

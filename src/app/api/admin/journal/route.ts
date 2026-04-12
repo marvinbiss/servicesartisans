@@ -8,9 +8,10 @@ import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { pageSchema } from '@/lib/validations/schemas'
 
 const journalQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
+  page: pageSchema,
   action: z.string().max(100).nullable().default(null),
   user_id: z.string().uuid().nullable().default(null),
 })
@@ -20,6 +21,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   // Verify admin with audit:read permission
   const auth = await requirePermission('audit', 'read')
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
@@ -58,7 +60,10 @@ export async function GET(request: NextRequest) {
     const { data: logs, error } = await query
 
     if (error) {
-      logger.warn('Journal query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('Journal query failed, returning empty list', {
+        code: error.code,
+        message: error.message,
+      })
       return NextResponse.json({
         logs: [],
         total: 0,
@@ -73,7 +78,9 @@ export async function GET(request: NextRequest) {
         .from('audit_logs')
         .select('id', { count: 'exact', head: true })
       totalCount = count || 0
-    } catch { /* use 0 */ }
+    } catch {
+      /* use 0 */
+    }
 
     return NextResponse.json({
       logs: logs || [],

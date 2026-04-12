@@ -3,12 +3,14 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 // GET query params schema
-const bookingsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'confirmed', 'completed', 'cancelled']).optional().default('all'),
+const bookingsQuerySchema = paginationSchema.extend({
+  status: z
+    .enum(['all', 'pending', 'confirmed', 'completed', 'cancelled'])
+    .optional()
+    .default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
@@ -35,7 +37,10 @@ export async function GET(request: NextRequest) {
     const result = bookingsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -43,16 +48,17 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit
 
-    let query = supabase
-      .from('bookings')
-      .select(`
+    let query = supabase.from('bookings').select(
+      `
         *,
         provider:providers!provider_id (
           id,
           name,
           email
         )
-      `, { count: 'exact' })
+      `,
+      { count: 'exact' }
+    )
 
     // Filtre par statut
     if (status !== 'all') {
@@ -64,12 +70,17 @@ export async function GET(request: NextRequest) {
     // Le paramètre search est accepté pour compatibilité UI mais ignoré au niveau DB.
     void search
 
-    const { data: bookings, count, error } = await query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const {
+      data: bookings,
+      count,
+      error,
+    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
 
     if (error) {
-      logger.warn('Bookings query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('Bookings query failed, returning empty list', {
+        code: error.code,
+        message: error.message,
+      })
       return NextResponse.json({
         success: true,
         bookings: [],

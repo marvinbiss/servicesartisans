@@ -3,11 +3,10 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
 // GET query params schema
-const usersQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+const usersQuerySchema = paginationSchema.extend({
   filter: z.enum(['all', 'clients', 'artisans', 'banned']).optional().default('all'),
   plan: z.enum(['all', 'gratuit', 'pro', 'premium']).optional().default('all'),
   search: z.string().max(100).optional().default(''),

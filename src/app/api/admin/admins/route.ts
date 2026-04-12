@@ -4,21 +4,21 @@ import { type AdminRole } from '@/types/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { paginationSchema } from '@/lib/validations/schemas'
 
-// GET query params schema
-const adminsQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-})
+// GET query params schema — pagination only, no additional filters
+const adminsQuerySchema = paginationSchema
 
 // POST request schema — accepts email OR user_id
-const createAdminSchema = z.object({
-  user_id: z.string().uuid().optional(),
-  email: z.string().email().optional(),
-  role: z.enum(['super_admin', 'admin', 'moderator', 'viewer']),
-}).refine(data => data.user_id || data.email, {
-  message: 'user_id ou email requis',
-})
+const createAdminSchema = z
+  .object({
+    user_id: z.string().uuid().optional(),
+    email: z.string().email().optional(),
+    role: z.enum(['super_admin', 'admin', 'moderator', 'viewer']),
+  })
+  .refine((data) => data.user_id || data.email, {
+    message: 'user_id ou email requis',
+  })
 
 export const dynamic = 'force-dynamic'
 
@@ -46,7 +46,10 @@ export async function GET(request: NextRequest) {
     const result = adminsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -54,7 +57,11 @@ export async function GET(request: NextRequest) {
     const offset = (page - 1) * limit
 
     // Fetch admins from profiles table (admin_roles table does not exist)
-    const { data: profiles, error, count } = await supabase
+    const {
+      data: profiles,
+      error,
+      count,
+    } = await supabase
       .from('profiles')
       .select('id, email, full_name, role, is_admin, created_at', { count: 'exact' })
       .or('is_admin.eq.true,role.in.(super_admin,admin,moderator,viewer)')
@@ -71,7 +78,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    const admins = (profiles || []).map(p => ({
+    const admins = (profiles || []).map((p) => ({
       id: p.id,
       email: p.email || '',
       full_name: p.full_name || null,
@@ -88,7 +95,10 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Admin fetch error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -101,7 +111,13 @@ export async function POST(request: NextRequest) {
 
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
-        { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent ajouter des administrateurs' } },
+        {
+          success: false,
+          error: {
+            code: 'FORBIDDEN',
+            message: 'Seuls les super admins peuvent ajouter des administrateurs',
+          },
+        },
         { status: 403 }
       )
     }
@@ -112,7 +128,10 @@ export async function POST(request: NextRequest) {
     const result = createAdminSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -142,7 +161,10 @@ export async function POST(request: NextRequest) {
         if (authError || !authData.user) {
           logger.error('Error creating auth user for admin', authError)
           return NextResponse.json(
-            { success: false, error: { message: authError?.message || 'Erreur lors de la création du compte' } },
+            {
+              success: false,
+              error: { message: authError?.message || 'Erreur lors de la création du compte' },
+            },
             { status: 400 }
           )
         }
@@ -166,6 +188,7 @@ export async function POST(request: NextRequest) {
     const { data: updatedProfile, error } = await supabase
       .from('profiles')
       .update({ role: role, is_admin: true, updated_at: new Date().toISOString() })
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       .eq('id', targetUserId!)
       .select('id, email, full_name, role, is_admin, created_at')
       .single()
@@ -178,10 +201,15 @@ export async function POST(request: NextRequest) {
         )
       }
       logger.error('Error promoting user to admin', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création de l\'administrateur' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: "Erreur lors de la création de l'administrateur" } },
+        { status: 500 }
+      )
     }
 
-    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', updatedProfile.id, { role })
+    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', updatedProfile.id, {
+      role,
+    })
 
     return NextResponse.json({
       admin: {
@@ -195,6 +223,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Admin create error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

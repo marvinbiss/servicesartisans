@@ -1,54 +1,24 @@
 /**
  * Reviews API - ServicesArtisans
- * Handles review submission and retrieval with proper validation
- * World-class review system with fraud detection
+ * Thin handler: parse request, validate, call service, return response
  */
 
 import { NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
-import { createHmac, timingSafeEqual } from 'crypto'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
-import { slugify } from '@/lib/utils'
 import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { z } from 'zod'
-import type { SupabaseClientType } from '@/types'
-
-// Type definitions for database responses
-interface ClientProfile {
-  full_name: string | null
-  email: string | null
-  phone_e164: string | null
-}
-
-interface ArtisanProfile {
-  id: string
-  name: string | null
-}
-
-interface BookingWithRelations {
-  id: string
-  provider_id: string
-  service_name: string | null
-  status: string
-  client: ClientProfile | ClientProfile[] | null
-  artisan: ArtisanProfile | ArtisanProfile[] | null
-}
-
-interface Review {
-  id: string
-  rating: number
-  content: string | null
-  would_recommend: boolean
-  author_name: string
-  created_at: string
-  reply: string | null
-  reply_date: string | null
-}
+import {
+  getArtisanDisplayName,
+  computeReviewStats,
+  generateReviewToken,
+  createReview,
+} from '@/lib/services/review-service'
+import type { BookingWithRelations } from '@/lib/services/review-service'
 
 // Initialize Supabase client (anon key only — RLS enforced)
 function getSupabaseClient() {
@@ -62,31 +32,7 @@ function getSupabaseClient() {
   return createSupabaseClient(supabaseUrl, supabaseKey)
 }
 
-// Helper to get artisan display name
-function getArtisanDisplayName(artisan: ArtisanProfile | ArtisanProfile[] | null): string {
-  if (!artisan) return 'Artisan'
-
-  const profile = Array.isArray(artisan) ? artisan[0] : artisan
-
-  return profile?.name || 'Artisan'
-}
-
-// Helper to get client info from profiles join
-function getClientInfo(client: ClientProfile | ClientProfile[] | null): {
-  name: string
-  email: string
-  phone: string | null
-} {
-  if (!client) return { name: 'Client', email: '', phone: null }
-  const profile = Array.isArray(client) ? client[0] : client
-  return {
-    name: profile?.full_name || 'Client',
-    email: profile?.email || '',
-    phone: profile?.phone_e164 || null,
-  }
-}
-
-// Query schema for GET request - require full UUID for bookingId to prevent enumeration
+// Query schema for GET request
 const getQuerySchema = z
   .object({
     bookingId: z.string().uuid('ID de réservation invalide').optional(),
@@ -96,9 +42,9 @@ const getQuerySchema = z
     message: 'bookingId ou artisanId requis',
   })
 
-// GET /api/reviews - Get booking info for review or artisan reviews
 export const dynamic = 'force-dynamic'
 
+// GET /api/reviews - Get booking info for review or artisan reviews
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -121,7 +67,7 @@ export async function GET(request: Request) {
     const { bookingId, artisanId } = queryValidation.data
     const supabase = getSupabaseClient()
 
-    // Get booking info for review submission - use exact match to prevent enumeration
+    // Get booking info for review submission
     if (bookingId) {
       const { data: booking, error } = await supabase
         .from('bookings')
@@ -140,14 +86,13 @@ export async function GET(request: Request) {
         .single()
 
       if (error || !booking) {
-        // Don't reveal whether the booking exists or not to prevent enumeration
         return NextResponse.json(
           createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
           { status: 404 }
         )
       }
 
-      const typedBooking = booking as BookingWithRelations & { client_id: string }
+      const typedBooking = booking as BookingWithRelations
 
       // Check if already reviewed
       const { data: existingReview } = await supabase
@@ -158,21 +103,16 @@ export async function GET(request: Request) {
 
       // Generate reviewToken only for authenticated client of this booking
       let reviewToken: string | undefined
-      if (process.env.REVIEW_HMAC_SECRET) {
-        try {
-          const authSupabase = await createServerClient()
-          const {
-            data: { user },
-          } = await authSupabase.auth.getUser()
-          if (user && typedBooking.client_id === user.id) {
-            reviewToken = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
-              .update(bookingId)
-              .digest('hex')
-              .slice(0, 32)
-          }
-        } catch {
-          // Auth check failed — no token returned (public behavior)
+      try {
+        const authSupabase = await createServerClient()
+        const {
+          data: { user },
+        } = await authSupabase.auth.getUser()
+        if (user && typedBooking.client_id === user.id) {
+          reviewToken = generateReviewToken(bookingId) ?? undefined
         }
+      } catch {
+        // Auth check failed — no token returned
       }
 
       return NextResponse.json(
@@ -185,7 +125,7 @@ export async function GET(request: Request) {
       )
     }
 
-    // Get published reviews for an artisan (only status = 'published')
+    // Get published reviews for an artisan
     if (artisanId) {
       const { data: reviews, error } = await supabase
         .from('reviews')
@@ -213,34 +153,23 @@ export async function GET(request: Request) {
         )
       }
 
-      const typedReviews = (reviews || []) as Review[]
+      const typedReviews = (reviews || []) as {
+        id: string
+        rating: number
+        content: string | null
+        would_recommend: boolean
+        author_name: string
+        created_at: string
+        reply: string | null
+        reply_date: string | null
+      }[]
 
-      // Calculate stats
-      const totalReviews = typedReviews.length
-      const avgRating =
-        totalReviews > 0 ? typedReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
-      const recommendRate =
-        totalReviews > 0
-          ? (typedReviews.filter((r) => r.would_recommend).length / totalReviews) * 100
-          : 0
-
-      // Rating distribution
-      const distribution = [0, 0, 0, 0, 0]
-      typedReviews.forEach((r) => {
-        if (r.rating >= 1 && r.rating <= 5) {
-          distribution[r.rating - 1]++
-        }
-      })
+      const stats = computeReviewStats(typedReviews)
 
       return NextResponse.json(
         createSuccessResponse({
           reviews: typedReviews,
-          stats: {
-            total: totalReviews,
-            average: Math.round(avgRating * 10) / 10,
-            recommendRate: Math.round(recommendRate),
-            distribution,
-          },
+          stats,
         })
       )
     }
@@ -260,7 +189,7 @@ export async function GET(request: Request) {
 // POST /api/reviews - Submit a review
 export async function POST(request: Request) {
   try {
-    // Rate limiting (public endpoint — 5 requests per minute per IP)
+    // Rate limiting
     const ip = getClientIp(request.headers)
     const rl = await checkRateLimit(`reviews:${ip}`, { window: 60_000, max: 5 })
     if (!rl.allowed) {
@@ -280,7 +209,6 @@ export async function POST(request: Request) {
 
     // Validate request body
     const validation = validateRequest(createReviewSchema, body)
-
     if (!validation.success) {
       return NextResponse.json(
         createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Donnees invalides', {
@@ -293,7 +221,7 @@ export async function POST(request: Request) {
     const { bookingId, rating, comment, reviewToken } = validation.data
     const wouldRecommend = body.wouldRecommend ?? true
 
-    // Validate bookingId is a valid UUID to prevent enumeration
+    // Validate bookingId is a valid UUID
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     if (!uuidRegex.test(bookingId)) {
       return NextResponse.json(
@@ -317,173 +245,75 @@ export async function POST(request: Request) {
       )
     }
 
-    // Bascule service_role : depuis la migration 414 les policies RLS anon
-    // sur `reviews` sont deny-all en INSERT. Le POST est déjà verrouillé
-    // côté serveur (auth user + HMAC reviewToken + match client_id), donc
-    // l'insert passe par admin client pour bypass RLS en toute sécurité.
+    // Use admin client (RLS deny-all on reviews INSERT since migration 414)
     const supabase = createAdminClient()
 
-    // Find the booking using exact match to prevent enumeration
-    // Join profiles via client_id to get client name and email
-    const { data: booking, error: bookingError } = await supabase
-      .from('bookings')
-      .select(
-        `
-        id,
-        client_id,
-        provider_id,
-        status,
-        client:profiles!client_id(full_name, email, phone_e164)
-      `
-      )
-      .eq('id', bookingId)
-      .single()
+    // Call service
+    const result = await createReview(supabase, {
+      bookingId,
+      userId: user.id,
+      rating,
+      comment,
+      wouldRecommend,
+      reviewToken,
+    })
 
-    if (bookingError || !booking) {
-      // Generic error to prevent enumeration
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
-        { status: 404 }
-      )
-    }
-
-    // Auth check: the reviewer must be the booking's client
-    if (booking.client_id !== user.id) {
-      return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.UNAUTHORIZED,
-          'Vous ne pouvez laisser un avis que pour vos propres réservations'
-        ),
-        { status: 403 }
-      )
-    }
-
-    // Validate HMAC review token (prevents fake reviews) — MANDATORY
-    // Auth check above already ensures reviewer === booking client
-    if (!process.env.REVIEW_HMAC_SECRET || !reviewToken) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.REVIEW_TOKEN_INVALID, 'Token de vérification requis'),
-        { status: 403 }
-      )
-    }
-    {
-      const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
-        .update(bookingId)
-        .digest('hex')
-        .slice(0, 32)
-      const provided = Buffer.from(reviewToken, 'hex')
-      const expectedBuf = Buffer.from(expected, 'hex')
-      if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
-        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), {
-          status: 401,
-        })
+    if (!result.success) {
+      switch (result.code) {
+        case 'booking_not_found':
+          return NextResponse.json(
+            createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
+            { status: 404 }
+          )
+        case 'not_owner':
+          return NextResponse.json(
+            createErrorResponse(
+              ErrorCode.UNAUTHORIZED,
+              'Vous ne pouvez laisser un avis que pour vos propres réservations'
+            ),
+            { status: 403 }
+          )
+        case 'missing_token':
+          return NextResponse.json(
+            createErrorResponse(ErrorCode.REVIEW_TOKEN_INVALID, 'Token de vérification requis'),
+            { status: 403 }
+          )
+        case 'invalid_token':
+          return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), {
+            status: 401,
+          })
+        case 'wrong_status':
+          return NextResponse.json(
+            createErrorResponse(
+              ErrorCode.VALIDATION_ERROR,
+              'Cette reservation ne peut pas etre evaluee'
+            ),
+            { status: 400 }
+          )
+        case 'already_reviewed':
+          return NextResponse.json(
+            createErrorResponse(
+              ErrorCode.REVIEW_ALREADY_EXISTS,
+              'Vous avez déjà laissé un avis pour cette réservation'
+            ),
+            { status: 409 }
+          )
+        case 'db_error':
+          return NextResponse.json(
+            createErrorResponse(ErrorCode.DATABASE_ERROR, "Erreur lors de la creation de l'avis"),
+            { status: 500 }
+          )
       }
-    }
-
-    // Check booking status
-    if (!['confirmed', 'completed'].includes(booking.status)) {
-      return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          'Cette reservation ne peut pas etre evaluee'
-        ),
-        { status: 400 }
-      )
-    }
-
-    // Check if already reviewed
-    const { data: existingReview } = await supabase
-      .from('reviews')
-      .select('id')
-      .eq('booking_id', booking.id)
-      .single()
-
-    if (existingReview) {
-      return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.REVIEW_ALREADY_EXISTS,
-          'Vous avez déjà laissé un avis pour cette réservation'
-        ),
-        { status: 409 }
-      )
-    }
-
-    // Extract client info from profiles join
-    const clientInfo = getClientInfo(booking.client as ClientProfile | ClientProfile[] | null)
-
-    // Basic fraud detection
-    const cleanComment = comment.trim()
-    const fraudIndicators = detectFraudIndicators(cleanComment, rating)
-
-    // Create the review
-    const { data: review, error: insertError } = await supabase
-      .from('reviews')
-      .insert({
-        booking_id: booking.id,
-        provider_id: booking.provider_id,
-        author_name: clientInfo.name,
-        author_email: clientInfo.email,
-        rating,
-        content: cleanComment,
-        would_recommend: wouldRecommend,
-        status: fraudIndicators.length > 0 ? 'pending_review' : 'published',
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
-
-    if (insertError) {
-      logger.error('Review insert error:', insertError)
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, "Erreur lors de la creation de l'avis"),
-        { status: 500 }
-      )
-    }
-
-    // Update artisan's average rating (non-blocking)
-    updateArtisanRating(supabase, booking.provider_id).catch((err) =>
-      logger.error('Update rating failed', err)
-    )
-
-    // Revalidation on-demand des pages affectées (non-bloquant)
-    try {
-      const { data: providerData } = await supabase
-        .from('providers')
-        .select('specialty, address_city, slug, stable_id')
-        .eq('id', booking.provider_id)
-        .single()
-
-      if (providerData) {
-        const serviceSlug = slugify(providerData.specialty || 'artisan')
-        const locationSlug = slugify(providerData.address_city || 'france')
-        const publicId = providerData.slug || providerData.stable_id
-
-        // Page profil artisan
-        if (publicId) {
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-        }
-        // Page avis ville
-        revalidatePath(`/avis/${serviceSlug}/${locationSlug}`, 'page')
-        // Listing ville
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-
-        logger.info('Revalidated paths after review submission', {
-          providerId: booking.provider_id,
-          reviewId: review.id,
-        })
-      }
-    } catch (revalError) {
-      logger.error('Revalidation failed after review submission:', revalError)
     }
 
     return NextResponse.json(
       createSuccessResponse({
         review: {
-          id: review.id,
-          status: review.status,
+          id: result.success ? result.reviewId : undefined,
+          status: result.success ? result.status : undefined,
         },
         message:
-          fraudIndicators.length > 0
+          result.success && result.fraudDetected
             ? 'Votre avis sera publie apres verification'
             : 'Merci pour votre avis !',
       }),
@@ -495,61 +325,5 @@ export async function POST(request: Request) {
       createErrorResponse(ErrorCode.INTERNAL_ERROR, "Erreur lors de l'envoi de l'avis"),
       { status: 500 }
     )
-  }
-}
-
-// Fraud detection helper
-function detectFraudIndicators(comment: string, rating: number): string[] {
-  const indicators: string[] = []
-
-  if (comment.length > 0) {
-    // All caps
-    if (comment === comment.toUpperCase() && comment.length > 20) {
-      indicators.push('all_caps')
-    }
-
-    // Repeated characters
-    if (/(.)\1{4,}/.test(comment)) {
-      indicators.push('repeated_chars')
-    }
-
-    // Links
-    if (/https?:\/\/|www\./i.test(comment)) {
-      indicators.push('contains_links')
-    }
-
-    // Excessive punctuation
-    if (/[!?]{3,}/.test(comment)) {
-      indicators.push('excessive_punctuation')
-    }
-
-    // Very short extreme rating
-    if (comment.length < 10 && (rating === 1 || rating === 5)) {
-      indicators.push('short_extreme_rating')
-    }
-  }
-
-  return indicators
-}
-
-// Update artisan's average rating (using ALL real reviews, not just published)
-async function updateArtisanRating(supabase: SupabaseClientType, providerId: string) {
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('rating')
-    .eq('provider_id', providerId)
-  // REMOVED: .eq('status', 'published') to include ALL real reviews in rating calculation
-
-  if (reviews && reviews.length > 0) {
-    const avgRating =
-      reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
-
-    await supabase
-      .from('providers')
-      .update({
-        rating_average: Math.round(avgRating * 10) / 10,
-        review_count: reviews.length,
-      })
-      .eq('id', providerId)
   }
 }
