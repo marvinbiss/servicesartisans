@@ -1,0 +1,215 @@
+/**
+ * PrimesCEEBlock — Bloc primes CEE éligibles pour un service donné.
+ *
+ * Affiche les opérations CEE dont services_slugs inclut le service de la page,
+ * avec une estimation de la tranche de revenus du foyer basée sur le revenu médian
+ * et la zone climatique.
+ *
+ * Server Component — pas de 'use client'.
+ */
+
+import { Zap, Euro, Leaf } from 'lucide-react'
+import type { CommuneData } from '@/lib/data/commune-data'
+import { getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
+import type { CeeOperation } from '@/lib/cee/catalogue'
+import { formatNumber } from '@/lib/data/commune-data'
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+interface PrimesCEEBlockProps {
+  serviceSlug: string
+  serviceName: string
+  villeName: string
+  communeData: CommuneData | null
+}
+
+// ---------------------------------------------------------------------------
+// Revenue bracket thresholds (hors Île-de-France, 1 personne — barème 2026)
+// ---------------------------------------------------------------------------
+
+type RevenuBracket = 'précaire' | 'modeste' | 'intermédiaire' | 'supérieur'
+
+function getRevenuBracket(revenuMedian: number | null): RevenuBracket {
+  if (revenuMedian == null) return 'intermédiaire' // safe default
+  if (revenuMedian <= 17009) return 'précaire'
+  if (revenuMedian <= 21805) return 'modeste'
+  if (revenuMedian <= 30549) return 'intermédiaire'
+  return 'supérieur'
+}
+
+const BRACKET_LABELS: Record<RevenuBracket, { label: string; color: string; primeLevel: string }> =
+  {
+    précaire: {
+      label: 'Ménages très modestes',
+      color: 'text-emerald-700 bg-emerald-100',
+      primeLevel: 'maximale',
+    },
+    modeste: {
+      label: 'Ménages modestes',
+      color: 'text-green-700 bg-green-100',
+      primeLevel: 'majorée',
+    },
+    intermédiaire: {
+      label: 'Ménages intermédiaires',
+      color: 'text-amber-700 bg-amber-100',
+      primeLevel: 'standard',
+    },
+    supérieur: {
+      label: 'Ménages supérieurs',
+      color: 'text-charcoal-600 bg-sand-100',
+      primeLevel: 'réduite',
+    },
+  }
+
+function getClimatZoneLabel(zone: string | null): string {
+  const labels: Record<string, string> = {
+    oceanique: 'zone H2 (océanique)',
+    continental: 'zone H1 (continental)',
+    mediterraneen: 'zone H3 (méditerranéen)',
+    montagnard: 'zone H1 (montagnard)',
+    'semi-oceanique': 'zone H2 (semi-océanique)',
+  }
+  return zone ? (labels[zone] ?? zone) : 'non déterminée'
+}
+
+function getClimatMultiplier(zone: string | null): number {
+  // H1 (continental/montagnard) = primes plus élevées, H3 (méditerranéen) = plus basses
+  if (zone === 'continental' || zone === 'montagnard') return 1.15
+  if (zone === 'mediterraneen') return 0.85
+  return 1.0
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
+export default async function PrimesCEEBlock({
+  serviceSlug,
+  serviceName,
+  villeName,
+  communeData,
+}: PrimesCEEBlockProps) {
+  // Fetch all CEE operations and filter by service
+  const allOperations = await getCeeOperations()
+  const eligibleOps = allOperations.filter((op: CeeOperation) =>
+    op.services_slugs.includes(serviceSlug)
+  )
+
+  if (eligibleOps.length === 0) return null
+
+  const bracket = getRevenuBracket(communeData?.revenu_median ?? null)
+  const bracketInfo = BRACKET_LABELS[bracket]
+  const climatZone = communeData?.climat_zone ?? null
+  const climatLabel = getClimatZoneLabel(climatZone)
+  const climatMultiplier = getClimatMultiplier(climatZone)
+
+  // Display max 5 operations
+  const displayedOps = eligibleOps.slice(0, 5)
+
+  return (
+    <section className="py-6 bg-white rounded-xl border border-sand-200 p-6">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <Zap className="w-5 h-5 text-emerald-600" />
+        </div>
+        <h3 className="font-heading text-lg font-bold text-charcoal-900">
+          Primes CEE pour {serviceName.toLowerCase()} à {villeName}
+        </h3>
+      </div>
+
+      {/* Revenue bracket + climate zone context */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span
+          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${bracketInfo.color}`}
+        >
+          {bracketInfo.label}
+        </span>
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-blue-700 bg-blue-100">
+          Climat {climatLabel}
+        </span>
+      </div>
+
+      {communeData?.revenu_median && (
+        <p className="text-sm text-charcoal-600 mb-4">
+          Avec un revenu médian de {formatNumber(communeData.revenu_median)}
+          {'\u00A0'}€/an à {villeName}, les foyers bénéficient d{"'"}une prime CEE{' '}
+          <strong>{bracketInfo.primeLevel}</strong>.
+          {climatMultiplier > 1 &&
+            ' Le climat continental/montagnard de la zone majore les montants.'}
+          {climatMultiplier < 1 &&
+            ' Le climat méditerranéen de la zone réduit légèrement les montants.'}
+        </p>
+      )}
+
+      {/* Operations list */}
+      <div className="space-y-3">
+        {displayedOps.map((op: CeeOperation) => {
+          const domaineLabel = CEE_DOMAINE_LABELS[op.domaine]?.label ?? op.domaine
+          return (
+            <div
+              key={op.code}
+              className="flex items-start gap-3 p-3 rounded-lg bg-sand-50 border border-sand-100"
+            >
+              <div className="flex-shrink-0 mt-1">
+                {op.domaine === 'enveloppe' ? (
+                  <Leaf className="w-4 h-4 text-emerald-500" />
+                ) : (
+                  <Euro className="w-4 h-4 text-primary-500" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-semibold text-charcoal-900">{op.nom}</span>
+                  <span className="text-xs text-charcoal-400">{op.code}</span>
+                </div>
+                <p className="text-xs text-charcoal-500 mt-0.5">{domaineLabel}</p>
+                {op.description && (
+                  <p className="text-sm text-charcoal-600 mt-1 line-clamp-2">{op.description}</p>
+                )}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {op.coup_de_pouce && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold text-amber-700 bg-amber-50">
+                      Coup de pouce
+                    </span>
+                  )}
+                  {op.precarite_eligible && bracket === 'précaire' && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold text-emerald-700 bg-emerald-50">
+                      Bonification précarité
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {eligibleOps.length > 5 && (
+        <p className="text-sm text-charcoal-500 mt-3">
+          Et {eligibleOps.length - 5} autre{eligibleOps.length - 5 > 1 ? 's' : ''} opération
+          {eligibleOps.length - 5 > 1 ? 's' : ''} éligible{eligibleOps.length - 5 > 1 ? 's' : ''}.
+        </p>
+      )}
+
+      {/* CTA links */}
+      <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-sand-200">
+        <a
+          href="/simulateur-prime-cee"
+          className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
+        >
+          Simuler ma prime CEE
+        </a>
+        {displayedOps.length > 0 && (
+          <a
+            href={`/cee/${displayedOps[0].code.toLowerCase()}/guide`}
+            className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
+          >
+            Guide {displayedOps[0].code}
+          </a>
+        )}
+      </div>
+    </section>
+  )
+}

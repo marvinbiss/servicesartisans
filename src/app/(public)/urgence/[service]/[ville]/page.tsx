@@ -45,6 +45,15 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import IntentNavBar from '@/components/seo/IntentNavBar'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
+import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
+import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
+import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import { generateHowToSchemaUrgence, generateSpeakableSchema } from '@/lib/seo/schema-enrichment'
 import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
@@ -406,6 +415,19 @@ export default async function UrgenceServiceVillePage({
     offerCount: commune?.nb_entreprises_artisanales ?? undefined,
   })
 
+  const howToSchema = generateHowToSchemaUrgence({
+    serviceName: trade.name,
+    locationName: villeData.name,
+    emergencyInfo: trade.emergencyInfo || `Intervention ${tradeLower} d'urgence.`,
+    url: `${SITE_URL}/urgence/${service}/${villeSlug}`,
+  })
+
+  const speakableSchema = generateSpeakableSchema({
+    url: `${SITE_URL}/urgence/${service}/${villeSlug}`,
+    title: `${trade.name} urgence à ${villeData.name}`,
+    cssSelectors: ['.speakable-summary', '.speakable-faq'],
+  })
+
   return (
     <div className="min-h-screen bg-sand-50">
       <SearchRecorder
@@ -413,7 +435,7 @@ export default async function UrgenceServiceVillePage({
         label={`Urgence ${trade.name} à ${villeData.name}`}
         href={`/urgence/${service}/${villeSlug}`}
       />
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, howToSchema, speakableSchema]} />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
       <section
@@ -440,7 +462,7 @@ export default async function UrgenceServiceVillePage({
             </div>
           </div>
 
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="speakable-summary font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
             {(() => {
               const h1Hash = Math.abs(hashCode(`urgence-ville-h1-${service}-${villeSlug}`))
               const h1Templates = [
@@ -1063,7 +1085,7 @@ export default async function UrgenceServiceVillePage({
       </section>
 
       {/* ─── FAQ ───────────────────────────────────────────── */}
-      <section className="py-16 bg-white">
+      <section className="speakable-faq py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
             Questions fréquentes — {trade.name} urgence à {villeData.name}
@@ -1137,6 +1159,65 @@ export default async function UrgenceServiceVillePage({
           max={3}
         />
       ) : null}
+
+      {/* ─── SEO ENRICHMENT BLOCKS ─────────────────────────── */}
+      <ProblemesCourantsBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      {commune && (
+        <RisquesGeoBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      {commune && (
+        <ContexteDPEBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      <BarometrePrixBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        regionName={villeData.region}
+      />
+
+      <CalendrierSaisonnierBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />
+
+      {commune && (
+        <PrimesCEEBlock
+          serviceSlug={service}
+          serviceName={trade.name}
+          villeName={villeData.name}
+          communeData={commune}
+        />
+      )}
+
+      <MaillageInterneBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        departementName={villeData.departement}
+        regionName={villeData.region}
+        currentIntent="urgence"
+      />
 
       {/* ─── CROSS-LINKS: NEARBY CITIES ────────────────────── */}
       <section className="py-16 bg-white">

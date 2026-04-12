@@ -17,7 +17,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
-import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
+import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import {
   getProvidersByServiceAndLocation,
@@ -49,6 +49,20 @@ import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
 import { getDefaultAuthor } from '@/lib/data/team'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import IntentNavBar from '@/components/seo/IntentNavBar'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
+import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
+import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
+import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import {
+  generateFAQSchema,
+  generateDetailedPricingSchema,
+  generateSpeakableSchema,
+  parseCommonTasksToPricingTasks,
+} from '@/lib/seo/schema-enrichment'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -336,6 +350,29 @@ export default async function TarifsServiceVillePage({
     title: `Tarifs ${tradeLower} à ${villeData.name}`,
   })
 
+  // Enriched schemas -------------------------------------------------------
+  const pricingTasks = parseCommonTasksToPricingTasks(trade.commonTasks, trade.priceRange.unit)
+  const detailedPricingSchema = generateDetailedPricingSchema({
+    serviceName: trade.name,
+    locationName: villeData.name,
+    url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
+    tasks: pricingTasks,
+    pricingMultiplier: multiplier,
+  })
+
+  const enrichedFAQSchema = generateFAQSchema(
+    trade.faq.slice(0, 5).map((f) => ({
+      question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
+      answer: f.a,
+    }))
+  )
+
+  const enrichedSpeakableSchema = generateSpeakableSchema({
+    url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
+    title: `Tarifs ${tradeLower} à ${villeData.name}`,
+    cssSelectors: ['.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
+  })
+
   const relatedCities = getNearbyCities(villeSlug, 6)
 
   const relatedSlugs = relatedServices[service] || []
@@ -347,7 +384,16 @@ export default async function TarifsServiceVillePage({
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd
-        data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, speakableSchema]}
+        data={[
+          breadcrumbSchema,
+          faqSchema,
+          serviceSchema,
+          pricingItemListSchema,
+          speakableSchema,
+          ...(detailedPricingSchema ? [detailedPricingSchema] : []),
+          ...(enrichedFAQSchema ? [enrichedFAQSchema] : []),
+          enrichedSpeakableSchema,
+        ]}
       />
 
       {/* Hero */}
@@ -380,7 +426,7 @@ export default async function TarifsServiceVillePage({
             className="mb-6 text-sand-400 [&_a]:text-sand-400 [[&_a:hover]:text-white_a:hover]:text-white [&_svg]:text-sand-600"
           />
           <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em] speakable-summary">
               {(() => {
                 const h1Hash = Math.abs(hashCode(`tarif-h1-${service}-${villeSlug}`))
                 const h1Templates = [
@@ -551,6 +597,55 @@ export default async function TarifsServiceVillePage({
           serviceName={trade.name}
           cityName={villeData.name}
           max={3}
+        />
+      )}
+
+      {/* Enrichment blocks — pSEO couche 3 */}
+      <ProblemesCourantsBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      {commune && (
+        <RisquesGeoBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      {commune && (
+        <ContexteDPEBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      <BarometrePrixBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        regionName={villeData.region}
+      />
+
+      <CalendrierSaisonnierBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />
+
+      {commune && (
+        <PrimesCEEBlock
+          serviceSlug={service}
+          serviceName={trade.name}
+          villeName={villeData.name}
+          communeData={commune}
         />
       )}
 
@@ -789,7 +884,7 @@ export default async function TarifsServiceVillePage({
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fr{'é'}quentes {'—'} {trade.name} {'à'} {villeData.name}
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-4 speakable-faq">
             {trade.faq.slice(0, 5).map((item, i) => {
               const localQ = item.q.replace(/\?$/, '') + ` à ${villeData.name} ?`
               return (
@@ -1129,6 +1224,17 @@ export default async function TarifsServiceVillePage({
       />
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
+
+      <MaillageInterneBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        departementSlug={getDepartementByCode(villeData.departementCode)?.slug}
+        departementName={villeData.departement}
+        regionName={villeData.region}
+        currentIntent="tarifs"
+      />
 
       <StickyMobileCTA
         serviceSlug={service}

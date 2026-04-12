@@ -39,6 +39,19 @@ import { shouldNoindex } from '@/lib/seo/pruning'
 import FallbackProviders from '@/components/seo/FallbackProviders'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import IntentNavBar from '@/components/seo/IntentNavBar'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
+import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
+import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
+import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import {
+  generateFAQSchema as generateFAQSchemaEnriched,
+  generateHowToSchema,
+  generateSpeakableSchema,
+} from '@/lib/seo/schema-enrichment'
 
 export const revalidate = 86400
 
@@ -282,6 +295,27 @@ export default async function DevisServiceLocationPage({
     },
   }
 
+  // Schema enrichment — HowTo, enriched FAQ, Speakable
+  const howToSchema = generateHowToSchema({
+    serviceName: trade.name,
+    locationName: villeData.name,
+    url: `${SITE_URL}/devis/${service}/${location}`,
+    description: `Comment décrire votre projet de ${tradeLower} à ${villeData.name} pour obtenir un devis précis et gratuit.`,
+    totalTime: 'PT5M',
+  })
+
+  const enrichedFaqItems = trade.faq.slice(0, 5).map((f) => ({
+    question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
+    answer: f.a,
+  }))
+  const enrichedFaqSchema = generateFAQSchemaEnriched(enrichedFaqItems)
+
+  const speakableSchema = generateSpeakableSchema({
+    url: `${SITE_URL}/devis/${service}/${location}`,
+    title: `Devis ${tradeLower} à ${villeData.name}`,
+    cssSelectors: ['.speakable-summary', '.speakable-faq'],
+  })
+
   // Related city links
   const nearbyCities = getNearbyCities(location, 6)
 
@@ -406,7 +440,16 @@ export default async function DevisServiceLocationPage({
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          faqSchema,
+          serviceSchema,
+          howToSchema,
+          ...(enrichedFaqSchema ? [enrichedFaqSchema] : []),
+          speakableSchema,
+        ]}
+      />
 
       {/* ─── HERO MINIMAL ────────────────────────────────── */}
       <section className="bg-white border-b border-sand-200">
@@ -422,7 +465,7 @@ export default async function DevisServiceLocationPage({
           <h1 className="font-heading text-3xl font-bold text-charcoal-900 tracking-tight">
             {h1Text}
           </h1>
-          <p className="text-charcoal-500 mt-2 max-w-xl">
+          <p className="speakable-summary text-charcoal-500 mt-2 max-w-xl">
             Devis gratuit de {tradeLower}s à {villeData.name} ({villeData.departement}). Prix local
             : {minPrice} à {maxPrice} {trade.priceRange.unit}.
           </p>
@@ -884,7 +927,7 @@ export default async function DevisServiceLocationPage({
       </section>
 
       {/* ─── FAQ ─────────────────────────────────────────── */}
-      <section className="py-16 bg-sand-50">
+      <section className="speakable-faq py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
             Questions fréquentes — Devis {trade.name} à {villeData.name}
@@ -1243,6 +1286,65 @@ export default async function DevisServiceLocationPage({
           max={3}
         />
       ) : null}
+
+      {/* ─── Enrichment blocks (pSEO layer) ──────────────── */}
+      <ProblemesCourantsBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      {commune && (
+        <RisquesGeoBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      {commune && (
+        <ContexteDPEBlock
+          communeData={commune}
+          serviceName={trade.name}
+          villeName={villeData.name}
+        />
+      )}
+
+      <BarometrePrixBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        regionName={villeData.region}
+      />
+
+      <CalendrierSaisonnierBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeName={villeData.name}
+        climatZone={commune?.climat_zone ?? null}
+      />
+
+      <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />
+
+      {commune && (
+        <PrimesCEEBlock
+          serviceSlug={service}
+          serviceName={trade.name}
+          villeName={villeData.name}
+          communeData={commune}
+        />
+      )}
+
+      <MaillageInterneBlock
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeSlug={location}
+        villeName={villeData.name}
+        departementName={villeData.departement}
+        regionName={villeData.region}
+        currentIntent="devis"
+      />
 
       <InContentLinks
         serviceSlug={service}

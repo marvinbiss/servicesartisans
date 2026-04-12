@@ -20,6 +20,14 @@ import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
 import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
+import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
+import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
+import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 
 import {
   getBreadcrumbSchema,
@@ -39,6 +47,7 @@ import {
 } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
+import { generateFAQSchema, generateSpeakableSchema } from '@/lib/seo/schema-enrichment'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import {
   generateLocationContent,
@@ -684,6 +693,20 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   })
   jsonLdSchemas.push(speakableSchema)
 
+  // Enriched FAQ schema from schema-enrichment (supplements existing faqSchema)
+  const enrichedFaqSchema = generateFAQSchema(
+    combinedFaq.map((f) => ({ question: f.question, answer: f.answer }))
+  )
+  if (enrichedFaqSchema) jsonLdSchemas.push(enrichedFaqSchema)
+
+  // Enriched speakable schema targeting specific CSS classes
+  const enrichedSpeakable = generateSpeakableSchema({
+    url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+    title: h1Text,
+    cssSelectors: ['.speakable-summary', '.speakable-faq'],
+  })
+  jsonLdSchemas.push(enrichedSpeakable)
+
   // Schema enrichi avec OfferCatalog, AggregateRating et areaServed détaillé
   jsonLdSchemas.push(
     getEnrichedLocalServiceSchema({
@@ -879,7 +902,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       />
 
       {trade && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="speakable-summary max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
             answer={`${trade.name} à ${location.name} : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount} artisans vérifiés SIREN disponibles dans le ${location.department_code}. Délai moyen : ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Urgences disponibles 24h/24.' : ''}`}
           />
@@ -919,12 +942,14 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         />
       )}
 
-      <FaqAndBlogSection
-        combinedFaq={combinedFaq}
-        service={service}
-        location={location}
-        serviceSlug={serviceSlug}
-      />
+      <div className="speakable-faq">
+        <FaqAndBlogSection
+          combinedFaq={combinedFaq}
+          service={service}
+          location={location}
+          serviceSlug={serviceSlug}
+        />
+      </div>
 
       <CrossLinks
         service={service}
@@ -937,6 +962,63 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         locationContent={locationContent}
         communeData={communeData}
       />
+
+      {/* --- pSEO enrichment blocks --- */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ProblemesCourantsBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          villeName={location.name}
+          climatZone={communeData?.climat_zone}
+        />
+
+        <RisquesGeoBlock
+          communeData={communeData}
+          serviceName={service.name}
+          villeName={location.name}
+        />
+
+        <ContexteDPEBlock
+          communeData={communeData}
+          serviceName={service.name}
+          villeName={location.name}
+        />
+
+        <BarometrePrixBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          villeName={location.name}
+          regionName={location.region_name || ''}
+        />
+
+        <CalendrierSaisonnierBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          villeName={location.name}
+          climatZone={communeData?.climat_zone ?? null}
+        />
+
+        <ComparatifsBlock serviceSlug={serviceSlug} serviceName={service.name} />
+
+        <PrimesCEEBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          villeName={location.name}
+          communeData={communeData}
+        />
+
+        <MaillageInterneBlock
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          villeSlug={locationSlug}
+          villeName={location.name}
+          departementSlug={location.department_code?.toLowerCase()}
+          departementName={location.department_name}
+          regionName={location.region_name}
+          currentIntent="services"
+        />
+      </div>
+      {/* --- end pSEO enrichment blocks --- */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
         <CallbackRequest serviceSlug={serviceSlug} cityName={location.name} />
