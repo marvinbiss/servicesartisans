@@ -645,7 +645,7 @@ export default function InscriptionArtisanPage() {
               className="bg-sand-50 hover:bg-primary-50 rounded-xl p-6 transition-colors group"
             >
               <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 mb-2">
-                Comment ça marche
+                Comment ça marche ?
               </h3>
               <p className="text-charcoal-600 text-sm">Tout savoir sur notre plateforme</p>
             </Link>

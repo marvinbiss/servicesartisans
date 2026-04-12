@@ -1,10 +1,26 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle,
+  Euro,
+  Shield,
+  ChevronDown,
+  TrendingUp,
+  Clock,
+  MapPin,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getHowToSchema, getServicePricingSchema, getDetailedPricingSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getSpeakableSchema,
+  getHowToSchema,
+  getServicePricingSchema,
+  getDetailedPricingSchema,
+} from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
@@ -25,20 +41,24 @@ import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
 
 const tradeSlugs = getTradesSlugs()
 
 const REGIONAL_PRICING = [
   { region: 'Île-de-France', multiplier: 1.25, label: 'Paris et banlieue' },
-  { region: 'PACA', multiplier: 1.10, label: "Côte d'Azur et Provence" },
-  { region: 'Auvergne-Rhône-Alpes', multiplier: 1.10, label: 'Lyon, Grenoble, Annecy' },
+  { region: 'PACA', multiplier: 1.1, label: "Côte d'Azur et Provence" },
+  { region: 'Auvergne-Rhône-Alpes', multiplier: 1.1, label: 'Lyon, Grenoble, Annecy' },
   { region: 'Occitanie', multiplier: 1.05, label: 'Toulouse, Montpellier' },
-  { region: 'Nouvelle-Aquitaine', multiplier: 1.00, label: 'Bordeaux, Limoges' },
+  { region: 'Nouvelle-Aquitaine', multiplier: 1.0, label: 'Bordeaux, Limoges' },
   { region: 'Hauts-de-France', multiplier: 0.95, label: 'Lille, Amiens' },
   { region: 'Grand Est', multiplier: 0.95, label: 'Strasbourg, Metz' },
-  { region: 'Bretagne', multiplier: 1.00, label: 'Rennes, Brest' },
+  { region: 'Bretagne', multiplier: 1.0, label: 'Rennes, Brest' },
 ]
 
 export function generateStaticParams() {
@@ -56,8 +76,11 @@ function truncateTitle(title: string, maxLen = 60): string {
   return endsWithQuestion ? truncated + ' ?' : truncated + '\u2026'
 }
 
-
-export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ service: string }>
+}): Promise<Metadata> {
   const { service } = await params
   const trade = tradeContent[service]
   if (!trade) return {}
@@ -66,11 +89,13 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const metaOverrides: Record<string, { title: string; description: string }> = {
     electricien: {
       title: 'Combien coûte un électricien en 2026 ? Grille + Devis Gratuit',
-      description: 'Grille tarifaire complète électricien 2026 : prix installation, rénovation, dépannage. Estimez votre budget et obtenez un devis gratuit.',
+      description:
+        'Grille tarifaire complète électricien 2026 : prix installation, rénovation, dépannage. Estimez votre budget et obtenez un devis gratuit.',
     },
     plombier: {
       title: 'Combien coûte un plombier en 2026 ? Prix + Devis Gratuit',
-      description: 'Tous les tarifs plombier 2026 : intervention urgente, installation sanitaire, chauffe-eau. Comparez et recevez un devis gratuit sans engagement.',
+      description:
+        'Tous les tarifs plombier 2026 : intervention urgente, installation sanitaire, chauffe-eau. Comparez et recevez un devis gratuit sans engagement.',
     },
   }
 
@@ -150,7 +175,11 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
 const topCities = villes.slice(0, 20)
 
-export default async function TarifsServicePage({ params }: { params: Promise<{ service: string }> }) {
+export default async function TarifsServicePage({
+  params,
+}: {
+  params: Promise<{ service: string }>
+}) {
   const { service } = await params
 
   const cmsPage = await getPageContent(service + '-tarifs', 'static')
@@ -160,9 +189,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -187,10 +214,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     { name: `Tarifs ${trade.name.toLowerCase()}`, url: `/tarifs/${service}` },
   ])
 
-  const faqSchema = getFAQSchema(
-    trade.faq.map((f) => ({ question: f.q, answer: f.a }))
-  )
-
+  const faqSchema = getFAQSchema(trade.faq.map((f) => ({ question: f.q, answer: f.a })))
 
   const tradeLower = trade.name.toLowerCase()
 
@@ -221,9 +245,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
         name,
         url: `${SITE_URL}/tarifs/${service}`,
       }
-    })
+    }),
   }
-
 
   const collectionPageSchema = {
     '@context': 'https://schema.org',
@@ -274,49 +297,75 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
   )
 
   // Schema détaillé avec PriceSpecification par prestation
-  const parsedTasks = trade.commonTasks.map(task => {
-    const parts = task.split(':')
-    const name = parts[0].trim()
-    // Extraire les prix min/max du texte (ex: "80 à 250 €")
-    const priceMatch = task.match(/(\d[\d\s]*)\s*(?:à|–|-)\s*(\d[\d\s]*)\s*€/)
-    if (priceMatch) {
-      return {
-        name,
-        lowPrice: parseInt(priceMatch[1].replace(/\s/g, ''), 10),
-        highPrice: parseInt(priceMatch[2].replace(/\s/g, ''), 10),
-        unit: 'intervention',
+  const parsedTasks = trade.commonTasks
+    .map((task) => {
+      const parts = task.split(':')
+      const name = parts[0].trim()
+      // Extraire les prix min/max du texte (ex: "80 à 250 €")
+      const priceMatch = task.match(/(\d[\d\s]*)\s*(?:à|–|-)\s*(\d[\d\s]*)\s*€/)
+      if (priceMatch) {
+        return {
+          name,
+          lowPrice: parseInt(priceMatch[1].replace(/\s/g, ''), 10),
+          highPrice: parseInt(priceMatch[2].replace(/\s/g, ''), 10),
+          unit: 'intervention',
+        }
       }
-    }
-    return null
-  }).filter((t): t is { name: string; lowPrice: number; highPrice: number; unit: string } => t !== null)
+      return null
+    })
+    .filter(
+      (t): t is { name: string; lowPrice: number; highPrice: number; unit: string } => t !== null
+    )
 
-  const detailedPricingSchema = parsedTasks.length > 0 ? getDetailedPricingSchema({
-    serviceName: trade.name,
-    serviceSlug: service,
-    description: `Tarifs détaillés ${tradeLower} 2026 : ${parsedTasks.length} prestations avec prix indicatifs.`,
-    url: `${SITE_URL}/tarifs/${service}`,
-    tasks: parsedTasks,
-    overallLowPrice: trade.priceRange.min,
-    overallHighPrice: trade.priceRange.max,
-    priceUnit: trade.priceRange.unit,
-  }) : null
+  const detailedPricingSchema =
+    parsedTasks.length > 0
+      ? getDetailedPricingSchema({
+          serviceName: trade.name,
+          serviceSlug: service,
+          description: `Tarifs détaillés ${tradeLower} 2026 : ${parsedTasks.length} prestations avec prix indicatifs.`,
+          url: `${SITE_URL}/tarifs/${service}`,
+          tasks: parsedTasks,
+          overallLowPrice: trade.priceRange.min,
+          overallHighPrice: trade.priceRange.max,
+          priceUnit: trade.priceRange.unit,
+        })
+      : null
 
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 4)
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, pricingItemListSchema, collectionPageSchema, speakableSchema, howToSchema, detailedPricingSchema]} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          faqSchema,
+          serviceSchema,
+          pricingItemListSchema,
+          collectionPageSchema,
+          speakableSchema,
+          howToSchema,
+          detailedPricingSchema,
+        ]}
+      />
 
       {/* Hero */}
       <section className="relative bg-gradient-hero text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.08) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.08) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
@@ -343,10 +392,13 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               })()}
             </h1>
             <p className="text-xl text-sand-400 max-w-3xl mx-auto mb-4">
-              Guide complet des prix {trade.name.toLowerCase()} en France.
-              Tarif horaire : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
+              Guide complet des prix {trade.name.toLowerCase()} en France. Tarif horaire :{' '}
+              {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
             </p>
-            <LastUpdated label="Tarifs vérifiés et mis à jour le" className="justify-center text-sand-500 mb-4" />
+            <LastUpdated
+              label="Tarifs vérifiés et mis à jour le"
+              className="justify-center text-sand-500 mb-4"
+            />
             <p className="text-sm text-sand-500">
               Tarifs vérifiés par{' '}
               <Link href="/a-propos" className="underline hover:text-white transition-colors">
@@ -378,9 +430,11 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <div className="snippet-answer" data-speakable="true">
             <p className="text-base text-charcoal-700 leading-relaxed mb-6">
               Le <strong>prix {tradeLower}</strong> en France est de{' '}
-              <strong>{trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}</strong> en 2026.
-              {' '}Ce tarif inclut la main-d&apos;oeuvre et varie selon la région, la complexité de l&apos;intervention et l&apos;urgence.
-              {' '}Voici le détail des tarifs par prestation :
+              <strong>
+                {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}
+              </strong>{' '}
+              en 2026. Ce tarif inclut la main-d&apos;œuvre et varie selon la région, la complexité
+              de l&apos;intervention et l&apos;urgence. Voici le détail des tarifs par prestation :
             </p>
           </div>
           <PriceTableHTML
@@ -416,12 +470,15 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit} TTC</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;oeuvre incluse, TTC
+              Prix moyen constaté en France métropolitaine, main-d&apos;œuvre incluse, TTC
             </p>
           </div>
 
           <SpeakableAnswerBox
-            answer={`Tarifs ${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks.slice(0, 3).map(t => t.split(':')[0].trim()).join('. ')}. Prix constatés auprès de 940 000+ artisans référencés.`}
+            answer={`Tarifs ${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks
+              .slice(0, 3)
+              .map((t) => t.split(':')[0].trim())
+              .join('. ')}. Prix constatés auprès de 940 000+ artisans référencés.`}
           />
 
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
@@ -437,27 +494,35 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Combien coûte un {trade.name.toLowerCase()} en France ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Le tarif horaire moyen d'un {trade.name.toLowerCase()} en France se situe entre {trade.priceRange.min} et {trade.priceRange.max} {trade.priceRange.unit}.
-            Ce prix varie selon la région, la complexité de l'intervention et les matériaux nécessaires.
-            En Île-de-France, comptez une majoration de 20 à 25 % par rapport à la moyenne nationale.
+            Le tarif horaire moyen d'un {trade.name.toLowerCase()} en France se situe entre{' '}
+            {trade.priceRange.min} et {trade.priceRange.max} {trade.priceRange.unit}. Ce prix varie
+            selon la région, la complexité de l'intervention et les matériaux nécessaires. En
+            Île-de-France, comptez une majoration de 20 à 25 % par rapport à la moyenne nationale.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-charcoal-900">
             Comment choisir son {trade.name.toLowerCase()} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Pour bien choisir votre {trade.name.toLowerCase()}, vérifiez son numéro SIRET sur le site de l'INSEE,
-            demandez une copie de son assurance décennale et comparez au moins 3 devis détaillés.
-            Privilégiez les artisans certifiés{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} et consultez les avis clients en ligne.
+            Pour bien choisir votre {trade.name.toLowerCase()}, vérifiez son numéro SIRET sur le
+            site de l'INSEE, demandez une copie de son assurance décennale et comparez au moins 3
+            devis détaillés. Privilégiez les artisans certifiés
+            {trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} et consultez
+            les avis clients en ligne.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-charcoal-900">
             Quels sont les tarifs moyens d'un {trade.name.toLowerCase()} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Les tarifs d'un {trade.name.toLowerCase()} dépendent du type de prestation.
-            Pour les interventions courantes : {trade.commonTasks.slice(0, 2).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
-            Le tarif horaire de base est de {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}, hors fournitures et déplacement.
+            Les tarifs d'un {trade.name.toLowerCase()} dépendent du type de prestation. Pour les
+            interventions courantes :{' '}
+            {trade.commonTasks
+              .slice(0, 2)
+              .map((t) => t.split(':')[0].trim().toLowerCase())
+              .join(', ')}
+            . Le tarif horaire de base est de {trade.priceRange.min} à {trade.priceRange.max}{' '}
+            {trade.priceRange.unit}, hors fournitures et déplacement.
           </p>
         </div>
       </section>
@@ -469,7 +534,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Prix détaillés par prestation et par ville
           </h2>
           <p className="text-charcoal-500 text-sm text-center mb-8">
-            Découvrez les tarifs précis pour chaque type d'intervention dans les principales villes de France.
+            Découvrez les tarifs précis pour chaque type d'intervention dans les principales villes
+            de France.
           </p>
           <div className="space-y-6">
             {trade.commonTasks.slice(0, 4).map((task) => {
@@ -503,7 +569,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Variation des tarifs par région
           </h3>
           <p className="text-charcoal-500 text-sm text-center mb-8">
-            Les prix {trade.name.toLowerCase()} varient selon la région. Voici une estimation ajustée.
+            Les prix {trade.name.toLowerCase()} varient selon la région. Voici une estimation
+            ajustée.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {REGIONAL_PRICING.map((r) => {
@@ -531,9 +598,14 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                   </div>
                   <p className="text-xs text-charcoal-500 mb-3">{r.label}</p>
                   <div className="text-lg font-bold text-charcoal-900">
-                    {adjustedMin} — {adjustedMax} <span className="text-sm font-normal text-charcoal-500">{trade.priceRange.unit} TTC</span>
+                    {adjustedMin} — {adjustedMax}{' '}
+                    <span className="text-sm font-normal text-charcoal-500">
+                      {trade.priceRange.unit} TTC
+                    </span>
                   </div>
-                  <span className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${badgeColor}`}>
+                  <span
+                    className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${badgeColor}`}
+                  >
                     {pct === 0 ? 'Moyenne nationale' : `${sign}${pct} % vs moyenne`}
                   </span>
                 </div>
@@ -551,7 +623,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </h2>
           <div className="space-y-4">
             {trade.tips.map((tip, i) => (
-              <div key={i} className="flex items-start gap-4 bg-white rounded-xl border border-sand-300 p-5">
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-white rounded-xl border border-sand-300 p-5"
+              >
                 <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-4 h-4 text-secondary-600" />
                 </div>
@@ -570,11 +645,15 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               Certifications et qualifications
             </h2>
             <p className="text-charcoal-600 text-center mb-8">
-              Vérifiez que votre {trade.name.toLowerCase()} possède les certifications adaptées à votre projet.
+              Vérifiez que votre {trade.name.toLowerCase()} possède les certifications adaptées à
+              votre projet.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
-                <div key={cert} className="flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-3 rounded-xl text-sm font-medium">
+                <div
+                  key={cert}
+                  className="flex items-center gap-2 bg-primary-50 text-primary-600 px-4 py-3 rounded-xl text-sm font-medium"
+                >
                   <Shield className="w-4 h-4 flex-shrink-0" />
                   {cert}
                 </div>
@@ -597,9 +676,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                   <h3 className="text-base font-semibold text-charcoal-900 pr-4">{item.q}</h3>
                   <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">
-                  {item.a}
-                </div>
+                <div className="px-6 pb-6 text-charcoal-600 text-sm leading-relaxed">{item.a}</div>
               </details>
             ))}
           </div>
@@ -638,7 +715,9 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       {/* Other trades */}
       <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Tarifs d'autres corps de métier</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
+            Tarifs d'autres corps de métier
+          </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
@@ -668,7 +747,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Obtenez un devis précis pour votre projet
           </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Les prix varient selon votre situation. Demandez un devis gratuit à un {trade.name.toLowerCase()} référencé.
+            Les prix varient selon votre situation. Demandez un devis gratuit à un{' '}
+            {trade.name.toLowerCase()} référencé.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -695,17 +775,16 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
+              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées
+              en France. Ils varient selon la région, la complexité du chantier, les matériaux et
+              l'urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire
+              indépendant.
             </p>
           </div>
         </div>
       </section>
 
-      <InContentLinks
-        serviceSlug={service}
-        serviceName={trade.name}
-        currentIntent="tarifs"
-      />
+      <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="tarifs" />
 
       {/* Articles utiles — blog articles liés au service */}
       <RelatedArticles serviceSlug={service} />
@@ -718,12 +797,26 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Ce service</h3>
               <div className="space-y-2">
-                <Link href={`/services/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">{trade.name} — tous les artisans</Link>
+                <Link
+                  href={`/services/${service}`}
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  {trade.name} — tous les artisans
+                </Link>
                 {trade.emergencyInfo && (
-                  <Link href={`/urgence/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">{trade.name} urgence</Link>
+                  <Link
+                    href={`/urgence/${service}`}
+                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                  >
+                    {trade.name} urgence
+                  </Link>
                 )}
                 {topCities.slice(0, 3).map((v) => (
-                  <Link key={v.slug} href={`/services/${service}/${v.slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                  <Link
+                    key={v.slug}
+                    href={`/services/${service}/${v.slug}`}
+                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                  >
                     {trade.name} à {v.name}
                   </Link>
                 ))}
@@ -733,7 +826,11 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               <h3 className="font-semibold text-charcoal-900 mb-3">Tarifs associés</h3>
               <div className="space-y-2">
                 {otherTrades.slice(0, 4).map((slug) => (
-                  <Link key={slug} href={`/tarifs/${slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
+                  <Link
+                    key={slug}
+                    href={`/tarifs/${slug}`}
+                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                  >
                     Tarifs {tradeContent[slug].name.toLowerCase()}
                   </Link>
                 ))}
@@ -742,11 +839,36 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/tarifs" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Comment ça marche</Link>
-                <Link href="/devis" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Demander un devis</Link>
-                <Link href="/faq" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">FAQ</Link>
-                <Link href="/notre-processus-de-verification" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Processus de vérification</Link>
+                <Link
+                  href="/tarifs"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Guide complet des tarifs
+                </Link>
+                <Link
+                  href="/comment-ca-marche"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Comment ça marche
+                </Link>
+                <Link
+                  href="/devis"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Demander un devis
+                </Link>
+                <Link
+                  href="/faq"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  FAQ
+                </Link>
+                <Link
+                  href="/notre-processus-de-verification"
+                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
+                >
+                  Processus de vérification
+                </Link>
               </div>
             </div>
           </div>
@@ -771,7 +893,10 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-primary-500 hover:text-primary-700">
+            <Link
+              href="/notre-processus-de-verification"
+              className="text-primary-500 hover:text-primary-700"
+            >
               Comment nous référençons les artisans
             </Link>
             <Link href="/politique-avis" className="text-primary-500 hover:text-primary-700">

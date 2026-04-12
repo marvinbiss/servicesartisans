@@ -42,7 +42,7 @@ export function CompareButton({ provider, size = 'sm', className }: CompareButto
       aria-label={
         active
           ? `Retirer ${provider.name} de la comparaison`
-          : `Ajouter ${provider.name} a la comparaison`
+          : `Ajouter ${provider.name} à la comparaison`
       }
       aria-pressed={active}
     >

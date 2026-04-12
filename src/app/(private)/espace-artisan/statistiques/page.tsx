@@ -291,7 +291,7 @@ export default function StatistiquesPage() {
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-green-600" />
-                  Evolution mensuelle
+                  Évolution mensuelle
                 </h3>
                 <div className="overflow-x-auto">
                   <div className="flex items-end justify-between h-32 sm:h-40 min-w-[400px]">

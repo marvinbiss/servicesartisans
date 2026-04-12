@@ -167,7 +167,7 @@ export function VilleAutocomplete({
   // Geolocation
   const handleGeolocation = async () => {
     if (!navigator.geolocation) {
-      alert("La geolocalisation n'est pas supportee par votre navigateur")
+      alert("La géolocalisation n'est pas supportée par votre navigateur")
       return
     }
 

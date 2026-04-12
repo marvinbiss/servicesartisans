@@ -157,7 +157,7 @@ export default function DevisBottomSheet({
 
   if (!isOpen) return null
 
-  const stepLabels = ['Projet', 'Details', 'Contact']
+  const stepLabels = ['Projet', 'Détails', 'Contact']
 
   return (
     <>

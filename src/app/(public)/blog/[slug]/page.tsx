@@ -1179,7 +1179,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                       {authorProfile
                         ? authorProfile.bio
                         : article.authorBio ||
-                          'Expert en artisanat et batiment chez ServicesArtisans. Nos contenus sont rediges en collaboration avec des professionnels du secteur et verifies pour leur exactitude technique.'}
+                          'Expert en artisanat et bâtiment chez ServicesArtisans. Nos contenus sont rédigés en collaboration avec des professionnels du secteur et vérifiés pour leur exactitude technique.'}
                     </p>
                     {authorProfile && (
                       <>
@@ -1222,7 +1222,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                         <div className="flex flex-wrap items-center gap-4 text-xs text-charcoal-500">
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
-                            {authorProfile.yearsExperience} ans d'experience
+                            {authorProfile.yearsExperience} ans d'expérience
                           </span>
                           <Link
                             href={`/blog?author=${encodeURIComponent(article.author.toLowerCase())}`}
@@ -1235,7 +1235,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                     )}
                     {!authorProfile && (
                       <p className="text-charcoal-400 text-xs mt-1">
-                        Contenu verifie par des artisans professionnels
+                        Contenu vérifié par des artisans professionnels
                       </p>
                     )}
                   </div>

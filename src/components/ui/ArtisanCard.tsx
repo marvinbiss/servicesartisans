@@ -36,7 +36,7 @@ export function ArtisanCard({
   profession,
   slug,
   location,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   locationSlug: _locationSlug,
   rating,
   reviewCount,
@@ -63,13 +63,23 @@ export function ArtisanCard({
         viewport={{ once: true }}
         className="group bg-white rounded-2xl border border-sand-200 overflow-hidden hover:shadow-card-hover transition-all duration-300"
       >
-        <Link href={href} className="flex flex-col md:flex-row" onClick={() => trackEvent('artisan_listing_click', { artisanId: id, artisanName: name, source: 'card_horizontal' })}>
+        <Link
+          href={href}
+          className="flex flex-col md:flex-row"
+          onClick={() =>
+            trackEvent('artisan_listing_click', {
+              artisanId: id,
+              artisanName: name,
+              source: 'card_horizontal',
+            })
+          }
+        >
           {/* Image */}
           <div className="relative w-full md:w-48 h-48 md:h-auto flex-shrink-0">
             {imageUrl ? (
               <Image
                 src={imageUrl}
-                alt={`${name} - ${profession} a ${location}`}
+                alt={`${name} - ${profession} à ${location}`}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 768px) 100vw, 192px"
@@ -77,10 +87,10 @@ export function ArtisanCard({
                 blurDataURL={BLUR_PLACEHOLDER}
               />
             ) : (
-              <div className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}>
-                <span className="text-4xl font-bold text-white">
-                  {name.charAt(0)}
-                </span>
+              <div
+                className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}
+              >
+                <span className="text-4xl font-bold text-white">{name.charAt(0)}</span>
               </div>
             )}
 
@@ -108,9 +118,7 @@ export function ArtisanCard({
                   <h3 className="font-semibold text-lg text-charcoal-900 group-hover:text-primary-400 transition-colors">
                     {name}
                   </h3>
-                  {isVerified && (
-                    <ShieldCheck className="w-5 h-5 text-accent-500" />
-                  )}
+                  {isVerified && <ShieldCheck className="w-5 h-5 text-accent-500" />}
                 </div>
                 <p className="text-charcoal-600">{profession}</p>
               </div>
@@ -148,14 +156,10 @@ export function ArtisanCard({
               {responseTime && (
                 <div className="flex items-center gap-1 text-charcoal-500">
                   <Clock className="w-4 h-4" />
-                  Repond en {responseTime}
+                  Répond en {responseTime}
                 </div>
               )}
-              {priceRange && (
-                <div className="text-charcoal-500">
-                  {priceRange}
-                </div>
-              )}
+              {priceRange && <div className="text-charcoal-500">{priceRange}</div>}
             </div>
           </div>
         </Link>
@@ -169,13 +173,29 @@ export function ArtisanCard({
       <Link
         href={href}
         className="flex items-center gap-3 p-3 bg-white rounded-xl border border-sand-200 hover:shadow-soft transition-shadow"
-        onClick={() => trackEvent('artisan_listing_click', { artisanId: id, artisanName: name, source: 'card_compact' })}
+        onClick={() =>
+          trackEvent('artisan_listing_click', {
+            artisanId: id,
+            artisanName: name,
+            source: 'card_compact',
+          })
+        }
       >
         <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
           {imageUrl ? (
-            <Image src={imageUrl} alt={`${name} - ${profession} a ${location}`} fill className="object-cover" sizes="48px" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
+            <Image
+              src={imageUrl}
+              alt={`${name} - ${profession} à ${location}`}
+              fill
+              className="object-cover"
+              sizes="48px"
+              placeholder="blur"
+              blurDataURL={BLUR_PLACEHOLDER}
+            />
           ) : (
-            <div className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}>
+            <div
+              className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}
+            >
               <span className="font-bold text-white">{name.charAt(0)}</span>
             </div>
           )}
@@ -205,13 +225,23 @@ export function ArtisanCard({
       onMouseLeave={() => setIsHovered(false)}
       className="group"
     >
-      <Link href={href} className="block" onClick={() => trackEvent('artisan_listing_click', { artisanId: id, artisanName: name, source: 'card_default' })}>
+      <Link
+        href={href}
+        className="block"
+        onClick={() =>
+          trackEvent('artisan_listing_click', {
+            artisanId: id,
+            artisanName: name,
+            source: 'card_default',
+          })
+        }
+      >
         {/* Image container */}
         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-3">
           {imageUrl ? (
             <Image
               src={imageUrl}
-              alt={`${name} - ${profession} a ${location}`}
+              alt={`${name} - ${profession} à ${location}`}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -219,10 +249,10 @@ export function ArtisanCard({
               blurDataURL={BLUR_PLACEHOLDER}
             />
           ) : (
-            <div className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}>
-              <span className="text-6xl font-bold text-white/90">
-                {name.charAt(0)}
-              </span>
+            <div
+              className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}
+            >
+              <span className="text-6xl font-bold text-white/90">{name.charAt(0)}</span>
             </div>
           )}
 
@@ -273,9 +303,7 @@ export function ArtisanCard({
               <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-400 transition-colors">
                 {name}
               </h3>
-              {isVerified && (
-                <ShieldCheck className="w-4 h-4 text-accent-500" />
-              )}
+              {isVerified && <ShieldCheck className="w-4 h-4 text-accent-500" />}
             </div>
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
@@ -305,9 +333,7 @@ export function ArtisanCard({
                 </span>
               ))}
               {specialties.length > 2 && (
-                <span className="text-xs text-charcoal-500">
-                  +{specialties.length - 2}
-                </span>
+                <span className="text-xs text-charcoal-500">+{specialties.length - 2}</span>
               )}
             </div>
           )}

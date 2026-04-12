@@ -118,7 +118,7 @@ function getServiceHubRescueLinks(serviceSlug: string): RescueLink[] {
   for (const city of smallCities.slice(0, 6)) {
     links.push({
       href: `/services/${serviceSlug}/${city.slug}`,
-      label: `${service.name} a ${city.name}`,
+      label: `${service.name} à ${city.name}`,
     })
   }
 
@@ -157,7 +157,7 @@ function getCityRescueLinks(villeSlug: string): RescueLink[] {
     if (tradeContent[svc.slug]) {
       links.push({
         href: `/services/${svc.slug}/${villeSlug}`,
-        label: `${svc.name} a ${ville.name}`,
+        label: `${svc.name} à ${ville.name}`,
       })
     }
   }
@@ -180,7 +180,7 @@ function getServiceCityRescueLinks(serviceSlug: string, villeSlug: string): Resc
   for (const neighbor of smallNeighbors.slice(0, 4)) {
     links.push({
       href: `/services/${serviceSlug}/${neighbor.slug}`,
-      label: `${service.name} a ${neighbor.name}`,
+      label: `${service.name} à ${neighbor.name}`,
     })
   }
 
@@ -193,7 +193,7 @@ function getServiceCityRescueLinks(serviceSlug: string, villeSlug: string): Resc
       if (relService) {
         links.push({
           href: `/services/${relSlug}/${villeSlug}`,
-          label: `${relService.name} a ${ville.name}`,
+          label: `${relService.name} à ${ville.name}`,
         })
       }
     }

@@ -693,7 +693,7 @@ export default async function TarifsServiceVillePage({
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit} TTC</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constat{'é'} {'à'} {villeData.name} et ses alentours, main-d&apos;oeuvre
+              Prix moyen constat{'é'} {'à'} {villeData.name} et ses alentours, main-d&apos;œuvre
               incluse, TTC
             </p>
             {multiplier !== 1.0 && (

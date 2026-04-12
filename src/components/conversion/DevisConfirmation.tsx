@@ -657,7 +657,7 @@ export default function DevisConfirmation({
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-sand-300 text-charcoal-700 font-medium rounded-xl hover:bg-sand-50 transition-colors text-sm"
           >
             {copied ? <Check className="w-4 h-4 text-accent-500" /> : <Copy className="w-4 h-4" />}
-            {copied ? 'Copie !' : 'Copier le lien'}
+            {copied ? 'Copié !' : 'Copier le lien'}
           </button>
         </div>
       </motion.div>

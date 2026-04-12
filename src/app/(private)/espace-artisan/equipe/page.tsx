@@ -559,6 +559,7 @@ export default function EquipePage() {
                     >
                       politique de confidentialité
                     </Link>
+                    .
                   </span>
                 </label>
               )}
