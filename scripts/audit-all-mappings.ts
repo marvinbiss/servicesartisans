@@ -9,22 +9,51 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  'https://umjmbdbwcsxrvfqktiui.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc',
-  { auth: { autoRefreshToken: false, persistSession: false } }
-)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+if (!SUPABASE_URL || !SUPABASE_KEY)
+  throw new Error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY env vars')
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { autoRefreshToken: false, persistSession: false },
+})
 
 const SPECIALTIES = [
-  'peintre', 'peintre-en-batiment', 'carreleur', 'plombier', 'couvreur',
-  'climaticien', 'chauffagiste', 'menuisier', 'vitrier', 'serrurier',
-  'charpentier', 'electricien', 'macon', 'solier', 'nettoyage',
-  'jardinier', 'Terrassier', 'Plâtrier', 'Climaticien'
+  'peintre',
+  'peintre-en-batiment',
+  'carreleur',
+  'plombier',
+  'couvreur',
+  'climaticien',
+  'chauffagiste',
+  'menuisier',
+  'vitrier',
+  'serrurier',
+  'charpentier',
+  'electricien',
+  'macon',
+  'solier',
+  'nettoyage',
+  'jardinier',
+  'Terrassier',
+  'Plâtrier',
+  'Climaticien',
 ]
 
 const NAF_CODES = [
-  '43.22A', '43.21A', '43.32A', '43.33Z', '43.99C', '43.34Z',
-  '43.31Z', '43.22B', '43.39Z', '43.32B', '43.91B', '43.29A', '43.91A'
+  '43.22A',
+  '43.21A',
+  '43.32A',
+  '43.33Z',
+  '43.99C',
+  '43.34Z',
+  '43.31Z',
+  '43.22B',
+  '43.39Z',
+  '43.32B',
+  '43.91B',
+  '43.29A',
+  '43.91A',
 ]
 
 interface SpecialtyNafEntry {
@@ -40,10 +69,7 @@ interface NafSpecialtyEntry {
   specialtyBreakdown: { specialty: string; count: number }[]
 }
 
-async function getCount(
-  specialty: string | null,
-  code_naf: string | null
-): Promise<number> {
+async function getCount(specialty: string | null, code_naf: string | null): Promise<number> {
   let query = supabase
     .from('providers')
     .select('id', { count: 'exact', head: true })
@@ -130,8 +156,8 @@ async function main() {
     .not('specialty', 'is', null)
     .limit(1000)
 
-  const distinctSpecialties = [...new Set((sampleSpecialties || []).map(r => r.specialty))].sort()
-  const unknownSpecialties = distinctSpecialties.filter(s => !SPECIALTIES.includes(s))
+  const distinctSpecialties = [...new Set((sampleSpecialties || []).map((r) => r.specialty))].sort()
+  const unknownSpecialties = distinctSpecialties.filter((s) => !SPECIALTIES.includes(s))
   if (unknownSpecialties.length > 0) {
     console.log(`WARNING: Found specialties not in known list: ${unknownSpecialties.join(', ')}`)
   } else {
@@ -145,8 +171,8 @@ async function main() {
     .not('code_naf', 'is', null)
     .limit(1000)
 
-  const distinctNafs = [...new Set((sampleNafs || []).map(r => r.code_naf))].sort()
-  const unknownNafs = distinctNafs.filter(n => !NAF_CODES.includes(n))
+  const distinctNafs = [...new Set((sampleNafs || []).map((r) => r.code_naf))].sort()
+  const unknownNafs = distinctNafs.filter((n) => !NAF_CODES.includes(n))
   if (unknownNafs.length > 0) {
     console.log(`WARNING: Found NAF codes not in known list: ${unknownNafs.join(', ')}`)
   } else {
@@ -188,7 +214,7 @@ async function main() {
         nafBreakdown.push({
           code_naf: naf,
           libelle_naf: libelleMap[naf],
-          count
+          count,
         })
       }
     }
@@ -199,7 +225,7 @@ async function main() {
       nafBreakdown.push({
         code_naf: '(NULL)',
         libelle_naf: '(no NAF code)',
-        count: nullNafCount
+        count: nullNafCount,
       })
     }
 
@@ -210,7 +236,9 @@ async function main() {
     console.log(`\n  Specialty: "${spec}" — ${totalCount} active providers`)
     for (const entry of nafBreakdown) {
       const pct = ((entry.count / totalCount) * 100).toFixed(1)
-      console.log(`    ${entry.code_naf.padEnd(10)} ${String(entry.count).padStart(6)} providers (${pct.padStart(5)}%)  — ${entry.libelle_naf}`)
+      console.log(
+        `    ${entry.code_naf.padEnd(10)} ${String(entry.count).padStart(6)} providers (${pct.padStart(5)}%)  — ${entry.libelle_naf}`
+      )
     }
   }
 
@@ -249,13 +277,15 @@ async function main() {
       code_naf: naf,
       libelle_naf: libelleMap[naf],
       totalCount,
-      specialtyBreakdown
+      specialtyBreakdown,
     })
 
     console.log(`\n  NAF: ${naf} — "${libelleMap[naf]}" — ${totalCount} active providers`)
     for (const entry of specialtyBreakdown) {
       const pct = ((entry.count / totalCount) * 100).toFixed(1)
-      console.log(`    ${entry.specialty.padEnd(25)} ${String(entry.count).padStart(6)} providers (${pct.padStart(5)}%)`)
+      console.log(
+        `    ${entry.specialty.padEnd(25)} ${String(entry.count).padStart(6)} providers (${pct.padStart(5)}%)`
+      )
     }
   }
 
@@ -268,41 +298,43 @@ async function main() {
 
   // 3a: Specialties that map to exactly 1 NAF code
   console.log('\n--- 3a: Specialties that map to exactly 1 NAF code (clean 1:1) ---')
-  const cleanSpecialties = specialtyData.filter(s => {
-    const nonNull = s.nafBreakdown.filter(n => n.code_naf !== '(NULL)')
+  const cleanSpecialties = specialtyData.filter((s) => {
+    const nonNull = s.nafBreakdown.filter((n) => n.code_naf !== '(NULL)')
     return nonNull.length === 1
   })
   if (cleanSpecialties.length === 0) {
     console.log('  (none)')
   } else {
     for (const s of cleanSpecialties) {
-      const primary = s.nafBreakdown.find(n => n.code_naf !== '(NULL)')!
-      const nullEntry = s.nafBreakdown.find(n => n.code_naf === '(NULL)')
+      const primary = s.nafBreakdown.find((n) => n.code_naf !== '(NULL)')!
+      const nullEntry = s.nafBreakdown.find((n) => n.code_naf === '(NULL)')
       const nullNote = nullEntry ? ` (+${nullEntry.count} with NULL NAF)` : ''
-      console.log(`  "${s.specialty}" -> ${primary.code_naf} (${primary.count}/${s.totalCount} providers)${nullNote}`)
+      console.log(
+        `  "${s.specialty}" -> ${primary.code_naf} (${primary.count}/${s.totalCount} providers)${nullNote}`
+      )
     }
   }
 
   // 3b: Specialties spread across multiple NAF codes
   console.log('\n--- 3b: Specialties with providers across MULTIPLE NAF codes (conflicts) ---')
-  const multiNafSpecialties = specialtyData.filter(s => {
-    const nonNull = s.nafBreakdown.filter(n => n.code_naf !== '(NULL)')
+  const multiNafSpecialties = specialtyData.filter((s) => {
+    const nonNull = s.nafBreakdown.filter((n) => n.code_naf !== '(NULL)')
     return nonNull.length > 1
   })
   if (multiNafSpecialties.length === 0) {
     console.log('  (none)')
   } else {
     for (const s of multiNafSpecialties) {
-      const nonNull = s.nafBreakdown.filter(n => n.code_naf !== '(NULL)')
-      const codes = nonNull.map(n => `${n.code_naf}(${n.count})`).join(', ')
+      const nonNull = s.nafBreakdown.filter((n) => n.code_naf !== '(NULL)')
+      const codes = nonNull.map((n) => `${n.code_naf}(${n.count})`).join(', ')
       console.log(`  "${s.specialty}" -> ${nonNull.length} NAF codes: ${codes}`)
     }
   }
 
   // 3c: Specialties with NO NAF code at all (all NULL)
   console.log('\n--- 3c: Specialties where ALL providers have NULL code_naf ---')
-  const allNullSpecialties = specialtyData.filter(s => {
-    const nonNull = s.nafBreakdown.filter(n => n.code_naf !== '(NULL)')
+  const allNullSpecialties = specialtyData.filter((s) => {
+    const nonNull = s.nafBreakdown.filter((n) => n.code_naf !== '(NULL)')
     return nonNull.length === 0
   })
   if (allNullSpecialties.length === 0) {
@@ -315,34 +347,36 @@ async function main() {
 
   // 3d: NAF codes shared by multiple specialties
   console.log('\n--- 3d: NAF codes shared by MULTIPLE specialties (ambiguous NAF) ---')
-  const multiSpecNafs = nafData.filter(n => {
-    const nonNull = n.specialtyBreakdown.filter(s => s.specialty !== '(NULL)')
+  const multiSpecNafs = nafData.filter((n) => {
+    const nonNull = n.specialtyBreakdown.filter((s) => s.specialty !== '(NULL)')
     return nonNull.length > 1
   })
   if (multiSpecNafs.length === 0) {
     console.log('  (none)')
   } else {
     for (const n of multiSpecNafs) {
-      const nonNull = n.specialtyBreakdown.filter(s => s.specialty !== '(NULL)')
-      const specs = nonNull.map(s => `${s.specialty}(${s.count})`).join(', ')
+      const nonNull = n.specialtyBreakdown.filter((s) => s.specialty !== '(NULL)')
+      const specs = nonNull.map((s) => `${s.specialty}(${s.count})`).join(', ')
       console.log(`  ${n.code_naf} "${n.libelle_naf}" -> ${nonNull.length} specialties: ${specs}`)
     }
   }
 
   // 3e: NAF codes that map to exactly 1 specialty
   console.log('\n--- 3e: NAF codes that map to exactly 1 specialty (clean 1:1) ---')
-  const cleanNafs = nafData.filter(n => {
-    const nonNull = n.specialtyBreakdown.filter(s => s.specialty !== '(NULL)')
+  const cleanNafs = nafData.filter((n) => {
+    const nonNull = n.specialtyBreakdown.filter((s) => s.specialty !== '(NULL)')
     return nonNull.length === 1
   })
   if (cleanNafs.length === 0) {
     console.log('  (none)')
   } else {
     for (const n of cleanNafs) {
-      const primary = n.specialtyBreakdown.find(s => s.specialty !== '(NULL)')!
-      const nullEntry = n.specialtyBreakdown.find(s => s.specialty === '(NULL)')
+      const primary = n.specialtyBreakdown.find((s) => s.specialty !== '(NULL)')!
+      const nullEntry = n.specialtyBreakdown.find((s) => s.specialty === '(NULL)')
       const nullNote = nullEntry ? ` (+${nullEntry.count} with NULL specialty)` : ''
-      console.log(`  ${n.code_naf} "${n.libelle_naf}" -> "${primary.specialty}" (${primary.count}/${n.totalCount})${nullNote}`)
+      console.log(
+        `  ${n.code_naf} "${n.libelle_naf}" -> "${primary.specialty}" (${primary.count}/${n.totalCount})${nullNote}`
+      )
     }
   }
 
@@ -364,7 +398,7 @@ async function main() {
   console.log('='.repeat(100))
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('Fatal error:', err)
   process.exit(1)
 })

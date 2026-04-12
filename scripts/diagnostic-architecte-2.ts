@@ -1,10 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  'https://umjmbdbwcsxrvfqktiui.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc',
-  { auth: { autoRefreshToken: false, persistSession: false } }
-)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+if (!SUPABASE_URL || !SUPABASE_KEY)
+  throw new Error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY env vars')
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { autoRefreshToken: false, persistSession: false },
+})
 
 async function main() {
   console.log('=== DIAGNOSTIC APPROFONDI ===\n')
@@ -42,7 +45,7 @@ async function main() {
   }
 
   // 3. Tous les code_naf distincts liés à l'architecture/design
-  console.log('\n--- 3. CODES NAF LIÉS À L\'ARCHITECTURE/DESIGN ---')
+  console.log("\n--- 3. CODES NAF LIÉS À L'ARCHITECTURE/DESIGN ---")
   const archNafCodes = ['7111Z', '7410Z', '7410', '71.11Z', '74.10Z']
   for (const naf of archNafCodes) {
     const { count } = await supabase
@@ -78,10 +81,21 @@ async function main() {
   }
 
   // 5. Chercher des NAF qui contiennent "archi" ou "décor" ou "design" dans libelle_naf
-  console.log('\n--- 5. CODES NAF DONT LE LIBELLÉ CONTIENT "archi", "décor", "design", "aménag" ---')
+  console.log(
+    '\n--- 5. CODES NAF DONT LE LIBELLÉ CONTIENT "archi", "décor", "design", "aménag" ---'
+  )
   for (const [naf, { count, libelle }] of sortedNaf) {
     const lib = libelle.toLowerCase()
-    if (lib.includes('archi') || lib.includes('décor') || lib.includes('decor') || lib.includes('design') || lib.includes('aménag') || lib.includes('amenag') || lib.includes('intérieur') || lib.includes('interieur')) {
+    if (
+      lib.includes('archi') ||
+      lib.includes('décor') ||
+      lib.includes('decor') ||
+      lib.includes('design') ||
+      lib.includes('aménag') ||
+      lib.includes('amenag') ||
+      lib.includes('intérieur') ||
+      lib.includes('interieur')
+    ) {
       console.log(`  ${naf} (${libelle}): ${count}`)
     }
   }

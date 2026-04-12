@@ -23,8 +23,10 @@ import { createClient } from '@supabase/supabase-js'
 // CONFIG
 // ============================================
 
-const SUPABASE_URL = 'https://umjmbdbwcsxrvfqktiui.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc'
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+if (!SUPABASE_URL || !SUPABASE_KEY)
+  throw new Error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY env vars')
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
@@ -86,9 +88,11 @@ function escapeCSV(val: string | null): string {
 
 async function main() {
   console.log('='.repeat(60))
-  console.log(FIX_MODE
-    ? '  CLEANUP UNTRACEABLE PHONES — FIX MODE (will update DB)'
-    : '  CLEANUP UNTRACEABLE PHONES — DRY RUN (no changes)')
+  console.log(
+    FIX_MODE
+      ? '  CLEANUP UNTRACEABLE PHONES — FIX MODE (will update DB)'
+      : '  CLEANUP UNTRACEABLE PHONES — DRY RUN (no changes)'
+  )
   console.log('='.repeat(60))
   console.log()
 
@@ -145,9 +149,13 @@ async function main() {
   console.log()
 
   // Count claimed annuaire providers (kept because claimed)
-  const claimedAnnuaire = toKeep.filter(p => p.source === 'annuaire_entreprises' && p.claimed_at !== null)
+  const claimedAnnuaire = toKeep.filter(
+    (p) => p.source === 'annuaire_entreprises' && p.claimed_at !== null
+  )
   if (claimedAnnuaire.length > 0) {
-    console.log(`  (includes ${claimedAnnuaire.length} annuaire_entreprises providers KEPT because claimed)`)
+    console.log(
+      `  (includes ${claimedAnnuaire.length} annuaire_entreprises providers KEPT because claimed)`
+    )
     console.log()
   }
 
@@ -165,13 +173,15 @@ async function main() {
   console.log(`Saving backup to ${BACKUP_FILE}...`)
   const csvLines = ['id,name,phone,source,claimed_at']
   for (const p of toNull) {
-    csvLines.push([
-      p.id,
-      escapeCSV(p.name),
-      escapeCSV(p.phone),
-      escapeCSV(p.source),
-      escapeCSV(p.claimed_at),
-    ].join(','))
+    csvLines.push(
+      [
+        p.id,
+        escapeCSV(p.name),
+        escapeCSV(p.phone),
+        escapeCSV(p.source),
+        escapeCSV(p.claimed_at),
+      ].join(',')
+    )
   }
   fs.writeFileSync(BACKUP_FILE, csvLines.join('\n'), 'utf-8')
   console.log(`  Backup saved: ${toNull.length} rows`)
@@ -182,12 +192,9 @@ async function main() {
   let updated = 0
   for (let i = 0; i < toNull.length; i += UPDATE_BATCH) {
     const batch = toNull.slice(i, i + UPDATE_BATCH)
-    const ids = batch.map(p => p.id)
+    const ids = batch.map((p) => p.id)
 
-    const { error } = await supabase
-      .from('providers')
-      .update({ phone: null })
-      .in('id', ids)
+    const { error } = await supabase.from('providers').update({ phone: null }).in('id', ids)
 
     if (error) {
       console.error(`  ERROR at batch ${i}: ${error.message}`)
@@ -196,7 +203,9 @@ async function main() {
     }
 
     updated += batch.length
-    process.stdout.write(`\r  Updated ${updated.toLocaleString()} / ${toNull.length.toLocaleString()}`)
+    process.stdout.write(
+      `\r  Updated ${updated.toLocaleString()} / ${toNull.length.toLocaleString()}`
+    )
   }
 
   console.log()
@@ -207,7 +216,7 @@ async function main() {
   console.log(`  Backup at:     ${BACKUP_FILE}`)
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('FATAL:', err)
   process.exit(1)
 })

@@ -1,22 +1,44 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  'https://umjmbdbwcsxrvfqktiui.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc',
-  { auth: { autoRefreshToken: false, persistSession: false } }
-)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+if (!SUPABASE_URL || !SUPABASE_KEY)
+  throw new Error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY env vars')
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { autoRefreshToken: false, persistSession: false },
+})
 
 async function main() {
   console.log('=== DIAGNOSTIC FINAL (counts exacts) ===\n')
 
   // 1. Toutes les specialties avec count exact
   const specialties = [
-    'peintre', 'peintre-en-batiment', 'carreleur', 'plombier', 'couvreur',
-    'climaticien', 'chauffagiste', 'menuisier', 'vitrier', 'serrurier',
-    'charpentier', 'electricien', 'macon', 'solier', 'nettoyage',
-    'jardinier', 'Terrassier', 'Plâtrier', 'Climaticien',
-    'architecte-interieur', 'architecte-d-interieur', 'decoration',
-    'decorateur', 'architecte', 'designer'
+    'peintre',
+    'peintre-en-batiment',
+    'carreleur',
+    'plombier',
+    'couvreur',
+    'climaticien',
+    'chauffagiste',
+    'menuisier',
+    'vitrier',
+    'serrurier',
+    'charpentier',
+    'electricien',
+    'macon',
+    'solier',
+    'nettoyage',
+    'jardinier',
+    'Terrassier',
+    'Plâtrier',
+    'Climaticien',
+    'architecte-interieur',
+    'architecte-d-interieur',
+    'decoration',
+    'decorateur',
+    'architecte',
+    'designer',
   ]
 
   console.log('--- TOUTES LES SPECIALTIES (counts exacts, actifs) ---')
@@ -41,10 +63,23 @@ async function main() {
 
   // 2. Tous les codes NAF avec count exact
   const nafCodes = [
-    '7111Z', '71.11Z', '7410Z', '74.10Z',
-    '43.22A', '43.21A', '43.32A', '43.33Z', '43.99C',
-    '43.34Z', '43.31Z', '43.22B', '43.39Z', '43.32B',
-    '43.91B', '43.29A', '43.91A'
+    '7111Z',
+    '71.11Z',
+    '7410Z',
+    '74.10Z',
+    '43.22A',
+    '43.21A',
+    '43.32A',
+    '43.33Z',
+    '43.99C',
+    '43.34Z',
+    '43.31Z',
+    '43.22B',
+    '43.39Z',
+    '43.32B',
+    '43.91B',
+    '43.29A',
+    '43.91A',
   ]
 
   console.log('\n--- TOUS LES CODES NAF (counts exacts, actifs) ---')
@@ -108,7 +143,7 @@ async function main() {
   console.log('  - 0 providers avec specialty "architecte-interieur" ou "architecte-d-interieur"')
   console.log('  - 0 providers avec code_naf 7111Z (Architecture)')
   console.log('  - Le mapping actuel renvoie UNIQUEMENT des peintres (93 592)')
-  console.log('  - Aucun architecte d\'intérieur n\'existe dans la base')
+  console.log("  - Aucun architecte d'intérieur n'existe dans la base")
 }
 
 main().catch(console.error)

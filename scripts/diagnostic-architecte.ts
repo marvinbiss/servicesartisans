@@ -1,16 +1,21 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  'https://umjmbdbwcsxrvfqktiui.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc',
-  { auth: { autoRefreshToken: false, persistSession: false } }
-)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+if (!SUPABASE_URL || !SUPABASE_KEY)
+  throw new Error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY env vars')
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { autoRefreshToken: false, persistSession: false },
+})
 
 async function main() {
-  console.log('=== DIAGNOSTIC ARCHITECTE D\'INTÉRIEUR ===\n')
+  console.log("=== DIAGNOSTIC ARCHITECTE D'INTÉRIEUR ===\n")
 
   // 1. Distribution specialty × code_naf pour les 4 specialties du mapping actuel
-  console.log('--- 1. MAPPING ACTUEL: specialty IN (architecte-interieur, architecte-d-interieur, decoration, peintre) ---')
+  console.log(
+    '--- 1. MAPPING ACTUEL: specialty IN (architecte-interieur, architecte-d-interieur, decoration, peintre) ---'
+  )
   for (const spec of ['architecte-interieur', 'architecte-d-interieur', 'decoration', 'peintre']) {
     const { data, count } = await supabase
       .from('providers')
@@ -138,7 +143,7 @@ async function main() {
   }
 
   // 7. Échantillon: providers architecte-interieur SANS code_naf 7111Z
-  console.log('\n--- 7. ARCHITECTES D\'INTÉRIEUR SANS code_naf 7111Z (actifs) ---')
+  console.log("\n--- 7. ARCHITECTES D'INTÉRIEUR SANS code_naf 7111Z (actifs) ---")
   const { data: noNaf } = await supabase
     .from('providers')
     .select('name, specialty, code_naf, libelle_naf, address_city')
