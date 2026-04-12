@@ -38,7 +38,11 @@ export default function CeeCTA({
 
   if (variant === 'sticky-bottom') {
     return (
-      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-emerald-700 border-t border-emerald-600 px-4 py-3 shadow-lg">
+      <div
+        role="complementary"
+        aria-label="Aide CEE disponible"
+        className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-emerald-700 border-t border-emerald-600 px-4 py-3 shadow-lg"
+      >
         <Link
           href={href}
           onClick={handleClick}

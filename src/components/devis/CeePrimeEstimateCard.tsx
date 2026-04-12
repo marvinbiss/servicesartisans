@@ -91,7 +91,13 @@ export function CeePrimeEstimateCard({ serviceSlug, postalCode }: CeePrimeEstima
       body: JSON.stringify({ serviceSlug: trimmedSlug, postalCode: trimmedCp }),
       signal: controller.signal,
     })
-      .then((res) => (res.ok ? (res.json() as Promise<unknown>) : null))
+      .then((res) => {
+        if (!res.ok) {
+          console.warn(`[CeePrimeEstimateCard] /api/cee/estimate HTTP ${res.status} (best-effort)`)
+          return null
+        }
+        return res.json() as Promise<unknown>
+      })
       .then((body) => {
         if (controller.signal.aborted) return
         // Fail-open silencieux : shape API inattendue → on masque la carte
@@ -108,8 +114,13 @@ export function CeePrimeEstimateCard({ serviceSlug, postalCode }: CeePrimeEstima
         setData(body as PublicEstimateResponse)
         setLoading(false)
       })
-      .catch(() => {
+      .catch((err: unknown) => {
         if (controller.signal.aborted) return
+        if (err instanceof Error && err.name === 'AbortError') return
+        console.warn(
+          '[CeePrimeEstimateCard] Fetch /api/cee/estimate \u00e9chou\u00e9 (best-effort):',
+          err
+        )
         setData(null)
         setLoading(false)
       })

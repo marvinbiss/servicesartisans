@@ -10,8 +10,8 @@
  * - Light only, français avec accents
  */
 
-import { useEffect, useRef, useState } from 'react'
-import { Leaf, Info } from 'lucide-react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { Leaf, Info, AlertTriangle } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 /* ─── Types API ───────────────────────────────────────────────────── */
@@ -110,15 +110,17 @@ export default function CeeSavingsComparator({
 }: CeeSavingsComparatorProps) {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<EstimateResponse | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const abortRef = useRef<AbortController | null>(null)
   const trackedRef = useRef(false)
 
-  useEffect(() => {
+  const fetchEstimate = useCallback(() => {
     const slug = serviceSlug?.trim() ?? ''
     const cp = postalCode?.trim() ?? ''
     if (!slug || !/^\d{5}$/.test(cp)) {
       setData(null)
       setLoading(false)
+      setError(null)
       return
     }
 
@@ -127,13 +129,17 @@ export default function CeeSavingsComparator({
     abortRef.current = controller
 
     setLoading(true)
+    setError(null)
     fetch('/api/cee/estimate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ serviceSlug: slug, postalCode: cp }),
       signal: controller.signal,
     })
-      .then((res) => (res.ok ? (res.json() as Promise<unknown>) : null))
+      .then((res) => {
+        if (!res.ok) throw new Error('fetch_failed')
+        return res.json() as Promise<unknown>
+      })
       .then((body) => {
         if (controller.signal.aborted) return
         if (
@@ -148,9 +154,11 @@ export default function CeeSavingsComparator({
         setData(body as EstimateResponse)
         setLoading(false)
       })
-      .catch(() => {
+      .catch((err: Error) => {
         if (controller.signal.aborted) return
+        if (err.name === 'AbortError') return
         setData(null)
+        setError('Une erreur est survenue lors du chargement des donn\u00e9es.')
         setLoading(false)
       })
 
@@ -158,6 +166,11 @@ export default function CeeSavingsComparator({
       controller.abort()
     }
   }, [serviceSlug, postalCode])
+
+  useEffect(() => {
+    const cleanup = fetchEstimate()
+    return cleanup
+  }, [fetchEstimate])
 
   /* ── Track cee_comparator_shown (une seule fois par montage) ── */
   useEffect(() => {
@@ -190,7 +203,29 @@ export default function CeeSavingsComparator({
     )
   }
 
-  /* ── Fail-open: non éligible ou erreur → invisible ── */
+  /* ── Erreur réseau → message discret avec retry ── */
+  if (error) {
+    return (
+      <div
+        data-testid="cee-savings-comparator-error"
+        className="rounded-xl border border-red-200 bg-red-50 p-4"
+      >
+        <div className="flex items-center gap-3">
+          <AlertTriangle className="h-5 w-5 flex-shrink-0 text-red-400" aria-hidden="true" />
+          <p className="text-sm text-red-700">{error}</p>
+          <button
+            type="button"
+            onClick={() => fetchEstimate()}
+            className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-100 transition"
+          >
+            R\u00e9essayer
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  /* ── Fail-open: non éligible → invisible ── */
   if (!data || !data.eligible) return null
 
   const primes = aggregatePrimes(data.items)
@@ -210,6 +245,7 @@ export default function CeeSavingsComparator({
   return (
     <div
       data-testid="cee-savings-comparator"
+      aria-label="Comparaison du coût des travaux avec et sans prime CEE"
       className="rounded-xl border border-sand-200 bg-white p-4 shadow-soft"
     >
       {/* Titre */}
@@ -224,14 +260,17 @@ export default function CeeSavingsComparator({
       </div>
 
       {/* Comparateur side-by-side */}
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2" aria-live="polite">
         {/* ── Colonne SANS prime ── */}
         <div className="rounded-xl border border-sand-200 bg-sand-50 p-4 transition-all">
           <p className="text-xs font-semibold uppercase tracking-wide text-charcoal-500">
             Sans prime CEE
           </p>
           <p className="mt-1 text-sm text-charcoal-600">{costInfo.label}</p>
-          <p className="mt-2 text-xl font-bold text-charcoal-700 transition-all">
+          <p
+            className="mt-2 text-xl font-bold text-charcoal-700 transition-all"
+            aria-label={`entre ${Math.round(costMin).toLocaleString('fr-FR')} et ${Math.round(costMax).toLocaleString('fr-FR')} euros`}
+          >
             {formatEuros(costMin)} à {formatEuros(costMax)}
           </p>
         </div>
@@ -242,10 +281,16 @@ export default function CeeSavingsComparator({
             Après prime CEE
           </p>
           <p className="mt-1 text-sm text-emerald-800">{costInfo.label} - prime déduite</p>
-          <p className="mt-2 text-xl font-bold text-emerald-800 transition-all">
+          <p
+            className="mt-2 text-xl font-bold text-emerald-800 transition-all"
+            aria-label={`entre ${Math.round(afterMin).toLocaleString('fr-FR')} et ${Math.round(afterMax).toLocaleString('fr-FR')} euros`}
+          >
             {formatEuros(afterMin)} à {formatEuros(afterMax)}
           </p>
-          <p className="mt-2 text-2xl font-bold text-emerald-600 transition-all">
+          <p
+            className="mt-2 text-2xl font-bold text-emerald-600 transition-all"
+            aria-label={`Économie : jusqu'à ${Math.round(primeMax).toLocaleString('fr-FR')} euros`}
+          >
             Économie : jusqu&apos;à {formatEuros(primeMax)}
           </p>
         </div>

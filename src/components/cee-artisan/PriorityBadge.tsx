@@ -17,24 +17,31 @@ interface PriorityBadgeProps {
   score?: number | null
 }
 
-const TIER_CONFIG: Record<CeeDossierTier, { label: string; bg: string; text: string }> = {
+const TIER_CONFIG: Record<
+  CeeDossierTier,
+  { label: string; ariaLabel: string; bg: string; text: string }
+> = {
   S: {
     label: 'Priorite haute',
+    ariaLabel: 'Priorité S — dossier haute valeur',
     bg: 'bg-emerald-600',
     text: 'text-white',
   },
   A: {
     label: 'Priorite moyenne',
+    ariaLabel: 'Priorité A — dossier valeur moyenne',
     bg: 'bg-primary-500',
     text: 'text-white',
   },
   B: {
     label: 'Standard',
+    ariaLabel: 'Priorité B — dossier standard',
     bg: 'bg-amber-500',
-    text: 'text-white',
+    text: 'text-charcoal-900',
   },
   C: {
     label: 'Faible valeur',
+    ariaLabel: 'Priorité C — dossier faible valeur',
     bg: 'bg-charcoal-400',
     text: 'text-white',
   },
@@ -45,6 +52,8 @@ export default function PriorityBadge({ tier, score }: PriorityBadgeProps) {
 
   return (
     <span
+      role="status"
+      aria-label={score != null ? `${config.ariaLabel}, score ${score} sur 100` : config.ariaLabel}
       className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${config.bg} ${config.text}`}
       title={score != null ? `Score ${score}/100 — ${config.label}` : config.label}
     >

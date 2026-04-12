@@ -17,23 +17,24 @@ const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 /* ------------------------------------------------------------------ */
 
 export const metadata: Metadata = {
-  title: 'Simulateur Prime CEE 2026 \u2014 Estimez vos aides \u00e9nergie | ServicesArtisans',
+  title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',
   description:
-    'Estimez gratuitement votre prime Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie (CEE) en 30 secondes. S\u00e9lectionnez vos travaux et votre code postal pour conna\u00eetre le montant indicatif de vos aides \u00e9nergie 2026.',
+    'Calculez gratuitement le montant de votre prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie). Estimation instantan\u00e9e par type de travaux et code postal.',
   alternates: { canonical: PAGE_URL },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Simulateur Prime CEE 2026 \u2014 Estimez vos aides \u00e9nergie',
-    description: 'Calculez votre prime CEE en 30 secondes. Outil gratuit, sans inscription.',
+    title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',
+    description:
+      'Calculez gratuitement le montant de votre prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie). Estimation instantan\u00e9e par type de travaux et code postal.',
     url: PAGE_URL,
     siteName: 'ServicesArtisans',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Simulateur Prime CEE 2026',
+    title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',
     description:
-      'Estimez gratuitement votre prime \u00e9nergie CEE. S\u00e9lectionnez vos travaux et code postal.',
+      'Calculez gratuitement le montant de votre prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie). Estimation instantan\u00e9e par type de travaux et code postal.',
   },
 }
 

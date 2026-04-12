@@ -31,6 +31,13 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'fr_FR',
     url: `${SITE_URL}${path}`,
+    siteName: 'ServicesArtisans',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Guides primes CEE 2026 \u2014 PAC, isolation, po\u00eale, chaudi\u00e8re',
+    description:
+      'Guides \u00e9ditoriaux complets sur les 5 primes CEE r\u00e9sidentielles les plus recherch\u00e9es : PAC air/eau, isolation combles, plancher, po\u00eale bois, chaudi\u00e8re biomasse.',
   },
   alternates: getAlternates(path),
 }

@@ -79,12 +79,14 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
   const [cpError, setCpError] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<EstimateResponse | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [hasSearched, setHasSearched] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
+  async function handleSubmit(e?: FormEvent) {
+    if (e) e.preventDefault()
     setCpError('')
+    setError(null)
 
     if (!serviceSlug) return
     if (!CP_REGEX.test(postalCode)) {
@@ -111,8 +113,11 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
       })
 
       if (!res.ok) {
-        setResult(null)
-        setLoading(false)
+        if (!controller.signal.aborted) {
+          setError('Une erreur est survenue. Veuillez réessayer.')
+          setResult(null)
+          setLoading(false)
+        }
         return
       }
 
@@ -126,6 +131,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
       }
     } catch {
       if (!controller.signal.aborted) {
+        setError('Une erreur est survenue. Veuillez réessayer.')
         setResult(null)
       }
     } finally {
@@ -152,6 +158,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
             </label>
             <select
               id="cee-service"
+              aria-label="Sélectionnez un type de travaux"
               value={serviceSlug}
               onChange={(e) => setServiceSlug(e.target.value)}
               required
@@ -180,6 +187,8 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
               inputMode="numeric"
               pattern="\d{5}"
               maxLength={5}
+              aria-label="Code postal"
+              aria-describedby="cee-cp-help"
               value={postalCode}
               onChange={(e) => {
                 const v = e.target.value.replace(/\D/g, '').slice(0, 5)
@@ -190,7 +199,14 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
               required
               className={`w-full rounded-xl border ${cpError ? 'border-red-400' : 'border-sand-300'} bg-white px-4 py-3 text-charcoal-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition`}
             />
-            {cpError && <p className="mt-1 text-sm text-red-600">{cpError}</p>}
+            <p id="cee-cp-help" className="mt-1 text-xs text-charcoal-400">
+              5 chiffres, ex : 75001
+            </p>
+            {cpError && (
+              <p role="alert" className="mt-1 text-sm text-red-600">
+                {cpError}
+              </p>
+            )}
           </div>
         </div>
 
@@ -228,9 +244,24 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
         </div>
       )}
 
+      {/* ---- Erreur r\u00e9seau ------------------------------------------------ */}
+      {!loading && error && (
+        <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+          <AlertTriangle className="mx-auto h-10 w-10 text-red-400 mb-3" aria-hidden="true" />
+          <p className="font-heading text-lg font-semibold text-red-700 mb-2">{error}</p>
+          <button
+            type="button"
+            onClick={() => handleSubmit()}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-red-300 text-red-700 font-semibold text-sm hover:bg-red-100 transition"
+          >
+            R\u00e9essayer
+          </button>
+        </div>
+      )}
+
       {/* ---- R\u00e9sultats : \u00e9ligible ---------------------------------------- */}
       {!loading && result?.eligible && result.items.length > 0 && (
-        <div className="space-y-6">
+        <div className="space-y-6" aria-live="polite">
           {/* Zone climatique */}
           {result.zone_climatique && (
             <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
@@ -321,7 +352,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
 
       {/* ---- R\u00e9sultats : non \u00e9ligible ------------------------------------ */}
       {!loading && hasSearched && result && !result.eligible && (
-        <div className="rounded-xl border border-sand-200 bg-sand-50 p-6 text-center">
+        <div role="alert" className="rounded-xl border border-sand-200 bg-sand-50 p-6 text-center">
           <AlertTriangle className="mx-auto h-10 w-10 text-sand-400 mb-3" aria-hidden="true" />
           <p className="font-heading text-lg font-semibold text-charcoal-800 mb-2">
             Ce type de travaux n&rsquo;est pas \u00e9ligible aux CEE

@@ -18,6 +18,16 @@ const REPLY_EMAIL = 'contact@servicesartisans.fr'
 // Helpers
 // ---------------------------------------------------------------------------
 
+/** Escape HTML special chars to prevent XSS in email templates. */
+function esc(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 function emailWrapper(body: string): string {
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -57,7 +67,7 @@ export interface RelanceEmailOutput {
 // ---------------------------------------------------------------------------
 
 export function relanceJ3Client(clientName: string): RelanceEmailOutput {
-  const prenom = clientName.split(' ')[0] || clientName
+  const prenom = esc(clientName.split(' ')[0] || clientName)
 
   return {
     subject: 'Votre prime CEE — prochaine étape pour en bénéficier',
@@ -92,7 +102,7 @@ export function relanceJ3Client(clientName: string): RelanceEmailOutput {
 // ---------------------------------------------------------------------------
 
 export function relanceJ7Client(clientName: string): RelanceEmailOutput {
-  const prenom = clientName.split(' ')[0] || clientName
+  const prenom = esc(clientName.split(' ')[0] || clientName)
 
   return {
     subject: 'Rappel : votre prime CEE est toujours disponible',
@@ -124,7 +134,7 @@ export function relanceJ7Artisan(artisanName: string): RelanceEmailOutput {
   return {
     subject: 'Un dossier CEE vous attend — pensez à le consulter',
     html: emailWrapper(`
-      <h2 style="color: #333; font-size: 20px;">Bonjour ${artisanName},</h2>
+      <h2 style="color: #333; font-size: 20px;">Bonjour ${esc(artisanName)},</h2>
 
       <p>Un dossier CEE (Certificats d'Économies d'Énergie) lié à un de vos devis est en attente depuis plusieurs jours.</p>
 
@@ -146,7 +156,7 @@ export function relanceJ7Artisan(artisanName: string): RelanceEmailOutput {
 // ---------------------------------------------------------------------------
 
 export function relanceJ14Client(clientName: string): RelanceEmailOutput {
-  const prenom = clientName.split(' ')[0] || clientName
+  const prenom = esc(clientName.split(' ')[0] || clientName)
 
   return {
     subject: 'Dernier rappel — votre prime CEE',
@@ -180,7 +190,7 @@ export function relanceJ14Artisan(artisanName: string): RelanceEmailOutput {
   return {
     subject: 'Dernier rappel — dossier CEE en attente',
     html: emailWrapper(`
-      <h2 style="color: #333; font-size: 20px;">Bonjour ${artisanName},</h2>
+      <h2 style="color: #333; font-size: 20px;">Bonjour ${esc(artisanName)},</h2>
 
       <p>Un dossier CEE associé à l'un de vos devis est en attente depuis deux semaines. Sans action, ce dossier ne pourra pas aboutir et votre client ne bénéficiera pas de sa prime énergie.</p>
 
