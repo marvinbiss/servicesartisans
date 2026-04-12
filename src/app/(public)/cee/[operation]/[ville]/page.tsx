@@ -14,7 +14,6 @@ import { SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
 import {
   getCeeOperationByCode,
   getCeeOperations,
-  isValidCeeOperationCode,
   CEE_DOMAINE_LABELS,
   type CeeOperation,
 } from '@/lib/cee/catalogue'
@@ -39,7 +38,7 @@ import {
 export const revalidate = 86400
 export const dynamicParams = true
 
-const VALID_OP = /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/
+const VALID_OP = /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/i
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
 
 /**
@@ -56,29 +55,29 @@ export async function generateStaticParams(): Promise<Array<{ operation: string;
   // 174, 175, 177.
   const codes: string[] =
     operations.length > 0
-      ? operations.map((op) => op.code)
+      ? operations.map((op) => op.code.toLowerCase())
       : [
-          'BAR-EN-101',
-          'BAR-EN-102',
-          'BAR-EN-103',
-          'BAR-EN-104',
-          'BAR-EN-108',
-          'BAR-TH-112',
-          'BAR-TH-113',
-          'BAR-TH-125',
-          'BAR-TH-127',
-          'BAR-TH-129',
-          'BAR-TH-143',
-          'BAR-TH-148',
-          'BAR-TH-159',
-          'BAR-TH-161',
-          'BAR-TH-171',
-          'BAR-TH-172',
-          'BAR-TH-173',
-          'BAR-TH-174',
-          'BAR-TH-175',
-          'BAR-TH-177',
-          'BAR-SE-104',
+          'bar-en-101',
+          'bar-en-102',
+          'bar-en-103',
+          'bar-en-104',
+          'bar-en-108',
+          'bar-th-112',
+          'bar-th-113',
+          'bar-th-125',
+          'bar-th-127',
+          'bar-th-129',
+          'bar-th-143',
+          'bar-th-148',
+          'bar-th-159',
+          'bar-th-161',
+          'bar-th-171',
+          'bar-th-172',
+          'bar-th-173',
+          'bar-th-174',
+          'bar-th-175',
+          'bar-th-177',
+          'bar-se-104',
         ]
 
   const topCities = staticVilles.slice(0, SITEMAP_CITY_COUNT_TIER2)
@@ -95,10 +94,11 @@ function truncate(text: string, maxLen: number): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { operation: opCode, ville: villeSlug } = await params
+  const { operation: rawOp, ville: villeSlug } = await params
+  const opCode = rawOp.toUpperCase()
+  const urlCode = opCode.toLowerCase()
 
   if (!VALID_OP.test(opCode) || !VALID_SLUG.test(villeSlug)) notFound()
-  if (!isValidCeeOperationCode(opCode)) notFound()
 
   const [operation, ville] = await Promise.all([
     getCeeOperationByCode(opCode),
@@ -119,7 +119,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `${opName} \u00e0 ${villeName} : artisans RGE qualifi\u00e9s, prime CEE mobilisable, cumul MaPrimeR\u00e9nov\u2019 et TVA 5,5 %. V\u00e9rification ADEME.`,
     158
   )
-  const path = `/cee/${opCode}/${villeSlug}`
+  const path = `/cee/${urlCode}/${villeSlug}`
 
   return {
     title,
@@ -150,17 +150,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CeeOperationCityPage({ params }: PageProps) {
-  const { operation: opCode, ville: villeSlug } = await params
+  const { operation: rawOp, ville: villeSlug } = await params
+  const opCode = rawOp.toUpperCase()
+  const urlCode = opCode.toLowerCase()
 
   if (!VALID_OP.test(opCode) || !VALID_SLUG.test(villeSlug)) notFound()
-  if (!isValidCeeOperationCode(opCode)) notFound()
 
   const ville = getVilleBySlug(villeSlug)
   if (!ville) notFound()
 
   const operation: CeeOperation | null = await getCeeOperationByCode(opCode)
   const villeName = ville.name
-  const path = `/cee/${opCode}/${villeSlug}`
+  const path = `/cee/${urlCode}/${villeSlug}`
 
   // Fail-open strict : si operation null, on rend un shell explicatif neutre.
   // Metadata aura d\u00e9j\u00e0 pos\u00e9 un noindex.
@@ -190,7 +191,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Primes CEE', url: '/cee' },
-    { name: operation.nom, url: `/cee/${opCode}` },
+    { name: operation.nom, url: `/cee/${urlCode}` },
     { name: villeName, url: path },
   ])
 
@@ -258,7 +259,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         <Breadcrumb
           items={[
             { label: 'Primes CEE', href: '/cee' },
-            { label: operation.nom, href: `/cee/${opCode}` },
+            { label: operation.nom, href: `/cee/${urlCode}` },
             { label: villeName },
           ]}
           className="mb-6"
@@ -461,7 +462,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               {otherCities.map((c) => (
                 <Link
                   key={c.slug}
-                  href={`/cee/${opCode}/${c.slug}`}
+                  href={`/cee/${urlCode}/${c.slug}`}
                   className="inline-flex items-center px-4 py-2 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
                 >
                   {c.name}
@@ -481,7 +482,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               {sameDomainOps.map((op) => (
                 <li key={op.code}>
                   <Link
-                    href={`/cee/${op.code}/${villeSlug}`}
+                    href={`/cee/${op.code.toLowerCase()}/${villeSlug}`}
                     className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
                   >
                     <div className="text-xs font-semibold text-emerald-700">{op.code}</div>

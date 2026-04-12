@@ -299,7 +299,7 @@ export default async function CeeHubPage() {
                   {ops.map((op) => (
                     <Link
                       key={op.code}
-                      href={`/cee/${op.code}`}
+                      href={`/cee/${op.code.toLowerCase()}`}
                       className="group block p-5 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-md transition"
                     >
                       <div className="text-xs font-semibold text-emerald-700">{op.code}</div>

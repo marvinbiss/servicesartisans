@@ -234,14 +234,14 @@ test.describe('CEE Funnel — DevisBottomSheet mobile', () => {
 })
 
 /* ================================================================== */
-/*  6. Page opération CEE — /cee/BAR-TH-171                           */
+/*  6. Page opération CEE — /cee/bar-th-171                           */
 /* ================================================================== */
 
 test.describe('CEE Funnel — Page opération', () => {
-  test('la page /cee/BAR-TH-171 charge avec le code opération et CeeCTA inline', async ({
+  test('la page /cee/bar-th-171 charge avec le code opération et CeeCTA inline', async ({
     page,
   }) => {
-    await page.goto('/cee/BAR-TH-171', {
+    await page.goto('/cee/bar-th-171', {
       waitUntil: 'domcontentloaded',
       timeout: 30_000,
     })

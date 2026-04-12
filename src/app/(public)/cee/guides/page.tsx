@@ -105,7 +105,7 @@ export default function CeeGuidesIndexPage() {
             return (
               <Link
                 key={code}
-                href={`/cee/${code}/guide`}
+                href={`/cee/${code.toLowerCase()}/guide`}
                 className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
               >
                 <div className="flex items-center gap-2 mb-2">

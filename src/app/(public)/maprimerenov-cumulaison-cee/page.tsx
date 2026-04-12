@@ -44,7 +44,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Isolation des combles perdus',
     code: 'BAR-EN-101',
-    href: '/cee/BAR-EN-101',
+    href: '/cee/bar-en-101',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
@@ -53,7 +53,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Isolation des murs (ITE ou ITI)',
     code: 'BAR-EN-103',
-    href: '/cee/BAR-EN-103',
+    href: '/cee/bar-en-103',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
@@ -62,7 +62,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Isolation des planchers bas',
     code: 'BAR-EN-102',
-    href: '/cee/BAR-EN-102',
+    href: '/cee/bar-en-102',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
@@ -71,7 +71,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Fenêtres et parois vitrées',
     code: 'BAR-EN-104',
-    href: '/cee/BAR-EN-104',
+    href: '/cee/bar-en-104',
     mpr: 'conditionnel',
     cee: 'oui',
     coupDePouce: false,
@@ -80,7 +80,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Pompe à chaleur air/eau haute performance',
     code: 'BAR-TH-171',
-    href: '/cee/BAR-TH-171',
+    href: '/cee/bar-th-171',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
@@ -89,7 +89,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Pompe à chaleur air/air (climatisation réversible)',
     code: 'BAR-TH-129',
-    href: '/cee/BAR-TH-129',
+    href: '/cee/bar-th-129',
     mpr: 'non',
     cee: 'oui',
     coupDePouce: false,
@@ -98,7 +98,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Chauffe-eau thermodynamique',
     code: 'BAR-TH-148',
-    href: '/cee/BAR-TH-148',
+    href: '/cee/bar-th-148',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
@@ -107,7 +107,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Chaudière biomasse (granulés, bûches)',
     code: 'BAR-TH-113',
-    href: '/cee/BAR-TH-113',
+    href: '/cee/bar-th-113',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
@@ -116,7 +116,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Poêle à bois ou à granulés',
     code: 'BAR-TH-112',
-    href: '/cee/BAR-TH-112',
+    href: '/cee/bar-th-112',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
@@ -125,7 +125,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'VMC double flux',
     code: 'BAR-TH-125',
-    href: '/cee/BAR-TH-125',
+    href: '/cee/bar-th-125',
     mpr: 'conditionnel',
     cee: 'oui',
     coupDePouce: false,
@@ -134,7 +134,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Pompe à chaleur eau/eau haute performance',
     code: 'BAR-TH-172',
-    href: '/cee/BAR-TH-172',
+    href: '/cee/bar-th-172',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
@@ -143,7 +143,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'PAC hybride (PAC + chaudière gaz)',
     code: 'BAR-TH-159',
-    href: '/cee/BAR-TH-159',
+    href: '/cee/bar-th-159',
     mpr: 'non',
     cee: 'oui',
     coupDePouce: false,
@@ -152,7 +152,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Système solaire combiné (SSC)',
     code: 'BAR-TH-143',
-    href: '/cee/BAR-TH-143',
+    href: '/cee/bar-th-143',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
@@ -161,7 +161,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Rénovation d\u2019ampleur maison individuelle',
     code: 'BAR-TH-174',
-    href: '/cee/BAR-TH-174',
+    href: '/cee/bar-th-174',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,

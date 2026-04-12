@@ -1016,12 +1016,12 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
 /** Liste des codes d'opération ayant un guide éditorial long-format */
 export const CEE_OPERATIONS_WITH_GUIDE: string[] = Object.keys(CEE_OPERATION_GUIDES)
 
-/** Lookup safe — retourne null si pas de guide pour ce code */
+/** Lookup safe — retourne null si pas de guide pour ce code (case-insensitive) */
 export function getCeeOperationGuide(code: string): CeeGuideContent | null {
-  return CEE_OPERATION_GUIDES[code] ?? null
+  return CEE_OPERATION_GUIDES[code.toUpperCase()] ?? null
 }
 
-/** True si le code possède un guide éditorial dédié */
+/** True si le code possède un guide éditorial dédié (case-insensitive) */
 export function hasCeeOperationGuide(code: string): boolean {
-  return code in CEE_OPERATION_GUIDES
+  return code.toUpperCase() in CEE_OPERATION_GUIDES
 }

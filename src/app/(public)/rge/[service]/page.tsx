@@ -291,7 +291,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               {ceeGuideLinks.map((c) => (
                 <Link
                   key={c.code}
-                  href={`/cee/${c.code}/guide`}
+                  href={`/cee/${c.code.toLowerCase()}/guide`}
                   className="group inline-flex items-center gap-2 rounded-lg border border-primary-200 bg-white hover:border-primary-300 hover:bg-primary-50 transition px-3 py-2 text-sm"
                 >
                   <span className="font-mono font-bold text-primary-800 text-xs">{c.code}</span>

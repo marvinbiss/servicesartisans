@@ -151,9 +151,9 @@ export async function GET(request: Request) {
     `${SITE_URL}/faq`,
     `${SITE_URL}/cee/mandataire-vs-direct`,
     `${SITE_URL}/maprimerenov-cumulaison-cee`,
-    `${SITE_URL}/cee/BAR-TH-143/guide`,
-    `${SITE_URL}/cee/BAR-TH-159/guide`,
-    `${SITE_URL}/cee/BAR-TH-174/guide`,
+    `${SITE_URL}/cee/bar-th-143/guide`,
+    `${SITE_URL}/cee/bar-th-159/guide`,
+    `${SITE_URL}/cee/bar-th-174/guide`,
     `${SITE_URL}/rge/qualifications/qualibat-5911-thermique`,
     `${SITE_URL}/simulateur-prime-cee`,
   ]

@@ -8,7 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { getCeeOperationByCode, isValidCeeOperationCode } from '@/lib/cee/catalogue'
+import { getCeeOperationByCode } from '@/lib/cee/catalogue'
 import { CEE_OPERATIONS_WITH_GUIDE, getCeeOperationGuide } from '@/lib/cee/operation-guides-content'
 import { getRgeQualificationGuide } from '@/lib/rge/qualification-guides-content'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
@@ -16,10 +16,10 @@ import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
 export const revalidate = 86400
 export const dynamicParams = false
 
-const VALID_OP = /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/
+const VALID_OP = /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/i
 
 export function generateStaticParams(): Array<{ operation: string }> {
-  return CEE_OPERATIONS_WITH_GUIDE.map((operation) => ({ operation }))
+  return CEE_OPERATIONS_WITH_GUIDE.map((operation) => ({ operation: operation.toLowerCase() }))
 }
 
 interface PageProps {
@@ -32,12 +32,14 @@ function truncate(text: string, maxLen: number): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { operation: opCode } = await params
-  if (!VALID_OP.test(opCode) || !isValidCeeOperationCode(opCode)) notFound()
+  const { operation: rawOp } = await params
+  const opCode = rawOp.toUpperCase()
+  const urlCode = opCode.toLowerCase()
+  if (!VALID_OP.test(opCode)) notFound()
 
   const guide = getCeeOperationGuide(opCode)
   if (!guide) notFound()
-  const path = `/cee/${opCode}/guide`
+  const path = `/cee/${urlCode}/guide`
 
   return {
     title: truncate(guide.metaTitle, 60),
@@ -66,19 +68,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CeeOperationGuidePage({ params }: PageProps) {
-  const { operation: opCode } = await params
-  if (!VALID_OP.test(opCode) || !isValidCeeOperationCode(opCode)) notFound()
+  const { operation: rawOp } = await params
+  const opCode = rawOp.toUpperCase()
+  const urlCode = opCode.toLowerCase()
+  if (!VALID_OP.test(opCode)) notFound()
 
   const guide = getCeeOperationGuide(opCode)
   if (!guide) notFound()
   const operation = await getCeeOperationByCode(opCode)
   const topCities = await getCeeTopCitiesByOperation(opCode)
-  const path = `/cee/${opCode}/guide`
+  const path = `/cee/${urlCode}/guide`
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Primes CEE', url: '/cee' },
-    { name: operation?.nom ?? opCode, url: `/cee/${opCode}` },
+    { name: operation?.nom ?? opCode, url: `/cee/${urlCode}` },
     { name: 'Guide', url: path },
   ])
 
@@ -116,7 +120,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       <Breadcrumb
         items={[
           { label: 'Primes CEE', href: '/cee' },
-          { label: operation?.nom ?? opCode, href: `/cee/${opCode}` },
+          { label: operation?.nom ?? opCode, href: `/cee/${urlCode}` },
           { label: 'Guide' },
         ]}
       />
@@ -286,7 +290,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             {topCities.slice(0, 12).map((city) => (
               <Link
                 key={city.slug}
-                href={`/cee/${opCode}/${city.slug}`}
+                href={`/cee/${urlCode}/${city.slug}`}
                 className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
               >
                 <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
@@ -325,7 +329,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
-              href={`/cee/${opCode}`}
+              href={`/cee/${urlCode}`}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
             >
               Voir la fiche {guide.code}

@@ -8,12 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import {
-  getCeeOperationByCode,
-  getCeeOperations,
-  isValidCeeOperationCode,
-  CEE_DOMAINE_LABELS,
-} from '@/lib/cee/catalogue'
+import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
 import {
   RGE_ALLOWED_SERVICES,
@@ -26,11 +21,11 @@ import LastUpdated from '@/components/seo/LastUpdated'
 export const revalidate = 86400
 export const dynamicParams = true
 
-const VALID_OP = /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/
+const VALID_OP = /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/i
 
 export async function generateStaticParams(): Promise<Array<{ operation: string }>> {
   const operations = await getCeeOperations().catch(() => [])
-  if (operations.length > 0) return operations.map((op) => ({ operation: op.code }))
+  if (operations.length > 0) return operations.map((op) => ({ operation: op.code.toLowerCase() }))
   // Fallback au seed 383 si DB indisponible au build. Fiches abrogées
   // retirées : BAR-TH-106 (01/01/2024 → BAR-TH-171), BAR-TH-160 (01/08/2025),
   // BAR-TH-164 (→ BAR-TH-174). Ajouts : BAR-TH-172, 174, 175, 177.
@@ -56,7 +51,7 @@ export async function generateStaticParams(): Promise<Array<{ operation: string 
     'BAR-TH-175',
     'BAR-TH-177',
     'BAR-SE-104',
-  ].map((operation) => ({ operation }))
+  ].map((operation) => ({ operation: operation.toLowerCase() }))
 }
 
 interface PageProps {
@@ -69,12 +64,13 @@ function truncate(text: string, maxLen: number): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { operation: opCode } = await params
-  if (!VALID_OP.test(opCode) || !isValidCeeOperationCode(opCode)) notFound()
+  const { operation: rawOp } = await params
+  const opCode = rawOp.toUpperCase()
+  if (!VALID_OP.test(opCode)) notFound()
 
   const operation = await getCeeOperationByCode(opCode)
   const opName = operation?.nom ?? `Prime CEE ${opCode}`
-  const path = `/cee/${opCode}`
+  const path = `/cee/${opCode.toLowerCase()}`
 
   const title = truncate(`Prime CEE ${opName} (${opCode}) \u2014 artisans RGE`, 60)
   const description = truncate(
@@ -111,11 +107,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CeeOperationHubPage({ params }: PageProps) {
-  const { operation: opCode } = await params
-  if (!VALID_OP.test(opCode) || !isValidCeeOperationCode(opCode)) notFound()
+  const { operation: rawOp } = await params
+  const opCode = rawOp.toUpperCase()
+  if (!VALID_OP.test(opCode)) notFound()
 
   const operation = await getCeeOperationByCode(opCode)
-  const path = `/cee/${opCode}`
+  const urlCode = opCode.toLowerCase()
+  const path = `/cee/${urlCode}`
 
   if (!operation) {
     return (
@@ -288,7 +286,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
               </div>
             </div>
             <Link
-              href={`/cee/${opCode}/guide`}
+              href={`/cee/${urlCode}/guide`}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition whitespace-nowrap"
             >
               Lire le guide
@@ -373,7 +371,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
               {topCities.map((city) => (
                 <Link
                   key={city.slug}
-                  href={`/cee/${opCode}/${city.slug}`}
+                  href={`/cee/${urlCode}/${city.slug}`}
                   className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -402,7 +400,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             {sameDomain.map((op) => (
               <Link
                 key={op.code}
-                href={`/cee/${op.code}`}
+                href={`/cee/${op.code.toLowerCase()}`}
                 className="group block p-5 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-md transition"
               >
                 <div className="text-xs font-semibold text-emerald-700">{op.code}</div>

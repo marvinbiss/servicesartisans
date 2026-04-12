@@ -79,7 +79,7 @@ const CEE_SELECT = [
  * Accepte BAR-EN-101, BAR-TH-129, BAR-SE-104, etc.
  */
 export function isValidCeeOperationCode(code: string): boolean {
-  return /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/.test(code)
+  return /^[A-Z]{2,3}-[A-Z]{2}-\d{3}$/i.test(code)
 }
 
 /**
@@ -155,7 +155,7 @@ export async function getCeeOperations(): Promise<CeeOperation[]> {
       }
     },
     CACHE_TTL_6H,
-    { skipNull: true },
+    { skipNull: true }
   )
 }
 
@@ -165,10 +165,11 @@ export async function getCeeOperations(): Promise<CeeOperation[]> {
  */
 export async function getCeeOperationByCode(code: string): Promise<CeeOperation | null> {
   if (IS_BUILD) return null
-  if (!isValidCeeOperationCode(code)) return null
+  const normalizedCode = code.toUpperCase()
+  if (!isValidCeeOperationCode(normalizedCode)) return null
 
   return getCachedData<CeeOperation | null>(
-    `cee:catalogue:code:${code}:v1`,
+    `cee:catalogue:code:${normalizedCode}:v1`,
     async () => {
       try {
         const { data, error } = await supabase
@@ -176,20 +177,20 @@ export async function getCeeOperationByCode(code: string): Promise<CeeOperation 
           .select(CEE_SELECT)
           .eq('is_active', true)
           .eq('secteur', 'residentiel')
-          .eq('code', code)
+          .eq('code', normalizedCode)
           .maybeSingle()
 
         if (error) throw error
         return (data as unknown as CeeOperation) || null
       } catch (err) {
-        logger.error(`[getCeeOperationByCode] FAILED for ${code}`, {
+        logger.error(`[getCeeOperationByCode] FAILED for ${normalizedCode}`, {
           error: err instanceof Error ? err.message : err,
         })
         return null
       }
     },
     CACHE_TTL_6H,
-    { skipNull: true },
+    { skipNull: true }
   )
 }
 
