@@ -27,6 +27,7 @@ import { services } from '@/lib/data/france-light'
 import { getArtisanUrl } from '@/lib/utils'
 import { getCeeOperationDetails, type CeeOperationDetail } from '@/lib/cee/qualify'
 import { CeeTracking } from '@/lib/analytics/tracking'
+import CeeSavingsComparator from '@/components/cee/CeeSavingsComparator'
 
 /* ─── Types ────────────────────────────────────────────────────────── */
 
@@ -331,6 +332,18 @@ export default function DevisConfirmation({
               </div>
             </div>
           )}
+        </motion.div>
+      )}
+
+      {/* ── CEE savings comparator — coût avec/sans prime ── */}
+      {ceeEligible && _serviceSlug && _postalCode && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className={compact ? 'mb-3' : 'mb-5'}
+        >
+          <CeeSavingsComparator serviceSlug={_serviceSlug} postalCode={_postalCode} />
         </motion.div>
       )}
 

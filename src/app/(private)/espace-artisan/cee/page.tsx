@@ -17,7 +17,9 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { createClient } from '@/lib/supabase/server'
 import { listCeeDossiersForProvider } from '@/lib/cee/dossiers'
 import DossierListCard from '@/components/cee-artisan/DossierListCard'
+import PriorityBadge from '@/components/cee-artisan/PriorityBadge'
 import type { CeeDossier } from '@/lib/cee/dossier-types'
+import { extractScoreFromMetadata } from '@/lib/cee/scoring'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -72,7 +74,14 @@ export default async function EspaceArtisanCeePage() {
   let dossiers: CeeDossier[] = []
   let loadError = false
   try {
-    dossiers = await listCeeDossiersForProvider(supabase, providerRow.id)
+    const raw = await listCeeDossiersForProvider(supabase, providerRow.id)
+    // Tri par score de priorite decroissant (S > A > B > C).
+    // Les dossiers sans score (metadata absente) sont places en fin de liste.
+    dossiers = raw.sort((a, b) => {
+      const scoreA = extractScoreFromMetadata(a.metadata).score
+      const scoreB = extractScoreFromMetadata(b.metadata).score
+      return scoreB - scoreA
+    })
   } catch (error) {
     loadError = true
     logger.warn('espace-artisan-cee-list failed', {
@@ -149,11 +158,19 @@ export default async function EspaceArtisanCeePage() {
                 </h2>
               </div>
               <ul className="space-y-3" role="list">
-                {dossiers.map((dossier) => (
-                  <li key={dossier.id}>
-                    <DossierListCard dossier={dossier} />
-                  </li>
-                ))}
+                {dossiers.map((dossier) => {
+                  const { tier, score } = extractScoreFromMetadata(dossier.metadata)
+                  return (
+                    <li key={dossier.id}>
+                      <div className="relative">
+                        <div className="absolute -top-2 right-3 z-10">
+                          <PriorityBadge tier={tier} score={score} />
+                        </div>
+                        <DossierListCard dossier={dossier} />
+                      </div>
+                    </li>
+                  )
+                })}
               </ul>
             </>
           )}

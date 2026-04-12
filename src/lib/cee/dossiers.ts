@@ -24,6 +24,7 @@ import type {
   CreateCeeDossierInput,
   TransitionResult,
 } from './dossier-types'
+import { computeCeeDossierScore } from './scoring'
 
 /**
  * Colonnes publiques sélectionnables — miroir exact de l'interface CeeDossier.
@@ -72,11 +73,25 @@ export async function createCeeDossier(
   input: CreateCeeDossierInput,
   actor: { type: CeeDossierActorType; id: string | null } = { type: 'system', id: null }
 ): Promise<CeeDossier | null> {
-  // Injection acteur dans metadata pour le trigger d'audit.
+  // Calcul du score de priorite (fail-open : default C/0 si erreur).
+  const priorityScore = computeCeeDossierScore({
+    kwhcEstime: input.kwhc_estime ?? null,
+    primeEstimeeEur: input.prime_estimee_eur ?? null,
+    zoneClimatique: input.zone_climatique ?? null,
+    operationCode: input.operation_code,
+    isPrecarite: input.precarite ?? false,
+  })
+
+  // Injection acteur + score dans metadata pour le trigger d'audit.
   const metadata = {
     ...(input.metadata ?? {}),
     _actor_type: actor.type,
     _actor_id: actor.id,
+    priority_score: {
+      score: priorityScore.score,
+      tier: priorityScore.tier,
+      factors: priorityScore.factors,
+    },
   }
 
   const { data, error } = await supabase
