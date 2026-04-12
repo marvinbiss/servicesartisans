@@ -4,6 +4,12 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import {
+  getContactById,
+  updateContact,
+  softDeleteContact,
+  gdprEraseContact,
+} from '@/lib/services/prospection-service'
 
 const updateSchema = z.object({
   contact_name: z.string().max(200).optional(),
@@ -21,10 +27,7 @@ const updateSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'read')
     if (!authResult.success) return authResult.error
@@ -38,12 +41,7 @@ export async function GET(
     }
 
     const supabase = createAdminClient()
-
-    const { data, error } = await supabase
-      .from('prospection_contacts')
-      .select('id, contact_type, company_name, contact_name, email, email_canonical, phone, phone_e164, address, postal_code, city, department, region, commune_code, population, artisan_id, source, source_file, source_row, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
-      .eq('id', id)
-      .single()
+    const { data, error } = await getContactById(supabase, id)
 
     if (error || !data) {
       return NextResponse.json(
@@ -55,14 +53,14 @@ export async function GET(
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('Get contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
@@ -80,7 +78,10 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -95,16 +96,14 @@ export async function PATCH(
     }
 
     const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from('prospection_contacts')
-      .update(sanitizedData)
-      .eq('id', id)
-      .select()
-      .single()
+    const { data, error } = await updateContact(supabase, id, sanitizedData)
 
     if (error) {
       logger.error('Update contact error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la mise à jour' } },
+        { status: 500 }
+      )
     }
 
     await logAdminAction(authResult.admin.id, 'contact.update', 'prospection_contact', id, {
@@ -114,7 +113,10 @@ export async function PATCH(
     return NextResponse.json({ success: true, data })
   } catch (error) {
     logger.error('Patch contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -139,23 +141,26 @@ export async function DELETE(
 
     if (gdpr) {
       // RGPD Article 17 — Full erasure
-      const { error } = await supabase.rpc('prospection_gdpr_erase', { p_contact_id: id })
+      const { error } = await gdprEraseContact(supabase, id)
       if (error) {
         logger.error('GDPR erase error', error)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+        return NextResponse.json(
+          { success: false, error: { message: 'Erreur lors de la suppression' } },
+          { status: 500 }
+        )
       }
       await logAdminAction(authResult.admin.id, 'gdpr_erasure', 'prospection_contact', id, {
-        reason: 'RGPD Article 17 - Droit à l\'effacement'
+        reason: "RGPD Article 17 - Droit à l'effacement",
       })
     } else {
       // Soft delete
-      const { error } = await supabase
-        .from('prospection_contacts')
-        .update({ is_active: false })
-        .eq('id', id)
+      const { error } = await softDeleteContact(supabase, id)
       if (error) {
         logger.error('Soft delete contact error', error)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+        return NextResponse.json(
+          { success: false, error: { message: 'Erreur lors de la suppression' } },
+          { status: 500 }
+        )
       }
       await logAdminAction(authResult.admin.id, 'contact.delete', 'prospection_contact', id, {
         method: 'soft_delete',
@@ -165,6 +170,9 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Delete contact error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

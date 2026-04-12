@@ -3,12 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
-import { z } from 'zod'
-
-// POST request schema
-const gdprDeleteSchema = z.object({
-  confirmDelete: z.literal('SUPPRIMER'),
-})
+import { adminGdprDeleteSchema, adminDeleteUserData } from '@/lib/services/gdpr-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,7 +26,7 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
     const supabase = createAdminClient()
     const userId = params.userId
     const body = await request.json()
-    const result = gdprDeleteSchema.safeParse(body)
+    const result = adminGdprDeleteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
         {
@@ -42,89 +37,24 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
       )
     }
 
-    const completedSteps: string[] = []
+    const deleteResult = await adminDeleteUserData(supabase, userId)
 
-    try {
-      // Étape 1 — Récupérer l'email du profil pour anonymiser les avis client
-      completedSteps.push('fetch_profile')
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('id', userId)
-        .maybeSingle()
-
-      // Étape 2 — Vérifier si l'utilisateur est un artisan
-      completedSteps.push('check_artisan')
-      const { data: artisanRecord } = await supabase
-        .from('providers')
-        .select('id')
-        .eq('user_id', userId)
-        .maybeSingle()
-
-      // Étape 3 — Anonymiser le profil (seules les colonnes qui existent sur profiles)
-      completedSteps.push('anonymize_profile')
-      await supabase
-        .from('profiles')
-        .update({
-          email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
-          full_name: 'Utilisateur supprimé',
-          phone_e164: null,
-        })
-        .eq('id', userId)
-
-      // Étape 4 — Anonymiser les avis client (filtrés par author_email)
-      completedSteps.push('anonymize_client_reviews')
-      if (profileData?.email) {
-        await supabase
-          .from('reviews')
-          .update({
-            author_name: 'Utilisateur supprimé',
-            author_email: 'deleted@anonymized.local',
-          })
-          .eq('author_email', profileData.email)
-      }
-
-      // Étape 5 — Anonymiser les réponses d'avis uniquement si l'utilisateur est un artisan
-      completedSteps.push('anonymize_artisan_reviews')
-      if (artisanRecord) {
-        await supabase
-          .from('reviews')
-          .update({
-            reply: null,
-            reply_date: null,
-          })
-          .eq('provider_id', artisanRecord.id)
-      }
-
-      // Étape 6 — Désactiver le provider si c'est un artisan
-      completedSteps.push('deactivate_provider')
-      if (artisanRecord) {
-        await supabase
-          .from('providers')
-          .update({
-            is_active: false,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('user_id', userId)
-      }
-
-      // Étape 7 — Log d'audit
-      completedSteps.push('audit_log')
-      await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, { anonymized: true })
-    } catch (stepError) {
-      const failedStep = completedSteps[completedSteps.length - 1] ?? 'unknown'
-      logger.error('GDPR delete failed at step', { completedSteps, userId, error: stepError })
+    if (deleteResult.error) {
+      logger.error('GDPR delete failed', { completedSteps: deleteResult.completedSteps, userId })
       return NextResponse.json(
         {
           success: false,
           error: {
-            message: `Suppression partielle — étape échouée: ${failedStep}`,
-            completedSteps,
+            message: deleteResult.error,
+            completedSteps: deleteResult.completedSteps,
           },
         },
         { status: 500 }
       )
     }
+
+    // Log audit (step was tracked in service but actual logging done here with admin context)
+    await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, { anonymized: true })
 
     return NextResponse.json({
       success: true,

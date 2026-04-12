@@ -8,6 +8,16 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
+import {
+  getProviderIdByUserId,
+  getQuotesByProviderId,
+  getLeadAssignment,
+  getDevisRequestById,
+  getExistingQuote,
+  insertQuote,
+  getQuoteByIdForProvider,
+  updateQuote,
+} from '@/lib/services/artisan-profile-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,32 +40,18 @@ export async function GET() {
     if (guardError) return guardError
 
     // Get provider linked to this user
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Profil artisan non trouvé' } },
+        { status: 404 }
+      )
     }
 
     // Fetch quotes sent by this provider
-    const { data: quotes, error: quotesError } = await supabase
-      .from('quotes')
-      .select(`
-        id,
-        request_id,
-        provider_id,
-        amount,
-        description,
-        valid_until,
-        status,
-        created_at,
-        request:devis_requests!request_id(id, service_name, city, postal_code, description, status, created_at)
-      `)
-      .eq('provider_id', provider.id)
-      .order('created_at', { ascending: false })
+    const { data: quotes, error: quotesError } = await getQuotesByProviderId(supabase, provider.id)
 
     if (quotesError) {
       logger.error('Error fetching quotes:', quotesError)
@@ -65,12 +61,18 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ devis: quotes || [] }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      { devis: quotes || [] },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Artisan devis GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -80,21 +82,24 @@ export async function POST(request: Request) {
     if (guardError) return guardError
 
     // Get provider linked to this user
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Profil artisan non trouvé' } },
+        { status: 404 }
+      )
     }
 
     const body = await request.json()
     const result = createQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -107,50 +112,42 @@ export async function POST(request: Request) {
       today.setHours(0, 0, 0, 0)
       if (validUntilDate < today) {
         return NextResponse.json(
-          { success: false, error: { message: 'La date d\'expiration doit être dans le futur' } },
+          { success: false, error: { message: "La date d'expiration doit être dans le futur" } },
           { status: 400 }
         )
       }
     }
 
     // Verify the artisan has a lead_assignment for this request
-    const { data: assignment } = await supabase
-      .from('lead_assignments')
-      .select('id')
-      .eq('provider_id', provider.id)
-      .eq('lead_id', request_id)
-      .single()
+    const { data: assignment } = await getLeadAssignment(supabase, provider.id, request_id)
 
     if (!assignment) {
-      return NextResponse.json({ success: false, error: { message: 'Demande non assignée' } }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Demande non assignée' } },
+        { status: 403 }
+      )
     }
 
     // Verify the devis_request exists
-    const { data: devisRequest } = await supabase
-      .from('devis_requests')
-      .select('id, status')
-      .eq('id', request_id)
-      .single()
+    const { data: devisRequest } = await getDevisRequestById(supabase, request_id)
 
     if (!devisRequest) {
-      return NextResponse.json({ success: false, error: { message: 'Demande introuvable' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Demande introuvable' } },
+        { status: 404 }
+      )
     }
 
     // Reject quotes on closed/completed requests
     if (!['pending', 'sent'].includes(devisRequest.status)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Cette demande n\'accepte plus de devis' } },
+        { success: false, error: { message: "Cette demande n'accepte plus de devis" } },
         { status: 409 }
       )
     }
 
     // Check for duplicate quote (same request_id + provider_id)
-    const { data: existing } = await supabase
-      .from('quotes')
-      .select('id')
-      .eq('request_id', request_id)
-      .eq('provider_id', provider.id)
-      .maybeSingle()
+    const { data: existing } = await getExistingQuote(supabase, request_id, provider.id)
 
     if (existing) {
       return NextResponse.json(
@@ -160,18 +157,14 @@ export async function POST(request: Request) {
     }
 
     // Insert quote
-    const { data: quote, error: insertError } = await supabase
-      .from('quotes')
-      .insert({
-        request_id,
-        provider_id: provider.id,
-        amount,
-        description,
-        valid_until: valid_until ?? DEFAULT_VALID_UNTIL(),
-        status: 'pending',
-      })
-      .select()
-      .single()
+    const { data: quote, error: insertError } = await insertQuote(supabase, {
+      request_id,
+      provider_id: provider.id,
+      amount,
+      description,
+      valid_until: valid_until ?? DEFAULT_VALID_UNTIL(),
+      status: 'pending',
+    })
 
     if (insertError) {
       logger.error('Error inserting quote:', insertError)
@@ -181,16 +174,22 @@ export async function POST(request: Request) {
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      devis: quote,
-      message: 'Devis envoyé avec succès',
-    }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        devis: quote,
+        message: 'Devis envoyé avec succès',
+      },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Artisan devis POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -209,21 +208,24 @@ export async function PUT(request: Request) {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Profil artisan non trouvé' } },
+        { status: 404 }
+      )
     }
 
     const body = await request.json()
     const result = updateQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -236,22 +238,20 @@ export async function PUT(request: Request) {
       today.setHours(0, 0, 0, 0)
       if (validDate <= today) {
         return NextResponse.json(
-          { success: false, error: { message: 'La date d\'expiration doit être dans le futur' } },
+          { success: false, error: { message: "La date d'expiration doit être dans le futur" } },
           { status: 400 }
         )
       }
     }
 
     // Verify quote exists, belongs to this provider, and is still pending
-    const { data: existingQuote } = await supabase
-      .from('quotes')
-      .select('id, status')
-      .eq('id', id)
-      .eq('provider_id', provider.id)
-      .single()
+    const { data: existingQuote } = await getQuoteByIdForProvider(supabase, id, provider.id)
 
     if (!existingQuote) {
-      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Devis introuvable' } },
+        { status: 404 }
+      )
     }
     if (existingQuote.status !== 'pending') {
       return NextResponse.json(
@@ -265,13 +265,7 @@ export async function PUT(request: Request) {
     if (description !== undefined) patch.description = description
     if (valid_until !== undefined) patch.valid_until = valid_until
 
-    const { data: quote, error: updateError } = await supabase
-      .from('quotes')
-      .update(patch)
-      .eq('id', id)
-      .eq('provider_id', provider.id)
-      .select()
-      .single()
+    const { data: quote, error: updateError } = await updateQuote(supabase, id, provider.id, patch)
 
     if (updateError) {
       logger.error('Error updating quote:', updateError)
@@ -281,11 +275,17 @@ export async function PUT(request: Request) {
       )
     }
 
-    return NextResponse.json({ success: true, devis: quote }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      { success: true, devis: quote },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Artisan devis PUT error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

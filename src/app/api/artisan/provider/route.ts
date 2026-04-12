@@ -10,6 +10,12 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { providerArtisanUpdateSchema } from '@/schemas/provider'
 import { sanitizeUserInput } from '@/lib/sanitize'
+import {
+  getProviderFull,
+  getProviderForUpdate,
+  updateProviderById,
+  syncProviderToProfile,
+} from '@/lib/services/artisan-profile-service'
 // DOMPurify lazy-imported inside PUT to avoid JSDOM crash in serverless cold start
 
 export const dynamic = 'force-dynamic'
@@ -19,13 +25,13 @@ export async function GET() {
     const supabase = await createClient()
 
     // Auth check
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Verify user is an artisan
@@ -36,26 +42,15 @@ export async function GET() {
       .single()
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: 'Profil introuvable' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Profil introuvable' }, { status: 404 })
     }
 
     if (profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
 
     // Fetch provider by user_id
-    const { data: provider, error: providerError } = await supabase
-      .from('providers')
-      .select('id, stable_id, name, slug, email, phone, phone_secondary, website, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, avatar_url, created_at, updated_at, opening_hours, accepts_new_clients, free_quote, available_24h, intervention_radius_km, services_offered, service_prices, faq, team_size')
-      .eq('user_id', user.id)
-      .or('is_active.eq.true,is_active.is.null')
-      .single()
+    const { data: provider, error: providerError } = await getProviderFull(supabase, user.id)
 
     if (providerError || !provider) {
       return NextResponse.json(
@@ -67,10 +62,7 @@ export async function GET() {
     return NextResponse.json({ provider })
   } catch (error) {
     logger.error('Provider GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -79,13 +71,13 @@ export async function PUT(request: Request) {
     const supabase = await createClient()
 
     // Auth check
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Verify user is an artisan
@@ -96,26 +88,15 @@ export async function PUT(request: Request) {
       .single()
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: 'Profil introuvable' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Profil introuvable' }, { status: 404 })
     }
 
     if (profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
 
     // Get provider by user_id (need provider.id for update + fields for revalidation)
-    const { data: provider, error: providerError } = await supabase
-      .from('providers')
-      .select('id, specialty, address_city, slug, stable_id')
-      .eq('user_id', user.id)
-      .or('is_active.eq.true,is_active.is.null')
-      .single()
+    const { data: provider, error: providerError } = await getProviderForUpdate(supabase, user.id)
 
     if (providerError || !provider) {
       return NextResponse.json(
@@ -168,15 +149,10 @@ export async function PUT(request: Request) {
     }
 
     // Update providers table
-    const { data: updated, error: updateError } = await supabase
-      .from('providers')
-      .update({
-        ...updateData,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', provider.id)
-      .select()
-      .single()
+    const { data: updated, error: updateError } = await updateProviderById(supabase, provider.id, {
+      ...updateData,
+      updated_at: new Date().toISOString(),
+    })
 
     if (updateError) {
       logger.error('Error updating provider:', updateError)
@@ -207,18 +183,7 @@ export async function PUT(request: Request) {
     if (updateData.email !== undefined) profileData.email = updateData.email
 
     if (Object.keys(profileData).length > 0) {
-      supabase
-        .from('profiles')
-        .update({
-          ...profileData,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id)
-        .then(({ error: syncError }) => {
-          if (syncError) {
-            logger.error('Error syncing provider data to profile:', syncError)
-          }
-        })
+      syncProviderToProfile(supabase, user.id, profileData)
     }
 
     return NextResponse.json({
@@ -227,9 +192,6 @@ export async function PUT(request: Request) {
     })
   } catch (error) {
     logger.error('Provider PUT error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

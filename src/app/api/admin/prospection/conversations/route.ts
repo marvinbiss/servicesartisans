@@ -4,6 +4,7 @@ import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { listConversations, buildPagination } from '@/lib/services/prospection-service'
 
 const querySchema = paginationSchema.extend({
   status: z
@@ -20,7 +21,6 @@ export async function GET(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'read')
     if (!authResult.success) return authResult.error
 
-    const supabase = createAdminClient()
     const params = Object.fromEntries(request.nextUrl.searchParams)
     const parsed = querySchema.safeParse(params)
 
@@ -32,21 +32,13 @@ export async function GET(request: NextRequest) {
     }
 
     const { page, limit, status, channel } = parsed.data
-    const offset = (page - 1) * limit
-
-    let query = supabase
-      .from('prospection_conversations')
-      .select(
-        '*, contact:prospection_contacts(id,contact_name,company_name,email,phone,contact_type)',
-        { count: 'exact' }
-      )
-      .order('last_message_at', { ascending: false, nullsFirst: false })
-      .range(offset, offset + limit - 1)
-
-    if (status !== 'all') query = query.eq('status', status)
-    if (channel !== 'all') query = query.eq('channel', channel)
-
-    const { data, count, error } = await query
+    const supabase = createAdminClient()
+    const { data, count, error } = await listConversations(supabase, {
+      page,
+      limit,
+      status,
+      channel,
+    })
 
     if (error) {
       logger.error('List conversations error', error)
@@ -59,12 +51,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data,
-      pagination: {
-        page,
-        pageSize: limit,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limit),
-      },
+      pagination: buildPagination(page, limit, count || 0),
     })
   } catch (error) {
     logger.error('Conversations GET error', error as Error)

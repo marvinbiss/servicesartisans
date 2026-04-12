@@ -5,18 +5,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
-import { logger } from '@/lib/logger'
-import { slugify } from '@/lib/utils'
-import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
-import crypto from 'crypto'
-
-const redactEmail = (e: string) =>
-  e ? e.substring(0, 2) + '***@' + (e.split('@')[1] || '***') : '***'
+import { listClaims, approveClaim, rejectClaim } from '@/lib/services/claims-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,54 +49,20 @@ export async function GET(request: NextRequest) {
     }
 
     const { status, page, limit } = result.data
-    const offset = (page - 1) * limit
 
-    let query = supabase
-      .from('provider_claims')
-      .select(
-        `
-        id,
-        status,
-        siret_provided,
-        claimant_name,
-        claimant_email,
-        claimant_phone,
-        claimant_position,
-        rejection_reason,
-        reviewed_at,
-        created_at,
-        provider_id,
-        user_id,
-        provider:provider_id(id, name, siret, address_city, stable_id),
-        user:user_id(id, email, full_name)
-      `,
-        { count: 'exact' }
-      )
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const serviceResult = await listClaims(supabase, { status, page, limit })
 
-    if (status !== 'all') {
-      query = query.eq('status', status)
-    }
-
-    const { data: claims, error, count } = await query
-
-    if (error) {
+    if (!serviceResult.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des demandes' } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error } },
+        { status: serviceResult.status }
       )
     }
 
     return NextResponse.json({
       success: true,
-      data: claims,
-      pagination: {
-        page,
-        limit,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limit),
-      },
+      data: serviceResult.data.data,
+      pagination: serviceResult.data.pagination,
     })
   } catch {
     return NextResponse.json(
@@ -134,509 +93,38 @@ export async function PATCH(request: NextRequest) {
 
     const { claimId, action, rejectionReason } = validation.data
     const supabase = createAdminClient()
-    const now = new Date().toISOString()
-
-    // Fetch the claim (include contact fields for anonymous claims)
-    const { data: claim, error: claimError } = await supabase
-      .from('provider_claims')
-      .select(
-        'id, provider_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position'
-      )
-      .eq('id', claimId)
-      .single()
-
-    if (claimError || !claim) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Demande introuvable' } },
-        { status: 404 }
-      )
-    }
-
-    // Unclaim: only works on approved claims
-    if (action === 'unclaim') {
-      if (claim.status !== 'approved') {
-        return NextResponse.json(
-          {
-            success: false,
-            error: { message: 'Seule une revendication approuvée peut être dérevendiquée' },
-          },
-          { status: 409 }
-        )
-      }
-
-      // 1. Remove user_id from provider
-      const { error: providerError } = await supabase
-        .from('providers')
-        .update({
-          user_id: null,
-          claimed_at: null,
-          claimed_by: null,
-          updated_at: now,
-        })
-        .eq('id', claim.provider_id)
-
-      if (providerError) {
-        logger.error('Error unclaiming provider', providerError)
-        return NextResponse.json(
-          {
-            success: false,
-            error: { message: `Erreur dérevendication: ${providerError.message}` },
-          },
-          { status: 500 }
-        )
-      }
-
-      // 2. Reset claim status to rejected with reason
-      const { error: claimUpdateError } = await supabase
-        .from('provider_claims')
-        .update({
-          status: 'rejected',
-          rejection_reason: rejectionReason || 'Dérevendiqué par un administrateur',
-          reviewed_by: authResult.admin.id,
-          reviewed_at: now,
-        })
-        .eq('id', claimId)
-
-      if (claimUpdateError) {
-        logger.error('Error updating claim after unclaim', claimUpdateError)
-        return NextResponse.json(
-          { success: false, error: { message: 'Erreur mise à jour de la demande' } },
-          { status: 500 }
-        )
-      }
-
-      // 3. Reset user role to client if they have no other claimed providers
-      if (claim.user_id) {
-        const { count } = await supabase
-          .from('providers')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', claim.user_id)
-
-        if (!count || count === 0) {
-          await supabase
-            .from('profiles')
-            .update({ role: 'client', updated_at: now })
-            .eq('id', claim.user_id)
-            .not('role', 'in', '(super_admin,admin,moderator)')
-        }
-      }
-
-      // 4. Revalidate affected pages
-      try {
-        const { data: providerInfo } = await supabase
-          .from('providers')
-          .select('specialty, address_city, slug, stable_id')
-          .eq('id', claim.provider_id)
-          .single()
-
-        if (providerInfo) {
-          const serviceSlug = slugify(providerInfo.specialty || 'artisan')
-          const locationSlug = slugify(providerInfo.address_city || 'france')
-          const publicId = providerInfo.slug || providerInfo.stable_id
-
-          if (publicId) {
-            revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-          }
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-        }
-      } catch (revalError) {
-        logger.error('Revalidation failed after unclaim:', revalError)
-      }
-
-      logger.info('Claim unclaimed', {
-        claimId,
-        providerId: claim.provider_id,
-        userId: claim.user_id,
-        adminId: authResult.admin.id,
-        reason: rejectionReason || null,
-      })
-
-      return NextResponse.json({
-        success: true,
-        message: 'Revendication retirée. La fiche est à nouveau disponible.',
-      })
-    }
-
-    if (claim.status !== 'pending') {
-      return NextResponse.json(
-        { success: false, error: { message: 'Cette demande a déjà été traitée' } },
-        { status: 409 }
-      )
-    }
 
     if (action === 'approve') {
-      // Resolve the user ID: either from the claim (authenticated) or create account (anonymous)
-      let resolvedUserId = claim.user_id
-      let accountCreated = false
+      const result = await approveClaim(supabase, claimId, authResult.admin.id)
 
-      if (!resolvedUserId) {
-        // Anonymous claim — resolve or create user account
-        const claimEmail = claim.claimant_email?.trim().toLowerCase()
-        if (!claimEmail) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: { message: 'Claim anonyme sans email — impossible de créer le compte' },
-            },
-            { status: 400 }
-          )
-        }
-
-        // Check if a user with this email already exists (profiles OR auth.users)
-        const { data: existingProfile } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('email', claimEmail)
-          .single()
-
-        if (existingProfile) {
-          resolvedUserId = existingProfile.id
-          logger.info('Anonymous claim: reusing existing user from profiles', {
-            claimId,
-            email: redactEmail(claimEmail),
-            userId: resolvedUserId,
-          })
-        } else {
-          // Try to create new account via Supabase admin auth
-          const { data: newUser, error: createUserError } = await supabase.auth.admin.createUser({
-            email: claimEmail,
-            password: crypto.randomUUID(),
-            email_confirm: true,
-            user_metadata: {
-              full_name: claim.claimant_name || '',
-              is_artisan: true,
-            },
-          })
-
-          if (createUserError || !newUser.user) {
-            // User might exist in auth.users but not in profiles (e.g. incomplete signup)
-            // Use generateLink to resolve their ID from auth.users
-            const { data: linkData } = await supabase.auth.admin.generateLink({
-              type: 'recovery',
-              email: claimEmail,
-            })
-
-            if (linkData?.user?.id) {
-              resolvedUserId = linkData.user.id
-              logger.info('Anonymous claim: found existing auth user via recovery', {
-                claimId,
-                email: redactEmail(claimEmail),
-                userId: resolvedUserId,
-              })
-
-              // Ensure profile exists (upsert with role)
-              const { error: upsertError } = await supabase.from('profiles').upsert(
-                {
-                  id: resolvedUserId,
-                  email: claimEmail,
-                  full_name: claim.claimant_name || '',
-                  role: 'artisan',
-                  created_at: now,
-                  updated_at: now,
-                },
-                { onConflict: 'id' }
-              )
-
-              if (upsertError) {
-                logger.error('Failed to upsert profile for existing auth user', {
-                  claimId,
-                  userId: resolvedUserId,
-                  error: upsertError,
-                })
-                return NextResponse.json(
-                  {
-                    success: false,
-                    error: { message: `Erreur création profil: ${upsertError.message}` },
-                  },
-                  { status: 500 }
-                )
-              }
-            } else {
-              logger.error('Failed to create or resolve user for anonymous claim', {
-                claimId,
-                email: claimEmail,
-                createError: createUserError?.message,
-              })
-              return NextResponse.json(
-                {
-                  success: false,
-                  error: { message: 'Erreur lors de la création du compte artisan' },
-                },
-                { status: 500 }
-              )
-            }
-          } else {
-            resolvedUserId = newUser.user.id
-            accountCreated = true
-
-            // Create profile row (upsert in case a trigger already created a partial row)
-            const { error: profileError } = await supabase.from('profiles').upsert(
-              {
-                id: resolvedUserId,
-                email: claimEmail,
-                full_name: claim.claimant_name || '',
-                role: 'artisan',
-                created_at: now,
-                updated_at: now,
-              },
-              { onConflict: 'id' }
-            )
-
-            if (profileError) {
-              logger.error('Failed to create profile for new user', {
-                claimId,
-                userId: resolvedUserId,
-                error: profileError,
-              })
-              return NextResponse.json(
-                {
-                  success: false,
-                  error: { message: `Erreur création profil: ${profileError.message}` },
-                },
-                { status: 500 }
-              )
-            }
-
-            logger.info('Anonymous claim: created new user', {
-              claimId,
-              email: redactEmail(claimEmail),
-              userId: resolvedUserId,
-            })
-          }
-        }
-      }
-
-      // 1. Assign the provider to the user atomically: only if user_id IS NULL.
-      const { data: updatedProvider, error: providerError } = await supabase
-        .from('providers')
-        .update({
-          user_id: resolvedUserId,
-          claimed_at: now,
-          claimed_by: resolvedUserId,
-          updated_at: now,
-        })
-        .eq('id', claim.provider_id)
-        .is('user_id', null)
-        .select('id, name')
-        .maybeSingle()
-
-      if (providerError) {
-        logger.error('Error assigning provider during claim approval', {
-          claimId,
-          providerId: claim.provider_id,
-          error: providerError,
-        })
+      if (!result.success) {
         return NextResponse.json(
-          { success: false, error: { message: "Erreur lors de l'attribution de la fiche" } },
-          { status: 500 }
+          { success: false, error: { message: result.error } },
+          { status: result.status }
         )
       }
-
-      if (!updatedProvider) {
-        await supabase
-          .from('provider_claims')
-          .update({
-            status: 'rejected',
-            rejection_reason: 'Fiche déjà attribuée',
-            reviewed_by: authResult.admin.id,
-            reviewed_at: now,
-          })
-          .eq('id', claimId)
-
-        return NextResponse.json(
-          {
-            success: false,
-            error: { message: 'Cette fiche a déjà été attribuée à un autre utilisateur' },
-          },
-          { status: 409 }
-        )
-      }
-
-      // 2. Update the claim status + link to resolved user
-      const { error: updateClaimError } = await supabase
-        .from('provider_claims')
-        .update({
-          status: 'approved',
-          user_id: resolvedUserId,
-          reviewed_by: authResult.admin.id,
-          reviewed_at: now,
-        })
-        .eq('id', claimId)
-
-      if (updateClaimError) {
-        return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de la mise à jour de la demande' } },
-          { status: 500 }
-        )
-      }
-
-      // 3. Set profiles.role = 'artisan' (skip if already admin/super_admin/moderator)
-      const { data: currentProfile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', resolvedUserId)
-        .single()
-
-      const protectedRoles = ['super_admin', 'admin', 'moderator']
-      if (!currentProfile || !protectedRoles.includes(currentProfile.role)) {
-        const { error: roleError } = await supabase
-          .from('profiles')
-          .update({ role: 'artisan', updated_at: now })
-          .eq('id', resolvedUserId)
-
-        if (roleError) {
-          logger.error('Failed to update profile role to artisan', {
-            claimId,
-            userId: resolvedUserId,
-            error: roleError,
-          })
-          return NextResponse.json(
-            { success: false, error: { message: 'Erreur lors de la mise à jour du rôle artisan' } },
-            { status: 500 }
-          )
-        }
-      }
-
-      // 4. Mark user as artisan in auth metadata
-      await supabase.auth.admin.updateUserById(resolvedUserId, {
-        user_metadata: { is_artisan: true },
-      })
-
-      // 5. For anonymous claims: generate recovery link + send email
-      let emailStatus = 'skipped'
-      if (!claim.user_id) {
-        if (!claim.claimant_email) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: {
-                message:
-                  "Email du demandeur manquant — impossible d'envoyer l'email de configuration",
-              },
-            },
-            { status: 400 }
-          )
-        }
-        const claimEmail = claim.claimant_email.trim().toLowerCase()
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
-
-        try {
-          const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-            type: 'recovery',
-            email: claimEmail,
-            options: {
-              redirectTo: `${siteUrl}/auth/callback?next=/definir-mot-de-passe`,
-            },
-          })
-
-          if (linkError || !linkData?.properties?.hashed_token) {
-            emailStatus = `link_error: ${linkError?.message || 'no hashed_token returned'}`
-            logger.error('Failed to generate recovery link', { claimId, error: linkError })
-          } else {
-            // Send hashed_token to intermediate page — verifyOtp client-side (avoids email pre-fetch + otp_expired)
-            const safeLink = `${siteUrl}/auth/setup-password?token=${linkData.properties.hashed_token}`
-
-            const emailResult = await sendClaimApprovedEmail({
-              to: claimEmail,
-              name: claim.claimant_name || 'Artisan',
-              providerName: updatedProvider.name || 'Votre fiche',
-              passwordLink: safeLink,
-            })
-
-            emailStatus = emailResult?.id ? `sent (id: ${emailResult.id})` : 'sent (no id)'
-            logger.info('Claim approval email result', {
-              claimId,
-              email: redactEmail(claimEmail),
-              emailResult,
-            })
-          }
-        } catch (emailErr) {
-          emailStatus = `exception: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`
-          logger.error('Failed to send claim approval email', { claimId, error: emailErr })
-        }
-      }
-
-      // Revalidation on-demand des pages affectées (non-bloquant)
-      try {
-        const { data: providerInfo } = await supabase
-          .from('providers')
-          .select('specialty, address_city, slug, stable_id')
-          .eq('id', claim.provider_id)
-          .single()
-
-        if (providerInfo) {
-          const serviceSlug = slugify(providerInfo.specialty || 'artisan')
-          const locationSlug = slugify(providerInfo.address_city || 'france')
-          const publicId = providerInfo.slug || providerInfo.stable_id
-
-          if (publicId) {
-            revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-          }
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-          revalidatePath(`/services/${serviceSlug}`, 'page')
-
-          logger.info('Revalidated paths after claim approval', {
-            claimId,
-            providerId: claim.provider_id,
-          })
-        }
-      } catch (revalError) {
-        logger.error('Revalidation failed after claim approval:', revalError)
-      }
-
-      logger.info('Claim approved', {
-        claimId,
-        providerId: claim.provider_id,
-        userId: resolvedUserId,
-        adminId: authResult.admin.id,
-        accountCreated,
-        emailStatus,
-      })
-
-      const emailMessage = emailStatus.startsWith('sent')
-        ? 'Demande approuvée. La fiche a été attribuée. Email envoyé.'
-        : emailStatus === 'skipped'
-          ? 'Demande approuvée. La fiche a été attribuée.'
-          : "Demande approuvée. La fiche a été attribuée. \u26A0 L'email n'a pas pu être envoyé \u2014 l'artisan devra utiliser \u00AB Mot de passe oublié \u00BB."
 
       return NextResponse.json({
         success: true,
-        message: emailMessage,
+        message: result.message,
       })
     } else {
-      // Reject
-      const { error: rejectError } = await supabase
-        .from('provider_claims')
-        .update({
-          status: 'rejected',
-          rejection_reason: rejectionReason || null,
-          reviewed_by: authResult.admin.id,
-          reviewed_at: now,
-        })
-        .eq('id', claimId)
+      // reject or unclaim — both handled by rejectClaim (which checks claim.status)
+      const result = await rejectClaim(supabase, claimId, authResult.admin.id, rejectionReason)
 
-      if (rejectError) {
+      if (!result.success) {
         return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors du rejet' } },
-          { status: 500 }
+          { success: false, error: { message: result.error } },
+          { status: result.status }
         )
       }
 
-      logger.info('Claim rejected', {
-        claimId,
-        providerId: claim.provider_id,
-        userId: claim.user_id,
-        adminId: authResult.admin.id,
-        reason: rejectionReason || null,
-      })
-
       return NextResponse.json({
         success: true,
-        message: 'Demande rejetée.',
+        message: result.message,
       })
     }
-  } catch (err) {
-    logger.error('Admin claims PATCH error', { error: err })
+  } catch {
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

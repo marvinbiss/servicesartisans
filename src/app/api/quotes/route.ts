@@ -1,33 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
-import { z } from 'zod'
+import { quoteCreateSchema, listQuotes, createQuote } from '@/lib/services/quotes-service'
 
 export const dynamic = 'force-dynamic'
-
-const quoteSchema = z.object({
-  booking_id: z.string().uuid(),
-  amount: z.number().positive(),
-  description: z.string().min(10).max(2000),
-  valid_until: z.string().datetime().optional(),
-  items: z.array(z.object({
-    description: z.string(),
-    quantity: z.number().positive(),
-    unit_price: z.number().positive(),
-  })).optional(),
-})
 
 // GET - List quotes for authenticated user
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentification requise' },
         },
         { status: 401 }
       )
@@ -39,61 +29,39 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1', 10)
     const limit = parseInt(searchParams.get('limit') || '10', 10)
 
-    let query = supabase
-      .from('quotes')
-      .select(`
-        *,
-        booking:bookings(
-          id,
-          service_name,
-          scheduled_date,
-          client:profiles!client_id(full_name, email),
-          provider:providers(name)
-        )
-      `, { count: 'exact' })
+    const result = await listQuotes(supabase, {
+      userId: user.id,
+      role,
+      status,
+      page,
+      limit,
+    })
 
-    if (role === 'provider') {
-      const { data: provider } = await supabase
-        .from('providers')
-        .select('id')
-        .eq('user_id', user.id)
-        .single()
-
-      if (!provider) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: { code: 1003, message: 'Profil artisan non trouve' }
-          },
-          { status: 404 }
-        )
-      }
-
-      query = query.eq('provider_id', provider.id)
-    } else {
-      query = query.eq('client_id', user.id)
+    if (result.error === 'PROVIDER_NOT_FOUND') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 1003, message: 'Profil artisan non trouve' },
+        },
+        { status: 404 }
+      )
     }
 
-    if (status) {
-      query = query.eq('status', status)
-    }
-
-    query = query
-      .order('created_at', { ascending: false })
-      .range((page - 1) * limit, page * limit - 1)
-
-    const { data: quotes, error, count } = await query
-
-    if (error) throw error
+    if (result.error) throw new Error(result.error)
 
     return NextResponse.json({
       success: true,
-      data: quotes,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      data: result.data!.quotes,
       pagination: {
-        page,
-        limit,
-        total: count || 0,
-        pages: Math.ceil((count || 0) / limit),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        page: result.data!.page,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        limit: result.data!.limit,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        total: result.data!.total,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        pages: result.data!.pages,
       },
     })
   } catch (error) {
@@ -101,7 +69,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Erreur serveur' },
       },
       { status: 500 }
     )
@@ -112,37 +80,22 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentification requise' },
         },
         { status: 401 }
       )
     }
 
-    // Verify user is a provider
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!provider) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: { code: 1003, message: 'Seuls les artisans peuvent creer des devis' }
-        },
-        { status: 403 }
-      )
-    }
-
     const body = await request.json()
-    const validation = quoteSchema.safeParse(body)
+    const validation = quoteCreateSchema.safeParse(body)
 
     if (!validation.success) {
       return NextResponse.json(
@@ -152,60 +105,49 @@ export async function POST(request: NextRequest) {
             code: 2001,
             message: 'Donnees invalides',
             details: validation.error.issues,
-          }
+          },
         },
         { status: 400 }
       )
     }
 
-    const { booking_id, amount, description, valid_until, items } = validation.data
+    const result = await createQuote(supabase, user.id, validation.data)
 
-    // Verify booking exists and belongs to this provider
-    const { data: booking } = await supabase
-      .from('bookings')
-      .select('id, client_id, provider_id')
-      .eq('id', booking_id)
-      .eq('provider_id', provider.id)
-      .single()
-
-    if (!booking) {
+    if (result.error === 'NOT_A_PROVIDER') {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Reservation non trouvee' }
+          error: { code: 1003, message: 'Seuls les artisans peuvent creer des devis' },
+        },
+        { status: 403 }
+      )
+    }
+
+    if (result.error === 'BOOKING_NOT_FOUND') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 2002, message: 'Reservation non trouvee' },
         },
         { status: 404 }
       )
     }
 
-    // Create quote
-    const { data: quote, error } = await supabase
-      .from('quotes')
-      .insert({
-        booking_id,
-        provider_id: provider.id,
-        client_id: booking.client_id,
-        amount,
-        description,
-        valid_until: valid_until || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        items: items || [],
-        status: 'pending',
-      })
-      .select()
-      .single()
+    if (result.error) throw new Error(result.error)
 
-    if (error) throw error
-
-    return NextResponse.json({
-      success: true,
-      data: quote,
-    }, { status: 201 })
+    return NextResponse.json(
+      {
+        success: true,
+        data: result.data,
+      },
+      { status: 201 }
+    )
   } catch (error) {
     logger.error('Quote creation error', error)
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Erreur serveur' },
       },
       { status: 500 }
     )

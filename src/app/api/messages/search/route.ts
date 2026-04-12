@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { getConversationForUser, searchMessages } from '@/lib/services/messages-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,10 +20,15 @@ const searchSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     const { searchParams } = new URL(request.url)
@@ -35,7 +41,10 @@ export async function GET(request: NextRequest) {
     const parsed = searchSchema.safeParse(queryParams)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -43,12 +52,7 @@ export async function GET(request: NextRequest) {
     const { conversation_id, q, limit } = parsed.data
 
     // Verify user has access to conversation
-    const { data: conversation } = await supabase
-      .from('conversations')
-      .select('id')
-      .eq('id', conversation_id)
-      .or(`client_id.eq.${user.id},provider_id.eq.${user.id}`)
-      .single()
+    const { data: conversation } = await getConversationForUser(supabase, conversation_id, user.id)
 
     if (!conversation) {
       return NextResponse.json(
@@ -58,13 +62,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Search in message content using ilike (dropped columns: edited_at, deleted_at, reply_to_message_id, rich_content, search_vector)
-    const { data: messages, error } = await supabase
-      .from('messages')
-      .select('id, conversation_id, sender_id, sender_type, content, message_type, file_url, file_name, file_size, read_at, created_at')
-      .eq('conversation_id', conversation_id)
-      .ilike('content', `%${q}%`)
-      .order('created_at', { ascending: false })
-      .limit(limit)
+    const { data: messages, error } = await searchMessages(supabase, {
+      conversationId: conversation_id,
+      query: q,
+      limit,
+    })
 
     if (error) {
       logger.error('Message search error', error)

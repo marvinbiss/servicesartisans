@@ -4,6 +4,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import { moderateReview } from '@/lib/services/admin-crud-service'
 
 // PATCH request schema — maps to reviews.status column
 const moderateReviewSchema = z.object({
@@ -11,22 +12,11 @@ const moderateReviewSchema = z.object({
   is_visible: z.boolean().optional(),
 })
 
-// Map frontend moderation_status to DB status column
-function toDbStatus(moderationStatus: string): string {
-  if (moderationStatus === 'approved') return 'published'
-  if (moderationStatus === 'rejected') return 'hidden'
-  return 'pending_review'
-}
-
 export const dynamic = 'force-dynamic'
 
 // PATCH - Moderate review
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with reviews:write permission
     const authResult = await requirePermission('reviews', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -39,35 +29,28 @@ export async function PATCH(
       )
     }
 
-    const supabase = createAdminClient()
     const body = await request.json()
     const result = moderateReviewSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
 
-    const { data, error } = await supabase
-      .from('reviews')
-      .update({
-        status: toDbStatus(result.data.moderation_status),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
-      .select()
-      .single()
+    const supabase = createAdminClient()
+    const serviceResult = await moderateReview(supabase, params.id, result.data.moderation_status)
 
-    if (error) {
-      logger.error('Review moderation failed', { code: error.code, message: error.message })
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de modérer l\'avis' } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
-    // Log the moderation action
     await logAdminAction(
       authResult.admin.id,
       `review.${result.data.moderation_status}`,
@@ -76,7 +59,7 @@ export async function PATCH(
       { moderation_status: result.data.moderation_status, is_visible: result.data.is_visible }
     )
 
-    return NextResponse.json({ success: true, data })
+    return NextResponse.json({ success: true, data: serviceResult.data.data })
   } catch (error) {
     logger.error('Admin review moderation error', error)
     return NextResponse.json(

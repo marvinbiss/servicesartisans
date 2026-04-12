@@ -7,11 +7,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import { z } from 'zod'
-
-const exportPostSchema = z.object({
-  format: z.enum(['json', 'csv']).optional().default('json'),
-})
+import { exportPostSchema, requestExport, getExportStatus } from '@/lib/services/gdpr-service'
 
 // POST /api/gdpr/export - Request data export
 export const dynamic = 'force-dynamic'
@@ -42,59 +38,29 @@ export async function POST(request: Request) {
     const { format } = result.data
 
     const adminSupabase = createAdminClient()
+    const exportResult = await requestExport(supabase, adminSupabase, user.id, format)
 
-    // Check for existing pending request
-    const { data: existingRequest } = await adminSupabase
-      .from('data_export_requests')
-      .select('id, user_id, format, status, completed_at, created_at')
-      .eq('user_id', user.id)
-      .eq('status', 'pending')
-      .single()
-
-    if (existingRequest) {
+    if (exportResult.error === 'EXISTING_REQUEST') {
       return NextResponse.json(
         {
           success: false,
           error: { message: "Vous avez déjà une demande d'export en cours" },
-          requestId: existingRequest.id,
+          requestId: exportResult.existingRequestId,
         },
         { status: 400 }
       )
     }
 
-    // Create export request
-    const { data: exportRequest, error } = await adminSupabase
-      .from('data_export_requests')
-      .insert({
-        user_id: user.id,
-        format,
-        status: 'pending',
-      })
-      .select()
-      .single()
-
-    if (error) throw error
-
-    // Process immediately for small datasets
-    const exportData = await collectUserData(user.id)
-
-    // Update request with data
-    const { error: updateError } = await adminSupabase
-      .from('data_export_requests')
-      .update({
-        status: 'completed',
-        completed_at: new Date().toISOString(),
-        download_url: null,
-      })
-      .eq('id', exportRequest.id)
-
-    if (updateError) throw updateError
+    if (exportResult.error) throw new Error(exportResult.error)
 
     return NextResponse.json({
       success: true,
-      requestId: exportRequest.id,
-      data: exportData,
-      message: 'Votre export de données est prêt',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      requestId: exportResult.data!.requestId,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      data: exportResult.data!.exportData,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      message: exportResult.data!.message,
     })
   } catch (error) {
     logger.error('GDPR export error:', error)
@@ -125,107 +91,25 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const requestId = searchParams.get('requestId')
 
-    if (requestId) {
-      const { data: exportRequest } = await adminSupabase
-        .from('data_export_requests')
-        .select('id, user_id, format, status, completed_at, created_at')
-        .eq('id', requestId)
-        .eq('user_id', user.id)
-        .single()
+    const result = await getExportStatus(adminSupabase, user.id, requestId)
 
-      if (!exportRequest) {
-        return NextResponse.json(
-          { success: false, error: { message: "Demande d'export introuvable" } },
-          { status: 404 }
-        )
-      }
-
-      return NextResponse.json(exportRequest)
+    if (result.error === 'REQUEST_NOT_FOUND') {
+      return NextResponse.json(
+        { success: false, error: { message: "Demande d'export introuvable" } },
+        { status: 404 }
+      )
     }
 
-    // Get all requests for user
-    const { data: requests } = await adminSupabase
-      .from('data_export_requests')
-      .select('id, user_id, format, status, completed_at, created_at')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
+    if (requestId) {
+      return NextResponse.json(result.data)
+    }
 
-    return NextResponse.json({ requests: requests || [] })
+    return NextResponse.json({ requests: result.data })
   } catch (error) {
     logger.error('GDPR export status error:', error)
     return NextResponse.json(
       { success: false, error: { message: "Échec de la récupération du statut d'export" } },
       { status: 500 }
     )
-  }
-}
-
-// Collect all user data for export
-async function collectUserData(userId: string) {
-  const adminSupabase = createAdminClient()
-
-  // Fetch profile first to get user email
-  const profileResult = await adminSupabase
-    .from('profiles')
-    .select('id, email, full_name, phone_e164, role, subscription_plan, created_at, updated_at')
-    .eq('id', userId)
-    .single()
-
-  const userEmail: string | null = profileResult.data?.email ?? null
-
-  const { data: userProvider } = await adminSupabase
-    .from('providers')
-    .select('id')
-    .eq('user_id', userId)
-    .maybeSingle()
-
-  const [
-    bookingsResult,
-    reviewsReceivedResult,
-    reviewsWrittenResult,
-    messagesResult,
-    preferencesResult,
-  ] = await Promise.all([
-    adminSupabase
-      .from('bookings')
-      .select(
-        'id, client_id, provider_id, status, scheduled_date, address, city, postal_code, total_amount, payment_status, created_at'
-      )
-      .or(`client_id.eq.${userId},provider_id.eq.${userId}`),
-
-    userProvider?.id
-      ? adminSupabase
-          .from('reviews')
-          .select('id, rating, content, created_at, provider_id')
-          .eq('provider_id', userProvider.id)
-      : Promise.resolve({ data: [] }),
-
-    userEmail
-      ? adminSupabase
-          .from('reviews')
-          .select('id, rating, content, created_at, provider_id')
-          .eq('author_email', userEmail)
-      : Promise.resolve({ data: [] }),
-
-    adminSupabase
-      .from('messages')
-      .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
-      .eq('sender_id', userId),
-
-    adminSupabase
-      .from('user_preferences')
-      .select('id, user_id, created_at')
-      .eq('user_id', userId)
-      .single(),
-  ])
-
-  return {
-    exportDate: new Date().toISOString(),
-    profile: profileResult.data || null,
-    bookings: bookingsResult.data || [],
-    reviews_received: reviewsReceivedResult.data || [],
-    reviews_written: reviewsWrittenResult.data || [],
-    messages: messagesResult.data || [],
-    preferences: preferencesResult.data || null,
   }
 }

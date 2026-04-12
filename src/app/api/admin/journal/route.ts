@@ -5,10 +5,10 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { pageSchema } from '@/lib/validations/schemas'
+import { getJournalEntries } from '@/lib/services/admin-stats-service'
 
 const journalQuerySchema = z.object({
   page: pageSchema,
@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
-    const supabase = createAdminClient()
     const url = new URL(request.url)
 
     const parsed = journalQuerySchema.safeParse({
@@ -38,56 +37,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ logs: [], total: 0, page: 1, pageSize: 50 })
     }
 
-    const page = parsed.data.page
-    const limit = 50
-    const offset = (page - 1) * limit
-    const actionFilter = parsed.data.action
-    const userFilter = parsed.data.user_id
-
-    let query = supabase
-      .from('audit_logs')
-      .select('id, action, user_id, resource_type, resource_id, new_value, metadata, created_at')
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
-
-    if (actionFilter) {
-      query = query.eq('action', actionFilter)
-    }
-    if (userFilter) {
-      query = query.eq('user_id', userFilter)
-    }
-
-    const { data: logs, error } = await query
-
-    if (error) {
-      logger.warn('Journal query failed, returning empty list', {
-        code: error.code,
-        message: error.message,
-      })
-      return NextResponse.json({
-        logs: [],
-        total: 0,
-        page,
-        pageSize: limit,
-      })
-    }
-
-    let totalCount = 0
-    try {
-      const { count } = await supabase
-        .from('audit_logs')
-        .select('id', { count: 'exact', head: true })
-      totalCount = count || 0
-    } catch {
-      /* use 0 */
-    }
-
-    return NextResponse.json({
-      logs: logs || [],
-      total: totalCount || 0,
-      page,
-      pageSize: limit,
+    const result = await getJournalEntries({
+      page: parsed.data.page,
+      action: parsed.data.action,
+      userId: parsed.data.user_id,
     })
+
+    return NextResponse.json(result)
   } catch (error) {
     logger.error('Journal GET error', error)
     return NextResponse.json({ logs: [], total: 0, page: 1, pageSize: 50 })

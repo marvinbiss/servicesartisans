@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { adminUpdateConversationStatus } from '@/lib/services/messages-service'
 
 const updateSchema = z.object({
   status: z.enum(['active', 'archived', 'blocked']),
@@ -11,10 +12,7 @@ const updateSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // PATCH - Mettre à jour le statut d'une conversation
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('users', 'write')
     if (!authResult.success || !authResult.admin) {
@@ -41,10 +39,7 @@ export async function PATCH(
     const supabase = createAdminClient()
     const { status } = result.data
 
-    const { error } = await supabase
-      .from('conversations')
-      .update({ status })
-      .eq('id', id)
+    const { error } = await adminUpdateConversationStatus(supabase, id, status)
 
     if (error) {
       logger.warn('Conversation update failed', { code: error.code, message: error.message })

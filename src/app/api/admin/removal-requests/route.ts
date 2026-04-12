@@ -5,13 +5,16 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
-import { slugify } from '@/lib/utils'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import {
+  listRemovalRequests,
+  approveRemovalRequest,
+  rejectRemovalRequest,
+} from '@/lib/services/claims-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,53 +54,20 @@ export async function GET(request: NextRequest) {
     }
 
     const { status, page, limit } = result.data
-    const offset = (page - 1) * limit
 
-    let query = supabase
-      .from('provider_removal_requests')
-      .select(
-        `
-        id,
-        provider_id,
-        requester_name,
-        requester_email,
-        requester_siret,
-        reason,
-        status,
-        admin_notes,
-        processed_at,
-        processed_by,
-        created_at,
-        provider:provider_id(id, name, slug, stable_id, specialty, address_city)
-      `,
-        { count: 'exact' }
-      )
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const serviceResult = await listRemovalRequests(supabase, { status, page, limit })
 
-    if (status !== 'all') {
-      query = query.eq('status', status)
-    }
-
-    const { data: requests, error, count } = await query
-
-    if (error) {
-      logger.error('Error fetching removal requests', { error })
+    if (!serviceResult.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la recuperation des demandes' } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error } },
+        { status: serviceResult.status }
       )
     }
 
     return NextResponse.json({
       success: true,
-      data: requests,
-      pagination: {
-        page,
-        limit,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limit),
-      },
+      data: serviceResult.data.data,
+      pagination: serviceResult.data.pagination,
     })
   } catch (err) {
     logger.error('Admin removal-requests GET error', { error: err })
@@ -129,7 +99,6 @@ export async function PATCH(request: NextRequest) {
 
     const { requestId, action, adminNotes } = validation.data
     const supabase = createAdminClient()
-    const now = new Date().toISOString()
 
     // Reject requires admin notes
     if (action === 'reject' && !adminNotes?.trim()) {
@@ -139,136 +108,44 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    // Fetch the request
-    const { data: removalRequest, error: fetchError } = await supabase
-      .from('provider_removal_requests')
-      .select('id, provider_id, status, requester_name, requester_email')
-      .eq('id', requestId)
-      .single()
-
-    if (fetchError || !removalRequest) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Demande introuvable' } },
-        { status: 404 }
-      )
-    }
-
-    if (removalRequest.status !== 'pending') {
-      return NextResponse.json(
-        { success: false, error: { message: 'Cette demande a deja ete traitee' } },
-        { status: 409 }
-      )
-    }
-
     if (action === 'approve') {
-      // 1. Update the request status
-      const { error: updateError } = await supabase
-        .from('provider_removal_requests')
-        .update({
-          status: 'approved',
-          admin_notes: adminNotes || null,
-          processed_at: now,
-          processed_by: authResult.admin.id,
-        })
-        .eq('id', requestId)
-
-      if (updateError) {
-        logger.error('Error approving removal request', { requestId, error: updateError })
-        return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de la mise a jour de la demande' } },
-          { status: 500 }
-        )
-      }
-
-      // 2. Deactivate and noindex the provider
-      const { error: providerError } = await supabase
-        .from('providers')
-        .update({
-          is_active: false,
-          noindex: true,
-          updated_at: now,
-        })
-        .eq('id', removalRequest.provider_id)
-
-      if (providerError) {
-        logger.error('Error deactivating provider after removal approval', {
-          requestId,
-          providerId: removalRequest.provider_id,
-          error: providerError,
-        })
-        return NextResponse.json(
-          {
-            success: false,
-            error: { message: `Erreur desactivation fiche: ${providerError.message}` },
-          },
-          { status: 500 }
-        )
-      }
-
-      // 3. Revalidate affected pages (non-blocking)
-      try {
-        const { data: providerInfo } = await supabase
-          .from('providers')
-          .select('specialty, address_city, slug, stable_id')
-          .eq('id', removalRequest.provider_id)
-          .single()
-
-        if (providerInfo) {
-          const serviceSlug = slugify(providerInfo.specialty || 'artisan')
-          const locationSlug = slugify(providerInfo.address_city || 'france')
-          const publicId = providerInfo.slug || providerInfo.stable_id
-
-          if (publicId) {
-            revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-          }
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-          revalidatePath(`/services/${serviceSlug}`, 'page')
-        }
-      } catch (revalError) {
-        logger.error('Revalidation failed after removal approval:', revalError)
-      }
-
-      logger.info('Removal request approved', {
+      const result = await approveRemovalRequest(
+        supabase,
         requestId,
-        providerId: removalRequest.provider_id,
-        adminId: authResult.admin.id,
-        requesterEmail: removalRequest.requester_email,
-      })
+        authResult.admin.id,
+        adminNotes
+      )
+
+      if (!result.success) {
+        return NextResponse.json(
+          { success: false, error: { message: result.error } },
+          { status: result.status }
+        )
+      }
 
       return NextResponse.json({
         success: true,
-        message: 'Demande approuvee. La fiche a ete desactivee et mise en noindex.',
+        message: result.message,
       })
     } else {
-      // Reject
-      const { error: rejectError } = await supabase
-        .from('provider_removal_requests')
-        .update({
-          status: 'rejected',
-          admin_notes: adminNotes,
-          processed_at: now,
-          processed_by: authResult.admin.id,
-        })
-        .eq('id', requestId)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const result = await rejectRemovalRequest(
+        supabase,
+        requestId,
+        authResult.admin.id,
+        adminNotes!
+      )
 
-      if (rejectError) {
-        logger.error('Error rejecting removal request', { requestId, error: rejectError })
+      if (!result.success) {
         return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors du rejet' } },
-          { status: 500 }
+          { success: false, error: { message: result.error } },
+          { status: result.status }
         )
       }
 
-      logger.info('Removal request rejected', {
-        requestId,
-        providerId: removalRequest.provider_id,
-        adminId: authResult.admin.id,
-        adminNotes,
-      })
-
       return NextResponse.json({
         success: true,
-        message: 'Demande rejetee.',
+        message: result.message,
       })
     }
   } catch (err) {

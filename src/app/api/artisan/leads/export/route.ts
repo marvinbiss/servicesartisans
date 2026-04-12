@@ -8,11 +8,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { getProviderForUser, getLeadsForExport, type LeadData } from '@/lib/services/leads-service'
 
 const exportQuerySchema = z.object({
   status: z.string().max(50).optional(),
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
 })
 
 const MAX_EXPORT_ROWS = 5000
@@ -53,17 +60,14 @@ export async function GET(request: NextRequest) {
     if (guardError) return guardError
 
     // Get provider
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) {
       return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .single()
+    const provider = await getProviderForUser(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json({ error: 'Aucun profil artisan trouvé' }, { status: 403 })
@@ -83,83 +87,47 @@ export async function GET(request: NextRequest) {
 
     const { status, from, to } = parsed.data
 
-    // Build query — no pagination, fetch all (capped at MAX_EXPORT_ROWS)
-    let query = supabase
-      .from('lead_assignments')
-      .select(`
-        id,
-        status,
-        assigned_at,
-        lead:devis_requests (
-          id,
-          service_name,
-          city,
-          postal_code,
-          description,
-          client_name,
-          client_email,
-          client_phone,
-          created_at
-        )
-      `)
-      .eq('provider_id', provider.id)
-      .order('assigned_at', { ascending: false })
-      .limit(MAX_EXPORT_ROWS)
-
-    if (status && status !== 'all') {
-      query = query.eq('status', status)
-    }
-
-    if (from) {
-      query = query.gte('assigned_at', `${from}T00:00:00`)
-    }
-
-    if (to) {
-      query = query.lte('assigned_at', `${to}T23:59:59`)
-    }
-
-    const { data: assignments, error: queryError } = await query
-
-    if (queryError) {
-      logger.error('Error exporting leads:', queryError)
-      return NextResponse.json({ error: 'Erreur lors de l\'export' }, { status: 500 })
-    }
+    const assignments = await getLeadsForExport(supabase, provider.id, {
+      status,
+      from,
+      to,
+      limit: MAX_EXPORT_ROWS,
+    })
 
     // Build CSV
-    const headers = ['Date', 'Client', 'Email', 'Téléphone', 'Service', 'Ville', 'Statut', 'Message']
+    const headers = [
+      'Date',
+      'Client',
+      'Email',
+      'Téléphone',
+      'Service',
+      'Ville',
+      'Statut',
+      'Message',
+    ]
     const headerRow = headers.map(csvEscape).join(';')
 
-    interface LeadData {
-      id: string
-      service_name: string
-      city: string | null
-      postal_code: string | null
-      description: string | null
-      client_name: string
-      client_email: string
-      client_phone: string | null
-      created_at: string
-    }
+    const rows = assignments
+      .map((a) => {
+        // Supabase returns the joined row as an object (single FK) but TS types it as array
+        const lead = (Array.isArray(a.lead) ? a.lead[0] : a.lead) as LeadData | null | undefined
 
-    const rows = (assignments || []).map((a) => {
-      // Supabase returns the joined row as an object (single FK) but TS types it as array
-      const lead = (Array.isArray(a.lead) ? a.lead[0] : a.lead) as LeadData | null | undefined
+        if (!lead) return null
 
-      if (!lead) return null
+        const ville = [lead.city, lead.postal_code].filter(Boolean).join(' ')
 
-      const ville = [lead.city, lead.postal_code].filter(Boolean).join(' ')
-
-      return [
-        csvEscape(formatDate(lead.created_at)),
-        csvEscape(lead.client_name),
-        csvEscape(lead.client_email),
-        csvEscape(lead.client_phone),
-        csvEscape(lead.service_name),
-        csvEscape(ville),
-        csvEscape(statusLabel(a.status)),
-        csvEscape(lead.description),
-      ].join(';')
-    }).filter(Boolean)
+        return [
+          csvEscape(formatDate(lead.created_at)),
+          csvEscape(lead.client_name),
+          csvEscape(lead.client_email),
+          csvEscape(lead.client_phone),
+          csvEscape(lead.service_name),
+          csvEscape(ville),
+          csvEscape(statusLabel(a.status)),
+          csvEscape(lead.description),
+        ].join(';')
+      })
+      .filter(Boolean)
 
     const today = new Date().toISOString().slice(0, 10)
     // BOM UTF-8 for Excel + header + rows

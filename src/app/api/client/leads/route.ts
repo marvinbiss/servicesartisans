@@ -9,6 +9,12 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { pageSchema } from '@/lib/validations/schemas'
+import {
+  getDevisRequestsForClient,
+  getLeadEventsForLeads,
+  deriveStatus,
+  STATUS_LABELS,
+} from '@/lib/services/leads-service'
 
 const clientLeadsQuerySchema = z.object({
   page: pageSchema,
@@ -17,45 +23,6 @@ const clientLeadsQuerySchema = z.object({
 })
 
 export const dynamic = 'force-dynamic'
-
-type DerivedStatus =
-  | 'en_attente'
-  | 'en_traitement'
-  | 'devis_recus'
-  | 'accepte'
-  | 'termine'
-  | 'expire'
-  | 'refuse'
-
-function deriveStatus(events: Array<{ event_type: string }>): DerivedStatus {
-  if (events.length === 0) return 'en_attente'
-
-  // Check for terminal states first (scan all events)
-  const types = new Set(events.map((e) => e.event_type))
-  if (types.has('completed')) return 'termine'
-  if (types.has('expired')) return 'expire'
-  if (types.has('accepted')) return 'accepte'
-  if (types.has('refused')) return 'refuse'
-  if (types.has('quoted')) return 'devis_recus'
-  if (
-    types.has('dispatched') ||
-    types.has('viewed') ||
-    types.has('declined') ||
-    types.has('reassigned')
-  )
-    return 'en_traitement'
-  return 'en_attente'
-}
-
-const STATUS_LABELS: Record<DerivedStatus, string> = {
-  en_attente: 'En attente',
-  en_traitement: 'En traitement',
-  devis_recus: 'Devis reçu(s)',
-  accepte: 'Accepté',
-  termine: 'Terminé',
-  expire: 'Expiré',
-  refuse: 'Refusé',
-}
 
 export async function GET(request: NextRequest) {
   try {
@@ -91,23 +58,9 @@ export async function GET(request: NextRequest) {
     const statusFilter = parsed.data.status
 
     // Fetch all devis_requests for this client
-    const { data: demandes, error: demandesError } = await supabase
-      .from('devis_requests')
-      .select(
-        'id, service_name, city, postal_code, description, budget, urgency, status, client_name, created_at'
-      )
-      .eq('client_id', user.id)
-      .order('created_at', { ascending: false })
+    const demandes = await getDevisRequestsForClient(supabase, user.id)
 
-    if (demandesError) {
-      logger.error('Client leads fetch error:', demandesError)
-      return NextResponse.json(
-        { success: false, error: { message: 'Erreur serveur' } },
-        { status: 500 }
-      )
-    }
-
-    if (!demandes || demandes.length === 0) {
+    if (demandes.length === 0) {
       return NextResponse.json({
         leads: [],
         stats: { total: 0, en_attente: 0, en_traitement: 0, devis_recus: 0, termine: 0 },
@@ -118,20 +71,11 @@ export async function GET(request: NextRequest) {
     // Fetch lead_events for all of this client's leads (admin client — RLS is admin-only)
     const adminClient = createAdminClient()
     const leadIds = demandes.map((d) => d.id)
-    const { data: allEvents, error: eventsError } = await adminClient
-      .from('lead_events')
-      .select('lead_id, event_type, created_at')
-      .in('lead_id', leadIds)
-      .order('created_at', { ascending: false })
-
-    if (eventsError) {
-      logger.error('Client lead_events fetch error:', eventsError)
-      // Non-blocking: fall back to devis_requests.status
-    }
+    const allEvents = await getLeadEventsForLeads(adminClient, leadIds)
 
     // Group events by lead_id
     const eventsByLead: Record<string, Array<{ event_type: string; created_at: string }>> = {}
-    for (const event of allEvents || []) {
+    for (const event of allEvents) {
       if (!eventsByLead[event.lead_id]) eventsByLead[event.lead_id] = []
       eventsByLead[event.lead_id].push(event)
     }
@@ -139,7 +83,7 @@ export async function GET(request: NextRequest) {
     // Build enriched leads with derived status + last activity
     const enrichedLeads = demandes.map((d) => {
       const events = eventsByLead[d.id] || []
-      const derivedStatus = deriveStatus(events)
+      const derivedStatusValue = deriveStatus(events)
       const lastActivity = events.length > 0 ? events[0].created_at : d.created_at
 
       return {
@@ -151,8 +95,8 @@ export async function GET(request: NextRequest) {
         budget: d.budget,
         urgency: d.urgency,
         created_at: d.created_at,
-        derived_status: derivedStatus,
-        derived_status_label: STATUS_LABELS[derivedStatus],
+        derived_status: derivedStatusValue,
+        derived_status_label: STATUS_LABELS[derivedStatusValue],
         last_activity: lastActivity,
         event_count: events.length,
       }

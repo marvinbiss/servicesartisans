@@ -11,6 +11,21 @@ import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { notifyNewMessage } from '@/lib/notifications/message-notifications'
 import { sanitizeUserInput } from '@/lib/sanitize'
+import {
+  getConversationById,
+  getMessagesByConversation,
+  markMessagesAsRead,
+  getProviderConversations,
+  getRecentMessagesForConversations,
+  findConversation,
+  createConversation,
+  insertMessage,
+  getProviderByUserId,
+  getConversationClientId,
+  getProfileById,
+  getProviderName,
+  type MessagePreviewRow,
+} from '@/lib/services/messages-service'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
@@ -38,18 +53,17 @@ export async function GET(request: Request) {
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
     const conversationId = result.data.conversation_id
 
     // Get provider linked to this user
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
+    const { data: provider } = await getProviderByUserId(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(
@@ -60,12 +74,9 @@ export async function GET(request: Request) {
 
     if (conversationId) {
       // Verify conversation belongs to this artisan
-      const { data: conversation } = await supabase
-        .from('conversations')
-        .select('id, client_id, provider_id')
-        .eq('id', conversationId)
-        .eq('provider_id', provider.id)
-        .single()
+      const { data: conversation } = await getConversationById(supabase, conversationId, {
+        providerId: provider.id,
+      })
 
       if (!conversation) {
         return NextResponse.json(
@@ -75,11 +86,10 @@ export async function GET(request: Request) {
       }
 
       // Fetch messages for this conversation (explicit columns, no select('*'))
-      const { data: messages, error: messagesError } = await supabase
-        .from('messages')
-        .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true })
+      const { data: messages, error: messagesError } = await getMessagesByConversation(
+        supabase,
+        conversationId
+      )
 
       if (messagesError) {
         logger.error('Error fetching messages:', messagesError)
@@ -90,14 +100,10 @@ export async function GET(request: Request) {
       }
 
       // Mark messages sent by client as read
-      await supabase
-        .from('messages')
-        .update({ read_at: new Date().toISOString() })
-        .eq('conversation_id', conversationId)
-        .eq('sender_type', 'client')
-        .is('read_at', null)
+      await markMessagesAsRead(supabase, conversationId, 'client')
 
-      return NextResponse.json({ messages: messages || [], currentUserId: user!.id })
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return NextResponse.json({ messages, currentUserId: user!.id })
     }
 
     // Bug fix: the Supabase JS client does not support .limit() on nested relation
@@ -109,17 +115,10 @@ export async function GET(request: Request) {
     // group server-side. This caps the messages loaded to convCount × 2 rows.
 
     // Step 1: fetch conversations (no messages embedded)
-    const { data: conversations, error: convsError } = await supabase
-      .from('conversations')
-      .select(`
-        id,
-        client_id,
-        provider_id,
-        created_at,
-        client:profiles!client_id(id, full_name)
-      `)
-      .eq('provider_id', provider.id)
-      .order('created_at', { ascending: false })
+    const { data: conversations, error: convsError } = await getProviderConversations(
+      supabase,
+      provider.id
+    )
 
     if (convsError) {
       logger.error('Error fetching conversations:', convsError)
@@ -129,43 +128,29 @@ export async function GET(request: Request) {
       )
     }
 
-    const convList = conversations || []
+    const convList = conversations
     const convIds = convList.map((c) => c.id)
-
-    type MessageRow = {
-      id: string
-      conversation_id: string
-      content: string
-      created_at: string
-      sender_type: string
-      read_at: string | null
-    }
 
     // Step 2: fetch recent messages for all conversations in one bounded query.
     // Limit to convIds.length * 2 so we have enough rows to determine lastMessage
     // and unread counts, without loading the entire message history.
-    let allMessages: MessageRow[] = []
-    if (convIds.length > 0) {
-      const msgLimit = Math.max(convIds.length * 2, 50)
-      const { data: recentMsgs, error: msgsError } = await supabase
-        .from('messages')
-        .select('id, conversation_id, content, created_at, sender_type, read_at')
-        .in('conversation_id', convIds)
-        .order('created_at', { ascending: false })
-        .limit(msgLimit)
+    const msgLimit = Math.max(convIds.length * 2, 50)
+    const { data: allMessages, error: msgsError } = await getRecentMessagesForConversations(
+      supabase,
+      convIds,
+      msgLimit
+    )
 
-      if (msgsError) {
-        logger.error('Error fetching recent messages:', msgsError)
-        return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de la récupération des messages' } },
-          { status: 500 }
-        )
-      }
-      allMessages = (recentMsgs as MessageRow[]) || []
+    if (msgsError) {
+      logger.error('Error fetching recent messages:', msgsError)
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la récupération des messages' } },
+        { status: 500 }
+      )
     }
 
     // Step 3: group messages by conversation_id server-side
-    const msgsByConv = new Map<string, MessageRow[]>()
+    const msgsByConv = new Map<string, MessagePreviewRow[]>()
     for (const msg of allMessages) {
       const bucket = msgsByConv.get(msg.conversation_id) ?? []
       bucket.push(msg)
@@ -183,7 +168,7 @@ export async function GET(request: Request) {
 
       return {
         id: conv.id,
-        partner: conv.client,
+        partner: (conv as Record<string, unknown>).client,
         lastMessage,
         unreadCount,
       }
@@ -208,18 +193,17 @@ export async function POST(request: Request) {
     const result = sendMessageSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
     const { conversation_id, client_id, content } = result.data
 
     // Get provider linked to this user
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
+    const { data: provider } = await getProviderByUserId(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(
@@ -239,21 +223,18 @@ export async function POST(request: Request) {
         )
       }
 
-      const { data: existingConv } = await supabase
-        .from('conversations')
-        .select('id')
-        .eq('provider_id', provider.id)
-        .eq('client_id', client_id)
-        .single()
+      const { data: existingConv } = await findConversation(supabase, {
+        providerId: provider.id,
+        clientId: client_id,
+      })
 
       if (existingConv) {
         resolvedConversationId = existingConv.id
       } else {
-        const { data: newConv, error: convError } = await supabase
-          .from('conversations')
-          .insert({ provider_id: provider.id, client_id })
-          .select('id')
-          .single()
+        const { data: newConv, error: convError } = await createConversation(supabase, {
+          providerId: provider.id,
+          clientId: client_id,
+        })
 
         if (convError || !newConv) {
           logger.error('Error creating conversation:', convError)
@@ -266,12 +247,9 @@ export async function POST(request: Request) {
       }
     } else {
       // Verify conversation belongs to this artisan
-      const { data: conversation } = await supabase
-        .from('conversations')
-        .select('id')
-        .eq('id', resolvedConversationId)
-        .eq('provider_id', provider.id)
-        .single()
+      const { data: conversation } = await getConversationById(supabase, resolvedConversationId, {
+        providerId: provider.id,
+      })
 
       if (!conversation) {
         return NextResponse.json(
@@ -282,16 +260,13 @@ export async function POST(request: Request) {
     }
 
     // Insert new message
-    const { data: message, error: insertError } = await supabase
-      .from('messages')
-      .insert({
-        conversation_id: resolvedConversationId,
-        sender_id: user.id,
-        sender_type: 'artisan',
-        content: sanitizeUserInput(content),
-      })
-      .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
-      .single()
+    const { data: message, error: insertError } = await insertMessage(supabase, {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      conversationId: resolvedConversationId!,
+      senderId: user.id,
+      senderType: 'artisan',
+      content: sanitizeUserInput(content),
+    })
 
     if (insertError) {
       logger.error('Error sending message:', insertError)
@@ -311,29 +286,17 @@ export async function POST(request: Request) {
         // Resolve client_id from conversation if not provided directly
         let cid = effectiveClientId
         if (!cid && effectiveConvId) {
-          const { data: conv } = await adminSupabase
-            .from('conversations')
-            .select('client_id')
-            .eq('id', effectiveConvId)
-            .single()
+          const { data: conv } = await getConversationClientId(adminSupabase, effectiveConvId)
           cid = conv?.client_id ?? null
         }
         if (!cid) return
 
-        const { data: clientProfile } = await adminSupabase
-          .from('profiles')
-          .select('email, full_name')
-          .eq('id', cid)
-          .single()
+        const { data: clientProfile } = await getProfileById(adminSupabase, cid)
 
         if (!clientProfile?.email) return
 
         // Get artisan name from provider
-        const { data: providerData } = await adminSupabase
-          .from('providers')
-          .select('name')
-          .eq('id', provider.id)
-          .single()
+        const { data: providerData } = await getProviderName(adminSupabase, provider.id)
 
         await notifyNewMessage({
           recipientEmail: clientProfile.email,
@@ -349,7 +312,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message
+      message,
     })
   } catch (error) {
     logger.error('Messages POST error:', error)

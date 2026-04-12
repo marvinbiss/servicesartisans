@@ -4,6 +4,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import { getUserById, updateUser, deleteUser } from '@/lib/services/admin-crud-service'
 
 // PATCH request schema
 const updateUserSchema = z.object({
@@ -24,7 +25,6 @@ export const dynamic = 'force-dynamic'
 // GET - Détails d'un utilisateur
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with users:read permission
     const authResult = await requirePermission('users', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -38,109 +38,16 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
     }
 
     const supabase = createAdminClient()
-    const userId = params.id
+    const serviceResult = await getUserById(supabase, params.id)
 
-    // Get user from Supabase Auth
-    const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(userId)
-
-    if (authError || !authUser.user) {
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Utilisateur non trouvé' } },
-        { status: 404 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
-    const user = authUser.user
-
-    // Try to get profile if table exists
-    let profile: Record<string, unknown> = {}
-    try {
-      const { data } = await supabase
-        .from('profiles')
-        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
-        .eq('id', userId)
-        .single()
-      if (data) profile = data
-    } catch {
-      // profiles table doesn't exist
-    }
-
-    // Get provider data if exists
-    let providerData = null
-    try {
-      const { data: provider } = await supabase
-        .from('providers')
-        .select(
-          'id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at'
-        )
-        .eq('user_id', userId)
-        .maybeSingle()
-      providerData = provider
-    } catch {
-      // No provider or table doesn't exist
-    }
-
-    // Get bookings count (two safe queries instead of string interpolation in .or())
-    let bookingsCount = 0
-    try {
-      const [{ count: providerCount }, { count: clientCount }] = await Promise.all([
-        supabase
-          .from('bookings')
-          .select('id', { count: 'exact', head: true })
-          .eq('provider_id', userId),
-        supabase
-          .from('bookings')
-          .select('id', { count: 'exact', head: true })
-          .eq('client_id', userId),
-      ])
-      bookingsCount = (providerCount || 0) + (clientCount || 0)
-    } catch {
-      // bookings table doesn't exist
-    }
-
-    // Get reviews count (reviews has author_email, not client_id FK to profiles)
-    let reviewsCount = 0
-    try {
-      const clientEmail = user.email
-      if (clientEmail) {
-        const { count } = await supabase
-          .from('reviews')
-          .select('id', { count: 'exact', head: true })
-          .eq('author_email', clientEmail)
-        reviewsCount = count || 0
-      }
-    } catch {
-      // reviews table doesn't exist
-    }
-
-    return NextResponse.json({
-      success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        full_name:
-          profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || null,
-        phone: profile.phone_e164 || user.user_metadata?.phone || null,
-        user_type:
-          profile.role === 'artisan'
-            ? 'artisan'
-            : user.user_metadata?.is_artisan
-              ? 'artisan'
-              : 'client',
-        is_verified: !!user.email_confirmed_at,
-        is_banned: user.banned_until !== null,
-        subscription_plan: null,
-        subscription_status: null,
-        created_at: user.created_at,
-        last_sign_in_at: user.last_sign_in_at,
-        provider: providerData,
-        stats: {
-          bookings: bookingsCount,
-          reviews: reviewsCount,
-        },
-        ...profile,
-      },
-    })
+    return NextResponse.json({ success: true, ...serviceResult.data })
   } catch (error) {
     logger.error('Admin user details error', error)
     return NextResponse.json(
@@ -153,7 +60,6 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 // PATCH - Mettre à jour un utilisateur
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with users:write permission
     const authResult = await requirePermission('users', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -166,8 +72,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       )
     }
 
-    const supabase = createAdminClient()
-    const userId = params.id
     const body = await request.json()
     const result = updateUserSchema.safeParse(body)
     if (!result.success) {
@@ -180,54 +84,19 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       )
     }
 
-    // Update user metadata in Supabase Auth
-    const userMetadataUpdates: Record<string, unknown> = {}
-    if (result.data.full_name !== undefined) userMetadataUpdates.full_name = result.data.full_name
-    if (result.data.phone !== undefined) userMetadataUpdates.phone = result.data.phone
-    if (result.data.user_type !== undefined)
-      userMetadataUpdates.is_artisan = result.data.user_type === 'artisan'
+    const supabase = createAdminClient()
+    const serviceResult = await updateUser(supabase, params.id, result.data)
 
-    if (Object.keys(userMetadataUpdates).length > 0) {
-      const { error: authError } = await supabase.auth.admin.updateUserById(userId, {
-        user_metadata: userMetadataUpdates,
-      })
-      if (authError) {
-        logger.error('Auth update error', authError)
-      }
+    if (serviceResult.error) {
+      return NextResponse.json(
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
+      )
     }
 
-    // Try to update profile if table exists
-    try {
-      // Only include columns that actually exist on profiles table
-      const allowedFields = ['full_name']
+    await logAdminAction(authResult.admin.id, 'user.update', 'user', params.id, result.data)
 
-      const updates: Record<string, unknown> = {}
-      for (const field of allowedFields) {
-        if (field in result.data) {
-          updates[field] = result.data[field as keyof typeof result.data]
-        }
-      }
-      // Sync profiles.role when user_type changes (artisan/client)
-      if (result.data.user_type) {
-        updates.role = result.data.user_type === 'artisan' ? 'artisan' : 'client'
-      }
-      updates.updated_at = new Date().toISOString()
-
-      await supabase.from('profiles').upsert({
-        id: userId,
-        ...updates,
-      })
-    } catch {
-      // profiles table doesn't exist
-    }
-
-    // Log the action
-    await logAdminAction(authResult.admin.id, 'user.update', 'user', userId, result.data)
-
-    return NextResponse.json({
-      success: true,
-      message: 'Utilisateur mis à jour',
-    })
+    return NextResponse.json({ success: true, message: serviceResult.data.message })
   } catch (error) {
     logger.error('Admin user update error', error)
     return NextResponse.json(
@@ -240,7 +109,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 // DELETE - Supprimer un utilisateur
 export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with users:delete permission
     const authResult = await requirePermission('users', 'delete')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -253,51 +121,19 @@ export async function DELETE(_request: NextRequest, { params }: { params: { id: 
       )
     }
 
+    await logAdminAction(authResult.admin.id, 'user.delete', 'user', params.id)
+
     const supabase = createAdminClient()
-    const userId = params.id
+    const serviceResult = await deleteUser(supabase, params.id)
 
-    // Log the deletion first
-    await logAdminAction(authResult.admin.id, 'user.delete', 'user', userId)
-
-    // Ban the user instead of hard delete (safer)
-    const { error: banError } = await supabase.auth.admin.updateUserById(userId, {
-      ban_duration: '876000h', // ~100 years
-    })
-
-    if (banError) {
-      logger.error('User ban error', banError)
-      throw banError
+    if (serviceResult.error) {
+      return NextResponse.json(
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
+      )
     }
 
-    // Try to update profiles table if exists (only columns that exist)
-    try {
-      await supabase
-        .from('profiles')
-        .update({
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', userId)
-    } catch {
-      // profiles table doesn't exist
-    }
-
-    // Deactivate provider if exists
-    try {
-      await supabase
-        .from('providers')
-        .update({
-          is_active: false,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('user_id', userId)
-    } catch {
-      // providers table doesn't exist or no provider
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Utilisateur supprimé',
-    })
+    return NextResponse.json({ success: true, message: serviceResult.data.message })
   } catch (error) {
     logger.error('Admin user delete error', error)
     return NextResponse.json(

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { pageSchema } from '@/lib/validations/schemas'
+import { getAuditLogs } from '@/lib/services/admin-stats-service'
 
 // GET query params schema (custom limit default=50 for audit logs)
 const auditQuerySchema = z.object({
@@ -28,8 +28,6 @@ export async function GET(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = createAdminClient()
-
     const searchParams = request.nextUrl.searchParams
     const queryParams = {
       page: searchParams.get('page') || '1',
@@ -50,87 +48,12 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { page, limit, action, entityType, adminId, dateFrom, dateTo } = result.data
 
-    const offset = (page - 1) * limit
-
-    let query = supabase.from('audit_logs').select('*', { count: 'exact' })
-
-    // Filtres
-    if (action !== 'all') {
-      const sanitizedAction = sanitizeSearchQuery(action)
-      if (sanitizedAction) {
-        query = query.ilike('action', `%${sanitizedAction}%`)
-      }
-    }
-
-    if (entityType !== 'all') {
-      query = query.eq('resource_type', entityType)
-    }
-
-    if (adminId) {
-      query = query.eq('user_id', adminId)
-    }
-
-    if (dateFrom) {
-      query = query.gte('created_at', dateFrom)
-    }
-
-    if (dateTo) {
-      query = query.lte('created_at', dateTo)
-    }
-
-    const {
-      data: logs,
-      count,
-      error,
-    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
-
-    if (error) {
-      logger.warn('Audit logs query failed, returning empty list', {
-        code: error.code,
-        message: error.message,
-      })
-      return NextResponse.json({
-        success: true,
-        logs: [],
-        total: 0,
-        page,
-        totalPages: 0,
-      })
-    }
-
-    // Enrich logs with admin profile info (audit_logs.user_id -> profiles.id)
-    const enrichedLogs = logs || []
-    const userIds = Array.from(new Set(enrichedLogs.map((l) => l.user_id).filter(Boolean)))
-    const profilesMap = new Map<string, { email: string; full_name: string | null }>()
-
-    if (userIds.length > 0) {
-      try {
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('id, email, full_name')
-          .in('id', userIds)
-
-        if (profiles) {
-          profiles.forEach((p) => profilesMap.set(p.id, { email: p.email, full_name: p.full_name }))
-        }
-      } catch {
-        // profiles table may not exist, continue without enrichment
-      }
-    }
-
-    const logsWithAdmin = enrichedLogs.map((log) => ({
-      ...log,
-      admin: log.user_id ? profilesMap.get(log.user_id) || null : null,
-    }))
+    const auditResult = await getAuditLogs(result.data, sanitizeSearchQuery)
 
     return NextResponse.json({
       success: true,
-      logs: logsWithAdmin,
-      total: count || 0,
-      page,
-      totalPages: Math.ceil((count || 0) / limit),
+      ...auditResult,
     })
   } catch (error) {
     logger.error('Admin audit logs error', error)

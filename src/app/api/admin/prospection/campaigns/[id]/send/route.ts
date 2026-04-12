@@ -4,13 +4,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { enqueueCampaignMessages, processBatch } from '@/lib/prospection/message-queue'
+import { getCampaignStatus } from '@/lib/services/prospection-service'
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'send')
     if (!authResult.success || !authResult.admin) return authResult.error
@@ -24,14 +22,22 @@ export async function POST(
     }
 
     const supabase = createAdminClient()
-    const { data: campaign } = await supabase.from('prospection_campaigns').select('id, status').eq('id', id).single()
+    const { data: campaign } = await getCampaignStatus(supabase, id)
     if (!campaign) {
-      return NextResponse.json({ success: false, error: { message: 'Campagne introuvable' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Campagne introuvable' } },
+        { status: 404 }
+      )
     }
 
     if (!['draft', 'scheduled'].includes(campaign.status)) {
       return NextResponse.json(
-        { success: false, error: { message: `Impossible d'envoyer une campagne avec le statut "${campaign.status}"` } },
+        {
+          success: false,
+          error: {
+            message: `Impossible d'envoyer une campagne avec le statut "${campaign.status}"`,
+          },
+        },
         { status: 400 }
       )
     }

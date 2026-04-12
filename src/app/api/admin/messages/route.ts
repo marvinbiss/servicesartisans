@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { adminListConversations } from '@/lib/services/messages-service'
 
 // GET query params schema
 const messagesQuerySchema = paginationSchema.extend({
@@ -41,29 +42,11 @@ export async function GET(request: NextRequest) {
     }
     const { page, limit } = result.data
 
-    const offset = (page - 1) * limit
-
-    const query = supabase.from('conversations').select(
-      `
-        *,
-        client:profiles!client_id (
-          id,
-          email,
-          full_name
-        ),
-        provider:providers!provider_id (
-          id,
-          name
-        )
-      `,
-      { count: 'exact' }
-    )
-
     const {
       data: conversations,
       count,
       error,
-    } = await query.order('last_message_at', { ascending: false }).range(offset, offset + limit - 1)
+    } = await adminListConversations(supabase, { page, limit })
 
     if (error) {
       // If the conversations table doesn't exist or FK fails, return empty
@@ -79,10 +62,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      conversations: conversations || [],
-      total: count || 0,
+      conversations,
+      total: count,
       page,
-      totalPages: Math.ceil((count || 0) / limit),
+      totalPages: Math.ceil(count / limit),
     })
   } catch (error) {
     logger.error('Admin messages list error', error)

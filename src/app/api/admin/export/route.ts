@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { exportData, type ExportType } from '@/lib/services/admin-stats-service'
 
 // GET query params schema
 const exportQuerySchema = z.object({
@@ -21,7 +21,6 @@ export async function GET(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = createAdminClient()
     const url = new URL(request.url)
     const queryParams = {
       type: url.searchParams.get('type') || 'providers',
@@ -39,45 +38,7 @@ export async function GET(request: NextRequest) {
     }
     const { type, format } = result.data
 
-    let data: unknown[]
-    let filename: string
-
-    switch (type) {
-      case 'providers': {
-        const { data: providers } = await supabase
-          .from('providers')
-          .select('id, slug, name, address_city, phone, email, is_active, created_at')
-          .order('created_at', { ascending: false })
-        data = providers || []
-        filename = 'providers'
-        break
-      }
-      case 'quotes': {
-        // quotes table columns: id, request_id, provider_id, amount, description, valid_until, status
-        // client_name and client_email do not exist on quotes; join with devis_requests for client info if needed
-        const { data: quotes } = await supabase
-          .from('quotes')
-          .select('id, request_id, provider_id, amount, description, valid_until, status')
-          .order('status', { ascending: true })
-        data = quotes || []
-        filename = 'quotes'
-        break
-      }
-      case 'reviews': {
-        const { data: reviews } = await supabase
-          .from('reviews')
-          .select('id, provider_id, author_name, rating, content, status, created_at')
-          .order('created_at', { ascending: false })
-        data = reviews || []
-        filename = 'reviews'
-        break
-      }
-      default:
-        return NextResponse.json(
-          { success: false, error: { message: "Type d'export invalide" } },
-          { status: 400 }
-        )
-    }
+    const { data, filename } = await exportData(type as ExportType)
 
     // Log d'audit pour l'export de données
     await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, {

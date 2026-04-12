@@ -5,9 +5,9 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { getEstimationLeads, deleteEstimationLead } from '@/lib/services/admin-stats-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,82 +35,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { page, limit, source, search, metier, from, to } = parsed.data
-    const offset = (page - 1) * limit
-    const supabase = createAdminClient()
-
-    // Build query
-    let query = supabase
-      .from('estimation_leads')
-      .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false })
-
-    if (source !== 'all') {
-      query = query.eq('source', source)
-    }
-
-    if (search) {
-      query = query.or(
-        `telephone.ilike.%${search}%,nom.ilike.%${search}%,email.ilike.%${search}%,ville.ilike.%${search}%`
-      )
-    }
-
-    if (metier) {
-      query = query.ilike('metier', `%${metier}%`)
-    }
-
-    if (from) {
-      query = query.gte('created_at', from)
-    }
-
-    if (to) {
-      query = query.lte('created_at', `${to}T23:59:59.999Z`)
-    }
-
-    const { data, error, count } = await query.range(offset, offset + limit - 1)
-
-    if (error) {
-      return NextResponse.json(
-        { error: 'Erreur base de données', details: error.message },
-        { status: 500 }
-      )
-    }
-
-    // Stats query (total, today, by source)
-    const now = new Date()
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
-
-    const [totalRes, todayRes, chatRes, callbackRes] = await Promise.all([
-      supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
-      supabase
-        .from('estimation_leads')
-        .select('id', { count: 'exact', head: true })
-        .gte('created_at', todayStart),
-      supabase
-        .from('estimation_leads')
-        .select('id', { count: 'exact', head: true })
-        .eq('source', 'chat'),
-      supabase
-        .from('estimation_leads')
-        .select('id', { count: 'exact', head: true })
-        .eq('source', 'callback'),
-    ])
+    const result = await getEstimationLeads(parsed.data)
 
     return NextResponse.json({
       success: true,
-      data: data ?? [],
-      pagination: {
-        page,
-        limit,
-        total: count ?? 0,
-        totalPages: Math.ceil((count ?? 0) / limit),
-      },
-      stats: {
-        total: totalRes.count ?? 0,
-        today: todayRes.count ?? 0,
-        chat: chatRes.count ?? 0,
-        callback: callbackRes.count ?? 0,
-      },
+      ...result,
     })
   } catch {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
@@ -128,15 +57,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'ID requis' }, { status: 400 })
     }
 
-    const supabase = createAdminClient()
-    const { error } = await supabase.from('estimation_leads').delete().eq('id', id)
-
-    if (error) {
-      return NextResponse.json(
-        { error: 'Erreur suppression', details: error.message },
-        { status: 500 }
-      )
-    }
+    await deleteEstimationLead(id)
 
     return NextResponse.json({ success: true })
   } catch {

@@ -11,6 +11,11 @@
 import { NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
+import {
+  getArtisanBookingsForMonth,
+  getAvailableSlotsForArtisanMonth,
+  extractSlotFromJoin,
+} from '@/lib/services/bookings-service'
 import { z } from 'zod'
 
 const querySchema = z.object({
@@ -47,26 +52,13 @@ export async function GET(request: Request) {
     const endStr = endDate.toISOString().split('T')[0]
 
     // Récupérer les bookings qui ont un slot dans ce mois
-    // On joint avec availability_slots pour obtenir la date et les heures
-    const { data: bookings, error: dbError } = await supabase
-      .from('bookings')
-      .select(`
-        id,
-        client_name,
-        client_email,
-        client_phone,
-        service_description,
-        status,
-        created_at,
-        slot:availability_slots!slot_id (
-          id,
-          date,
-          start_time,
-          end_time
-        )
-      `)
-      .eq('artisan_id', user!.id)
-      .in('status', ['confirmed', 'pending', 'completed'])
+    const { data: bookings, error: dbError } = await getArtisanBookingsForMonth(
+      supabase,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      user!.id,
+      startStr,
+      endStr
+    )
 
     if (dbError) {
       logger.error('Error fetching artisan bookings', { error: dbError })
@@ -79,16 +71,13 @@ export async function GET(request: Request) {
     // Filtrer par date du slot dans le mois demandé
     type SlotData = { id: string; date: string; start_time: string; end_time: string }
     const filtered = (bookings ?? [])
-      .filter(b => {
-        const slot = b.slot as unknown as SlotData | SlotData[] | null
-        if (!slot) return false
-        const slotObj = Array.isArray(slot) ? slot[0] : slot
-        if (!slotObj?.date) return false
-        return slotObj.date >= startStr && slotObj.date <= endStr
+      .filter((b) => {
+        const slot = extractSlotFromJoin(b.slot as SlotData | SlotData[] | null)
+        if (!slot?.date) return false
+        return slot.date >= startStr && slot.date <= endStr
       })
-      .map(b => {
-        const slot = b.slot as unknown as SlotData | SlotData[] | null
-        const slotObj = slot ? (Array.isArray(slot) ? slot[0] : slot) : null
+      .map((b) => {
+        const slot = extractSlotFromJoin(b.slot as SlotData | SlotData[] | null)
         return {
           id: b.id,
           client_name: b.client_name,
@@ -96,9 +85,9 @@ export async function GET(request: Request) {
           client_phone: b.client_phone,
           service_description: b.service_description,
           status: b.status,
-          date: slotObj?.date ?? null,
-          start_time: slotObj?.start_time ?? null,
-          end_time: slotObj?.end_time ?? null,
+          date: slot?.date ?? null,
+          start_time: slot?.start_time ?? null,
+          end_time: slot?.end_time ?? null,
         }
       })
       .sort((a, b) => {
@@ -109,15 +98,13 @@ export async function GET(request: Request) {
       })
 
     // ─── Récupérer les créneaux de disponibilité du mois ──────────────
-    const { data: availabilitySlots, error: slotsError } = await supabase
-      .from('availability_slots')
-      .select('id, date, start_time, end_time, is_available')
-      .eq('artisan_id', user!.id)
-      .gte('date', startStr)
-      .lte('date', endStr)
-      .eq('is_available', true)
-      .order('date', { ascending: true })
-      .order('start_time', { ascending: true })
+    const { data: availabilitySlots, error: slotsError } = await getAvailableSlotsForArtisanMonth(
+      supabase,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      user!.id,
+      startStr,
+      endStr
+    )
 
     if (slotsError) {
       logger.warn('Error fetching availability slots (non-blocking)', { error: slotsError })
@@ -125,7 +112,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       bookings: filtered,
-      availabilitySlots: (availabilitySlots ?? []).map(s => ({
+      availabilitySlots: (availabilitySlots ?? []).map((s) => ({
         id: s.id,
         date: s.date,
         start_time: s.start_time,
@@ -134,9 +121,6 @@ export async function GET(request: Request) {
     })
   } catch (err) {
     logger.error('Unexpected error in GET /api/artisan/bookings', { error: err })
-    return NextResponse.json(
-      { error: 'Erreur interne du serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur interne du serveur' }, { status: 500 })
   }
 }

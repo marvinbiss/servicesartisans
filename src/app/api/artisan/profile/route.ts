@@ -10,6 +10,12 @@ import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
 import { z } from 'zod'
+import {
+  getProfileById,
+  getProviderForProfile,
+  updateProfileById,
+  updateProviderByUserId,
+} from '@/lib/services/artisan-profile-service'
 
 // PUT request schema — only columns that actually exist
 // profiles: full_name
@@ -34,11 +40,8 @@ export async function GET() {
     if (guardError) return guardError
 
     // Fetch profile with explicit column list (profiles table)
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id, email, full_name, role, average_rating, review_count')
-      .eq('id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: profile, error: profileError } = await getProfileById(supabase, user!.id)
 
     if (profileError) {
       logger.error('Error fetching profile:', profileError)
@@ -49,21 +52,18 @@ export async function GET() {
     }
 
     // Fetch associated provider data
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, address_region, specialty, rating_average, review_count, is_verified, is_active')
-      .eq('user_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: provider } = await getProviderForProfile(supabase, user!.id)
 
-    return NextResponse.json({ profile, provider }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      { profile, provider },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Profile GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -98,12 +98,12 @@ export async function PUT(request: Request) {
 
     let profile = null
     if (Object.keys(profileUpdate).length > 0) {
-      const { data, error: updateError } = await supabase
-        .from('profiles')
-        .update(profileUpdate)
-        .eq('id', user!.id)
-        .select('id, email, full_name, role, average_rating, review_count')
-        .single()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const { data, error: updateError } = await updateProfileById(
+        supabase,
+        user!.id,
+        profileUpdate
+      )
 
       if (updateError) {
         logger.error('Error updating profile:', updateError)
@@ -127,12 +127,12 @@ export async function PUT(request: Request) {
 
     let provider = null
     if (Object.keys(providerUpdate).length > 0) {
-      const { data, error: providerError } = await supabase
-        .from('providers')
-        .update(providerUpdate)
-        .eq('user_id', user!.id)
-        .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, specialty, stable_id, is_verified, is_active')
-        .single()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const { data, error: providerError } = await updateProviderByUserId(
+        supabase,
+        user!.id,
+        providerUpdate
+      )
 
       if (providerError) {
         logger.error('Error updating provider:', providerError)
@@ -174,19 +174,19 @@ export async function PUT(request: Request) {
       }
     }
 
-    return NextResponse.json({
-      success: true,
-      profile,
-      provider,
-      message: 'Profil mis à jour avec succès'
-    }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        profile,
+        provider,
+        message: 'Profil mis à jour avec succès',
+      },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Profile PUT error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

@@ -7,6 +7,11 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import {
+  getActiveProviderIdByUserId,
+  getReviewsByProviderId,
+  getReviewRatings,
+} from '@/lib/services/artisan-profile-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,13 +27,7 @@ export async function GET(request: Request) {
     }
 
     // Resolve provider.id from user.id (reviews.provider_id → providers.id)
-    const { data: providerRow } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .limit(1)
-      .maybeSingle()
+    const { data: providerRow } = await getActiveProviderIdByUserId(supabase, user.id)
 
     const providerId = providerRow?.id
     if (!providerId) {
@@ -83,15 +82,7 @@ export async function GET(request: Request) {
       data: reviews,
       error: reviewsError,
       count,
-    } = await supabase
-      .from('reviews')
-      .select(
-        'id, provider_id, rating, content, reply, reply_date, author_name, booking_id, created_at, updated_at',
-        { count: 'exact' }
-      )
-      .eq('provider_id', providerId)
-      .order(orderColumn, { ascending })
-      .range(from, to)
+    } = await getReviewsByProviderId(supabase, providerId, { orderColumn, ascending, from, to })
 
     if (reviewsError) {
       logger.error('Error fetching reviews:', reviewsError)
@@ -105,10 +96,7 @@ export async function GET(request: Request) {
     const totalPages = Math.ceil(total / limit)
 
     // Calcul des stats via une seule requête (GROUP BY côté JS)
-    const { data: allRatings, error: ratingsError } = await supabase
-      .from('reviews')
-      .select('rating')
-      .eq('provider_id', providerId)
+    const { data: allRatings, error: ratingsError } = await getReviewRatings(supabase, providerId)
 
     let stats
     if (ratingsError) {
@@ -119,7 +107,7 @@ export async function GET(request: Request) {
       }
     } else {
       const ratingCounts = [0, 0, 0, 0, 0] // index 0 = rating 1, index 4 = rating 5
-      for (const row of allRatings) {
+      for (const row of allRatings || []) {
         const r = row.rating
         if (r >= 1 && r <= 5) ratingCounts[r - 1]++
       }

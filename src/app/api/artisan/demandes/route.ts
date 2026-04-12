@@ -7,6 +7,12 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
+import {
+  getProviderIdMaybeSingle,
+  getLeadAssignmentsByProviderId,
+  getDevisRequestStatusByIds,
+  getDevisRequestsByIds,
+} from '@/lib/services/artisan-profile-service'
 
 // GET query params schema
 const demandesQuerySchema = z.object({
@@ -34,37 +40,37 @@ export async function GET(request: Request) {
     const { status } = result.data
 
     // Resolve provider for this artisan
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user!.id)
-      .maybeSingle()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: provider } = await getProviderIdMaybeSingle(supabase, user!.id)
 
     if (!provider) {
-      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } }, {
-        headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-      })
+      return NextResponse.json(
+        { demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } },
+        {
+          headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+        }
+      )
     }
 
     // Get lead IDs assigned to this provider via lead_assignments
-    const { data: assignments } = await supabase
-      .from('lead_assignments')
-      .select('lead_id')
-      .eq('provider_id', provider.id)
+    const { data: assignments } = await getLeadAssignmentsByProviderId(supabase, provider.id)
 
-    const leadIds = (assignments || []).map(a => a.lead_id)
+    const leadIds = (assignments || []).map((a) => a.lead_id)
 
     if (leadIds.length === 0) {
-      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } }, {
-        headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-      })
+      return NextResponse.json(
+        { demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } },
+        {
+          headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+        }
+      )
     }
 
     // Fetch ALL devis_requests assigned to this provider (unfiltered) for accurate stats
-    const { data: allDemandes, error: allDemandesError } = await supabase
-      .from('devis_requests')
-      .select('id, status')
-      .in('id', leadIds)
+    const { data: allDemandes, error: allDemandesError } = await getDevisRequestStatusByIds(
+      supabase,
+      leadIds
+    )
 
     if (allDemandesError) {
       logger.error('Error fetching demandes for stats:', allDemandesError)
@@ -77,25 +83,18 @@ export async function GET(request: Request) {
     // Stats calculated on ALL demandes (not filtered by status)
     const stats = {
       total: allDemandes?.length || 0,
-      nouveau: allDemandes?.filter(d => d.status === 'pending').length || 0,
-      devis_envoye: allDemandes?.filter(d => d.status === 'sent').length || 0,
-      accepte: allDemandes?.filter(d => d.status === 'accepted').length || 0,
-      refuse: allDemandes?.filter(d => d.status === 'refused').length || 0,
+      nouveau: allDemandes?.filter((d) => d.status === 'pending').length || 0,
+      devis_envoye: allDemandes?.filter((d) => d.status === 'sent').length || 0,
+      accepte: allDemandes?.filter((d) => d.status === 'accepted').length || 0,
+      refuse: allDemandes?.filter((d) => d.status === 'refused').length || 0,
     }
 
     // Fetch only devis_requests assigned to this provider, filtered by status if requested
-    let query = supabase
-      .from('devis_requests')
-      .select('id, client_id, service_id, service_name, postal_code, city, description, budget, urgency, status, client_name, client_email, client_phone, created_at, updated_at')
-      .in('id', leadIds)
-      .order('created_at', { ascending: false })
-
-    // Filter by status if provided
-    if (status && status !== 'all') {
-      query = query.eq('status', status)
-    }
-
-    const { data: demandes, error: demandesError } = await query
+    const { data: demandes, error: demandesError } = await getDevisRequestsByIds(
+      supabase,
+      leadIds,
+      status
+    )
 
     if (demandesError) {
       logger.error('Error fetching demandes:', demandesError)
@@ -105,17 +104,17 @@ export async function GET(request: Request) {
       )
     }
 
-    return NextResponse.json({
-      demandes: demandes || [],
-      stats
-    }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      {
+        demandes: demandes || [],
+        stats,
+      },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Demandes GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

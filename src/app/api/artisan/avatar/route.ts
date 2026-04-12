@@ -9,6 +9,10 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
+import {
+  getProviderForAvatar,
+  updateProviderAvatarUrl,
+} from '@/lib/services/artisan-profile-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,13 +55,9 @@ function storagePathFromUrl(url: string, bucket: string): string | null {
  */
 function validateMagicBytes(bytes: Uint8Array): boolean {
   // JPEG: FF D8 FF
-  const isJpeg = bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF
+  const isJpeg = bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff
   // PNG: 89 50 4E 47
-  const isPng =
-    bytes[0] === 0x89 &&
-    bytes[1] === 0x50 &&
-    bytes[2] === 0x4E &&
-    bytes[3] === 0x47
+  const isPng = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47
   // WebP: bytes 8–11 = W E B P (requires at least 12 bytes)
   const isWebp =
     bytes.length >= 12 &&
@@ -78,17 +78,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (guardError) return guardError
 
   // Récupérer le provider lié à cet utilisateur
-  const { data: provider, error: providerError } = await supabase
-    .from('providers')
-    .select('id, avatar_url')
-    .eq('user_id', user!.id)
-    .single()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user!.id)
 
   if (providerError || !provider) {
-    return NextResponse.json(
-      { error: 'Profil artisan introuvable.' },
-      { status: 404 }
-    )
+    return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
   }
 
   // Parser le FormData et extraire le fichier
@@ -104,10 +98,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   const file = formData.get('file')
   if (!(file instanceof File)) {
-    return NextResponse.json(
-      { error: 'Champ "file" manquant ou invalide.' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Champ "file" manquant ou invalide.' }, { status: 400 })
   }
 
   // Valider le type MIME déclaré et la taille
@@ -134,10 +125,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const bytes = new Uint8Array(buffer)
 
   if (!validateMagicBytes(bytes)) {
-    return NextResponse.json(
-      { error: 'Format de fichier invalide' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Format de fichier invalide' }, { status: 400 })
   }
 
   // Créer un Blob depuis le buffer validé (pas le File original) pour l'upload Storage.
@@ -156,6 +144,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   // Uploader le nouveau fichier dans Storage (fileBlob, pas file)
   const ext = extensionFromMime(file.type)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const storagePath = `${user!.id}/avatar.${ext}`
 
   const { error: uploadError } = await supabase.storage
@@ -170,23 +159,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   // Obtenir l'URL publique
-  const { data: publicUrlData } = supabase.storage
-    .from('avatars')
-    .getPublicUrl(storagePath)
+  const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(storagePath)
 
   const publicUrl = publicUrlData.publicUrl
 
   // Mettre à jour la colonne avatar_url dans providers
-  const { error: updateError } = await supabase
-    .from('providers')
-    .update({ avatar_url: publicUrl })
-    .eq('user_id', user!.id)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { error: updateError } = await updateProviderAvatarUrl(supabase, user!.id, publicUrl)
 
   if (updateError) {
-    return NextResponse.json(
-      { error: `Échec de la mise à jour du profil: ${updateError.message}` },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
   }
 
   // Retourner l'URL publique
@@ -202,26 +184,17 @@ export async function DELETE(): Promise<NextResponse> {
   if (guardError) return guardError
 
   // Récupérer le provider et son avatar_url actuel
-  const { data: provider, error: providerError } = await supabase
-    .from('providers')
-    .select('id, avatar_url')
-    .eq('user_id', user!.id)
-    .single()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user!.id)
 
   if (providerError || !provider) {
-    return NextResponse.json(
-      { error: 'Profil artisan introuvable.' },
-      { status: 404 }
-    )
+    return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
   }
 
   const currentAvatarUrl = provider.avatar_url as string | null
 
   if (!currentAvatarUrl) {
-    return NextResponse.json(
-      { error: 'Aucun avatar à supprimer.' },
-      { status: 404 }
-    )
+    return NextResponse.json({ error: 'Aucun avatar à supprimer.' }, { status: 404 })
   }
 
   // Bug 2 fix: si storagePathFromUrl retourne null, on ne peut pas localiser le
@@ -236,9 +209,7 @@ export async function DELETE(): Promise<NextResponse> {
     )
   }
 
-  const { error: removeError } = await supabase.storage
-    .from('avatars')
-    .remove([storagePath])
+  const { error: removeError } = await supabase.storage.from('avatars').remove([storagePath])
 
   if (removeError) {
     return NextResponse.json(
@@ -248,16 +219,11 @@ export async function DELETE(): Promise<NextResponse> {
   }
 
   // Mettre avatar_url à NULL dans providers (uniquement après suppression réussie)
-  const { error: updateError } = await supabase
-    .from('providers')
-    .update({ avatar_url: null })
-    .eq('user_id', user!.id)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { error: updateError } = await updateProviderAvatarUrl(supabase, user!.id, null)
 
   if (updateError) {
-    return NextResponse.json(
-      { error: `Échec de la mise à jour du profil: ${updateError.message}` },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
   }
 
   // Retourner succès

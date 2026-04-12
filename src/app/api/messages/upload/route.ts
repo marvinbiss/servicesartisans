@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { insertMessageAttachment } from '@/lib/services/messages-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,10 +38,15 @@ const ALLOWED_TYPES = [
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     const formData = await request.formData()
@@ -54,7 +60,10 @@ export async function POST(request: NextRequest) {
 
     if (!metadataValidation.success) {
       return NextResponse.json(
-        { success: false, error: { message: metadataValidation.error.issues[0]?.message || 'Parametres invalides' } },
+        {
+          success: false,
+          error: { message: metadataValidation.error.issues[0]?.message || 'Parametres invalides' },
+        },
         { status: 400 }
       )
     }
@@ -103,15 +112,15 @@ export async function POST(request: NextRequest) {
     if (uploadError) {
       logger.error('File upload error', uploadError)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de l\'upload' } },
+        { success: false, error: { message: "Erreur lors de l'upload" } },
         { status: 500 }
       )
     }
 
     // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from('messages')
-      .getPublicUrl(uploadData.path)
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('messages').getPublicUrl(uploadData.path)
 
     // Create thumbnail for images
     let thumbnailUrl: string | null = null
@@ -122,16 +131,14 @@ export async function POST(request: NextRequest) {
 
     // If messageId provided, create attachment record
     if (messageId) {
-      const { error: attachmentError } = await supabase
-        .from('message_attachments')
-        .insert({
-          message_id: messageId,
-          file_url: publicUrl,
-          file_name: file.name,
-          file_size: file.size,
-          mime_type: file.type,
-          thumbnail_url: thumbnailUrl,
-        })
+      const { error: attachmentError } = await insertMessageAttachment(supabase, {
+        messageId,
+        fileUrl: publicUrl,
+        fileName: file.name,
+        fileSize: file.size,
+        mimeType: file.type,
+        thumbnailUrl,
+      })
 
       if (attachmentError) {
         logger.error('Attachment record error', attachmentError)

@@ -4,6 +4,12 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import {
+  listMembers,
+  addMembers,
+  removeMembers,
+  buildPagination,
+} from '@/lib/services/prospection-service'
 
 const addMembersSchema = z.object({
   contact_ids: z.array(z.string().uuid()).min(1).max(1000),
@@ -11,10 +17,7 @@ const addMembersSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'read')
     if (!authResult.success) return authResult.error
@@ -32,35 +35,32 @@ export async function GET(
     const rawLimit = parseInt(request.nextUrl.searchParams.get('limit') || '20')
     const page = isNaN(rawPage) || rawPage < 1 ? 1 : rawPage
     const limit = isNaN(rawLimit) || rawLimit < 1 ? 20 : Math.min(rawLimit, 100)
-    const offset = (page - 1) * limit
 
-    const { data, count, error } = await supabase
-      .from('prospection_list_members')
-      .select('*, contact:prospection_contacts(*)', { count: 'exact' })
-      .eq('list_id', id)
-      .order('added_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const { data, count, error } = await listMembers(supabase, id, { page, limit })
 
     if (error) {
       logger.error('List members error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la récupération des données' } },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({
       success: true,
       data,
-      pagination: { page, pageSize: limit, total: count || 0, totalPages: Math.ceil((count || 0) / limit) },
+      pagination: buildPagination(page, limit, count || 0),
     })
   } catch (error) {
     logger.error('Members GET error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
@@ -78,34 +78,36 @@ export async function POST(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
 
     const supabase = createAdminClient()
-    const members = parsed.data.contact_ids.map(contact_id => ({
-      list_id: id,
-      contact_id,
-    }))
-
-    const { error } = await supabase
-      .from('prospection_list_members')
-      .upsert(members, { onConflict: 'list_id,contact_id' })
+    const { error } = await addMembers(supabase, id, parsed.data.contact_ids)
 
     if (error) {
       logger.error('Add members error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la création' } },
+        { status: 500 }
+      )
     }
 
     await logAdminAction(authResult.admin.id, 'list.add_members', 'prospection_list', id, {
-      member_count: members.length,
+      member_count: parsed.data.contact_ids.length,
     })
 
-    return NextResponse.json({ success: true, data: { added: members.length } })
+    return NextResponse.json({ success: true, data: { added: parsed.data.contact_ids.length } })
   } catch (error) {
     logger.error('Members POST error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -134,21 +136,23 @@ export async function DELETE(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
 
     const supabase = createAdminClient()
-    const { error } = await supabase
-      .from('prospection_list_members')
-      .delete()
-      .eq('list_id', id)
-      .in('contact_id', parsed.data.contact_ids)
+    const { error } = await removeMembers(supabase, id, parsed.data.contact_ids)
 
     if (error) {
       logger.error('Remove members error', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la suppression' } },
+        { status: 500 }
+      )
     }
 
     await logAdminAction(authResult.admin.id, 'list.remove_members', 'prospection_list', id, {
@@ -158,6 +162,9 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Members DELETE error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

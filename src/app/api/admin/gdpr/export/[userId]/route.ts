@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
+import { adminExportUserData } from '@/lib/services/gdpr-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,46 +27,25 @@ export async function POST(_request: NextRequest, { params }: { params: { userId
     const supabase = createAdminClient()
     const userId = params.userId
 
-    // Récupérer toutes les données de l'utilisateur
-    const [{ data: profile }, { data: bookings }, { data: userProvider }] = await Promise.all([
-      supabase
-        .from('profiles')
-        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
-        .eq('id', userId)
-        .single(),
-      supabase
-        .from('bookings')
-        .select('id, provider_id, client_id, status, scheduled_date, notes, created_at')
-        .or(`provider_id.eq.${userId},client_id.eq.${userId}`),
-      supabase.from('providers').select('id').eq('user_id', userId).maybeSingle(),
-    ])
+    const result = await adminExportUserData(supabase, userId)
 
-    const { data: reviews } = userProvider?.id
-      ? await supabase
-          .from('reviews')
-          .select(
-            'id, booking_id, provider_id, author_name, author_email, rating, content, status, created_at'
-          )
-          .eq('provider_id', userProvider.id)
-      : { data: [] }
-
-    const exportData = {
-      profile,
-      bookings: bookings || [],
-      reviews: reviews || [],
-      // La table conversations n'est pas disponible dans ce contexte d'export.
-      conversations: null,
-      _note: 'Données de conversations non disponibles dans cet export',
-      exportedAt: new Date().toISOString(),
-      exportedBy: authResult.admin.id,
+    if (result.error) {
+      logger.error('Admin GDPR export error', { message: result.error })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur serveur' } },
+        { status: 500 }
+      )
     }
 
-    // Log d'audit
+    // Log audit
     await logAdminAction(authResult.admin.id, 'gdpr.export', 'user', userId)
 
     return NextResponse.json({
       success: true,
-      data: exportData,
+      data: {
+        ...result.data,
+        exportedBy: authResult.admin.id,
+      },
       message: 'Export RGPD généré',
     })
   } catch (error) {

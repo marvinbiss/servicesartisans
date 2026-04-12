@@ -1,6 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import {
+  getSlotIdsForDate,
+  hasActiveBookingsOnSlots,
+  deleteSlotsForDate,
+  bulkInsertSlots,
+  getSlotWithBookings,
+  deleteSlot,
+} from '@/lib/services/bookings-service'
 import { z } from 'zod'
 
 // GET query params schema
@@ -12,10 +20,12 @@ const availabilityGetSchema = z.object({
 const availabilityPostSchema = z.object({
   artisanId: z.string().uuid(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  slots: z.array(z.object({
-    start: z.string().regex(/^\d{2}:\d{2}$/),
-    end: z.string().regex(/^\d{2}:\d{2}$/),
-  })),
+  slots: z.array(
+    z.object({
+      start: z.string().regex(/^\d{2}:\d{2}$/),
+      end: z.string().regex(/^\d{2}:\d{2}$/),
+    })
+  ),
 })
 
 // DELETE query params schema
@@ -35,7 +45,10 @@ export async function GET(request: Request) {
   const result = availabilityGetSchema.safeParse(queryParams)
   if (!result.success) {
     return NextResponse.json(
-      { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+      {
+        success: false,
+        error: { message: 'Paramètres invalides', details: result.error.flatten() },
+      },
       { status: 400 }
     )
   }
@@ -53,7 +66,10 @@ export async function POST(request: Request) {
     const result = availabilityPostSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -62,7 +78,10 @@ export async function POST(request: Request) {
     const supabase = await createClient()
 
     // Verify ownership: artisanId must match the authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json(
         { success: false, error: { message: 'Non authentifié' } },
@@ -77,35 +96,25 @@ export async function POST(request: Request) {
     }
 
     // Verifier qu'aucune reservation active n'est liee aux creneaux de cette date
-    const { data: existingSlots } = await supabase
-      .from('availability_slots')
-      .select('id')
-      .eq('artisan_id', artisanId)
-      .eq('date', date)
+    const { data: existingSlots } = await getSlotIdsForDate(supabase, artisanId, date)
 
     if (existingSlots && existingSlots.length > 0) {
-      const slotIds = existingSlots.map(s => s.id)
-      const { data: activeBookings } = await supabase
-        .from('bookings')
-        .select('id')
-        .in('slot_id', slotIds)
-        .in('status', ['pending', 'confirmed'])
-        .limit(1)
+      const slotIds = existingSlots.map((s) => s.id)
+      const hasActive = await hasActiveBookingsOnSlots(supabase, slotIds)
 
-      if (activeBookings && activeBookings.length > 0) {
+      if (hasActive) {
         return NextResponse.json(
-          { success: false, error: { message: 'Des créneaux de cette date ont des réservations actives' } },
+          {
+            success: false,
+            error: { message: 'Des créneaux de cette date ont des réservations actives' },
+          },
           { status: 409 }
         )
       }
     }
 
     // Supprimer les creneaux existants pour cette date
-    await supabase
-      .from('availability_slots')
-      .delete()
-      .eq('artisan_id', artisanId)
-      .eq('date', date)
+    await deleteSlotsForDate(supabase, artisanId, date)
 
     // Insert new slots
     const slotsToInsert = slots.map((slot: { start: string; end: string }) => ({
@@ -116,10 +125,7 @@ export async function POST(request: Request) {
       is_available: true,
     }))
 
-    const { data: newSlots, error: insertError } = await supabase
-      .from('availability_slots')
-      .insert(slotsToInsert)
-      .select()
+    const { data: newSlots, error: insertError } = await bulkInsertSlots(supabase, slotsToInsert)
 
     if (insertError) throw insertError
 
@@ -154,7 +160,10 @@ export async function DELETE(request: Request) {
   const result = availabilityDeleteSchema.safeParse(queryParams)
   if (!result.success) {
     return NextResponse.json(
-      { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+      {
+        success: false,
+        error: { message: 'Paramètres invalides', details: result.error.flatten() },
+      },
       { status: 400 }
     )
   }
@@ -164,40 +173,42 @@ export async function DELETE(request: Request) {
     const supabase = await createClient()
 
     // Auth guard: require authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non authentifié' } },
+        { status: 401 }
+      )
     }
 
     // Check if slot has a booking
-    const { data: slot, error: slotError } = await supabase
-      .from('availability_slots')
-      .select('*, booking:bookings(*)')
-      .eq('id', slotId)
-      .single()
+    const { data: slot, error: slotError } = await getSlotWithBookings(supabase, slotId)
 
     if (slotError) throw slotError
 
     // Ownership check: only the artisan who owns the slot can delete it
     if (slot?.artisan_id !== user.id) {
       return NextResponse.json(
-        { success: false, error: { message: 'Vous n\'êtes pas autorisé à supprimer ce créneau' } },
+        { success: false, error: { message: "Vous n'êtes pas autorisé à supprimer ce créneau" } },
         { status: 403 }
       )
     }
 
     if (slot?.booking && slot.booking.length > 0) {
       return NextResponse.json(
-        { success: false, error: { message: 'Ce créneau a une réservation et ne peut pas être supprimé' } },
+        {
+          success: false,
+          error: { message: 'Ce créneau a une réservation et ne peut pas être supprimé' },
+        },
         { status: 400 }
       )
     }
 
     // Delete the slot
-    const { error: deleteError } = await supabase
-      .from('availability_slots')
-      .delete()
-      .eq('id', slotId)
+    const { error: deleteError } = await deleteSlot(supabase, slotId)
 
     if (deleteError) throw deleteError
 

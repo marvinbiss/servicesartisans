@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { updateMessageContent, deleteMessage } from '@/lib/services/messages-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,17 +16,19 @@ const editMessageSchema = z.object({
   content: z.string().min(1).max(5000),
 })
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     const body = await request.json()
@@ -33,21 +36,16 @@ export async function PATCH(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
 
     // Update message (RLS will verify ownership)
-    const { data, error } = await supabase
-      .from('messages')
-      .update({
-        content: parsed.data.content,
-      })
-      .eq('id', id)
-      .eq('sender_id', user.id)
-      .select()
-      .single()
+    const { data, error } = await updateMessageContent(supabase, id, user.id, parsed.data.content)
 
     if (error) {
       logger.error('Error editing message', error)
@@ -81,19 +79,20 @@ export async function DELETE(
   try {
     const { id } = await params
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     // Hard delete message (RLS will verify ownership)
     // Note: deleted_at column was removed in migration 102, using hard delete
-    const { error } = await supabase
-      .from('messages')
-      .delete()
-      .eq('id', id)
-      .eq('sender_id', user.id)
+    const { error } = await deleteMessage(supabase, id, user.id)
 
     if (error) {
       logger.error('Error deleting message', error)

@@ -9,6 +9,12 @@ import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { isValidUUID } from '@/lib/validation/uuid'
 import { z } from 'zod'
+import {
+  getProviderIdByUserId,
+  getQuoteById,
+  deleteQuote,
+  updateQuote,
+} from '@/lib/services/artisan-profile-service'
 
 const patchQuoteSchema = z.object({
   amount: z.number().positive().optional(),
@@ -22,10 +28,7 @@ const patchQuoteSchema = z.object({
 // ---------------------------------------------------------------------------
 // DELETE — retract a pending quote
 // ---------------------------------------------------------------------------
-export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
     const { error: guardError, user, supabase } = await requireArtisan()
@@ -38,25 +41,24 @@ export async function DELETE(
       )
     }
 
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Profil artisan non trouvé' } },
+        { status: 404 }
+      )
     }
 
     // Fetch the quote and verify ownership
-    const { data: quote } = await supabase
-      .from('quotes')
-      .select('id, status, provider_id')
-      .eq('id', id)
-      .single()
+    const { data: quote } = await getQuoteById(supabase, id)
 
     if (!quote || quote.provider_id !== provider.id) {
-      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Devis introuvable' } },
+        { status: 404 }
+      )
     }
 
     if (quote.status !== 'pending') {
@@ -66,11 +68,7 @@ export async function DELETE(
       )
     }
 
-    const { error: deleteError } = await supabase
-      .from('quotes')
-      .delete()
-      .eq('id', id)
-      .eq('provider_id', provider.id)
+    const { error: deleteError } = await deleteQuote(supabase, id, provider.id)
 
     if (deleteError) {
       logger.error('Error deleting quote:', deleteError)
@@ -83,17 +81,17 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Artisan devis DELETE error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
 // ---------------------------------------------------------------------------
 // PATCH — modify a pending quote
 // ---------------------------------------------------------------------------
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
     const { error: guardError, user, supabase } = await requireArtisan()
@@ -106,21 +104,24 @@ export async function PATCH(
       )
     }
 
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Profil artisan non trouvé' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Profil artisan non trouvé' } },
+        { status: 404 }
+      )
     }
 
     const body = await req.json()
     const result = patchQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -133,21 +134,20 @@ export async function PATCH(
       today.setHours(0, 0, 0, 0)
       if (validUntilDate < today) {
         return NextResponse.json(
-          { success: false, error: { message: 'La date d\'expiration doit être dans le futur' } },
+          { success: false, error: { message: "La date d'expiration doit être dans le futur" } },
           { status: 400 }
         )
       }
     }
 
     // Fetch the quote and verify ownership
-    const { data: existing } = await supabase
-      .from('quotes')
-      .select('id, status, provider_id')
-      .eq('id', id)
-      .single()
+    const { data: existing } = await getQuoteById(supabase, id)
 
     if (!existing || existing.provider_id !== provider.id) {
-      return NextResponse.json({ success: false, error: { message: 'Devis introuvable' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Devis introuvable' } },
+        { status: 404 }
+      )
     }
 
     if (existing.status !== 'pending') {
@@ -169,13 +169,12 @@ export async function PATCH(
       )
     }
 
-    const { data: updated, error: updateError } = await supabase
-      .from('quotes')
-      .update(patch)
-      .eq('id', id)
-      .eq('provider_id', provider.id)
-      .select()
-      .single()
+    const { data: updated, error: updateError } = await updateQuote(
+      supabase,
+      id,
+      provider.id,
+      patch
+    )
 
     if (updateError) {
       logger.error('Error patching quote:', updateError)
@@ -188,6 +187,9 @@ export async function PATCH(
     return NextResponse.json({ success: true, devis: updated })
   } catch (error) {
     logger.error('Artisan devis PATCH error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

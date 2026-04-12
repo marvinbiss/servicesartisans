@@ -7,6 +7,11 @@ import { sendProspectionSMS } from '@/lib/prospection/channels/sms'
 import { sendProspectionEmail } from '@/lib/prospection/channels/email'
 import { sanitizeHtml, isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import {
+  getConversationWithContact,
+  insertConversationMessage,
+  updateConversationLastMessage,
+} from '@/lib/services/prospection-service'
 
 const replySchema = z.object({
   content: z.string().min(1).max(5000),
@@ -15,10 +20,7 @@ const replySchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
@@ -35,20 +37,22 @@ export async function POST(
     const parsed = replySchema.safeParse(body)
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Données invalides' } },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()
 
     // Charger la conversation avec le contact
-    const { data: conversation } = await supabase
-      .from('prospection_conversations')
-      .select('*, contact:prospection_contacts(*)')
-      .eq('id', id)
-      .single()
+    const { data: conversation } = await getConversationWithContact(supabase, id)
 
     if (!conversation) {
-      return NextResponse.json({ success: false, error: { message: 'Conversation non trouvée' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Conversation non trouvée' } },
+        { status: 404 }
+      )
     }
 
     const contact = conversation.contact as { phone_e164?: string; email?: string }
@@ -65,7 +69,10 @@ export async function POST(
         break
       case 'sms':
         if (contact.phone_e164) {
-          const result = await sendProspectionSMS({ to: contact.phone_e164, body: parsed.data.content })
+          const result = await sendProspectionSMS({
+            to: contact.phone_e164,
+            body: parsed.data.content,
+          })
           externalId = result.sid
         }
         break
@@ -84,36 +91,38 @@ export async function POST(
     }
 
     // Sauvegarder le message dans la conversation
-    const { data: msg, error: msgError } = await supabase
-      .from('prospection_conversation_messages')
-      .insert({
-        conversation_id: id,
-        direction: 'outbound',
-        sender_type: parsed.data.sender_type,
-        content: parsed.data.content,
-        external_id: externalId,
-      })
-      .select()
-      .single()
+    const { data: msg, error: msgError } = await insertConversationMessage(supabase, {
+      conversation_id: id,
+      direction: 'outbound',
+      sender_type: parsed.data.sender_type,
+      content: parsed.data.content,
+      external_id: externalId,
+    })
 
     if (msgError) {
       logger.error('Save reply error', msgError)
     }
 
     // Mettre à jour la conversation
-    await supabase
-      .from('prospection_conversations')
-      .update({ last_message_at: new Date().toISOString() })
-      .eq('id', id)
+    await updateConversationLastMessage(supabase, id)
 
-    await logAdminAction(authResult.admin.id, 'conversation.reply', 'prospection_conversation', id, {
-      channel: conversation.channel,
-      sender_type: parsed.data.sender_type,
-    })
+    await logAdminAction(
+      authResult.admin.id,
+      'conversation.reply',
+      'prospection_conversation',
+      id,
+      {
+        channel: conversation.channel,
+        sender_type: parsed.data.sender_type,
+      }
+    )
 
     return NextResponse.json({ success: true, data: msg })
   } catch (error) {
     logger.error('Reply error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

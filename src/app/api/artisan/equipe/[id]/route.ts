@@ -9,6 +9,11 @@ import { z } from 'zod'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { isValidUUID } from '@/lib/validation/uuid'
 import { logger } from '@/lib/logger'
+import {
+  getTeamMemberByIdForArtisan,
+  updateTeamMember,
+  deleteTeamMember,
+} from '@/lib/services/artisan-profile-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,14 +22,14 @@ const memberUpdateSchema = z.object({
   email: z.string().email(),
   phone: z.string().max(50).optional(),
   role: z.string().min(1).max(255),
-  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  color: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/)
+    .optional(),
   is_active: z.boolean().optional(),
 })
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
@@ -41,7 +46,10 @@ export async function PUT(
 
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: validation.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: validation.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -49,12 +57,12 @@ export async function PUT(
     const { name, email, phone, role, color, is_active } = validation.data
 
     // Verify ownership before update
-    const { data: existing, error: fetchError } = await supabase
-      .from('team_members')
-      .select('id')
-      .eq('id', params.id)
-      .eq('artisan_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: existing, error: fetchError } = await getTeamMemberByIdForArtisan(
+      supabase,
+      params.id,
+      user!.id
+    )
 
     if (fetchError || !existing) {
       return NextResponse.json(
@@ -68,13 +76,8 @@ export async function PUT(
     if (color !== undefined) updatePayload.color = color
     if (is_active !== undefined) updatePayload.is_active = is_active
 
-    const { data, error } = await supabase
-      .from('team_members')
-      .update(updatePayload)
-      .eq('id', params.id)
-      .eq('artisan_id', user!.id)
-      .select('id, name, email, phone, role, color, avatar_url, is_active, created_at')
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data, error } = await updateTeamMember(supabase, params.id, user!.id, updatePayload)
 
     if (error) {
       logger.error('Error updating team member:', error)
@@ -87,14 +90,14 @@ export async function PUT(
     return NextResponse.json({ member: data })
   } catch (error) {
     logger.error('Equipe PUT error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
   try {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
@@ -107,12 +110,12 @@ export async function DELETE(
     }
 
     // Verify ownership before delete
-    const { data: existing, error: fetchError } = await supabase
-      .from('team_members')
-      .select('id')
-      .eq('id', params.id)
-      .eq('artisan_id', user!.id)
-      .single()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: existing, error: fetchError } = await getTeamMemberByIdForArtisan(
+      supabase,
+      params.id,
+      user!.id
+    )
 
     if (fetchError || !existing) {
       return NextResponse.json(
@@ -121,11 +124,8 @@ export async function DELETE(
       )
     }
 
-    const { error } = await supabase
-      .from('team_members')
-      .delete()
-      .eq('id', params.id)
-      .eq('artisan_id', user!.id)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { error } = await deleteTeamMember(supabase, params.id, user!.id)
 
     if (error) {
       logger.error('Error deleting team member:', error)
@@ -138,6 +138,9 @@ export async function DELETE(
     return new NextResponse(null, { status: 204 })
   } catch (error) {
     logger.error('Equipe DELETE error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

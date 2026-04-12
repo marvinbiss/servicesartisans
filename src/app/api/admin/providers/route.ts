@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
-import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { listProviders } from '@/lib/services/admin-crud-service'
 
 // GET query params schema
 const providersQuerySchema = paginationSchema.extend({
@@ -14,25 +14,6 @@ const providersQuerySchema = paginationSchema.extend({
 
 export const dynamic = 'force-dynamic'
 
-// Define the select columns once
-const SELECT_COLUMNS = `
-  id,
-  name,
-  slug,
-  email,
-  phone,
-  address_city,
-  address_region,
-  siret,
-  specialty,
-  is_verified,
-  is_active,
-  source,
-  rating_average,
-  review_count,
-  created_at
-`
-
 export async function GET(request: NextRequest) {
   try {
     // Verify admin with providers:read permission
@@ -40,8 +21,6 @@ export async function GET(request: NextRequest) {
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
-
-    const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
     const queryParams = {
@@ -60,75 +39,23 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { page, limit, filter, search } = result.data
 
-    const offset = (page - 1) * limit
+    const supabase = createAdminClient()
+    const serviceResult = await listProviders(supabase, result.data)
 
-    // Build query with filters
-    let query = supabase.from('providers').select(SELECT_COLUMNS, { count: 'exact' })
-
-    // Apply filters using in() for reliable boolean comparison
-    if (filter === 'verified') {
-      query = query.in('is_verified', [true]).in('is_active', [true])
-    } else if (filter === 'pending') {
-      query = query.in('is_verified', [false]).in('is_active', [true])
-    } else if (filter === 'suspended') {
-      query = query.in('is_active', [false])
-    }
-
-    // Apply search (sanitized to prevent injection)
-    if (search) {
-      const sanitized = sanitizeSearchQuery(search)
-      if (sanitized) {
-        query = query.or(
-          `name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,siret.ilike.%${sanitized}%`
-        )
-      }
-    }
-
-    // Execute query with ordering and pagination
-    const {
-      data: providers,
-      count,
-      error,
-    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
-
-    if (error) {
-      logger.warn('Providers query failed', { code: error.code, message: error.message })
+    if (serviceResult.error) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: 'Erreur lors de la récupération des artisans', code: error.code },
+          error: { message: serviceResult.error.message, code: serviceResult.error.code },
         },
-        { status: 502 }
+        { status: serviceResult.error.status }
       )
     }
 
-    // Transform data for frontend
-    const transformedProviders = (providers || []).map((p: Record<string, unknown>) => ({
-      id: p.id,
-      name: p.name,
-      slug: p.slug,
-      email: p.email || '',
-      phone: p.phone || '',
-      address_city: p.address_city || '',
-      address_region: p.address_region || '',
-      specialty: (p.specialty as string) || 'Artisan',
-      is_verified: p.is_verified,
-      is_active: p.is_active,
-      rating_average: Number(p.rating_average) || 0,
-      review_count: Number(p.review_count) || 0,
-      created_at: p.created_at,
-      source: p.source,
-      siret: p.siret,
-    }))
-
     const response = NextResponse.json({
       success: true,
-      providers: transformedProviders,
-      total: count || 0,
-      page,
-      totalPages: Math.ceil((count || 0) / limit),
+      ...serviceResult.data,
     })
 
     // Prevent caching

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
-import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { listServices, createService } from '@/lib/services/admin-crud-service'
 
 // POST request schema
 const createServiceSchema = z.object({
@@ -20,48 +20,26 @@ export const dynamic = 'force-dynamic'
 // GET - Liste des services
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin with services:read permission
     const authResult = await requirePermission('services', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
 
-    const supabase = createAdminClient()
-
     const searchParams = request.nextUrl.searchParams
     const search = searchParams.get('search') || ''
     const includeInactive = searchParams.get('includeInactive') === 'true'
 
-    let query = supabase
-      .from('services')
-      .select('id, name, slug, description, icon, category, is_active, sort_order, created_at')
-      .order('name', { ascending: true })
+    const supabase = createAdminClient()
+    const serviceResult = await listServices(supabase, { search, includeInactive })
 
-    if (!includeInactive) {
-      query = query.eq('is_active', true)
+    if (serviceResult.error) {
+      return NextResponse.json(
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
+      )
     }
 
-    if (search) {
-      const sanitized = sanitizeSearchQuery(search)
-      if (sanitized) {
-        query = query.ilike('name', `%${sanitized}%`)
-      }
-    }
-
-    const { data: services, error } = await query
-
-    if (error) {
-      logger.warn('Services query failed, returning empty list', { code: error.code, message: error.message })
-      return NextResponse.json({
-        success: true,
-        services: [],
-      })
-    }
-
-    return NextResponse.json({
-      success: true,
-      services: services || [],
-    })
+    return NextResponse.json({ success: true, ...serviceResult.data })
   } catch (error) {
     logger.error('Admin services list error', error)
     return NextResponse.json(
@@ -74,22 +52,30 @@ export async function GET(request: NextRequest) {
 // POST - Créer un service
 export async function POST(request: NextRequest) {
   try {
-    // Verify admin with services:write permission
     const authResult = await requirePermission('services', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
 
-    const supabase = createAdminClient()
     const body = await request.json()
     const result = createServiceSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
-    const { name: rawName, description: rawDescription, icon, parent_id, meta_title: rawMetaTitle, meta_description: rawMetaDescription } = result.data
+    const {
+      name: rawName,
+      description: rawDescription,
+      icon,
+      parent_id,
+      meta_title: rawMetaTitle,
+      meta_description: rawMetaDescription,
+    } = result.data
 
     // Strip HTML tags from text fields
     const name = rawName.replace(/<[^>]*>/g, '').trim()
@@ -105,49 +91,35 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
 
-    const { data, error } = await supabase
-      .from('services')
-      .insert({
-        name,
-        slug,
-        description,
-        icon,
-        parent_id,
-        meta_title: meta_title || name,
-        meta_description: meta_description || description,
-        is_active: true,
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
+    const supabase = createAdminClient()
+    const serviceResult = await createService(supabase, {
+      name,
+      slug,
+      description,
+      icon,
+      parent_id,
+      meta_title,
+      meta_description,
+    })
 
-    if (error) {
-      if (error.code === '23505') {
-        return NextResponse.json(
-          { success: false, error: { message: 'Un service avec ce nom existe déjà' } },
-          { status: 409 }
-        )
-      }
-      logger.error('Service create error', error)
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la création du service' } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
     // Log d'audit with actual admin ID
-    await logAdminAction(
-      authResult.admin.id,
-      'service.create',
-      'service',
-      data.id,
-      { name, slug }
-    )
+    const serviceId = (serviceResult.data.service as Record<string, unknown>).id as string
+    await logAdminAction(authResult.admin.id, 'service.create', 'service', serviceId, {
+      name,
+      slug,
+    })
 
     return NextResponse.json({
       success: true,
-      service: data,
-      message: 'Service créé avec succès',
+      service: serviceResult.data.service,
+      message: serviceResult.data.message,
     })
   } catch (error) {
     logger.error('Admin service create error', error)

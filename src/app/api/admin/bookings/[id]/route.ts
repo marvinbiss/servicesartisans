@@ -3,6 +3,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
+import {
+  adminGetBookingById,
+  adminUpdateBooking,
+  adminCancelBooking,
+} from '@/lib/services/bookings-service'
 import { z } from 'zod'
 
 // PATCH request schema
@@ -15,10 +20,7 @@ const updateBookingSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'une réservation
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with services:read permission
     const authResult = await requirePermission('services', 'read')
@@ -35,22 +37,13 @@ export async function GET(
 
     const supabase = createAdminClient()
 
-    const { data: booking, error } = await supabase
-      .from('bookings')
-      .select(`
-        *,
-        provider:providers!provider_id (
-          id,
-          name,
-          email,
-          phone
-        )
-      `)
-      .eq('id', params.id)
-      .single()
+    const { data: booking, error } = await adminGetBookingById(supabase, params.id)
 
     if (error) {
-      logger.warn('Booking detail query failed', { code: error.code, message: error.message })
+      logger.warn('Booking detail query failed', {
+        code: (error as { code?: string }).code,
+        message: (error as { message?: string }).message,
+      })
       return NextResponse.json(
         { success: false, error: { message: 'Réservation introuvable ou table inexistante' } },
         { status: 404 }
@@ -68,10 +61,7 @@ export async function GET(
 }
 
 // PATCH - Mettre à jour une réservation
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with services:write permission
     const authResult = await requirePermission('services', 'write')
@@ -91,23 +81,21 @@ export async function PATCH(
     const result = updateBookingSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
 
-    const { data, error } = await supabase
-      .from('bookings')
-      .update({
-        ...result.data,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
-      .select()
-      .single()
+    const { data, error } = await adminUpdateBooking(supabase, params.id, result.data)
 
     if (error) {
-      logger.error('Booking update failed', { code: error.code, message: error.message })
+      logger.error('Booking update failed', {
+        code: (error as { code?: string }).code,
+        message: (error as { message?: string }).message,
+      })
       return NextResponse.json(
         { success: false, error: { message: 'Impossible de mettre à jour la réservation' } },
         { status: 500 }
@@ -132,10 +120,7 @@ export async function PATCH(
 }
 
 // DELETE - Annuler une réservation
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with services:delete permission
     const authResult = await requirePermission('services', 'delete')
@@ -151,18 +136,15 @@ export async function DELETE(
     }
 
     const supabase = createAdminClient()
-    const { error } = await supabase
-      .from('bookings')
-      .update({
-        status: 'cancelled',
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
+    const { error } = await adminCancelBooking(supabase, params.id)
 
     if (error) {
-      logger.error('Booking cancel failed', { code: error.code, message: error.message })
+      logger.error('Booking cancel failed', {
+        code: (error as { code?: string }).code,
+        message: (error as { message?: string }).message,
+      })
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible d\'annuler la réservation' } },
+        { success: false, error: { message: "Impossible d'annuler la réservation" } },
         { status: 500 }
       )
     }

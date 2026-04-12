@@ -4,6 +4,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import { banUser } from '@/lib/services/admin-crud-service'
 
 // POST request schema
 const banUserSchema = z.object({
@@ -14,12 +15,8 @@ const banUserSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Bannir ou débannir un utilisateur
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with users:write permission
     const authResult = await requirePermission('users', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -32,55 +29,38 @@ export async function POST(
       )
     }
 
-    const supabase = createAdminClient()
     const body = await request.json()
     const result = banUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
     const { action, reason } = result.data
 
-    const isBanning = action === 'ban'
+    const supabase = createAdminClient()
+    const serviceResult = await banUser(supabase, params.id, action)
 
-    // Ban/unban via Supabase Auth admin API
-    // ban_duration: '876600h' (~100 years) to ban, 'none' to unban
-    const { error: authError } = await supabase.auth.admin.updateUserById(params.id, {
-      ban_duration: isBanning ? '876600h' : 'none',
-    })
-
-    if (authError) {
-      logger.error('User ban/unban failed', { code: authError.message })
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de modifier le statut de l\'utilisateur' } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
-    // Si c'est un artisan, désactiver/réactiver également le provider
-    await supabase
-      .from('providers')
-      .update({
-        is_active: !isBanning,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('user_id', params.id)
-
-    // Enregistrer l'action dans les logs d'audit
     await logAdminAction(
       authResult.admin.id,
-      isBanning ? 'user.ban' : 'user.unban',
+      action === 'ban' ? 'user.ban' : 'user.unban',
       'user',
       params.id,
-      { is_banned: isBanning, reason }
+      { is_banned: action === 'ban', reason }
     )
 
-    return NextResponse.json({
-      success: true,
-      message: isBanning ? 'Utilisateur banni' : 'Utilisateur débanni',
-    })
+    return NextResponse.json({ success: true, message: serviceResult.data.message })
   } catch (error) {
     logger.error('Admin user ban error', error)
     return NextResponse.json(

@@ -7,6 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
+import {
+  getProviderForSettings,
+  getProfileForSettings,
+  getProviderIdByUserId,
+  updateProviderByIdNoSelect,
+  updateProfileFullName,
+} from '@/lib/services/artisan-profile-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,17 +27,9 @@ export async function GET() {
     const { error, user, supabase } = await requireArtisan()
     if (error) return error
 
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id, name, phone, email, is_active, is_verified')
-      .eq('user_id', user.id)
-      .single()
+    const { data: provider } = await getProviderForSettings(supabase, user.id)
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('id, email, full_name, role')
-      .eq('id', user.id)
-      .single()
+    const { data: profile } = await getProfileForSettings(supabase, user.id)
 
     return NextResponse.json({
       profile: profile || null,
@@ -38,7 +37,10 @@ export async function GET() {
     })
   } catch (error) {
     logger.error('Settings GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -51,18 +53,17 @@ export async function PUT(request: NextRequest) {
     const result = settingsUpdateSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
     const { phone, name } = result.data
 
     // Update provider if linked
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
+    const { data: provider } = await getProviderIdByUserId(supabase, user.id)
 
     if (provider) {
       const updates: Record<string, string> = {}
@@ -70,34 +71,41 @@ export async function PUT(request: NextRequest) {
       if (name !== undefined) updates.name = name
 
       if (Object.keys(updates).length > 0) {
-        const { error: updateError } = await supabase
-          .from('providers')
-          .update(updates)
-          .eq('id', provider.id)
+        const { error: updateError } = await updateProviderByIdNoSelect(
+          supabase,
+          provider.id,
+          updates
+        )
 
         if (updateError) {
           logger.error('Settings PUT provider update error:', updateError)
-          return NextResponse.json({ success: false, error: { message: 'Erreur mise à jour' } }, { status: 500 })
+          return NextResponse.json(
+            { success: false, error: { message: 'Erreur mise à jour' } },
+            { status: 500 }
+          )
         }
       }
     }
 
     // Update profile name
     if (name !== undefined) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({ full_name: name })
-        .eq('id', user.id)
+      const { error: profileError } = await updateProfileFullName(supabase, user.id, name)
 
       if (profileError) {
         logger.error('Settings PUT profile update error:', profileError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur mise à jour profil' } }, { status: 500 })
+        return NextResponse.json(
+          { success: false, error: { message: 'Erreur mise à jour profil' } },
+          { status: 500 }
+        )
       }
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Settings PUT error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

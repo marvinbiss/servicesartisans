@@ -11,6 +11,20 @@ import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { notifyNewMessage } from '@/lib/notifications/message-notifications'
 import { sanitizeUserInput } from '@/lib/sanitize'
+import {
+  getConversationById,
+  getMessagesByConversation,
+  markMessagesAsRead,
+  getClientConversations,
+  getLastMessage,
+  countUnreadMessages,
+  findConversation,
+  createConversation,
+  insertMessageFull,
+  getConversationProviderId,
+  getProviderDetails,
+  getProfileName,
+} from '@/lib/services/messages-service'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
@@ -43,37 +57,30 @@ export async function GET(request: Request) {
     const conversationId = result.data.conversation_id
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     if (conversationId) {
       // Verify conversation belongs to this client
-      const { data: conversation } = await supabase
-        .from('conversations')
-        .select('id, client_id, provider_id')
-        .eq('id', conversationId)
-        .eq('client_id', user.id)
-        .single()
+      const { data: conversation } = await getConversationById(supabase, conversationId, {
+        clientId: user.id,
+      })
 
       if (!conversation) {
-        return NextResponse.json(
-          { error: 'Conversation non trouvée' },
-          { status: 404 }
-        )
+        return NextResponse.json({ error: 'Conversation non trouvée' }, { status: 404 })
       }
 
       // Fetch messages for this conversation
-      const { data: messages, error: messagesError } = await supabase
-        .from('messages')
-        .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true })
+      const { data: messages, error: messagesError } = await getMessagesByConversation(
+        supabase,
+        conversationId
+      )
 
       if (messagesError) {
         logger.error('Error fetching messages:', messagesError)
@@ -84,32 +91,16 @@ export async function GET(request: Request) {
       }
 
       // Mark messages sent by artisan as read
-      await supabase
-        .from('messages')
-        .update({ read_at: new Date().toISOString() })
-        .eq('conversation_id', conversationId)
-        .eq('sender_type', 'artisan')
-        .is('read_at', null)
+      await markMessagesAsRead(supabase, conversationId, 'artisan')
 
-      return NextResponse.json({ messages: messages || [], currentUserId: user.id })
+      return NextResponse.json({ messages, currentUserId: user.id })
     }
 
     // Fetch all conversations for this client
-    const { data: conversations, error: convsError } = await supabase
-      .from('conversations')
-      .select(`
-        id,
-        client_id,
-        provider_id,
-        status,
-        created_at,
-        booking_id,
-        provider:providers!provider_id(id, name),
-        booking:bookings!booking_id(service_description)
-      `)
-      .eq('client_id', user.id)
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
+    const { data: conversations, error: convsError } = await getClientConversations(
+      supabase,
+      user.id
+    )
 
     if (convsError) {
       logger.error('Error fetching conversations:', convsError)
@@ -121,27 +112,18 @@ export async function GET(request: Request) {
 
     // For each conversation, get the last message and unread count
     const conversationsWithMeta = await Promise.all(
-      (conversations || []).map(async (conv) => {
-        const { data: lastMessages } = await supabase
-          .from('messages')
-          .select('id, content, created_at, sender_type, read_at')
-          .eq('conversation_id', conv.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-
-        const { count: unreadCount } = await supabase
-          .from('messages')
-          .select('id', { count: 'exact', head: true })
-          .eq('conversation_id', conv.id)
-          .eq('sender_type', 'artisan')
-          .is('read_at', null)
+      conversations.map(async (conv) => {
+        const { data: lastMessage } = await getLastMessage(supabase, conv.id)
+        const { count: unreadCount } = await countUnreadMessages(supabase, conv.id, 'artisan')
 
         return {
           id: conv.id,
-          partner: conv.provider,
-          lastMessage: lastMessages?.[0] || null,
-          unreadCount: unreadCount || 0,
-          service: (conv.booking as unknown as { service_description: string } | null)?.service_description || null,
+          partner: (conv as Record<string, unknown>).provider,
+          lastMessage,
+          unreadCount,
+          service:
+            ((conv as Record<string, unknown>).booking as { service_description: string } | null)
+              ?.service_description || null,
         }
       })
     )
@@ -149,10 +131,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ conversations: conversationsWithMeta })
   } catch (error) {
     logger.error('Client Messages GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -161,13 +140,13 @@ export async function POST(request: Request) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -191,21 +170,18 @@ export async function POST(request: Request) {
         )
       }
 
-      const { data: existingConv } = await supabase
-        .from('conversations')
-        .select('id')
-        .eq('client_id', user.id)
-        .eq('provider_id', provider_id)
-        .single()
+      const { data: existingConv } = await findConversation(supabase, {
+        providerId: provider_id,
+        clientId: user.id,
+      })
 
       if (existingConv) {
         resolvedConversationId = existingConv.id
       } else {
-        const { data: newConv, error: convError } = await supabase
-          .from('conversations')
-          .insert({ client_id: user.id, provider_id })
-          .select('id')
-          .single()
+        const { data: newConv, error: convError } = await createConversation(supabase, {
+          providerId: provider_id,
+          clientId: user.id,
+        })
 
         if (convError || !newConv) {
           logger.error('Error creating conversation:', convError)
@@ -218,12 +194,9 @@ export async function POST(request: Request) {
       }
     } else {
       // Verify conversation belongs to this client
-      const { data: conversation } = await supabase
-        .from('conversations')
-        .select('id')
-        .eq('id', resolvedConversationId)
-        .eq('client_id', user.id)
-        .single()
+      const { data: conversation } = await getConversationById(supabase, resolvedConversationId, {
+        clientId: user.id,
+      })
 
       if (!conversation) {
         return NextResponse.json(
@@ -234,23 +207,17 @@ export async function POST(request: Request) {
     }
 
     // Insert new message
-    const { data: message, error: insertError } = await supabase
-      .from('messages')
-      .insert({
-        conversation_id: resolvedConversationId,
-        sender_id: user.id,
-        sender_type: 'client',
-        content: sanitizeUserInput(content),
-      })
-      .select()
-      .single()
+    const { data: message, error: insertError } = await insertMessageFull(supabase, {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      conversationId: resolvedConversationId!,
+      senderId: user.id,
+      senderType: 'client',
+      content: sanitizeUserInput(content),
+    })
 
     if (insertError) {
       logger.error('Error sending message:', insertError)
-      return NextResponse.json(
-        { error: 'Erreur lors de l\'envoi du message' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: "Erreur lors de l'envoi du message" }, { status: 500 })
     }
 
     // Fire-and-forget: notify the artisan by email
@@ -263,29 +230,17 @@ export async function POST(request: Request) {
         // Resolve provider_id from conversation if not provided directly
         let pid = effectiveProviderId
         if (!pid && effectiveConvId) {
-          const { data: conv } = await adminSupabase
-            .from('conversations')
-            .select('provider_id')
-            .eq('id', effectiveConvId)
-            .single()
+          const { data: conv } = await getConversationProviderId(adminSupabase, effectiveConvId)
           pid = conv?.provider_id ?? null
         }
         if (!pid) return
 
-        const { data: provider } = await adminSupabase
-          .from('providers')
-          .select('name, email')
-          .eq('id', pid)
-          .single()
+        const { data: provider } = await getProviderDetails(adminSupabase, pid)
 
         if (!provider?.email) return
 
         // Get sender name
-        const { data: senderProfile } = await adminSupabase
-          .from('profiles')
-          .select('full_name')
-          .eq('id', user.id)
-          .single()
+        const { data: senderProfile } = await getProfileName(adminSupabase, user.id)
 
         await notifyNewMessage({
           recipientEmail: provider.email,
@@ -301,13 +256,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message
+      message,
     })
   } catch (error) {
     logger.error('Client Messages POST error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

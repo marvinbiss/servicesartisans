@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import { getConversationForUser, updateConversationStatus } from '@/lib/services/messages-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,17 +15,19 @@ const archiveSchema = z.object({
   is_archived: z.boolean(),
 })
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: conversationId } = await params
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     const body = await request.json()
@@ -38,12 +41,7 @@ export async function POST(
     }
 
     // Verify user has access to conversation
-    const { data: conversation } = await supabase
-      .from('conversations')
-      .select('id')
-      .eq('id', conversationId)
-      .or(`client_id.eq.${user.id},provider_id.eq.${user.id}`)
-      .single()
+    const { data: conversation } = await getConversationForUser(supabase, conversationId, user.id)
 
     if (!conversation) {
       return NextResponse.json(
@@ -54,17 +52,12 @@ export async function POST(
 
     // Update conversation status (conversation_settings table removed in migration 100)
     const newStatus = parsed.data.is_archived ? 'archived' : 'active'
-    const { data, error } = await supabase
-      .from('conversations')
-      .update({ status: newStatus })
-      .eq('id', conversationId)
-      .select('id, status')
-      .single()
+    const { data, error } = await updateConversationStatus(supabase, conversationId, newStatus)
 
     if (error) {
       logger.error('Archive conversation error', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible d\'archiver la conversation' } },
+        { success: false, error: { message: "Impossible d'archiver la conversation" } },
         { status: 500 }
       )
     }

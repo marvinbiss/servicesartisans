@@ -1,75 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
-import { z } from 'zod'
-
-// PATCH request schema
-const quoteUpdateSchema = z.object({
-  action: z.enum(['accept', 'reject', 'cancel']),
-})
+import { quoteUpdateActionSchema, getQuoteById, updateQuote } from '@/lib/services/quotes-service'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Get single quote
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentification requise' },
         },
         { status: 401 }
       )
     }
 
-    const { data: quote, error } = await supabase
-      .from('quotes')
-      .select(`
-        id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at
-      `)
-      .eq('id', params.id)
-      .single()
+    const result = await getQuoteById(supabase, params.id, user.id)
 
-    if (error || !quote) {
+    if (result.error === 'QUOTE_NOT_FOUND') {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Devis non trouve' }
+          error: { code: 2002, message: 'Devis non trouve' },
         },
         { status: 404 }
       )
     }
 
-    // Check authorization: is user the provider of this quote?
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    const isProvider = provider?.id === quote.provider_id
-
-    // Check if user is the client via the devis_request
-    const { data: devisRequest } = await supabase
-      .from('devis_requests')
-      .select('client_id')
-      .eq('id', quote.request_id)
-      .single()
-
-    const isClient = devisRequest?.client_id === user.id
-
-    if (!isProvider && !isClient) {
+    if (result.error === 'UNAUTHORIZED') {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1002, message: 'Acces non autorise' }
+          error: { code: 1002, message: 'Acces non autorise' },
         },
         { status: 403 }
       )
@@ -77,14 +47,14 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: quote,
+      data: result.data,
     })
   } catch (error) {
     logger.error('Quote fetch error', error)
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Erreur serveur' },
       },
       { status: 500 }
     )
@@ -92,147 +62,89 @@ export async function GET(
 }
 
 // PATCH - Update quote status
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentification requise' }
+          error: { code: 1001, message: 'Authentification requise' },
         },
         { status: 401 }
       )
     }
 
     const body = await request.json()
-    const result = quoteUpdateSchema.safeParse(body)
-    if (!result.success) {
+    const validation = quoteUpdateActionSchema.safeParse(body)
+    if (!validation.success) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2001, message: 'Validation error', details: result.error.flatten() }
+          error: { code: 2001, message: 'Validation error', details: validation.error.flatten() },
         },
         { status: 400 }
       )
     }
-    const { action } = result.data
 
-    const { data: quote } = await supabase
-      .from('quotes')
-      .select('id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at')
-      .eq('id', params.id)
-      .single()
+    const result = await updateQuote(supabase, params.id, user.id, validation.data.action)
 
-    if (!quote) {
+    if (result.error === 'QUOTE_NOT_FOUND') {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Devis non trouve' }
+          error: { code: 2002, message: 'Devis non trouve' },
         },
         { status: 404 }
       )
     }
 
-    // Check authorization and validate action
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    const isProvider = provider?.id === quote.provider_id
-
-    const { data: devisRequest } = await supabase
-      .from('devis_requests')
-      .select('client_id')
-      .eq('id', quote.request_id)
-      .single()
-
-    const isClient = devisRequest?.client_id === user.id
-
-    let newStatus: string
-
-    switch (action) {
-      case 'accept':
-        if (!isClient) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: { code: 1002, message: 'Seul le client peut accepter le devis' }
-            },
-            { status: 403 }
-          )
-        }
-        newStatus = 'accepted'
-        break
-
-      case 'reject':
-        if (!isClient) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: { code: 1002, message: 'Seul le client peut refuser le devis' }
-            },
-            { status: 403 }
-          )
-        }
-        newStatus = 'rejected'
-        break
-
-      case 'cancel':
-        if (!isProvider) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: { code: 1002, message: 'Seul l\'artisan peut annuler le devis' }
-            },
-            { status: 403 }
-          )
-        }
-        newStatus = 'cancelled'
-        break
+    if (result.error === 'ONLY_CLIENT_CAN_ACCEPT') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 1002, message: 'Seul le client peut accepter le devis' },
+        },
+        { status: 403 }
+      )
     }
 
-    // Defense-in-depth: filter by owner in the UPDATE itself
-    // For 'cancel' (provider action), filter by provider_id
-    // For 'accept'/'reject' (client actions), filter by request_id + client ownership
-    const updateQuery = supabase
-      .from('quotes')
-      .update({
-        status: newStatus,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
-
-    if (action === 'cancel') {
-      updateQuery.eq('provider_id', provider!.id)
-    } else {
-      // accept/reject: ensure the quote belongs to the client's request
-      updateQuery.eq('request_id', quote.request_id)
+    if (result.error === 'ONLY_CLIENT_CAN_REJECT') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 1002, message: 'Seul le client peut refuser le devis' },
+        },
+        { status: 403 }
+      )
     }
 
-    const { data: updatedQuote, error } = await updateQuery
-      .select()
-      .single()
+    if (result.error === 'ONLY_PROVIDER_CAN_CANCEL') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 1002, message: "Seul l'artisan peut annuler le devis" },
+        },
+        { status: 403 }
+      )
+    }
 
-    if (error) throw error
+    if (result.error) throw new Error(result.error)
 
     return NextResponse.json({
       success: true,
-      data: updatedQuote,
+      data: result.data,
     })
   } catch (error) {
     logger.error('Quote update error', error)
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Erreur serveur' }
+        error: { code: 9999, message: 'Erreur serveur' },
       },
       { status: 500 }
     )

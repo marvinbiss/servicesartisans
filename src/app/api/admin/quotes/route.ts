@@ -3,8 +3,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { sanitizeSearchQuery, isValidUuid } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
-import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { z } from 'zod'
+import { adminListQuotes, adminDeleteQuote } from '@/lib/services/quotes-service'
 
 // GET query params schema
 const quotesQuerySchema = paginationSchema.extend({
@@ -47,96 +48,25 @@ export async function GET(request: NextRequest) {
     }
     const { page, limit, status, search } = result.data
 
-    const offset = (page - 1) * limit
+    const queryResult = await adminListQuotes(
+      supabase,
+      { status, search, page, limit },
+      sanitizeSearchQuery
+    )
 
-    let query = supabase
-      .from('devis_requests')
-      .select(
-        'id, client_id, service_name, postal_code, city, description, budget, urgency, client_name, client_email, client_phone, status, created_at',
-        { count: 'exact' }
-      )
-
-    // Filtre par statut — valeurs CHECK: pending/sent/accepted/refused/completed
-    if (status !== 'all') {
-      query = query.eq('status', status)
-    }
-
-    // Recherche sur service_name, description, client_name, client_email ou postal_code
-    if (search) {
-      const sanitized = sanitizeSearchQuery(search)
-      if (sanitized) {
-        query = query.or(
-          `service_name.ilike.%${sanitized}%,description.ilike.%${sanitized}%,client_name.ilike.%${sanitized}%,client_email.ilike.%${sanitized}%,postal_code.ilike.%${sanitized}%,city.ilike.%${sanitized}%`
-        )
-      }
-    }
-
-    const {
-      data: demandes,
-      count,
-      error,
-    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
-
-    if (error) {
+    if (queryResult.error) {
       logger.warn('Devis requests query failed, returning empty list', {
-        code: error.code,
-        message: error.message,
+        message: queryResult.error,
       })
-      return NextResponse.json({
-        success: true,
-        demandes: [],
-        assignments: {},
-        total: 0,
-        page,
-        totalPages: 0,
-      })
-    }
-
-    // Fetch lead_assignments for these demandes to show which artisan(s) received each request
-    const demandeIds = (demandes || []).map((d) => d.id)
-    const assignmentsByLead: Record<
-      string,
-      Array<{
-        id: string
-        status: string
-        assigned_at: string
-        provider_name: string
-        provider_id: string
-      }>
-    > = {}
-
-    if (demandeIds.length > 0) {
-      const { data: assignments } = await supabase
-        .from('lead_assignments')
-        .select('id, lead_id, status, assigned_at, provider_id, provider:providers(id, name)')
-        .in('lead_id', demandeIds)
-        .order('position', { ascending: true })
-
-      if (assignments) {
-        for (const a of assignments) {
-          const provider = a.provider as unknown as { id: string; name: string } | null
-          const entry = {
-            id: a.id,
-            status: a.status,
-            assigned_at: a.assigned_at,
-            provider_id: a.provider_id,
-            provider_name: provider?.name || 'Inconnu',
-          }
-          if (!assignmentsByLead[a.lead_id]) {
-            assignmentsByLead[a.lead_id] = []
-          }
-          assignmentsByLead[a.lead_id].push(entry)
-        }
-      }
     }
 
     return NextResponse.json({
       success: true,
-      demandes: demandes || [],
-      assignments: assignmentsByLead,
-      total: count || 0,
-      page,
-      totalPages: Math.ceil((count || 0) / limit),
+      demandes: queryResult.data.demandes,
+      assignments: queryResult.data.assignments,
+      total: queryResult.data.total,
+      page: queryResult.data.page,
+      totalPages: queryResult.data.totalPages,
     })
   } catch (error) {
     logger.error('Admin devis requests list error', error)
@@ -167,14 +97,10 @@ export async function DELETE(request: NextRequest) {
 
     const supabase = createAdminClient()
 
-    // Delete related lead_assignments first (FK-free polymorphic link)
-    await supabase.from('lead_assignments').delete().eq('lead_id', id)
+    const result = await adminDeleteQuote(supabase, id)
 
-    // Delete the devis_request
-    const { error } = await supabase.from('devis_requests').delete().eq('id', id)
-
-    if (error) {
-      logger.error('Devis request delete error', error)
+    if (result.error) {
+      logger.error('Devis request delete error', { message: result.error })
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors de la suppression' } },
         { status: 500 }

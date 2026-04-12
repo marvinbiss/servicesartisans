@@ -9,6 +9,10 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import {
+  getProfileForSettings,
+  type ProfileSettingsRow,
+} from '@/lib/services/artisan-profile-service'
 
 const querySchema = z.object({
   period: z.enum(['week', 'month', 'year']).default('month'),
@@ -95,11 +99,7 @@ export async function GET(request: Request) {
     }
 
     // Get profile
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('id, email, full_name, role')
-      .eq('id', user.id)
-      .single()
+    const { data: profile } = await getProfileForSettings(supabase, user.id)
 
     if (!profile) {
       return NextResponse.json({ error: 'Profil introuvable' }, { status: 404 })
@@ -443,7 +443,7 @@ export async function GET(request: Request) {
 async function getLegacyStats(
   supabase: Awaited<ReturnType<typeof createClient>>,
   user: { id: string },
-  profile: Record<string, unknown>,
+  profile: ProfileSettingsRow,
   period: Period,
   startTime: number
 ) {

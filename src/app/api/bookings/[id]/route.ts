@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import {
+  getBookingByIdWithSlot,
+  getBookingForAuthCheck,
+  updateBooking,
+  getProfileById,
+  extractSlotFromJoin,
+} from '@/lib/services/bookings-service'
 import { z } from 'zod'
 
 // Booking ID schema - must be valid UUID
@@ -16,10 +23,7 @@ const bookingPatchSchema = z.object({
 // GET /api/bookings/[id] - Get booking details
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  _request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: Request, { params }: { params: { id: string } }) {
   try {
     const bookingId = params.id
 
@@ -34,39 +38,15 @@ export async function GET(
 
     // Get authenticated user (optional for booking lookup by ID)
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     // Use admin client for booking lookup
     const adminSupabase = createAdminClient()
 
     // Query booking by exact ID only (no partial matching for security)
-    const { data: booking, error } = await adminSupabase
-      .from('bookings')
-      .select(`
-        id,
-        client_name,
-        client_phone,
-        client_email,
-        service_description,
-        status,
-        created_at,
-        cancelled_at,
-        cancelled_by,
-        cancellation_reason,
-        rescheduled_at,
-        payment_status,
-        deposit_amount,
-        client_id,
-        slot:availability_slots(
-          id,
-          date,
-          start_time,
-          end_time,
-          artisan_id
-        )
-      `)
-      .eq('id', bookingId)
-      .single()
+    const { data: booking, error } = await getBookingByIdWithSlot(adminSupabase, bookingId)
 
     if (error || !booking) {
       return NextResponse.json(
@@ -75,8 +55,15 @@ export async function GET(
       )
     }
 
-    const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; artisan_id: string }> | null
-    const slot = slotData?.[0] || null
+    const slot = extractSlotFromJoin(
+      booking.slot as Array<{
+        id: string
+        date: string
+        start_time: string
+        end_time: string
+        artisan_id: string
+      }> | null
+    )
 
     // Require authentication to view booking details
     if (!user) {
@@ -105,14 +92,22 @@ export async function GET(
     }
 
     // Fetch artisan details (limited info for non-owners)
-    let artisan = null
+    let artisan: {
+      id: string
+      full_name: string | null
+      phone_e164: string | null
+      email: string | null
+    } | null = null
     if (slot?.artisan_id) {
-      const { data: artisanData } = await adminSupabase
-        .from('profiles')
-        .select('id, full_name, phone_e164, email')
-        .eq('id', slot.artisan_id)
-        .single()
+      const { data: artisanData } = await getProfileById(adminSupabase, slot.artisan_id)
       artisan = artisanData
+        ? {
+            id: artisanData.id ?? slot.artisan_id,
+            full_name: artisanData.full_name,
+            phone_e164: artisanData.phone_e164 ?? null,
+            email: artisanData.email,
+          }
+        : null
     }
 
     // Format response for confirmation page
@@ -159,10 +154,7 @@ export async function GET(
 }
 
 // PATCH /api/bookings/[id] - Update booking status
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
     const bookingId = params.id
 
@@ -177,7 +169,9 @@ export async function PATCH(
 
     // Verify authentication
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
@@ -189,17 +183,19 @@ export async function PATCH(
     const body = await request.json()
     const result = bookingPatchSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Requête invalide', details: result.error.flatten() } },
+        { status: 400 }
+      )
     }
     const { status, notes } = result.data
 
     // Verify user has access to this booking
     const adminSupabase = createAdminClient()
-    const { data: existingBooking, error: fetchError } = await adminSupabase
-      .from('bookings')
-      .select('id, client_id, client_email, slot:availability_slots(artisan_id)')
-      .eq('id', bookingId)
-      .single()
+    const { data: existingBooking, error: fetchError } = await getBookingForAuthCheck(
+      adminSupabase,
+      bookingId
+    )
 
     if (fetchError || !existingBooking) {
       return NextResponse.json(
@@ -216,7 +212,10 @@ export async function PATCH(
 
     if (!isOwner && !isArtisan && !isEmailMatch) {
       return NextResponse.json(
-        { success: false, error: { message: 'Vous n\'êtes pas autorisé à modifier cette réservation' } },
+        {
+          success: false,
+          error: { message: "Vous n'êtes pas autorisé à modifier cette réservation" },
+        },
         { status: 403 }
       )
     }
@@ -224,14 +223,8 @@ export async function PATCH(
     const updateData: Record<string, string | undefined> = {}
     if (status) updateData.status = status
     if (notes !== undefined) updateData.notes = notes
-    updateData.updated_at = new Date().toISOString()
 
-    const { data, error } = await adminSupabase
-      .from('bookings')
-      .update(updateData)
-      .eq('id', bookingId)
-      .select()
-      .single()
+    const { data, error } = await updateBooking(adminSupabase, bookingId, updateData)
 
     if (error) {
       logger.error('Booking update error:', error)

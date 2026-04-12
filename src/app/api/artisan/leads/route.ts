@@ -8,6 +8,7 @@ import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { pageSchema } from '@/lib/validations/schemas'
+import { getProviderForUser, getLeadsForArtisan } from '@/lib/services/leads-service'
 
 const leadsQuerySchema = z.object({
   page: pageSchema,
@@ -22,13 +23,7 @@ export async function GET(request: NextRequest) {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    // Get provider linked to this user (include address_city for zone matching)
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id, address_city')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .single()
+    const provider = await getProviderForUser(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(
@@ -53,77 +48,16 @@ export async function GET(request: NextRequest) {
     }
 
     const { page, pageSize, status } = parsed.data
-    const from = (page - 1) * pageSize
-    const to = from + pageSize - 1
 
-    // Count query (head: true returns only count, no rows)
-    let countQuery = supabase
-      .from('lead_assignments')
-      .select('id', { count: 'exact', head: true })
-      .eq('provider_id', provider.id)
-
-    if (status !== 'all') {
-      countQuery = countQuery.eq('status', status)
-    }
-
-    const { count, error: countError } = await countQuery
-
-    if (countError) {
-      logger.error('Error counting leads:', countError)
-      return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors du comptage des leads' } },
-        { status: 500 }
-      )
-    }
-
-    const totalItems = count ?? 0
-    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize))
-
-    // Data query with pagination
-    let dataQuery = supabase
-      .from('lead_assignments')
-      .select(
-        `
-        id,
-        status,
-        assigned_at,
-        viewed_at,
-        lead:devis_requests (
-          id,
-          service_name,
-          city,
-          postal_code,
-          description,
-          urgency,
-          client_name,
-          client_email,
-          client_phone,
-          created_at,
-          status
-        )
-      `
-      )
-      .eq('provider_id', provider.id)
-      .order('assigned_at', { ascending: false })
-      .range(from, to)
-
-    if (status !== 'all') {
-      dataQuery = dataQuery.eq('status', status)
-    }
-
-    const { data: assignments, error: assignError } = await dataQuery
-
-    if (assignError) {
-      logger.error('Error fetching assigned leads:', assignError)
-      return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la récupération des leads' } },
-        { status: 500 }
-      )
-    }
+    const { assignments, totalItems, totalPages } = await getLeadsForArtisan(
+      supabase,
+      provider.id,
+      { page, pageSize, status }
+    )
 
     return NextResponse.json(
       {
-        leads: assignments || [],
+        leads: assignments,
         count: totalItems,
         provider_city: provider.address_city || null,
         pagination: {

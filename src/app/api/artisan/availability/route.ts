@@ -10,6 +10,15 @@
 import { NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
+import {
+  getAllSlotsForArtisan,
+  getSlotsForDateByArtisan,
+  createSlot,
+  getSlotById,
+  deleteSlot,
+  hasActiveBookingOnSlot,
+  hasTimeOverlap,
+} from '@/lib/services/bookings-service'
 import { z } from 'zod'
 
 // ---------------------------------------------------------------------------
@@ -43,18 +52,14 @@ export async function GET() {
     const { error, user, supabase } = await requireArtisan()
     if (error) return error
 
-    const { data: slots, error: dbError } = await supabase
-      .from('availability_slots')
-      .select('id, artisan_id, date, start_time, end_time, is_available, created_at')
-      .eq('artisan_id', user!.id)
-      .order('date', { ascending: true })
-      .order('start_time', { ascending: true })
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data: slots, error: dbError } = await getAllSlotsForArtisan(supabase, user!.id)
 
     if (dbError) {
       logger.error('Erreur DB GET availability_slots', dbError)
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors du chargement des creneaux' } },
-        { status: 500 },
+        { status: 500 }
       )
     }
 
@@ -63,7 +68,7 @@ export async function GET() {
     logger.error('GET /api/artisan/availability unexpected error', err)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
-      { status: 500 },
+      { status: 500 }
     )
   }
 }
@@ -82,59 +87,57 @@ export async function POST(request: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Donnees invalides', details: parsed.error.flatten() } },
-        { status: 400 },
+        {
+          success: false,
+          error: { message: 'Donnees invalides', details: parsed.error.flatten() },
+        },
+        { status: 400 }
       )
     }
 
     const { date, start_time, end_time, is_available } = parsed.data
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const artisanId = user!.id
 
     // --- Verification anti-chevauchement ---
-    const { data: existing, error: overlapErr } = await supabase
-      .from('availability_slots')
-      .select('id, start_time, end_time')
-      .eq('artisan_id', artisanId)
-      .eq('date', date)
+    const { data: existing, error: overlapErr } = await getSlotsForDateByArtisan(
+      supabase,
+      artisanId,
+      date
+    )
 
     if (overlapErr) {
       logger.error('Erreur DB overlap check', overlapErr)
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors de la verification des chevauchements' } },
-        { status: 500 },
+        { status: 500 }
       )
     }
 
-    const hasOverlap = (existing ?? []).some((slot) => {
-      // Deux intervalles [a,b) et [c,d) se chevauchent si a < d && c < b
-      return start_time < slot.end_time && slot.start_time < end_time
-    })
-
-    if (hasOverlap) {
+    if (hasTimeOverlap(existing ?? [], start_time, end_time)) {
       return NextResponse.json(
-        { success: false, error: { message: 'Ce creneau chevauche un creneau existant sur cette date' } },
-        { status: 409 },
+        {
+          success: false,
+          error: { message: 'Ce creneau chevauche un creneau existant sur cette date' },
+        },
+        { status: 409 }
       )
     }
 
     // --- Insertion ---
-    const { data: newSlot, error: insertErr } = await supabase
-      .from('availability_slots')
-      .insert({
-        artisan_id: artisanId,
-        date,
-        start_time,
-        end_time,
-        is_available,
-      })
-      .select()
-      .single()
+    const { data: newSlot, error: insertErr } = await createSlot(supabase, {
+      artisan_id: artisanId,
+      date,
+      start_time,
+      end_time,
+      is_available,
+    })
 
     if (insertErr) {
       logger.error('Erreur DB insert availability_slot', insertErr)
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors de la creation du creneau' } },
-        { status: 500 },
+        { status: 500 }
       )
     }
 
@@ -143,7 +146,7 @@ export async function POST(request: Request) {
     logger.error('POST /api/artisan/availability unexpected error', err)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
-      { status: 500 },
+      { status: 500 }
     )
   }
 }
@@ -162,60 +165,54 @@ export async function DELETE(request: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Parametre slotId invalide', details: parsed.error.flatten() } },
-        { status: 400 },
+        {
+          success: false,
+          error: { message: 'Parametre slotId invalide', details: parsed.error.flatten() },
+        },
+        { status: 400 }
       )
     }
 
     const { slotId } = parsed.data
 
     // Verifier que le slot appartient a l'artisan
-    const { data: slot, error: fetchErr } = await supabase
-      .from('availability_slots')
-      .select('id, artisan_id')
-      .eq('id', slotId)
-      .single()
+    const { data: slot, error: fetchErr } = await getSlotById(supabase, slotId)
 
     if (fetchErr || !slot) {
       return NextResponse.json(
         { success: false, error: { message: 'Creneau introuvable' } },
-        { status: 404 },
+        { status: 404 }
       )
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (slot.artisan_id !== user!.id) {
       return NextResponse.json(
         { success: false, error: { message: 'Vous ne pouvez pas supprimer ce creneau' } },
-        { status: 403 },
+        { status: 403 }
       )
     }
 
     // Verifier qu'aucune reservation active n'est liee a ce creneau
-    const { data: activeBooking } = await supabase
-      .from('bookings')
-      .select('id')
-      .eq('slot_id', slotId)
-      .in('status', ['pending', 'confirmed'])
-      .limit(1)
-      .single()
+    const hasActive = await hasActiveBookingOnSlot(supabase, slotId)
 
-    if (activeBooking) {
+    if (hasActive) {
       return NextResponse.json(
-        { success: false, error: { message: 'Ce créneau a une réservation active et ne peut pas être supprimé' } },
-        { status: 409 },
+        {
+          success: false,
+          error: { message: 'Ce créneau a une réservation active et ne peut pas être supprimé' },
+        },
+        { status: 409 }
       )
     }
 
-    const { error: deleteErr } = await supabase
-      .from('availability_slots')
-      .delete()
-      .eq('id', slotId)
+    const { error: deleteErr } = await deleteSlot(supabase, slotId)
 
     if (deleteErr) {
       logger.error('Erreur DB delete availability_slot', deleteErr)
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors de la suppression du creneau' } },
-        { status: 500 },
+        { status: 500 }
       )
     }
 
@@ -224,7 +221,7 @@ export async function DELETE(request: Request) {
     logger.error('DELETE /api/artisan/availability unexpected error', err)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
-      { status: 500 },
+      { status: 500 }
     )
   }
 }

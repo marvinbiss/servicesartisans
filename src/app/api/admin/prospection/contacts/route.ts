@@ -4,6 +4,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { listContacts, createContact, buildPagination } from '@/lib/services/prospection-service'
 
 const querySchema = paginationSchema.extend({
   type: z.enum(['all', 'artisan', 'client', 'mairie']).optional().default('all'),
@@ -35,7 +36,6 @@ export async function GET(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'read')
     if (!authResult.success) return authResult.error
 
-    const supabase = createAdminClient()
     const params = Object.fromEntries(request.nextUrl.searchParams)
     const parsed = querySchema.safeParse(params)
 
@@ -50,27 +50,16 @@ export async function GET(request: NextRequest) {
     }
 
     const { page, limit, type, search, department, tags, consent } = parsed.data
-    const offset = (page - 1) * limit
-
-    let query = supabase
-      .from('prospection_contacts')
-      .select('*', { count: 'exact' })
-      .eq('is_active', true)
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
-
-    if (type !== 'all') query = query.eq('contact_type', type)
-    if (department) query = query.eq('department', department)
-    if (consent !== 'all') query = query.eq('consent_status', consent)
-    if (tags) query = query.overlaps('tags', tags.split(','))
-    if (search) {
-      const escaped = search.replace(/%/g, '\\%').replace(/_/g, '\\_')
-      query = query.or(
-        `contact_name.ilike.%${escaped}%,company_name.ilike.%${escaped}%,email.ilike.%${escaped}%,city.ilike.%${escaped}%`
-      )
-    }
-
-    const { data, count, error } = await query
+    const supabase = createAdminClient()
+    const { data, count, error } = await listContacts(supabase, {
+      page,
+      limit,
+      type,
+      search,
+      department,
+      tags,
+      consent,
+    })
 
     if (error) {
       logger.error('Prospection contacts list error', error)
@@ -83,12 +72,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data,
-      pagination: {
-        page,
-        pageSize: limit,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limit),
-      },
+      pagination: buildPagination(page, limit, count || 0),
     })
   } catch (error) {
     logger.error('Prospection contacts GET error', error as Error)
@@ -104,7 +88,6 @@ export async function POST(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
 
-    const supabase = createAdminClient()
     const body = await request.json()
     const parsed = createSchema.safeParse(body)
 
@@ -134,11 +117,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { data, error } = await supabase
-      .from('prospection_contacts')
-      .insert({ ...sanitizedData, source: 'manual' })
-      .select()
-      .single()
+    const supabase = createAdminClient()
+    const { data, error } = await createContact(supabase, sanitizedData)
 
     if (error) {
       if (error.code === '23505') {

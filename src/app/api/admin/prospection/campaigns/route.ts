@@ -4,6 +4,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { listCampaigns, createCampaign, buildPagination } from '@/lib/services/prospection-service'
 
 const querySchema = paginationSchema.extend({
   status: z
@@ -42,7 +43,6 @@ export async function GET(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'read')
     if (!authResult.success) return authResult.error
 
-    const supabase = createAdminClient()
     const params = Object.fromEntries(request.nextUrl.searchParams)
     const parsed = querySchema.safeParse(params)
 
@@ -54,21 +54,8 @@ export async function GET(request: NextRequest) {
     }
 
     const { page, limit, status, channel } = parsed.data
-    const offset = (page - 1) * limit
-
-    let query = supabase
-      .from('prospection_campaigns')
-      .select(
-        '*, template:prospection_templates(id,name,channel), list:prospection_lists(id,name,contact_count)',
-        { count: 'exact' }
-      )
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
-
-    if (status !== 'all') query = query.eq('status', status)
-    if (channel !== 'all') query = query.eq('channel', channel)
-
-    const { data, count, error } = await query
+    const supabase = createAdminClient()
+    const { data, count, error } = await listCampaigns(supabase, { page, limit, status, channel })
 
     if (error) {
       logger.warn('List campaigns query failed, returning empty list', {
@@ -78,19 +65,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         data: [],
-        pagination: { page, pageSize: limit, total: 0, totalPages: 0 },
+        pagination: buildPagination(page, limit, 0),
       })
     }
 
     return NextResponse.json({
       success: true,
       data,
-      pagination: {
-        page,
-        pageSize: limit,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limit),
-      },
+      pagination: buildPagination(page, limit, count || 0),
     })
   } catch (error) {
     logger.error('Campaigns GET error', error as Error)
@@ -106,7 +88,6 @@ export async function POST(request: NextRequest) {
     const authResult = await requirePermission('prospection', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
 
-    const supabase = createAdminClient()
     const body = await request.json()
     const parsed = createSchema.safeParse(body)
 
@@ -126,15 +107,8 @@ export async function POST(request: NextRequest) {
     if (sanitizedData.description)
       sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
 
-    const { data, error } = await supabase
-      .from('prospection_campaigns')
-      .insert({
-        ...sanitizedData,
-        status: sanitizedData.scheduled_at ? 'scheduled' : 'draft',
-        created_by: authResult.admin.id,
-      })
-      .select()
-      .single()
+    const supabase = createAdminClient()
+    const { data, error } = await createCampaign(supabase, sanitizedData, authResult.admin.id)
 
     if (error) {
       logger.error('Create campaign error', error)

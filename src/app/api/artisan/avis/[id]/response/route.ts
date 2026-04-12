@@ -5,6 +5,12 @@ import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { isValidUUID } from '@/lib/validation/uuid'
 import { z } from 'zod'
 import { sanitizeUserInput } from '@/lib/sanitize'
+import {
+  getActiveProviderIdByUserId,
+  getReviewByIdForProvider,
+  updateReviewReply,
+  getProviderForRevalidation,
+} from '@/lib/services/artisan-profile-service'
 
 // POST request schema
 const reviewResponseSchema = z.object({
@@ -47,13 +53,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { response } = result.data
 
     // Resolve this user's provider.id (reviews.provider_id → providers.id)
-    const { data: providerRow } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .limit(1)
-      .maybeSingle()
+    const { data: providerRow } = await getActiveProviderIdByUserId(supabase, user.id)
 
     const providerId = providerRow?.id
     if (!providerId) {
@@ -64,12 +64,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     // Check review belongs to this provider and has no reply yet
-    const { data: review } = await supabase
-      .from('reviews')
-      .select('id, provider_id, reply')
-      .eq('id', id)
-      .eq('provider_id', providerId)
-      .single()
+    const { data: review } = await getReviewByIdForProvider(supabase, id, providerId)
 
     if (!review) {
       return NextResponse.json(
@@ -86,23 +81,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     // Update review with reply
-    const { error: updateError } = await supabase
-      .from('reviews')
-      .update({
-        reply: sanitizeUserInput(response.trim()),
-        reply_date: new Date().toISOString(),
-      })
-      .eq('id', id)
+    const { error: updateError } = await updateReviewReply(
+      supabase,
+      id,
+      sanitizeUserInput(response.trim())
+    )
 
     if (updateError) throw updateError
 
     // Revalidate public artisan page (ISR cache bust)
     try {
-      const { data: provider } = await supabase
-        .from('providers')
-        .select('specialty, address_city, slug, stable_id')
-        .eq('user_id', user.id)
-        .single()
+      const { data: provider } = await getProviderForRevalidation(supabase, user.id)
 
       if (provider) {
         const toSlug = (s: string) => s.toLowerCase().replace(/\s+/g, '-')

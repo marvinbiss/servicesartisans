@@ -6,11 +6,15 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { isValidUUID } from '@/lib/validation/uuid'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+import {
+  getPortfolioItem,
+  updatePortfolioItem,
+  deletePortfolioItem,
+} from '@/lib/services/portfolio-service'
 
 const updatePortfolioSchema = z.object({
   title: z.string().min(3).max(100).optional(),
@@ -40,13 +44,13 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Verify user is an artisan
@@ -57,41 +61,23 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
       .single()
 
     if (!profile || profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
 
     if (!isValidUUID(id)) {
-      return NextResponse.json(
-        { error: 'Identifiant invalide' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Identifiant invalide' }, { status: 400 })
     }
 
-    // Fetch portfolio item
-    const { data: item, error } = await supabase
-      .from('portfolio_items')
-      .select('id, artisan_id, title, description, image_url, thumbnail_url, category, tags, is_featured, display_order, created_at, media_type, video_url, before_image_url, after_image_url, is_visible')
-      .eq('id', id)
-      .eq('artisan_id', user.id)
-      .single()
+    const result = await getPortfolioItem(supabase, id, user.id)
 
-    if (error || !item) {
-      return NextResponse.json(
-        { error: 'Élément non trouvé' },
-        { status: 404 }
-      )
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: result.status })
     }
 
-    return NextResponse.json({ item })
+    return NextResponse.json({ item: result.data })
   } catch (error) {
     logger.error('Portfolio item GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -101,13 +87,13 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Verify user is an artisan
@@ -118,97 +104,38 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       .single()
 
     if (!profile || profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
 
     if (!isValidUUID(id)) {
-      return NextResponse.json(
-        { error: 'Identifiant invalide' },
-        { status: 400 }
-      )
-    }
-
-    // Verify ownership
-    const { data: existingItem, error: fetchError } = await supabase
-      .from('portfolio_items')
-      .select('id')
-      .eq('id', id)
-      .eq('artisan_id', user.id)
-      .single()
-
-    if (fetchError || !existingItem) {
-      return NextResponse.json(
-        { error: 'Élément non trouvé ou accès non autorisé' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Identifiant invalide' }, { status: 400 })
     }
 
     // Parse and validate request body
     const body = await request.json()
-    const result = updatePortfolioSchema.safeParse(body)
+    const validation = updatePortfolioSchema.safeParse(body)
 
-    if (!result.success) {
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: result.error.flatten() },
+        { error: 'Données invalides', details: validation.error.flatten() },
         { status: 400 }
       )
     }
 
-    // Update portfolio item
-    const { data: item, error: updateError } = await supabase
-      .from('portfolio_items')
-      .update({
-        ...result.data,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', id)
-      .eq('artisan_id', user.id)
-      .select()
-      .single()
+    const result = await updatePortfolioItem(supabase, id, user.id, validation.data)
 
-    if (updateError) {
-      logger.error('Error updating portfolio item:', updateError)
-      return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour' },
-        { status: 500 }
-      )
-    }
-
-    // Revalidate public artisan page (ISR cache bust)
-    try {
-      const { data: provider } = await supabase
-        .from('providers')
-        .select('specialty, address_city, slug, stable_id')
-        .eq('user_id', user.id)
-        .single()
-
-      if (provider) {
-        const toSlug = (s: string) => s.toLowerCase().replace(/\s+/g, '-')
-        const serviceSlug = toSlug(provider.specialty || '')
-        const locationSlug = toSlug(provider.address_city || '')
-        if (serviceSlug && locationSlug && provider.stable_id) {
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${provider.stable_id}`)
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}`)
-        }
-      }
-    } catch (revalidateError) {
-      logger.error('Revalidation error after portfolio update:', revalidateError)
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: result.status })
     }
 
     return NextResponse.json({
       success: true,
-      item,
+      item: result.data,
       message: 'Élément mis à jour',
     })
   } catch (error) {
     logger.error('Portfolio item PUT error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -218,13 +145,13 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Verify user is an artisan
@@ -235,83 +162,25 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
       .single()
 
     if (!profile || profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
 
     if (!isValidUUID(id)) {
-      return NextResponse.json(
-        { error: 'Identifiant invalide' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Identifiant invalide' }, { status: 400 })
     }
 
-    // Get item to delete (also verifies ownership)
-    const { data: item, error: fetchError } = await supabase
-      .from('portfolio_items')
-      .select('id')
-      .eq('id', id)
-      .eq('artisan_id', user.id)
-      .single()
+    const result = await deletePortfolioItem(supabase, id, user.id)
 
-    if (fetchError || !item) {
-      return NextResponse.json(
-        { error: 'Élément non trouvé ou accès non autorisé' },
-        { status: 404 }
-      )
-    }
-
-    // Delete from database
-    const { error: deleteError } = await supabase
-      .from('portfolio_items')
-      .delete()
-      .eq('id', id)
-      .eq('artisan_id', user.id)
-
-    if (deleteError) {
-      logger.error('Error deleting portfolio item:', deleteError)
-      return NextResponse.json(
-        { error: 'Erreur lors de la suppression' },
-        { status: 500 }
-      )
-    }
-
-    // Note: Storage cleanup should be handled separately or via a trigger
-    // The files in Supabase Storage can be cleaned up via a scheduled job
-    // or immediately if we have the deleteFile function available server-side
-
-    // Revalidate public artisan page (ISR cache bust)
-    try {
-      const { data: provider } = await supabase
-        .from('providers')
-        .select('specialty, address_city, slug, stable_id')
-        .eq('user_id', user.id)
-        .single()
-
-      if (provider) {
-        const toSlug = (s: string) => s.toLowerCase().replace(/\s+/g, '-')
-        const serviceSlug = toSlug(provider.specialty || '')
-        const locationSlug = toSlug(provider.address_city || '')
-        if (serviceSlug && locationSlug && provider.stable_id) {
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${provider.stable_id}`)
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}`)
-        }
-      }
-    } catch (revalidateError) {
-      logger.error('Revalidation error after portfolio delete:', revalidateError)
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: result.status })
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Élément supprimé',
+      message: result.data.message,
     })
   } catch (error) {
     logger.error('Portfolio item DELETE error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

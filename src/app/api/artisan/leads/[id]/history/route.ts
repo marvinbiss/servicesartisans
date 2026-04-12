@@ -7,13 +7,15 @@ import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { isValidUUID } from '@/lib/validation/uuid'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import {
+  getProviderForUser,
+  verifyAssignmentOwnership,
+  getLeadHistory,
+} from '@/lib/services/leads-service'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
     const { error: guardError, user, supabase } = await requireArtisan()
@@ -26,47 +28,35 @@ export async function GET(
       )
     }
 
-    // Get provider linked to this user
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .single()
+    const provider = await getProviderForUser(supabase, user.id)
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Aucun profil artisan' } }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Aucun profil artisan' } },
+        { status: 403 }
+      )
     }
 
     // Verify assignment belongs to this provider
-    const { data: assignment } = await supabase
-      .from('lead_assignments')
-      .select('lead_id')
-      .eq('id', id)
-      .eq('provider_id', provider.id)
-      .single()
+    const assignment = await verifyAssignmentOwnership(supabase, id, provider.id)
 
     if (!assignment) {
-      return NextResponse.json({ success: false, error: { message: 'Lead non trouvé' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Lead non trouvé' } },
+        { status: 404 }
+      )
     }
 
     // Fetch events for this lead (admin client to read lead_events)
     const adminClient = createAdminClient()
-    const { data: events, error: eventsError } = await adminClient
-      .from('lead_events')
-      .select('id, event_type, metadata, created_at')
-      .eq('lead_id', assignment.lead_id)
-      .eq('provider_id', provider.id)
-      .order('created_at', { ascending: true })
+    const events = await getLeadHistory(adminClient, assignment.lead_id, provider.id)
 
-    if (eventsError) {
-      logger.error('Lead history error:', eventsError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
-    }
-
-    return NextResponse.json({ events: events || [] })
+    return NextResponse.json({ events })
   } catch (error) {
     logger.error('Lead history GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

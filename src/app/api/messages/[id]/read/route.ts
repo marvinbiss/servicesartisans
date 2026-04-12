@@ -6,28 +6,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { getMessageById, markSingleMessageAsRead } from '@/lib/services/messages-service'
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: messageId } = await params
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     // Verify user has access to the conversation
-    const { data: message } = await supabase
-      .from('messages')
-      .select('conversation_id, sender_id')
-      .eq('id', messageId)
-      .single()
+    const { data: message } = await getMessageById(supabase, messageId)
 
     if (!message) {
       return NextResponse.json(
@@ -43,11 +42,7 @@ export async function POST(
 
     // Mark message as read by updating read_at on messages table
     // (message_read_receipts table was dropped in migration 100)
-    const { error } = await supabase
-      .from('messages')
-      .update({ read_at: new Date().toISOString() })
-      .eq('id', messageId)
-      .is('read_at', null)
+    const { error } = await markSingleMessageAsRead(supabase, messageId)
 
     if (error) {
       logger.error('Error marking message as read', error)

@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
+import { getTeamMembers, insertTeamMember } from '@/lib/services/artisan-profile-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +17,10 @@ const memberSchema = z.object({
   email: z.string().email(),
   phone: z.string().max(50).optional(),
   role: z.string().min(1).max(255),
-  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  color: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/)
+    .optional(),
 })
 
 export async function GET() {
@@ -24,16 +28,13 @@ export async function GET() {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    const { data, error } = await supabase
-      .from('team_members')
-      .select('id, name, email, phone, role, color, avatar_url, is_active, created_at')
-      .eq('artisan_id', user!.id)
-      .order('created_at', { ascending: true })
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { data, error } = await getTeamMembers(supabase, user!.id)
 
     if (error) {
       logger.error('Error fetching team members:', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors du chargement de l\'équipe' } },
+        { success: false, error: { message: "Erreur lors du chargement de l'équipe" } },
         { status: 500 }
       )
     }
@@ -41,7 +42,10 @@ export async function GET() {
     return NextResponse.json({ members: data ?? [] })
   } catch (error) {
     logger.error('Equipe GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -55,31 +59,31 @@ export async function POST(request: Request) {
 
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: validation.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: validation.error.flatten() },
+        },
         { status: 400 }
       )
     }
 
     const { name, email, phone, role, color } = validation.data
 
-    const { data, error } = await supabase
-      .from('team_members')
-      .insert({
-        artisan_id: user!.id,
-        name,
-        email,
-        phone: phone ?? null,
-        role,
-        color: color ?? '#3b82f6',
-        is_active: true,
-      })
-      .select('id, name, email, phone, role, color, avatar_url, is_active, created_at')
-      .single()
+    const { data, error } = await insertTeamMember(supabase, {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      artisan_id: user!.id,
+      name,
+      email,
+      phone: phone ?? null,
+      role,
+      color: color ?? '#3b82f6',
+      is_active: true,
+    })
 
     if (error) {
       logger.error('Error inserting team member:', error)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de l\'ajout du membre' } },
+        { success: false, error: { message: "Erreur lors de l'ajout du membre" } },
         { status: 500 }
       )
     }
@@ -87,6 +91,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ member: data }, { status: 201 })
   } catch (error) {
     logger.error('Equipe POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

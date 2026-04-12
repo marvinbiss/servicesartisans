@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { adminListBookings } from '@/lib/services/bookings-service'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
 
@@ -46,25 +47,6 @@ export async function GET(request: NextRequest) {
     }
     const { page, limit, status, search } = result.data
 
-    const offset = (page - 1) * limit
-
-    let query = supabase.from('bookings').select(
-      `
-        *,
-        provider:providers!provider_id (
-          id,
-          name,
-          email
-        )
-      `,
-      { count: 'exact' }
-    )
-
-    // Filtre par statut
-    if (status !== 'all') {
-      query = query.eq('status', status)
-    }
-
     // Recherche: bookings n'a pas de colonnes textuelles libres (client_email et service n'existent pas).
     // La recherche par status est gérée par le filtre dédié ci-dessus.
     // Le paramètre search est accepté pour compatibilité UI mais ignoré au niveau DB.
@@ -74,12 +56,12 @@ export async function GET(request: NextRequest) {
       data: bookings,
       count,
       error,
-    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
+    } = await adminListBookings(supabase, { status, page, limit })
 
     if (error) {
       logger.warn('Bookings query failed, returning empty list', {
-        code: error.code,
-        message: error.message,
+        code: (error as { code?: string }).code,
+        message: (error as { message?: string }).message,
       })
       return NextResponse.json({
         success: true,

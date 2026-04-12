@@ -7,6 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import {
+  getDevisRequestById,
+  getQuotesForLead,
+  getLeadEventsById,
+  getAssignmentsForLead,
+  type LeadEventRow,
+} from '@/lib/services/leads-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,80 +30,44 @@ const CLIENT_SAFE_EVENT_LABELS: Record<string, string> = {
   reassigned: 'Nouvel artisan contacté',
 }
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
     const supabase = await createClient()
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non authentifié' } },
+        { status: 401 }
+      )
     }
 
     // Fetch the devis_request — RLS ensures client_id = auth.uid()
-    const { data: lead, error: leadError } = await supabase
-      .from('devis_requests')
-      .select('id, service_name, city, postal_code, description, budget, urgency, status, client_name, client_email, client_phone, created_at')
-      .eq('id', id)
-      .eq('client_id', user.id)
-      .single()
+    const lead = await getDevisRequestById(supabase, id, user.id)
 
-    if (leadError || !lead) {
-      return NextResponse.json({ success: false, error: { message: 'Demande non trouvée' } }, { status: 404 })
+    if (!lead) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Demande non trouvée' } },
+        { status: 404 }
+      )
     }
 
     // Use admin client for tables restricted by RLS to providers only
     const adminClient = createAdminClient()
 
-    // Fetch quotes for this lead — join provider info
-    const { data: quotesRaw, error: quotesError } = await adminClient
-      .from('quotes')
-      .select(`
-        id,
-        amount,
-        description,
-        valid_until,
-        status,
-        created_at,
-        provider_id,
-        provider:providers!provider_id(id, name, specialty, address_city, rating_average)
-      `)
-      .eq('request_id', id)
-      .order('created_at', { ascending: true })
+    // Fetch quotes, events, and assignments in parallel
+    const [quotesRaw, events, assignments] = await Promise.all([
+      getQuotesForLead(adminClient, id),
+      getLeadEventsById(adminClient, id),
+      getAssignmentsForLead(adminClient, id),
+    ])
 
-    if (quotesError) {
-      logger.error('Client lead detail quotes error:', quotesError)
-    }
-
-    // Fetch events for this lead (admin client — RLS is admin-only on lead_events)
-    const { data: events, error: eventsError } = await adminClient
-      .from('lead_events')
-      .select('id, event_type, metadata, created_at')
-      .eq('lead_id', id)
-      .order('created_at', { ascending: true })
-
-    if (eventsError) {
-      logger.error('Client lead detail events error:', eventsError)
-    }
-
-    // Fetch lead_assignments stats — how many artisans have seen this lead
-    const { data: assignments, error: assignmentsError } = await adminClient
-      .from('lead_assignments')
-      .select('id, status')
-      .eq('lead_id', id)
-
-    if (assignmentsError) {
-      logger.error('Client lead detail assignments error:', assignmentsError)
-    }
-
-    // Sanitize events for client view:
-    // - Use client-friendly labels
-    // - Strip provider_id, actor_id
-    // - Expose only safe metadata (amounts, no internal IDs)
-    const clientEvents = (events || []).map(e => ({
+    // Sanitize events for client view
+    const clientEvents = events.map((e: LeadEventRow) => ({
       id: e.id,
       event_type: e.event_type,
       label: CLIENT_SAFE_EVENT_LABELS[e.event_type] || e.event_type,
@@ -105,8 +76,7 @@ export async function GET(
     }))
 
     // Build quotes list — strip provider_id from client response
-    const quotes = (quotesRaw || []).map(q => {
-      // Supabase returns the join as an array or object depending on FK cardinality
+    const quotes = quotesRaw.map((q) => {
       const providerRaw = Array.isArray(q.provider) ? q.provider[0] : q.provider
       return {
         id: q.id,
@@ -126,13 +96,12 @@ export async function GET(
       }
     })
 
-    const allAssignments = assignments || []
-    const artisansViewed = allAssignments.filter(a =>
+    const artisansViewed = assignments.filter((a) =>
       ['viewed', 'quoted', 'declined'].includes(a.status)
     ).length
 
     const stats = {
-      artisans_notified: allAssignments.length,
+      artisans_notified: assignments.length,
       artisans_viewed: artisansViewed,
       quotes_count: quotes.length,
     }
@@ -149,7 +118,10 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Client lead detail GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
 

@@ -4,13 +4,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { resumeCampaign } from '@/lib/prospection/message-queue'
+import { getCampaignStatus } from '@/lib/services/prospection-service'
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'send')
     if (!authResult.success || !authResult.admin) return authResult.error
@@ -24,14 +22,20 @@ export async function POST(
     }
 
     const supabase = createAdminClient()
-    const { data: campaign } = await supabase.from('prospection_campaigns').select('id, status').eq('id', id).single()
+    const { data: campaign } = await getCampaignStatus(supabase, id)
     if (!campaign) {
-      return NextResponse.json({ success: false, error: { message: 'Campagne introuvable' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Campagne introuvable' } },
+        { status: 404 }
+      )
     }
 
     if (campaign.status !== 'paused') {
       return NextResponse.json(
-        { success: false, error: { message: 'Seules les campagnes en pause peuvent être relancées' } },
+        {
+          success: false,
+          error: { message: 'Seules les campagnes en pause peuvent être relancées' },
+        },
         { status: 400 }
       )
     }
@@ -43,6 +47,9 @@ export async function POST(
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Resume campaign error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

@@ -6,10 +6,10 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { checkRateLimit } from '@/lib/rate-limiter'
 import { z } from 'zod'
+import { createClaim } from '@/lib/services/claims-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,10 +25,11 @@ const claimSchema = z.object({
 export async function POST(request: Request) {
   try {
     // Rate limiting (public endpoint — 3 requests per hour per IP)
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-      || request.headers.get('x-real-ip')
-      || request.headers.get('cf-connecting-ip')
-      || 'unknown'
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      request.headers.get('cf-connecting-ip') ||
+      'unknown'
     const rl = await checkRateLimit(`claim:${ip}`, { window: 3_600_000, max: 3 })
     if (!rl.allowed) {
       return NextResponse.json(
@@ -39,17 +40,16 @@ export async function POST(request: Request) {
 
     // Auth is OPTIONAL — try to get user, but don't fail if not logged in
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     // Validate body
     let body
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json(
-        { error: 'Corps de requête invalide' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Corps de requête invalide' }, { status: 400 })
     }
 
     const validation = claimSchema.safeParse(body)
@@ -60,185 +60,30 @@ export async function POST(request: Request) {
       )
     }
 
-    const { providerId, siret, fullName, email, phone, position } = validation.data
-    const adminClient = createAdminClient()
+    const result = await createClaim(validation.data, user?.id ?? null)
 
-    // Duplicate checks — different logic for authenticated vs anonymous
-    if (user) {
-      // Authenticated: check if user already owns a provider
-      const { data: existingProvider } = await adminClient
-        .from('providers')
-        .select('id')
-        .eq('user_id', user.id)
-        .single()
-
-      if (existingProvider) {
-        return NextResponse.json(
-          { error: 'Vous avez déjà une fiche artisan associée à votre compte' },
-          { status: 409 }
-        )
-      }
-
-      // Check if user already has a pending claim
-      const { data: pendingClaims } = await adminClient
-        .from('provider_claims')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('status', 'pending')
-        .limit(1)
-
-      if (pendingClaims && pendingClaims.length > 0) {
-        return NextResponse.json(
-          { error: 'Vous avez déjà une demande de revendication en cours de validation' },
-          { status: 409 }
-        )
-      }
-    } else {
-      // Anonymous: check by email if there's already a pending claim
-      const { data: emailPendingClaims } = await adminClient
-        .from('provider_claims')
-        .select('id')
-        .eq('claimant_email', email.trim().toLowerCase())
-        .eq('status', 'pending')
-        .limit(1)
-
-      if (emailPendingClaims && emailPendingClaims.length > 0) {
-        return NextResponse.json(
-          { error: 'Une demande de revendication est déjà en cours avec cet email' },
-          { status: 409 }
-        )
-      }
-    }
-
-    // Check if this specific provider already has a pending claim from anyone
-    const { data: providerPendingClaims } = await adminClient
-      .from('provider_claims')
-      .select('id')
-      .eq('provider_id', providerId)
-      .eq('status', 'pending')
-      .limit(1)
-
-    if (providerPendingClaims && providerPendingClaims.length > 0) {
-      return NextResponse.json(
-        { error: 'Une demande de revendication est déjà en cours pour cette fiche' },
-        { status: 409 }
-      )
-    }
-
-    // Fetch provider
-    const { data: provider, error: providerError } = await adminClient
-      .from('providers')
-      .select('id, name, siret, user_id')
-      .eq('id', providerId)
-      .single()
-
-    if (providerError || !provider) {
-      return NextResponse.json(
-        { error: 'Fiche artisan introuvable' },
-        { status: 404 }
-      )
-    }
-
-    if (provider.user_id) {
-      return NextResponse.json(
-        { error: 'Cette fiche a déjà été revendiquée par un autre utilisateur' },
-        { status: 409 }
-      )
-    }
-
-    if (!provider.siret) {
-      return NextResponse.json(
-        { error: 'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIRET ou contacter le support.' },
-        { status: 400 }
-      )
-    }
-
-    // SIREN/SIRET verification (normalize: strip spaces)
-    const normalizedInput = siret.replace(/\s/g, '')
-    const normalizedStored = provider.siret.replace(/\s/g, '')
-    const isSirenInput = normalizedInput.length === 9
-
-    // Match: full SIRET (14 digits) or SIREN (first 9 digits)
-    const matches = isSirenInput
-      ? normalizedInput === normalizedStored.slice(0, 9)
-      : normalizedInput === normalizedStored
-
-    if (!matches) {
-      logger.warn('Claim SIREN/SIRET mismatch', {
-        userId: user?.id || 'anonymous',
-        claimantEmail: email,
-        providerId,
-        providerName: provider.name,
-        inputSiren: normalizedInput.slice(0, 9),
-        storedSiren: normalizedStored.slice(0, 9),
-      })
-
-      return NextResponse.json(
-        { error: 'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIREN/SIRET ou contacter le support.' },
-        { status: 403 }
-      )
-    }
-
-    // SIREN/SIRET matches — create a pending claim for admin review
-    // Store the full SIRET for traceability even if user entered SIREN
-    const { error: insertError } = await adminClient
-      .from('provider_claims')
-      .insert({
-        provider_id: providerId,
-        user_id: user?.id ?? null,
-        siret_provided: isSirenInput ? normalizedStored : normalizedInput,
-        claimant_name: fullName,
-        claimant_email: email.trim().toLowerCase(),
-        claimant_phone: phone,
-        claimant_position: position,
-        status: 'pending',
-      })
-
-    if (insertError) {
-      if (insertError.code === '23505') {
-        return NextResponse.json(
-          { error: 'Vous avez déjà soumis une demande pour cette fiche' },
-          { status: 409 }
-        )
-      }
-      logger.error('Claim insert error', { error: insertError, userId: user?.id, providerId })
+    if (!result.success) {
       return NextResponse.json(
         {
-          error: 'Erreur lors de la soumission de la demande',
-          ...(process.env.NODE_ENV === 'development' && {
-            debug: { message: insertError.message, code: insertError.code, details: insertError.details },
-          }),
+          error: result.error,
+          ...(result.details &&
+            process.env.NODE_ENV === 'development' && { debug: result.details }),
         },
-        { status: 500 }
+        { status: result.status }
       )
     }
-
-    // Update user profile if authenticated
-    if (user) {
-      await adminClient
-        .from('profiles')
-        .update({
-          full_name: fullName,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id)
-    }
-
-    logger.info('Claim submitted', {
-      userId: user?.id || 'anonymous',
-      claimantEmail: email,
-      providerId,
-      providerName: provider.name,
-    })
 
     return NextResponse.json({
       success: true,
-      message: 'Votre demande de revendication a été soumise. Un administrateur la validera rapidement.',
+      message: result.message,
     })
   } catch (err) {
     logger.error('Claim API unexpected error', { error: err })
     return NextResponse.json(
-      { error: 'Erreur serveur', ...(process.env.NODE_ENV === 'development' && { debug: String(err) }) },
+      {
+        error: 'Erreur serveur',
+        ...(process.env.NODE_ENV === 'development' && { debug: String(err) }),
+      },
       { status: 500 }
     )
   }

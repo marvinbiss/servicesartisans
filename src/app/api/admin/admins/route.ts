@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { type AdminRole } from '@/types/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { listAdmins, createAdmin } from '@/lib/services/admin-crud-service'
 
 // GET query params schema — pagination only, no additional filters
 const adminsQuerySchema = paginationSchema
@@ -36,8 +36,6 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = createAdminClient()
-
     const { searchParams } = new URL(request.url)
     const queryParams = {
       page: searchParams.get('page') || '1',
@@ -53,46 +51,18 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { page, limit } = result.data
-    const offset = (page - 1) * limit
 
-    // Fetch admins from profiles table (admin_roles table does not exist)
-    const {
-      data: profiles,
-      error,
-      count,
-    } = await supabase
-      .from('profiles')
-      .select('id, email, full_name, role, is_admin, created_at', { count: 'exact' })
-      .or('is_admin.eq.true,role.in.(super_admin,admin,moderator,viewer)')
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const supabase = createAdminClient()
+    const serviceResult = await listAdmins(supabase, result.data)
 
-    if (error) {
-      logger.warn('Profiles admin query failed', { code: error.code, message: error.message })
-      return NextResponse.json({
-        admins: [],
-        total: 0,
-        totalPages: 0,
-        page,
-      })
+    if (serviceResult.error) {
+      return NextResponse.json(
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
+      )
     }
 
-    const admins = (profiles || []).map((p) => ({
-      id: p.id,
-      email: p.email || '',
-      full_name: p.full_name || null,
-      role: p.role as AdminRole | null,
-      is_admin: p.is_admin,
-      created_at: p.created_at,
-    }))
-
-    return NextResponse.json({
-      admins,
-      total: count || 0,
-      totalPages: Math.ceil((count || 0) / limit),
-      page,
-    })
+    return NextResponse.json(serviceResult.data)
   } catch (error) {
     logger.error('Admin fetch error', error)
     return NextResponse.json(
@@ -122,8 +92,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = createAdminClient()
-
     const body = await request.json()
     const result = createAdminSchema.safeParse(body)
     if (!result.success) {
@@ -135,92 +103,28 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { user_id, email, role } = result.data
 
-    // Resolve user_id from email if needed
-    let targetUserId = user_id
-    if (!targetUserId && email) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', email)
-        .single()
+    const supabase = createAdminClient()
+    const serviceResult = await createAdmin(supabase, result.data)
 
-      if (profile) {
-        targetUserId = profile.id
-      } else {
-        // User doesn't exist — create auth account + profile
-        const tempPassword = crypto.randomUUID()
-        const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-          email,
-          password: tempPassword,
-          email_confirm: true,
-          user_metadata: { full_name: email.split('@')[0] },
-        })
-
-        if (authError || !authData.user) {
-          logger.error('Error creating auth user for admin', authError)
-          return NextResponse.json(
-            {
-              success: false,
-              error: { message: authError?.message || 'Erreur lors de la création du compte' },
-            },
-            { status: 400 }
-          )
-        }
-
-        // Create profile
-        await supabase.from('profiles').upsert({
-          id: authData.user.id,
-          email,
-          full_name: email.split('@')[0],
-          is_admin: true,
-          role,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-
-        targetUserId = authData.user.id
-      }
-    }
-
-    // Promote user to admin role via profiles table
-    const { data: updatedProfile, error } = await supabase
-      .from('profiles')
-      .update({ role: role, is_admin: true, updated_at: new Date().toISOString() })
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      .eq('id', targetUserId!)
-      .select('id, email, full_name, role, is_admin, created_at')
-      .single()
-
-    if (error) {
-      if (error.code === 'PGRST116') {
-        return NextResponse.json(
-          { success: false, error: { message: 'Aucun utilisateur trouvé avec cet identifiant' } },
-          { status: 404 }
-        )
-      }
-      logger.error('Error promoting user to admin', error)
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: "Erreur lors de la création de l'administrateur" } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
-    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', updatedProfile.id, {
-      role,
-    })
+    await logAdminAction(
+      authResult.admin.id,
+      'admin_created',
+      'settings',
+      serviceResult.data.admin.id,
+      {
+        role: result.data.role,
+      }
+    )
 
-    return NextResponse.json({
-      admin: {
-        id: updatedProfile.id,
-        email: updatedProfile.email || '',
-        full_name: updatedProfile.full_name || null,
-        role: updatedProfile.role as AdminRole | null,
-        is_admin: updatedProfile.is_admin,
-        created_at: updatedProfile.created_at,
-      },
-    })
+    return NextResponse.json({ admin: serviceResult.data.admin })
   } catch (error) {
     logger.error('Admin create error', error)
     return NextResponse.json(

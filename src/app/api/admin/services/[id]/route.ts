@@ -4,6 +4,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+import { getServiceById, updateService, deleteService } from '@/lib/services/admin-crud-service'
 
 // PATCH request schema
 const updateServiceSchema = z.object({
@@ -20,12 +21,8 @@ const updateServiceSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un service
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with services:read permission
     const authResult = await requirePermission('services', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -39,22 +36,16 @@ export async function GET(
     }
 
     const supabase = createAdminClient()
+    const serviceResult = await getServiceById(supabase, params.id)
 
-    const { data: service, error } = await supabase
-      .from('services')
-      .select('id, name, slug, description, icon, category, is_active, sort_order, created_at')
-      .eq('id', params.id)
-      .single()
-
-    if (error) {
-      logger.warn('Service detail query failed', { code: error.code, message: error.message })
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Service introuvable' } },
-        { status: 404 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
-    return NextResponse.json({ success: true, service })
+    return NextResponse.json({ success: true, ...serviceResult.data })
   } catch (error) {
     logger.error('Admin service details error', error)
     return NextResponse.json(
@@ -65,12 +56,8 @@ export async function GET(
 }
 
 // PATCH - Mettre à jour un service
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with services:write permission
     const authResult = await requirePermission('services', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -83,12 +70,14 @@ export async function PATCH(
       )
     }
 
-    const supabase = createAdminClient()
     const body = await request.json()
     const result = updateServiceSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -102,31 +91,22 @@ export async function PATCH(
       }
     }
 
-    const { data, error } = await supabase
-      .from('services')
-      .update({
-        ...sanitizedData,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
-      .select()
-      .single()
+    const supabase = createAdminClient()
+    const serviceResult = await updateService(supabase, params.id, sanitizedData)
 
-    if (error) {
-      logger.error('Service update failed', { code: error.code, message: error.message })
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de mettre à jour le service' } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
-    // Log d'audit
     await logAdminAction(authResult.admin.id, 'service.update', 'service', params.id, result.data)
 
     return NextResponse.json({
       success: true,
-      service: data,
-      message: 'Service mis à jour',
+      service: serviceResult.data.service,
+      message: serviceResult.data.message,
     })
   } catch (error) {
     logger.error('Admin service update error', error)
@@ -138,12 +118,8 @@ export async function PATCH(
 }
 
 // DELETE - Supprimer/désactiver un service
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with services:delete permission
     const authResult = await requirePermission('services', 'delete')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -156,29 +132,19 @@ export async function DELETE(
       )
     }
 
-    const supabase = createAdminClient()
-
-    // Log the deletion
     await logAdminAction(authResult.admin.id, 'service.delete', 'service', params.id)
 
-    // Soft delete
-    const { error } = await supabase
-      .from('services')
-      .update({ is_active: false })
-      .eq('id', params.id)
+    const supabase = createAdminClient()
+    const serviceResult = await deleteService(supabase, params.id)
 
-    if (error) {
-      logger.error('Service delete failed', { code: error.code, message: error.message })
+    if (serviceResult.error) {
       return NextResponse.json(
-        { success: false, error: { message: 'Impossible de désactiver le service' } },
-        { status: 500 }
+        { success: false, error: { message: serviceResult.error.message } },
+        { status: serviceResult.error.status }
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Service désactivé',
-    })
+    return NextResponse.json({ success: true, message: serviceResult.data.message })
   } catch (error) {
     logger.error('Admin service delete error', error)
     return NextResponse.json(

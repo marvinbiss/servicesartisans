@@ -12,8 +12,15 @@ import { z } from 'zod'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { isValidUUID } from '@/lib/validation/uuid'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
+import {
+  getProviderForUser,
+  getAssignmentForAction,
+  updateAssignmentStatus,
+  getExistingQuote,
+  insertQuote,
+  logLeadEvent,
+} from '@/lib/services/leads-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,10 +38,7 @@ const actionSchema = z.discriminatedUnion('action', [
   }),
 ])
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
 
@@ -52,37 +56,38 @@ export async function POST(
     const result = actionSchema.safeParse(rawBody)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Action invalide. Valeurs: view, quote, decline', details: result.error.flatten() } },
+        {
+          success: false,
+          error: {
+            message: 'Action invalide. Valeurs: view, quote, decline',
+            details: result.error.flatten(),
+          },
+        },
         { status: 400 }
       )
     }
     const body = result.data
 
-    // Get provider linked to this user
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .single()
+    const provider = await getProviderForUser(supabase, user.id)
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Aucun profil artisan' } }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Aucun profil artisan' } },
+        { status: 403 }
+      )
     }
 
     // Verify assignment exists and belongs to this provider.
     // adminClient used for SELECT only (read across RLS boundary is harmless here;
     // the provider_id check ensures the artisan only sees their own record).
     const adminClient = createAdminClient()
-    const { data: assignment, error: assignError } = await adminClient
-      .from('lead_assignments')
-      .select('id, lead_id, status')
-      .eq('id', id)
-      .eq('provider_id', provider.id)
-      .single()
+    const assignment = await getAssignmentForAction(adminClient, id, provider.id)
 
-    if (assignError || !assignment) {
-      return NextResponse.json({ success: false, error: { message: 'Lead non trouvé' } }, { status: 404 })
+    if (!assignment) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Lead non trouvé' } },
+        { status: 404 }
+      )
     }
 
     const now = new Date().toISOString()
@@ -101,15 +106,7 @@ export async function POST(
 
       // Bug 1 fix: use authenticated supabase client (RLS policy "lead_assignments_provider_update"
       // from migration 103 allows the artisan to UPDATE their own assignments).
-      const { error: updateError } = await supabase
-        .from('lead_assignments')
-        .update({ status: 'viewed', viewed_at: now })
-        .eq('id', id)
-
-      if (updateError) {
-        logger.error('Lead view update error:', updateError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour du lead' } }, { status: 500 })
-      }
+      await updateAssignmentStatus(supabase, id, { status: 'viewed', viewed_at: now })
 
       await logLeadEvent(assignment.lead_id, 'viewed', {
         providerId: provider.id,
@@ -119,13 +116,7 @@ export async function POST(
       const { amount, description: quoteDesc, validDays } = body
 
       // Check for duplicate quote (409 Conflict)
-      const { data: existingQuote } = await adminClient
-        .from('quotes')
-        .select('id')
-        .eq('request_id', assignment.lead_id)
-        .eq('provider_id', provider.id)
-        .limit(1)
-        .single()
+      const existingQuote = await getExistingQuote(adminClient, assignment.lead_id, provider.id)
 
       if (existingQuote) {
         return NextResponse.json(
@@ -145,36 +136,24 @@ export async function POST(
       // (the most recent prior state for a quoted action) to keep a consistent state.
 
       // Step 1: UPDATE assignment status -> 'quoted'
-      const { error: updateError } = await supabase
-        .from('lead_assignments')
-        .update({ status: 'quoted' })
-        .eq('id', id)
-
-      if (updateError) {
-        logger.error('Lead quote status update error:', updateError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour du lead' } }, { status: 500 })
-      }
+      await updateAssignmentStatus(supabase, id, { status: 'quoted' })
 
       // Step 2: INSERT quote — if this fails, roll back assignment status
-      const { error: insertError } = await supabase
-        .from('quotes')
-        .insert({
-          request_id: assignment.lead_id,
-          provider_id: provider.id,
+      try {
+        await insertQuote(supabase, {
+          requestId: assignment.lead_id,
+          providerId: provider.id,
           amount,
           description: quoteDesc || '',
-          valid_until: validUntil.toISOString().split('T')[0],
-          status: 'pending',
+          validUntil: validUntil.toISOString().split('T')[0],
         })
-
-      if (insertError) {
-        logger.error('Lead quote insert error (rolling back assignment status):', insertError)
+      } catch {
         // Rollback: restore previous status
-        await supabase
-          .from('lead_assignments')
-          .update({ status: assignment.status })
-          .eq('id', id)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création du devis' } }, { status: 500 })
+        await updateAssignmentStatus(supabase, id, { status: assignment.status })
+        return NextResponse.json(
+          { success: false, error: { message: 'Erreur lors de la création du devis' } },
+          { status: 500 }
+        )
       }
 
       await logLeadEvent(assignment.lead_id, 'quoted', {
@@ -186,15 +165,7 @@ export async function POST(
       const { reason } = body
 
       // Bug 1 fix: use authenticated supabase client for mutation
-      const { error: updateError } = await supabase
-        .from('lead_assignments')
-        .update({ status: 'declined' })
-        .eq('id', id)
-
-      if (updateError) {
-        logger.error('Lead decline update error:', updateError)
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour du lead' } }, { status: 500 })
-      }
+      await updateAssignmentStatus(supabase, id, { status: 'declined' })
 
       await logLeadEvent(assignment.lead_id, 'declined', {
         providerId: provider.id,
@@ -206,6 +177,9 @@ export async function POST(
     return NextResponse.json({ success: true, action: body.action })
   } catch (error) {
     logger.error('Lead action POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }
