@@ -35,6 +35,7 @@ import { z } from 'zod'
 import { enrichCeeQualification } from '@/lib/cee/enrich'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
 
@@ -84,6 +85,32 @@ interface PublicEstimateResponse {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  // ---- Rate limiting (20 req/min par IP, fail-open) ---------------------
+  const ip = getClientIp(request.headers)
+  const rl = await checkRateLimit(`cee-estimate:${ip}`, { window: 60_000, max: 20, failOpen: true })
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Trop de requêtes, réessayez dans quelques instants' },
+      {
+        status: 429,
+        headers: {
+          ...RESPONSE_HEADERS,
+          'X-RateLimit-Limit': '20',
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(rl.resetTime),
+          'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)),
+        },
+      }
+    )
+  }
+
+  // Ajouter les headers rate limit sur toutes les réponses
+  const rateLimitHeaders: Record<string, string> = {
+    'X-RateLimit-Limit': '20',
+    'X-RateLimit-Remaining': String(rl.remaining),
+    'X-RateLimit-Reset': String(rl.resetTime),
+  }
+
   // ---- Étape 1 : parse + validation zod ---------------------------------
   let rawBody: unknown
   try {
@@ -91,7 +118,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   } catch {
     return NextResponse.json(
       { success: false, error: { code: 'invalid_json', message: 'Body JSON invalide' } },
-      { status: 400, headers: RESPONSE_HEADERS }
+      { status: 400, headers: { ...RESPONSE_HEADERS, ...rateLimitHeaders } }
     )
   }
 
@@ -106,7 +133,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           issues: parsed.error.flatten(),
         },
       },
-      { status: 400, headers: RESPONSE_HEADERS }
+      { status: 400, headers: { ...RESPONSE_HEADERS, ...rateLimitHeaders } }
     )
   }
 
@@ -142,7 +169,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Shape directe (eligible/codes/items) — pas de wrapper success:true, pour compat CeePrimeEstimateCard
-    return NextResponse.json(response, { status: 200, headers: RESPONSE_HEADERS })
+    return NextResponse.json(response, {
+      status: 200,
+      headers: { ...RESPONSE_HEADERS, ...rateLimitHeaders },
+    })
   } catch (err) {
     // Fail-open : on renvoie un résultat "non éligible" plutôt qu'une 500
     // pour ne jamais bloquer l'affichage du tunnel devis.
@@ -157,7 +187,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         zone_climatique: null,
         items: [],
       } satisfies PublicEstimateResponse,
-      { status: 200, headers: RESPONSE_HEADERS }
+      { status: 200, headers: { ...RESPONSE_HEADERS, ...rateLimitHeaders } }
     )
   }
 }

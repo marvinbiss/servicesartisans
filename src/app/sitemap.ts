@@ -280,6 +280,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.75,
       },
       {
+        url: `${SITE_URL}/simulateur-prime-cee`,
+        lastModified: new Date().toISOString(),
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
         url: `${SITE_URL}/ademe`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',

@@ -155,6 +155,7 @@ export async function GET(request: Request) {
     `${SITE_URL}/cee/BAR-TH-159/guide`,
     `${SITE_URL}/cee/BAR-TH-174/guide`,
     `${SITE_URL}/rge/qualifications/qualibat-5911-thermique`,
+    `${SITE_URL}/simulateur-prime-cee`,
   ]
   counts.strategic = urls.length
 

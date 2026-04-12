@@ -8,8 +8,8 @@ import { logger } from './logger'
 
 // Types
 interface RateLimitConfig {
-  window: number    // Time window in milliseconds
-  max: number       // Maximum requests in window
+  window: number // Time window in milliseconds
+  max: number // Maximum requests in window
   failOpen?: boolean // If true, allow requests when Redis is unavailable (default: false = fail-close)
 }
 
@@ -44,7 +44,7 @@ class UpstashRateLimiter {
     const response = await fetch(`${this.baseUrl}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(command),
@@ -78,7 +78,7 @@ class UpstashRateLimiter {
         await this.redisCommand(cmd)
       }
 
-      const count = await this.redisCommand(['ZCARD', windowKey]) as number
+      const count = (await this.redisCommand(['ZCARD', windowKey])) as number
       await this.redisCommand(['PEXPIRE', windowKey, String(windowMs)])
 
       const allowed = count <= config.max
@@ -149,7 +149,7 @@ class MemoryRateLimiter {
     return {
       allowed: true,
       remaining: config.max - record.count,
-      resetTime: record.resetTime
+      resetTime: record.resetTime,
     }
   }
 }
@@ -173,28 +173,29 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
 
 // Rate limit configurations per route type
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  auth: { window: 60 * 1000, max: 10 },          // 10 requests per minute for auth
-  api: { window: 60 * 1000, max: 60 },           // 60 requests per minute for general API
-  booking: { window: 60 * 1000, max: 30 },       // 30 requests per minute for bookings
-  payment: { window: 60 * 1000, max: 10 },       // 10 requests per minute for payments
-  reviews: { window: 60 * 1000, max: 5 },        // 5 requests per minute for reviews
-  devis: { window: 60 * 1000, max: 10 },         // 10 requests per minute for quotes
-  contact: { window: 300 * 1000, max: 3 },       // 3 requests per 5 minutes for contact
-  upload: { window: 60 * 1000, max: 20 },        // 20 uploads per minute
-  search: { window: 60 * 1000, max: 100 },       // 100 searches per minute
-  gdpr: { window: 300 * 1000, max: 5 },          // 5 requests per 5 minutes for GDPR export/delete
-  newsletter: { window: 300 * 1000, max: 3 },    // 3 requests per 5 minutes for newsletter (sends email)
-  inscription: { window: 300 * 1000, max: 3 },   // 3 requests per 5 minutes for artisan registration (sends emails)
-  ai: { window: 60 * 1000, max: 10 },            // 10 requests per minute for AI generation (expensive)
-  estimation: { window: 60 * 1000, max: 15, failOpen: true },    // 15 messages per minute for estimation chat — fail open so widget always works
+  auth: { window: 60 * 1000, max: 10 }, // 10 requests per minute for auth
+  api: { window: 60 * 1000, max: 60 }, // 60 requests per minute for general API
+  booking: { window: 60 * 1000, max: 30 }, // 30 requests per minute for bookings
+  payment: { window: 60 * 1000, max: 10 }, // 10 requests per minute for payments
+  reviews: { window: 60 * 1000, max: 5 }, // 5 requests per minute for reviews
+  devis: { window: 60 * 1000, max: 10 }, // 10 requests per minute for quotes
+  contact: { window: 300 * 1000, max: 3 }, // 3 requests per 5 minutes for contact
+  upload: { window: 60 * 1000, max: 20 }, // 20 uploads per minute
+  search: { window: 60 * 1000, max: 100 }, // 100 searches per minute
+  gdpr: { window: 300 * 1000, max: 5 }, // 5 requests per 5 minutes for GDPR export/delete
+  newsletter: { window: 300 * 1000, max: 3 }, // 3 requests per 5 minutes for newsletter (sends email)
+  inscription: { window: 300 * 1000, max: 3 }, // 3 requests per 5 minutes for artisan registration (sends emails)
+  ai: { window: 60 * 1000, max: 10 }, // 10 requests per minute for AI generation (expensive)
+  ceeEstimate: { window: 60 * 1000, max: 20, failOpen: true }, // 20 requests per minute for CEE prime estimate — fail open so tunnel devis always works
+  estimation: { window: 60 * 1000, max: 15, failOpen: true }, // 15 messages per minute for estimation chat — fail open so widget always works
   estimationLead: { window: 300 * 1000, max: 3, failOpen: true }, // 3 leads per 5 minutes for estimation lead capture — fail open
-  verify: { window: 60 * 1000, max: 20 },        // 20 requests per minute for SIRET/entreprise verification (external API)
-  geocode: { window: 60 * 1000, max: 60 },       // 60 requests per minute for geocoding (external API)
+  verify: { window: 60 * 1000, max: 20 }, // 20 requests per minute for SIRET/entreprise verification (external API)
+  geocode: { window: 60 * 1000, max: 60 }, // 60 requests per minute for geocoding (external API)
   vapiWebhook: { window: 60 * 1000, max: 300, failOpen: true }, // 300/min for VAPI voice webhooks — fail open
   webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
-  cron: { window: 60 * 1000, max: 10, failOpen: true },     // 10/min for cron jobs — fail open so cron runs don't fail
+  cron: { window: 60 * 1000, max: 10, failOpen: true }, // 10/min for cron jobs — fail open so cron runs don't fail
   analytics: { window: 60 * 1000, max: 120, failOpen: true }, // 120/min for analytics beacons — fail open
-  default: { window: 60 * 1000, max: 100 },      // 100 requests per minute default
+  default: { window: 60 * 1000, max: 100 }, // 100 requests per minute default
 }
 
 /**
@@ -208,7 +209,8 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   if (pathname.startsWith('/api/auth')) return RATE_LIMITS.auth
 
   // Payments — Stripe checkout, portal, webhook
-  if (pathname.startsWith('/api/payments') || pathname.startsWith('/api/stripe')) return RATE_LIMITS.payment
+  if (pathname.startsWith('/api/payments') || pathname.startsWith('/api/stripe'))
+    return RATE_LIMITS.payment
 
   // Cron jobs — Vercel cron triggers, must not be blocked
   if (pathname.startsWith('/api/cron')) return RATE_LIMITS.cron
@@ -221,6 +223,9 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
 
   // AI generation — expensive external API calls (Claude, OpenAI)
   if (pathname.startsWith('/api/admin/prospection/ai')) return RATE_LIMITS.ai
+
+  // CEE prime estimate — public tunnel devis, fail-open
+  if (pathname.startsWith('/api/cee/estimate')) return RATE_LIMITS.ceeEstimate
 
   // Estimation lead capture — anti-spam (must match before /api/estimation)
   if (pathname.startsWith('/api/estimation/lead')) return RATE_LIMITS.estimationLead
@@ -235,7 +240,8 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   if (pathname.startsWith('/api/reviews')) return RATE_LIMITS.reviews
 
   // Quotes / devis — create, list
-  if (pathname.startsWith('/api/devis') || pathname.startsWith('/api/artisan/devis')) return RATE_LIMITS.devis
+  if (pathname.startsWith('/api/devis') || pathname.startsWith('/api/artisan/devis'))
+    return RATE_LIMITS.devis
 
   // Contact form — sends email, unauthenticated
   if (pathname.startsWith('/api/contact')) return RATE_LIMITS.contact
@@ -262,7 +268,12 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   if (pathname.startsWith('/api/analytics')) return RATE_LIMITS.analytics
 
   // Search and public listing endpoints — scraping prevention
-  if (pathname.startsWith('/api/search') || pathname.startsWith('/api/providers/listing') || pathname.startsWith('/api/providers/by-city')) return RATE_LIMITS.search
+  if (
+    pathname.startsWith('/api/search') ||
+    pathname.startsWith('/api/providers/listing') ||
+    pathname.startsWith('/api/providers/by-city')
+  )
+    return RATE_LIMITS.search
 
   // All other API routes
   if (pathname.startsWith('/api/')) return RATE_LIMITS.api
@@ -297,10 +308,12 @@ export async function checkRateLimit(
  * Utility to extract IP from request headers
  */
 export function getClientIp(headers: Headers): string {
-  return headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+  return (
+    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     headers.get('x-real-ip') ||
-    headers.get('cf-connecting-ip') ||  // Cloudflare
+    headers.get('cf-connecting-ip') || // Cloudflare
     'unknown'
+  )
 }
 
 export default {
