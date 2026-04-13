@@ -158,8 +158,10 @@ export async function GET(request: Request) {
       `[Cron] Review metrics recalculation complete: ${totalUpdated} updated, ${totalSkipped} skipped, ${totalErrors} errors`
     )
 
-    // Refresh de la vue matérialisée mv_provider_stats
+    // Refresh des vues matérialisées
     let mvRefreshed = false
+    let reviewStatsDeptRefreshed = false
+
     try {
       const { error: mvError } = await supabase.rpc('refresh_provider_stats')
       if (mvError) {
@@ -172,6 +174,18 @@ export async function GET(request: Request) {
       logger.error('[Cron] Exception refreshing mv_provider_stats:', mvErr)
     }
 
+    try {
+      const { error: rvError } = await supabase.rpc('fn_refresh_review_stats')
+      if (rvError) {
+        logger.error('[Cron] Failed to refresh review_stats_by_dept:', rvError)
+      } else {
+        reviewStatsDeptRefreshed = true
+        logger.info('[Cron] review_stats_by_dept refreshed successfully')
+      }
+    } catch (rvErr) {
+      logger.error('[Cron] Exception refreshing review_stats_by_dept:', rvErr)
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Review metrics recalculated',
@@ -179,6 +193,7 @@ export async function GET(request: Request) {
       skipped: totalSkipped,
       errors: totalErrors,
       mvRefreshed,
+      reviewStatsDeptRefreshed,
     })
   } catch (error) {
     logger.error('[Cron] Error in calculate-trust-badges:', error)
