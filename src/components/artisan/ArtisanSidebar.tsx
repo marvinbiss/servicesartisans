@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { Mail, FileText, ShieldCheck, Phone, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -27,16 +25,6 @@ interface ArtisanSidebarProps {
 }
 
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
-  const [shouldPulse, setShouldPulse] = useState(false)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShouldPulse(true)
-      setTimeout(() => setShouldPulse(false), 600)
-    }, 8000)
-    return () => clearInterval(interval)
-  }, [])
-
   const handleEmail = () => {
     if (artisan.email) {
       trackEvent('artisan_email_click', {
@@ -49,11 +37,9 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
+    <div
+      className="animate-fade-in-right bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
+      style={{ animationDelay: '0.2s' }}
     >
       {/* Terracotta gradient accent bar */}
       <div className="h-1.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600" />
@@ -72,22 +58,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
         {/* CTA principal - MASSIF */}
         <div className="space-y-3 mb-5" role="group" aria-label="Actions de contact">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            animate={
-              shouldPulse
-                ? {
-                    scale: [1, 1.03, 1],
-                    boxShadow: [
-                      '0 10px 25px rgba(232, 107, 75, 0.3)',
-                      '0 10px 35px rgba(232, 107, 75, 0.5)',
-                      '0 10px 25px rgba(232, 107, 75, 0.3)',
-                    ],
-                  }
-                : {}
-            }
-            transition={shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
+          <button
             onClick={() => {
               trackEvent('artisan_devis_click', {
                 artisanId: artisan.id,
@@ -96,12 +67,12 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               })
               window.location.href = getDevisUrl(artisan)
             }}
-            className="w-full py-4 px-5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="w-full py-4 px-5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
             Devis gratuit en 2 min
-          </motion.button>
+          </button>
 
           {/* Trust reassurance under CTA */}
           <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
@@ -119,16 +90,14 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           </div>
 
           {artisan.email && (
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               onClick={handleEmail}
-              className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-500 focus:ring-offset-2"
+              className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-charcoal-500 focus:ring-offset-2"
               aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-charcoal-400" aria-hidden="true" />
               Envoyer un email
-            </motion.button>
+            </button>
           )}
 
           {/* Platform phone — always available */}
@@ -185,31 +154,15 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }
 
 // Mobile CTA bar -- Single dominant CTA, ALWAYS visible
 export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
-  // Subtle pulse animation every 8 seconds
-  const pulseVariants = {
-    initial: { boxShadow: '0 0 0 0 rgba(232, 107, 75, 0)' },
-    pulse: {
-      boxShadow: ['0 0 0 0 rgba(232, 107, 75, 0.4)', '0 0 0 12px rgba(232, 107, 75, 0)'],
-      transition: {
-        duration: 1.5,
-        repeat: Infinity,
-        repeatDelay: 6.5,
-      },
-    },
-  }
-
   return (
-    <motion.div
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 lg:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+    <div
+      className="animate-fade-in-up fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 lg:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
       role="group"
       aria-label="Actions rapides"
     >
@@ -233,11 +186,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           </a>
 
           {/* Primary: Devis CTA - MASSIF */}
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            variants={pulseVariants}
-            initial="initial"
-            animate="pulse"
+          <button
             onClick={() => {
               trackEvent('artisan_devis_click', {
                 artisanId: artisan.id,
@@ -246,12 +195,12 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
               })
               window.location.href = getDevisUrl(artisan)
             }}
-            className="flex-1 py-4 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex-1 py-4 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
             Devis gratuit en 2 min
-          </motion.button>
+          </button>
         </div>
 
         {/* Trust line under CTA */}
@@ -269,6 +218,6 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           <span>Sans engagement</span>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

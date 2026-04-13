@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { CheckCircle, Phone, Wrench, ArrowRight } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
@@ -28,11 +27,9 @@ export function UnclaimedSidebarCTA({
   onDevisClick,
 }: UnclaimedSidebarCTAProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
+    <div
+      className="animate-fade-in-right bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
+      style={{ animationDelay: '0.2s' }}
     >
       {/* Gradient accent bar */}
       <div className="h-1.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600" />
@@ -50,9 +47,7 @@ export function UnclaimedSidebarCTA({
         <p className="text-charcoal-700 font-medium mb-1">
           Besoin d&apos;un {specialty.toLowerCase()} à {city} ?
         </p>
-        <p className="text-sm text-charcoal-500 mb-5">
-          Devis gratuit et sans engagement.
-        </p>
+        <p className="text-sm text-charcoal-500 mb-5">Devis gratuit et sans engagement.</p>
 
         {/* CTA principal */}
         <button
@@ -81,9 +76,7 @@ export function UnclaimedSidebarCTA({
           <Phone className="w-4 h-4 text-primary-500" aria-hidden="true" />
           {PHONE_NUMBER}
         </a>
-        <p className="text-xs text-charcoal-400 text-center mb-5">
-          Appel gratuit
-        </p>
+        <p className="text-xs text-charcoal-400 text-center mb-5">Appel gratuit</p>
 
         {/* Trust badges */}
         <div className="space-y-2 mb-5 pb-5 border-b border-sand-200">
@@ -102,11 +95,7 @@ export function UnclaimedSidebarCTA({
           <h4 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
             Vous êtes ce professionnel ?
           </h4>
-          <ClaimButton
-            providerId={providerId}
-            providerName={providerName}
-            hasSiret={hasSiret}
-          />
+          <ClaimButton providerId={providerId} providerName={providerName} hasSiret={hasSiret} />
           <RemovalRequestButton
             providerId={providerId}
             providerName={providerName}
@@ -114,6 +103,6 @@ export function UnclaimedSidebarCTA({
           />
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

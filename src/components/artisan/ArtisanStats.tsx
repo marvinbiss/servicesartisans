@@ -1,15 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import {
-  Calendar,
-  Award,
-  Shield,
-  Users,
-  Clock,
-  Navigation,
-  CheckCircle,
-} from 'lucide-react'
+import { Calendar, Award, Shield, Users, Clock, Navigation, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanStatsProps {
@@ -28,7 +19,6 @@ interface StatConfig {
 export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   const stats: StatConfig[] = []
   const currentYear = new Date().getFullYear()
-
 
   // Company creation year
   if (artisan.creation_date) {
@@ -111,18 +101,12 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (stats.length === 0) return null
 
   const gridCols =
-    stats.length >= 4
-      ? 'md:grid-cols-4'
-      : stats.length === 3
-      ? 'md:grid-cols-3'
-      : 'md:grid-cols-2'
+    stats.length >= 4 ? 'md:grid-cols-4' : stats.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.1 }}
-      className="bg-white rounded-2xl shadow-soft border border-sand-200 overflow-hidden"
+    <div
+      className="animate-fade-in-up bg-white rounded-2xl shadow-soft border border-sand-200 overflow-hidden"
+      style={{ animationDelay: '0.1s' }}
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
@@ -142,14 +126,11 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
           aria-label="Informations clés de l'artisan"
         >
           {stats.map((stat, index) => (
-            <motion.div
+            <div
               key={stat.label}
               role="listitem"
-              initial={{ opacity: 0, scale: 0.85 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
-              className={`text-center p-4 rounded-xl border ${stat.bgColor}`}
+              className={`animate-fade-in-scale text-center p-4 rounded-xl border ${stat.bgColor}`}
+              style={{ animationDelay: `${index * 0.08}s` }}
             >
               <div
                 className={`w-10 h-10 rounded-xl ${stat.color} bg-white/80 flex items-center justify-center mx-auto mb-2.5 shadow-sm`}
@@ -163,16 +144,21 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
               >
                 {stat.value}
                 {stat.subValue && (
-                  <span className="text-sm font-normal text-charcoal-500 ml-0.5">{stat.subValue}</span>
+                  <span className="text-sm font-normal text-charcoal-500 ml-0.5">
+                    {stat.subValue}
+                  </span>
                 )}
               </div>
-              <div className="text-xs text-charcoal-500 mt-1.5 font-medium leading-tight" aria-hidden="true">
+              <div
+                className="text-xs text-charcoal-500 mt-1.5 font-medium leading-tight"
+                aria-hidden="true"
+              >
                 {stat.label}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

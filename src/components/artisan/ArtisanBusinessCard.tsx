@@ -1,6 +1,3 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import {
   Shield,
   CheckCircle,
@@ -42,9 +39,9 @@ const LEGAL_FORM_LABELS: Record<string, string> = {
   '5498': 'SARL unipersonnelle',
   '5499': 'SARL',
   '5505': 'SA',
-  '5510': 'SA à conseil d\'administration',
+  '5510': "SA à conseil d'administration",
   '5515': 'SA à directoire',
-  '5520': 'SA à conseil d\'administration',
+  '5520': "SA à conseil d'administration",
   '5522': 'SA à directoire',
   '5525': 'SA',
   '5530': 'SA',
@@ -77,7 +74,7 @@ const LEGAL_FORM_LABELS: Record<string, string> = {
   '6316': 'SCOP',
   '6317': 'SCOP',
   '6318': 'SCOP',
-  '6411': 'Société d\'exercice libéral (SELARL)',
+  '6411': "Société d'exercice libéral (SELARL)",
   '6521': 'SCI',
   '6532': 'SCI',
   '6533': 'SCI',
@@ -97,7 +94,7 @@ const LEGAL_FORM_LABELS: Record<string, string> = {
   '9220': 'Association déclarée',
   '9221': 'Association déclarée',
   '9222': 'Association déclarée',
-  '9223': 'Association d\'utilité publique',
+  '9223': "Association d'utilité publique",
   '9224': 'Association déclarée',
   '9230': 'Association déclarée',
   '9240': 'Association déclarée',
@@ -172,11 +169,9 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
     : null
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-soft border border-sand-200 overflow-hidden"
+    <div
+      className="animate-fade-in-up bg-white rounded-2xl shadow-soft border border-sand-200 overflow-hidden"
+      style={{ animationDelay: '0.2s' }}
     >
       {/* Header */}
       <div className="px-6 py-5 bg-gradient-to-r from-sand-50 via-primary-50/30 to-sand-50 border-b border-sand-200">
@@ -206,7 +201,6 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
       {/* Data grid */}
       <div className="p-6">
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
           {/* SIRET */}
           {artisan.siret && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-50 border border-sand-200 hover:bg-sand-100 transition-colors">
@@ -241,7 +235,8 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                   {yearsSinceCreation !== null && yearsSinceCreation > 0 && (
                     <span className="mt-1.5 flex">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold border border-amber-200">
-                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}&nbsp;d'activité
+                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}
+                        &nbsp;d'activité
                       </span>
                     </span>
                   )}
@@ -279,7 +274,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                 </dt>
                 <dd className="mt-0.5">
                   <span className="text-sm font-bold text-charcoal-900">
-                    {formatTeamSize(artisan.team_size!)}
+                    {formatTeamSize(artisan.team_size ?? 0)}
                   </span>
                   <span className="mt-1 block text-xs text-charcoal-400">
                     Source : SIRENE (INSEE)
@@ -318,9 +313,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                 >
                   <Building2 className="w-4 h-4" aria-hidden="true" />
                   <span className="truncate max-w-[180px]">
-                    {artisan.website
-                      .replace(/^https?:\/\/(www\.)?/, '')
-                      .replace(/\/$/, '')}
+                    {artisan.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
                   </span>
                   <ExternalLink className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
                 </a>
@@ -329,6 +322,6 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }

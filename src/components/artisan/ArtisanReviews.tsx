@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { Star, ChevronDown, ShieldCheck } from 'lucide-react'
 import { Review } from './types'
 
@@ -50,12 +49,9 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.35, delay: index * 0.1 }}
-      className="bg-sand-50 rounded-xl border border-sand-200 p-4"
+    <div
+      className="animate-fade-in-up bg-sand-50 rounded-xl border border-sand-200 p-4"
+      style={{ animationDelay: `${index * 0.1}s` }}
     >
       {/* Header: author + rating + date */}
       <div className="flex items-start justify-between gap-3 mb-2">
@@ -114,7 +110,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
           <p className="text-sm text-charcoal-700 leading-relaxed">{review.artisan_response}</p>
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }
 
@@ -129,11 +125,9 @@ export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
   const hasMoreReviews = !showAll && reviews.length > MAX_VISIBLE_REVIEWS
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.3 }}
-      className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6"
+    <div
+      className="animate-fade-in-up bg-white rounded-2xl shadow-soft border border-sand-200 p-6"
+      style={{ animationDelay: '0.3s' }}
     >
       <div className="mb-5">
         <h2 className="text-xl font-semibold text-charcoal-900 font-heading flex items-center gap-2">
@@ -169,6 +163,6 @@ export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
           </p>
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }

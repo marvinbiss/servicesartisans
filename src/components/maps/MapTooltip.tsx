@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { Star, MapPin, Clock } from 'lucide-react'
 
 interface Provider {
@@ -24,12 +23,8 @@ interface MapTooltipProps {
  */
 export default function MapTooltip({ provider, position }: MapTooltipProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.9, y: 10 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
-      className="fixed z-[10000] pointer-events-none"
+    <div
+      className="animate-fade-in-scale fixed z-[10000] pointer-events-none"
       style={{
         left: position.x + 20,
         top: position.y - 60,
@@ -97,6 +92,6 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
         {/* Hover indicator */}
         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-sand-200 rotate-45" />
       </div>
-    </motion.div>
+    </div>
   )
 }

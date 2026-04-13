@@ -1,7 +1,6 @@
 'use client'
 
 import React, { memo, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
 import { Phone, Check, Loader2, Clock, ShieldCheck } from 'lucide-react'
 import type { EstimationContext } from './utils'
 import type { UseLeadSubmitReturn } from './hooks/useLeadSubmit'
@@ -31,10 +30,7 @@ async function fireConfetti() {
   }
 }
 
-export const CallbackPanel = memo(function CallbackPanel({
-  context,
-  lead,
-}: CallbackPanelProps) {
+export const CallbackPanel = memo(function CallbackPanel({ context, lead }: CallbackPanelProps) {
   const confettiFired = useRef(false)
 
   // Fire confetti once on successful submission
@@ -48,43 +44,28 @@ export const CallbackPanel = memo(function CallbackPanel({
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
       {!lead.callbackSubmitted ? (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-sm text-center space-y-5"
-        >
+        <div className="animate-fade-in-up w-full max-w-sm text-center space-y-5">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary-50">
             <Phone className="h-7 w-7 text-primary-400" />
           </div>
           <div>
             <p className="text-base font-semibold text-charcoal-900">
-              {context.artisan
-                ? `Être rappelé par ${context.artisan.name}`
-                : 'Demande de rappel'}
+              {context.artisan ? `Être rappelé par ${context.artisan.name}` : 'Demande de rappel'}
             </p>
             <p className="mt-1 text-sm text-charcoal-600">
               {context.artisan ? (
                 <>
-                  <strong>{context.artisan.name}</strong> vous
-                  rappelle dans les meilleurs délais
+                  <strong>{context.artisan.name}</strong> vous rappelle dans les meilleurs délais
                 </>
               ) : (
                 <>
-                  Un{' '}
-                  <strong>
-                    {context.metier.toLowerCase()}
-                  </strong>{' '}
-                  vérifié à{' '}
-                  <strong>{context.ville}</strong> vous
-                  rappelle dans les meilleurs délais
+                  Un <strong>{context.metier.toLowerCase()}</strong> vérifié à{' '}
+                  <strong>{context.ville}</strong> vous rappelle dans les meilleurs délais
                 </>
               )}
             </p>
           </div>
-          <form
-            onSubmit={lead.handleCallbackSubmit}
-            className="space-y-3"
-          >
+          <form onSubmit={lead.handleCallbackSubmit} className="space-y-3">
             <div>
               <input
                 type="tel"
@@ -105,9 +86,7 @@ export const CallbackPanel = memo(function CallbackPanel({
                 style={{ fontSize: '16px' }}
               />
               {lead.callbackPhoneError && (
-                <p className="text-xs text-red-600 mt-1 text-center">
-                  {lead.callbackPhoneError}
-                </p>
+                <p className="text-xs text-red-600 mt-1 text-center">{lead.callbackPhoneError}</p>
               )}
             </div>
             {/* RGPD consent */}
@@ -119,14 +98,12 @@ export const CallbackPanel = memo(function CallbackPanel({
                 className="mt-0.5"
               />
               <span>
-                J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-                <a
-                  href="/confidentialite"
-                  target="_blank"
-                  className="underline"
-                >
+                J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre
+                en relation avec des artisans partenaires. Voir notre{' '}
+                <a href="/confidentialite" target="_blank" className="underline">
                   politique de confidentialité
-                </a>.
+                </a>
+                .
               </span>
             </label>
             {lead.callbackError && (
@@ -151,54 +128,38 @@ export const CallbackPanel = memo(function CallbackPanel({
               )}
             </button>
           </form>
-        </motion.div>
+        </div>
       ) : (
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="w-full max-w-sm text-center space-y-5"
-        >
+        <div className="animate-fade-in-scale w-full max-w-sm text-center space-y-5">
           {/* Animated checkmark */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
-            className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent-50"
+          <div
+            className="animate-fade-in-scale mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent-50"
+            style={{ animationDelay: '0.1s' }}
           >
-            <motion.div
-              initial={{ scale: 0, rotate: -45 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.25 }}
-            >
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.25s' }}>
               <Check className="h-8 w-8 text-accent-600" />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           <div>
-            <motion.p
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-base font-semibold text-charcoal-900"
+            <p
+              className="animate-fade-in-up text-base font-semibold text-charcoal-900"
+              style={{ animationDelay: '0.3s' }}
             >
               Demande envoyée !
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mt-1 text-sm text-charcoal-600"
+            </p>
+            <p
+              className="animate-fade-in-up mt-1 text-sm text-charcoal-600"
+              style={{ animationDelay: '0.4s' }}
             >
               Votre demande a été envoyée ! Un conseiller vous rappelle rapidement.
-            </motion.p>
+            </p>
           </div>
 
           {/* Reassurance stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 }}
-            className="flex items-center justify-center gap-4 text-xs text-charcoal-500"
+          <div
+            className="animate-fade-in-up flex items-center justify-center gap-4 text-xs text-charcoal-500"
+            style={{ animationDelay: '0.55s' }}
           >
             <span className="inline-flex items-center gap-1">
               <Clock className="h-3.5 w-3.5 text-accent-500" />
@@ -208,18 +169,16 @@ export const CallbackPanel = memo(function CallbackPanel({
               <ShieldCheck className="h-3.5 w-3.5 text-accent-500" />
               Artisan vérifié
             </span>
-          </motion.div>
+          </div>
 
           {/* Subtle satisfaction message */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="text-xs text-charcoal-400"
+          <p
+            className="animate-fade-in text-xs text-charcoal-400"
+            style={{ animationDelay: '0.7s' }}
           >
             98% de nos clients sont recontactés en moins de 2h
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
       )}
     </div>
   )

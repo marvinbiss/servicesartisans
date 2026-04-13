@@ -1,14 +1,16 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { motion } from 'framer-motion'
 import { MapPin, Navigation, ExternalLink, Loader2 } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
   ssr: false,
   loading: () => (
-    <div className="bg-sand-100 rounded-xl flex items-center justify-center" style={{ height: '280px' }}>
+    <div
+      className="bg-sand-100 rounded-xl flex items-center justify-center"
+      style={{ height: '280px' }}
+    >
       <Loader2 className="w-6 h-6 animate-spin text-charcoal-400" />
     </div>
   ),
@@ -33,28 +35,32 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
   const mapsQuery = artisan.address
     ? `${artisan.address}, ${artisan.postal_code} ${artisan.city}, France`
     : artisan.postal_code
-    ? `${artisan.city} ${artisan.postal_code} France`
-    : `${artisan.city} France`
+      ? `${artisan.city} ${artisan.postal_code} France`
+      : `${artisan.city} France`
   const mapsLink = `https://www.google.com/maps/search/${encodeURIComponent(mapsQuery)}`
 
   // Provider marker for the map
-  const mapProvider = hasCoordinates ? [{
-    id: 'artisan',
-    name: artisan.business_name || `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || '',
-    latitude: artisan.latitude!,
-    longitude: artisan.longitude!,
-    specialty: artisan.specialty,
-    address_city: artisan.city,
-    is_verified: artisan.is_verified || false,
-  }] : []
+  const mapProvider = hasCoordinates
+    ? [
+        {
+          id: 'artisan',
+          name:
+            artisan.business_name ||
+            `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() ||
+            '',
+          latitude: artisan.latitude ?? 0,
+          longitude: artisan.longitude ?? 0,
+          specialty: artisan.specialty,
+          address_city: artisan.city,
+          is_verified: artisan.is_verified || false,
+        },
+      ]
+    : []
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.5 }}
-      className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6 relative z-0"
-      style={{ isolation: 'isolate' }}
+    <div
+      className="animate-fade-in-up bg-white rounded-2xl shadow-soft border border-sand-200 p-6 relative z-0"
+      style={{ isolation: 'isolate', animationDelay: '0.5s' }}
     >
       <h2 className="text-xl font-semibold text-charcoal-900 font-heading mb-4 flex items-center gap-2.5">
         <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
@@ -67,8 +73,8 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
       {hasCoordinates ? (
         <div className="rounded-xl overflow-hidden mb-4">
           <GeographicMap
-            centerLat={artisan.latitude!}
-            centerLng={artisan.longitude!}
+            centerLat={artisan.latitude ?? 0}
+            centerLng={artisan.longitude ?? 0}
             zoom={14}
             providers={mapProvider}
             locationName={artisan.city}
@@ -91,11 +97,15 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
             <div>
               <p className="font-semibold text-charcoal-900 text-sm">Voir sur Google Maps</p>
               <p className="text-xs text-charcoal-500">
-                {artisan.city}{artisan.postal_code ? ` (${artisan.postal_code})` : ''}
+                {artisan.city}
+                {artisan.postal_code ? ` (${artisan.postal_code})` : ''}
               </p>
             </div>
           </div>
-          <ExternalLink className="w-4 h-4 text-primary-400 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+          <ExternalLink
+            className="w-4 h-4 text-primary-400 group-hover:translate-x-0.5 transition-transform"
+            aria-hidden="true"
+          />
         </a>
       ) : null}
 
@@ -105,7 +115,9 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
           <Navigation className="w-5 h-5 text-charcoal-400 mt-0.5" aria-hidden="true" />
           <div>
             <p className="text-charcoal-900">{artisan.address}</p>
-            <p className="text-charcoal-500">{artisan.postal_code} {artisan.city}</p>
+            <p className="text-charcoal-500">
+              {artisan.postal_code} {artisan.city}
+            </p>
           </div>
         </address>
       )}
@@ -134,10 +146,12 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         <div className="mt-4 pt-4 border-t border-sand-200">
           <div className="flex items-center gap-2 text-charcoal-600">
             <Navigation className="w-4 h-4" aria-hidden="true" />
-            <span>Rayon d'intervention : <strong>{artisan.intervention_zone}</strong></span>
+            <span>
+              Rayon d'intervention : <strong>{artisan.intervention_zone}</strong>
+            </span>
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }

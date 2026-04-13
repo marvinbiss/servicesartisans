@@ -2,7 +2,6 @@
 
 import { useRef } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import {
   Star,
   MapPin,
@@ -85,11 +84,9 @@ export function ArtisanSimilar({
       : null
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.6 }}
-      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
+    <div
+      className="animate-fade-in-up bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
+      style={{ animationDelay: '0.6s' }}
     >
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-xl font-semibold text-charcoal-900 flex items-center gap-2">
@@ -101,24 +98,20 @@ export function ArtisanSimilar({
 
         {/* Navigation buttons */}
         <div className="flex gap-2" role="group" aria-label="Navigation du carrousel">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+          <button
             onClick={() => scroll('left')}
-            className="p-2 rounded-full bg-sand-100 hover:bg-sand-300 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
+            className="p-2 rounded-full bg-sand-100 hover:bg-sand-300 transition-all hover:scale-110 active:scale-90 focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="Voir les artisans precedents"
           >
             <ChevronLeft className="w-5 h-5 text-charcoal-600" aria-hidden="true" />
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+          </button>
+          <button
             onClick={() => scroll('right')}
-            className="p-2 rounded-full bg-sand-100 hover:bg-sand-300 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
+            className="p-2 rounded-full bg-sand-100 hover:bg-sand-300 transition-all hover:scale-110 active:scale-90 focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="Voir les artisans suivants"
           >
             <ChevronRight className="w-5 h-5 text-charcoal-600" aria-hidden="true" />
-          </motion.button>
+          </button>
         </div>
       </div>
 
@@ -139,13 +132,11 @@ export function ArtisanSimilar({
         aria-label="Liste des artisans similaires"
       >
         {similar.map((item, index) => (
-          <motion.div
+          <div
             key={item.id}
             role="listitem"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            style={{ scrollSnapAlign: 'start' }}
+            className="animate-fade-in-right"
+            style={{ scrollSnapAlign: 'start', animationDelay: `${index * 0.05}s` }}
           >
             <Link
               href={getArtisanUrl({
@@ -156,10 +147,7 @@ export function ArtisanSimilar({
               })}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
-              <motion.article
-                whileHover={{ y: -4, boxShadow: '0 12px 24px -8px rgba(0,0,0,0.15)' }}
-                className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer"
-              >
+              <article className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)]">
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
@@ -202,9 +190,9 @@ export function ArtisanSimilar({
                     <span>{item.city}</span>
                   </div>
                 </div>
-              </motion.article>
+              </article>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -219,6 +207,6 @@ export function ArtisanSimilar({
           </Link>
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }

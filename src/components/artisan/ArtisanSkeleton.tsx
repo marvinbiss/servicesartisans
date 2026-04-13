@@ -1,17 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
-
 // Shimmer animation component
 function Shimmer({ className }: { className?: string }) {
   return (
-    <div className={`relative overflow-hidden bg-sand-300 ${className}`}>
-      <motion.div
-        className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent"
-        animate={{ translateX: ['100%', '-100%'] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-      />
-    </div>
+    <div
+      className={`bg-sand-300 bg-[length:200%_100%] bg-gradient-to-r from-sand-300 via-white/60 to-sand-300 animate-shimmer ${className}`}
+    />
   )
 }
 

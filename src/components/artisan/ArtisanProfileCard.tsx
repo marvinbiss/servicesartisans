@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import {
   Star,
   MapPin,
@@ -57,7 +56,7 @@ export function ArtisanProfileCard({
   companyName,
   profession,
   location,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   locationSlug: _locationSlug,
   rating,
   reviewCount,
@@ -79,17 +78,17 @@ export function ArtisanProfileCard({
   const [isFavorite, setIsFavorite] = useState(false)
   const [imageError, setImageError] = useState(false)
 
-  const href = getArtisanUrl({ stable_id: stableId || id, slug, specialty: profession, city: location })
+  const href = getArtisanUrl({
+    stable_id: stableId || id,
+    slug,
+    specialty: profession,
+    city: location,
+  })
 
   // Variant: Featured (homepage, large)
   if (variant === 'featured') {
     return (
-      <motion.article
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500"
-      >
+      <article className="animate-fade-in-up group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500">
         {/* Cover Image */}
         <div className="relative h-48 bg-gradient-to-br from-primary-400 to-primary-600">
           {coverUrl && !imageError && (
@@ -180,7 +179,17 @@ export function ArtisanProfileCard({
         </div>
 
         {/* Content */}
-        <Link href={href} className="block p-6 pt-16" onClick={() => trackEvent('artisan_listing_click', { artisanId: stableId || id, artisanName: name, source: 'card_featured' })}>
+        <Link
+          href={href}
+          className="block p-6 pt-16"
+          onClick={() =>
+            trackEvent('artisan_listing_click', {
+              artisanId: stableId || id,
+              artisanName: name,
+              source: 'card_featured',
+            })
+          }
+        >
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div>
@@ -277,20 +286,25 @@ export function ArtisanProfileCard({
             </Link>
           </div>
         </Link>
-      </motion.article>
+      </article>
     )
   }
 
   // Variant: List (search results)
   if (variant === 'list') {
     return (
-      <motion.article
-        initial={{ opacity: 0, x: -20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        className="group bg-white rounded-2xl border border-sand-200 overflow-hidden hover:shadow-card-hover hover:border-primary-200 transition-all duration-300"
-      >
-        <Link href={href} className="flex flex-col sm:flex-row" onClick={() => trackEvent('artisan_listing_click', { artisanId: stableId || id, artisanName: name, source: 'card_list' })}>
+      <article className="animate-fade-in-up group bg-white rounded-2xl border border-sand-200 overflow-hidden hover:shadow-card-hover hover:border-primary-200 transition-all duration-300">
+        <Link
+          href={href}
+          className="flex flex-col sm:flex-row"
+          onClick={() =>
+            trackEvent('artisan_listing_click', {
+              artisanId: stableId || id,
+              artisanName: name,
+              source: 'card_list',
+            })
+          }
+        >
           {/* Image */}
           <div className="relative w-full sm:w-56 h-48 sm:h-auto flex-shrink-0">
             {imageUrl && !imageError ? (
@@ -377,7 +391,10 @@ export function ArtisanProfileCard({
             {specialties.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mb-3">
                 {specialties.slice(0, 4).map((spec, i) => (
-                  <span key={i} className="text-xs bg-sand-100 text-charcoal-600 px-2 py-0.5 rounded border border-sand-200">
+                  <span
+                    key={i}
+                    className="text-xs bg-sand-100 text-charcoal-600 px-2 py-0.5 rounded border border-sand-200"
+                  >
                     {spec}
                   </span>
                 ))}
@@ -412,7 +429,7 @@ export function ArtisanProfileCard({
             <ChevronRight className="w-6 h-6 text-charcoal-400 group-hover:text-primary-400 group-hover:translate-x-1 transition-all" />
           </div>
         </Link>
-      </motion.article>
+      </article>
     )
   }
 
@@ -448,7 +465,9 @@ export function ArtisanProfileCard({
             </h4>
             {isVerified && <ShieldCheck className="w-4 h-4 text-accent-500 flex-shrink-0" />}
           </div>
-          <p className="text-sm text-charcoal-500 truncate">{profession} - {location}</p>
+          <p className="text-sm text-charcoal-500 truncate">
+            {profession} - {location}
+          </p>
         </div>
         {rating !== null && rating > 0 && (
           <div className="flex items-center gap-1 flex-shrink-0">
@@ -462,13 +481,18 @@ export function ArtisanProfileCard({
 
   // Default: Card (grid)
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="group"
-    >
-      <Link href={href} className="block" onClick={() => trackEvent('artisan_listing_click', { artisanId: stableId || id, artisanName: name, source: 'card' })}>
+    <article className="animate-fade-in-up group">
+      <Link
+        href={href}
+        className="block"
+        onClick={() =>
+          trackEvent('artisan_listing_click', {
+            artisanId: stableId || id,
+            artisanName: name,
+            source: 'card',
+          })
+        }
+      >
         {/* Image */}
         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-3">
           {imageUrl && !imageError ? (
@@ -546,6 +570,6 @@ export function ArtisanProfileCard({
           </p>
         </div>
       </Link>
-    </motion.article>
+    </article>
   )
 }

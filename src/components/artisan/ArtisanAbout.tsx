@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { User, ChevronDown } from 'lucide-react'
 import { Artisan } from './types'
 
@@ -16,11 +15,9 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
   const isLong = description.length > 300
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.15 }}
-      className="bg-white rounded-2xl shadow-soft border border-sand-200 overflow-hidden"
+    <div
+      className="animate-fade-in-up bg-white rounded-2xl shadow-soft border border-sand-200 overflow-hidden"
+      style={{ animationDelay: '0.15s' }}
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-0">
@@ -55,13 +52,16 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
               className="mt-2 text-primary-400 font-medium text-sm flex items-center gap-1 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded transition-colors"
             >
               {expanded ? 'Voir moins' : 'Voir plus'}
-              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+                aria-hidden="true"
+              />
             </button>
           )}
         </div>
       ) : null}
 
       <div className="pb-6" />
-    </motion.div>
+    </div>
   )
 }

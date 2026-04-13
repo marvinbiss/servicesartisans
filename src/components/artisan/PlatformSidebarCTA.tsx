@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { Phone, CheckCircle, Clock, Zap, Users, ArrowRight } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
@@ -34,11 +33,9 @@ export function PlatformSidebarCTA({
   return (
     <div className="space-y-4">
       {/* Card principale — conversion */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-        className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
+      <div
+        className="animate-fade-in-right bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
+        style={{ animationDelay: '0.2s' }}
       >
         {/* Urgency header */}
         <div className="bg-accent-500 px-5 py-3 flex items-center gap-2">
@@ -60,30 +57,17 @@ export function PlatformSidebarCTA({
           </p>
 
           {/* CTA téléphone — MASSIF */}
-          <motion.a
+          <a
             href={PHONE_TEL}
             onClick={() => {
               trackEvent('phone_click', { source: 'platform_sidebar' })
             }}
-            animate={
-              shouldPulse
-                ? {
-                    scale: [1, 1.03, 1],
-                    boxShadow: [
-                      '0 10px 25px rgba(16, 185, 129, 0.3)',
-                      '0 10px 40px rgba(16, 185, 129, 0.5)',
-                      '0 10px 25px rgba(16, 185, 129, 0.3)',
-                    ],
-                  }
-                : {}
-            }
-            transition={shouldPulse ? { duration: 0.8, ease: 'easeInOut' } : {}}
-            className="w-full py-4 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-accent-500/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 mb-2"
+            className={`w-full py-4 px-5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-accent-500/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 mb-2 ${shouldPulse ? 'animate-pulse' : ''}`}
             aria-label={`Appeler au ${PHONE_NUMBER}`}
           >
             <Phone className="w-5 h-5" aria-hidden="true" />
             Parler à un conseiller
-          </motion.a>
+          </a>
           <p className="text-center text-xs text-charcoal-500 mb-1">{PHONE_NUMBER}</p>
 
           {/* Horaires */}
@@ -146,7 +130,7 @@ export function PlatformSidebarCTA({
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
-      </motion.div>
+      </div>
 
       {/* Card claim */}
       <div className="bg-white rounded-2xl border border-sand-200 p-5">

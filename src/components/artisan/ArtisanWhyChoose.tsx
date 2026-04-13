@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { Trophy, Calendar, Shield, Users, MapPin, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
@@ -34,7 +33,6 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     })
   }
 
-
   if (artisan.team_size && artisan.team_size > 1) {
     cards.push({
       icon: Users,
@@ -62,24 +60,6 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
   return cards.slice(0, 3)
 }
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: 'easeOut' as const },
-  },
-}
-
 export function ArtisanWhyChoose({ artisan }: { artisan: LegacyArtisan }) {
   const cards = getWhyCards(artisan)
 
@@ -96,27 +76,21 @@ export function ArtisanWhyChoose({ artisan }: { artisan: LegacyArtisan }) {
         </h2>
       </div>
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-      >
-        {cards.map((card) => (
-          <motion.div
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {cards.map((card, index) => (
+          <div
             key={card.title}
-            variants={cardVariants}
-            className="rounded-xl bg-sand-50 border border-sand-200 p-5 hover:border-primary-200 transition-colors"
+            className="animate-fade-in-up rounded-xl bg-sand-50 border border-sand-200 p-5 hover:border-primary-200 transition-colors"
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-50 mb-3">
               <card.icon className="w-5 h-5 text-primary-400" aria-hidden="true" />
             </div>
             <p className="font-semibold text-charcoal-900 mb-1">{card.title}</p>
             <p className="text-sm text-charcoal-600">{card.description}</p>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   )
 }

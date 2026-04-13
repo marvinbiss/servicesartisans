@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { motion, useReducedMotion } from 'framer-motion'
 import { MapPin, CheckCircle, Users, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
 import { getDisplayName } from './types'
 import RgeBadge from './RgeBadge'
@@ -23,20 +22,14 @@ interface ArtisanHeroProps {
 export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
   const [isDevisOpen, setIsDevisOpen] = useState(false)
-  const shouldReduceMotion = useReducedMotion()
 
   const hasPortfolioImage =
     artisan.portfolio && artisan.portfolio.length > 0 && artisan.portfolio[0].imageUrl
 
   return (
     <>
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={
-          shouldReduceMotion ? { duration: 0 } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
-        }
-        className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
+      <div
+        className="animate-fade-in-up bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
         role="banner"
         aria-label={`Profil de ${displayName}`}
       >
@@ -49,18 +42,9 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
             <div className="flex-shrink-0">
               <div className="relative">
                 {/* Pulsing ring for artisans accepting new clients */}
-                {artisan.accepts_new_clients && !shouldReduceMotion && (
-                  <motion.div
-                    className="absolute -inset-1.5 rounded-2xl border-2 border-primary-400/40"
-                    animate={{
-                      scale: [1, 1.04, 1],
-                      opacity: [0.4, 0.15, 0.4],
-                    }}
-                    transition={{
-                      duration: 2.5,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
+                {artisan.accepts_new_clients && (
+                  <div
+                    className="absolute -inset-1.5 rounded-2xl border-2 border-primary-400/40 animate-pulse-ring"
                     aria-hidden="true"
                   />
                 )}
@@ -179,9 +163,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
               {/* Prominent CTA — above the fold (only for claimed profiles) */}
               {isClaimed && (
                 <div className="mt-5">
-                  <motion.button
-                    whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
-                    whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                  <button
                     onClick={() => {
                       trackEvent('artisan_devis_click', {
                         artisanId: artisan.id,
@@ -207,12 +189,12 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                         setIsDevisOpen(true)
                       }
                     }}
-                    className="w-full sm:w-auto py-3.5 px-8 bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
+                    className="w-full sm:w-auto py-3.5 px-8 bg-primary-600 hover:bg-primary-700 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
                     aria-label="Devis gratuit en 2 min"
                   >
                     <FileText className="w-5 h-5" aria-hidden="true" />
                     Devis gratuit en 2 min
-                  </motion.button>
+                  </button>
                   <p className="text-xs text-charcoal-500 mt-2 flex items-center gap-1.5">
                     <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
                     <span>2 conseillers dispo</span>
@@ -230,7 +212,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* DevisBottomSheet — pre-filled with artisan data */}
       <DevisBottomSheet

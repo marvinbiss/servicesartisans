@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import { motion } from 'framer-motion'
 import { Check, AlertCircle, Lock } from 'lucide-react'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')
@@ -173,11 +172,7 @@ export default function PaymentForm(props: PaymentFormProps) {
 
           {/* Split Payment Options */}
           {paymentType === 'split' && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="p-4 bg-sand-50 rounded-xl"
-            >
+            <div className="animate-fade-in p-4 bg-sand-50 rounded-xl">
               <label className="block text-sm font-medium text-charcoal-700 mb-2">
                 Nombre de mensualités
               </label>
@@ -210,16 +205,12 @@ export default function PaymentForm(props: PaymentFormProps) {
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Deposit Options */}
           {paymentType === 'deposit' && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="p-4 bg-sand-50 rounded-xl"
-            >
+            <div className="animate-fade-in p-4 bg-sand-50 rounded-xl">
               <label className="block text-sm font-medium text-charcoal-700 mb-2">
                 Pourcentage de l'acompte
               </label>
@@ -252,7 +243,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
       )}

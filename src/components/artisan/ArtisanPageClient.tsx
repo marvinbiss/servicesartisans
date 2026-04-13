@@ -3,7 +3,6 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { motion } from 'framer-motion'
 import { AlertCircle, ArrowLeft, Heart, Info } from 'lucide-react'
 import {
   Review,
@@ -175,11 +174,7 @@ export default function ArtisanPageClient({
   if (!artisan) {
     return (
       <div className="min-h-screen bg-sand-50 flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center p-8"
-        >
+        <div className="animate-fade-in-scale text-center p-8">
           <AlertCircle className="w-16 h-16 text-charcoal-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-charcoal-900 font-heading mb-2">
             Artisan non trouvé
@@ -194,7 +189,7 @@ export default function ArtisanPageClient({
             <ArrowLeft className="w-5 h-5" />
             Retour à la recherche
           </Link>
-        </motion.div>
+        </div>
       </div>
     )
   }
@@ -243,11 +238,9 @@ export default function ArtisanPageClient({
                   description={`${displayName} — ${artisan.specialty} à ${artisan.city}. Consultez son profil sur ServicesArtisans.`}
                   variant="icon"
                 />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   onClick={() => toggleFavorite(artisanId)}
-                  className={`p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 ${
+                  className={`p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 ${
                     isFavorite(artisanId)
                       ? 'bg-red-50 text-red-500 border-red-200 hover:bg-red-100'
                       : 'bg-sand-50 text-charcoal-600 border-sand-200 hover:bg-sand-100'
@@ -259,7 +252,7 @@ export default function ArtisanPageClient({
                     className={`w-4.5 h-4.5 ${isFavorite(artisanId) ? 'fill-current' : ''}`}
                     aria-hidden="true"
                   />
-                </motion.button>
+                </button>
               </div>
             </div>
           </div>

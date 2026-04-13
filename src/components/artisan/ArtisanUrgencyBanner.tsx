@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { Zap, Clock, CheckCircle, RefreshCw } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
@@ -47,7 +46,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
     if (diffHours < 1) {
       items.push({
         icon: RefreshCw,
-        label: 'Actif il y a moins d\'une heure',
+        label: "Actif il y a moins d'une heure",
         color: 'text-accent-500',
       })
     } else if (diffHours < 24) {
@@ -80,15 +79,13 @@ export function ArtisanUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
   if (items.length === 0) return null
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="bg-gradient-to-r from-primary-50 to-sand-100 rounded-2xl border border-primary-200/40 px-5 py-3.5"
-    >
+    <div className="animate-fade-in-up bg-gradient-to-r from-primary-50 to-sand-100 rounded-2xl border border-primary-200/40 px-5 py-3.5">
       <div className="hidden sm:flex flex-wrap items-center gap-x-6 gap-y-2">
         {items.map((item) => (
-          <div key={item.label} className="flex items-center gap-2 text-sm font-medium text-charcoal-900">
+          <div
+            key={item.label}
+            className="flex items-center gap-2 text-sm font-medium text-charcoal-900"
+          >
             {item.label === 'Accepte de nouveaux clients' ? (
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
@@ -105,7 +102,10 @@ export function ArtisanUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
       {/* Mobile: 2-column grid */}
       <div className="grid grid-cols-2 gap-3 sm:hidden">
         {items.map((item) => (
-          <div key={item.label} className="flex items-center gap-2 text-xs font-medium text-charcoal-900">
+          <div
+            key={item.label}
+            className="flex items-center gap-2 text-xs font-medium text-charcoal-900"
+          >
             {item.label === 'Accepte de nouveaux clients' ? (
               <span className="relative flex h-2 w-2 flex-shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
@@ -118,6 +118,6 @@ export function ArtisanUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   )
 }

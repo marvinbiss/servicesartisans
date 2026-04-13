@@ -1,6 +1,5 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
 import { FileText, ShieldCheck, Clock, Users } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
@@ -11,7 +10,6 @@ interface ArtisanQuickQuoteProps {
 }
 
 export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
-  const shouldReduceMotion = useReducedMotion()
   const displayName = getDisplayName(artisan)
 
   const handleClick = () => {
@@ -28,11 +26,9 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
 
   return (
     <>
-      <motion.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-        className="bg-gradient-to-br from-primary-50 via-white to-accent-50 rounded-xl border border-primary-200/60 shadow-soft overflow-hidden"
+      <div
+        className="animate-fade-in-up bg-gradient-to-br from-primary-50 via-white to-accent-50 rounded-xl border border-primary-200/60 shadow-soft overflow-hidden"
+        style={{ animationDelay: '0.15s' }}
       >
         {/* Top accent bar */}
         <div className="h-1 bg-gradient-to-r from-primary-400 to-accent-500" />
@@ -49,22 +45,19 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
           </div>
 
           {/* CTA Button */}
-          <motion.button
-            whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
-            whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+          <button
             onClick={handleClick}
-            className="w-full py-3.5 px-6 bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2.5 touch-manipulation"
+            className="w-full py-3.5 px-6 bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2.5 touch-manipulation hover:scale-[1.02] active:scale-[0.98]"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
             Devis gratuit en 2 min
-          </motion.button>
+          </button>
 
           {/* Trust signals */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4">
             <div className="flex items-center gap-1.5 text-xs font-medium text-accent-700">
-              <Users className="w-4 h-4 text-accent-500" aria-hidden="true" />
-              2 conseillers dispo
+              <Users className="w-4 h-4 text-accent-500" aria-hidden="true" />2 conseillers dispo
             </div>
             {artisan.is_verified && (
               <div className="flex items-center gap-1.5 text-xs font-medium text-accent-700">
@@ -78,7 +71,7 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </>
   )
 }

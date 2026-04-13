@@ -1,7 +1,6 @@
 'use client'
 
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
@@ -11,10 +10,17 @@ interface CriterionResult {
   points: number
 }
 
-function computeProfileStrength(artisan: LegacyArtisan): { score: number; criteria: CriterionResult[] } {
+function computeProfileStrength(artisan: LegacyArtisan): {
+  score: number
+  criteria: CriterionResult[]
+} {
   const criteria: CriterionResult[] = [
     { label: 'Nom', met: !!artisan.business_name, points: 10 },
-    { label: 'Description', met: !!artisan.description && artisan.description.length > 50, points: 15 },
+    {
+      label: 'Description',
+      met: !!artisan.description && artisan.description.length > 50,
+      points: 15,
+    },
     { label: 'Téléphone', met: !!artisan.phone, points: 10 },
     { label: 'Email', met: !!artisan.email, points: 5 },
     { label: 'Vérifié', met: !!artisan.is_verified, points: 15 },
@@ -47,7 +53,7 @@ export function ArtisanProfileStrength({ artisan }: { artisan: LegacyArtisan }) 
   // Don't render for weak profiles
   if (score < 50) return null
 
-  const metCriteria = criteria.filter(c => c.met)
+  const metCriteria = criteria.filter((c) => c.met)
 
   return (
     <div className="bg-white rounded-2xl border border-sand-200 p-5">
@@ -59,17 +65,15 @@ export function ArtisanProfileStrength({ artisan }: { artisan: LegacyArtisan }) 
 
       {/* Progress bar */}
       <div className="h-2 bg-sand-200 rounded-full overflow-hidden mb-3">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${score}%` }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
-          className={`h-full rounded-full bg-gradient-to-r ${getBarColor(score)}`}
+        <div
+          className={`h-full rounded-full bg-gradient-to-r ${getBarColor(score)} transition-all duration-700 ease-out`}
+          style={{ width: `${score}%`, animationDelay: '0.3s' }}
         />
       </div>
 
       {/* Badges */}
       <div className="flex flex-wrap gap-1.5">
-        {metCriteria.map(c => (
+        {metCriteria.map((c) => (
           <span
             key={c.label}
             className="inline-flex items-center gap-0.5 text-xs text-charcoal-500 bg-sand-100 rounded-full px-2 py-0.5"
