@@ -493,88 +493,123 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     )
   }
 
-  // 1. Resolve service (DB → static fallback) — notFound() OUTSIDE try/catch to avoid swallowing
-  let resolvedService: Service | null = null
-  try {
-    resolvedService = await getServiceBySlug(serviceSlug)
-    if (!resolvedService) {
-      const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
-      if (staticSvc)
-        resolvedService = {
-          id: '',
-          name: staticSvc.name,
-          slug: staticSvc.slug,
-          is_active: true,
-          created_at: '',
-        }
-    }
-  } catch {
-    const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
-    if (staticSvc)
-      resolvedService = {
-        id: '',
-        name: staticSvc.name,
-        slug: staticSvc.slug,
-        is_active: true,
-        created_at: '',
+  // 1. Resolve service + location in parallel (DB → static fallback) — notFound() OUTSIDE try/catch
+  const [resolvedService, resolvedLocation] = await Promise.all([
+    // Service resolution
+    (async (): Promise<Service | null> => {
+      try {
+        const svc = await getServiceBySlug(serviceSlug)
+        if (svc) return svc
+        const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
+        if (staticSvc)
+          return {
+            id: '',
+            name: staticSvc.name,
+            slug: staticSvc.slug,
+            is_active: true,
+            created_at: '',
+          }
+        return null
+      } catch {
+        const staticSvc = staticServicesList.find((s) => s.slug === serviceSlug)
+        if (staticSvc)
+          return {
+            id: '',
+            name: staticSvc.name,
+            slug: staticSvc.slug,
+            is_active: true,
+            created_at: '',
+          }
+        return null
       }
-  }
+    })(),
+    // Location resolution
+    (async (): Promise<LocationType | null> => {
+      try {
+        const dbLocation = await getLocationBySlug(locationSlug)
+        if (dbLocation) {
+          return {
+            ...dbLocation,
+            id: ((dbLocation as Record<string, unknown>).code_insee as string) || '',
+          }
+        }
+        return villeToLocation(locationSlug)
+      } catch {
+        return villeToLocation(locationSlug)
+      }
+    })(),
+  ])
   if (!resolvedService) notFound()
   const service: Service = resolvedService
-
-  // 2. Resolve location (DB → france.ts fallback) — notFound() OUTSIDE try/catch
-  let resolvedLocation: LocationType | null = null
-  try {
-    const dbLocation = await getLocationBySlug(locationSlug)
-    if (dbLocation) {
-      resolvedLocation = {
-        ...dbLocation,
-        id: ((dbLocation as Record<string, unknown>).code_insee as string) || '',
-      }
-    } else {
-      resolvedLocation = villeToLocation(locationSlug)
-    }
-  } catch {
-    resolvedLocation = villeToLocation(locationSlug)
-  }
   if (!resolvedLocation || !resolvedLocation.name) notFound()
   const location: LocationType = resolvedLocation
 
-  // 3. Fetch providers + total count in parallel
-  // (throw on providers failure so ISR keeps stale cache)
-  const [directProviders, totalProviderCount, rgeProviderCount] = await Promise.all([
-    getProvidersByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }),
-    getProviderCountByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(() => -1),
-    getRgeProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
-  ])
-
-  // Fallback: if 0 providers in this city, try the whole département
-  let providers = directProviders
-  let isFallback = false
-  if (providers.length === 0 && totalProviderCount <= 0) {
-    // Use already-resolved location (works for DB-only cities too, not just france.ts)
-    const deptName = location.department_name || getVilleBySlug(locationSlug)?.departement
-    if (deptName) {
-      providers = await getProvidersByServiceAndDepartment(serviceSlug, deptName, {
-        limit: 6,
-      })
-      isFallback = providers.length > 0
-    }
-    // Hard 404: if BOTH direct and department fallback return 0 results
-    if (providers.length === 0) {
-      notFound()
-    }
-  }
-
   const trade = getTradeContent(serviceSlug)
+  const deptName = location.department_name || getVilleBySlug(locationSlug)?.departement
 
-  // 4. Fetch commune enrichment data (best-effort, never crash)
-  let communeData: Awaited<ReturnType<typeof getCommuneBySlug>> = null
-  try {
-    communeData = await getCommuneBySlug(locationSlug)
-  } catch {
-    // Commune table may not exist yet — continue without data
-  }
+  // 2. Fetch ALL async data in a single parallel batch
+  const [providersResult, communeData, recentDevisCount, reviewStats, topReviews, dynamicLastMod] =
+    await Promise.all([
+      // Providers + count + RGE count, with department fallback
+      (async () => {
+        const [directProviders, totalProviderCount, rgeProviderCount] = await Promise.all([
+          getProvidersByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }),
+          getProviderCountByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(
+            () => -1
+          ),
+          getRgeProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
+        ])
+        let providers = directProviders
+        let isFallback = false
+        if (providers.length === 0 && totalProviderCount <= 0) {
+          if (deptName) {
+            providers = await getProvidersByServiceAndDepartment(serviceSlug, deptName, {
+              limit: 6,
+            })
+            isFallback = providers.length > 0
+          }
+          if (providers.length === 0) return null // signal notFound
+        }
+        return { providers, isFallback, totalProviderCount, rgeProviderCount }
+      })(),
+      // Commune enrichment (best-effort, never crash)
+      getCommuneBySlug(locationSlug).catch(() => null) as Promise<
+        Awaited<ReturnType<typeof getCommuneBySlug>>
+      >,
+      // Recent devis count
+      (async () => {
+        if (process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL)
+          return 0
+        try {
+          const { createAdminClient } = await import('@/lib/supabase/admin')
+          const supabase = createAdminClient()
+          const thirtyDaysAgo = new Date()
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+          const { count } = await supabase
+            .from('devis_requests')
+            .select('*', { count: 'exact', head: true })
+            .ilike('city', location.name)
+            .gte('created_at', thirtyDaysAgo.toISOString())
+          return count ?? 0
+        } catch {
+          return 0
+        }
+      })(),
+      // Social proof: department reviews
+      deptName
+        ? getReviewStatsByDept(serviceSlug, deptName).catch(() => null)
+        : Promise.resolve(null),
+      deptName
+        ? getTopReviewsByDept(serviceSlug, deptName).catch(() => [])
+        : Promise.resolve([] as Awaited<ReturnType<typeof getTopReviewsByDept>>),
+      deptName
+        ? getDynamicLastModified(serviceSlug, location.department_code || '').catch(() => null)
+        : Promise.resolve(null),
+    ])
+
+  // Hard 404: if BOTH direct and department fallback return 0 results
+  if (!providersResult) notFound()
+  const { providers, isFallback, totalProviderCount, rgeProviderCount } = providersResult
 
   const baseSchemas = generateJsonLd(
     service,
@@ -584,38 +619,6 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     locationSlug,
     communeData
   )
-
-  // Count recent devis requests for freshness signal
-  let recentDevisCount = 0
-  if (!(process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL)) {
-    try {
-      const { createAdminClient } = await import('@/lib/supabase/admin')
-      const supabase = createAdminClient()
-      const thirtyDaysAgo = new Date()
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-      const { count } = await supabase
-        .from('devis_requests')
-        .select('*', { count: 'exact', head: true })
-        .ilike('city', location.name)
-        .gte('created_at', thirtyDaysAgo.toISOString())
-      recentDevisCount = count ?? 0
-    } catch {
-      recentDevisCount = 0
-    }
-  }
-
-  // Social proof: department reviews (only if we have department info)
-  const deptName = location.department_name || getVilleBySlug(locationSlug)?.departement
-  let reviewStats: Awaited<ReturnType<typeof getReviewStatsByDept>> = null
-  let topReviews: Awaited<ReturnType<typeof getTopReviewsByDept>> = []
-  let dynamicLastMod: string | null = null
-  if (deptName) {
-    ;[reviewStats, topReviews, dynamicLastMod] = await Promise.all([
-      getReviewStatsByDept(serviceSlug, deptName).catch(() => null),
-      getTopReviewsByDept(serviceSlug, deptName).catch(() => []),
-      getDynamicLastModified(serviceSlug, location.department_code || '').catch(() => null),
-    ])
-  }
 
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
   const ville = getVilleBySlug(locationSlug)
