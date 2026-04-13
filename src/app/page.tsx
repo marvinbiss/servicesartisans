@@ -12,6 +12,7 @@ import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
 import { TOP_SERVICES, TOP_CITIES } from '@/lib/seo/top-pages'
+import TrustBar from '@/components/conversion/TrustBar'
 import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
@@ -118,6 +119,9 @@ export default async function HomePage() {
 
       {/* Server-rendered H1 for SEO — visually hidden, ClayHomePage shows the visible version */}
       <h1 className="sr-only">L'annuaire des artisans qualifiés en France</h1>
+
+      {/* ─── TRUST BAR — indicateurs clés (artisans, avis, SIREN, départements) ─── */}
+      <TrustBar />
 
       {/* ─── CLAY HOMEPAGE DESIGN ─────────────────────────────── */}
       <ClayHomePage
