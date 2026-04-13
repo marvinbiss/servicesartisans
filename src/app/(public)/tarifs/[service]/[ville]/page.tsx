@@ -32,7 +32,7 @@ import { hashCode } from '@/lib/seo/location-content'
 import LocalDataInsights from '@/components/seo/LocalDataInsights'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import FallbackProviders from '@/components/seo/FallbackProviders'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import { getProblemsByService } from '@/lib/data/problems'
 import { relatedServices } from '@/lib/constants/navigation'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
@@ -237,13 +237,15 @@ export async function generateMetadata({
       description,
       url: canonicalUrl,
       type: 'website',
-      images: [{ url: getServiceImage(service).src, width: 1200, height: 630 }],
+      images: [
+        { url: getServiceImageForContext(service, villeSlug).src, width: 1200, height: 630 },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [getServiceImage(service).src],
+      images: [getServiceImageForContext(service, villeSlug).src],
     },
   }
 }

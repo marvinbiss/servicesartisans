@@ -32,7 +32,7 @@ import {
   hashCode,
   getRegionalMultiplier,
 } from '@/lib/seo/location-content'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
-  const serviceImage = getServiceImage(serviceSlug)
+  const serviceImage = getServiceImageForContext(serviceSlug, deptSlug)
 
   return {
     title,

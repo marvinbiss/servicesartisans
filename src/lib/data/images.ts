@@ -1,5 +1,5 @@
 /**
- * Banque d'images centralisée — 120 photos uniques
+ * Banque d'images centralisée — 120+ photos uniques + pools de rotation
  * Source : Unsplash (licence gratuite, usage commercial autorisé)
  *
  * RÈGLE D'OR : ZÉRO doublon. Chaque ID Unsplash n'apparaît qu'UNE SEULE fois
@@ -8,10 +8,11 @@
  * Organisation :
  * - Hero homepage (1)
  * - Services / métiers (46 uniques + 1 défaut)
+ * - Pools de rotation : batch1/2/3 (5-7 images/métier)
  * - Artisans confiance (3 visages)
  * - Témoignages clients (3)
  * - Avant/Après (10 paires = 20, tous uniques)
- * - Villes top 20 (20 uniques)
+ * - Villes top 20 + 80 supplémentaires (100 uniques)
  * - Pages statiques (7)
  * - Ambiance (3)
  * - Blog (12 topics + 3 catégories + 1 défaut)
@@ -22,14 +23,22 @@ function unsplash(id: string, w = 800, h = 600): string {
   return `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`
 }
 
+// ── Imports pools de rotation ────────────────────────────────────
+import { serviceImagePool_batch1 } from './images-batch1'
+import { serviceImagePool_batch2 } from './images-batch2'
+import { serviceImagePool_batch3 } from './images-batch3'
+import { additionalCityImages } from './images-cities'
+
 /** Placeholder flou générique (gris neutre) — utilisable partout */
-export const BLUR_PLACEHOLDER = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAFAAgDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAABv/EAB0QAAICAgMBAAAAAAAAAAAAAAECAxEABBIhMUH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAEDAAIRIf/aAAwDAQACEQMRAD8AoNnYig1IYkjJZgLdj2fueYsXExif/9k='
+export const BLUR_PLACEHOLDER =
+  'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAFAAgDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAABv/EAB0QAAICAgMBAAAAAAAAAAAAAAECAxEABBIhMUH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAEDAAIRIf/aAAwDAQACEQMRAD8AoNnYig1IYkjJZgLdj2fueYsXExif/9k='
 
 // ── 1. HERO HOMEPAGE ─────────────────────────────────────────────
 export const heroImage = {
   src: unsplash('photo-1504307651254-35680f356dfd', 1920, 1080),
   alt: 'Artisan qualifié au travail sur un chantier en France',
-  blurDataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAFAAgDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAAB//EABwQAAICAgMAAAAAAAAAAAAAAAABAgMEBREhMf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAWEQEBAQAAAAAAAAAAAAAAAAABAAL/2gAMAwEAAhEDEQA/AKmTl1dEIVRXdbJLt+gA0Jdl/9k=',
+  blurDataURL:
+    'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAFAAgDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAAB//EABwQAAICAgMAAAAAAAAAAAAAAAABAgMEBREhMf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAWEQEBAQAAAAAAAAAAAAAAAAABAAL/2gAMAwEAAhEDEQA/AKmTl1dEIVRXdbJLt+gA0Jdl/9k=',
 }
 
 // ── 2. IMAGES PAR SERVICE (métier) — 46 uniques ─────────────────
@@ -96,7 +105,7 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   },
   facadier: {
     src: unsplash('photo-1597758011002-9a3e9537dd8b'),
-    alt: 'Façade d\'immeuble en cours de ravalement',
+    alt: "Façade d'immeuble en cours de ravalement",
   },
   charpentier: {
     src: unsplash('photo-1569370029765-33aaab1f4851'),
@@ -108,7 +117,7 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   },
   'isolation-thermique': {
     src: unsplash('photo-1631277190979-1704e8c7d574'),
-    alt: 'Artisan posant de l\'isolation thermique en laine de roche',
+    alt: "Artisan posant de l'isolation thermique en laine de roche",
   },
   domoticien: {
     src: unsplash('photo-1545259741-2ea3ebf61fa3'),
@@ -136,11 +145,11 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   },
   'architecte-interieur': {
     src: unsplash('photo-1762545112336-646c69e4888b'),
-    alt: 'Salon moderne aménagé par un architecte d\'intérieur',
+    alt: "Salon moderne aménagé par un architecte d'intérieur",
   },
   ascensoriste: {
     src: unsplash('photo-1758193017781-e3aee6c3e359'),
-    alt: 'Hall d\'ascenseur moderne avec finitions en marbre et verre',
+    alt: "Hall d'ascenseur moderne avec finitions en marbre et verre",
   },
   'borne-recharge': {
     src: unsplash('photo-1582201872911-67877db5fb38'),
@@ -164,7 +173,7 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   },
   diagnostiqueur: {
     src: unsplash('photo-1631300313270-227604e71ea5'),
-    alt: 'Diagnostiqueur immobilier avec casque et dossier d\'inspection',
+    alt: "Diagnostiqueur immobilier avec casque et dossier d'inspection",
   },
   etancheiste: {
     src: unsplash('photo-1633759593085-1eaeb724fc88'),
@@ -231,23 +240,74 @@ export function getServiceImage(slug: string) {
   return serviceImages[slug] || defaultServiceImage
 }
 
+// ── Hash déterministe pour rotation d'images ─────────────────────
+function simpleHash(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = (hash << 5) - hash + char
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
+
+/**
+ * Pool complet d'images pour un service donné.
+ * Merge : image principale + batch1 + batch2 + batch3.
+ * Les batches stockent des IDs bruts → on les convertit en URL Unsplash.
+ */
+function getFullImagePool(slug: string): { src: string; alt: string }[] {
+  const main = serviceImages[slug]
+  const pool: { src: string; alt: string }[] = main ? [main] : []
+
+  for (const batch of [serviceImagePool_batch1, serviceImagePool_batch2, serviceImagePool_batch3]) {
+    const batchImages = batch[slug]
+    if (batchImages) {
+      for (const img of batchImages) {
+        // Les batches stockent soit des IDs bruts soit des URLs complètes
+        const src = img.src.startsWith('http') ? img.src : unsplash(img.src)
+        pool.push({ src, alt: img.alt })
+      }
+    }
+  }
+
+  return pool.length > 0 ? pool : [defaultServiceImage]
+}
+
+/**
+ * Récupérer une image de service avec rotation déterministe.
+ * Le `contextSeed` (ville, département, etc.) détermine quelle image
+ * est choisie dans le pool — même seed = même image à chaque fois.
+ *
+ * Usage : getServiceImageForContext('plombier', 'paris')
+ *         getServiceImageForContext('electricien', '75')
+ */
+export function getServiceImageForContext(
+  slug: string,
+  contextSeed: string
+): { src: string; alt: string } {
+  const pool = getFullImagePool(slug)
+  const index = simpleHash(`${slug}-${contextSeed}`) % pool.length
+  return pool[index]
+}
+
 // ── 3. VISAGES ARTISANS (confiance) ──────────────────────────────
 export const artisanFaces = [
   {
     src: unsplash('photo-1580810734868-7ea4e9130c01', 400, 400),
-    alt: 'Portrait d\'un artisan professionnel souriant',
+    alt: "Portrait d'un artisan professionnel souriant",
     name: 'Thomas M.',
     metier: 'Plombier · Paris',
   },
   {
     src: unsplash('photo-1616179283726-e96f7aa16a56', 400, 400),
-    alt: 'Portrait d\'un artisan expérimenté',
+    alt: "Portrait d'un artisan expérimenté",
     name: 'Marc D.',
     metier: 'Électricien · Lyon',
   },
   {
     src: unsplash('photo-1630670401138-9a5c91abad18', 400, 400),
-    alt: 'Portrait d\'un artisan qualifié',
+    alt: "Portrait d'un artisan qualifié",
     name: 'Pierre L.',
     metier: 'Menuisier · Marseille',
   },
@@ -259,7 +319,7 @@ export const artisanFaces = [
 export const testimonialImages = [
   {
     name: 'Sophie R.',
-    text: 'J\'ai trouvé un excellent plombier en 5 minutes. Travail impeccable !',
+    text: "J'ai trouvé un excellent plombier en 5 minutes. Travail impeccable !",
     ville: 'Paris',
     note: 5,
   },
@@ -336,7 +396,7 @@ export const beforeAfterPairs = [
   {
     before: unsplash('photo-1593817122715-bbe051a66bf8'),
     after: unsplash('photo-1595514534785-44a24a4d9467'),
-    alt: 'Rénovation plomberie salle d\'eau',
+    alt: "Rénovation plomberie salle d'eau",
     category: 'Plomberie',
   },
 ]
@@ -377,7 +437,7 @@ export const cityImages: Record<string, { src: string; alt: string }> = {
   },
   bordeaux: {
     src: unsplash('photo-1493564738392-d148cfbd6eda', 800, 500),
-    alt: 'Miroir d\'eau de Bordeaux',
+    alt: "Miroir d'eau de Bordeaux",
   },
   lille: {
     src: unsplash('photo-1596031837679-e1444bd4b830', 800, 500),
@@ -409,7 +469,7 @@ export const cityImages: Record<string, { src: string; alt: string }> = {
   },
   angers: {
     src: unsplash('photo-1588278183316-7c7a88cc683d', 800, 500),
-    alt: 'Château d\'Angers',
+    alt: "Château d'Angers",
   },
   'le-mans': {
     src: unsplash('photo-1627674410470-dc8642afc616', 800, 500),
@@ -425,9 +485,9 @@ export const cityImages: Record<string, { src: string; alt: string }> = {
   },
 }
 
-/** Récupérer l'image d'une ville par son slug */
+/** Récupérer l'image d'une ville par son slug (top 100 villes) */
 export function getCityImage(slug: string) {
-  return cityImages[slug] || null
+  return cityImages[slug] || additionalCityImages[slug] || null
 }
 
 // ── DÉPARTEMENT → image via chef-lieu ────────────────────────────
@@ -465,12 +525,12 @@ const regionSlugToCitySlug: Record<string, string> = {
   'ile-de-france': 'paris',
   'provence-alpes-cote-dazur': 'marseille',
   'auvergne-rhone-alpes': 'lyon',
-  'occitanie': 'toulouse',
+  occitanie: 'toulouse',
   'nouvelle-aquitaine': 'bordeaux',
   'pays-de-la-loire': 'nantes',
   'grand-est': 'strasbourg',
   'hauts-de-france': 'lille',
-  'bretagne': 'rennes',
+  bretagne: 'rennes',
   'bourgogne-franche-comte': 'dijon',
 }
 
@@ -490,7 +550,7 @@ export const pageImages = {
     },
     {
       src: unsplash('photo-1548967136-609936a3088b'),
-      alt: 'Comparaison de profils d\'artisans sur écran',
+      alt: "Comparaison de profils d'artisans sur écran",
     },
     {
       src: unsplash('photo-1521791136064-7986c2920216'),
@@ -504,7 +564,7 @@ export const pageImages = {
     },
     {
       src: unsplash('photo-1632856692518-b694374ee5ec', 800, 500),
-      alt: 'Réunion d\'équipe autour de la mission ServicesArtisans',
+      alt: "Réunion d'équipe autour de la mission ServicesArtisans",
     },
   ],
   verification: [
@@ -544,7 +604,7 @@ const blogTopicImages: Record<string, { src: string; alt: string }> = {
   },
   entretien: {
     src: unsplash('photo-1564943300036-461e6e152355', 1200, 630),
-    alt: 'Entretien et maintenance d\'une maison',
+    alt: "Entretien et maintenance d'une maison",
   },
   reglementation: {
     src: unsplash('photo-1554224155-cfa08c2a758f', 1200, 630),
@@ -560,7 +620,7 @@ const blogTopicImages: Record<string, { src: string; alt: string }> = {
   },
   energie: {
     src: unsplash('photo-1655300283247-6b1924b1d152', 1200, 630),
-    alt: 'Panneaux solaires et économies d\'énergie',
+    alt: "Panneaux solaires et économies d'énergie",
   },
   terrasse: {
     src: unsplash('photo-1474547385661-ef98b8799dce', 1200, 630),
@@ -588,12 +648,12 @@ const blogTopicImages: Record<string, { src: string; alt: string }> = {
 const blogCategoryFallbacks: Record<string, { src: string; alt: string }> = {
   Tarifs: blogTopicImages.budget,
   'Aides & Subventions': blogTopicImages.aides,
-  'Réglementation': blogTopicImages.reglementation,
+  Réglementation: blogTopicImages.reglementation,
   Securite: blogTopicImages.securite,
-  'Sécurité': blogTopicImages.securite,
+  Sécurité: blogTopicImages.securite,
   Saisonnier: blogTopicImages.hiver,
   Energie: blogTopicImages.energie,
-  'Énergie': blogTopicImages.energie,
+  Énergie: blogTopicImages.energie,
   Guides: blogTopicImages.renovation,
   Conseils: blogTopicImages.entretien,
   'Fiches métier': {
@@ -647,17 +707,14 @@ const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
 
 const defaultBlogImage = {
   src: unsplash('photo-1600585154340-be6161a56a0c', 1200, 630),
-  alt: 'Travaux de rénovation et d\'aménagement',
+  alt: "Travaux de rénovation et d'aménagement",
 }
 
 /**
  * Récupérer l'image d'un article de blog.
  * Priorité : slug keywords → catégorie → défaut.
  */
-export function getBlogImage(
-  slug: string,
-  category?: string,
-): { src: string; alt: string } {
+export function getBlogImage(slug: string, category?: string): { src: string; alt: string } {
   const lower = slug.toLowerCase()
 
   // 1. Match par mot-clé dans le slug

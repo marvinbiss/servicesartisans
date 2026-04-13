@@ -39,7 +39,7 @@ import {
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getArtisanUrl } from '@/lib/utils'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import {
   services as staticServicesList,
   villes,
@@ -302,13 +302,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       locale: 'fr_FR',
-      images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }],
+      images: [
+        {
+          url: getServiceImageForContext(serviceSlug, locationSlug).src,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [getServiceImage(serviceSlug).src],
+      images: [getServiceImageForContext(serviceSlug, locationSlug).src],
     },
     alternates: getAlternates(`/services/${serviceSlug}/${locationSlug}`),
   }
@@ -331,7 +338,7 @@ function generateJsonLd(
     '@type': 'LocalBusiness',
     name: `${service.name} à ${location.name}`,
     description: `Trouvez un ${svcLower} qualifié à ${location.name}. Artisans vérifiés SIREN, devis gratuit et avis clients.`,
-    image: getServiceImage(serviceSlug).src,
+    image: getServiceImageForContext(serviceSlug, locationSlug).src,
     address: {
       '@type': 'PostalAddress',
       addressLocality: location.name,
@@ -370,7 +377,7 @@ function generateJsonLd(
     '@type': 'Service',
     name: `${service.name} à ${location.name}`,
     description: `Trouvez des ${svcLower}s qualifiés et vérifiés à ${location.name}`,
-    image: getServiceImage(serviceSlug).src,
+    image: getServiceImageForContext(serviceSlug, locationSlug).src,
     serviceType: service.name,
     inLanguage: 'fr-FR',
     areaServed: {
@@ -665,7 +672,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
               city: p.address_city,
             }),
             position: i + 1,
-            image: getServiceImage(serviceSlug).src,
+            image: getServiceImageForContext(serviceSlug, locationSlug).src,
             rating: p.rating_average ?? undefined,
             reviewCount: p.review_count ?? undefined,
           })),
@@ -775,7 +782,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       regionName: location.region_name || '',
       departmentName: location.department_name || '',
       url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
-      image: getServiceImage(serviceSlug).src,
+      image: getServiceImageForContext(serviceSlug, locationSlug).src,
       ...(trade
         ? {
             lowPrice: trade.priceRange.min,

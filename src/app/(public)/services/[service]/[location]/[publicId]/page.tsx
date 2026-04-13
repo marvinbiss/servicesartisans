@@ -17,7 +17,7 @@ import { ArtisanSchema } from '@/components/artisan/ArtisanSchema'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 import type { Service, Location } from '@/types'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import { getRegionPreposition } from '@/lib/geo-strings'
 
 /** Raw provider row from select('*') — includes all DB columns the mapper reads */
@@ -486,13 +486,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         type: 'website',
         locale: 'fr_FR',
         url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
-        images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }],
+        images: [
+          {
+            url: getServiceImageForContext(serviceSlug, locationSlug).src,
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        images: [getServiceImage(serviceSlug).src],
+        images: [getServiceImageForContext(serviceSlug, locationSlug).src],
       },
       alternates: getAlternates(`/services/${serviceSlug}/${locationSlug}/${publicId}`),
     }
@@ -587,7 +594,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // the sitemap used stable_id while getArtisanUrl preferred slug.
     const shouldNoindex = provider.noindex === true
 
-    const serviceImage = getServiceImage(serviceSlug)
+    const serviceImage = getServiceImageForContext(serviceSlug, locationSlug)
     const ogAlt = `${displayName} - ${serviceName} à ${realCity}`
     const ogImage = serviceImage.src
 

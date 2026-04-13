@@ -25,7 +25,7 @@ import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getCityValues } from '@/lib/insee-resolver'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
@@ -260,7 +260,7 @@ export async function generateMetadata({
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
-  const serviceImage = getServiceImage(service)
+  const serviceImage = getServiceImageForContext(service, ville)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
 
   return {

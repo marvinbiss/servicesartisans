@@ -20,7 +20,7 @@ import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber, formatEuro } from '@/lib/data/commune-data'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -175,7 +175,7 @@ export async function generateMetadata({
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
-  const serviceImage = getServiceImage(service)
+  const serviceImage = getServiceImageForContext(service, location)
   const canonicalUrl = `${SITE_URL}/devis/${service}/${location}`
 
   // Gate indexation on provider availability (HCU anti-thin). Fail-open during build.

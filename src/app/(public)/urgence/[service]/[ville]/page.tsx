@@ -27,7 +27,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber, monthName } from '@/lib/data/commune-data'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import {
   hasProvidersByServiceAndLocation,
   getProvidersByServiceAndLocation,
@@ -262,7 +262,7 @@ export async function generateMetadata({
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
-  const serviceImage = getServiceImage(service)
+  const serviceImage = getServiceImageForContext(service, villeSlug)
   const canonicalUrl = `${SITE_URL}/urgence/${service}/${villeSlug}`
 
   // Gate indexation on provider availability (HCU anti-thin). Fail-open during build.

@@ -13,7 +13,7 @@ import {
 } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getQuartierBySlug, getQuartiersByVille, getNearbyCities } from '@/lib/data/france'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import DevisForm from '@/components/DevisForm'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -80,7 +80,7 @@ export async function generateMetadata({
 
   const description = `Devis ${tradeLower} à ${quartierName}, ${ville.name} : ${minPrice}–${maxPrice} ${unit}. Comparez jusqu’à 3 artisans. Gratuit, sans engagement.`
 
-  const serviceImage = getServiceImage(service)
+  const serviceImage = getServiceImageForContext(service, `${location}-${quartier}`)
   const canonicalUrl = `${SITE_URL}/devis/${service}/${location}/${quartier}`
 
   return {

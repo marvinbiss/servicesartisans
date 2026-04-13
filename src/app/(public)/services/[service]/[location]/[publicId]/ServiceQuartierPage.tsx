@@ -5,7 +5,7 @@ import ServiceLocationPageClient from '../PageClient'
 import { getBreadcrumbSchema, getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getArtisanUrl } from '@/lib/utils'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import {
   services as staticServicesList,
   getQuartierBySlug,
@@ -107,7 +107,7 @@ export default async function ServiceQuartierPage({
     '@type': 'Service',
     name: `${service.name} à ${quartierName}, ${ville.name}`,
     description: `Trouvez des ${svcLower}s qualifiés dans le quartier ${quartierName} à ${ville.name}`,
-    image: getServiceImage(serviceSlug).src,
+    image: getServiceImageForContext(serviceSlug, `${locationSlug}-${quartierSlug}`).src,
     areaServed: {
       '@type': 'Place',
       name: `${quartierName}, ${ville.name}`,
@@ -162,7 +162,7 @@ export default async function ServiceQuartierPage({
               city: p.address_city,
             }),
             position: i + 1,
-            image: getServiceImage(serviceSlug).src,
+            image: getServiceImageForContext(serviceSlug, `${locationSlug}-${quartierSlug}`).src,
             rating: p.rating_average ?? undefined,
             reviewCount: p.review_count ?? undefined,
           })),

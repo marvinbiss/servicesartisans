@@ -17,7 +17,7 @@ import { getCommuneBySlug } from '@/lib/data/commune-data'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImageForContext } from '@/lib/data/images'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -146,13 +146,15 @@ export async function generateMetadata({
       description,
       url: canonicalUrl,
       type: 'website',
-      images: [{ url: getServiceImage(service).src, width: 1200, height: 630 }],
+      images: [
+        { url: getServiceImageForContext(service, villeSlug).src, width: 1200, height: 630 },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [getServiceImage(service).src],
+      images: [getServiceImageForContext(service, villeSlug).src],
     },
   }
 }
