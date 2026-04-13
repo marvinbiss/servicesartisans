@@ -221,7 +221,7 @@ export default async function UrgencePage() {
           </div>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
             Urgence artisan ?<br />
-            <span className="text-red-300">Trouvez rapidement un professionnel.</span>
+            <span className="text-red-300">Intervention rapide 24h/7j.</span>
           </h1>
           <p className="text-xl text-red-100/80 max-w-2xl mb-10">
             Plombier, électricien, serrurier, chauffagiste — un artisan référencé intervient chez

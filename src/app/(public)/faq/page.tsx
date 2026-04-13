@@ -58,11 +58,6 @@ const faqWebPageSchema = {
   description:
     "Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l'annuaire d'artisans.",
   url: `${SITE_URL}/faq`,
-  isPartOf: {
-    '@type': 'WebSite',
-    name: 'ServicesArtisans',
-    url: SITE_URL,
-  },
   speakable: {
     '@type': 'SpeakableSpecification',
     cssSelector: ['h1', 'h2', '[data-speakable="true"]'],

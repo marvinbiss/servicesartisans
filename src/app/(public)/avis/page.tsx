@@ -304,7 +304,7 @@ export default async function AvisPage() {
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
               Avis artisans —{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-200 to-cyan-300">
-                Trouvez un professionnel
+                professionnels
               </span>{' '}
               de confiance
             </h1>

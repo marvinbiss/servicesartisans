@@ -88,7 +88,6 @@ export default async function DepartementsIndexPage() {
             description: "Annuaire d'artisans référencés dans les 101 départements français.",
             url: `${SITE_URL}/departements`,
             numberOfItems: departements.length,
-            isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
             breadcrumb: {
               '@type': 'BreadcrumbList',
               itemListElement: [

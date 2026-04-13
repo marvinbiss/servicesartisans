@@ -373,7 +373,7 @@ export default async function UrgenceServicePage({
               return h1Templates[h1Hash % h1Templates.length]
             })()}
             <br />
-            <span className="opacity-80">Trouvez rapidement un professionnel.</span>
+            <span className="opacity-80">Intervention rapide 24h/7j.</span>
           </h1>
           <p className="text-xl opacity-90 max-w-2xl mb-8">{trade.emergencyInfo}</p>
           <div className="flex flex-col sm:flex-row gap-4 mb-8">

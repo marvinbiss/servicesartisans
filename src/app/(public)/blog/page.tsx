@@ -77,11 +77,6 @@ export default async function BlogPage({ searchParams }: PageProps) {
     description: "Conseils, guides et actualités sur l'artisanat et les travaux de rénovation.",
     url: `${SITE_URL}/blog`,
     numberOfItems: allArticlesMeta.length,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: 'ServicesArtisans',
-      url: SITE_URL,
-    },
     hasPart: allArticlesMeta.slice(0, 10).map((a) => ({
       '@type': 'BlogPosting',
       headline: a.title,

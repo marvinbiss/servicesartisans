@@ -406,11 +406,6 @@ export default function StatistiquesArtisansFrancePage() {
     datePublished: '2026-01-15',
     dateModified: '2026-03-01',
     inLanguage: 'fr',
-    isPartOf: {
-      '@type': 'WebSite',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

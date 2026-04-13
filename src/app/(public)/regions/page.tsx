@@ -74,7 +74,6 @@ export default async function RegionsIndexPage() {
             description: "Annuaire d'artisans référencés dans les 18 régions françaises.",
             url: `${SITE_URL}/regions`,
             numberOfItems: regions.length,
-            isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
             breadcrumb: {
               '@type': 'BreadcrumbList',
               itemListElement: [

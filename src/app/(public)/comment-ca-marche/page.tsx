@@ -249,7 +249,7 @@ export default async function CommentCaMarchePage() {
             />
             <div className="text-center">
               <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-                Trouvez un artisan référencé en 3 étapes
+                Artisan référencé en 3 étapes
               </h1>
               <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
                 Recherchez, comparez et contactez des artisans référencés grâce aux données

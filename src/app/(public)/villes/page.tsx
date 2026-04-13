@@ -82,7 +82,6 @@ export default async function VillesIndexPage() {
             description: `Annuaire d'artisans référencés dans ${villes.length} villes de France.`,
             url: `${SITE_URL}/villes`,
             numberOfItems: villes.length,
-            isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
             breadcrumb: {
               '@type': 'BreadcrumbList',
               itemListElement: [

@@ -296,11 +296,6 @@ export default function MaprimeRenovCumulCeePage() {
       { '@type': 'Thing', name: 'Certificats d\u2019Économies d\u2019Énergie' },
       { '@type': 'Thing', name: 'Rénovation énergétique' },
     ],
-    isPartOf: {
-      '@type': 'WebSite',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
   }
 
   return (
