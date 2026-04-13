@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const auth = await requirePermission('audit', 'read')
+  const auth = await requirePermission('audit', 'write')
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (!auth.success || !auth.admin) return auth.error!
 

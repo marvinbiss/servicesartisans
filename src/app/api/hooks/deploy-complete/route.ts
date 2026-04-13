@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { createHmac } from 'crypto'
+import { createHmac, timingSafeEqual } from 'crypto'
 
 /**
  * Vercel deploy webhook → triggers GitHub Actions cache warmup.
@@ -29,7 +29,7 @@ async function verifySignature(request: Request, body: string): Promise<boolean>
   if (!signature) return false
 
   const hash = createHmac('sha1', WEBHOOK_SECRET).update(body).digest('hex')
-  return hash === signature
+  return timingSafeEqual(Buffer.from(hash), Buffer.from(signature))
 }
 
 export async function POST(request: Request) {

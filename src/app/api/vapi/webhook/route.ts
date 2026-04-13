@@ -279,7 +279,10 @@ async function handleStatusUpdate(event: VapiWebhookEvent): Promise<NextResponse
       status: 'in_progress',
     })
 
-    logger.info('Voice call started', { callId: call.id, callerPhone })
+    logger.info('Voice call started', {
+      callId: call.id,
+      callerPhone: callerPhone.replace(/(.{4}).*(.{2})$/, '$1***$2'),
+    })
   }
 
   if (status === 'ended') {
