@@ -111,9 +111,18 @@ export default function ComparaisonPage() {
             </div>
             <p className="text-lg text-charcoal-600 max-w-2xl">
               {
-                "30 comparatifs détaillés pour vous aider à choisir les meilleures solutions pour vos travaux. Prix 2026, avantages, inconvénients et verdict d'experts."
+                "30 comparatifs détaillés pour vous aider à choisir la solution adaptée à vos travaux. Prix 2026, avantages, inconvénients et verdict d'experts."
               }
             </p>
+            <div className="mt-6">
+              <Link
+                href="/devis"
+                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all"
+              >
+                Comparer les artisans
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
 

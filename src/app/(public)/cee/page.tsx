@@ -498,8 +498,8 @@ export default async function CeeHubPage() {
                 Leads exclusifs vs partagés
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Pourquoi les leads exclusifs convertissent 3x plus&nbsp;: co&ucirc;ts, taux de
-                conversion, comparatif des plateformes.
+                Pourquoi les leads exclusifs convertissent 3x plus&nbsp;: coûts, taux de conversion,
+                comparatif des plateformes.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Lire le comparatif <ArrowRight className="w-4 h-4" aria-hidden="true" />

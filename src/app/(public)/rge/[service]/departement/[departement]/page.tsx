@@ -41,7 +41,7 @@ interface PageProps {
   params: Promise<{ service: string; departement: string }>
 }
 
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
@@ -64,10 +64,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = truncateTitle(
     `${serviceName} RGE ${dept.name} (${dept.code}) \u2014 MaPrimeR\u00e9nov\u2019`
   )
-  const description = truncateTitle(
-    `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE ${getDeptPreposition(dept.name)} (${dept.code}). \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Donn\u00e9es ADEME.`,
-    158
-  )
+  const rawDesc = `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE ${getDeptPreposition(dept.name)} (${dept.code}). \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Donn\u00e9es ADEME.`
+  const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '\u2026'
 
   const path = `/rge/${serviceSlug}/departement/${deptSlug}`
 
@@ -204,12 +202,12 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
               <>
                 Les artisans {serviceName.toLowerCase()} certifiés RGE (Reconnu Garant de
                 l’Environnement) {getDeptArticle(dept.name)} répondent aux critères
-                d’éco-conditionnalité fixés par l’&Eacute;tat.
+                d’éco-conditionnalité fixés par l’État.
               </>
             )}{' '}
             Cette qualification est indispensable pour bénéficier des aides publiques à la
-            rénovation énergétique&nbsp;: MaPrimeRénov’, Certificats d’&Eacute;conomies
-            d’&Eacute;nergie (CEE), éco-prêt à taux zéro et TVA réduite à 5,5&nbsp;%.
+            rénovation énergétique&nbsp;: MaPrimeRénov’, Certificats d’Économies d’Énergie (CEE),
+            éco-prêt à taux zéro et TVA réduite à 5,5&nbsp;%.
           </p>
           <p>
             Le département {getDeptArticle(dept.name)} compte {dept.population} habitants. Son
@@ -271,7 +269,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
               {serviceName} RGE par ville dans le {dept.name}
             </h2>
             <p className="text-sm text-charcoal-600 mb-4">
-              Affinez votre recherche en ciblant directement la commune o&ugrave; vos travaux seront
+              Affinez votre recherche en ciblant directement la commune où vos travaux seront
               réalisés.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">

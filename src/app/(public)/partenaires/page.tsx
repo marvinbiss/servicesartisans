@@ -94,7 +94,7 @@ export default async function PartenairesPage() {
             Nos partenaires
           </h1>
           <p className="text-xl text-charcoal-400 max-w-3xl">
-            Nous collaborons avec des partenaires de confiance pour offrir le meilleur service aux
+            Nous collaborons avec des partenaires de confiance pour offrir un service fiable aux
             particuliers et artisans.
           </p>
         </div>

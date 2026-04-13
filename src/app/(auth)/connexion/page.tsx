@@ -286,16 +286,16 @@ export default function ConnexionPage() {
             </p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="text-3xl font-bold">2500+</div>
-                <div className="text-sm text-primary-100">Artisans</div>
+                <div className="text-2xl font-bold">96 depts</div>
+                <div className="text-sm text-primary-100">Couverture nationale</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="text-3xl font-bold">50K+</div>
-                <div className="text-sm text-primary-100">Clients</div>
+                <div className="text-2xl font-bold">Gratuit</div>
+                <div className="text-sm text-primary-100">Devis sans engagement</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="text-3xl font-bold">4.8</div>
-                <div className="text-sm text-primary-100">Note moyenne</div>
+                <div className="text-2xl font-bold">SIREN vérifié</div>
+                <div className="text-sm text-primary-100">Artisans contrôlés</div>
               </div>
             </div>
           </div>

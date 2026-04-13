@@ -280,8 +280,8 @@ export default function FraudeRgeVerifierPage() {
           La fraude aux aides à la rénovation énergétique n’est ni marginale, ni nouvelle. Chaque
           année, la
           <strong> DGCCRF</strong> publie dans son rapport d’activité un bilan des contrôles menés
-          dans le secteur «&nbsp;rénovation énergétique&nbsp;», o&ugrave; figurent des taux
-          d’anomalie élevés ainsi que des procédures engagées à la suite de signalements via{' '}
+          dans le secteur «&nbsp;rénovation énergétique&nbsp;», où figurent des taux d’anomalie
+          élevés ainsi que des procédures engagées à la suite de signalements via{' '}
           <strong>Signal Conso</strong>. Ces constats sont documentés par l’administration
           elle-même&nbsp;: nous renvoyons aux rapports officiels plutôt que d’avancer des chiffres
           reconstitués.
@@ -391,7 +391,7 @@ export default function FraudeRgeVerifierPage() {
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-8">
             Un seul de ces signaux ne suffit pas toujours à qualifier une arnaque, mais leur cumul,
-            lui, est sans ambigu&iuml;té.
+            lui, est sans ambiguïté.
           </p>
           <ul className="space-y-3">
             {RED_FLAGS.map((f, i) => (
@@ -592,7 +592,7 @@ export default function FraudeRgeVerifierPage() {
             <li className="flex items-start gap-2">
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
-                Loi n&deg; 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique —
+                Loi n° 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique —
                 interdiction pour les travaux de rénovation énergétique.
               </span>
             </li>
@@ -607,7 +607,7 @@ export default function FraudeRgeVerifierPage() {
               <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
               <span>
                 France Rénov’ — annuaire officiel des professionnels RGE, tenu par l’ADEME pour le
-                compte de l’&Eacute;tat.
+                compte de l’État.
               </span>
             </li>
             <li className="flex items-start gap-2">

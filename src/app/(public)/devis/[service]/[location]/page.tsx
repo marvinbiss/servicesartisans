@@ -133,7 +133,7 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -170,7 +170,7 @@ export async function generateMetadata({
     `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu'à 3 artisans référencés. 100 % gratuit, sans engagement.`,
     `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Réponse rapide.`,
     `${trade.name} à ${villeData.name} : obtenez un devis gratuit et comparez les artisans vérifiés. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
-    `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}–${maxPrice} ${trade.priceRange.unit}) et choisissez le meilleur artisan. Gratuit.`,
+    `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}–${maxPrice} ${trade.priceRange.unit}) et choisissez un artisan de confiance. Gratuit.`,
     `Besoin d'un ${tradeLower} à ${villeData.name} ? Devis gratuit d'artisans vérifiés ${getDeptPreposition(dept)}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -1459,6 +1459,28 @@ export default async function DevisServiceLocationPage({
         currentIntent="devis"
         skipCrossIntent
       />
+
+      {/* CTA final — rappel devis */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-charcoal-900 to-charcoal-800 rounded-2xl p-8 md:p-12 text-center text-white">
+            <h2 className="font-heading text-2xl md:text-3xl font-bold mb-4">
+              Votre devis {tradeLower} à {villeData.name} — Gratuit et sans engagement
+            </h2>
+            <p className="text-sand-400 text-lg mb-8 max-w-2xl mx-auto">
+              Remplissez le formulaire en 2 minutes et recevez des devis personnalisés d'artisans
+              vérifiés.
+            </p>
+            <a
+              href="#formulaire"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            >
+              Remplir le formulaire
+              <ArrowRight className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+      </section>
 
       <MoneyPageBoost currentService={service} currentVille={location} />
     </div>

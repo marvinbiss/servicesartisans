@@ -430,8 +430,8 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
             Accédez à l’annuaire {label?.label ?? 'RGE'} de chaque département français pour couvrir
-            les zones rurales et les communes o&ugrave; la densité d’artisans qualifiés est plus
-            faible qu’en centre-ville.
+            les zones rurales et les communes où la densité d’artisans qualifiés est plus faible
+            qu’en centre-ville.
           </p>
           <div className="flex flex-wrap gap-2">
             {departements.map((d) => (

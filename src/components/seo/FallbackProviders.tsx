@@ -147,8 +147,8 @@ export default function FallbackProviders({
                       {provider.is_verified && (
                         <span
                           className="relative inline-flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 flex-shrink-0"
-                          aria-label="Artisan v&#233;rifi&#233;"
-                          title="Artisan v&#233;rifi&#233; SIREN"
+                          aria-label="Artisan vérifié"
+                          title="Artisan vérifié SIREN"
                         >
                           <svg
                             className="w-3 h-3 text-white"

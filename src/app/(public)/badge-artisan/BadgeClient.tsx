@@ -480,7 +480,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
               {
                 icon: Shield,
                 title: 'Inspirez confiance aux clients',
-                desc: 'Le badge "Artisan Vérifié" rassure instantanément vos visiteurs. 73 % des internautes déclarent faire davantage confiance aux sites avec un badge de vérification.',
+                desc: 'Le badge "Artisan Vérifié" rassure instantanément vos visiteurs. Les internautes font naturellement davantage confiance aux professionnels qui affichent une preuve de vérification.',
               },
               {
                 icon: TrendingUp,

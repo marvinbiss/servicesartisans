@@ -22,19 +22,21 @@ export async function GET() {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Fetch profile
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('id, email, full_name, phone_e164, average_rating, review_count, created_at, updated_at')
+      .select(
+        'id, email, full_name, phone_e164, average_rating, review_count, created_at, updated_at'
+      )
       .eq('id', user.id)
       .single()
 
@@ -46,15 +48,15 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({ profile }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      { profile },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Profile GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -63,13 +65,13 @@ export async function PUT(request: Request) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Parse request body
@@ -77,7 +79,7 @@ export async function PUT(request: Request) {
     const result = updateClientProfileSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Erreur de validation', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -106,18 +108,18 @@ export async function PUT(request: Request) {
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      profile,
-      message: 'Profil mis à jour avec succès'
-    }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        profile,
+        message: 'Profil mis à jour avec succès',
+      },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Profile PUT error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

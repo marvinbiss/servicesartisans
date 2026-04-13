@@ -7,11 +7,11 @@ export const maxDuration = 60
 export async function GET(request: NextRequest) {
   // Verify CRON_SECRET
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const supabase = createAdminClient()
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     logger.error('voice-lead-expiry: query error', { error })
-    return NextResponse.json({ error: 'Database error' }, { status: 500 })
+    return NextResponse.json({ error: 'Erreur base de données' }, { status: 500 })
   }
 
   let expiredCount = 0
@@ -49,7 +49,10 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  logger.info('voice-lead-expiry completed', { checked: expiredCalls?.length || 0, expired: expiredCount })
+  logger.info('voice-lead-expiry completed', {
+    checked: expiredCalls?.length || 0,
+    expired: expiredCount,
+  })
 
   return NextResponse.json({
     success: true,

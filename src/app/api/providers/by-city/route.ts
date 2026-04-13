@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('Error fetching providers by city:', error)
-      return NextResponse.json({ error: 'Failed to fetch providers' }, { status: 500 })
+      return NextResponse.json({ error: 'Échec de la récupération des artisans' }, { status: 500 })
     }
 
     return NextResponse.json(

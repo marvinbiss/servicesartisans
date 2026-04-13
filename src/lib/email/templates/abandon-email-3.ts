@@ -19,6 +19,7 @@ export function getAbandonEmail3(data: { service: string; city: string; unsubscr
 <html lang="fr">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1a1a1a;">
+  <span style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">Dernière relance — finalisez votre demande gratuitement et recevez vos devis.</span>
   <div style="text-align: center; margin-bottom: 24px;">
     <h1 style="color: #2563eb; font-size: 20px; margin: 0;">ServicesArtisans</h1>
   </div>

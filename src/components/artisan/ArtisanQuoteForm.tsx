@@ -3,7 +3,17 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, CheckCircle, AlertCircle, Shield, FileText, Users, Phone, ArrowLeft, ChevronRight } from 'lucide-react'
+import {
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Shield,
+  FileText,
+  Users,
+  Phone,
+  ArrowLeft,
+  ChevronRight,
+} from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -51,13 +61,16 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
 
   const displayName = getDisplayName(artisan)
 
-  const trackingProps = useCallback(() => ({
-    artisanId: artisan.id,
-    artisanName: displayName,
-    specialty: artisan.specialty,
-    city: artisan.city,
-    source: 'inline_form' as const,
-  }), [artisan.id, artisan.specialty, artisan.city, displayName])
+  const trackingProps = useCallback(
+    () => ({
+      artisanId: artisan.id,
+      artisanName: displayName,
+      specialty: artisan.specialty,
+      city: artisan.city,
+      source: 'inline_form' as const,
+    }),
+    [artisan.id, artisan.specialty, artisan.city, displayName]
+  )
 
   // Restore draft from localStorage on mount
   useEffect(() => {
@@ -65,7 +78,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
       const raw = localStorage.getItem(DRAFT_KEY)
       if (raw) {
         const draft = JSON.parse(raw) as Partial<FormData>
-        setFormData(prev => ({ ...prev, ...draft }))
+        setFormData((prev) => ({ ...prev, ...draft }))
       }
     } catch {
       // ignore corrupt draft
@@ -87,7 +100,12 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
   // Abandon tracking: beforeunload when user has email filled at step 2
   useEffect(() => {
     function handleBeforeUnload() {
-      if (step === 2 && formData.email.trim() && EMAIL_REGEX.test(formData.email.trim()) && !success) {
+      if (
+        step === 2 &&
+        formData.email.trim() &&
+        EMAIL_REGEX.test(formData.email.trim()) &&
+        !success
+      ) {
         trackEvent('inline_form_abandoned', {
           ...trackingProps(),
           email: formData.email.trim(),
@@ -108,7 +126,16 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
     }
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [step, formData.email, success, artisan.specialty_slug, artisan.specialty, artisan.city_slug, artisan.city, trackingProps])
+  }, [
+    step,
+    formData.email,
+    success,
+    artisan.specialty_slug,
+    artisan.specialty,
+    artisan.city_slug,
+    artisan.city,
+    trackingProps,
+  ])
 
   // Cleanup draft timeout on unmount
   useEffect(() => {
@@ -161,7 +188,9 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
     if (Object.keys(validationErrors).length > 0) return
 
     if (!consentRgpd) {
-      setSubmitError('Veuillez accepter la politique de confidentialité pour envoyer votre demande.')
+      setSubmitError(
+        'Veuillez accepter la politique de confidentialité pour envoyer votre demande.'
+      )
       return
     }
 
@@ -191,11 +220,17 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
       trackEvent('inline_form_submitted', trackingProps())
 
       // Clear draft on success
-      try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
+      try {
+        localStorage.removeItem(DRAFT_KEY)
+      } catch {
+        /* ignore */
+      }
 
       setSuccess(true)
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.')
+      setSubmitError(
+        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
+      )
     } finally {
       setLoading(false)
     }
@@ -213,7 +248,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
     saveDraft(updated)
 
     if (errors[field as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }))
+      setErrors((prev) => ({ ...prev, [field]: undefined }))
     }
   }
 
@@ -235,9 +270,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
           <FileText className="w-5 h-5" aria-hidden="true" />
           Devis gratuit en 2 min
         </h2>
-        <p className="text-primary-100 text-sm mt-1">
-          Réponse rapide de professionnels qualifiés
-        </p>
+        <p className="text-primary-100 text-sm mt-1">Réponse rapide de professionnels qualifiés</p>
       </div>
 
       {/* Content */}
@@ -262,19 +295,19 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
               <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-2">
                 Votre demande a été envoyée !
               </h3>
-              <p className="text-charcoal-600 text-sm mb-4">
-                Un conseiller vous rappelle sous 2h
-              </p>
+              <p className="text-charcoal-600 text-sm mb-4">Un conseiller vous rappelle sous 2h</p>
 
               {/* Phone CTA */}
               <div className="bg-accent-50 rounded-xl p-4 mb-4">
-                <p className="text-sm text-charcoal-700 mb-2">Besoin d&apos;une réponse immédiate ?</p>
+                <p className="text-sm text-charcoal-700 mb-2">
+                  Besoin d&apos;une réponse immédiate ?
+                </p>
                 <a
                   href={PHONE_TEL}
                   className="inline-flex items-center gap-2 bg-accent-600 hover:bg-accent-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors"
                 >
                   <Phone className="w-4 h-4" aria-hidden="true" />
-                  {PHONE_NUMBER}
+                  Appelez un conseiller · {PHONE_NUMBER}
                 </a>
               </div>
 
@@ -287,23 +320,20 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
               </Link>
             </motion.div>
           ) : (
-            <motion.div
-              key="form"
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
+            <motion.div key="form" initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
               {/* Social proof */}
               <p className="text-sm text-charcoal-600 mb-4 flex items-center gap-1.5">
                 <Users className="w-4 h-4 text-accent-700 flex-shrink-0" aria-hidden="true" />
-                <span><span className="font-semibold text-accent-700">2 conseillers disponibles</span> · Devis gratuit sans engagement</span>
+                <span>
+                  <span className="font-semibold text-accent-700">2 conseillers disponibles</span> ·
+                  Devis gratuit sans engagement
+                </span>
               </p>
 
               {/* Progress indicator */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-medium text-charcoal-500">
-                    Étape {step}/2
-                  </span>
+                  <span className="text-xs font-medium text-charcoal-500">Étape {step}/2</span>
                 </div>
                 <div className="h-1 bg-sand-100 rounded-full overflow-hidden">
                   <motion.div
@@ -327,7 +357,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                   >
                     {/* Description */}
                     <div>
-                      <label htmlFor="devis-description" className="block text-sm font-medium text-charcoal-700 mb-1">
+                      <label
+                        htmlFor="devis-description"
+                        className="block text-sm font-medium text-charcoal-700 mb-1"
+                      >
                         Description du projet
                       </label>
                       <textarea
@@ -335,7 +368,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                         rows={3}
                         placeholder="Décrivez votre besoin..."
                         value={formData.description}
-                        onChange={e => updateField('description', e.target.value)}
+                        onChange={(e) => updateField('description', e.target.value)}
                         className={inputClasses('description')}
                       />
                       {errors.description && (
@@ -348,13 +381,16 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
 
                     {/* Urgence */}
                     <div>
-                      <label htmlFor="devis-urgence" className="block text-sm font-medium text-charcoal-700 mb-1">
+                      <label
+                        htmlFor="devis-urgence"
+                        className="block text-sm font-medium text-charcoal-700 mb-1"
+                      >
                         Urgence
                       </label>
                       <select
                         id="devis-urgence"
                         value={formData.urgence}
-                        onChange={e => updateField('urgence', e.target.value)}
+                        onChange={(e) => updateField('urgence', e.target.value)}
                         className="w-full rounded-lg border border-sand-200 bg-white px-3 py-2.5 text-sm text-charcoal-900 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 hover:border-primary-300"
                       >
                         <option value="flexible">Pas urgent</option>
@@ -400,7 +436,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                     {/* Nom + Téléphone on same row */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="devis-nom" className="block text-sm font-medium text-charcoal-700 mb-1">
+                        <label
+                          htmlFor="devis-nom"
+                          className="block text-sm font-medium text-charcoal-700 mb-1"
+                        >
                           Nom complet
                         </label>
                         <input
@@ -408,7 +447,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                           type="text"
                           placeholder="Votre nom"
                           value={formData.nom}
-                          onChange={e => updateField('nom', e.target.value)}
+                          onChange={(e) => updateField('nom', e.target.value)}
                           className={inputClasses('nom')}
                         />
                         {errors.nom && (
@@ -419,7 +458,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                         )}
                       </div>
                       <div>
-                        <label htmlFor="devis-telephone" className="block text-sm font-medium text-charcoal-700 mb-1">
+                        <label
+                          htmlFor="devis-telephone"
+                          className="block text-sm font-medium text-charcoal-700 mb-1"
+                        >
                           Téléphone
                         </label>
                         <input
@@ -428,7 +470,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                           inputMode="tel"
                           placeholder="06 XX XX XX XX"
                           value={formData.telephone}
-                          onChange={e => updateField('telephone', e.target.value)}
+                          onChange={(e) => updateField('telephone', e.target.value)}
                           className={inputClasses('telephone')}
                         />
                         {errors.telephone && (
@@ -442,7 +484,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
 
                     {/* Email */}
                     <div>
-                      <label htmlFor="devis-email" className="block text-sm font-medium text-charcoal-700 mb-1">
+                      <label
+                        htmlFor="devis-email"
+                        className="block text-sm font-medium text-charcoal-700 mb-1"
+                      >
                         Email
                       </label>
                       <input
@@ -451,7 +496,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                         inputMode="email"
                         placeholder="votre@email.fr"
                         value={formData.email}
-                        onChange={e => updateField('email', e.target.value)}
+                        onChange={(e) => updateField('email', e.target.value)}
                         className={inputClasses('email')}
                       />
                       {errors.email && (
@@ -471,10 +516,12 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                         className="mt-1 rounded border-sand-200 text-primary-400 focus:ring-primary-400"
                       />
                       <span className="text-xs text-charcoal-500">
-                        J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
+                        J&apos;accepte que mes données soient utilisées pour traiter ma demande et
+                        me mettre en relation avec des artisans partenaires. Voir notre{' '}
                         <Link href="/confidentialite" className="underline hover:text-primary-500">
                           politique de confidentialité
-                        </Link>.
+                        </Link>
+                        .
                       </span>
                     </label>
 
@@ -497,9 +544,26 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                     >
                       {loading ? (
                         <span className="flex items-center gap-2">
-                          <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            />
                           </svg>
                           Envoi en cours...
                         </span>
@@ -513,7 +577,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
 
                     {/* Trust footer */}
                     <div className="flex items-center justify-center gap-2 pt-2">
-                      <Shield className="w-3.5 h-3.5 text-accent-500 flex-shrink-0" aria-hidden="true" />
+                      <Shield
+                        className="w-3.5 h-3.5 text-accent-500 flex-shrink-0"
+                        aria-hidden="true"
+                      />
                       <p className="text-xs text-charcoal-500">
                         Gratuit · Sans engagement · Réponse sous 2h
                       </p>

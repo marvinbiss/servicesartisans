@@ -268,10 +268,10 @@ export default function MandataireVsDirectPage() {
         <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
           Le dispositif des certificats d’économies d’énergie, créé par la loi POPE du 13 juillet
           2005 et codifié aux articles L221-1 à L221-12 du code de l’énergie, repose sur un principe
-          simple&nbsp;: l’&Eacute;tat impose aux vendeurs d’énergie un volume d’économies à
-          réaliser, et ces vendeurs doivent le justifier en déposant des certificats au Pôle
-          national des certificats d’économies d’énergie (PNCEE), service de la Direction générale
-          de l’énergie et du climat.
+          simple&nbsp;: l’État impose aux vendeurs d’énergie un volume d’économies à réaliser, et
+          ces vendeurs doivent le justifier en déposant des certificats au Pôle national des
+          certificats d’économies d’énergie (PNCEE), service de la Direction générale de l’énergie
+          et du climat.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
           Autour de ce mécanisme, trois rôles se sont stabilisés au fil des périodes
@@ -346,7 +346,7 @@ export default function MandataireVsDirectPage() {
                     </div>
                     <div>
                       <div className="font-semibold text-charcoal-900 mb-1">
-                        D’o&ugrave; vient sa marge
+                        D’où vient sa marge
                       </div>
                       <p>{role.revenue}</p>
                     </div>
@@ -407,7 +407,7 @@ export default function MandataireVsDirectPage() {
         <p className="text-charcoal-700 leading-relaxed">
           En résumé&nbsp;: le montant maximal théorique de la prime est figé par la réglementation,
           mais le montant réellement perçu, le délai de versement et la qualité du SAV dépendent
-          beaucoup du choix du partenaire CEE. Comparer ne co&ucirc;te rien.
+          beaucoup du choix du partenaire CEE. Comparer ne coûte rien.
         </p>
       </section>
 
@@ -580,8 +580,8 @@ export default function MandataireVsDirectPage() {
           <li className="flex items-start gap-2">
             <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
             <span>
-              Loi n&deg; 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique
-              (interdiction pour les travaux d’économies d’énergie).
+              Loi n° 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique (interdiction
+              pour les travaux d’économies d’énergie).
             </span>
           </li>
           <li className="flex items-start gap-2">

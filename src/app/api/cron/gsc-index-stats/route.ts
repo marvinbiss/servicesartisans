@@ -25,19 +25,22 @@ const INDEXATION_RATIO_THRESHOLD = 0.6
  */
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   // ── Vérifier que les credentials GSC sont configurées ─────────────────
   const hasCredentials = !!(process.env.GSC_CREDENTIALS || process.env.GOOGLE_SERVICE_ACCOUNT_KEY)
   if (!hasCredentials) {
-    logger.warn('GSC index stats cron: No GSC credentials configured (GSC_CREDENTIALS or GOOGLE_SERVICE_ACCOUNT_KEY). Skipping.', {
-      action: 'gsc-index-stats-skip',
-    })
+    logger.warn(
+      'GSC index stats cron: No GSC credentials configured (GSC_CREDENTIALS or GOOGLE_SERVICE_ACCOUNT_KEY). Skipping.',
+      {
+        action: 'gsc-index-stats-skip',
+      }
+    )
     return NextResponse.json({
       skipped: true,
       reason: 'GSC credentials not configured',
@@ -67,7 +70,10 @@ export async function GET(request: Request) {
     }
 
     if (indexationStats.sitemapErrors.length > 0) {
-      console.error('[gsc-index-stats] Sitemaps with errors:', indexationStats.sitemapErrors.map((s) => s.path))
+      console.error(
+        '[gsc-index-stats] Sitemaps with errors:',
+        indexationStats.sitemapErrors.map((s) => s.path)
+      )
     }
 
     logger.warn('GSC index stats collected', {

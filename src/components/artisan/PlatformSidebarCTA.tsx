@@ -82,8 +82,9 @@ export function PlatformSidebarCTA({
             aria-label={`Appeler au ${PHONE_NUMBER}`}
           >
             <Phone className="w-5 h-5" aria-hidden="true" />
-            Appeler · {PHONE_NUMBER}
+            Parler à un conseiller
           </motion.a>
+          <p className="text-center text-xs text-charcoal-500 mb-1">{PHONE_NUMBER}</p>
 
           {/* Horaires */}
           <div className="flex items-center justify-center gap-1.5 text-xs text-charcoal-500 mb-4">
@@ -100,7 +101,7 @@ export function PlatformSidebarCTA({
                   <Zap className="w-3.5 h-3.5 text-accent-600" aria-hidden="true" />
                 </div>
                 <span>
-                  <strong>Gratuit</strong> et sans engagement
+                  <strong>100% gratuit</strong> — sans engagement
                 </span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
@@ -108,7 +109,7 @@ export function PlatformSidebarCTA({
                   <Users className="w-3.5 h-3.5 text-accent-600" aria-hidden="true" />
                 </div>
                 <span>
-                  Artisans <strong>vérifiés SIRET</strong>
+                  Artisans <strong>vérifiés SIREN</strong> dans 96 départements
                 </span>
               </div>
               <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
@@ -120,6 +121,15 @@ export function PlatformSidebarCTA({
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Urgency nudge */}
+        <div className="px-5 pb-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
+            <p className="text-xs text-amber-800 font-medium text-center">
+              Les artisans disponibles reçoivent beaucoup de demandes — contactez-nous maintenant
+            </p>
           </div>
         </div>
 

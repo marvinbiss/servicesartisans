@@ -1,3 +1,5 @@
+import { getDeptPreposition, getDeptArticle, getRegionPreposition } from '@/lib/geo-strings'
+
 /**
  * pSEO content helpers for RGE routes.
  *
@@ -104,7 +106,7 @@ export function buildGenericRgeFaq(ville: Ville, count: number): RgeFaqItem[] {
       answer:
         count > 0
           ? `Notre base référence actuellement ${countLabel} ${artisanWord} RGE actif${count > 1 ? 's' : ''} à ${ville.name}, toutes spécialités confondues (pompe à chaleur, isolation, solaire, menuiseries, chauffage bois…). Les données sont synchronisées chaque semaine depuis le registre officiel ADEME publié sur data.gouv.fr.`
-          : `Le nombre d'artisans RGE à ${ville.name} évolue en permanence au rythme des renouvellements de qualifications. Notre base est synchronisée chaque semaine depuis le registre ADEME. Si aucun résultat n'apparaît, élargissez la recherche au département ${ville.departement} ou consultez les communes voisines.`,
+          : `Le nombre d'artisans RGE à ${ville.name} évolue en permanence au rythme des renouvellements de qualifications. Notre base est synchronisée chaque semaine depuis le registre ADEME. Si aucun résultat n'apparaît, élargissez la recherche ${getDeptPreposition(ville.departement)} ou consultez les communes voisines.`,
     },
     {
       question: `Qu'est-ce que le label RGE et est-il obligatoire ?`,
@@ -112,7 +114,7 @@ export function buildGenericRgeFaq(ville: Ville, count: number): RgeFaqItem[] {
     },
     {
       question: `Quelles aides puis-je obtenir avec un artisan RGE à ${ville.name} en 2026 ?`,
-      answer: `À ${ville.name} (${ville.departement}), un particulier peut cumuler en 2026 : MaPrimeRénov' (forfait selon revenus et travaux, jusqu'à 11 000 € pour une PAC air/eau en ménage "bleu"), les primes CEE des délégataires (Effy, Sonergia, TotalEnergies), l'éco-PTZ jusqu'à 50 000 €, la TVA réduite à 5,5 % et les aides locales éventuelles de la région ${ville.region} ou du département.`,
+      answer: `À ${ville.name} (${ville.departement}), un particulier peut cumuler en 2026 : MaPrimeRénov' (forfait selon revenus et travaux, jusqu'à 11 000 € pour une PAC air/eau en ménage "bleu"), les primes CEE des délégataires (Effy, Sonergia, TotalEnergies), l'éco-PTZ jusqu'à 50 000 €, la TVA réduite à 5,5 % et les aides locales éventuelles ${getRegionPreposition(ville.region)} ou du département.`,
     },
     {
       question: `Comment vérifier qu'un artisan est bien certifié RGE ?`,
@@ -247,7 +249,7 @@ export function buildServiceCityParagraphs(
     metropole: `Dans une agglomération comme ${ville.name}, la concentration de professionnels permet de comparer plusieurs devis dans un rayon proche et d'obtenir des délais d'intervention plus courts qu'en zone rurale.`,
     grande: `À ${ville.name} (${ville.departement}), le marché de la rénovation énergétique reste concurrentiel : demander systématiquement 3 devis RGE permet de vérifier que les prix sont alignés sur les références locales.`,
     moyenne: `À ${ville.name}, le nombre d'artisans ${serviceName.toLowerCase()} RGE reste plus limité qu'en grande agglomération : les bons professionnels ont souvent 2 à 4 mois de carnet de commandes, anticipez votre demande.`,
-    commune: `Pour une commune du département ${ville.departement} comme ${ville.name}, il est fréquent que les artisans ${serviceName.toLowerCase()} RGE interviennent depuis la ville-centre voisine, dans un rayon de 20 à 40 km : cela reste parfaitement compatible avec les demandes d'aides.`,
+    commune: `Pour une commune ${getDeptArticle(ville.departement)} comme ${ville.name}, il est fréquent que les artisans ${serviceName.toLowerCase()} RGE interviennent depuis la ville-centre voisine, dans un rayon de 20 à 40 km : cela reste parfaitement compatible avec les demandes d'aides.`,
   }
 
   const localCount = countLabel
@@ -308,7 +310,7 @@ export function buildServiceCityFaq(
     },
     {
       question: `Un artisan ${qualifLabel} hors ${ville.name} peut-il intervenir chez moi ?`,
-      answer: `Oui. Les qualifications RGE sont nominatives et rattachées à l'entreprise, pas à la commune. Un artisan ${qualifLabel} domicilié dans une commune voisine du département ${ville.departement} intervient couramment à ${ville.name} dans un rayon de 20 à 50 km, et les aides (MaPrimeRénov', CEE, TVA 5,5 %) restent intégralement mobilisables sans restriction géographique.`,
+      answer: `Oui. Les qualifications RGE sont nominatives et rattachées à l'entreprise, pas à la commune. Un artisan ${qualifLabel} domicilié dans une commune voisine ${getDeptArticle(ville.departement)} intervient couramment à ${ville.name} dans un rayon de 20 à 50 km, et les aides (MaPrimeRénov', CEE, TVA 5,5 %) restent intégralement mobilisables sans restriction géographique.`,
     },
     {
       question: `Que vérifier sur le devis d'un ${svcLower} RGE ?`,

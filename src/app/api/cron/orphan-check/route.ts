@@ -18,11 +18,11 @@ export const maxDuration = 300
  */
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const startTime = Date.now()
@@ -189,7 +189,7 @@ export async function GET(request: Request) {
         healthy,
         upserted: upsertBatch.length,
         upsert_errors: upsertErrors,
-        top_orphans: top50.map(o => ({ path: o.path, links_in: o.links_in, status: o.status })),
+        top_orphans: top50.map((o) => ({ path: o.path, links_in: o.links_in, status: o.status })),
         run_id: runId,
       },
       elapsed: `${elapsed}ms`,
@@ -209,7 +209,7 @@ export async function GET(request: Request) {
         run_id: runId,
         elapsed: `${elapsed}ms`,
       },
-      { status: 500 },
+      { status: 500 }
     )
   }
 }

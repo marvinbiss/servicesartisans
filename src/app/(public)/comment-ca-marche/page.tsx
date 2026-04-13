@@ -70,7 +70,7 @@ const steps = [
       "Trouvez le bon professionnel en quelques secondes dans notre annuaire d'artisans. Recherchez par type de service et par ville dans les 101 départements français.",
     details: [
       "Des milliers d'artisans référencés en France",
-      'Recherche par métier : plombier, électricien, couvreur...',
+      'Recherche par métier : plombier, électricien, couvreur\u2026',
       'Filtrage par ville et département',
       'Résultats instantanés et à jour',
     ],
@@ -283,7 +283,7 @@ export default async function CommentCaMarchePage() {
                 Comment trouver un artisan sur ServicesArtisans ?
               </h2>
               <p className="text-xl text-charcoal-600 max-w-2xl mx-auto">
-                Un processus simple et transparent pour accéder aux meilleurs professionnels de
+                Un processus simple et transparent pour trouver des professionnels qualifiés dans
                 votre région
               </p>
             </div>

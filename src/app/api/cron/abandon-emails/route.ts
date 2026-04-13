@@ -15,7 +15,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.f
 export async function POST(request: NextRequest) {
   // Verify cron secret
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -45,7 +45,12 @@ export async function POST(request: NextRequest) {
         city: row.city_slug || 'votre ville',
         unsubscribeUrl,
       })
-      const result = await sendEmail({ to: row.email, subject, html })
+      const result = await sendEmail({
+        to: row.email,
+        subject,
+        html,
+        headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>` },
+      })
       if (result.success) {
         await supabase
           .from('devis_abandons')
@@ -74,7 +79,12 @@ export async function POST(request: NextRequest) {
         city: row.city_slug || 'votre ville',
         unsubscribeUrl,
       })
-      const result = await sendEmail({ to: row.email, subject, html })
+      const result = await sendEmail({
+        to: row.email,
+        subject,
+        html,
+        headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>` },
+      })
       if (result.success) {
         await supabase
           .from('devis_abandons')
@@ -103,7 +113,12 @@ export async function POST(request: NextRequest) {
         city: row.city_slug || 'votre ville',
         unsubscribeUrl,
       })
-      const result = await sendEmail({ to: row.email, subject, html })
+      const result = await sendEmail({
+        to: row.email,
+        subject,
+        html,
+        headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>` },
+      })
       if (result.success) {
         await supabase
           .from('devis_abandons')

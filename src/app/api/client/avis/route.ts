@@ -112,7 +112,7 @@ export async function POST(request: Request) {
     const result = clientCreateReviewSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Erreur de validation', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -204,7 +204,7 @@ export async function PUT(request: Request) {
     const result = clientUpdateReviewSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Erreur de validation', details: result.error.flatten() },
         { status: 400 }
       )
     }
@@ -280,7 +280,7 @@ export async function DELETE(request: Request) {
     const result = clientDeleteReviewSchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Invalid parameters', details: result.error.flatten() },
+        { error: 'Paramètres invalides', details: result.error.flatten() },
         { status: 400 }
       )
     }

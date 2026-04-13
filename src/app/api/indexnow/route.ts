@@ -9,20 +9,20 @@ const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY
  */
 export async function POST(request: Request) {
   if (!INDEXNOW_KEY) {
-    return NextResponse.json({ error: 'IndexNow API key not configured' }, { status: 500 })
+    return NextResponse.json({ error: 'Clé API IndexNow non configurée' }, { status: 500 })
   }
 
   // Verify this is an internal call (simple auth check)
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const body = await request.json().catch(() => null)
   const urls: string[] = body?.urls || []
 
   if (urls.length === 0) {
-    return NextResponse.json({ error: 'No URLs provided' }, { status: 400 })
+    return NextResponse.json({ error: 'Aucune URL fournie' }, { status: 400 })
   }
 
   // IndexNow API - submit to Bing (which shares with Yandex, Seznam, etc.)
@@ -47,6 +47,6 @@ export async function POST(request: Request) {
       message: response.status === 200 ? 'URLs submitted successfully' : 'Submission acknowledged',
     })
   } catch {
-    return NextResponse.json({ error: 'IndexNow API error' }, { status: 502 })
+    return NextResponse.json({ error: 'Erreur API IndexNow' }, { status: 502 })
   }
 }

@@ -262,8 +262,8 @@ export default function CommentDevenirRgePage() {
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             Guide factuel et non commercial pour obtenir la qualification Reconnu Garant de
-            l’Environnement&nbsp;: quels organismes&nbsp;? quelles étapes&nbsp;? combien ça
-            co&ucirc;te vraiment&nbsp;? Et surtout, est-ce rentable pour votre entreprise&nbsp;?
+            l’Environnement&nbsp;: quels organismes&nbsp;? quelles étapes&nbsp;? combien ça coûte
+            vraiment&nbsp;? Et surtout, est-ce rentable pour votre entreprise&nbsp;?
           </p>
           <p className="text-sm text-emerald-100/70 mt-4 max-w-3xl">
             Rédigé sur la base de l’arrêté du 1<sup>er</sup> décembre 2015 modifié, de la charte RGE
@@ -295,8 +295,8 @@ export default function CommentDevenirRgePage() {
             </strong>
             , pris en application des articles L.232-1 et suivants du code de l’énergie. Il définit
             la liste des travaux éligibles aux aides publiques à la rénovation énergétique
-            (MaPrimeRénov’, Certificats d’&Eacute;conomies d’&Eacute;nergie, éco-prêt à taux zéro)
-            et les qualifications exigées pour chaque type de chantier.
+            (MaPrimeRénov’, Certificats d’Économies d’Énergie, éco-prêt à taux zéro) et les
+            qualifications exigées pour chaque type de chantier.
           </p>
           <p>
             La <strong>gouvernance du dispositif</strong> est assurée conjointement par France
@@ -308,10 +308,9 @@ export default function CommentDevenirRgePage() {
             Concrètement, la mention RGE est délivrée par{' '}
             <strong>quatre grandes familles d’organismes</strong>
             spécialisés&nbsp;: Qualit’EnR pour les énergies renouvelables, Qualibat pour les corps
-            de métier du b&acirc;timent, Qualifelec pour l’électrotechnique et le
-            photovolta&iuml;que, et Céquami/CertiBat/OPQIBI pour les audits et bureaux d’études.
-            Chaque organisme délivre des qualifications spécifiques qui couvrent un périmètre
-            technique précis.
+            de métier du bâtiment, Qualifelec pour l’électrotechnique et le photovoltaïque, et
+            Céquami/CertiBat/OPQIBI pour les audits et bureaux d’études. Chaque organisme délivre
+            des qualifications spécifiques qui couvrent un périmètre technique précis.
           </p>
         </div>
       </section>
@@ -357,9 +356,7 @@ export default function CommentDevenirRgePage() {
                   </div>
                   <p className="text-sm text-charcoal-600 mb-3 leading-relaxed">{org.who}</p>
                   <p className="text-xs text-charcoal-900 leading-relaxed">
-                    <span className="font-semibold text-charcoal-700">
-                      Co&ucirc;ts indicatifs&nbsp;:
-                    </span>{' '}
+                    <span className="font-semibold text-charcoal-700">Coûts indicatifs&nbsp;:</span>{' '}
                     {org.cost}
                   </p>
                   <a
@@ -368,15 +365,15 @@ export default function CommentDevenirRgePage() {
                     rel="noopener noreferrer nofollow"
                     className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 hover:text-emerald-900 transition"
                   >
-                    Site officiel &rarr;
+                    Site officiel →
                   </a>
                 </article>
               )
             })}
           </div>
           <p className="text-xs text-charcoal-900 mt-6 italic">
-            Les fourchettes de co&ucirc;ts sont indicatives et doivent être confirmées directement
-            auprès de chaque organisme, qui publie ses barèmes à jour sur son site.
+            Les fourchettes de coûts sont indicatives et doivent être confirmées directement auprès
+            de chaque organisme, qui publie ses barèmes à jour sur son site.
           </p>
         </div>
       </section>
@@ -415,19 +412,19 @@ export default function CommentDevenirRgePage() {
           <div className="flex items-center gap-2 mb-6">
             <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Combien ça co&ucirc;te vraiment&nbsp;?
+              Combien ça coûte vraiment&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-600 mb-6 max-w-3xl leading-relaxed">
-            Les co&ucirc;ts varient selon l’organisme, le nombre de qualifications demandées et la
-            taille de l’entreprise. Voici un ordre de grandeur basé sur les barèmes publics des
-            organismes à date&nbsp;:
+            Les coûts varient selon l’organisme, le nombre de qualifications demandées et la taille
+            de l’entreprise. Voici un ordre de grandeur basé sur les barèmes publics des organismes
+            à date&nbsp;:
           </p>
           <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
             <table className="w-full text-sm">
               <thead className="bg-sand-200 text-charcoal-700">
                 <tr>
-                  <th className="text-left p-4 font-semibold">Poste de co&ucirc;t</th>
+                  <th className="text-left p-4 font-semibold">Poste de coût</th>
                   <th className="text-left p-4 font-semibold">Fourchette indicative</th>
                   <th className="text-left p-4 font-semibold">Remarque</th>
                 </tr>
@@ -444,9 +441,9 @@ export default function CommentDevenirRgePage() {
             </table>
           </div>
           <p className="text-xs text-charcoal-900 mt-4 italic">
-            Budget total moyen pour une première qualification&nbsp;: entre 3&nbsp;000 &euro; et
-            6&nbsp;000 &euro; la première année, formation comprise. Certaines formations peuvent
-            être financées par l’OPCO Constructys ou le FAFCEA selon le statut de l’entreprise.
+            Budget total moyen pour une première qualification&nbsp;: entre 3&nbsp;000 € et
+            6&nbsp;000 € la première année, formation comprise. Certaines formations peuvent être
+            financées par l’OPCO Constructys ou le FAFCEA selon le statut de l’entreprise.
           </p>
         </div>
       </section>
@@ -463,9 +460,8 @@ export default function CommentDevenirRgePage() {
           <p>
             La logique est simple et mécanique&nbsp;: la mention RGE est une{' '}
             <strong>condition réglementaire</strong> pour que le client final puisse bénéficier de
-            MaPrimeRénov’, des Certificats d’&Eacute;conomies d’&Eacute;nergie (CEE) et de
-            l’éco-prêt à taux zéro. Sans RGE, le client paie l’intégralité du devis sans aide
-            publique.
+            MaPrimeRénov’, des Certificats d’Économies d’Énergie (CEE) et de l’éco-prêt à taux zéro.
+            Sans RGE, le client paie l’intégralité du devis sans aide publique.
           </p>
           <p>
             En pratique, cela signifie qu’un artisan non-RGE est{' '}
@@ -484,9 +480,8 @@ export default function CommentDevenirRgePage() {
           <p>
             Le retour sur investissement de la qualification dépend du volume de chantiers, mais le
             point d’équilibre est généralement atteint <strong>dès les premiers dossiers</strong>
-            (un seul chantier énergétique couvre habituellement le co&ucirc;t annuel de la
-            qualification). Il ne s’agit donc pas d’un pari mais d’un{' '}
-            <em>ticket d’entrée réglementaire</em>
+            (un seul chantier énergétique couvre habituellement le coût annuel de la qualification).
+            Il ne s’agit donc pas d’un pari mais d’un <em>ticket d’entrée réglementaire</em>
             pour exercer dans le secteur de la rénovation subventionnée.
           </p>
         </div>

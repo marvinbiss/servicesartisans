@@ -171,9 +171,9 @@ export default function RgeSourcesPage() {
             Sources et méthodologie RGE
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            D’o&ugrave; proviennent les données RGE affichées sur ServicesArtisans, à quelle
-            fréquence elles sont mises à jour et comment vérifier vous-même la qualification d’un
-            artisan auprès des organismes officiels.
+            D’où proviennent les données RGE affichées sur ServicesArtisans, à quelle fréquence
+            elles sont mises à jour et comment vérifier vous-même la qualification d’un artisan
+            auprès des organismes officiels.
           </p>
         </div>
       </section>

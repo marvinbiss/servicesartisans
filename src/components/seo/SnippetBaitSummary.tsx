@@ -37,9 +37,11 @@ export default function SnippetBaitSummary({ trades, year = 2026 }: SnippetBaitS
     <div className="snippet-answer max-w-4xl mx-auto" data-speakable="true">
       <p className="text-base text-charcoal-700 leading-relaxed mb-4">
         Le <strong>prix moyen d'un artisan en France</strong> se situe entre{' '}
-        <strong>{globalMin} et {globalMax} {trades[0]?.unit || '\u20AC/h'}</strong> en {year}.
-        Les tarifs varient selon le corps de m{'e'}tier, la r{'e'}gion et la complexit{'e'} des travaux.
-        Voici le bar{'e'}me complet par m{'e'}tier :
+        <strong>
+          {globalMin} et {globalMax} {trades[0]?.unit || '\u20AC/h'}
+        </strong>{' '}
+        en {year}. Les tarifs varient selon le corps de m{'e'}tier, la r{'e'}gion et la complexit
+        {'e'} des travaux. Voici le bar{'e'}me complet par m{'e'}tier :
       </p>
 
       <div className="overflow-x-auto rounded-xl border border-sand-300 shadow-sm">
@@ -52,10 +54,16 @@ export default function SnippetBaitSummary({ trades, year = 2026 }: SnippetBaitS
               <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700">
                 M{'e'}tier
               </th>
-              <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right">
+              <th
+                scope="col"
+                className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right"
+              >
                 Prix moyen
               </th>
-              <th scope="col" className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-center w-28">
+              <th
+                scope="col"
+                className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-center w-28"
+              >
                 D{'e'}tails
               </th>
             </tr>
@@ -91,7 +99,8 @@ export default function SnippetBaitSummary({ trades, year = 2026 }: SnippetBaitS
           <tfoot>
             <tr className="bg-sand-50/80 border-t border-sand-300">
               <td colSpan={3} className="px-5 py-3 text-xs text-charcoal-500 italic">
-                Prix indicatifs TTC en {year}, main-d'oeuvre incluse. Peuvent varier selon la r{'e'}gion et la complexit{'e'} des travaux.
+                Prix indicatifs TTC en {year}, main-d'œuvre incluse. Peuvent varier selon la r{'e'}
+                gion et la complexit{'e'} des travaux.
               </td>
             </tr>
           </tfoot>

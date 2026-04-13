@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'MaPrimeRénov 2026 : Guide Complet',
     description:
-      'Montants, conditions, barèmes et démarches MaPrimeRénov 2026. Le guide le plus complet.',
+      'Montants, conditions, barèmes et démarches MaPrimeRénov 2026. Guide détaillé et à jour.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

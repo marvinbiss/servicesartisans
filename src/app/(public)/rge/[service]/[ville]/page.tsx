@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { FileText } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
@@ -52,8 +53,8 @@ interface PageProps {
   params: Promise<{ service: string; ville: string }>
 }
 
-/** Tronque un title à ~60 chars pour Google */
-function truncateTitle(title: string, maxLen = 60): string {
+/** Tronque un title à ~58 chars pour Google */
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
@@ -93,10 +94,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const rawTitle = `${serviceName} RGE \u00e0 ${villeName} \u2014 Certifi\u00e9 MaPrimeR\u00e9nov\u2019`
   const title = truncateTitle(rawTitle)
 
-  const description = truncateTitle(
-    `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE \u00e0 ${villeName}. \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Qualifications v\u00e9rifi\u00e9es ADEME \u00e0 jour.`,
-    158
-  )
+  const rawDesc = `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE \u00e0 ${villeName}. \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Qualifications v\u00e9rifi\u00e9es ADEME \u00e0 jour.`
+  const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '\u2026'
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
 
@@ -257,6 +256,13 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           <p className="mt-3 text-charcoal-600">
             {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} à {villeName}
           </p>
+          <Link
+            href={`/devis/${serviceSlug}/${villeSlug}`}
+            className="inline-flex items-center gap-2 mt-4 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all"
+          >
+            <FileText className="w-5 h-5" />
+            Demander un devis RGE
+          </Link>
         </header>
 
         <section className="mb-8 text-charcoal-700 leading-relaxed space-y-4">
@@ -311,6 +317,22 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           ) : (
             <ProviderList providers={providers} totalCount={count} />
           )}
+        </section>
+
+        <section className="mb-12 bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 rounded-2xl p-6 md:p-8 text-center">
+          <p className="font-heading font-bold text-lg md:text-xl text-charcoal-900 mb-2">
+            Besoin d&apos;un {serviceName.toLowerCase()} RGE à {villeName} ?
+          </p>
+          <p className="text-charcoal-600 text-sm mb-4">
+            Recevez un devis gratuit et sans engagement en 2 minutes
+          </p>
+          <Link
+            href={`/devis/${serviceSlug}/${villeSlug}`}
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+          >
+            <FileText className="w-5 h-5" />
+            Obtenir mon devis gratuit
+          </Link>
         </section>
 
         <section aria-labelledby="cross-links" className="mb-12">
@@ -375,7 +397,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               {serviceName} RGE dans d’autres villes
             </h2>
             <p className="text-sm text-charcoal-500 mb-4">
-              Les villes o&ugrave; les {serviceName.toLowerCase()} RGE sont les plus nombreux.
+              Les villes où les {serviceName.toLowerCase()} RGE sont les plus nombreux.
             </p>
             <div className="flex flex-wrap gap-2">
               {otherCities.map((c) => (
@@ -417,6 +439,22 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             </div>
           </section>
         )}
+
+        <section className="mb-12 py-12 bg-charcoal-950 rounded-2xl text-center text-white">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold mb-3">
+            Trouvez votre {serviceName.toLowerCase()} RGE à {villeName}
+          </h2>
+          <p className="text-charcoal-400 mb-6 max-w-xl mx-auto">
+            Devis gratuit en 2 min — éligible MaPrimeRénov&apos;, CEE et TVA 5,5 %
+          </p>
+          <Link
+            href={`/devis/${serviceSlug}/${villeSlug}`}
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+          >
+            <FileText className="w-5 h-5" />
+            Devis gratuit en 2 min
+          </Link>
+        </section>
       </div>
     </main>
   )

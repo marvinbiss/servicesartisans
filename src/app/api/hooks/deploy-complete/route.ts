@@ -35,7 +35,7 @@ async function verifySignature(request: Request, body: string): Promise<boolean>
 export async function POST(request: Request) {
   if (!process.env.WEBHOOK_SECRET) {
     logger.error('[deploy-hook] WEBHOOK_SECRET not configured — rejecting request')
-    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
+    return NextResponse.json({ error: 'Secret webhook non configuré' }, { status: 500 })
   }
 
   const rawBody = await request.text()
@@ -44,15 +44,14 @@ export async function POST(request: Request) {
   const isValid = await verifySignature(request, rawBody)
   if (!isValid) {
     logger.warn('[deploy-hook] Invalid webhook signature')
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+    return NextResponse.json({ error: 'Signature invalide' }, { status: 401 })
   }
 
   // Only trigger on production deploys
   try {
     const payload = JSON.parse(rawBody)
-    const target = payload?.payload?.deployment?.meta?.target
-      || payload?.payload?.target
-      || 'production'
+    const target =
+      payload?.payload?.deployment?.meta?.target || payload?.payload?.target || 'production'
     if (target !== 'production') {
       return NextResponse.json({ skipped: true, reason: `target=${target}` })
     }
@@ -62,10 +61,7 @@ export async function POST(request: Request) {
 
   if (!GITHUB_TOKEN) {
     logger.error('[deploy-hook] GITHUB_DISPATCH_TOKEN not configured')
-    return NextResponse.json(
-      { error: 'GITHUB_DISPATCH_TOKEN not configured' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'GITHUB_DISPATCH_TOKEN non configuré' }, { status: 500 })
   }
 
   try {
@@ -86,17 +82,14 @@ export async function POST(request: Request) {
 
     if (res.status === 204) {
       logger.info('[deploy-hook] Cache warmup triggered on GitHub Actions')
-      return NextResponse.json({ success: true, message: 'Warmup triggered' })
+      return NextResponse.json({ success: true, message: 'Préchauffage déclenché' })
     }
 
     const body = await res.text()
     logger.error('[deploy-hook] GitHub API error', { status: res.status, body })
-    return NextResponse.json(
-      { error: `GitHub API: ${res.status}` },
-      { status: 502 }
-    )
+    return NextResponse.json({ error: `GitHub API: ${res.status}` }, { status: 502 })
   } catch (err) {
     logger.error('[deploy-hook] Failed to trigger warmup', err)
-    return NextResponse.json({ error: 'Failed to trigger' }, { status: 500 })
+    return NextResponse.json({ error: 'Échec du déclenchement' }, { status: 500 })
   }
 }

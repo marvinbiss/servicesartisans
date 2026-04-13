@@ -247,7 +247,7 @@ export default function DevisConfirmation({
             ? `3 artisans ${serviceLabel.toLowerCase()} correspondent à votre besoin`
             : providerCount !== null && providerCount > 0
               ? `${providerCount} artisan${providerCount > 1 ? 's' : ''} ${serviceLabel.toLowerCase()} trouvé${providerCount > 1 ? 's' : ''} près de chez vous`
-              : 'Nous recherchons les meilleurs artisans pour vous'}
+              : 'Nous recherchons des artisans qualifiés pour vous'}
         </p>
         <p className={`font-medium text-accent-600 ${compact ? 'text-xs mb-4' : 'text-sm mb-6'}`}>
           Un conseiller vous rappelle rapidement

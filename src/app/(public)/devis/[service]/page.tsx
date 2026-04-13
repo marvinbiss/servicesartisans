@@ -161,7 +161,7 @@ export default async function DevisServicePage({
     const h1Hash = Math.abs(hashCode(`devis-h1-${service}`))
     const h1Templates = [
       `Devis ${trade.name} gratuit`,
-      `Devis ${tradeLower} — Comparez les meilleurs artisans`,
+      `Devis ${tradeLower} — Comparez les artisans qualifiés`,
       `Devis ${tradeLower} : comparez jusqu'à 3 artisans`,
       `Devis gratuit ${tradeLower} — Sans engagement`,
       `${trade.name} : obtenez votre devis gratuit`,

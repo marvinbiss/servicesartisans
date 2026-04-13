@@ -10,9 +10,15 @@ interface SendEmailParams {
   to: string
   subject: string
   html: string
+  headers?: Record<string, string>
 }
 
-export async function sendEmail({ to, subject, html }: SendEmailParams): Promise<{ success: boolean; error?: string }> {
+export async function sendEmail({
+  to,
+  subject,
+  html,
+  headers,
+}: SendEmailParams): Promise<{ success: boolean; error?: string }> {
   if (!RESEND_API_KEY) {
     console.warn('[email] RESEND_API_KEY not configured — skipping email')
     return { success: false, error: 'RESEND_API_KEY not configured' }
@@ -30,6 +36,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams): Promise
         to,
         subject,
         html,
+        ...(headers && { headers }),
       }),
     })
 

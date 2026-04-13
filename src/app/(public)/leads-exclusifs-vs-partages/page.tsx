@@ -214,10 +214,10 @@ export default function LeadsExclusifsVsPartagesPage() {
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-            Leads exclusifs vs leads partagés&nbsp;: le vrai co&ucirc;t pour un artisan
+            Leads exclusifs vs leads partagés&nbsp;: le vrai coût pour un artisan
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
-            Vous payez des leads. Mais combien vous co&ucirc;te vraiment un chantier signé&nbsp;?
+            Vous payez des leads. Mais combien vous coûte vraiment un chantier signé&nbsp;?
             Comparatif objectif avec les chiffres réels des principales plateformes.
           </p>
         </div>
@@ -244,9 +244,9 @@ export default function LeadsExclusifsVsPartagesPage() {
             demi-journée de rendez-vous commercial.
           </p>
           <p>
-            <strong>Le co&ucirc;t réel d’un lead partagé n’est pas son prix unitaire.</strong> C’est
-            son prix divisé par le taux de conversion réel (5 à 12&nbsp;%), multiplié par le temps
-            perdu en rendez-vous non-convertis.
+            <strong>Le coût réel d’un lead partagé n’est pas son prix unitaire.</strong> C’est son
+            prix divisé par le taux de conversion réel (5 à 12&nbsp;%), multiplié par le temps perdu
+            en rendez-vous non-convertis.
           </p>
         </div>
       </section>
@@ -324,7 +324,7 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
                 <span>
-                  Abonnement Habitatpresto&nbsp;: <strong>144&nbsp;&euro;/mois</strong>
+                  Abonnement Habitatpresto&nbsp;: <strong>144&nbsp;€/mois</strong>
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -334,14 +334,13 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
                 <span>
-                  Taux de conversion&nbsp;: 8&nbsp;% &rarr; <strong>1,6 chantier/mois</strong>
+                  Taux de conversion&nbsp;: 8&nbsp;% → <strong>1,6 chantier/mois</strong>
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
                 <span>
-                  Co&ucirc;t par chantier signé&nbsp;:{' '}
-                  <strong className="text-red-600">90&nbsp;&euro;</strong>
+                  Coût par chantier signé&nbsp;: <strong className="text-red-600">90&nbsp;€</strong>
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -363,8 +362,7 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
                 <span>
-                  Co&ucirc;t&nbsp;: <strong>0&nbsp;&euro;/mois</strong> (ServicesArtisans, phase
-                  lancement)
+                  Coût&nbsp;: <strong>0&nbsp;€/mois</strong> (ServicesArtisans, phase lancement)
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -374,14 +372,14 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
                 <span>
-                  Taux de conversion&nbsp;: 25&nbsp;% &rarr; <strong>2 chantiers/mois</strong>
+                  Taux de conversion&nbsp;: 25&nbsp;% → <strong>2 chantiers/mois</strong>
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
                 <span>
-                  Co&ucirc;t par chantier signé&nbsp;:{' '}
-                  <strong className="text-emerald-700">0&nbsp;&euro;</strong>
+                  Coût par chantier signé&nbsp;:{' '}
+                  <strong className="text-emerald-700">0&nbsp;€</strong>
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -428,9 +426,7 @@ export default function LeadsExclusifsVsPartagesPage() {
                 </div>
                 <dl className="space-y-2 text-sm">
                   <div className="flex gap-2">
-                    <dt className="font-semibold text-charcoal-700 w-28 flex-shrink-0">
-                      Co&ucirc;t
-                    </dt>
+                    <dt className="font-semibold text-charcoal-700 w-28 flex-shrink-0">Coût</dt>
                     <dd className="text-charcoal-600">{p.cost}</dd>
                   </div>
                   <div className="flex gap-2">
@@ -477,23 +473,22 @@ export default function LeadsExclusifsVsPartagesPage() {
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
             Avant de souscrire à une plateforme de leads, calculez votre{' '}
-            <strong>co&ucirc;t réel par chantier signé</strong> (CPA). La formule est simple&nbsp;:
+            <strong>coût réel par chantier signé</strong> (CPA). La formule est simple&nbsp;:
           </p>
           <div className="bg-sand-50 border border-charcoal-200 rounded-xl p-5 my-6 not-prose">
             <p className="font-heading font-bold text-charcoal-900 text-center text-lg">
-              CPA = co&ucirc;t mensuel total &divide; nombre de chantiers signés
+              CPA = coût mensuel total ÷ nombre de chantiers signés
             </p>
           </div>
           <p>
-            Incluez tout&nbsp;: abonnement, co&ucirc;t au lead, temps passé en rappels et
-            rendez-vous non-convertis (valorisez votre heure à 40-60 &euro;). Un artisan qui passe
-            2h par semaine à rappeler des leads partagés qui ne convertissent pas perd 320 à 480
-            &euro;/mois en temps.
+            Incluez tout&nbsp;: abonnement, coût au lead, temps passé en rappels et rendez-vous
+            non-convertis (valorisez votre heure à 40-60 €). Un artisan qui passe 2h par semaine à
+            rappeler des leads partagés qui ne convertissent pas perd 320 à 480 €/mois en temps.
           </p>
           <p>
             <strong>Règle simple&nbsp;:</strong> si votre CPA dépasse 3 % du montant moyen de vos
-            devis, le canal n’est pas rentable. Sur un devis moyen de 5 000 &euro;, c’est 150 &euro;
-            max par chantier signé.
+            devis, le canal n’est pas rentable. Sur un devis moyen de 5 000 €, c’est 150 € max par
+            chantier signé.
           </p>
         </div>
       </section>

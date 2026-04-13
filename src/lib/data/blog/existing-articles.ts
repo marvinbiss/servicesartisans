@@ -1112,7 +1112,7 @@ export const existingArticles: Record<string, BlogArticle> = {
       {
         question: "Peut-on négocier le prix d'un peintre ?",
         answer:
-          "Oui, plusieurs leviers de négociation existent : regroupez plusieurs pièces (remise de 10 à 15 % courante), proposez de préparer vous-même les murs (économie de 20-30 % sur la main-d'oeuvre), planifiez les travaux en basse saison (automne/hiver), ou fournissez la peinture vous-même. Comparez toujours 3 devis minimum.",
+          "Oui, plusieurs leviers de négociation existent : regroupez plusieurs pièces (remise de 10 à 15 % courante), proposez de préparer vous-même les murs (économie de 20-30 % sur la main-d'œuvre), planifiez les travaux en basse saison (automne/hiver), ou fournissez la peinture vous-même. Comparez toujours 3 devis minimum.",
       },
       {
         question: 'La peinture est-elle éligible à la TVA réduite ?',

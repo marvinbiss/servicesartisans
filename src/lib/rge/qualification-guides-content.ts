@@ -572,8 +572,8 @@ export const RGE_QUALIFICATION_GUIDES: Record<string, RgeQualificationGuide> = {
     ],
     ceeDebloquees: [
       'BAR-EN-101 — Isolation des combles ou toitures',
-      'BAR-EN-102 — Isolation des planchers bas',
-      'BAR-EN-103 — Isolation des murs',
+      'BAR-EN-102 — Isolation des murs',
+      'BAR-EN-103 — Isolation des planchers bas',
     ],
     linkedRgeService: 'isolation-thermique',
     linkedCeeOperations: ['BAR-EN-101', 'BAR-EN-102', 'BAR-EN-103'],

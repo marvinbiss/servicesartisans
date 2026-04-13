@@ -67,6 +67,7 @@ import {
 } from '@/lib/seo/schema-enrichment'
 import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
+import { getRegionPreposition } from '@/lib/geo-strings'
 import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
@@ -209,7 +210,7 @@ export function generateStaticParams() {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -667,8 +668,8 @@ export default async function UrgenceServiceVillePage({
           {multiplier !== 1.0 && (
             <p className="text-xs text-charcoal-400 text-center mb-8">
               {multiplier > 1.0
-                ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                ? `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                : `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
             </p>
           )}
 

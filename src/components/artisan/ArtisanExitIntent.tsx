@@ -296,7 +296,7 @@ export function ArtisanExitIntent({ artisan, isClaimed = false }: ArtisanExitInt
             aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
           >
             <Phone className="w-5 h-5" />
-            Préférez appeler ? {PHONE_NUMBER}
+            Parler à un conseiller · {PHONE_NUMBER}
           </a>
 
           {/* Dismiss explicite */}

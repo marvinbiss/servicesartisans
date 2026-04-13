@@ -108,7 +108,7 @@ export async function POST(request: Request, context: RouteContext) {
 
     const bytes = new Uint8Array(await fileEntry.arrayBuffer())
 
-    // --- 5. Délégation au coeur métier (uploadJustificatif) -----------------
+    // --- 5. Délégation au cœur métier (uploadJustificatif) -----------------
     const result = await uploadJustificatif(supabase, {
       dossierId,
       code,

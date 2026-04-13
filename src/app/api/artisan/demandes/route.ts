@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     const result = demandesQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Invalid parameters', details: result.error.flatten() },
+        { error: 'Paramètres invalides', details: result.error.flatten() },
         { status: 400 }
       )
     }

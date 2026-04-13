@@ -10,7 +10,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Accessibilité',
+  title: 'Accessibilité — ServicesArtisans',
   description:
     "Déclaration d'accessibilité de ServicesArtisans - Notre engagement pour rendre le site accessible à tous.",
   robots: { index: false, follow: true },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/accessibilite`,
   },
   openGraph: {
-    title: 'Accessibilité',
+    title: 'Accessibilité — ServicesArtisans',
     description: 'Notre engagement pour rendre le site accessible à tous.',
     url: `${SITE_URL}/accessibilite`,
     type: 'website',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Accessibilité',
+    title: 'Accessibilité — ServicesArtisans',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

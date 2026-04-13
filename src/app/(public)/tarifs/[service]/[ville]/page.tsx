@@ -73,6 +73,7 @@ import {
 } from '@/lib/seo/schema-enrichment'
 import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
+import { getRegionPreposition } from '@/lib/geo-strings'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -172,7 +173,7 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 // ---------------------------------------------------------------------------
 
 /** Truncate title to maxLen chars on a word boundary */
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }
@@ -504,6 +505,15 @@ export default async function TarifsServiceVillePage({
                 </div>
               )}
             </div>
+            <div className="mt-8">
+              <Link
+                href={`/devis/${service}/${villeSlug}`}
+                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+              >
+                <ArrowRight className="w-5 h-5" />
+                Devis gratuit à {villeData.name}
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -699,8 +709,8 @@ export default async function TarifsServiceVillePage({
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                  ? `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
@@ -860,7 +870,7 @@ export default async function TarifsServiceVillePage({
             {maxPrice} {trade.priceRange.unit}. Ce prix varie selon la complexit{'é'} de
             l'intervention, l'accessibilit{'é'} du chantier et les mat{'é'}riaux n{'é'}cessaires.
             {multiplier >= 1.2
-              ? ` Les tarifs en ${villeData.region} sont généralement 20 à 25 % supérieurs à la moyenne nationale.`
+              ? ` Les tarifs ${getRegionPreposition(villeData.region)} sont généralement 20 à 25 % supérieurs à la moyenne nationale.`
               : ''}
           </p>
 

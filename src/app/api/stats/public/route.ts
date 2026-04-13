@@ -15,15 +15,9 @@ export async function GET() {
     const supabase = createAdminClient()
 
     // Get REAL stats from actual reviews table (NOT from providers table which had fake data)
-    const [
-      { count: artisanCount },
-      { data: realReviews }
-    ] = await Promise.all([
+    const [{ count: artisanCount }, { data: realReviews }] = await Promise.all([
       // Count active artisans
-      supabase
-        .from('providers')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true),
+      supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
 
       // Get ALL reviews (only exclude synthetic/fake ones)
       supabase
@@ -31,7 +25,7 @@ export async function GET() {
         .select('rating, source')
         // Only exclude reviews explicitly marked as synthetic
         // Include reviews with NULL or empty source (they are real)
-        .or('source.is.null,source.eq.,source.neq.synthetic')
+        .or('source.is.null,source.eq.,source.neq.synthetic'),
     ])
 
     // Calculate total REAL reviews and average rating
@@ -43,26 +37,26 @@ export async function GET() {
       totalRating = realReviews.reduce((sum, r) => sum + (r.rating || 0), 0)
     }
 
-    const averageRating = totalReviews > 0
-      ? Math.round((totalRating / totalReviews) * 10) / 10
-      : 0 // Return 0 if no real reviews, NOT a fake fallback value
+    const averageRating = totalReviews > 0 ? Math.round((totalRating / totalReviews) * 10) / 10 : 0 // Return 0 if no real reviews, NOT a fake fallback value
 
-    return NextResponse.json({
-      artisanCount: artisanCount || 0,
-      reviewCount: totalReviews,
-      averageRating: averageRating,
-      cityCount: villes.length,
-      updatedAt: new Date().toISOString()
-    }, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+    return NextResponse.json(
+      {
+        artisanCount: artisanCount || 0,
+        reviewCount: totalReviews,
+        averageRating: averageRating,
+        cityCount: villes.length,
+        updatedAt: new Date().toISOString(),
       },
-    })
-
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        },
+      }
+    )
   } catch (error) {
     logger.error('Error fetching public stats:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch stats' },
+      { error: 'Échec de la récupération des statistiques' },
       { status: 500 }
     )
   }

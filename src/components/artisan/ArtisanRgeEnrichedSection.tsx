@@ -203,8 +203,8 @@ const CEE_SHORT_LABELS: Record<string, string> = {
   'BAR-TH-148': 'Chauffe-eau thermodynamique',
   'BAR-TH-174': 'Rénovation d’ampleur maison individuelle',
   'BAR-EN-101': 'Isolation des combles ou toitures',
-  'BAR-EN-102': 'Isolation des planchers bas',
-  'BAR-EN-103': 'Isolation des murs',
+  'BAR-EN-102': 'Isolation des murs',
+  'BAR-EN-103': 'Isolation des planchers bas',
   'BAR-EN-104': 'Fenêtres ou baies vitrées',
 }
 

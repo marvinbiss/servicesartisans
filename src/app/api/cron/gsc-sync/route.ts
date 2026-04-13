@@ -15,11 +15,11 @@ export const maxDuration = 60
 export async function GET(request: Request) {
   // ── Auth ───────────────────────────────────────────────────────────────
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   // ── Check GSC credentials ─────────────────────────────────────────────
@@ -35,7 +35,8 @@ export async function GET(request: Request) {
     })
     return NextResponse.json({
       skipped: true,
-      reason: 'GSC credentials not configured. Set GSC_CREDENTIALS, GOOGLE_SERVICE_ACCOUNT_KEY, or GSC_SERVICE_ACCOUNT_EMAIL + GSC_PRIVATE_KEY.',
+      reason:
+        'GSC credentials not configured. Set GSC_CREDENTIALS, GOOGLE_SERVICE_ACCOUNT_KEY, or GSC_SERVICE_ACCOUNT_EMAIL + GSC_PRIVATE_KEY.',
       timestamp: new Date().toISOString(),
     })
   }

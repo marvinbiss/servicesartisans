@@ -1003,7 +1003,7 @@ export default function StatistiquesArtisansFrancePage() {
 
             <div className="bg-purple-50 rounded-xl border border-purple-200 p-6">
               <h3 className="font-bold text-purple-900 mb-3">
-                La pénurie de main d'oeuvre dans le BTP
+                La pénurie de main-d'œuvre dans le BTP
               </h3>
               <p className="text-sm text-purple-800 mb-3">
                 Le secteur du bâtiment fait face à une tension majeure sur le recrutement. Selon la

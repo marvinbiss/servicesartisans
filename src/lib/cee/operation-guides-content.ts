@@ -979,7 +979,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       {
         heading: 'Le montant de la prime CEE BAR-EN-108',
         paragraphs: [
-          "La prime CEE BAR-EN-108 est modeste : le forfait en kWh cumac par m² de baie équipée est faible comparé aux opérations d'enveloppe principales (BAR-EN-101 combles, BAR-EN-103 murs). Elle reste néanmoins très demandée car le geste est simple, rapide à mettre en œuvre et le reste à charge faible sur un remplacement de volets déjà envisagé pour des raisons d'usage.",
+          "La prime CEE BAR-EN-108 est modeste : le forfait en kWh cumac par m² de baie équipée est faible comparé aux opérations d'enveloppe principales (BAR-EN-101 combles, BAR-EN-102 murs). Elle reste néanmoins très demandée car le geste est simple, rapide à mettre en œuvre et le reste à charge faible sur un remplacement de volets déjà envisagé pour des raisons d'usage.",
           "⚠️ Contrairement à la majorité des opérations CEE enveloppe, BAR-EN-108 n'est PAS éligible à MaPrimeRénov' classique : les volets ne sont pas dans le périmètre des gestes MPR résidentiels, sauf lorsqu'ils sont intégrés comme geste annexe dans un dossier Parcours Accompagné. Le cumul se limite donc en pratique à la prime CEE seule et à la TVA 10\u202f% (le taux 5,5\u202f% ne s'applique pas non plus, les volets ne relevant pas de l'article 278-0 bis A CGI en tant qu'équipement d'économie d'énergie principal).",
         ],
       },
@@ -994,7 +994,7 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
         heading: 'Gain énergétique réel et hiérarchisation des travaux',
         paragraphs: [
           "Il faut être honnête sur le gain énergétique réel : l'installation de volets isolants représente en moyenne une économie de 2 à 5\u202f% de la consommation de chauffage d'un logement, essentiellement par réduction des déperditions nocturnes sur les baies vitrées. L'effet le plus sensible est en réalité le confort thermique d'été (réduction de la chaleur entrante en journée) plutôt que l'économie de chauffage hivernale.",
-          "Pour un logement mal isolé, la priorité budgétaire doit rester l'enveloppe principale : isolation des combles (BAR-EN-101), isolation des murs (BAR-EN-103) et remplacement des fenêtres simple vitrage (BAR-EN-104). Les volets isolants viennent en complément utile après ces trois gestes, pas à leur place. Un artisan sérieux orientera le ménage dans cette hiérarchie plutôt que de pousser BAR-EN-108 en premier.",
+          "Pour un logement mal isolé, la priorité budgétaire doit rester l'enveloppe principale : isolation des combles (BAR-EN-101), isolation des murs (BAR-EN-102) et remplacement des fenêtres simple vitrage (BAR-EN-104). Les volets isolants viennent en complément utile après ces trois gestes, pas à leur place. Un artisan sérieux orientera le ménage dans cette hiérarchie plutôt que de pousser BAR-EN-108 en premier.",
         ],
       },
     ],

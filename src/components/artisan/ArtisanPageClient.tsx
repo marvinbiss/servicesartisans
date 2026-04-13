@@ -18,6 +18,7 @@ import {
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
 import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
+import SocialProofToast from '@/components/conversion/SocialProofToast'
 
 import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
 import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
@@ -456,6 +457,9 @@ export default function ArtisanPageClient({
 
       {/* Exit intent — claimed ET unclaimed (filet de rattrapage universel) */}
       <ArtisanExitIntent artisan={artisan} isClaimed={isClaimed} />
+
+      {/* Social proof toast — Booking.com style */}
+      <SocialProofToast initialDelay={8000} displayDuration={4500} interval={18000} maxToasts={3} />
     </>
   )
 }

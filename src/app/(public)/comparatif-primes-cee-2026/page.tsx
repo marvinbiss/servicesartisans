@@ -504,7 +504,7 @@ export default function ComparatifPrimesCee2026Page() {
             <p>
               <strong>4. Vérifiez le cumul MaPrimeRénov’.</strong> Certains acteurs gèrent les deux
               (Effy, Hellio). D’autres ne font que le CEE. Le cumul peut représenter 80 à 90 % du
-              co&ucirc;t des travaux pour les ménages modestes.
+              coût des travaux pour les ménages modestes.
             </p>
           </div>
         </div>

@@ -61,12 +61,12 @@ export async function POST(request: Request) {
 
   if (!signature) {
     logger.error('Missing stripe-signature header')
-    return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
+    return NextResponse.json({ error: 'Signature manquante' }, { status: 400 })
   }
 
   if (!env.STRIPE_WEBHOOK_SECRET) {
     logger.error('STRIPE_WEBHOOK_SECRET is not configured')
-    return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 })
+    return NextResponse.json({ error: 'Stripe non configuré' }, { status: 503 })
   }
 
   let event: Stripe.Event
@@ -75,7 +75,10 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET)
   } catch (error) {
     logger.error('Webhook signature verification failed:', error)
-    return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'Échec de la vérification de signature webhook' },
+      { status: 400 }
+    )
   }
 
   const shouldSkip = await checkWebhookIdempotency(event.id, 'stripe')
@@ -128,7 +131,7 @@ export async function POST(request: Request) {
 
     await markWebhookFailed(event.id, errorMessage)
 
-    return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 })
+    return NextResponse.json({ error: 'Échec du traitement webhook' }, { status: 500 })
   }
 }
 

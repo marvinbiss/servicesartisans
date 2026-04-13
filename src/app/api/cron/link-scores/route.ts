@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
-import {
-  buildLinkGraph,
-  getAllPagePaths,
-} from '@/lib/seo/orphan-detection'
+import { buildLinkGraph, getAllPagePaths } from '@/lib/seo/orphan-detection'
 
 export const maxDuration = 60
 
@@ -14,28 +11,52 @@ export const maxDuration = 60
 
 /** Pages present in footer navigation (sitewide, low weight) */
 const FOOTER_NAV_PATHS = new Set([
-  '/services', '/tarifs', '/devis', '/departements', '/villes',
-  '/blog', '/contact', '/faq', '/inscription-artisan',
+  '/services',
+  '/tarifs',
+  '/devis',
+  '/departements',
+  '/villes',
+  '/blog',
+  '/contact',
+  '/faq',
+  '/inscription-artisan',
 ])
 
 /** Pages present in FooterClusterLinks (sitewide, low weight) */
-const FOOTER_CLUSTER_SERVICE_SLUGS = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur', 'macon']
+const FOOTER_CLUSTER_SERVICE_SLUGS = [
+  'plombier',
+  'electricien',
+  'serrurier',
+  'chauffagiste',
+  'couvreur',
+  'macon',
+]
 const FOOTER_CLUSTER_CITY_SLUGS = ['paris', 'lyon', 'marseille', 'toulouse', 'bordeaux', 'lille']
 const FOOTER_CLUSTER_PATHS = new Set([
-  ...FOOTER_CLUSTER_SERVICE_SLUGS.map(s => `/services/${s}`),
-  ...FOOTER_CLUSTER_CITY_SLUGS.map(c => `/villes/${c}`),
-  '/guides', '/barometre', '/comparaison', '/urgence',
+  ...FOOTER_CLUSTER_SERVICE_SLUGS.map((s) => `/services/${s}`),
+  ...FOOTER_CLUSTER_CITY_SLUGS.map((c) => `/villes/${c}`),
+  '/guides',
+  '/barometre',
+  '/comparaison',
+  '/urgence',
 ])
 
 /** Header links (sitewide, low weight) */
 const HEADER_PATHS = new Set([
-  '/', '/services', '/tarifs', '/devis', '/urgence',
-  '/departements', '/regions', '/villes', '/blog',
+  '/',
+  '/services',
+  '/tarifs',
+  '/devis',
+  '/urgence',
+  '/departements',
+  '/regions',
+  '/villes',
+  '/blog',
 ])
 
-const WEIGHT_CONTEXTUAL = 1.0    // Liens contextuels (cross-intent, DeepPageLinks, TopCitiesGrid)
-const WEIGHT_FOOTER = 0.15       // Liens footer (sitewide, dilués)
-const WEIGHT_HEADER = 0.10       // Liens header/navigation (sitewide, très dilués)
+const WEIGHT_CONTEXTUAL = 1.0 // Liens contextuels (cross-intent, DeepPageLinks, TopCitiesGrid)
+const WEIGHT_FOOTER = 0.15 // Liens footer (sitewide, dilués)
+const WEIGHT_HEADER = 0.1 // Liens header/navigation (sitewide, très dilués)
 
 // ---------------------------------------------------------------------------
 // Page type detection
@@ -111,8 +132,8 @@ function computeLinkScores(): PageLinkData[] {
   }
 
   // Compute incoming links per page with weighting
-  const contextualIn = new Map<string, number>()   // contextual incoming only (for orphan detection)
-  const incomingRaw = new Map<string, number>()     // total raw count
+  const contextualIn = new Map<string, number>() // contextual incoming only (for orphan detection)
+  const incomingRaw = new Map<string, number>() // total raw count
   const incomingWeighted = new Map<string, number>() // weighted score
 
   for (let i = 0; i < allPages.length; i++) {
@@ -144,7 +165,10 @@ function computeLinkScores(): PageLinkData[] {
     const footerPath = footerNavArr[i]
     if (incomingWeighted.has(footerPath)) {
       incomingRaw.set(footerPath, (incomingRaw.get(footerPath) ?? 0) + estimatedTotalPages)
-      incomingWeighted.set(footerPath, (incomingWeighted.get(footerPath) ?? 0) + estimatedTotalPages * WEIGHT_FOOTER)
+      incomingWeighted.set(
+        footerPath,
+        (incomingWeighted.get(footerPath) ?? 0) + estimatedTotalPages * WEIGHT_FOOTER
+      )
     }
   }
 
@@ -153,7 +177,10 @@ function computeLinkScores(): PageLinkData[] {
     const clusterPath = clusterArr[i]
     if (incomingWeighted.has(clusterPath)) {
       incomingRaw.set(clusterPath, (incomingRaw.get(clusterPath) ?? 0) + estimatedTotalPages)
-      incomingWeighted.set(clusterPath, (incomingWeighted.get(clusterPath) ?? 0) + estimatedTotalPages * WEIGHT_FOOTER)
+      incomingWeighted.set(
+        clusterPath,
+        (incomingWeighted.get(clusterPath) ?? 0) + estimatedTotalPages * WEIGHT_FOOTER
+      )
     }
   }
 
@@ -162,7 +189,10 @@ function computeLinkScores(): PageLinkData[] {
     const headerPath = headerArr[i]
     if (incomingWeighted.has(headerPath)) {
       incomingRaw.set(headerPath, (incomingRaw.get(headerPath) ?? 0) + estimatedTotalPages)
-      incomingWeighted.set(headerPath, (incomingWeighted.get(headerPath) ?? 0) + estimatedTotalPages * WEIGHT_HEADER)
+      incomingWeighted.set(
+        headerPath,
+        (incomingWeighted.get(headerPath) ?? 0) + estimatedTotalPages * WEIGHT_HEADER
+      )
     }
   }
 
@@ -213,11 +243,11 @@ const UPSERT_BATCH_SIZE = 500
  */
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const start = Date.now()
@@ -236,7 +266,7 @@ export async function GET(request: Request) {
     for (let i = 0; i < scores.length; i += UPSERT_BATCH_SIZE) {
       const batch = scores.slice(i, i + UPSERT_BATCH_SIZE)
 
-      const rows = batch.map(s => ({
+      const rows = batch.map((s) => ({
         page_path: s.page_path,
         page_type: s.page_type,
         internal_links_in: s.internal_links_in,
@@ -260,7 +290,7 @@ export async function GET(request: Request) {
     }
 
     // 3. Compute stats
-    const orphanCount = scores.filter(s => s.is_orphan).length
+    const orphanCount = scores.filter((s) => s.is_orphan).length
     const totalScore = scores.reduce((sum, s) => sum + s.link_score, 0)
     const avgScore = scores.length > 0 ? Math.round((totalScore / scores.length) * 100) / 100 : 0
 
@@ -292,9 +322,6 @@ export async function GET(request: Request) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     logger.error('[link-scores] Cron failed', err, { action: 'link-scores-cron' })
 
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 },
-    )
+    return NextResponse.json({ success: false, error: message }, { status: 500 })
   }
 }

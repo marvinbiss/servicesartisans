@@ -284,8 +284,7 @@ export default function DevenirPartenaireCeePage() {
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed mb-6">
             1&nbsp;demande = 1&nbsp;artisan. Jamais partagé. On gère vos primes CEE, vous vous
-            concentrez sur le chantier.{' '}
-            <strong>0&nbsp;&euro; pendant la phase de lancement.</strong>
+            concentrez sur le chantier. <strong>0&nbsp;€ pendant la phase de lancement.</strong>
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -335,18 +334,17 @@ export default function DevenirPartenaireCeePage() {
         </h2>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            Vous payez un abonnement ou un co&ucirc;t au lead. La même demande est envoyée à 5
-            artisans. Le premier qui décroche gagne. Les 4 autres perdent leur temps et leur argent.
+            Vous payez un abonnement ou un coût au lead. La même demande est envoyée à 5 artisans.
+            Le premier qui décroche gagne. Les 4 autres perdent leur temps et leur argent.
           </p>
           <p>
             Et quand le chantier est éligible aux primes CEE&nbsp;? Vous laissez 2&nbsp;000 à
-            5&nbsp;000&nbsp;&euro; sur la table parce que le montage du dossier est trop complexe,
-            les délégataires exigent du volume, et le suivi prend des mois.
+            5&nbsp;000&nbsp;€ sur la table parce que le montage du dossier est trop complexe, les
+            délégataires exigent du volume, et le suivi prend des mois.
           </p>
           <p>
-            <strong>On a construit l’inverse.</strong> Un service o&ugrave; chaque lead est
-            exclusif, o&ugrave; les primes CEE sont gérées pour vous, et o&ugrave; vous gardez votre
-            indépendance.
+            <strong>On a construit l’inverse.</strong> Un service où chaque lead est exclusif, où
+            les primes CEE sont gérées pour vous, et où vous gardez votre indépendance.
           </p>
         </div>
       </section>
@@ -466,7 +464,7 @@ export default function DevenirPartenaireCeePage() {
           </h2>
         </div>
         <p className="text-charcoal-600 mb-6 max-w-3xl leading-relaxed">
-          Vos clients peuvent toucher entre 800 et 5&nbsp;500&nbsp;&euro; de primes énergie sur les
+          Vos clients peuvent toucher entre 800 et 5&nbsp;500&nbsp;€ de primes énergie sur les
           travaux que vous réalisez déjà. On gère le dossier, vous augmentez votre taux de
           conversion.
         </p>
@@ -513,9 +511,9 @@ export default function DevenirPartenaireCeePage() {
               </h2>
               <p className="text-charcoal-600 leading-relaxed max-w-2xl">
                 Exemple&nbsp;: un chauffagiste RGE qui installe 4 pompes à chaleur par mois peut
-                générer <strong>10&nbsp;000 à 20&nbsp;000&nbsp;&euro;/mois</strong> de primes CEE
-                pour ses clients, tout en améliorant son taux de conversion. Le simulateur de
-                revenus artisan arrive bientôt.
+                générer <strong>10&nbsp;000 à 20&nbsp;000&nbsp;€/mois</strong> de primes CEE pour
+                ses clients, tout en améliorant son taux de conversion. Le simulateur de revenus
+                artisan arrive bientôt.
               </p>
             </div>
             <Link

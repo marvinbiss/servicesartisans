@@ -59,6 +59,7 @@ import {
 } from '@/lib/seo/schema-enrichment'
 import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
+import { getRegionPreposition } from '@/lib/geo-strings'
 import dynamic from 'next/dynamic'
 
 function getClimatLabel(zone: string | null): string {
@@ -218,7 +219,7 @@ export const dynamicParams = true
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -254,7 +255,7 @@ export async function generateMetadata({
     `Avis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`,
     `Choisir un ${tradeLower} à ${villeData.name} (${dept}) : avis clients, notes et recommandations. Artisans vérifiés, devis gratuit.`,
     `${trade.name} à ${villeData.name} : consultez les avis vérifiés et comparez les tarifs (${minPrice}–${maxPrice} ${trade.priceRange.unit}). Guide 2026.`,
-    `Les meilleurs ${tradeLower}s à ${villeData.name} selon les avis clients. Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.`,
+    `${tradeLower.charAt(0).toUpperCase() + tradeLower.slice(1)}s de confiance à ${villeData.name} selon les avis clients. Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.`,
     `Avis et recommandations ${tradeLower} à ${villeData.name} (${dept}). Trouvez un artisan de confiance parmi les professionnels vérifiés.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -617,6 +618,15 @@ export default async function AvisServiceVillePage({
                 </div>
               )}
             </div>
+            <div className="mt-8">
+              <Link
+                href={`/devis/${service}/${villeSlug}`}
+                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+              >
+                <ArrowRight className="w-5 h-5" />
+                Devis gratuit à {villeData.name}
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -908,8 +918,8 @@ export default async function AvisServiceVillePage({
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
+                  ? `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs ${getRegionPreposition(villeData.region)} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
@@ -962,7 +972,7 @@ export default async function AvisServiceVillePage({
                 commune?.nb_entreprises_artisanales
                   ? commune.nb_entreprises_artisanales > 500
                     ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} offre un large choix de ${tradeLower}s. Comparez les avis pour faire le bon choix.`
-                    : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Consultez les avis pour identifier les meilleurs professionnels.`
+                    : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Consultez les avis pour identifier les professionnels les mieux notés.`
                   : `Le nombre d'artisans disponibles à ${villeData.name} influence directement l'offre et la qualité de service.`
               }
             />

@@ -110,7 +110,7 @@ export default function GlossaireTooltips({ serviceSlug, maxTerms = 5 }: Glossai
         className="inline-flex items-center gap-1 mt-3 text-xs font-medium text-primary-600 hover:text-primary-700 transition-colors"
       >
         Voir tout le glossaire
-        <span aria-hidden="true">&rarr;</span>
+        <span aria-hidden="true">→</span>
       </Link>
     </section>
   )

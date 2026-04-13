@@ -69,7 +69,7 @@ export const dynamicParams = true
 export const revalidate = 86400
 
 /** Truncate title to maxLen chars on a word boundary, preserving trailing '?' */
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   const endsWithQuestion = title.trimEnd().endsWith('?')
   const truncated = title.slice(0, maxLen - (endsWithQuestion ? 2 : 1)).replace(/\s+\S*$/, '')
@@ -419,6 +419,15 @@ export default async function TarifsServicePage({
                 <Clock className="w-4 h-4 text-secondary-400" />
                 <span>{trade.averageResponseTime}</span>
               </div>
+            </div>
+            <div className="mt-8">
+              <Link
+                href={`/devis/${service}`}
+                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+              >
+                <ArrowRight className="w-5 h-5" />
+                Obtenir un devis personnalisé
+              </Link>
             </div>
           </div>
         </div>

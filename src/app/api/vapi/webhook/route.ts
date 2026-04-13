@@ -30,7 +30,7 @@ const IDEMPOTENT_EVENTS = new Set(['status-update', 'end-of-call-report'])
 export async function POST(request: NextRequest) {
   if (!process.env.VAPI_WEBHOOK_SECRET) {
     logger.error('Vapi webhook: VAPI_WEBHOOK_SECRET not configured — rejecting request')
-    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
+    return NextResponse.json({ error: 'Secret webhook non configuré' }, { status: 500 })
   }
 
   const rawBody = await request.text()
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   const signature = request.headers.get('x-vapi-signature') || ''
   if (!verifyVapiSignature(rawBody, signature)) {
     logger.warn('Vapi webhook: invalid signature')
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 403 })
+    return NextResponse.json({ error: 'Signature invalide' }, { status: 403 })
   }
 
   let event: VapiWebhookEvent
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     event = JSON.parse(rawBody) as VapiWebhookEvent
   } catch {
     logger.error('Vapi webhook: invalid JSON')
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    return NextResponse.json({ error: 'JSON invalide' }, { status: 400 })
   }
 
   const eventType = event.message?.type
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
         error instanceof Error ? error.message : 'Unknown error'
       )
     }
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 })
   }
 }
 

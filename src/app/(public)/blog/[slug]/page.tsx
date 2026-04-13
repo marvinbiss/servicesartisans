@@ -68,7 +68,7 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -867,6 +867,19 @@ export default async function BlogArticlePage({ params }: PageProps) {
             </div>
           )
         })()}
+
+        {/* Inline CTA — subtle banner above hero image */}
+        <div className="max-w-3xl mx-auto mb-6">
+          <Link
+            href="/devis"
+            className="flex items-center justify-between gap-3 px-5 py-3 bg-primary-50 border border-primary-100 rounded-xl hover:bg-primary-100 transition-colors group"
+          >
+            <span className="text-sm font-medium text-primary-700">
+              {"Besoin d'un artisan ? Devis gratuit et sans engagement"}
+            </span>
+            <ChevronRight className="w-4 h-4 text-primary-400 group-hover:translate-x-0.5 transition-transform flex-shrink-0" />
+          </Link>
+        </div>
 
         {/* Article Hero Image */}
         {(() => {

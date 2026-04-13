@@ -53,7 +53,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Isolation des murs (ITE ou ITI)',
     code: 'BAR-EN-102',
-    href: '/cee/bar-en-103',
+    href: '/cee/bar-en-102',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
@@ -62,7 +62,7 @@ const FAMILLES: FamilleRow[] = [
   {
     famille: 'Isolation des planchers bas',
     code: 'BAR-EN-103',
-    href: '/cee/bar-en-102',
+    href: '/cee/bar-en-103',
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
@@ -189,7 +189,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Combien de temps entre le dépôt du dossier et le versement des aides?',
     answer:
-      'Pour MaPrimeRénov\u2019, comptez 2 à 4 mois en moyenne entre l\u2019envoi du dossier complet à l\u2019Anah et le versement sur votre compte bancaire, avec des pics pouvant aller à 6 mois en période de forte affluence. Pour la prime CEE, le délai dépend du délégataire obligé : 4 à 12 semaines après réception du dossier complet (facture acquittée, attestation sur l\u2019honneur, photos géotaggées obligatoires depuis la loi du 30 juin 2025). Les délégataires spécialisés (Effy, Sonergia) sont historiquement plus rapides que les obligés généralistes. En Parcours Accompagné, le versement MPR est échelonné selon l\u2019avancement des travaux.',
+      'Pour MaPrimeRénov\u2019, comptez 2 à 4 mois en moyenne entre l\u2019envoi du dossier complet à l\u2019Anah et le versement sur votre compte bancaire, avec des pics pouvant aller à 6 mois en période de forte affluence. Pour la prime CEE, le délai dépend de l\u2019obligé ou délégataire : 4 à 12 semaines après réception du dossier complet (facture acquittée, attestation sur l\u2019honneur, photos géotaggées obligatoires depuis la loi du 30 juin 2025). Les délégataires spécialisés (Effy, Sonergia) sont historiquement plus rapides que les obligés généralistes. En Parcours Accompagné, le versement MPR est échelonné selon l\u2019avancement des travaux.',
   },
   {
     question:
@@ -387,7 +387,7 @@ export default function MaprimeRenovCumulCeePage() {
         <p className="text-charcoal-700 leading-relaxed mb-4">
           MaPrimeRénov’ et les Certificats d’Économies d’Énergie (CEE) sont deux dispositifs d’aide
           à la rénovation énergétique distincts, qui coexistent depuis la fusion du crédit d’impôt
-          transition énergétique dans MaPrimeRénov’ en 2020 (décret n&deg;&nbsp;2020-26). Les textes
+          transition énergétique dans MaPrimeRénov’ en 2020 (décret n°&nbsp;2020-26). Les textes
           réglementaires, en particulier l’arrêté du 14 janvier 2020 modifié et l’arrêté du 22
           décembre 2014 modifié pour les CEE, prévoient explicitement leur cumul. C’est la règle, et
           non l’exception.
@@ -592,7 +592,7 @@ export default function MaprimeRenovCumulCeePage() {
         </div>
         <p className="text-xs text-charcoal-900 mt-4 leading-relaxed">
           Sources&nbsp;: arrêté du 14 janvier 2020 modifié (MaPrimeRénov’), arrêté du 22 décembre
-          2014 modifié (opérations standardisées CEE), décret n&deg;&nbsp;2022-1649 (exclusion
+          2014 modifié (opérations standardisées CEE), décret n°&nbsp;2022-1649 (exclusion
           fossiles), chartes Coup de pouce en vigueur. Les éligibilités exactes dépendent des
           performances techniques (COP, résistance thermique, rendement…) précisées dans chaque
           fiche d’opération.
@@ -747,8 +747,8 @@ export default function MaprimeRenovCumulCeePage() {
                   Signer le devis avant l’accord MaPrimeRénov’ — dossier irrémédiablement rejeté.
                 </li>
                 <li>
-                  Accepter un démarchage téléphonique CEE — interdit par la loi n&deg;&nbsp;2020-901
-                  du 24 juillet 2020.
+                  Accepter un démarchage téléphonique CEE — interdit par la loi n°&nbsp;2020-901 du
+                  24 juillet 2020.
                 </li>
                 <li>
                   Artisan RGE non vérifié sur france-renov.gouv.fr à la date de signature — motif de
@@ -822,15 +822,14 @@ export default function MaprimeRenovCumulCeePage() {
           <li>
             Arrêté du 14 janvier 2020 modifié — prime de transition énergétique (MaPrimeRénov’)
           </li>
-          <li>Décret n&deg;&nbsp;2020-26 du 14 janvier 2020 — création de MaPrimeRénov’</li>
+          <li>Décret n°&nbsp;2020-26 du 14 janvier 2020 — création de MaPrimeRénov’</li>
           <li>
-            Décret n&deg;&nbsp;2022-1649 du 26 décembre 2022 — exclusion des chaudières fonctionnant
-            aux énergies fossiles
+            Décret n°&nbsp;2022-1649 du 26 décembre 2022 — exclusion des chaudières fonctionnant aux
+            énergies fossiles
           </li>
-          <li>Décret n&deg;&nbsp;2022-1035 du 22 juillet 2022 — Mon Accompagnateur Rénov’</li>
+          <li>Décret n°&nbsp;2022-1035 du 22 juillet 2022 — Mon Accompagnateur Rénov’</li>
           <li>
-            Loi n&deg;&nbsp;2020-901 du 24 juillet 2020 — interdiction du démarchage téléphonique
-            CEE
+            Loi n°&nbsp;2020-901 du 24 juillet 2020 — interdiction du démarchage téléphonique CEE
           </li>
           <li>Loi Climat et Résilience du 22 août 2021</li>
           <li>CGI, article 278-0 bis A — TVA à 5,5 %</li>

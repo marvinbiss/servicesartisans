@@ -106,7 +106,7 @@ export default async function ServiceQuartierPage({
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `${service.name} à ${quartierName}, ${ville.name}`,
-    description: `Trouvez les meilleurs ${svcLower}s dans le quartier ${quartierName} à ${ville.name}`,
+    description: `Trouvez des ${svcLower}s qualifiés dans le quartier ${quartierName} à ${ville.name}`,
     image: getServiceImage(serviceSlug).src,
     areaServed: {
       '@type': 'Place',
@@ -183,7 +183,7 @@ export default async function ServiceQuartierPage({
     `${service.name} — Quartier ${quartierName}, ${ville.name}`,
     `Trouvez un ${svcLower} à ${quartierName} (${ville.name})`,
     `${service.name} à ${quartierName} : artisans vérifiés`,
-    `Les meilleurs ${svcLower}s à ${quartierName}, ${ville.name}`,
+    `${svcLower.charAt(0).toUpperCase() + svcLower.slice(1)}s de confiance à ${quartierName}, ${ville.name}`,
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 

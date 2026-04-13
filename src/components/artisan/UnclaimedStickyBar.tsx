@@ -52,7 +52,9 @@ export function UnclaimedStickyBar({ specialty, city, onDevisClick }: UnclaimedS
             <Users className="w-4 h-4 text-accent-500" aria-hidden="true" />
             <span className="text-sm font-semibold text-accent-700">2 conseillers disponibles</span>
           </span>
-          <span className="text-sand-300" aria-hidden="true">|</span>
+          <span className="text-sand-300" aria-hidden="true">
+            |
+          </span>
           <span className="text-sm text-charcoal-600">
             {specialty} à {city} · Gratuit · Sans engagement
           </span>
@@ -68,11 +70,15 @@ export function UnclaimedStickyBar({ specialty, city, onDevisClick }: UnclaimedS
             aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
-            {PHONE_NUMBER}
+            Conseiller · {PHONE_NUMBER}
           </a>
           <button
             onClick={() => {
-              trackEvent('unclaimed_devis_click', { source: 'unclaimed_sticky_bar_desktop', specialty, city })
+              trackEvent('unclaimed_devis_click', {
+                source: 'unclaimed_sticky_bar_desktop',
+                specialty,
+                city,
+              })
               onDevisClick()
             }}
             className="inline-flex items-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm shadow-lg shadow-primary-600/25 transition-all duration-200"
@@ -91,14 +97,19 @@ export function UnclaimedStickyBar({ specialty, city, onDevisClick }: UnclaimedS
             onClick={() => {
               trackEvent('phone_click', { source: 'unclaimed_sticky_bar_mobile', specialty, city })
             }}
-            className="flex items-center justify-center w-12 h-12 rounded-xl border-2 border-sand-300 text-charcoal-700 hover:border-sand-400 hover:bg-sand-50 transition-all duration-200 touch-manipulation flex-shrink-0"
-            aria-label={`Appeler ServicesArtisans au ${PHONE_NUMBER}`}
+            className="flex flex-col items-center justify-center w-14 h-12 rounded-xl border-2 border-sand-300 text-charcoal-700 hover:border-sand-400 hover:bg-sand-50 transition-all duration-200 touch-manipulation flex-shrink-0"
+            aria-label={`Appeler un conseiller au ${PHONE_NUMBER}`}
           >
             <Phone className="w-5 h-5" />
+            <span className="text-[9px] leading-tight mt-0.5">Conseiller</span>
           </a>
           <button
             onClick={() => {
-              trackEvent('unclaimed_devis_click', { source: 'unclaimed_sticky_bar_mobile', specialty, city })
+              trackEvent('unclaimed_devis_click', {
+                source: 'unclaimed_sticky_bar_mobile',
+                specialty,
+                city,
+              })
               onDevisClick()
             }}
             className="flex-1 py-3.5 px-5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary-600/25 transition-all duration-200 touch-manipulation"
@@ -110,12 +121,16 @@ export function UnclaimedStickyBar({ specialty, city, onDevisClick }: UnclaimedS
         </div>
         <div className="flex items-center justify-center gap-3 mt-2 text-xs text-charcoal-500">
           <span className="flex items-center gap-1">
-            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
-            2 conseillers à votre écoute
+            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />2 conseillers à votre
+            écoute
           </span>
-          <span className="text-charcoal-300" aria-hidden="true">·</span>
+          <span className="text-charcoal-300" aria-hidden="true">
+            ·
+          </span>
           <span>Gratuit</span>
-          <span className="text-charcoal-300" aria-hidden="true">·</span>
+          <span className="text-charcoal-300" aria-hidden="true">
+            ·
+          </span>
           <span>Sans engagement</span>
         </div>
       </div>

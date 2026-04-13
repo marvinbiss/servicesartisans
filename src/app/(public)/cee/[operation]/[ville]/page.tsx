@@ -359,7 +359,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               </div>
             )}
             <div>
-              <dt className="font-semibold text-charcoal-900">&Eacute;ligibilité</dt>
+              <dt className="font-semibold text-charcoal-900">Éligibilité</dt>
               <dd className="text-charcoal-700">
                 {operation.classique_eligible && 'Tous m\u00e9nages'}
                 {operation.classique_eligible && operation.precarite_eligible && ' + '}
@@ -383,7 +383,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 rel="noopener noreferrer"
                 className="text-emerald-700 font-semibold underline hover:text-emerald-900"
               >
-                Consulter la fiche officielle DGEC {operation.code} &rarr;
+                Consulter la fiche officielle DGEC {operation.code} →
               </a>
             </p>
           )}

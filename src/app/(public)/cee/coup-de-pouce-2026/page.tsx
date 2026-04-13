@@ -284,8 +284,8 @@ export default function CoupDePouce2026Page() {
           >
             <p>
               Un Coup de pouce est une bonification contractuelle d’une prime CEE, définie par une
-              charte signée entre l’&Eacute;tat et un obligationé ou délégataire. La bonification
-              est reversée au bénéficiaire final sous forme de prime majorée. Engagement obligatoire
+              charte signée entre l’État et un obligationé ou délégataire. La bonification est
+              reversée au bénéficiaire final sous forme de prime majorée. Engagement obligatoire
               <em> avant</em> signature du devis, artisan RGE, dépôt dans les délais&nbsp;: trois
               règles d’or.
             </p>
@@ -301,7 +301,7 @@ export default function CoupDePouce2026Page() {
           créent pas de nouvelles opérations&nbsp;: ils
           <em> majorent</em> le volume de CEE généré par une opération déjà standardisée, en
           contrepartie d’un engagement contractuel pris par un obligationé ou un délégataire auprès
-          de l’&Eacute;tat.
+          de l’État.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
           Cet article décrit ce qu’est juridiquement un Coup de pouce, liste les chartes actives ou
@@ -342,16 +342,16 @@ export default function CoupDePouce2026Page() {
                 6<sup>e</sup> période CEE
               </strong>{' '}
               (01/01/2026 &ndash; 31/12/2030), encadrée par l’arrêté du 21 décembre 2025
-              (JORFTEXT000053158200) et le décret n&deg;&nbsp;2025-1048.
+              (JORFTEXT000053158200) et le décret n°&nbsp;2025-1048.
             </p>
             <p>
               <strong>Principe économique.</strong> L’obligé ou le délégataire signe une charte
-              d’engagement avec l’&Eacute;tat. En échange, il obtient un bonus de volume CEE sur les
+              d’engagement avec l’État. En échange, il obtient un bonus de volume CEE sur les
               opérations concernées, qu’il s’engage à reverser au bénéficiaire final sous forme de
-              prime majorée. Le co&ucirc;t total reste supporté par l’obligé, qui le répercute
-              ensuite dans le prix de l’énergie qu’il vend à ses clients. Le Coup de pouce n’est
-              donc pas une subvention publique, même s’il en donne souvent l’apparence dans la
-              communication grand public.
+              prime majorée. Le coût total reste supporté par l’obligé, qui le répercute ensuite
+              dans le prix de l’énergie qu’il vend à ses clients. Le Coup de pouce n’est donc pas
+              une subvention publique, même s’il en donne souvent l’apparence dans la communication
+              grand public.
             </p>
             <p>
               <strong>Portée.</strong> Un Coup de pouce ne crée aucun droit automatique&nbsp;: il ne
@@ -519,10 +519,10 @@ export default function CoupDePouce2026Page() {
           </p>
           <p>
             <strong>Précaution pratique.</strong> Le total des aides ne peut toutefois pas dépasser
-            le co&ucirc;t réel des travaux&nbsp;: un plafond de reste à charge minimum est en
-            général imposé, en particulier pour les ménages modestes et très modestes, par les
-            décrets applicables à MaPrimeRénov’. Les simulateurs officiels de france-renov.gouv.fr
-            et maprimerenov.gouv.fr intègrent cette règle et donnent un chiffrage fiable avant
+            le coût réel des travaux&nbsp;: un plafond de reste à charge minimum est en général
+            imposé, en particulier pour les ménages modestes et très modestes, par les décrets
+            applicables à MaPrimeRénov’. Les simulateurs officiels de france-renov.gouv.fr et
+            maprimerenov.gouv.fr intègrent cette règle et donnent un chiffrage fiable avant
             signature.
           </p>
           <p>
@@ -542,7 +542,7 @@ export default function CoupDePouce2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            &Eacute;volutions 2026 par rapport aux années précédentes
+            Évolutions 2026 par rapport aux années précédentes
           </h2>
           <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
@@ -611,10 +611,10 @@ export default function CoupDePouce2026Page() {
               Démarchage téléphonique illicite
             </h3>
             <p className="text-sm text-charcoal-700 leading-relaxed">
-              La loi n&deg;&nbsp;2020-901 du 24 juillet 2020 interdit le démarchage téléphonique
-              pour la vente d’équipements ou la réalisation de travaux d’économies d’énergie dans
-              les logements. Tout appel non sollicité vantant un «&nbsp;Coup de pouce&nbsp;» est
-              donc présumé illégal. Raccrochez et signalez à la DGCCRF via SignalConso.
+              La loi n°&nbsp;2020-901 du 24 juillet 2020 interdit le démarchage téléphonique pour la
+              vente d’équipements ou la réalisation de travaux d’économies d’énergie dans les
+              logements. Tout appel non sollicité vantant un «&nbsp;Coup de pouce&nbsp;» est donc
+              présumé illégal. Raccrochez et signalez à la DGCCRF via SignalConso.
             </p>
           </div>
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">

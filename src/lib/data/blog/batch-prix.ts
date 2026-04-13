@@ -646,7 +646,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     ],
   },
   'prix-macon-2026-gros-oeuvre-renovation': {
-    metaTitle: 'Prix Maçon 2026 : 40-85€/h — Gros oeuvre et réno',
+    metaTitle: 'Prix Maçon 2026 : 40-85€/h — Gros œuvre et réno',
     metaDescription:
       'Tarifs maçon 2026 : fondations 100-200€/ml, mur parpaing 50-100€/m², dalle béton 60-120€/m². Prix réels par prestation.',
     title: 'Prix Maçon 2026 : Gros Œuvre et Rénovation',

@@ -467,8 +467,8 @@ export default async function RgeHubPage() {
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
             Trois ressources opérationnelles&nbsp;: comment obtenir la qualification RGE, comment
-            vérifier qu’un artisan est réellement qualifié, et combien co&ucirc;te un audit
-            énergétique réglementaire.
+            vérifier qu’un artisan est réellement qualifié, et combien coûte un audit énergétique
+            réglementaire.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <Link
@@ -482,8 +482,8 @@ export default async function RgeHubPage() {
                 Comment devenir artisan RGE&nbsp;?
               </div>
               <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-                Parcours complet de qualification (formation, audit, chantier témoin), co&ucirc;ts
-                et délais pour chaque organisme.
+                Parcours complet de qualification (formation, audit, chantier témoin), coûts et
+                délais pour chaque organisme.
               </p>
               <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Lire le guide <ArrowRight className="w-4 h-4" aria-hidden="true" />

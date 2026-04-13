@@ -251,7 +251,7 @@ export default function NotFoundClient() {
               className="inline-flex items-center gap-2 bg-white text-primary-600 px-6 py-3 rounded-lg font-bold hover:bg-primary-50 transition-colors"
             >
               Demander un devis gratuit
-              <span aria-hidden="true">&rarr;</span>
+              <span aria-hidden="true">→</span>
             </Link>
             <p className="text-primary-100 text-sm mt-3 mb-2">Ou appelez-nous</p>
             <a

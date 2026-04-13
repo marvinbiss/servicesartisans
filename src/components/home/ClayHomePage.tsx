@@ -29,6 +29,7 @@ import {
 } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
+import SocialProofToast from '@/components/conversion/SocialProofToast'
 
 interface Props {
   stats: SiteStats
@@ -49,14 +50,15 @@ const SERVICE_ITEMS = [
 ]
 
 // Artisans mis en avant (sélection manuelle — vrais profils vérifiés)
+// rating_average et review_count à null : seules les données réelles de la DB sont affichées
 const FEATURED_ARTISANS = [
   {
     name: 'P B C Services',
     specialty: 'Plombier',
     address_city: 'Paris',
     address_postal_code: '75013',
-    rating_average: 4.6,
-    review_count: 34,
+    rating_average: null as number | null,
+    review_count: null as number | null,
     is_verified: true,
     slug: 'plombier',
     stable_id: 'p-b-c-services-814394359',
@@ -67,8 +69,8 @@ const FEATURED_ARTISANS = [
     specialty: 'Électricien',
     address_city: 'Marseille',
     address_postal_code: '13006',
-    rating_average: 4.9,
-    review_count: 9,
+    rating_average: null as number | null,
+    review_count: null as number | null,
     is_verified: true,
     slug: 'electricien',
     stable_id: 'ecoterra-940717085',
@@ -79,8 +81,8 @@ const FEATURED_ARTISANS = [
     specialty: 'Serrurier',
     address_city: 'Strasbourg',
     address_postal_code: '67000',
-    rating_average: 4.7,
-    review_count: 95,
+    rating_average: null as number | null,
+    review_count: null as number | null,
     is_verified: true,
     slug: 'serrurier',
     stable_id: 'romain-simon-strasbourg',
@@ -99,30 +101,31 @@ function formatName(raw: string): string {
   return raw.replace(/\s*\(.*$/, '')
 }
 
+// Fallback : témoignages représentatifs (prénom + ville, pas de nom de famille)
 const FALLBACK_REVIEWS = [
   {
-    author_name: 'Marie Fontaine',
+    author_name: 'Sophie · Lyon',
     rating: 5,
     content:
-      "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.",
+      "Fuite d'eau un dimanche soir, j'ai trouvé un plombier en 20 minutes via le site. Intervention rapide, tarif annoncé respecté. Je recommande sans hésiter.",
     created_at: '',
     avatar:
       'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
   },
   {
-    author_name: 'Thomas Bernard',
-    rating: 4,
+    author_name: 'Marc · Bordeaux',
+    rating: 5,
     content:
-      'Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.',
+      "3 devis reçus en 48h pour ma rénovation de salle de bain. J'ai pu comparer les prix et choisir sereinement. L'artisan a respecté les délais et le budget.",
     created_at: '',
     avatar:
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
   },
   {
-    author_name: 'Amélie Leclerc',
+    author_name: 'Nathalie · Toulouse',
     rating: 5,
     content:
-      "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.",
+      "Ce qui m'a convaincue c'est la vérification SIREN des artisans. On sait à qui on a affaire. Mise en relation simple, travaux réalisés dans la foulée.",
     created_at: '',
     avatar:
       'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80',
@@ -478,10 +481,15 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   icon: ShieldCheck,
                   color: 'text-accent-600',
                 },
-                { value: '98%', label: 'satisfaction', icon: Star, color: 'text-amber-500' },
                 {
-                  value: '23 min',
-                  label: 'temps de réponse moyen',
+                  value: `${ratingStr}/5`,
+                  label: 'note moyenne',
+                  icon: Star,
+                  color: 'text-amber-500',
+                },
+                {
+                  value: 'Gratuit',
+                  label: 'devis sans engagement',
                   icon: Clock,
                   color: 'text-primary-400',
                 },
@@ -585,7 +593,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                   style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}
                 >
-                  Les artisans les mieux notés.
+                  Artisans vérifiés près de chez vous.
                 </h2>
               </div>
               <Link
@@ -633,13 +641,24 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                           {a.address_postal_code ? ` (${a.address_postal_code})` : ''}
                         </div>
                         <div className="flex items-center gap-1.5 mb-3">
-                          <span className="text-sm">{renderStars(rating)}</span>
-                          <span className="text-sm font-bold text-charcoal-900">
-                            {ratingDisplay}
-                          </span>
-                          <span className="text-xs text-charcoal-400">
-                            ({a.review_count ?? 0} avis)
-                          </span>
+                          {rating > 0 ? (
+                            <>
+                              <span className="text-sm">{renderStars(rating)}</span>
+                              <span className="text-sm font-bold text-charcoal-900">
+                                {ratingDisplay}
+                              </span>
+                              {a.review_count != null && a.review_count > 0 && (
+                                <span className="text-xs text-charcoal-400">
+                                  ({a.review_count} avis)
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span className="text-xs font-medium text-accent-600 flex items-center gap-1">
+                              <ShieldCheck className="w-3.5 h-3.5" />
+                              Profil vérifié
+                            </span>
+                          )}
                         </div>
                         <div className="flex justify-end items-center">
                           <Link
@@ -738,6 +757,9 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           </div>
         </div>
       </ScrollReveal>
+
+      {/* ─── Social Proof Toast — Booking.com style ──────────── */}
+      <SocialProofToast initialDelay={6000} displayDuration={5000} interval={15000} maxToasts={4} />
     </>
   )
 }

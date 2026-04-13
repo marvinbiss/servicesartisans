@@ -102,7 +102,7 @@ function applyMultiplier(priceText: string, multiplier: number): string {
 // ---------------------------------------------------------------------------
 
 /** Truncate title to maxLen chars on a word boundary */
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
 }

@@ -9,11 +9,11 @@ import { logger } from '@/lib/logger'
  */
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const start = Date.now()
@@ -34,7 +34,9 @@ export async function GET(request: Request) {
       // Worst 20 orphans (critical: is_orphan + lowest link_score)
       supabase
         .from('seo_page_scores')
-        .select('page_path, page_type, link_score, internal_links_in, internal_links_out, is_indexed')
+        .select(
+          'page_path, page_type, link_score, internal_links_in, internal_links_out, is_indexed'
+        )
         .eq('is_orphan', true)
         .order('internal_links_in', { ascending: true })
         .order('link_score', { ascending: true })
@@ -42,42 +44,46 @@ export async function GET(request: Request) {
     ])
 
     // --- Build overview via direct queries (more reliable than rpc) ---
-    const [totalRes, orphanCriticalRes, orphanWeakRes, avgScoreRes, lastRunsRes] = await Promise.all([
-      supabase
-        .from('seo_page_scores')
-        .select('id', { count: 'exact', head: true }),
-      supabase
-        .from('seo_page_scores')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_orphan', true)
-        .eq('internal_links_in', 0),
-      supabase
-        .from('seo_page_scores')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_orphan', true)
-        .gt('internal_links_in', 0),
-      supabase
-        .from('seo_page_scores')
-        .select('link_score')
-        .not('link_score', 'is', null)
-        .limit(5000),
-      supabase
-        .from('seo_page_scores')
-        .select('updated_at, source_run_id')
-        .order('updated_at', { ascending: false })
-        .limit(100),
-    ])
+    const [totalRes, orphanCriticalRes, orphanWeakRes, avgScoreRes, lastRunsRes] =
+      await Promise.all([
+        supabase.from('seo_page_scores').select('id', { count: 'exact', head: true }),
+        supabase
+          .from('seo_page_scores')
+          .select('id', { count: 'exact', head: true })
+          .eq('is_orphan', true)
+          .eq('internal_links_in', 0),
+        supabase
+          .from('seo_page_scores')
+          .select('id', { count: 'exact', head: true })
+          .eq('is_orphan', true)
+          .gt('internal_links_in', 0),
+        supabase
+          .from('seo_page_scores')
+          .select('link_score')
+          .not('link_score', 'is', null)
+          .limit(5000),
+        supabase
+          .from('seo_page_scores')
+          .select('updated_at, source_run_id')
+          .order('updated_at', { ascending: false })
+          .limit(100),
+      ])
 
     // Compute average from fetched scores
     const scores = avgScoreRes.data ?? []
-    const avgLinkScore = scores.length > 0
-      ? Math.round((scores.reduce((sum, r) => sum + Number(r.link_score), 0) / scores.length) * 100) / 100
-      : 0
+    const avgLinkScore =
+      scores.length > 0
+        ? Math.round(
+            (scores.reduce((sum, r) => sum + Number(r.link_score), 0) / scores.length) * 100
+          ) / 100
+        : 0
 
     // Find last run timestamps from source_run_id
     const runs = lastRunsRes.data ?? []
-    const lastLinkScoreRun = runs.find(r => r.source_run_id?.includes('link-scores'))?.updated_at ?? null
-    const lastOrphanCheckRun = runs.find(r => r.source_run_id?.includes('orphan'))?.updated_at ?? null
+    const lastLinkScoreRun =
+      runs.find((r) => r.source_run_id?.includes('link-scores'))?.updated_at ?? null
+    const lastOrphanCheckRun =
+      runs.find((r) => r.source_run_id?.includes('orphan'))?.updated_at ?? null
 
     const overview = {
       total_pages: totalRes.count ?? 0,
@@ -109,9 +115,12 @@ export async function GET(request: Request) {
           .limit(5000),
       ])
       const typeScores = scoresRes.data ?? []
-      const avgScore = typeScores.length > 0
-        ? Math.round((typeScores.reduce((s, r) => s + Number(r.link_score), 0) / typeScores.length) * 100) / 100
-        : 0
+      const avgScore =
+        typeScores.length > 0
+          ? Math.round(
+              (typeScores.reduce((s, r) => s + Number(r.link_score), 0) / typeScores.length) * 100
+            ) / 100
+          : 0
 
       return {
         type,
@@ -130,7 +139,7 @@ export async function GET(request: Request) {
     }
 
     // --- Top pages & worst orphans (already fetched) ---
-    const top_pages = (topPagesResult.data ?? []).map(p => ({
+    const top_pages = (topPagesResult.data ?? []).map((p) => ({
       path: p.page_path,
       type: p.page_type,
       score: Number(p.link_score),
@@ -138,7 +147,7 @@ export async function GET(request: Request) {
       links_out: p.internal_links_out,
     }))
 
-    const worst_orphans = (worstOrphansResult.data ?? []).map(p => ({
+    const worst_orphans = (worstOrphansResult.data ?? []).map((p) => ({
       path: p.page_path,
       type: p.page_type,
       score: Number(p.link_score),
@@ -190,12 +199,9 @@ export async function GET(request: Request) {
       elapsed_ms: elapsed,
     })
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
+    const message = err instanceof Error ? err.message : 'Erreur inconnue'
     logger.error('[seo-monitor] Failed', err, { action: 'seo-monitor' })
 
-    return NextResponse.json(
-      { error: 'SEO monitor failed', message },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: 'Échec du moniteur SEO', message }, { status: 500 })
   }
 }

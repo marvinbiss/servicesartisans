@@ -9,7 +9,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Découvrez toutes les étapes pour rénover votre cuisine en 2026. Budget 5 000-25 000 €. Obtenez un devis gratuit cuisiniste.',
     content: [
-      "La cuisine est le coeur de la maison. Sa rénovation est l'un des projets les plus valorisants pour un logement, mais aussi l'un des plus complexes à orchestrer. Entre la plomberie, l'électricité, l'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un [cuisiniste professionnel](/services/cuisiniste) pour concevoir votre projet.",
+      "La cuisine est le cœur de la maison. Sa rénovation est l'un des projets les plus valorisants pour un logement, mais aussi l'un des plus complexes à orchestrer. Entre la plomberie, l'électricité, l'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un [cuisiniste professionnel](/services/cuisiniste) pour concevoir votre projet.",
       '## 1. Définir le projet et le budget',
       "Avant de contacter le moindre artisan, posez-vous les bonnes questions : s'agit-il d'un simple rafraîchissement (peinture, crédence, plan de travail) ou d'une rénovation complète avec modification des réseaux ? Le budget moyen d'une rénovation de cuisine se situe entre 5 000 et 25 000 euros selon l'ampleur des travaux. Prévoyez une marge de 10 à 15 % pour les imprévus.",
       "## 2. Concevoir l'agencement",
@@ -610,7 +610,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       '## 4. Planifier le passage des câbles',
       'En rénovation, le passage des câbles se fait par saignées dans les murs (rebouchées ensuite), par les combles et le vide sanitaire, ou par des goulottes apparentes. Les saignées verticales sont autorisées, les horizontales interdites dans les murs porteurs. Prévoyez des gaines ICTA de diamètre suffisant pour permettre le tirage des fils.',
       '## 5. Installer le nouveau tableau',
-      "Le tableau électrique est le coeur de l'installation. Il regroupe le disjoncteur de branchement, les interrupteurs différentiels (un par groupe de circuits) et les disjoncteurs divisionnaires (un par circuit). Coût d'un tableau neuf équipé : 800 à 2 000 euros pose comprise. Prévoyez 20 % de réserve pour des circuits futurs.",
+      "Le tableau électrique est le cœur de l'installation. Il regroupe le disjoncteur de branchement, les interrupteurs différentiels (un par groupe de circuits) et les disjoncteurs divisionnaires (un par circuit). Coût d'un tableau neuf équipé : 800 à 2 000 euros pose comprise. Prévoyez 20 % de réserve pour des circuits futurs.",
       '## 6. Les circuits spécialisés',
       'Chaque gros appareil électroménager doit disposer de son propre circuit en 2,5 mm² protégé par un disjoncteur 20 A : four, lave-linge, lave-vaisselle, sèche-linge. Les plaques de cuisson nécessitent un circuit en 6 mm² protégé par un disjoncteur 32 A. Le chauffage électrique dispose de circuits dédiés dimensionnés selon la puissance.',
       '## 7. La mise à la terre',
@@ -618,7 +618,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "## 8. L'éclairage et la domotique",
       "Profitez de la rénovation pour passer à l'éclairage LED et installer des interrupteurs connectés si vous le souhaitez. Le câblage en étoile depuis le tableau facilite l'intégration future de la domotique. Prévoyez un point d'éclairage au plafond dans chaque pièce et des va-et-vient dans les couloirs et pièces à deux accès.",
       '## Budget détaillé par poste',
-      "Tableau électrique : 800 à 2 000 euros. Câblage complet (maison 100 m²) : 3 000 à 8 000 euros. Prises et interrupteurs : 1 000 à 3 000 euros. Mise à la terre : 200 à 600 euros. Points d'éclairage : 500 à 2 000 euros. Main-d'oeuvre : 40 à 70 % du budget total.",
+      "Tableau électrique : 800 à 2 000 euros. Câblage complet (maison 100 m²) : 3 000 à 8 000 euros. Prises et interrupteurs : 1 000 à 3 000 euros. Mise à la terre : 200 à 600 euros. Points d'éclairage : 500 à 2 000 euros. Main-d'œuvre : 40 à 70 % du budget total.",
       '## Durée du chantier',
       "Rénovation partielle : trois à cinq jours. Rénovation totale : deux à quatre semaines. Prévoyez que l'électricité sera coupée par intermittence pendant les travaux. Un groupe électrogène ou un raccordement provisoire peut être nécessaire pour maintenir le réfrigérateur et les équipements essentiels.",
       '## Points de vigilance',

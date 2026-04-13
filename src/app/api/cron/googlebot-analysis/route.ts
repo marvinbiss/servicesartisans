@@ -20,11 +20,11 @@ export const maxDuration = 60
 export async function GET(request: Request) {
   // ── Auth (même pattern que les autres crons) ────────────────────────
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   try {
@@ -61,21 +61,19 @@ export async function GET(request: Request) {
     const report = await runWeeklyAnalysis()
 
     // ── Stockage du rapport dans googlebot_analysis ───────────────────
-    const { error: insertError } = await supabase
-      .from('googlebot_analysis')
-      .insert({
-        period_start: report.period_start,
-        period_end: report.period_end,
-        total_crawls: report.total_crawls,
-        crawls_per_day: report.crawls_per_day,
-        top_pages: report.top_pages,
-        never_crawled_sample: report.never_crawled_sample,
-        page_type_distribution: report.page_type_distribution,
-        user_agent_distribution: report.user_agent_distribution,
-        status_code_distribution: report.status_code_distribution,
-        hourly_distribution: report.hourly_distribution,
-        logs_purged: report.logs_purged,
-      })
+    const { error: insertError } = await supabase.from('googlebot_analysis').insert({
+      period_start: report.period_start,
+      period_end: report.period_end,
+      total_crawls: report.total_crawls,
+      crawls_per_day: report.crawls_per_day,
+      top_pages: report.top_pages,
+      never_crawled_sample: report.never_crawled_sample,
+      page_type_distribution: report.page_type_distribution,
+      user_agent_distribution: report.user_agent_distribution,
+      status_code_distribution: report.status_code_distribution,
+      hourly_distribution: report.hourly_distribution,
+      logs_purged: report.logs_purged,
+    })
 
     if (insertError) {
       // La table googlebot_analysis n'existe peut-être pas encore.
@@ -87,9 +85,10 @@ export async function GET(request: Request) {
     }
 
     // ── Log structuré du rapport ──────────────────────────────────────
-    const avgCrawlsPerDay = report.crawls_per_day.length > 0
-      ? Math.round(report.total_crawls / report.crawls_per_day.length)
-      : 0
+    const avgCrawlsPerDay =
+      report.crawls_per_day.length > 0
+        ? Math.round(report.total_crawls / report.crawls_per_day.length)
+        : 0
 
     const peakHour = report.hourly_distribution.reduce(
       (max, h) => (h.count > max.count ? h : max),

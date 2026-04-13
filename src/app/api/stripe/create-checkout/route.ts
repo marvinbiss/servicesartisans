@@ -14,39 +14,33 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non autorisé' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
     const body = await request.json()
     const result = checkoutSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Erreur de validation', details: result.error.flatten() },
         { status: 400 }
       )
     }
     const { planId } = result.data
 
     if (!(planId in PLANS)) {
-      return NextResponse.json(
-        { error: 'Plan invalide' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Plan invalide' }, { status: 400 })
     }
 
     const plan = PLANS[planId as PlanId]
 
     if (!plan.priceId) {
-      return NextResponse.json(
-        { error: 'Ce plan ne nécessite pas de paiement' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Ce plan ne nécessite pas de paiement' }, { status: 400 })
     }
 
     // Create Stripe customer for this session
@@ -80,9 +74,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ sessionId: session.id, url: session.url })
   } catch (error) {
     logger.error('Stripe checkout error:', error)
-    return NextResponse.json(
-      { error: 'Erreur lors de la création du paiement' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur lors de la création du paiement' }, { status: 500 })
   }
 }

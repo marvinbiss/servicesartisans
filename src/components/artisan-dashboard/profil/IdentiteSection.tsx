@@ -61,7 +61,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               htmlFor="identite-siret"
               className="block text-sm font-medium text-charcoal-700 mb-2"
             >
-              N&deg; SIRET
+              N° SIRET
               {isVerified && (
                 <span className="ml-2 text-xs text-green-600 font-normal">
                   (vérifié - non modifiable)

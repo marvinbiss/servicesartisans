@@ -211,7 +211,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
               Primes CEE débloquées par {guide.name}
             </h2>
             <p className="text-sm text-charcoal-600 mb-4">
-              Consultez le guide de chaque opération CEE standardisée accessible gr&acirc;ce à cette
+              Consultez le guide de chaque opération CEE standardisée accessible grâce à cette
               qualification.
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">

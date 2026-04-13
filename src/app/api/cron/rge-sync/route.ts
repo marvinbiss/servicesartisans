@@ -23,17 +23,20 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured: CRON_SECRET missing' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Serveur mal configuré : CRON_SECRET manquant' },
+      { status: 500 }
+    )
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!supabaseUrl || !serviceRoleKey) {
-    return NextResponse.json({ error: 'Supabase env vars missing' }, { status: 500 })
+    return NextResponse.json({ error: 'Variables Supabase manquantes' }, { status: 500 })
   }
 
   const supabase = createClient(supabaseUrl, serviceRoleKey, {

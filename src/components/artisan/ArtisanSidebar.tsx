@@ -75,14 +75,18 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            animate={shouldPulse ? {
-              scale: [1, 1.03, 1],
-              boxShadow: [
-                '0 10px 25px rgba(232, 107, 75, 0.3)',
-                '0 10px 35px rgba(232, 107, 75, 0.5)',
-                '0 10px 25px rgba(232, 107, 75, 0.3)',
-              ],
-            } : {}}
+            animate={
+              shouldPulse
+                ? {
+                    scale: [1, 1.03, 1],
+                    boxShadow: [
+                      '0 10px 25px rgba(232, 107, 75, 0.3)',
+                      '0 10px 35px rgba(232, 107, 75, 0.5)',
+                      '0 10px 25px rgba(232, 107, 75, 0.3)',
+                    ],
+                  }
+                : {}
+            }
             transition={shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
             onClick={() => {
               trackEvent('artisan_devis_click', {
@@ -102,12 +106,15 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           {/* Trust reassurance under CTA */}
           <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
             <span className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
-              2 conseillers dispo
+              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />2 conseillers dispo
             </span>
-            <span className="text-charcoal-300" aria-hidden="true">·</span>
+            <span className="text-charcoal-300" aria-hidden="true">
+              ·
+            </span>
             <span>Gratuit</span>
-            <span className="text-charcoal-300" aria-hidden="true">·</span>
+            <span className="text-charcoal-300" aria-hidden="true">
+              ·
+            </span>
             <span>Sans engagement</span>
           </div>
 
@@ -133,31 +140,48 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
                 source: 'sidebar_platform_phone',
               })
             }}
-            className="w-full py-3 px-4 rounded-xl border-2 border-accent-200 bg-accent-50 text-accent-700 font-medium flex items-center justify-center gap-2 hover:border-accent-300 hover:bg-accent-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
-            aria-label="Appeler ServicesArtisans"
+            className="w-full py-3 px-4 rounded-xl border-2 border-accent-200 bg-accent-50 text-accent-700 font-medium flex flex-col items-center gap-1 hover:border-accent-300 hover:bg-accent-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+            aria-label="Appeler un conseiller ServicesArtisans"
           >
-            <Phone className="w-5 h-5 text-accent-500" />
-            Appeler · {PHONE_NUMBER}
+            <span className="flex items-center gap-2">
+              <Phone className="w-5 h-5 text-accent-500" />
+              Conseiller dispo · {PHONE_NUMBER}
+            </span>
+            <span className="text-xs text-charcoal-400 font-normal">
+              Aide gratuite pour votre projet
+            </span>
           </a>
         </div>
 
         {/* Trust badges */}
         <div className="space-y-2.5 mb-5 pb-5 border-b border-sand-200">
-          <h4 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">Vérifications</h4>
+          <h4 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">
+            Vérifications
+          </h4>
           {artisan.is_verified && (
             <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
               <ShieldCheck className="w-4 h-4 text-accent-500 flex-shrink-0" />
               <span>Identité vérifiée (SIREN)</span>
             </div>
           )}
+          <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
+            <Users className="w-4 h-4 text-primary-400 flex-shrink-0" />
+            <span>Devis 100% gratuit, sans engagement</span>
+          </div>
+        </div>
+
+        {/* Urgency nudge */}
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5">
+          <p className="text-xs text-amber-800 font-medium">
+            <span className="font-bold">Conseil :</span> les artisans disponibles reçoivent beaucoup
+            de demandes. Envoyez votre devis maintenant pour obtenir une réponse rapide.
+          </p>
         </div>
 
         {/* SIRET */}
         {artisan.siret && (
           <div className="pt-2">
-            <div className="text-xs text-charcoal-400 font-mono">
-              SIRET : {artisan.siret}
-            </div>
+            <div className="text-xs text-charcoal-400 font-mono">SIRET : {artisan.siret}</div>
           </div>
         )}
       </div>
@@ -171,10 +195,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
   const pulseVariants = {
     initial: { boxShadow: '0 0 0 0 rgba(232, 107, 75, 0)' },
     pulse: {
-      boxShadow: [
-        '0 0 0 0 rgba(232, 107, 75, 0.4)',
-        '0 0 0 12px rgba(232, 107, 75, 0)',
-      ],
+      boxShadow: ['0 0 0 0 rgba(232, 107, 75, 0.4)', '0 0 0 12px rgba(232, 107, 75, 0)'],
       transition: {
         duration: 1.5,
         repeat: Infinity,
@@ -204,10 +225,11 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
                 source: 'mobile_cta_platform_phone',
               })
             }}
-            className="flex items-center justify-center w-12 h-12 bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
-            aria-label="Appeler ServicesArtisans"
+            className="flex flex-col items-center justify-center w-14 h-12 bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
+            aria-label="Appeler un conseiller ServicesArtisans"
           >
             <Phone className="w-5 h-5" />
+            <span className="text-[9px] leading-tight mt-0.5">Conseiller</span>
           </a>
 
           {/* Primary: Devis CTA - MASSIF */}
@@ -235,15 +257,17 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         {/* Trust line under CTA */}
         <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1">
-            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
-            2 conseillers dispo
+            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />2 conseillers dispo
           </span>
-          <span className="text-charcoal-300" aria-hidden="true">·</span>
+          <span className="text-charcoal-300" aria-hidden="true">
+            ·
+          </span>
           <span>Gratuit</span>
-          <span className="text-charcoal-300" aria-hidden="true">·</span>
+          <span className="text-charcoal-300" aria-hidden="true">
+            ·
+          </span>
           <span>Sans engagement</span>
         </div>
-
       </div>
     </motion.div>
   )

@@ -1,6 +1,14 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Euro, TrendingUp, CheckCircle, Search, ChevronDown, ChevronRight } from 'lucide-react'
+import {
+  ArrowRight,
+  Euro,
+  TrendingUp,
+  CheckCircle,
+  Search,
+  ChevronDown,
+  ChevronRight,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
@@ -13,14 +21,19 @@ import { CmsContent } from '@/components/CmsContent'
 import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
 import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), { ssr: false })
+const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
+  ssr: false,
+})
+const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
+  ssr: false,
+})
 
 export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
-  description: 'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
+  description:
+    'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
   alternates: {
     canonical: `${SITE_URL}/tarifs`,
   },
@@ -33,39 +46,53 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
-    description: 'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
+    description:
+      'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
     url: `${SITE_URL}/tarifs`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tarifs artisans' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Tarifs artisans',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
-    description: 'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
+    description:
+      'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const tradeFaqs = [
   {
-    question: 'Quel est le prix moyen d\'un artisan en France en 2026 ?',
-    answer: 'Le prix moyen d\'un artisan en France se situe entre 35 et 90 €/h TTC en 2026, selon le corps de métier. Un plombier coûte 60 à 90 €/h, un électricien 50 à 80 €/h, un peintre 35 à 55 €/h. Demandez plusieurs devis pour comparer.',
+    question: "Quel est le prix moyen d'un artisan en France en 2026 ?",
+    answer:
+      "Le prix moyen d'un artisan en France se situe entre 35 et 90 €/h TTC en 2026, selon le corps de métier. Un plombier coûte 60 à 90 €/h, un électricien 50 à 80 €/h, un peintre 35 à 55 €/h. Demandez plusieurs devis pour comparer.",
   },
   {
     question: 'Comment sont calculés les prix affichés ?',
-    answer: 'Les prix affichés sont des fourchettes moyennes observées en France métropolitaine, main-d\'oeuvre incluse. Ils varient selon la région, la complexité des travaux et le niveau de qualification de l\'artisan. Demandez toujours plusieurs devis.',
+    answer:
+      "Les prix affichés sont des fourchettes moyennes observées en France métropolitaine, main-d'œuvre incluse. Ils varient selon la région, la complexité des travaux et le niveau de qualification de l'artisan. Demandez toujours plusieurs devis.",
   },
   {
-    question: 'Pourquoi les prix varient-ils autant d\'un artisan à l\'autre ?',
-    answer: 'Les écarts de prix s\'expliquent par la localisation (plus cher en Île-de-France), l\'expérience de l\'artisan, ses certifications, la complexité du chantier, les matériaux et la période de l\'année. Comptez +25 % en région parisienne.',
+    question: "Pourquoi les prix varient-ils autant d'un artisan à l'autre ?",
+    answer:
+      "Les écarts de prix s'expliquent par la localisation (plus cher en Île-de-France), l'expérience de l'artisan, ses certifications, la complexité du chantier, les matériaux et la période de l'année. Comptez +25 % en région parisienne.",
   },
   {
     question: 'Comment obtenir un devis gratuit pour mes travaux ?',
-    answer: 'Remplissez notre formulaire en ligne pour obtenir un devis gratuit d\'artisans vérifiés. Vous pouvez aussi contacter directement les artisans référencés. Comparez toujours plusieurs devis avant de vous engager.',
+    answer:
+      "Remplissez notre formulaire en ligne pour obtenir un devis gratuit d'artisans vérifiés. Vous pouvez aussi contacter directement les artisans référencés. Comparez toujours plusieurs devis avant de vous engager.",
   },
   {
     question: 'Les prix incluent-ils la TVA ?',
-    answer: 'Les prix affichés sont TTC. Le taux de TVA varie : 10 % pour la rénovation (logement de plus de 2 ans), 5,5 % pour les travaux d\'amélioration énergétique (isolation, chauffage) et 20 % pour les constructions neuves.',
+    answer:
+      "Les prix affichés sont TTC. Le taux de TVA varie : 10 % pour la rénovation (logement de plus de 2 ans), 5,5 % pour les travaux d'amélioration énergétique (isolation, chauffage) et 20 % pour les constructions neuves.",
   },
 ]
 
@@ -95,9 +122,7 @@ export default async function TarifsPage() {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -142,13 +167,21 @@ export default async function TarifsPage() {
         {/* Hero */}
         <section className="relative bg-gradient-hero text-white overflow-hidden">
           <div className="absolute inset-0">
-            <div className="absolute inset-0" style={{
-              background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.08) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,107,75,0.06) 0%, transparent 50%)',
-            }} />
-            <div className="absolute inset-0 opacity-[0.025]" style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-              backgroundSize: '64px 64px',
-            }} />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.08) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,107,75,0.06) 0%, transparent 50%)',
+              }}
+            />
+            <div
+              className="absolute inset-0 opacity-[0.025]"
+              style={{
+                backgroundImage:
+                  'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                backgroundSize: '64px 64px',
+              }}
+            />
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pt-10 sm:pb-28 md:pt-14 md:pb-36">
@@ -161,8 +194,8 @@ export default async function TarifsPage() {
                 Guide des prix artisans 2026
               </h1>
               <p className="text-base sm:text-xl text-sand-400 max-w-3xl mx-auto mb-4">
-                Tarifs moyens par corps de métier en France. Comparez les prix de {trades.length} métiers
-                du bâtiment pour estimer votre budget travaux avant de demander un devis.
+                Tarifs moyens par corps de métier en France. Comparez les prix de {trades.length}{' '}
+                métiers du bâtiment pour estimer votre budget travaux avant de demander un devis.
               </p>
               <div className="flex flex-wrap justify-center gap-3 mt-8">
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -225,7 +258,7 @@ export default async function TarifsPage() {
                 Tarifs par corps de métier
               </h2>
               <p className="text-xl text-charcoal-600 max-w-2xl mx-auto">
-                Prix moyens constatés en France métropolitaine, main-d'oeuvre incluse
+                Prix moyens constatés en France métropolitaine, main-d'œuvre incluse
               </p>
             </div>
 
@@ -277,7 +310,10 @@ export default async function TarifsPage() {
                         <div className="mb-4">
                           <div className="flex flex-wrap gap-1">
                             {trade.certifications.slice(0, 2).map((cert, i) => (
-                              <span key={i} className="inline-block bg-primary-50 text-primary-600 text-xs px-2 py-1 rounded">
+                              <span
+                                key={i}
+                                className="inline-block bg-primary-50 text-primary-600 text-xs px-2 py-1 rounded"
+                              >
                                 {cert}
                               </span>
                             ))}
@@ -319,10 +355,26 @@ export default async function TarifsPage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { n: 1, title: 'Comparez 3 devis minimum', text: 'Ne vous contentez jamais d\'un seul devis. La comparaison permet d\'identifier le juste prix et de négocier.' },
-                { n: 2, title: 'Évitez les urgences', text: 'Les interventions d\'urgence coûtent 50 à 100% plus cher. Anticipez l\'entretien et les réparations.' },
-                { n: 3, title: 'Profitez des aides', text: 'MaPrimeRénov\', CEE, éco-PTZ... Les aides peuvent couvrir 30 à 90% du coût des travaux de rénovation énergétique.' },
-                { n: 4, title: 'Vérifiez l\'artisan', text: 'Un artisan référencé avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.' },
+                {
+                  n: 1,
+                  title: 'Comparez 3 devis minimum',
+                  text: "Ne vous contentez jamais d'un seul devis. La comparaison permet d'identifier le juste prix et de négocier.",
+                },
+                {
+                  n: 2,
+                  title: 'Évitez les urgences',
+                  text: "Les interventions d'urgence coûtent 50 à 100% plus cher. Anticipez l'entretien et les réparations.",
+                },
+                {
+                  n: 3,
+                  title: 'Profitez des aides',
+                  text: "MaPrimeRénov', CEE, éco-PTZ... Les aides peuvent couvrir 30 à 90% du coût des travaux de rénovation énergétique.",
+                },
+                {
+                  n: 4,
+                  title: "Vérifiez l'artisan",
+                  text: 'Un artisan référencé avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.',
+                },
               ].map(({ n, title, text }) => (
                 <div key={n} className="text-center p-6">
                   <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -349,14 +401,10 @@ export default async function TarifsPage() {
               {tradeFaqs.map((faq, index) => (
                 <details key={index} className="bg-white rounded-xl border border-sand-300 group">
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <h3 className="text-lg font-semibold text-charcoal-900 pr-4">
-                      {faq.question}
-                    </h3>
+                    <h3 className="text-lg font-semibold text-charcoal-900 pr-4">{faq.question}</h3>
                     <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                   </summary>
-                  <div className="px-6 pb-6 text-charcoal-600 leading-relaxed">
-                    {faq.answer}
-                  </div>
+                  <div className="px-6 pb-6 text-charcoal-600 leading-relaxed">{faq.answer}</div>
                 </details>
               ))}
             </div>
@@ -370,7 +418,8 @@ export default async function TarifsPage() {
               Obtenez un devis précis pour vos travaux
             </h2>
             <p className="text-xl text-primary-100 mb-8">
-              Les prix varient selon votre projet. Demandez un devis gratuit pour connaître le coût exact.
+              Les prix varient selon votre projet. Demandez un devis gratuit pour connaître le coût
+              exact.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
@@ -394,15 +443,22 @@ export default async function TarifsPage() {
         {/* Section A: Tarifs par métier et ville — Service×City matrix */}
         <section className="py-12 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8">Tarifs par métier et ville</h2>
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8">
+              Tarifs par métier et ville
+            </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {services.slice(0, 8).map((service) => (
                 <div key={service.slug}>
-                  <h3 className="font-semibold text-charcoal-900 mb-3">Tarifs {service.name.toLowerCase()}</h3>
+                  <h3 className="font-semibold text-charcoal-900 mb-3">
+                    Tarifs {service.name.toLowerCase()}
+                  </h3>
                   <div className="space-y-1.5">
                     {villes.slice(0, 6).map((ville) => (
-                      <Link key={ville.slug} href={`/tarifs/${service.slug}/${ville.slug}`}
-                        className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                      <Link
+                        key={ville.slug}
+                        href={`/tarifs/${service.slug}/${ville.slug}`}
+                        className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                      >
                         <ChevronRight className="w-3 h-3" /> {ville.name}
                       </Link>
                     ))}
@@ -423,8 +479,11 @@ export default async function TarifsPage() {
                 <h3 className="font-semibold text-charcoal-900 mb-3">Demander un devis</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
-                    <Link key={s.slug} href={`/devis/${s.slug}`}
-                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                    <Link
+                      key={s.slug}
+                      href={`/devis/${s.slug}`}
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                    >
                       <ChevronRight className="w-3 h-3" /> Devis {s.name.toLowerCase()}
                     </Link>
                   ))}
@@ -435,8 +494,11 @@ export default async function TarifsPage() {
                 <h3 className="font-semibold text-charcoal-900 mb-3">Avis clients</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
-                    <Link key={s.slug} href={`/avis/${s.slug}`}
-                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                    <Link
+                      key={s.slug}
+                      href={`/avis/${s.slug}`}
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                    >
                       <ChevronRight className="w-3 h-3" /> Avis {s.name.toLowerCase()}
                     </Link>
                   ))}
@@ -447,8 +509,11 @@ export default async function TarifsPage() {
                 <h3 className="font-semibold text-charcoal-900 mb-3">Urgence artisan</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
-                    <Link key={s.slug} href={`/urgence/${s.slug}`}
-                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                    <Link
+                      key={s.slug}
+                      href={`/urgence/${s.slug}`}
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                    >
                       <ChevronRight className="w-3 h-3" /> Urgence {s.name.toLowerCase()}
                     </Link>
                   ))}
@@ -458,43 +523,82 @@ export default async function TarifsPage() {
               <div>
                 <h3 className="font-semibold text-charcoal-900 mb-3">Navigation</h3>
                 <div className="space-y-1.5">
-                  <Link href="/services" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/services"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Tous les services
                   </Link>
-                  <Link href="/villes" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/villes"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Toutes les villes
                   </Link>
-                  <Link href="/departements" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/departements"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Tous les départements
                   </Link>
-                  <Link href="/regions" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/regions"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Toutes les régions
                   </Link>
-                  <Link href="/blog" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/blog"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Blog
                   </Link>
-                  <Link href="/devis" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/devis"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Demander un devis
                   </Link>
-                  <Link href="/urgence" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/urgence"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Urgence artisan
                   </Link>
-                  <Link href="/avis" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/avis"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Avis clients
                   </Link>
-                  <Link href="/outils" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/outils"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Outils gratuits
                   </Link>
-                  <Link href="/outils/calculateur-prix" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/outils/calculateur-prix"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Calculateur de prix
                   </Link>
-                  <Link href="/outils/diagnostic" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/outils/diagnostic"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Diagnostic artisan
                   </Link>
-                  <Link href="/widget-prix" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/widget-prix"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Widget prix artisan
                   </Link>
-                  <Link href="/checklist-travaux" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
+                  <Link
+                    href="/checklist-travaux"
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" /> Checklist avant travaux
                   </Link>
                 </div>

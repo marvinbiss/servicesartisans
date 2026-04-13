@@ -65,11 +65,11 @@ function getStaticUrls(): string[] {
 }
 
 function getServiceHubUrls(): string[] {
-  return services.map(s => `${SITE_URL}/services/${s.slug}`)
+  return services.map((s) => `${SITE_URL}/services/${s.slug}`)
 }
 
 function getCityHubUrls(): string[] {
-  return villes.map(v => `${SITE_URL}/villes/${v.slug}`)
+  return villes.map((v) => `${SITE_URL}/villes/${v.slug}`)
 }
 
 function getRotatingUrls(slot: number): { category: SlotCategory; urls: string[] } {
@@ -178,11 +178,11 @@ function getRotatingUrls(slot: number): { category: SlotCategory; urls: string[]
 
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const slot = getSlot()
@@ -228,7 +228,7 @@ export async function GET(request: Request) {
 
     const batch = cappedUrls.slice(i, i + BATCH_SIZE)
     const results = await Promise.allSettled(
-      batch.map(url =>
+      batch.map((url) =>
         fetch(url, {
           method: 'GET',
           headers: { 'User-Agent': 'SA-Cache-Warmup/1.0' },
@@ -237,10 +237,10 @@ export async function GET(request: Request) {
       )
     )
     warmed += results.filter(
-      r => r.status === 'fulfilled' && (r as PromiseFulfilledResult<Response>).value.ok
+      (r) => r.status === 'fulfilled' && (r as PromiseFulfilledResult<Response>).value.ok
     ).length
     failed += results.filter(
-      r =>
+      (r) =>
         r.status === 'rejected' ||
         (r.status === 'fulfilled' && !(r as PromiseFulfilledResult<Response>).value.ok)
     ).length

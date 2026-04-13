@@ -191,8 +191,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Domaine{' '}
             <strong className="text-white">{domaineInfo?.label || operation.domaine}</strong>
             {operation.sous_domaine ? ` \u2014 ${operation.sous_domaine.replace(/_/g, ' ')}` : ''}.
-            Opération standardisée résidentielle éligible aux Certificats d’&Eacute;conomies
-            d’&Eacute;nergie, sous conditions de qualification RGE de l’entreprise.
+            Opération standardisée résidentielle éligible aux Certificats d’Économies d’Énergie,
+            sous conditions de qualification RGE de l’entreprise.
           </p>
           {/* Freshness signal — révision éditoriale des barèmes. TODO : brancher
               sur cee_operations.updated_at dès la persistance DGEC automatisée. */}
@@ -213,16 +213,16 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           <p>
             La fiche d’opération standardisée <strong>{operation.code}</strong> encadre les travaux
             de <strong>{operation.nom.toLowerCase()}</strong> dans le secteur résidentiel. Publiée
-            par la Direction Générale de l’&Eacute;nergie et du Climat (DGEC) dans le cadre du
-            dispositif des Certificats d’&Eacute;conomies d’&Eacute;nergie, elle fixe les exigences
-            techniques minimales à respecter pour qu’un chantier soit valorisé en prime CEE.
+            par la Direction Générale de l’Énergie et du Climat (DGEC) dans le cadre du dispositif
+            des Certificats d’Économies d’Énergie, elle fixe les exigences techniques minimales à
+            respecter pour qu’un chantier soit valorisé en prime CEE.
           </p>
           <p>
-            La prime est versée par un délégataire obligé (Effy, Sonergia, TotalEnergies, EDF,
+            La prime est versée par un obligé ou délégataire (Effy, Sonergia, TotalEnergies, EDF,
             Engie, etc.) qui achète en retour des certificats auprès du Pôle National des
-            Certificats d’&Eacute;conomies d’&Eacute;nergie (PNCEE). Le cours de la prime évolue
-            chaque semaine selon l’offre et la demande, c’est pourquoi nous recommandons toujours de
-            comparer au moins trois devis d’artisans RGE avant de signer.
+            Certificats d’Économies d’Énergie (PNCEE). Le cours de la prime évolue chaque semaine
+            selon l’offre et la demande, c’est pourquoi nous recommandons toujours de comparer au
+            moins trois devis d’artisans RGE avant de signer.
           </p>
         </div>
 
@@ -252,7 +252,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             </dd>
           </div>
           <div>
-            <dt className="font-semibold text-charcoal-900">&Eacute;ligibilité</dt>
+            <dt className="font-semibold text-charcoal-900">Éligibilité</dt>
             <dd className="text-charcoal-700">
               {operation.classique_eligible && 'Tous ménages'}
               {operation.classique_eligible && operation.precarite_eligible && ' + '}

@@ -34,11 +34,11 @@ export const maxDuration = 60 // seconds — may need to scan many combinations
 export async function GET(request: Request) {
   // Auth: same pattern as all other crons
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const startTime = Date.now()
@@ -58,7 +58,10 @@ export async function GET(request: Request) {
 
     if (cityError) {
       logger.error('[pruning-audit] Failed to fetch provider city counts:', cityError.message)
-      return NextResponse.json({ error: 'Database error', details: cityError.message }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Erreur base de données', details: cityError.message },
+        { status: 500 }
+      )
     }
 
     // Build a map: normalized city name -> provider count
@@ -82,7 +85,10 @@ export async function GET(request: Request) {
 
     if (specError) {
       logger.error('[pruning-audit] Failed to fetch specialty counts:', specError.message)
-      return NextResponse.json({ error: 'Database error', details: specError.message }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Erreur base de données', details: specError.message },
+        { status: 500 }
+      )
     }
 
     // Build a map: "specialty:city" -> count
@@ -148,7 +154,10 @@ export async function GET(request: Request) {
           reason = 'zero_providers'
           priority = 'medium'
           zeroPagesCount++
-        } else if (providerCount <= THIN_PAGE_PROVIDER_THRESHOLD && diffScore < MIN_DIFFERENTIATION_PERCENT) {
+        } else if (
+          providerCount <= THIN_PAGE_PROVIDER_THRESHOLD &&
+          diffScore < MIN_DIFFERENTIATION_PERCENT
+        ) {
           reason = 'low_providers'
           priority = 'low'
           thinPagesCount++
@@ -176,20 +185,21 @@ export async function GET(request: Request) {
       .eq('noindex', true)
 
     if (noindexError) {
-      logger.warn('[pruning-audit] Failed to count noindex providers:', { action: noindexError.message })
+      logger.warn('[pruning-audit] Failed to count noindex providers:', {
+        action: noindexError.message,
+      })
     }
 
     // -----------------------------------------------------------------------
     // Step 5: Summary stats
     // -----------------------------------------------------------------------
     const totalProviders = cityCounts?.length || 0
-    const indexationRatio = totalServiceCityPages > 0
-      ? ((indexedPages / totalServiceCityPages) * 100).toFixed(1)
-      : '0'
+    const indexationRatio =
+      totalServiceCityPages > 0 ? ((indexedPages / totalServiceCityPages) * 100).toFixed(1) : '0'
 
-    const highPriority = candidates.filter(c => c.priority === 'high')
-    const mediumPriority = candidates.filter(c => c.priority === 'medium')
-    const lowPriority = candidates.filter(c => c.priority === 'low')
+    const highPriority = candidates.filter((c) => c.priority === 'high')
+    const mediumPriority = candidates.filter((c) => c.priority === 'medium')
+    const lowPriority = candidates.filter((c) => c.priority === 'low')
 
     const durationMs = Date.now() - startTime
 
@@ -236,14 +246,16 @@ export async function GET(request: Request) {
         .slice(0, 50),
     }
 
-    logger.info(`[pruning-audit] Complete: ${totalServiceCityPages} pages scanned, ${noindexCandidates} candidates (${indexationRatio}% indexation ratio) in ${durationMs}ms`)
+    logger.info(
+      `[pruning-audit] Complete: ${totalServiceCityPages} pages scanned, ${noindexCandidates} candidates (${indexationRatio}% indexation ratio) in ${durationMs}ms`
+    )
 
     return NextResponse.json(report)
   } catch (error) {
     logger.error('[pruning-audit] Fatal error:', error)
     return NextResponse.json(
-      { error: 'Internal error', details: error instanceof Error ? error.message : String(error) },
-      { status: 500 },
+      { error: 'Erreur interne', details: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
     )
   }
 }
@@ -260,9 +272,10 @@ function generateRecommendations(stats: {
   highPriority: number
 }): string[] {
   const recommendations: string[] = []
-  const prunePercent = stats.totalServiceCityPages > 0
-    ? ((stats.noindexCandidates / stats.totalServiceCityPages) * 100).toFixed(1)
-    : '0'
+  const prunePercent =
+    stats.totalServiceCityPages > 0
+      ? ((stats.noindexCandidates / stats.totalServiceCityPages) * 100).toFixed(1)
+      : '0'
 
   recommendations.push(
     `${stats.noindexCandidates} pages candidates au pruning sur ${stats.totalServiceCityPages} (${prunePercent}%).`

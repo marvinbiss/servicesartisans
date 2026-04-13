@@ -46,7 +46,8 @@ function parsePricingRows(tasks: string[], multiplier: number): PricingRow[] {
     const priceStr = task.substring(colonIdx + 1).trim()
 
     // Extract all numbers from price string
-    const numbers = priceStr.match(/\d[\d\s]*/g)?.map(n => parseInt(n.replace(/\s/g, ''), 10)) || []
+    const numbers =
+      priceStr.match(/\d[\d\s]*/g)?.map((n) => parseInt(n.replace(/\s/g, ''), 10)) || []
 
     let prixMin = 0
     let prixMax = 0
@@ -118,21 +119,23 @@ export default function StructuredPricingTable({
       itemListElement: rows.map((row, i) => ({
         '@type': 'OfferCatalog',
         name: row.intervention,
-        itemListElement: [{
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: row.intervention,
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: row.intervention,
+            },
+            priceSpecification: {
+              '@type': 'PriceSpecification',
+              priceCurrency: 'EUR',
+              minPrice: row.prixMin,
+              maxPrice: row.prixMax,
+              unitText: unit,
+            },
+            position: i + 1,
           },
-          priceSpecification: {
-            '@type': 'PriceSpecification',
-            priceCurrency: 'EUR',
-            minPrice: row.prixMin,
-            maxPrice: row.prixMax,
-            unitText: unit,
-          },
-          position: i + 1,
-        }],
+        ],
       })),
     },
   }
@@ -154,8 +157,8 @@ export default function StructuredPricingTable({
         Grille tarifaire {serviceNameLower} {'à'} {villeName}
       </h2>
       <p className="text-sm text-charcoal-500 mb-5">
-        Tarifs indicatifs 2026 pour les interventions courantes de {serviceNameLower} {'à'} {villeName}.
-        Prix ajust{'é'}s au march{'é'} local.
+        Tarifs indicatifs 2026 pour les interventions courantes de {serviceNameLower} {'à'}{' '}
+        {villeName}. Prix ajust{'é'}s au march{'é'} local.
       </p>
 
       <div className="overflow-x-auto rounded-xl border border-sand-300 shadow-sm">
@@ -168,13 +171,22 @@ export default function StructuredPricingTable({
               <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700">
                 Type d{"'"}intervention
               </th>
-              <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right">
+              <th
+                scope="col"
+                className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right"
+              >
                 Prix min
               </th>
-              <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right">
+              <th
+                scope="col"
+                className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right"
+              >
                 Prix max
               </th>
-              <th scope="col" className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-center">
+              <th
+                scope="col"
+                className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-center"
+              >
                 Dur{'é'}e estim{'é'}e
               </th>
             </tr>
@@ -196,7 +208,10 @@ export default function StructuredPricingTable({
                       <span className="text-charcoal-900 font-semibold">
                         {row.intervention}
                         <span className="block text-xs text-primary-600 font-medium mt-0.5">
-                          Exemple {'à'} {villeName} : {formatPrice(Math.round((row.prixMin + row.prixMax) / 2))}{'\u00A0'}{unit}
+                          Exemple {'à'} {villeName} :{' '}
+                          {formatPrice(Math.round((row.prixMin + row.prixMax) / 2))}
+                          {'\u00A0'}
+                          {unit}
                         </span>
                       </span>
                     ) : (
@@ -219,10 +234,13 @@ export default function StructuredPricingTable({
           <tfoot>
             <tr className="bg-sand-50/80 border-t border-sand-300">
               <td colSpan={4} className="px-5 py-3 text-xs text-charcoal-500 italic">
-                Prix indicatifs TTC, main-d{"'"}oeuvre incluse. Varient selon la complexit{'é'}, l{"'"}accessibilit{'é'} et les mat{'é'}riaux choisis.
+                Prix indicatifs TTC, main-d{"'"}œuvre incluse. Varient selon la complexit{'é'}, l
+                {"'"}accessibilit{'é'} et les mat{'é'}riaux choisis.
                 {multiplier !== 1 && (
                   <span className="ml-1">
-                    Tarifs ajust{'é'}s pour {villeName} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}{'\u00A0'}% vs moyenne nationale).
+                    Tarifs ajust{'é'}s pour {villeName} ({multiplier > 1 ? '+' : ''}
+                    {Math.round((multiplier - 1) * 100)}
+                    {'\u00A0'}% vs moyenne nationale).
                   </span>
                 )}
               </td>

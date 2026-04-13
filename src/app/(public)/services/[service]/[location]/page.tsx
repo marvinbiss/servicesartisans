@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
   getServiceBySlug,
@@ -142,8 +143,8 @@ interface PageProps {
 // Valid slug: lowercase alphanumeric + hyphens, 2-80 chars, no leading/trailing hyphen
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
 
-/** Truncate title to ~60 chars for Google's display limit */
-function truncateTitle(title: string, maxLen = 60): string {
+/** Truncate title to ~58 chars for Google's display limit */
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -223,7 +224,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
         {
           title: `${serviceName} à ${locationName} — Devis Gratuit 2026`,
-          h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}`,
+          h1: `${naturalTerm.plural.charAt(0).toUpperCase() + naturalTerm.plural.slice(1)} de confiance à ${locationName}`,
         },
       ]
     : [
@@ -245,7 +246,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
         {
           title: `${serviceName} ${locationName} : Devis Gratuit 2026`,
-          h1: `Les meilleurs ${naturalTerm.plural} à ${locationName}`,
+          h1: `${naturalTerm.plural.charAt(0).toUpperCase() + naturalTerm.plural.slice(1)} de confiance à ${locationName}`,
         },
       ]
 
@@ -368,7 +369,7 @@ function generateJsonLd(
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `${service.name} à ${location.name}`,
-    description: `Trouvez les meilleurs ${svcLower}s à ${location.name}`,
+    description: `Trouvez des ${svcLower}s qualifiés et vérifiés à ${location.name}`,
     image: getServiceImage(serviceSlug).src,
     serviceType: service.name,
     inLanguage: 'fr-FR',
@@ -703,14 +704,14 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         `Trouvez ${naturalTermH1.article} à ${location.name}`,
         `${service.name} à ${location.name} — ${providerCount} pros référencés`,
         `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
-        `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
+        `${naturalTermH1.plural.charAt(0).toUpperCase() + naturalTermH1.plural.slice(1)} de confiance à ${location.name}`,
       ]
     : [
         `${service.name} à ${location.name}`,
         `Trouvez ${naturalTermH1.article} à ${location.name}`,
         `${service.name} à ${location.name} — Artisans qualifiés`,
         `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
-        `Les meilleurs ${naturalTermH1.plural} à ${location.name}`,
+        `${naturalTermH1.plural.charAt(0).toUpperCase() + naturalTermH1.plural.slice(1)} de confiance à ${location.name}`,
       ]
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]
 
@@ -1167,6 +1168,30 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         villeSlug={locationSlug}
         villeName={location.name}
       />
+
+      {/* CTA final — Devis gratuit */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-charcoal-900 to-charcoal-800 rounded-2xl p-8 md:p-12 text-center text-white">
+            <h2 className="font-heading text-2xl md:text-3xl font-bold mb-4">
+              Devis gratuit de {service.name.toLowerCase()} à {location.name}
+            </h2>
+            <p className="text-sand-400 text-lg mb-8 max-w-2xl mx-auto">
+              Comparez les profils et obtenez un devis personnalisé d'artisans vérifiés à{' '}
+              {location.name}.
+            </p>
+            <Link
+              href={`/devis/${serviceSlug}/${locationSlug}`}
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            >
+              Obtenir mon devis gratuit
+              <span aria-hidden="true" className="text-lg">
+                &rarr;
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <StickyMobileCTA serviceSlug={serviceSlug} cityName={location.name} citySlug={locationSlug} />
 

@@ -105,7 +105,7 @@ interface PageProps {
   params: Promise<{ service: string }>
 }
 
-function truncateTitle(title: string, maxLen = 60): string {
+function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -385,7 +385,7 @@ export default async function ServicePage({ params }: PageProps) {
           </h1>
           <p className="text-lg md:text-xl text-sand-400 max-w-3xl leading-relaxed">
             {service.description ||
-              `Trouvez les meilleurs ${service.name.toLowerCase()}s près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
+              `Trouvez des ${service.name.toLowerCase()}s qualifiés près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
           </p>
           <LastUpdated label="Données artisans mises à jour le" className="text-sand-500 mt-3" />
 
@@ -767,8 +767,8 @@ export default async function ServicePage({ params }: PageProps) {
               <div className="prose prose-gray max-w-none">
                 <p>
                   Trouver un {service.name.toLowerCase()} de confiance peut sembler compliqué.
-                  ServicesArtisans vous simplifie la tâche en répertoriant les meilleurs
-                  professionnels de votre région.
+                  ServicesArtisans vous simplifie la tâche en répertoriant des professionnels
+                  qualifiés et vérifiés dans votre région.
                 </p>
                 <h3>Les critères pour choisir votre {service.name.toLowerCase()}</h3>
                 <ul>
@@ -890,7 +890,29 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Articles utiles — blog articles liés au service */}
       <RelatedArticles serviceSlug={serviceSlug} />
 
-      {/* CTA */}
+      {/* CTA — Devis gratuit (user-facing) */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-charcoal-900 to-charcoal-800 rounded-2xl p-8 md:p-12 text-center text-white">
+            <h2 className="font-heading text-2xl md:text-3xl font-bold mb-4">
+              Obtenir mon devis {service.name.toLowerCase()} gratuit
+            </h2>
+            <p className="text-sand-400 text-lg mb-8 max-w-2xl mx-auto">
+              Comparez les artisans vérifiés près de chez vous et recevez des devis personnalisés,
+              gratuits et sans engagement.
+            </p>
+            <Link
+              href={`/devis/${serviceSlug}`}
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            >
+              Demander un devis gratuit
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA — Artisans (B2B) */}
       <section className="relative py-16 overflow-hidden bg-gradient-hero">
         <div
           className="absolute inset-0"
