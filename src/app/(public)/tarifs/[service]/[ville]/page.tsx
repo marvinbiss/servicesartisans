@@ -49,6 +49,7 @@ import LocalInsightsBlock from '@/components/seo/LocalInsightsBlock'
 import { getDefaultAuthor } from '@/lib/data/team'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import IntentNavBar from '@/components/seo/IntentNavBar'
+import TrustPromiseBanner from '@/components/conversion/TrustPromiseBanner'
 import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
@@ -576,6 +577,10 @@ export default async function TarifsServiceVillePage({
           </div>
         </div>
       </section>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <TrustPromiseBanner variant="compact" />
+      </div>
 
       <section className="py-6 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

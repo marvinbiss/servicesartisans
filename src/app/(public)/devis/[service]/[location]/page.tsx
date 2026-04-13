@@ -45,6 +45,7 @@ import {
 } from '@/lib/geo-strings'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import IntentNavBar from '@/components/seo/IntentNavBar'
+import TrustPromiseBanner from '@/components/conversion/TrustPromiseBanner'
 import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
@@ -543,6 +544,11 @@ export default async function DevisServiceLocationPage({
         serviceName={trade.name}
         villeName={villeData.name}
       />
+
+      {/* ─── TRUST PROMISE BANNER ────── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <TrustPromiseBanner variant="full" />
+      </div>
 
       {/* ─── SPLIT LAYOUT: Form (60%) + Sidebar (40%) ────── */}
       <section className="py-8 md:py-12">
