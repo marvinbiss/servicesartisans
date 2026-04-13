@@ -755,24 +755,27 @@ export async function generateMetadata({
   if (!trade || !villeData) notFound()
 
   const tradeLower = trade.name.toLowerCase()
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
+  const minPrice = Math.round(trade.priceRange.min * multiplier)
+  const priceTag = `dès ${minPrice}€`
 
   const titleHash = Math.abs(hashCode(`urgence-ville-title-${service}-${villeSlug}`))
   const titleTemplates = [
-    `${trade.name} urgence ${villeData.name}`,
-    `${trade.name} d'urgence à ${villeData.name}`,
-    `Urgence ${tradeLower} ${villeData.name}`,
-    `Dépannage ${tradeLower} ${villeData.name}`,
-    `${trade.name} urgence ${villeData.name} (${villeData.departementCode})`,
+    `${trade.name} urgence ${villeData.name} — Dépannage ${priceTag} | 24h/7j`,
+    `${trade.name} d'urgence à ${villeData.name} — ${priceTag} | 7j/7`,
+    `Urgence ${tradeLower} ${villeData.name} — Intervention ${priceTag} 24h/24`,
+    `Dépannage ${tradeLower} ${villeData.name} — ${priceTag} | Nuit & Week-end`,
+    `${trade.name} urgence ${villeData.name} (${villeData.departementCode}) — ${priceTag}`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`urgence-ville-desc-${service}-${villeSlug}`))
   const descTemplates = [
-    `Urgence ${tradeLower} à ${villeData.name} : intervention rapide, y compris le week-end. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`,
-    `Dépannage ${tradeLower} urgent à ${villeData.name} : disponible soir et week-end. ${trade.averageResponseTime}. Artisans vérifiés.`,
-    `${trade.name} d'urgence à ${villeData.name} : intervention rapide 7j/7. Professionnels référencés à proximité. Devis gratuit.`,
-    `Besoin d'un ${tradeLower} en urgence à ${villeData.name} ? Intervention rapide, soir et week-end. ${trade.averageResponseTime}.`,
-    `Urgence ${tradeLower} ${villeData.name} : artisans disponibles pour intervention immédiate. ${trade.averageResponseTime}. Devis gratuit.`,
+    `Urgence ${tradeLower} à ${villeData.name} ${priceTag} : intervention rapide 24h/24, week-end inclus. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`,
+    `Dépannage ${tradeLower} urgent à ${villeData.name} ${priceTag} : disponible nuit, soir et week-end. ${trade.averageResponseTime}. Artisans vérifiés.`,
+    `${trade.name} d'urgence à ${villeData.name} ${priceTag} : intervention rapide 7j/7. Professionnels référencés à proximité. Devis gratuit.`,
+    `Besoin d'un ${tradeLower} en urgence à ${villeData.name} ? Tarifs ${priceTag}, intervention rapide soir et week-end. ${trade.averageResponseTime}.`,
+    `Urgence ${tradeLower} ${villeData.name} ${priceTag} : artisans disponibles pour intervention immédiate 24h/24. ${trade.averageResponseTime}. Devis gratuit.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 

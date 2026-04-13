@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
@@ -245,13 +245,15 @@ export async function generateMetadata({
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
+  const priceTag = `dès ${minPrice}${trade.priceRange.unit === '€/h' ? '€/h' : '€'}`
+
   const titleHash = Math.abs(hashCode(`avis-loc-title-${service}-${ville}`))
   const titleTemplates = [
-    `Avis ${tradeLower} ${villeData.name}`,
-    `Avis ${tradeLower} à ${villeData.name} — Guide`,
-    `Avis ${tradeLower} ${villeData.name} : notes`,
-    `Avis ${tradeLower} ${villeData.name} 2026`,
-    `Avis ${tradeLower} ${villeData.name} — Comparez`,
+    `Avis ${trade.name} ${villeData.name} 2026 — Notes & Tarifs ${priceTag}`,
+    `Avis ${tradeLower} à ${villeData.name} — Comparez les pros 2026`,
+    `Avis ${tradeLower} ${villeData.name} 2026 : notes, tarifs ${priceTag}`,
+    `Avis ${trade.name} ${villeData.name} — Top artisans vérifiés 2026`,
+    `Avis ${tradeLower} ${villeData.name} 2026 — Classement & prix ${priceTag}`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
@@ -424,8 +426,6 @@ export default async function AvisServiceVillePage({
 
   const allFaqItems = [...reviewFaqItems, ...tradeFaqItems]
 
-  const faqSchema = getFAQSchema(allFaqItems)
-
   // Merge real reviews + deterministic fallback into a single Service schema
   // (avoids duplicate Service schemas that confuse Google's validator)
   const hasRealReviews = totalReviews > 0
@@ -559,7 +559,6 @@ export default async function AvisServiceVillePage({
       <JsonLd
         data={[
           breadcrumbSchema,
-          faqSchema,
           reviewSchema,
           ...(enrichedFAQSchema ? [enrichedFAQSchema] : []),
           enrichedSpeakableSchema,
