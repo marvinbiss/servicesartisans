@@ -31,6 +31,8 @@ import { getRegionPreposition, getRegionArticle } from '@/lib/geo-strings'
 import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
 import problems from '@/lib/data/problems'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 
@@ -894,6 +896,21 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* ─── CROSS-INTENT LINKS — top services in region ────── */}
+      {orderedServices.slice(0, 3).map((service) => (
+        <CrossIntentLinks
+          key={`ci-${service.slug}`}
+          service={service.slug}
+          serviceName={service.name}
+          variant="compact"
+        />
+      ))}
+
+      {/* ─── MONEY PAGE BOOST — cross-silo links to top pages ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+        <MoneyPageBoost currentService={orderedServices[0]?.slug} />
+      </div>
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">

@@ -45,6 +45,8 @@ import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
+import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
+import RelatedArticles from '@/components/seo/RelatedArticles'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
@@ -845,6 +847,17 @@ export default async function VillePage({ params }: PageProps) {
       <SeasonalLinks villeSlug={villeSlug} villeName={ville.name} />
 
       <OrphanRescueLinks currentPath={`/villes/${villeSlug}`} villeSlug={villeSlug} />
+
+      {/* ─── MONEY PAGE BOOST — cross-silo links to top pages ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <MoneyPageBoost
+          currentService={content.profile.topServiceSlugs[0]}
+          currentVille={villeSlug}
+        />
+      </div>
+
+      {/* ─── RELATED ARTICLES — guides for top service ───────── */}
+      <RelatedArticles serviceSlug={content.profile.topServiceSlugs[0] ?? 'plombier'} limit={3} />
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">
