@@ -21,10 +21,28 @@ export default function DefinirMotDePassePage() {
   const [userRole, setUserRole] = useState<string | null>(null)
 
   const tokenFromQuery = searchParams.get('token')
+  const codeFromQuery = searchParams.get('code')
 
-  // On mount: check session, parse hash fragment, or verify OTP token
+  // On mount: check session, parse hash fragment, exchange code, or verify OTP token
   useEffect(() => {
     const init = async () => {
+      // 0. Handle PKCE code parameter (from /auth/callback or direct Supabase redirect)
+      if (codeFromQuery) {
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.exchangeCodeForSession(codeFromQuery)
+        if (!sessionError && sessionData.user) {
+          setUserEmail(sessionData.user.email || null)
+          // Clean the URL to remove the code
+          window.history.replaceState(null, '', window.location.pathname)
+          setChecking(false)
+          return
+        }
+        // Code exchange failed — token may be expired
+        setTokenExpired(true)
+        setChecking(false)
+        return
+      }
+
       // 1. Check if Supabase sent tokens in the hash fragment
       //    (resetPasswordForEmail redirects with #access_token=...&type=recovery)
       if (typeof window !== 'undefined' && window.location.hash) {

@@ -123,7 +123,7 @@ export function useAuth() {
       setState((prev) => ({ ...prev, loading: true, error: null }))
 
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/definir-mot-de-passe`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/definir-mot-de-passe`,
       })
 
       if (error) {

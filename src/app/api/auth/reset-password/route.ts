@@ -26,15 +26,15 @@ export async function POST(request: Request) {
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de demandes de réinitialisation, veuillez réessayer plus tard' },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 
     if (!supabaseUrl || !supabaseServiceKey) {
-      return NextResponse.json(
-        { error: 'Configuration serveur manquante' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Configuration serveur manquante' }, { status: 500 })
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
@@ -43,10 +43,7 @@ export async function POST(request: Request) {
     // Validate input
     const validation = resetSchema.safeParse(body)
     if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Email invalide' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
     }
 
     const { email } = validation.data
@@ -54,7 +51,7 @@ export async function POST(request: Request) {
 
     // Send password reset email
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${siteUrl}/definir-mot-de-passe`,
+      redirectTo: `${siteUrl}/auth/callback?next=/definir-mot-de-passe`,
     })
 
     if (error) {
@@ -69,9 +66,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Reset password API error', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
