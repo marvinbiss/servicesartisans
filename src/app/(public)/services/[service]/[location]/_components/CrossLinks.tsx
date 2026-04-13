@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { slugify } from '@/lib/utils'
 import { getDepartementByCode, getRegionSlugByName } from '@/lib/data/france'
+import { getDeptPreposition, getRegionPreposition } from '@/lib/geo-strings'
 import type { LocationContent } from '@/lib/seo/location-content'
 import type { CommuneData } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType } from '@/types'
@@ -48,7 +49,9 @@ export default function CrossLinks({
       {/* Voir aussi */}
       <section className="py-12 bg-white border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 border-l-4 border-primary-400 pl-4">Voir aussi</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 border-l-4 border-primary-400 pl-4">
+            Voir aussi
+          </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Autres services dans cette ville */}
@@ -72,7 +75,15 @@ export default function CrossLinks({
                 className="inline-flex items-center gap-1 mt-4 text-primary-400 hover:text-primary-600 text-sm font-medium group"
               >
                 Tous les artisans à {location.name}
-                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                <svg
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
             </div>
 
@@ -97,30 +108,107 @@ export default function CrossLinks({
                 className="inline-flex items-center gap-1 mt-4 text-primary-400 hover:text-primary-600 text-sm font-medium group"
               >
                 Voir toutes les villes
-                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                <svg
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
             </div>
 
             {/* Navigation régionale */}
             <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6">
-              <h3 className="font-heading font-semibold text-charcoal-900 mb-4">Explorer par zone</h3>
+              <h3 className="font-heading font-semibold text-charcoal-900 mb-4">
+                Explorer par zone
+              </h3>
               <div className="space-y-2">
                 {location.region_name && (
                   <Link
-                    href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}`}
+                    href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}/${serviceSlug}`}
                     className="flex items-center gap-2 px-4 py-3 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
-                    <svg className="w-4 h-4 shrink-0 text-charcoal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    Artisans en {location.region_name}
+                    <svg
+                      className="w-4 h-4 shrink-0 text-charcoal-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    {service.name} {getRegionPreposition(location.region_name)}
                   </Link>
                 )}
-                {location.department_name && location.department_code && (
+                {location.department_name &&
+                  location.department_code &&
+                  (() => {
+                    const dept = getDepartementByCode(location.department_code ?? '')
+                    const deptSlug = dept?.slug || slugify(location.department_name ?? '')
+                    return (
+                      <Link
+                        href={`/departements/${deptSlug}/${serviceSlug}`}
+                        className="flex items-center gap-2 px-4 py-3 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                      >
+                        <svg
+                          className="w-4 h-4 shrink-0 text-charcoal-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        {service.name}{' '}
+                        {dept ? getDeptPreposition(dept.name) : `dans ${location.department_name}`}
+                      </Link>
+                    )
+                  })()}
+                {location.region_name && (
                   <Link
-                    href={`/departements/${getDepartementByCode(location.department_code)?.slug || slugify(location.department_name)}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                    href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}`}
+                    className="flex items-center gap-2 px-4 py-3 bg-sand-50 hover:bg-primary-50 text-charcoal-600 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
-                    <svg className="w-4 h-4 shrink-0 text-charcoal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    Artisans dans {location.department_name} ({location.department_code})
+                    <svg
+                      className="w-4 h-4 shrink-0 text-charcoal-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    Tous les artisans {getRegionPreposition(location.region_name)}
                   </Link>
                 )}
               </div>
@@ -171,14 +259,18 @@ export default function CrossLinks({
                     Services complémentaires à {location.name}
                   </h3>
                   <p className="text-sm text-charcoal-500 mb-4">
-                    Besoin d'un autre artisan à {location.name} ? Ces services sont souvent demandés avec {service.name.toLowerCase()}.
+                    Besoin d'un autre artisan à {location.name} ? Ces services sont souvent demandés
+                    avec {service.name.toLowerCase()}.
                   </p>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {complementaryServices.map((slug) => {
                       const t = tradeContent[slug]
                       if (!t) return null
                       return (
-                        <div key={slug} className="bg-sand-50 rounded-xl border border-sand-200 p-4 space-y-2">
+                        <div
+                          key={slug}
+                          className="bg-sand-50 rounded-xl border border-sand-200 p-4 space-y-2"
+                        >
                           <div className="font-medium text-charcoal-900 text-sm">{t.name}</div>
                           <div className="flex flex-wrap gap-1.5">
                             <Link
@@ -211,15 +303,15 @@ export default function CrossLinks({
             {/* GSC boost links — pages with promising positions */}
             {(() => {
               const currentPath = `/services/${serviceSlug}/${locationSlug}`
-              const boostLinks = GSC_BOOST_PAGES
-                .filter(path => path !== currentPath)
-                .slice(0, 1)
+              const boostLinks = GSC_BOOST_PAGES.filter((path) => path !== currentPath).slice(0, 1)
 
               if (boostLinks.length === 0) return null
 
               return (
                 <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6 md:col-span-2 lg:col-span-3">
-                  <h3 className="font-heading font-semibold text-charcoal-900 mb-4">À découvrir aussi</h3>
+                  <h3 className="font-heading font-semibold text-charcoal-900 mb-4">
+                    À découvrir aussi
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {boostLinks.map((path) => {
                       const parts = path.split('/')
@@ -249,20 +341,28 @@ export default function CrossLinks({
       <section className="py-6 bg-sand-50 border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs text-charcoal-400 leading-relaxed max-w-3xl">
-            Les {service.name.toLowerCase()}s référencés à {location.name} sont des entreprises immatriculées, vérifiées via l'API SIRENE de l'INSEE.
-            Les tarifs affichés sont indicatifs et basés sur les moyennes du marché en {location.region_name || 'France'} pour un {service.name.toLowerCase()} à {location.name} ({location.department_code}).
-            ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne percevons aucune commission.
+            Les {service.name.toLowerCase()}s référencés à {location.name} sont des entreprises
+            immatriculées, vérifiées via l'API SIRENE de l'INSEE. Les tarifs affichés sont
+            indicatifs et basés sur les moyennes du marché en {location.region_name || 'France'}{' '}
+            pour un {service.name.toLowerCase()} à {location.name} ({location.department_code}).
+            ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne
+            percevons aucune commission.
           </p>
-          {locationContent?.dataDriven?.dataSources && locationContent.dataDriven.dataSources.length > 0 && (
-            <p className="text-xs text-charcoal-400 mt-2 max-w-3xl">
-              <strong className="text-charcoal-500">Sources des données locales :</strong>{' '}
-              {locationContent.dataDriven.dataSources.join(' · ')}.
-              Données mises à jour périodiquement. Dernière actualisation{' '}
-              {communeData?.enriched_at
-                ? new Date(communeData.enriched_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
-                : 'récente'}.
-            </p>
-          )}
+          {locationContent?.dataDriven?.dataSources &&
+            locationContent.dataDriven.dataSources.length > 0 && (
+              <p className="text-xs text-charcoal-400 mt-2 max-w-3xl">
+                <strong className="text-charcoal-500">Sources des données locales :</strong>{' '}
+                {locationContent.dataDriven.dataSources.join(' · ')}. Données mises à jour
+                périodiquement. Dernière actualisation{' '}
+                {communeData?.enriched_at
+                  ? new Date(communeData.enriched_at).toLocaleDateString('fr-FR', {
+                      month: 'long',
+                      year: 'numeric',
+                    })
+                  : 'récente'}
+                .
+              </p>
+            )}
         </div>
       </section>
 
