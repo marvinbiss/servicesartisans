@@ -48,7 +48,6 @@ import {
   getNearbyCities,
 } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
-import { getFAQSchema } from '@/lib/seo/jsonld'
 import {
   generateFAQSchema,
   generateSpeakableSchema,
@@ -671,8 +670,6 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     }
   }
 
-  const faqSchema = combinedFaq.length > 0 ? getFAQSchema(combinedFaq) : null
-
   // Task 2: ItemList JSON-LD for provider listings
   const itemListSchema =
     providers.length > 0
@@ -698,7 +695,6 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
   const jsonLdSchemas: Record<string, unknown>[] = [
     ...baseSchemas,
-    ...(faqSchema ? [faqSchema] : []),
     ...(itemListSchema ? [itemListSchema] : []),
   ]
 

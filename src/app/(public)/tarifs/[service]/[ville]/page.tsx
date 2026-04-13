@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
@@ -291,13 +291,6 @@ export default async function TarifsServiceVillePage({
     { name: villeData.name, url: `/tarifs/${service}/${villeSlug}` },
   ])
 
-  const faqSchema = getFAQSchema(
-    trade.faq.slice(0, 5).map((f) => ({
-      question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
-      answer: f.a,
-    }))
-  )
-
   const author = getDefaultAuthor()
 
   const dbOfferCount = commune?.nb_entreprises_artisanales
@@ -403,7 +396,6 @@ export default async function TarifsServiceVillePage({
       <JsonLd
         data={[
           breadcrumbSchema,
-          faqSchema,
           serviceSchema,
           pricingItemListSchema,
           speakableSchema,

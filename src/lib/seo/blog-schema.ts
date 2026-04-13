@@ -5,23 +5,30 @@ import { getAuthorByName } from '@/lib/data/authors'
  * Generate the Article + FAQ JSON-LD schemas for a blog post.
  * Returns an array of schema objects to be rendered via the JsonLd component.
  */
-export function getBlogArticleSchema(article: {
-  title: string
-  excerpt: string
-  content: string[]
-  author: string
-  date: string
-  updatedDate?: string
-  category: string
-  tags: string[]
-}, slug: string, imageUrl?: string): Record<string, unknown>[] {
+export function getBlogArticleSchema(
+  article: {
+    title: string
+    excerpt: string
+    content: string[]
+    author: string
+    date: string
+    updatedDate?: string
+    category: string
+    tags: string[]
+  },
+  slug: string,
+  imageUrl?: string
+): Record<string, unknown>[] {
   const schemas: Record<string, unknown>[] = []
 
   // Article schema — image always present (Google requires it for rich results)
   const articleImage = imageUrl || `${SITE_URL}/opengraph-image`
+  const isRecent =
+    article.date && Date.now() - new Date(article.date).getTime() < 48 * 60 * 60 * 1000
+  const articleType = isRecent ? 'NewsArticle' : 'Article'
   schemas.push({
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': articleType,
     headline: article.title,
     description: article.excerpt,
     image: articleImage,
@@ -49,7 +56,7 @@ export function getBlogArticleSchema(article: {
             '@id': `${SITE_URL}#organization`,
             name: 'ServicesArtisans',
           },
-          hasCredential: authorProfile.certifications.map(cert => ({
+          hasCredential: authorProfile.certifications.map((cert) => ({
             '@type': 'EducationalOccupationalCredential' as const,
             credentialCategory: 'certification',
             name: cert,
@@ -87,7 +94,7 @@ export function getBlogArticleSchema(article: {
     inLanguage: 'fr-FR',
     about: [
       { '@type': 'Thing', name: article.category },
-      ...article.tags.slice(0, 5).map(tag => ({ '@type': 'Thing', name: tag })),
+      ...article.tags.slice(0, 5).map((tag) => ({ '@type': 'Thing', name: tag })),
     ],
   })
 

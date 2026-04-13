@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
@@ -286,13 +286,6 @@ export default async function DevisServiceLocationPage({
     { name: `Devis ${tradeLower}`, url: `/devis/${service}` },
     { name: villeData.name, url: `/devis/${service}/${location}` },
   ])
-
-  const faqSchema = getFAQSchema(
-    trade.faq.slice(0, 5).map((f) => ({
-      question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
-      answer: f.a,
-    }))
-  )
 
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -585,7 +578,6 @@ export default async function DevisServiceLocationPage({
       <JsonLd
         data={[
           breadcrumbSchema,
-          faqSchema,
           serviceSchema,
           howToSchema,
           ...(enrichedFaqSchema ? [enrichedFaqSchema] : []),
