@@ -83,14 +83,31 @@ const verificationSteps = [
 export default async function NotreProcessusDeVerificationPage() {
   const cmsPage = await getPageContent('notre-processus-de-verification', 'static')
 
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'Comment ServicesArtisans vérifie les artisans',
+    description:
+      "Processus de vérification en 5 étapes : contrôle SIRET via l'API SIRENE, assurance RC professionnelle, garantie décennale, suivi continu et traitement des signalements.",
+    step: verificationSteps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.title,
+      text: step.description,
+    })),
+  }
+
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-sand-50">
         <JsonLd
-          data={getBreadcrumbSchema([
-            { name: 'Accueil', url: '/' },
-            { name: 'Notre processus de vérification', url: '/notre-processus-de-verification' },
-          ])}
+          data={[
+            getBreadcrumbSchema([
+              { name: 'Accueil', url: '/' },
+              { name: 'Notre processus de vérification', url: '/notre-processus-de-verification' },
+            ]),
+            howToSchema,
+          ]}
         />
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -116,7 +133,7 @@ export default async function NotreProcessusDeVerificationPage() {
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, howToSchema]} />
 
       {/* Hero */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
