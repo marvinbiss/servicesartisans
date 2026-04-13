@@ -188,6 +188,17 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       return links.length > 0 ? { sameAs: links } : {}
     })(),
 
+    // AggregateRating — only when real reviews exist
+    ...(artisan.review_count > 0 && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: artisan.average_rating.toFixed(1),
+        reviewCount: String(artisan.review_count),
+        bestRating: '5',
+        worstRating: '1',
+      },
+    }),
+
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
     priceRange: '€€',
