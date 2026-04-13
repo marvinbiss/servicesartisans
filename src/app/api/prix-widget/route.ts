@@ -47,7 +47,10 @@ export async function GET(request: NextRequest) {
 
   // --- Validate service ---
   if (!serviceSlug) {
-    return errorResponse('Paramètre "service" manquant. Exemple : ?service=plombier&ville=paris', format)
+    return errorResponse(
+      'Paramètre "service" manquant. Exemple : ?service=plombier&ville=paris',
+      format
+    )
   }
 
   const trade = getTradeContent(serviceSlug)
@@ -55,25 +58,28 @@ export async function GET(request: NextRequest) {
     const availableSlugs = Object.keys(tradeContent).slice(0, 10).join(', ')
     return errorResponse(
       `Service "${escapeHtml(serviceSlug)}" non trouvé. Services disponibles : ${availableSlugs}…`,
-      format,
+      format
     )
   }
 
   // --- Validate ville ---
   if (!villeSlug) {
-    return errorResponse('Paramètre "ville" manquant. Exemple : ?service=plombier&ville=paris', format)
+    return errorResponse(
+      'Paramètre "ville" manquant. Exemple : ?service=plombier&ville=paris',
+      format
+    )
   }
 
   const ville = getVilleBySlug(villeSlug)
   if (!ville) {
     return errorResponse(
       `Ville "${escapeHtml(villeSlug)}" non trouvée. Utilisez le slug de la ville (ex: paris, lyon, marseille).`,
-      format,
+      format
     )
   }
 
   // --- Compute prices ---
-  const multiplier = getRegionalMultiplier(ville.region)
+  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
 
   // Use barometre data if available for richer data, fallback to trade priceRange
   const barometreService = servicePricings.find((s) => s.service === serviceSlug)
@@ -123,7 +129,7 @@ export async function GET(request: NextRequest) {
       },
       {
         headers: { ...CORS_HEADERS, ...CACHE_HEADERS },
-      },
+      }
     )
   }
 
@@ -154,10 +160,7 @@ export async function GET(request: NextRequest) {
 
 function errorResponse(message: string, format?: string | null) {
   if (format === 'json') {
-    return NextResponse.json(
-      { error: message },
-      { status: 400, headers: CORS_HEADERS },
-    )
+    return NextResponse.json({ error: message }, { status: 400, headers: CORS_HEADERS })
   }
 
   const html = `<!DOCTYPE html>
@@ -196,16 +199,8 @@ interface WidgetData {
 }
 
 function buildWidgetHtml(data: WidgetData): string {
-  const {
-    serviceName,
-    villeName,
-    region,
-    priceMin,
-    priceMax,
-    unit,
-    interventions,
-    sourceUrl,
-  } = data
+  const { serviceName, villeName, region, priceMin, priceMax, unit, interventions, sourceUrl } =
+    data
 
   const safeServiceName = escapeHtml(serviceName)
   const safeVilleName = escapeHtml(villeName)
@@ -222,7 +217,7 @@ function buildWidgetHtml(data: WidgetData): string {
       <tr>
         <td style="padding:6px 8px;font-size:13px;color:#374151;border-bottom:1px solid #f3f4f6">${escapeHtml(i.name)}</td>
         <td style="padding:6px 8px;font-size:13px;color:#1d4ed8;font-weight:600;text-align:right;white-space:nowrap;border-bottom:1px solid #f3f4f6">${i.prixMin} – ${i.prixMax} €<span style="font-weight:400;color:#6b7280;font-size:11px">/${escapeHtml(i.unite)}</span></td>
-      </tr>`,
+      </tr>`
       )
       .join('')
   }

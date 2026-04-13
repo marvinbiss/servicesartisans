@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const trade = getTradeContent(serviceSlug)
   if (!dept || !trade) notFound()
 
-  const multiplier = getRegionalMultiplier(dept.region)
+  const multiplier = getRegionalMultiplier(dept.region, dept.code)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
@@ -128,7 +128,7 @@ export default async function DeptServicePage({ params }: PageProps) {
   const content = generateDepartementContent(dept)
   const villesDuDepartement = getVillesByDepartement(dept.code)
   const regionSlug = getRegionSlugByName(dept.region)
-  const multiplier = getRegionalMultiplier(dept.region)
+  const multiplier = getRegionalMultiplier(dept.region, dept.code)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
   const serviceMeta = services.find((s) => s.slug === serviceSlug)

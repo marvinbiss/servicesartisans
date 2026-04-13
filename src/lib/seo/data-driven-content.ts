@@ -309,7 +309,7 @@ export function generateDataDrivenContent(
 
     // Renovation context linked to property prices
     if (trade && commune.prix_m2_moyen) {
-      const multiplier = getRegionalMultiplier(commune.region_name || '')
+      const multiplier = getRegionalMultiplier(commune.region_name || '', commune.departement_code)
       const avgCost = Math.round(((trade.priceRange.min + trade.priceRange.max) / 2) * multiplier)
       if (commune.prix_m2_moyen >= 3000) {
         parts.push(
@@ -698,7 +698,10 @@ export function generateDataDrivenContent(
   }
 
   // Region-specific pricing context
-  const regionMultiplier = getRegionalMultiplier(commune.region_name || '')
+  const regionMultiplier = getRegionalMultiplier(
+    commune.region_name || '',
+    commune.departement_code
+  )
   if (regionMultiplier >= 1.2) {
     demandeLocaleParts.push(
       `Les tarifs des ${svc}s ${getRegionPreposition(commune.region_name ?? '')} sont en moyenne 20 à 25 % supérieurs au reste de la France, en raison du coût de la vie et de la forte demande. Comparer plusieurs devis reste le meilleur moyen d'obtenir un tarif compétitif à ${commune.name}.`
@@ -795,7 +798,7 @@ export function generateDataDrivenContent(
 
   // Q1: Cost with real data
   if (trade) {
-    const multiplier = getRegionalMultiplier(commune.region_name || '')
+    const multiplier = getRegionalMultiplier(commune.region_name || '', commune.departement_code)
     const minPrice = Math.round(trade.priceRange.min * multiplier)
     const maxPrice = Math.round(trade.priceRange.max * multiplier)
 

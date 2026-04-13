@@ -63,7 +63,7 @@ export async function generateMetadata({
 
   const { ville, quartierName } = quartierData
   const tradeLower = trade.name.toLowerCase()
-  const multiplier = getRegionalMultiplier(ville.region)
+  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
   const unit = trade.priceRange.unit
@@ -129,7 +129,7 @@ export default async function DevisQuartierPage({
 
   const { ville, quartierName } = quartierData
   const quartierContent = generateQuartierContent(ville, quartierName, service)
-  const multiplier = getRegionalMultiplier(ville.region)
+  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
   const tradeLower = trade.name.toLowerCase()

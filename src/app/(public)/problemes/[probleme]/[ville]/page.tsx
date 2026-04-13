@@ -457,7 +457,7 @@ export async function generateMetadata({
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)
 
@@ -512,7 +512,7 @@ export default async function ProblemeVillePage({
   const gradient = urgencyGradients[problem.urgencyLevel]
 
   const commune = await getCommuneBySlug(ville)
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)
 

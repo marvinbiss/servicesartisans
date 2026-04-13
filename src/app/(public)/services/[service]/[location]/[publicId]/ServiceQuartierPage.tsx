@@ -98,7 +98,7 @@ export default async function ServiceQuartierPage({
   // 4. Generate content
   const trade = getTradeContent(serviceSlug)
   const quartierContent = generateQuartierContent(ville, quartierName, serviceSlug)
-  const pricingMultiplier = getRegionalMultiplier(ville.region)
+  const pricingMultiplier = getRegionalMultiplier(ville.region, ville.departementCode)
   const svcLower = service.name.toLowerCase()
 
   // 5. JSON-LD schemas

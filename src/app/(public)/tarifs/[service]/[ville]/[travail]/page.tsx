@@ -18,6 +18,7 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
 import { getServiceImageForContext } from '@/lib/data/images'
+import { getRegionalMultiplier } from '@/lib/seo/location-content'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -49,25 +50,7 @@ export const revalidate = 86400 // ISR 24h
 // Helpers
 // ---------------------------------------------------------------------------
 
-function getRegionalMultiplier(region: string): number {
-  const multipliers: Record<string, number> = {
-    'Ile-de-France': 1.25,
-    'Île-de-France': 1.25,
-    "Provence-Alpes-Côte d'Azur": 1.1,
-    'Auvergne-Rhône-Alpes': 1.1,
-    Occitanie: 1.05,
-    'Nouvelle-Aquitaine': 1.0,
-    'Hauts-de-France': 0.95,
-    'Grand Est': 0.95,
-    Bretagne: 1.0,
-    'Pays de la Loire': 1.0,
-    Normandie: 0.95,
-    'Centre-Val de Loire': 0.95,
-    'Bourgogne-Franche-Comté': 0.95,
-    Corse: 1.1,
-  }
-  return multipliers[region] ?? 1.0
-}
+// getRegionalMultiplier imported from '@/lib/seo/location-content'
 
 function formatNumber(n: number): string {
   return n.toLocaleString('fr-FR')
@@ -121,7 +104,7 @@ export async function generateMetadata({
   const currentTask = tasks.find((t) => t.slug === travail)
   if (!currentTask) notFound()
 
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
 
   const taskLower = currentTask.name.toLowerCase()
@@ -187,7 +170,7 @@ export default async function TarifsServiceTravailVillePage({
     // Graceful fallback — page works without commune data
   }
 
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
   const adjustedPriceText = applyMultiplier(currentTask.priceText, multiplier)
   const tradeLower = trade.name.toLowerCase()
@@ -603,7 +586,7 @@ export default async function TarifsServiceTravailVillePage({
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
               {relatedCities.map((v) => {
-                const m = getRegionalMultiplier(v.region)
+                const m = getRegionalMultiplier(v.region, v.departementCode)
                 const range = extractPriceRange(currentTask.priceText, m)
                 return (
                   <Link

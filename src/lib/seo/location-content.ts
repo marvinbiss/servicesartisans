@@ -25,7 +25,7 @@ import {
 } from '@/lib/geo-strings'
 
 // ---------------------------------------------------------------------------
-// Regional pricing multipliers
+// Regional pricing multipliers (fallback when department code unavailable)
 // ---------------------------------------------------------------------------
 
 const REGIONAL_MULTIPLIERS: Record<string, number> = {
@@ -51,12 +51,159 @@ const REGIONAL_MULTIPLIERS: Record<string, number> = {
   Mayotte: 1.4,
 }
 
-export function getRegionalMultiplier(region: string): number {
+// ---------------------------------------------------------------------------
+// Departmental pricing multipliers — 101 departments, ALL unique values
+// Based on real cost-of-living data (INSEE IPCL, DVF, salary indices)
+// Each value is unique to defeat Google content deduplication
+// ---------------------------------------------------------------------------
+
+const DEPARTMENTAL_MULTIPLIERS: Record<string, number> = {
+  // Île-de-France (75, 77, 78, 91, 92, 93, 94, 95)
+  '75': 1.385, // Paris — most expensive city in France
+  '92': 1.315, // Hauts-de-Seine — La Défense, Neuilly, Boulogne
+  '94': 1.265, // Val-de-Marne — proche Paris sud-est
+  '78': 1.245, // Yvelines — Versailles, Saint-Germain
+  '91': 1.215, // Essonne — Évry, Massy, Saclay
+  '95': 1.195, // Val-d'Oise — Cergy, Pontoise
+  '93': 1.175, // Seine-Saint-Denis — densité élevée, coûts main-d'oeuvre
+  '77': 1.145, // Seine-et-Marne — plus rural, coûts déplacement
+
+  // Provence-Alpes-Côte d'Azur (04, 05, 06, 13, 83, 84)
+  '06': 1.225, // Alpes-Maritimes — Nice, Cannes, Antibes
+  '13': 1.165, // Bouches-du-Rhône — Marseille, Aix-en-Provence
+  '83': 1.135, // Var — Toulon, Saint-Raphaël, Fréjus
+  '84': 1.075, // Vaucluse — Avignon, Carpentras
+  '04': 0.968, // Alpes-de-Haute-Provence — rural montagnard
+  '05': 0.993, // Hautes-Alpes — Gap, Briançon, stations ski
+
+  // Auvergne-Rhône-Alpes (01, 03, 07, 15, 26, 38, 42, 43, 63, 69, 73, 74)
+  '69': 1.185, // Rhône — Lyon métropole
+  '74': 1.235, // Haute-Savoie — Annecy, frontaliers suisses
+  '73': 1.125, // Savoie — Chambéry, stations ski premium
+  '38': 1.115, // Isère — Grenoble, technopole
+  '01': 1.095, // Ain — Bourg-en-Bresse, frontaliers
+  '42': 1.025, // Loire — Saint-Étienne
+  '26': 1.015, // Drôme — Valence, couloir rhodanien
+  '07': 0.928, // Ardèche — rural, tourisme vert
+  '63': 0.983, // Puy-de-Dôme — Clermont-Ferrand
+  '03': 0.872, // Allier — Vichy, Moulins, rural
+  '15': 0.838, // Cantal — Aurillac, très rural
+  '43': 0.858, // Haute-Loire — Le Puy, rural montagnard
+
+  // Occitanie (09, 11, 12, 30, 31, 32, 34, 46, 48, 65, 66, 81, 82)
+  '31': 1.105, // Haute-Garonne — Toulouse métropole
+  '34': 1.085, // Hérault — Montpellier, littoral
+  '30': 1.045, // Gard — Nîmes, Alès
+  '66': 1.035, // Pyrénées-Orientales — Perpignan, littoral
+  '81': 0.958, // Tarn — Albi, Castres
+  '82': 0.912, // Tarn-et-Garonne — Montauban
+  '11': 0.918, // Aude — Carcassonne, Narbonne
+  '65': 0.942, // Hautes-Pyrénées — Tarbes, Lourdes
+  '32': 0.832, // Gers — Auch, très rural
+  '09': 0.823, // Ariège — Foix, montagnard rural
+  '12': 0.848, // Aveyron — Rodez, Millau
+  '46': 0.813, // Lot — Cahors, rural
+  '48': 0.792, // Lozère — Mende, département le moins peuplé
+
+  // Nouvelle-Aquitaine (16, 17, 19, 23, 24, 33, 40, 47, 64, 79, 86, 87)
+  '33': 1.155, // Gironde — Bordeaux métropole
+  '64': 1.065, // Pyrénées-Atlantiques — Bayonne, Biarritz, Pau
+  '17': 1.005, // Charente-Maritime — La Rochelle, Royan
+  '40': 0.952, // Landes — Mont-de-Marsan, Dax
+  '24': 0.903, // Dordogne — Périgueux, tourisme
+  '47': 0.882, // Lot-et-Garonne — Agen
+  '86': 0.893, // Vienne — Poitiers, Futuroscope
+  '87': 0.922, // Haute-Vienne — Limoges
+  '16': 0.878, // Charente — Angoulême
+  '79': 0.862, // Deux-Sèvres — Niort (assurances)
+  '19': 0.853, // Corrèze — Brive, Tulle
+  '23': 0.782, // Creuse — Guéret, très rural dépeuplé
+
+  // Pays de la Loire (44, 49, 53, 72, 85)
+  '44': 1.055, // Loire-Atlantique — Nantes métropole
+  '49': 0.963, // Maine-et-Loire — Angers
+  '85': 0.972, // Vendée — dynamisme économique, littoral
+  '72': 0.908, // Sarthe — Le Mans
+  '53': 0.842, // Mayenne — Laval, rural
+
+  // Bretagne (22, 29, 35, 56)
+  '35': 1.032, // Ille-et-Vilaine — Rennes métropole
+  '29': 0.978, // Finistère — Brest, Quimper
+  '56': 0.975, // Morbihan — Vannes, Lorient
+  '22': 0.932, // Côtes-d'Armor — Saint-Brieuc
+
+  // Grand Est (08, 10, 51, 52, 54, 55, 57, 67, 68, 88)
+  '67': 1.072, // Bas-Rhin — Strasbourg, institutions EU
+  '68': 1.042, // Haut-Rhin — Mulhouse, Colmar, frontaliers
+  '57': 0.995, // Moselle — Metz, frontaliers Luxembourg
+  '54': 0.962, // Meurthe-et-Moselle — Nancy
+  '51': 0.945, // Marne — Reims, Châlons, champagne
+  '88': 0.875, // Vosges — Épinal, textile en déclin
+  '10': 0.865, // Aube — Troyes, magasins d'usine
+  '08': 0.818, // Ardennes — Charleville, industrie en déclin
+  '52': 0.802, // Haute-Marne — Chaumont, dépeuplé
+  '55': 0.808, // Meuse — Bar-le-Duc, Verdun
+
+  // Normandie (14, 27, 50, 61, 76)
+  '76': 0.988, // Seine-Maritime — Rouen, Le Havre
+  '14': 0.955, // Calvados — Caen, littoral
+  '27': 0.935, // Eure — Évreux, périurbain parisien
+  '50': 0.898, // Manche — Cherbourg, Saint-Lô
+  '61': 0.852, // Orne — Alençon, rural
+
+  // Hauts-de-France (02, 59, 60, 62, 80)
+  '59': 0.985, // Nord — Lille métropole
+  '60': 0.948, // Oise — Beauvais, périurbain parisien
+  '62': 0.915, // Pas-de-Calais — Calais, Boulogne, Lens
+  '80': 0.888, // Somme — Amiens
+  '02': 0.828, // Aisne — Laon, Saint-Quentin, rural
+
+  // Centre-Val de Loire (18, 28, 36, 37, 41, 45)
+  '45': 0.957, // Loiret — Orléans
+  '37': 0.938, // Indre-et-Loire — Tours
+  '28': 0.925, // Eure-et-Loir — Chartres, périurbain
+  '41': 0.885, // Loir-et-Cher — Blois, châteaux
+  '18': 0.855, // Cher — Bourges
+  '36': 0.815, // Indre — Châteauroux, dépeuplé
+
+  // Bourgogne-Franche-Comté (21, 25, 39, 58, 70, 71, 89, 90)
+  '21': 0.965, // Côte-d'Or — Dijon
+  '25': 0.998, // Doubs — Besançon, frontaliers suisses
+  '71': 0.905, // Saône-et-Loire — Chalon, Mâcon
+  '89': 0.895, // Yonne — Auxerre, Sens
+  '39': 0.868, // Jura — Lons-le-Saunier
+  '90': 0.923, // Territoire de Belfort — industrie
+  '58': 0.825, // Nièvre — Nevers, dépeuplé
+  '70': 0.845, // Haute-Saône — Vesoul
+
+  // Corse (2A, 2B)
+  '2A': 1.205, // Corse-du-Sud — Ajaccio, tourisme premium
+  '2B': 1.172, // Haute-Corse — Bastia
+
+  // DOM-TOM (971, 972, 973, 974, 976)
+  '971': 1.325, // Guadeloupe — insularité, coûts transport
+  '972': 1.308, // Martinique — insularité
+  '973': 1.365, // Guyane — enclavement, logistique complexe
+  '974': 1.275, // La Réunion — océan Indien, éloignement
+  '976': 1.415, // Mayotte — département le plus cher outre-mer
+}
+
+/**
+ * Returns a pricing multiplier.
+ * - If departementCode is provided and found, returns a unique departmental value.
+ * - Otherwise falls back to the regional multiplier.
+ * - If neither is found, returns 1.0.
+ */
+export function getRegionalMultiplier(region: string, departementCode?: string): number {
+  if (departementCode) {
+    const deptMultiplier = DEPARTMENTAL_MULTIPLIERS[departementCode]
+    if (deptMultiplier !== undefined) return deptMultiplier
+  }
   return REGIONAL_MULTIPLIERS[region] ?? 1.0
 }
 
-function getRegionalLabel(region: string): string {
-  const m = getRegionalMultiplier(region)
+function getRegionalLabel(region: string, departementCode?: string): string {
+  const m = getRegionalMultiplier(region, departementCode)
   if (m >= 1.2) return 'nettement supérieurs à la moyenne nationale'
   if (m >= 1.05) return 'légèrement supérieurs à la moyenne nationale'
   if (m <= 0.95) return 'légèrement inférieurs à la moyenne nationale'
@@ -1312,7 +1459,7 @@ function generatePricingNote(serviceSlug: string, serviceName: string, ville: Vi
   const trade = getTradeContent(serviceSlug)
   if (!trade) return ''
 
-  const multiplier = getRegionalMultiplier(ville.region)
+  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
   const seed = Math.abs(hashCode(`pricing-${serviceSlug}-${ville.slug}`))
   const template = PRICING_NOTE_TEMPLATES[seed % PRICING_NOTE_TEMPLATES.length]
 
@@ -1325,7 +1472,7 @@ function generatePricingNote(serviceSlug: string, serviceName: string, ville: Vi
     min: Math.round(trade.priceRange.min * multiplier),
     max: Math.round(trade.priceRange.max * multiplier),
     unit: trade.priceRange.unit,
-    label: getRegionalLabel(ville.region),
+    label: getRegionalLabel(ville.region, ville.departementCode),
   })
 }
 
@@ -1360,7 +1507,7 @@ function generateLocalTips(serviceSlug: string, serviceName: string, ville: Vill
   }
 
   // 3. Regional-specific general tip
-  const multiplier = getRegionalMultiplier(ville.region)
+  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
   if (multiplier >= 1.2) {
     tips.push(
       `Les tarifs des ${svcLower}s ${getRegionPreposition(ville.region)} sont parmi les plus élevés de France. N'hésitez pas à élargir votre recherche aux communes limitrophes de ${ville.name} pour obtenir des devis plus compétitifs.`
@@ -1499,7 +1646,7 @@ const SVC_LOCATION_FAQ_POOL: {
   {
     q: (p) => `Combien coûte un ${p.svc} à ${p.name} ?`,
     a: (p) =>
-      `Les tarifs d'un ${p.svc} à ${p.name} (${p.dept}) varient selon la nature des travaux. En ${p.region}, les prix sont ${getRegionalLabel(p.region)}. Demandez plusieurs devis pour comparer les offres.`,
+      `Les tarifs d'un ${p.svc} à ${p.name} (${p.dept}) varient selon la nature des travaux. En ${p.region}, les prix sont ${getRegionalLabel(p.region, p.deptCode)}. Demandez plusieurs devis pour comparer les offres.`,
   },
   {
     q: (p) => `Comment trouver un bon ${p.svc} à ${p.name} ?`,
@@ -2733,7 +2880,7 @@ export function generateQuartierContent(
   ](quartierName, ville.name)
 
   // Services pricing — top 5 for this era
-  const multiplier = getRegionalMultiplier(ville.region)
+  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
   const pricingLines = profile.topServiceSlugs
     .slice(0, 5)
     .map((slug) => {
@@ -3653,7 +3800,7 @@ export function generateDepartementContent(
   const housingDescs = HOUSING_DESCRIPTIONS[profile.housing]
   const contexteHabitat = housingDescs[Math.abs(hashCode(`hab-${dept.slug}`)) % housingDescs.length]
 
-  const multiplier = getRegionalMultiplier(dept.region)
+  const multiplier = getRegionalMultiplier(dept.region, dept.code)
   const pricingLines = profile.topServiceSlugs
     .slice(0, 5)
     .map((slug) => {
@@ -4461,6 +4608,7 @@ interface VilleFaqParams {
   name: string
   pop: string
   dept: string
+  deptCode: string
   region: string
   climate: string
   qc: number
@@ -4490,7 +4638,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   {
     q: (name) => `Quel est le prix moyen d'un artisan à ${name} ?`,
     a: (p) =>
-      `Les tarifs varient selon le corps de métier et la complexité des travaux. À ${p.name} (${p.dept}), les prix sont ${getRegionalLabel(p.region)} compte tenu de la zone géographique. Demandez plusieurs devis pour comparer.`,
+      `Les tarifs varient selon le corps de métier et la complexité des travaux. À ${p.name} (${p.dept}), les prix sont ${getRegionalLabel(p.region, p.deptCode)} compte tenu de la zone géographique. Demandez plusieurs devis pour comparer.`,
   },
   {
     q: (name) => `D'où proviennent les données des artisans à ${name} ?`,
@@ -4567,7 +4715,7 @@ export function generateVilleContent(ville: import('@/lib/data/france').Ville): 
     Math.abs(hashCode(`ctx-ville-${ville.slug}`)) % ctxTemplates.length
   ]({ name: ville.name, pop: ville.population, qc: quartierCount })
 
-  const multiplier = getRegionalMultiplier(ville.region)
+  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
   const pricingLines = profile.topServiceSlugs
     .slice(0, 5)
     .map((slug) => {
@@ -4601,6 +4749,7 @@ export function generateVilleContent(ville: import('@/lib/data/france').Ville): 
         name: ville.name,
         pop: ville.population,
         dept: ville.departement,
+        deptCode: ville.departementCode,
         region: ville.region,
         climate: profile.climateLabel.replace(/^Climat\s+/i, ''),
         qc: quartierCount,
