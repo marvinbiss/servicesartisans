@@ -205,12 +205,17 @@ export default async function AProposPage() {
         </section>
         {/* Notre équipe — E-E-A-T (also in CMS branch) */}
         <section className="py-16 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-heading font-bold text-charcoal-900 mb-6">Notre équipe</h2>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-heading font-bold text-charcoal-900 mb-2">Notre équipe</h2>
+            <p className="text-charcoal-600 mb-8">
+              Les experts derrière nos contenus et notre plateforme.
+            </p>
+
+            {/* Équipe éditoriale collective */}
             {(() => {
               const editorial = teamMembers[0]
               return (
-                <div className="bg-sand-50 rounded-xl shadow-sm p-8 border border-sand-200">
+                <div className="bg-sand-50 rounded-xl shadow-sm p-8 border border-sand-200 mb-8">
                   <div className="flex items-start gap-6">
                     <div className="flex-shrink-0 w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
                       <Users className="h-8 w-8 text-primary-500" />
@@ -234,6 +239,62 @@ export default async function AProposPage() {
                 </div>
               )
             })()}
+
+            {/* Auteurs individuels */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {getAllAuthors().map((author) => {
+                const initials = author.name
+                  .split(' ')
+                  .map((n) => n[0])
+                  .join('')
+                return (
+                  <Link
+                    key={author.slug}
+                    href={`/equipe/${author.slug}`}
+                    className="group bg-sand-50 rounded-xl shadow-sm p-6 border border-sand-200 hover:shadow-md hover:border-primary-300 transition-all"
+                  >
+                    <div className="flex items-center gap-4 mb-3">
+                      <div className="w-14 h-14 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-heading font-bold text-xl shrink-0">
+                        {initials}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">
+                          {author.name}
+                        </h3>
+                        <p className="text-sm text-primary-500">{author.role}</p>
+                      </div>
+                    </div>
+                    <p className="text-charcoal-600 text-sm leading-relaxed mb-3 line-clamp-2">
+                      {author.bio}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {author.expertise.slice(0, 3).map((exp) => (
+                        <span
+                          key={exp}
+                          className="text-xs bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full font-medium"
+                        >
+                          {exp}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-xs text-charcoal-400">
+                      {author.yearsExperience} ans d&apos;expérience
+                    </p>
+                  </Link>
+                )
+              })}
+            </div>
+
+            {/* Lien vers la page équipe complète */}
+            <div className="text-center mt-8">
+              <Link
+                href="/equipe"
+                className="inline-flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
+              >
+                Voir l&apos;équipe complète
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         </section>
         <GeoPageCTA variant="sticky-only" />
@@ -687,22 +748,27 @@ export default async function AProposPage() {
                 .map((n) => n[0])
                 .join('')
               return (
-                <div
+                <Link
                   key={author.slug}
-                  className="bg-white rounded-xl shadow-sm p-6 border border-sand-200"
+                  href={`/equipe/${author.slug}`}
+                  className="group bg-white rounded-xl shadow-sm p-6 border border-sand-200 hover:shadow-md hover:border-primary-300 transition-all"
                 >
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                    <div className="w-14 h-14 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-heading font-bold text-xl shrink-0">
                       {initials}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-charcoal-900">{author.name}</h3>
+                      <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">
+                        {author.name}
+                      </h3>
                       <p className="text-sm text-primary-500">{author.role}</p>
                     </div>
                   </div>
-                  <p className="text-charcoal-600 text-sm leading-relaxed mb-3">{author.bio}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-2">
-                    {author.expertise.map((exp) => (
+                  <p className="text-charcoal-600 text-sm leading-relaxed mb-3 line-clamp-2">
+                    {author.bio}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {author.expertise.slice(0, 3).map((exp) => (
                       <span
                         key={exp}
                         className="text-xs bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full font-medium"
@@ -711,22 +777,23 @@ export default async function AProposPage() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {author.certifications.map((cert) => (
-                      <span
-                        key={cert}
-                        className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium"
-                      >
-                        {cert}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-xs text-charcoal-400 mt-2">
-                    {author.yearsExperience} ans d'expérience
+                  <p className="text-xs text-charcoal-400">
+                    {author.yearsExperience} ans d&apos;expérience
                   </p>
-                </div>
+                </Link>
               )
             })}
+          </div>
+
+          {/* Lien vers la page équipe complète */}
+          <div className="text-center mt-10">
+            <Link
+              href="/equipe"
+              className="inline-flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
+            >
+              Voir l&apos;équipe complète
+              <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>
