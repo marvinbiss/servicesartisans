@@ -19,8 +19,15 @@ interface VilleHeroCTAProps {
  * Contains the interactive button + DevisBottomSheet + SocialProofBanner.
  * Keeps the parent page as a Server Component.
  */
-export default function VilleHeroCTA({ villeName, quartierName, variant = 'hero' }: VilleHeroCTAProps) {
+export default function VilleHeroCTA({
+  villeName,
+  quartierName,
+  variant = 'hero',
+}: VilleHeroCTAProps) {
   const [isDevisOpen, setIsDevisOpen] = useState(false)
+
+  // Build desktop devis link with pre-filled ville
+  const devisHref = villeName ? `/devis?ville=${encodeURIComponent(villeName)}` : '/devis'
 
   const openDevis = useCallback(() => {
     trackEvent('form_started', {
@@ -34,12 +41,12 @@ export default function VilleHeroCTA({ villeName, quartierName, variant = 'hero'
       if (devisSection) {
         devisSection.scrollIntoView({ behavior: 'smooth' })
       } else {
-        window.location.href = '/devis'
+        window.location.href = devisHref
       }
     } else {
       setIsDevisOpen(true)
     }
-  }, [villeName, quartierName, variant])
+  }, [villeName, quartierName, variant, devisHref])
 
   const closeDevis = useCallback(() => {
     setIsDevisOpen(false)
@@ -51,11 +58,7 @@ export default function VilleHeroCTA({ villeName, quartierName, variant = 'hero'
     return (
       <>
         <SocialProofBanner ville={villeName} variant="card" />
-        <DevisBottomSheet
-          isOpen={isDevisOpen}
-          onClose={closeDevis}
-          prefilledCity={villeName}
-        />
+        <DevisBottomSheet isOpen={isDevisOpen} onClose={closeDevis} prefilledCity={villeName} />
       </>
     )
   }
@@ -82,11 +85,7 @@ export default function VilleHeroCTA({ villeName, quartierName, variant = 'hero'
         <SocialProofBanner ville={villeName} variant="compact" animated={false} />
       </div>
 
-      <DevisBottomSheet
-        isOpen={isDevisOpen}
-        onClose={closeDevis}
-        prefilledCity={villeName}
-      />
+      <DevisBottomSheet isOpen={isDevisOpen} onClose={closeDevis} prefilledCity={villeName} />
     </>
   )
 }

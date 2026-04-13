@@ -4,6 +4,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Phone } from 'lucide-react'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { slugify } from '@/lib/utils'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { getClientPortrait } from '@/lib/data/images-faces'
@@ -36,6 +37,15 @@ export default function GeoPageCTA({
 }: GeoPageCTAProps) {
   const [isDevisOpen, setIsDevisOpen] = useState(false)
 
+  // Build desktop devis link with pre-filled service + ville
+  const villeSlug = ville ? slugify(ville) : ''
+  const devisHref =
+    service && villeSlug
+      ? `/devis/${service}/${villeSlug}`
+      : service
+        ? `/devis/${service}`
+        : '/devis'
+
   const handleClick = () => {
     const isDesktop = window.matchMedia('(min-width: 768px)').matches
     if (isDesktop) {
@@ -43,7 +53,7 @@ export default function GeoPageCTA({
       if (devisSection) {
         devisSection.scrollIntoView({ behavior: 'smooth' })
       } else {
-        window.location.href = '/devis'
+        window.location.href = devisHref
       }
     } else {
       setIsDevisOpen(true)

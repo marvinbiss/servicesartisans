@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ArrowRight, CheckCircle, Shield, Clock } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { slugify } from '@/lib/utils'
 
 const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), {
   ssr: false,
@@ -26,6 +27,15 @@ export default function TarifsDevisCTA({
 }: TarifsDevisCTAProps) {
   const [isOpen, setIsOpen] = useState(false)
 
+  // Build desktop devis link with pre-filled service + ville
+  const villeSlug = ville ? slugify(ville) : ''
+  const devisHref =
+    service && villeSlug
+      ? `/devis/${service}/${villeSlug}`
+      : service
+        ? `/devis/${service}`
+        : '/devis'
+
   const handleClick = () => {
     const isDesktop = window.matchMedia('(min-width: 768px)').matches
     if (isDesktop) {
@@ -33,7 +43,7 @@ export default function TarifsDevisCTA({
       if (devisSection) {
         devisSection.scrollIntoView({ behavior: 'smooth' })
       } else {
-        window.location.href = '/devis'
+        window.location.href = devisHref
       }
     } else {
       setIsOpen(true)
