@@ -28,6 +28,7 @@ import { serviceImagePool_batch1 } from './images-batch1'
 import { serviceImagePool_batch2 } from './images-batch2'
 import { serviceImagePool_batch3 } from './images-batch3'
 import { additionalCityImages } from './images-cities'
+import { generatedImagePools } from './images-generated'
 
 /** Placeholder flou générique (gris neutre) — utilisable partout */
 export const BLUR_PLACEHOLDER =
@@ -260,7 +261,12 @@ function getFullImagePool(slug: string): { src: string; alt: string }[] {
   const main = serviceImages[slug]
   const pool: { src: string; alt: string }[] = main ? [main] : []
 
-  for (const batch of [serviceImagePool_batch1, serviceImagePool_batch2, serviceImagePool_batch3]) {
+  for (const batch of [
+    serviceImagePool_batch1,
+    serviceImagePool_batch2,
+    serviceImagePool_batch3,
+    ...generatedImagePools,
+  ]) {
     const batchImages = batch[slug]
     if (batchImages) {
       for (const img of batchImages) {
