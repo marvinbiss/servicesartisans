@@ -1,4 +1,17 @@
-import { Shield, Clock, CheckCircle, Star, Search, FileText, ChevronDown } from 'lucide-react'
+'use client'
+
+import {
+  Shield,
+  Clock,
+  CheckCircle,
+  Star,
+  Search,
+  FileText,
+  ChevronDown,
+  Phone,
+} from 'lucide-react'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { trackEvent } from '@/lib/analytics/tracking'
 
 // ---------------------------------------------------------------------------
 // Sidebar de réassurance pour les pages /devis (pattern Lemonade/Wise)
@@ -17,15 +30,18 @@ interface DevisSidebarProps {
 const defaultFaq = [
   {
     question: 'Le service est-il vraiment gratuit ?',
-    answer: 'Oui, la demande de devis est 100 % gratuite et sans engagement. Vous ne payez rien pour recevoir les propositions des artisans.',
+    answer:
+      'Oui, la demande de devis est 100 % gratuite et sans engagement. Vous ne payez rien pour recevoir les propositions des artisans.',
   },
   {
     question: 'Combien de devis vais-je recevoir ?',
-    answer: "Vous recevez des devis personnalisés d'artisans disponibles dans votre zone. Le nombre dépend de la disponibilité locale.",
+    answer:
+      "Vous recevez des devis personnalisés d'artisans disponibles dans votre zone. Le nombre dépend de la disponibilité locale.",
   },
   {
     question: 'En combien de temps suis-je contacté ?',
-    answer: "Un conseiller vous rappelle rapidement. En cas d'urgence, précisez-le dans le formulaire.",
+    answer:
+      "Un conseiller vous rappelle rapidement. En cas d'urgence, précisez-le dans le formulaire.",
   },
 ]
 
@@ -75,9 +91,7 @@ function getTestimonial(serviceName?: string) {
     if (match) return match
   }
   // Deterministic pick based on service name hash
-  const hash = serviceName
-    ? serviceName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
-    : 0
+  const hash = serviceName ? serviceName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) : 0
   return testimonials[hash % testimonials.length]
 }
 
@@ -133,9 +147,7 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
         </blockquote>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-            <span className="text-xs font-bold text-primary-600">
-              {testimonial.name.charAt(0)}
-            </span>
+            <span className="text-xs font-bold text-primary-600">{testimonial.name.charAt(0)}</span>
           </div>
           <div>
             <p className="text-sm font-semibold text-charcoal-900">{testimonial.name}</p>
@@ -163,16 +175,23 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
         </div>
       </div>
 
+      {/* ─── Phone CTA ────────────────────────────────────── */}
+      <a
+        href={PHONE_TEL}
+        aria-label="Appeler ServicesArtisans"
+        onClick={() => trackEvent('phone_click', { source: 'devis_sidebar', service: serviceName })}
+        className="flex items-center justify-center gap-2.5 w-full bg-accent-500 hover:bg-accent-600 text-white rounded-xl py-3.5 px-4 font-semibold text-sm transition-colors shadow-soft"
+      >
+        <Phone className="w-5 h-5 text-white" />
+        {PHONE_NUMBER}
+      </a>
+
       {/* ─── Price Range (optional) ──────────────────────── */}
       {priceRange && (
-        <div className="bg-secondary-50 rounded-2xl border border-secondary-100 p-5 text-center">
-          <p className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-1">
-            Tarif indicatif
+        <div className="bg-secondary-50 rounded-lg border border-secondary-100 px-4 py-3 text-center">
+          <p className="text-sm font-medium text-secondary-400">
+            Budget moyen : {priceRange.min} – {priceRange.max} {priceRange.unit}
           </p>
-          <p className="text-2xl font-bold text-primary-500">
-            {priceRange.min} – {priceRange.max}
-          </p>
-          <p className="text-xs text-charcoal-500 mt-0.5">{priceRange.unit} TTC</p>
         </div>
       )}
 
@@ -183,19 +202,12 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
         </h3>
         <div className="space-y-2">
           {faq.map((item) => (
-            <details
-              key={item.question}
-              className="group border-b border-sand-100 last:border-0"
-            >
+            <details key={item.question} className="group border-b border-sand-100 last:border-0">
               <summary className="flex items-center justify-between cursor-pointer py-3 text-left [&::-webkit-details-marker]:hidden">
-                <span className="text-sm font-medium text-charcoal-800 pr-3">
-                  {item.question}
-                </span>
+                <span className="text-sm font-medium text-charcoal-800 pr-3">{item.question}</span>
                 <ChevronDown className="w-4 h-4 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform duration-200" />
               </summary>
-              <div className="pb-3 text-xs text-charcoal-500 leading-relaxed">
-                {item.answer}
-              </div>
+              <div className="pb-3 text-xs text-charcoal-500 leading-relaxed">{item.answer}</div>
             </details>
           ))}
         </div>
