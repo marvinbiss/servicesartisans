@@ -19,6 +19,13 @@ interface CalendrierSaisonnierBlockProps {
   serviceName: string
   villeName: string
   climatZone: string | null
+  joursGelAnnuels?: number | null
+  precipitationAnnuelle?: number | null
+  temperatureMoyenneHiver?: number | null
+  temperatureMoyenneEte?: number | null
+  moisTravauxExtDebut?: number | null
+  moisTravauxExtFin?: number | null
+  altitudeMoyenne?: number | null
 }
 
 // ---------------------------------------------------------------------------
@@ -27,6 +34,94 @@ interface CalendrierSaisonnierBlockProps {
 
 function getCurrentMonthIndex(): number {
   return new Date().getMonth() // 0–11
+}
+
+const MONTH_NAMES_CAL = [
+  'janvier',
+  'f\u00E9vrier',
+  'mars',
+  'avril',
+  'mai',
+  'juin',
+  'juillet',
+  'ao\u00FBt',
+  'septembre',
+  'octobre',
+  'novembre',
+  'd\u00E9cembre',
+]
+
+/** Generate city-specific weather context paragraph */
+function getCityWeatherContext(
+  villeName: string,
+  serviceName: string,
+  joursGel: number | null | undefined,
+  precipitations: number | null | undefined,
+  tempHiver: number | null | undefined,
+  tempEte: number | null | undefined,
+  moisDebut: number | null | undefined,
+  moisFin: number | null | undefined,
+  altitude: number | null | undefined
+): string | null {
+  const parts: string[] = []
+  const s = serviceName.toLowerCase()
+
+  if (joursGel != null && joursGel > 0) {
+    if (joursGel > 60) {
+      parts.push(
+        `les temp\u00E9ratures descendent sous 0\u00A0\u00B0C en moyenne ${joursGel} jours par an, rendant les interventions ext\u00E9rieures de ${s} complexes en hiver`
+      )
+    } else if (joursGel > 20) {
+      parts.push(
+        `${joursGel} jours de gel par an n\u00E9cessitent d\u2019anticiper les travaux ext\u00E9rieurs de ${s} avant les premi\u00E8res gel\u00E9es`
+      )
+    } else {
+      parts.push(
+        `avec seulement ${joursGel} jours de gel par an, les travaux de ${s} en ext\u00E9rieur restent possibles une grande partie de l\u2019ann\u00E9e`
+      )
+    }
+  }
+
+  if (precipitations != null && precipitations > 0) {
+    if (precipitations > 1000) {
+      parts.push(
+        `la pluviom\u00E9trie \u00E9lev\u00E9e (${Math.round(precipitations)}\u00A0mm/an) impose de prot\u00E9ger les chantiers et de privil\u00E9gier les mat\u00E9riaux r\u00E9sistants \u00E0 l\u2019humidit\u00E9`
+      )
+    } else if (precipitations < 600) {
+      parts.push(
+        `la faible pluviom\u00E9trie (${Math.round(precipitations)}\u00A0mm/an) est favorable aux travaux ext\u00E9rieurs mais impose une vigilance sur la s\u00E9cheresse des mat\u00E9riaux`
+      )
+    }
+  }
+
+  if (moisDebut != null && moisFin != null && moisDebut > 0 && moisFin > 0) {
+    const debutLabel = MONTH_NAMES_CAL[moisDebut - 1] || ''
+    const finLabel = MONTH_NAMES_CAL[moisFin - 1] || ''
+    if (debutLabel && finLabel) {
+      parts.push(
+        `la fen\u00EAtre optimale pour les travaux ext\u00E9rieurs s\u2019\u00E9tend de ${debutLabel} \u00E0 ${finLabel}`
+      )
+    }
+  }
+
+  if (tempHiver != null && tempEte != null) {
+    const amplitude = Math.round(tempEte - tempHiver)
+    if (amplitude > 20) {
+      parts.push(
+        `l\u2019amplitude thermique de ${amplitude}\u00A0\u00B0C entre hiver (${Math.round(tempHiver)}\u00A0\u00B0C) et \u00E9t\u00E9 (${Math.round(tempEte)}\u00A0\u00B0C) sollicite fortement les mat\u00E9riaux et justifie un entretien r\u00E9gulier`
+      )
+    }
+  }
+
+  if (altitude != null && altitude > 800) {
+    parts.push(
+      `l\u2019altitude de ${Math.round(altitude)}\u00A0m impose des contraintes sp\u00E9cifiques : pression atmosph\u00E9rique r\u00E9duite, UV intenses et acc\u00E8s parfois difficile en hiver`
+    )
+  }
+
+  if (parts.length === 0) return null
+
+  return `\u00C0 ${villeName}, ${parts.join('. De plus, ')}.`
 }
 
 function getClimatTip(climatZone: string | null): string | null {
@@ -88,6 +183,13 @@ export default function CalendrierSaisonnierBlock({
   serviceName,
   villeName,
   climatZone,
+  joursGelAnnuels,
+  precipitationAnnuelle,
+  temperatureMoyenneHiver,
+  temperatureMoyenneEte,
+  moisTravauxExtDebut,
+  moisTravauxExtFin,
+  altitudeMoyenne,
 }: CalendrierSaisonnierBlockProps) {
   const monthIdx = getCurrentMonthIndex()
   const moisData = calendrierTravaux[monthIdx]
@@ -96,9 +198,22 @@ export default function CalendrierSaisonnierBlock({
   // Filter recommended works matching this service
   const matchingTravaux = moisData.travauxRecommandes.filter((t) => t.service === serviceSlug)
 
+  // City-specific weather context
+  const cityWeather = getCityWeatherContext(
+    villeName,
+    serviceName,
+    joursGelAnnuels,
+    precipitationAnnuelle,
+    temperatureMoyenneHiver,
+    temperatureMoyenneEte,
+    moisTravauxExtDebut,
+    moisTravauxExtFin,
+    altitudeMoyenne
+  )
+
   // Even if no matching service-specific work, show the month info if we have climate context
   const climatTip = getClimatTip(climatZone)
-  const hasContent = matchingTravaux.length > 0 || climatTip
+  const hasContent = matchingTravaux.length > 0 || climatTip || !!cityWeather
 
   if (!hasContent) return null
 
@@ -153,6 +268,13 @@ export default function CalendrierSaisonnierBlock({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* City-specific weather context */}
+      {cityWeather && (
+        <div className="p-3 rounded-lg bg-sand-50 border border-sand-200 mb-3">
+          <p className="text-sm text-charcoal-700 leading-relaxed">{cityWeather}</p>
         </div>
       )}
 

@@ -94,6 +94,89 @@ function getPricePositioning(multiplier: number, regionName: string | null): str
   return `Les tarifs \u00E0 ${regionLabel} sont ${pct}\u00A0% ${direction} de la moyenne nationale`
 }
 
+/** Revenue impact insight — budget capacity for services */
+function getRevenueInsight(
+  revenuMedian: number | null,
+  serviceName: string,
+  villeName: string
+): string | null {
+  if (revenuMedian == null) return null
+  const s = serviceName.toLowerCase()
+
+  if (revenuMedian <= 17009) {
+    return `Le revenu m\u00E9dian de ${formatNumber(revenuMedian)}\u00A0\u20AC/an \u00E0 ${villeName} classe la commune parmi les territoires \u00E9ligibles aux aides maximales. Pour les travaux de ${s}, cela signifie un reste \u00E0 charge r\u00E9duit gr\u00E2ce \u00E0 MaPrimeR\u00E9nov\u2019 S\u00E9r\u00E9nit\u00E9 et aux CEE bonifi\u00E9s.`
+  }
+  if (revenuMedian <= 21805) {
+    return `Avec un revenu m\u00E9dian de ${formatNumber(revenuMedian)}\u00A0\u20AC/an, les habitants de ${villeName} acc\u00E8dent aux aides renforc\u00E9es pour les travaux de ${s} (MaPrimeR\u00E9nov\u2019 jaune/bleu + primes CEE major\u00E9es).`
+  }
+  if (revenuMedian >= 35000) {
+    return `Le revenu m\u00E9dian \u00E9lev\u00E9 (${formatNumber(revenuMedian)}\u00A0\u20AC/an) indique une capacit\u00E9 d\u2019investissement sup\u00E9rieure pour les travaux de ${s}, avec une pr\u00E9f\u00E9rence fr\u00E9quente pour des prestations haut de gamme et des mat\u00E9riaux durables.`
+  }
+  return null
+}
+
+/** Real estate market dynamics insight */
+function getImmobilierInsight(communeData: CommuneData, serviceName: string): string | null {
+  const s = serviceName.toLowerCase()
+  const parts: string[] = []
+
+  if (communeData.nb_transactions_annuelles && communeData.nb_transactions_annuelles > 50) {
+    parts.push(
+      `${formatNumber(communeData.nb_transactions_annuelles)} transactions immobili\u00E8res par an g\u00E9n\u00E8rent une demande r\u00E9guli\u00E8re en travaux de ${s} (remise aux normes, am\u00E9nagements apr\u00E8s achat)`
+    )
+  }
+
+  if (communeData.prix_m2_maison && communeData.prix_m2_appartement) {
+    const ecart = Math.abs(communeData.prix_m2_maison - communeData.prix_m2_appartement)
+    if (ecart > 500) {
+      const plusCher =
+        communeData.prix_m2_maison > communeData.prix_m2_appartement ? 'maisons' : 'appartements'
+      parts.push(
+        `les ${plusCher} affichent un prix au m\u00B2 nettement sup\u00E9rieur, ce qui incite les propri\u00E9taires \u00E0 investir dans l\u2019entretien et la valorisation de leur bien`
+      )
+    }
+  } else if (communeData.prix_m2_moyen && communeData.prix_m2_moyen > 3000) {
+    parts.push(
+      `avec un prix moyen de ${formatNumber(communeData.prix_m2_moyen)}\u00A0\u20AC/m\u00B2, les propri\u00E9taires ont int\u00E9r\u00EAt \u00E0 maintenir la valeur de leur bien par des travaux de ${s} r\u00E9guliers`
+    )
+  }
+
+  if (parts.length === 0) return null
+  return parts.join('. De plus, ') + '.'
+}
+
+/** RGE artisan coverage insight */
+function getRGEInsight(
+  communeData: CommuneData,
+  serviceName: string,
+  villeName: string
+): string | null {
+  if (!communeData.nb_artisans_rge || communeData.nb_artisans_rge <= 0) return null
+  const s = serviceName.toLowerCase()
+
+  const coverage =
+    communeData.nb_artisans_btp && communeData.nb_artisans_btp > 0
+      ? Math.round((communeData.nb_artisans_rge / communeData.nb_artisans_btp) * 100)
+      : null
+
+  let text = `${formatNumber(communeData.nb_artisans_rge)} artisans certifi\u00E9s RGE exercent \u00E0 ${villeName}`
+
+  if (coverage != null) {
+    text += `, soit ${coverage}\u00A0% des entreprises BTP de la commune`
+    if (coverage < 20) {
+      text += `. Ce ratio relativement faible allonge les d\u00E9lais pour les travaux de ${s} \u00E9ligibles aux aides.`
+    } else if (coverage > 50) {
+      text += `. Cette forte proportion facilite l\u2019acc\u00E8s aux aides publiques pour les travaux de ${s}.`
+    } else {
+      text += '.'
+    }
+  } else {
+    text += `, ce qui garantit l\u2019acc\u00E8s aux aides publiques pour les travaux de ${s}.`
+  }
+
+  return text
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -130,6 +213,11 @@ export default function LocalInsightsBlock({
     // quartier-data may not have entries for this ville
   }
 
+  // Additional insights
+  const revenueInsight = getRevenueInsight(c.revenu_median, serviceName, villeName)
+  const immobilierInsight = getImmobilierInsight(c, serviceName)
+  const rgeInsight = getRGEInsight(c, serviceName, villeName)
+
   // Check if we have enough data for at least 2 insights
   const insightCount = [
     true, // demand is always available if we have population
@@ -137,6 +225,9 @@ export default function LocalInsightsBlock({
     !!pricePositioning,
     topQuartiers.length > 0,
     !!c.nb_entreprises_artisanales,
+    !!revenueInsight,
+    !!immobilierInsight,
+    !!rgeInsight,
   ].filter(Boolean).length
 
   if (insightCount < 2) return null
@@ -267,6 +358,36 @@ export default function LocalInsightsBlock({
                   {serviceName.toLowerCase()} y est plus {'é'}lev{'é'}e en raison de la densit{'é'}{' '}
                   de population et du parc immobilier.
                 </p>
+              </div>
+            )}
+
+            {/* 6. Revenue / aids eligibility */}
+            {revenueInsight && (
+              <div className="flex items-start gap-3">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-emerald-700 bg-emerald-100 flex-shrink-0 mt-0.5">
+                  Budget
+                </span>
+                <p className="text-sm text-charcoal-700 leading-relaxed">{revenueInsight}</p>
+              </div>
+            )}
+
+            {/* 7. Immobilier / DVF dynamics */}
+            {immobilierInsight && (
+              <div className="flex items-start gap-3">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-amber-700 bg-amber-100 flex-shrink-0 mt-0.5">
+                  Immobilier
+                </span>
+                <p className="text-sm text-charcoal-700 leading-relaxed">{immobilierInsight}</p>
+              </div>
+            )}
+
+            {/* 8. RGE artisan coverage */}
+            {rgeInsight && (
+              <div className="flex items-start gap-3">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-blue-700 bg-blue-100 flex-shrink-0 mt-0.5">
+                  RGE
+                </span>
+                <p className="text-sm text-charcoal-700 leading-relaxed">{rgeInsight}</p>
               </div>
             )}
           </div>

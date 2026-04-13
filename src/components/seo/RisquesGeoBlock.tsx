@@ -73,6 +73,62 @@ function getCatnatAdvice(serviceName: string, count: number): string {
   return `Avec ${count} arrêtés de catastrophe naturelle recensés, ${serviceName.toLowerCase()} à cet endroit doit intégrer des matériaux et techniques résistants aux aléas récurrents.`
 }
 
+function getInondationAdvice(serviceName: string): string {
+  const s = serviceName.toLowerCase()
+  if (s.includes('plomb'))
+    return 'Les inondations endommagent les réseaux d\u2019assainissement et d\u2019eau potable. Un clapet anti-retour et des canalisations étanches sont indispensables en zone inondable.'
+  if (s.includes('électric'))
+    return 'En zone inondable, le tableau électrique doit être installé en hauteur et les circuits enterrés protégés par des gaines étanches IP68.'
+  if (s.includes('maçon') || s.includes('macon'))
+    return 'Les fondations en zone inondable nécessitent un cuvelage étanche et des matériaux résistants à l\u2019immersion prolongée (parpaings hydrofugés, enduits spéciaux).'
+  if (s.includes('chauffag') || s.includes('pompe'))
+    return 'En zone inondable, la chaudière et la pompe à chaleur doivent être surélevées. Les réseaux de chauffage au sol nécessitent une isolation étanche spécifique.'
+  if (s.includes('peintr'))
+    return 'Après une inondation, les murs doivent sécher complètement (3 à 6 mois) avant toute remise en peinture. Des peintures anti-humidité sont recommandées en zone inondable.'
+  return `Le risque d\u2019inondation impose des précautions spécifiques pour les travaux de ${s} : matériaux résistants à l\u2019eau, installations surélevées et systèmes de protection.`
+}
+
+/** Generate a contextual prose paragraph combining multiple risks and their impact on the service */
+function getRiskSynthesis(
+  communeData: CommuneData,
+  serviceName: string,
+  villeName: string
+): string | null {
+  const s = serviceName.toLowerCase()
+  const parts: string[] = []
+
+  if (communeData.risque_argile === 'fort') {
+    parts.push('un sol argileux à fort retrait-gonflement')
+  } else if (communeData.risque_argile === 'moyen') {
+    parts.push('un sol argileux à risque modéré')
+  }
+
+  if (communeData.risque_inondation) {
+    parts.push('une exposition au risque d\u2019inondation')
+  }
+
+  if ((communeData.zone_sismique ?? 0) >= 3) {
+    parts.push(`une sismicité de zone ${communeData.zone_sismique}/5`)
+  }
+
+  if ((communeData.risque_radon ?? 0) >= 2) {
+    const radonLevel = communeData.risque_radon === 3 ? 'élevée' : 'modérée'
+    parts.push(`une concentration en radon ${radonLevel}`)
+  }
+
+  if (parts.length === 0) return null
+
+  const riskList =
+    parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' et ' + parts[parts.length - 1]
+
+  const catnatSuffix =
+    (communeData.nb_catnat ?? 0) > 5
+      ? ` La commune a fait l\u2019objet de ${communeData.nb_catnat} arrêtés de catastrophe naturelle, ce qui confirme l\u2019importance de faire appel à un professionnel expérimenté.`
+      : ''
+
+  return `${villeName} présente ${riskList}. Ces caractéristiques géologiques influencent directement les interventions de ${s} : le choix des matériaux, les techniques de pose et les normes à respecter doivent être adaptés au contexte local.${catnatSuffix}`
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -85,23 +141,35 @@ export default function RisquesGeoBlock({
   if (!communeData) return null
 
   const c = communeData
-  const hasArgile = c.risque_argile === 'fort'
+  const hasArgile = c.risque_argile === 'fort' || c.risque_argile === 'moyen'
+  const hasInondation = !!c.risque_inondation
   const hasSismique = (c.zone_sismique ?? 0) >= 3
   const hasRadon = (c.risque_radon ?? 0) >= 2
   const hasCatnat = (c.nb_catnat ?? 0) > 10
 
   // Show only if at least one risk condition is met
-  if (!hasArgile && !hasSismique && !hasRadon && !hasCatnat) return null
+  if (!hasArgile && !hasInondation && !hasSismique && !hasRadon && !hasCatnat) return null
 
   const risks: RiskItem[] = []
 
   if (hasArgile) {
+    const isArgileFort = c.risque_argile === 'fort'
     risks.push({
       icon: <AlertTriangle className="w-5 h-5 text-amber-600" />,
       label: 'Retrait-gonflement des argiles',
-      level: 'Fort',
-      levelColor: 'text-red-700 bg-red-100',
+      level: isArgileFort ? 'Fort' : 'Moyen',
+      levelColor: isArgileFort ? 'text-red-700 bg-red-100' : 'text-amber-700 bg-amber-100',
       description: getArgileAdvice(serviceName),
+    })
+  }
+
+  if (hasInondation) {
+    risks.push({
+      icon: <Shield className="w-5 h-5 text-blue-600" />,
+      label: 'Zone inondable',
+      level: 'Exposé',
+      levelColor: 'text-blue-700 bg-blue-100',
+      description: getInondationAdvice(serviceName),
     })
   }
 
@@ -138,14 +206,21 @@ export default function RisquesGeoBlock({
     })
   }
 
-  // Max 4 items
-  const displayedRisks = risks.slice(0, 4)
+  // Max 5 items
+  const displayedRisks = risks.slice(0, 5)
+
+  // Generate a synthesis paragraph combining all risks
+  const synthesis = getRiskSynthesis(c, serviceName, villeName)
 
   return (
     <section className="py-6 bg-white rounded-xl border border-sand-200 p-6">
       <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">
         Risques naturels à {villeName} : impact sur les travaux de {serviceName.toLowerCase()}
       </h3>
+
+      {/* Synthesis paragraph — unique per city */}
+      {synthesis && <p className="text-sm text-charcoal-700 leading-relaxed mb-5">{synthesis}</p>}
+
       <div className="grid gap-4 sm:grid-cols-2">
         {displayedRisks.map((risk) => (
           <div
@@ -167,6 +242,18 @@ export default function RisquesGeoBlock({
           </div>
         ))}
       </div>
+
+      {/* Specific risks list from risques_principaux */}
+      {c.risques_principaux && c.risques_principaux.length > 0 && (
+        <div className="mt-4 p-3 rounded-lg bg-sand-50 border border-sand-100">
+          <p className="text-xs font-semibold text-charcoal-700 mb-1">
+            Risques identifiés par Géorisques pour {villeName} :
+          </p>
+          <p className="text-xs text-charcoal-600 leading-relaxed">
+            {c.risques_principaux.join(' \u00B7 ')}
+          </p>
+        </div>
+      )}
     </section>
   )
 }

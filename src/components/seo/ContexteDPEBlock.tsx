@@ -7,7 +7,7 @@
  * Server Component — pas de 'use client'.
  */
 
-import { Thermometer, Home } from 'lucide-react'
+import { Thermometer, Home, TrendingUp, Zap } from 'lucide-react'
 import type { CommuneData } from '@/lib/data/commune-data'
 import { formatNumber } from '@/lib/data/commune-data'
 
@@ -54,6 +54,78 @@ function getServiceDPEContext(serviceName: string, pct: number, villeName: strin
   }
 
   return `${pct}\u00A0% des logements à ${villeName} sont des passoires énergétiques (DPE F ou G), ce qui rend les travaux de ${s} particulièrement pertinents dans le cadre de la rénovation énergétique.`
+}
+
+/** Generate renovation demand context based on DPE + housing stock + MaPrimeRénov */
+function getRenovationDemandContext(
+  communeData: CommuneData,
+  serviceName: string,
+  villeName: string
+): string | null {
+  const parts: string[] = []
+  const s = serviceName.toLowerCase()
+
+  // MaPrimeRénov context
+  if (communeData.nb_maprimerenov_annuel && communeData.nb_maprimerenov_annuel > 0) {
+    parts.push(
+      `${formatNumber(communeData.nb_maprimerenov_annuel)} dossiers MaPrimeR\u00E9nov\u2019 sont déposés chaque année à ${villeName}, témoignant d\u2019une dynamique active de rénovation énergétique`
+    )
+  }
+
+  // Housing stock age inference from DPE severity
+  const pct = communeData.pct_passoires_dpe ?? 0
+  if (pct >= 25 && communeData.nb_logements) {
+    const nbPassoires = Math.round((pct / 100) * communeData.nb_logements)
+    parts.push(
+      `environ ${formatNumber(nbPassoires)} logements nécessitent des travaux de rénovation, créant une demande soutenue en ${s}`
+    )
+  }
+
+  // Housing type impact on DPE
+  if (communeData.part_maisons_pct != null && pct > 0) {
+    if (communeData.part_maisons_pct >= 60) {
+      parts.push(
+        `les maisons individuelles (${communeData.part_maisons_pct}\u00A0% du parc) sont souvent les plus énergivores en raison de leur surface de déperdition thermique plus importante`
+      )
+    } else if (communeData.part_maisons_pct < 40) {
+      parts.push(
+        `les immeubles collectifs (${100 - communeData.part_maisons_pct}\u00A0% du parc) concentrent les rénovations en copropriété, souvent plus complexes à organiser`
+      )
+    }
+  }
+
+  if (parts.length === 0) return null
+  return parts.join('. De plus, ') + '.'
+}
+
+/** Generate recommendation based on DPE severity and service type */
+function getDPERecommendation(
+  serviceName: string,
+  pct: number,
+  revenuMedian: number | null
+): string | null {
+  const s = serviceName.toLowerCase()
+
+  // High severity: recommend audit first
+  if (pct >= 25) {
+    const aidePart =
+      revenuMedian != null && revenuMedian <= 21805
+        ? ' Les ménages de cette commune peuvent prétendre aux aides maximales (MaPrimeR\u00E9nov\u2019 S\u00E9r\u00E9nit\u00E9 + CEE bonifi\u00E9s).'
+        : revenuMedian != null && revenuMedian <= 30549
+          ? ' Les aides MaPrimeR\u00E9nov\u2019 et CEE sont accessibles pour la majorit\u00E9 des foyers.'
+          : ''
+    if (
+      s.includes('isolation') ||
+      s.includes('chauffag') ||
+      s.includes('pompe') ||
+      s.includes('menuisier')
+    ) {
+      return `Recommandation\u00A0: avec un taux de passoires aussi \u00E9lev\u00E9, un audit \u00E9nerg\u00E9tique pr\u00E9alable permet de prioriser les travaux de ${s} les plus rentables.${aidePart}`
+    }
+    return `Avec ce taux de logements mal class\u00E9s, les travaux de ${s} s\u2019inscrivent souvent dans un projet de r\u00E9novation \u00E9nerg\u00E9tique globale.${aidePart}`
+  }
+
+  return null
 }
 
 // ---------------------------------------------------------------------------
@@ -119,6 +191,30 @@ export default function ContexteDPEBlock({
         </span>
         <p className="text-sm text-charcoal-700 leading-relaxed">{contextText}</p>
       </div>
+
+      {/* Renovation demand context — MaPrimeRénov + housing stock */}
+      {(() => {
+        const demandContext = getRenovationDemandContext(communeData, serviceName, villeName)
+        if (!demandContext) return null
+        return (
+          <div className="flex items-start gap-3 mt-4 p-3 rounded-lg bg-emerald-50 border border-emerald-100">
+            <TrendingUp className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-charcoal-700 leading-relaxed">{demandContext}</p>
+          </div>
+        )
+      })()}
+
+      {/* DPE recommendation */}
+      {(() => {
+        const recommendation = getDPERecommendation(serviceName, pct, communeData.revenu_median)
+        if (!recommendation) return null
+        return (
+          <div className="flex items-start gap-3 mt-3 p-3 rounded-lg bg-blue-50 border border-blue-100">
+            <Zap className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-blue-800 leading-relaxed">{recommendation}</p>
+          </div>
+        )
+      })()}
     </section>
   )
 }

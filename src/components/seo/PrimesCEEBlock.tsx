@@ -81,6 +81,84 @@ function getClimatMultiplier(zone: string | null): number {
   return 1.0
 }
 
+/** Estimate annual energy savings based on bracket + climate zone + service type */
+function getEstimatedSavings(
+  bracket: RevenuBracket,
+  climatZone: string | null,
+  serviceName: string
+): { economieAnnuelle: string; gainDPE: string } | null {
+  const s = serviceName.toLowerCase()
+
+  // Base savings by service type (annual €)
+  let baseSaving = 0
+  let dpeGain = ''
+
+  if (s.includes('isolation')) {
+    baseSaving = 800
+    dpeGain = '2 à 3 classes DPE'
+  } else if (s.includes('chauffag') || s.includes('pompe')) {
+    baseSaving = 1200
+    dpeGain = '1 à 2 classes DPE'
+  } else if (s.includes('menuisier') || s.includes('fen\u00EAtr')) {
+    baseSaving = 400
+    dpeGain = '1 classe DPE'
+  } else if (s.includes('couv') || s.includes('charpent')) {
+    baseSaving = 600
+    dpeGain = '1 à 2 classes DPE'
+  } else if (s.includes('plomb')) {
+    baseSaving = 350
+    dpeGain = '0,5 à 1 classe DPE'
+  } else {
+    return null // No relevant savings estimate for this service
+  }
+
+  // Climate adjustment: colder zones = more savings potential
+  const climatMult =
+    climatZone === 'continental' || climatZone === 'montagnard'
+      ? 1.3
+      : climatZone === 'mediterraneen'
+        ? 0.7
+        : 1.0
+
+  // Bracket adjustment: lower income = higher eligible aid ratio
+  const bracketMult =
+    bracket === 'pr\u00E9caire'
+      ? 1.2
+      : bracket === 'modeste'
+        ? 1.1
+        : bracket === 'sup\u00E9rieur'
+          ? 0.8
+          : 1.0
+
+  const finalSaving = Math.round(baseSaving * climatMult * bracketMult)
+
+  return {
+    economieAnnuelle: `${formatNumber(finalSaving)}\u00A0\u20AC/an`,
+    gainDPE: dpeGain,
+  }
+}
+
+/** Generate contextual savings text */
+function getSavingsContext(
+  bracket: RevenuBracket,
+  climatZone: string | null,
+  serviceName: string,
+  villeName: string
+): string | null {
+  const savings = getEstimatedSavings(bracket, climatZone, serviceName)
+  if (!savings) return null
+
+  const s = serviceName.toLowerCase()
+  const bracketLabel =
+    bracket === 'pr\u00E9caire' || bracket === 'modeste'
+      ? 'les foyers modestes peuvent b\u00E9n\u00E9ficier d\u2019une prise en charge allant jusqu\u2019\u00E0 90\u00A0% du co\u00FBt des travaux'
+      : bracket === 'interm\u00E9diaire'
+        ? 'les foyers aux revenus interm\u00E9diaires b\u00E9n\u00E9ficient d\u2019une aide couvrant 40 \u00E0 60\u00A0% du co\u00FBt'
+        : 'les foyers aux revenus sup\u00E9rieurs acc\u00E8dent \u00E0 une prime CEE de base'
+
+  return `\u00C0 ${villeName}, ${bracketLabel}. Les travaux de ${s} permettent une \u00E9conomie estim\u00E9e \u00E0 ${savings.economieAnnuelle} sur la facture \u00E9nerg\u00E9tique, avec un gain potentiel de ${savings.gainDPE}.`
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -142,6 +220,20 @@ export default async function PrimesCEEBlock({
             ' Le climat méditerranéen de la zone réduit légèrement les montants.'}
         </p>
       )}
+
+      {/* Estimated savings context */}
+      {(() => {
+        const savingsText = getSavingsContext(bracket, climatZone, serviceName, villeName)
+        if (!savingsText) return null
+        return (
+          <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100 mb-4">
+            <div className="flex items-start gap-2">
+              <Leaf className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-emerald-800 leading-relaxed">{savingsText}</p>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Operations list */}
       <div className="space-y-3">
