@@ -91,6 +91,10 @@ const MicroConversions = dynamic(() => import('@/components/MicroConversions'), 
 
 const CallbackRequest = dynamic(() => import('@/components/CallbackRequest'), { ssr: false })
 
+const InlineTestimonial = dynamic(() => import('@/components/conversion/InlineTestimonial'), {
+  ssr: false,
+})
+
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
   return JSON.stringify(data)
@@ -1006,6 +1010,11 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
           pricingMultiplier={pricingMultiplier}
         />
       )}
+
+      {/* Social proof — inline testimonial */}
+      <section className="my-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <InlineTestimonial count={1} />
+      </section>
 
       <div className="speakable-faq">
         <FaqAndBlogSection
