@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: 'Comment Trouver un Artisan de Confiance en 2026',
   description:
     'Guide complet pour trouver un artisan fiable : vérifications SIRET, décennale, RGE, comparaison de devis, labels et certifications, droits du client et recours en cas de problème.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/trouver-artisan'),
   openGraph: {
     title: 'Comment Trouver un Artisan de Confiance en 2026',
     description:

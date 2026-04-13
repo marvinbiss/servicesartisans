@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getInsuranceProductSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'Assurance Dommage-Ouvrage : Est-ce Obligatoire ? (2026)',
   description:
     "Tout savoir sur l'assurance dommage-ouvrage : obligation légale, coût moyen (1 à 5 % du chantier), comment souscrire, délais d'indemnisation et conséquences en cas d'absence.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/assurance-dommage-ouvrage'),
   openGraph: {
     title: 'Assurance Dommage-Ouvrage : Est-ce Obligatoire ?',
     description:

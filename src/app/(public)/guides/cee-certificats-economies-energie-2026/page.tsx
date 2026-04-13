@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   title: "CEE 2026 : guide complet Certificats d'Économies d'Énergie",
   description:
     "Mécanisme CEE, obligés et délégataires, opérations coup de pouce 2026, éligibilité RGE, démarche et cumul MaPrimeRénov'. Guide complet 2026.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/cee-certificats-economies-energie-2026'),
   openGraph: {
     title: "CEE 2026 : guide complet Certificats d'Économies d'Énergie",
     description:

@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Euro, ChevronDown, MapPin } from 'lucide-react
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import {
   hashCode,
   getRegionalMultiplier,
@@ -87,7 +87,7 @@ export async function generateMetadata({
     title,
     description,
     robots: { index: false, follow: true },
-    alternates: { canonical: canonicalUrl },
+    alternates: getAlternates(`/devis/${service}/${location}/${quartier}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -248,7 +248,7 @@ export default async function DevisQuartierPage({
                 const h1Hash = Math.abs(hashCode(`devis-q-h1-${service}-${location}-${quartier}`))
                 const h1Templates = [
                   `Devis ${tradeLower} à ${quartierName}, ${ville.name}`,
-                  `Obtenez un devis ${tradeLower} gratuit — ${quartierName}`,
+                  `Devis ${tradeLower} gratuit à ${quartierName}, ${ville.name}`,
                   `${trade.name} à ${quartierName} : devis gratuit en 24h`,
                   `Devis ${tradeLower} : artisans à ${quartierName}, ${ville.name}`,
                   `${quartierName}, ${ville.name} : devis ${tradeLower} détaillé`,

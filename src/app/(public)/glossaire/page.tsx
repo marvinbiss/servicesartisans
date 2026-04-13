@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { glossaireTerms, glossaireCategories } from '@/lib/data/glossaire'
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   title: 'Glossaire du bâtiment — 150+ termes expliqués simplement',
   description:
     'Glossaire complet du bâtiment et de la rénovation : 150+ termes techniques expliqués simplement pour les particuliers. Gros œuvre, plomberie, électricité, isolation, menuiserie et plus.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/glossaire'),
   openGraph: {
     title: 'Glossaire du bâtiment — 150+ termes expliqués',
     description:

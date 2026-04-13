@@ -19,7 +19,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
-import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
+import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { villes, services } from '@/lib/data/france'
 import dynamic from 'next/dynamic'
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   title: 'Artisan Urgence — Dépannage Soir & Week-end',
   description:
     'Artisan en urgence : plombier, électricien, serrurier. Dépannage soir et week-end partout en France. Devis gratuit, artisans vérifiés SIREN.',
-  alternates: { canonical: `${SITE_URL}/urgence` },
+  alternates: getAlternates(`/urgence`),
   openGraph: {
     locale: 'fr_FR',
     title: 'Artisan Urgence — Dépannage Soir & Week-end',

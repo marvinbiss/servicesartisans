@@ -149,7 +149,7 @@ export async function getRgeProvidersByServiceAndCity(
   villeSlug: string,
   { limit = 50, offset = 0 }: { limit?: number; offset?: number } = {}
 ): Promise<RgeServiceCityListing> {
-  if (IS_BUILD) return { providers: [], count: 0 }
+  if (IS_BUILD) return { providers: [], count: 1 } // fail-open: keep pages indexed during build
 
   if (!isRgeAllowedService(serviceSlug)) {
     return { providers: [], count: 0 }
@@ -247,7 +247,7 @@ export async function getRgeProvidersByServiceAndDepartement(
   departementName: string,
   { limit = 50, offset = 0 }: { limit?: number; offset?: number } = {}
 ): Promise<RgeServiceCityListing> {
-  if (IS_BUILD) return { providers: [], count: 0 }
+  if (IS_BUILD) return { providers: [], count: 1 } // fail-open: keep pages indexed during build
 
   if (!isRgeAllowedService(serviceSlug)) {
     return { providers: [], count: 0 }

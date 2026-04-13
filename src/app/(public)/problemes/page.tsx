@@ -17,7 +17,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import problems from '@/lib/data/problems'
 
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'Problèmes Courants — Solutions',
   description:
     'Identifiez votre problème (fuite d’eau, panne électrique, serrure bloquée…) et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et mise en relation avec des artisans référencés.',
-  alternates: { canonical: `${SITE_URL}/problemes` },
+  alternates: getAlternates(`/problemes`),
   openGraph: {
     locale: 'fr_FR',
     title: 'Problèmes Courants — Solutions',

@@ -7,7 +7,7 @@ import ProviderList from '@/components/ProviderList'
 import JsonLd from '@/components/JsonLd'
 import { getServiceBySlug } from '@/lib/supabase'
 import { departements, getDepartementBySlug, getVillesByDepartement } from '@/lib/data/france'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { getArtisanUrl } from '@/lib/utils'
 import {
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}${path}` },
+    alternates: getAlternates(`${path}`),
     robots: isNoindex
       ? { index: false, follow: true }
       : {

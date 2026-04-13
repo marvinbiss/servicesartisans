@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { HeroSearch } from '@/components/search/HeroSearch'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { services, villes, regions } from '@/lib/data/france'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: 'Rechercher un artisan — Trouvez le bon professionnel',
   description:
     "Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. Des milliers d'artisans référencés dans toute la France.",
-  alternates: { canonical: `${SITE_URL}/recherche` },
+  alternates: getAlternates(`/recherche`),
   openGraph: {
     title: 'Rechercher un artisan — Trouvez le bon professionnel',
     description:

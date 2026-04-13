@@ -26,7 +26,7 @@ import {
   getEnrichedPlaceSchema,
   getCityServicesListSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import {
   villes,
   getVilleBySlug,
@@ -116,6 +116,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: 'fr_FR',
       title,
       description,
+      url: `${SITE_URL}/villes/${villeSlug}`,
       type: 'website',
       images: [
         cityImage
@@ -134,7 +135,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       images: [cityImage ? cityImage.src : `${SITE_URL}/opengraph-image`],
     },
-    alternates: { canonical: `${SITE_URL}/villes/${villeSlug}` },
+    alternates: getAlternates(`/villes/${villeSlug}`),
   }
 }
 
@@ -272,7 +273,7 @@ export default async function VillePage({ params }: PageProps) {
               const h1Hash = Math.abs(hashCode(`h1-ville-${ville.slug}`))
               const h1Templates = [
                 `Artisans à ${ville.name}`,
-                `Trouver un artisan à ${ville.name} (${ville.departementCode})`,
+                `Artisans à ${ville.name} (${ville.departementCode}) : pros qualifiés`,
                 `${ville.name} : artisans qualifiés pour vos travaux`,
                 `Artisans à ${ville.name}, ${ville.departement}`,
                 `${services.length} corps de métier à ${ville.name}`,

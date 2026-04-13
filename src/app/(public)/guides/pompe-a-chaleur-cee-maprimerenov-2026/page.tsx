@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
   description:
     "Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE chauffage, cumul total, exemple chiffré et obligation QualiPAC. Guide complet 2026.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/pompe-a-chaleur-cee-maprimerenov-2026'),
   openGraph: {
     title: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
     description:

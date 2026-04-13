@@ -148,11 +148,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${svcLower} qualifié parmi ${countLabel} artisans vérifiés SIREN en France. Comparez les tarifs, consultez les avis clients et obtenez un devis gratuit dans ${departements.length} départements.`,
-    `Comparez ${countLabel} ${svcLower}s certifiés partout en France : tarifs détaillés, avis clients vérifiés et certifications. Devis gratuit en ligne, sans engagement, réponse rapide.`,
-    `Annuaire de ${svcLower}s vérifiés par SIREN dans toute la France. Consultez les prix, les avis clients et les certifications. Demandez un devis gratuit en ligne sans engagement.`,
-    `Besoin d'un ${svcLower} ? Parcourez ${countLabel} artisans référencés dans ${departements.length} départements : tarifs indicatifs, avis vérifiés et devis gratuit en ligne sans engagement.`,
-    `${serviceName} en France 2026 : comparez ${countLabel} artisans qualifiés. Prix indicatifs, certifications vérifiées et devis gratuit en ligne. Couverture nationale, réponse rapide.`,
+    `${serviceName} : ${countLabel} artisans vérifiés SIREN en France. Tarifs, avis clients et devis gratuit sans engagement.`,
+    `Comparez ${countLabel} ${svcLower}s certifiés en France : tarifs, avis vérifiés, certifications. Devis gratuit, réponse rapide.`,
+    `Annuaire ${svcLower}s vérifiés SIREN en France. Prix, avis clients, certifications. Devis gratuit en ligne sans engagement.`,
+    `${serviceName} dans ${departements.length} départements : ${countLabel} artisans référencés, tarifs indicatifs, avis vérifiés. Devis gratuit.`,
+    `${serviceName} France 2026 : comparez ${countLabel} artisans qualifiés. Prix, certifications vérifiées, devis gratuit en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -291,7 +291,7 @@ export default async function ServicePage({ params }: PageProps) {
   const h1Hash = Math.abs(hashCode(`hub-h1-${serviceSlug}`))
   const h1Templates = [
     `${service.name} en France`,
-    `Trouver un ${service.name.toLowerCase()} en France`,
+    `${service.name} en France : annuaire et devis`,
     `${service.name} — Annuaire national`,
     `Artisans ${service.name.toLowerCase()} en France`,
     `${service.name} : comparez les professionnels`,

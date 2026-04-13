@@ -17,7 +17,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { DEPARTMENTS, DEPT_TO_REGION } from '@/lib/geography'
 import { DEPT_ARTISAN_COUNTS } from '@/lib/data/dept-artisan-counts'
 import { DEPT_POPULATIONS } from '@/lib/data/dept-populations'
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   title: 'Deserts artisanaux en France \u2014 \u00c9tude 2026 par d\u00e9partement',
   description:
     'Carte interactive des d\u00e9serts artisanaux. Classement des 101 d\u00e9partements par nombre d\u2019artisans pour 10\u202f000 habitants. Donn\u00e9es SIREN officielles.',
-  alternates: { canonical: canonicalUrl },
+  alternates: getAlternates('/etudes/deserts-artisanaux'),
   robots: {
     index: true,
     follow: true,

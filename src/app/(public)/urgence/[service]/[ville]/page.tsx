@@ -21,7 +21,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getUrgencyServiceSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, PHONE_TEL } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
@@ -793,7 +793,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: getAlternates(`/urgence/${service}/${villeSlug}`),
     robots: { index: !noindex, follow: true },
     openGraph: {
       locale: 'fr_FR',
@@ -1030,7 +1030,7 @@ export default async function UrgenceServiceVillePage({
                 `Urgence ${tradeLower} à ${villeData.name} soir & week-end`,
                 `Dépannage ${tradeLower} urgent à ${villeData.name}`,
                 `${trade.name} d'urgence à ${villeData.name}`,
-                `Intervention ${tradeLower} urgente à ${villeData.name}`,
+                `${trade.name} en urgence à ${villeData.name}`,
               ]
               return h1Templates[h1Hash % h1Templates.length]
             })()}
@@ -1918,7 +1918,7 @@ export default async function UrgenceServiceVillePage({
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
-            Voir aussi
+            Comparer les options
           </h2>
           <div className="flex flex-wrap gap-3">
             <Link

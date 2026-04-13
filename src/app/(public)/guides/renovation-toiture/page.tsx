@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   title: 'Rénovation Toiture : Travaux et Prix 2026',
   description:
     "Guide complet rénovation toiture 2026 : signes d'usure, types de couverture (tuile, ardoise, zinc), prix (60-200€/m²), isolation, charpente et aides financières.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/renovation-toiture'),
   openGraph: {
     title: 'Rénovation Toiture : Travaux et Prix 2026',
     description:

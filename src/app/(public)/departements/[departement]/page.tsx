@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import {
   departements,
@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     // Hub pages are always indexed — rich geographic content has value even with 0 providers
     robots: { index: true, follow: true },
-    alternates: { canonical: `${SITE_URL}/departements/${deptSlug}` },
+    alternates: getAlternates(`/departements/${deptSlug}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -227,7 +227,7 @@ export default async function DepartementPage({ params }: PageProps) {
                   const h1Hash = Math.abs(hashCode(`h1-dept-${dept.slug}`))
                   const h1Templates = [
                     `Artisans ${getDeptPreposition(dept.name)}`,
-                    `Trouver un artisan ${getDeptPreposition(dept.name)} (${dept.code})`,
+                    `Artisans ${getDeptPreposition(dept.name)} (${dept.code}) : annuaire`,
                     `${dept.name} : artisans qualifiés par ville`,
                     `Artisans ${getDeptArticle(dept.name)} (${dept.code})`,
                     `Tous les artisans ${getDeptPreposition(dept.name)}, ${dept.region}`,

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   title: 'Rénovation Cuisine : Guide Complet des Étapes et Prix 2026',
   description:
     'Guide complet rénovation cuisine 2026 : étapes de conception à la pose, prix par poste (meubles, plan de travail, électroménager), budget total et erreurs à éviter.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/renovation-cuisine'),
   openGraph: {
     title: 'Rénovation Cuisine : Guide Complet des Étapes et Prix 2026',
     description:

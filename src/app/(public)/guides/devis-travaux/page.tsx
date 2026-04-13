@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: 'Devis Travaux : Guide Complet pour Bien Comparer (2026)',
   description:
     'Comment obtenir et comparer des devis travaux : mentions obligatoires, nombre de devis à demander, négociation, pièges à éviter et conseils pour choisir le bon artisan.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/devis-travaux'),
   openGraph: {
     title: 'Devis Travaux : Guide Complet pour Bien Comparer',
     description: 'Guide complet pour obtenir, comparer et négocier vos devis travaux en 2026.',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   title: 'Isolation Thermique : Prix, Matériaux et Aides 2026',
   description:
     "Guide isolation thermique 2026 : ITE (120-280€/m²), ITI (40-130€/m²), combles (20-75€/m²), matériaux, aides MaPrimeRénov' jusqu'à 80% et artisans RGE.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/isolation-thermique'),
   openGraph: {
     title: 'Isolation Thermique : Prix, Matériaux et Aides 2026',
     description:

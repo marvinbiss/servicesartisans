@@ -14,7 +14,7 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getCollectionPageSchema,
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   title: 'Données ADEME & sources officielles — Méthodologie RGE',
   description:
     "Source de nos données RGE : référentiel officiel ADEME / France Rénov', synchronisation hebdomadaire. 165 000 qualifications recensées.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/ademe'),
   openGraph: {
     locale: 'fr_FR',
     title: 'Données ADEME — Sources officielles RGE & méthodologie',

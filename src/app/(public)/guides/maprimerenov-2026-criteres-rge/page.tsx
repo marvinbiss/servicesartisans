@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   title: "MaPrimeRénov' 2026 : critères RGE, montants et dossier",
   description:
     "MaPrimeRénov' 2026 décryptée : obligation RGE, barèmes par travaux, plafonds de ressources, dossier en 5 étapes, pièges fréquents et cumul CEE.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/maprimerenov-2026-criteres-rge'),
   openGraph: {
     title: "MaPrimeRénov' 2026 : critères RGE, montants et dossier",
     description:

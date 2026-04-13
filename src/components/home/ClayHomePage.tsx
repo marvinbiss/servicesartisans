@@ -29,7 +29,11 @@ import {
 } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
-import SocialProofToast from '@/components/conversion/SocialProofToast'
+import dynamic from 'next/dynamic'
+
+const SocialProofToast = dynamic(() => import('@/components/conversion/SocialProofToast'), {
+  ssr: false,
+})
 
 interface Props {
   stats: SiteStats
@@ -618,7 +622,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                       <div className="relative overflow-hidden h-[200px]">
                         <Image
                           src={bgImage}
-                          alt=""
+                          alt={`${a.name} — services artisans en France`}
                           fill
                           {...(i < 3 ? { priority: true } : { loading: 'lazy' as const })}
                           sizes="(max-width: 768px) 100vw, 33vw"
@@ -719,7 +723,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="absolute inset-0">
             <Image
               src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=500&fit=crop&q=80"
-              alt=""
+              alt="Artisan qualifié sur un chantier de construction en France"
               fill
               loading="lazy"
               sizes="100vw"

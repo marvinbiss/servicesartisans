@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
   description:
     "Les 10 arnaques les plus fréquentes avec les artisans du bâtiment : démarchage abusif, faux RGE, devis gonflés. Signaux d'alerte, vérifications et recours en cas de fraude.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/eviter-arnaques-artisan'),
   openGraph: {
     title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
     description:

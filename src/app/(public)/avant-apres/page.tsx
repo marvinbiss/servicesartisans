@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { ArrowRight, Clock, Euro, Users, Sparkles, FileCheck, Search } from 'lucide-react'
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: 'Avant/Après Travaux : Galeries de Rénovation',
   description:
     'Découvrez 12 rénovations avant/après : salle de bain, cuisine, isolation, toiture, parquet, extension. Budget et durée inclus.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/avant-apres'),
   openGraph: {
     title: 'Avant/Après Travaux : Galeries de Rénovation',
     description:

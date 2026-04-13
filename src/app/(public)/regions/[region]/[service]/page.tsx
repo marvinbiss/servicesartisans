@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
 import {
   regions,
@@ -91,7 +91,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/regions/${regionSlug}/${serviceSlug}` },
+    alternates: getAlternates(`/regions/${regionSlug}/${serviceSlug}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -251,7 +251,7 @@ export default async function RegionServicePage({ params }: PageProps) {
               const h1Hash = Math.abs(hashCode(`h1-region-svc-${regionSlug}-${serviceSlug}`))
               const h1Templates = [
                 `${trade.name} ${getRegionPreposition(region.name)}`,
-                `Trouver un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)}`,
+                `${trade.name} ${getRegionPreposition(region.name)} : pros qualifiés`,
                 `${region.name} : ${trade.name.toLowerCase()} par département`,
                 `${trade.name} qualifié ${getRegionPreposition(region.name)}`,
                 `Tous les ${trade.name.toLowerCase()}s ${getRegionArticle(region.name)}`,

@@ -21,7 +21,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import {
   villes,
   services,
@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       images: [cityImage ? cityImage.src : `${SITE_URL}/opengraph-image`],
     },
-    alternates: { canonical: `${SITE_URL}/villes/${villeSlug}/${quartierSlug}` },
+    alternates: getAlternates(`/villes/${villeSlug}/${quartierSlug}`),
   }
 }
 
@@ -237,7 +237,7 @@ export default async function QuartierPage({ params }: PageProps) {
               const h1Hash = Math.abs(hashCode(`h1-quartier-${ville.slug}-${quartierSlug}`))
               const h1Templates = [
                 `Artisans à ${quartierName}, ${ville.name}`,
-                `Trouver un artisan à ${quartierName} (${ville.name})`,
+                `Artisans à ${quartierName} (${ville.name}) : pros qualifiés`,
                 `${quartierName}, ${ville.name} : artisans qualifiés`,
                 `Artisans dans le quartier ${quartierName} à ${ville.name}`,
                 `${ville.name} ${quartierName} — artisans de confiance`,

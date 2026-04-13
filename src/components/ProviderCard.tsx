@@ -77,7 +77,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getDiceBearAvatar(provider.siret || provider.slug || provider.name, 96)}
-              alt=""
+              alt={`${provider.name} — artisan à ${provider.address_city || 'France'}`}
               width={48}
               height={48}
               loading="lazy"

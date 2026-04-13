@@ -5,7 +5,7 @@ import { Star, Users, Shield, MapPin, ArrowRight, HelpCircle } from 'lucide-reac
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { BAROMETRE_METIERS, getBarometreMetierBySlug, TOP_VILLES } from '@/lib/barometre/constants'
 import { getStatsByMetier, getMetierTopVilles } from '@/lib/barometre/queries'
 import type { BarometreStatRow } from '@/lib/barometre/queries'
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: getAlternates(`/barometre/tarifs/${metierSlug}`),
     robots: { index: true, follow: true },
     openGraph: {
       locale: 'fr_FR',

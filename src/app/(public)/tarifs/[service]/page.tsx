@@ -382,11 +382,11 @@ export default async function TarifsServicePage({
                 const h1Hash = Math.abs(hashCode(`tarif-h1-${service}`))
                 const tradeLower = trade.name.toLowerCase()
                 const h1Templates = [
-                  `Combien coûte un ${tradeLower} en 2026 ?`,
-                  `Quel est le prix d'un ${tradeLower} en 2026 ?`,
-                  `Quel budget prévoir pour un ${tradeLower} en 2026 ?`,
-                  `Combien coûte un ${tradeLower} ? Guide tarifs 2026`,
-                  `${trade.name} : combien ça coûte en 2026 ?`,
+                  `Tarifs ${tradeLower} en France — Guide 2026`,
+                  `Prix ${tradeLower} en 2026 : tarif horaire et devis`,
+                  `${trade.name} : tarifs et prix en France (2026)`,
+                  `Tarifs ${tradeLower} 2026 : prix et coûts`,
+                  `${trade.name} : prix et tarifs en 2026`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}

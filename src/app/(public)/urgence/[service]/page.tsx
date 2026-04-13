@@ -10,7 +10,7 @@ import {
   getHowToSchema,
   getUrgencyHubServiceSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
+import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode } from '@/lib/seo/location-content'
@@ -181,7 +181,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/urgence/${service}` },
+    alternates: getAlternates(`/urgence/${service}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -368,7 +368,7 @@ export default async function UrgenceServicePage({
                 `Urgence ${trade.name.toLowerCase()} soir & week-end`,
                 `Dépannage ${trade.name.toLowerCase()} urgent`,
                 `${trade.name} d'urgence — y compris le week-end`,
-                `Intervention ${trade.name.toLowerCase()} en urgence`,
+                `${trade.name} urgence : intervention rapide`,
               ]
               return h1Templates[h1Hash % h1Templates.length]
             })()}

@@ -14,8 +14,8 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
@@ -214,7 +214,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: getAlternates(`/tarifs/${service}/${villeSlug}`),
     robots: { index: !noindex, follow: true },
     openGraph: {
       locale: 'fr_FR',
@@ -343,11 +343,6 @@ export default async function TarifsServiceVillePage({
     }),
   }
 
-  const speakableSchema = getSpeakableSchema({
-    url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
-    title: `Tarifs ${tradeLower} à ${villeData.name}`,
-  })
-
   // Enriched schemas -------------------------------------------------------
   const pricingTasks = parseCommonTasksToPricingTasks(trade.commonTasks, trade.priceRange.unit)
   const detailedPricingSchema = generateDetailedPricingSchema({
@@ -398,7 +393,6 @@ export default async function TarifsServiceVillePage({
           breadcrumbSchema,
           serviceSchema,
           pricingItemListSchema,
-          speakableSchema,
           ...(detailedPricingSchema ? [detailedPricingSchema] : []),
           ...(enrichedFAQSchema ? [enrichedFAQSchema] : []),
           enrichedSpeakableSchema,
@@ -442,9 +436,9 @@ export default async function TarifsServiceVillePage({
                 const h1Templates = [
                   `Tarifs ${tradeLower} à ${villeData.name} en 2026`,
                   `Prix ${tradeLower} à ${villeData.name} : guide des tarifs 2026`,
-                  `Combien coûte un ${tradeLower} à ${villeData.name} ?`,
+                  `${trade.name} à ${villeData.name} : tarifs et coûts 2026`,
                   `${trade.name} à ${villeData.name} : tarifs et prix 2026`,
-                  `Guide des tarifs ${tradeLower} à ${villeData.name}`,
+                  `Tarifs ${tradeLower} à ${villeData.name} — guide complet 2026`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}

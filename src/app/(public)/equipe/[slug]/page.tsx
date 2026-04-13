@@ -59,9 +59,9 @@ export default async function AuthorPage({ params }: PageProps) {
 
   const personSchema = getPersonSchema(author)
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Accueil', url: SITE_URL },
-    { name: 'Notre équipe', url: `${SITE_URL}/equipe` },
-    { name: author.name, url: `${SITE_URL}/equipe/${slug}` },
+    { name: 'Accueil', url: '/' },
+    { name: 'Notre équipe', url: '/equipe' },
+    { name: author.name, url: `/equipe/${slug}` },
   ])
 
   const breadcrumbItems = [{ label: 'Notre équipe', href: '/equipe' }, { label: author.name }]

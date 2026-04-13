@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: 'Diagnostics Immobiliers Obligatoires : Le Guide Complet',
   description:
     'Liste des 10 diagnostics immobiliers obligatoires en 2026 : DPE, amiante, plomb, termites, électricité, gaz. Quand les réaliser, durée de validité et prix.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/diagnostics-immobiliers'),
   openGraph: {
     title: 'Diagnostics Immobiliers Obligatoires : Le Guide Complet',
     description:

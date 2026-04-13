@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: 'Travaux en Copropriété : Règles et Démarches 2026',
   description:
     'Guide complet des travaux en copropriété : parties communes vs privatives, vote en assemblée générale, majorités requises, autorisations et gros travaux obligatoires.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/travaux-copropriete'),
   openGraph: {
     title: 'Travaux en Copropriété : Règles et Démarches 2026',
     description:

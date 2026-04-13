@@ -5,7 +5,7 @@ import CopyButton from '@/components/ui/CopyButton'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getTradesSlugs, getTradeContent } from '@/lib/data/trade-content'
 
 // ---------------------------------------------------------------------------
@@ -19,7 +19,7 @@ const PAGE_DESCRIPTION =
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/widget-prix` },
+  alternates: getAlternates(`/widget-prix`),
   openGraph: {
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
@@ -108,10 +108,7 @@ export default function WidgetPrixPage() {
       <section className="bg-gradient-to-br from-primary-400 via-primary-500 to-primary-700 text-white">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
           <Breadcrumb
-            items={[
-              { label: 'Accueil', href: '/' },
-              { label: 'Widget Prix' },
-            ]}
+            items={[{ label: 'Accueil', href: '/' }, { label: 'Widget Prix' }]}
             className="mb-8 text-primary-200"
           />
 
@@ -126,7 +123,8 @@ export default function WidgetPrixPage() {
               </h1>
               <p className="mb-8 text-lg leading-relaxed text-primary-100">
                 Intégrez un widget de tarifs artisans sur votre site ou blog en une ligne de code.
-                Données actualisées, design responsive, {slugs.length} métiers et toutes les villes de France.
+                Données actualisées, design responsive, {slugs.length} métiers et toutes les villes
+                de France.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a
@@ -198,7 +196,10 @@ export default function WidgetPrixPage() {
                 desc: 'HTML auto-contenu avec CSS inline. Aucun script externe, aucun cookie.',
               },
             ].map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="rounded-xl border border-sand-200 p-6 shadow-soft hover:shadow-card-hover transition-shadow">
+              <div
+                key={title}
+                className="rounded-xl border border-sand-200 p-6 shadow-soft hover:shadow-card-hover transition-shadow"
+              >
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-primary-500">
                   <Icon className="h-5 w-5" />
                 </div>
@@ -218,9 +219,13 @@ export default function WidgetPrixPage() {
           </h2>
           <p className="mb-8 text-charcoal-600">
             Copiez-collez ce code HTML dans votre site ou article de blog. Modifiez les paramètres
-            <code className="mx-1 rounded bg-sand-200 px-1.5 py-0.5 text-sm font-mono text-primary-600">service</code>
+            <code className="mx-1 rounded bg-sand-200 px-1.5 py-0.5 text-sm font-mono text-primary-600">
+              service
+            </code>
             et
-            <code className="mx-1 rounded bg-sand-200 px-1.5 py-0.5 text-sm font-mono text-primary-600">ville</code>
+            <code className="mx-1 rounded bg-sand-200 px-1.5 py-0.5 text-sm font-mono text-primary-600">
+              ville
+            </code>
             selon vos besoins.
           </p>
 
@@ -241,7 +246,9 @@ export default function WidgetPrixPage() {
           </div>
 
           <div className="mt-8">
-            <h3 className="mb-4 font-heading text-lg font-bold text-charcoal-900">Paramètres disponibles</h3>
+            <h3 className="mb-4 font-heading text-lg font-bold text-charcoal-900">
+              Paramètres disponibles
+            </h3>
             <div className="overflow-x-auto rounded-xl border border-sand-200 bg-white shadow-soft">
               <table className="w-full text-left text-sm">
                 <thead className="border-b border-sand-200 bg-sand-50">
@@ -268,7 +275,9 @@ export default function WidgetPrixPage() {
                   <tr>
                     <td className="px-4 py-3 font-mono text-primary-600">format</td>
                     <td className="px-4 py-3 text-charcoal-600">string</td>
-                    <td className="px-4 py-3 text-charcoal-600">{'"json"'} pour la réponse API (optionnel)</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      {'"json"'} pour la réponse API (optionnel)
+                    </td>
                     <td className="px-4 py-3 font-mono text-charcoal-500">json</td>
                   </tr>
                 </tbody>
@@ -285,14 +294,17 @@ export default function WidgetPrixPage() {
             Documentation API
           </h2>
           <p className="mb-8 text-charcoal-600">
-            Utilisez notre API JSON gratuite pour intégrer les prix des artisans directement dans votre application.
+            Utilisez notre API JSON gratuite pour intégrer les prix des artisans directement dans
+            votre application.
           </p>
 
           {/* Endpoint */}
           <div className="mb-8 rounded-xl border border-sand-200 bg-sand-50 p-6">
             <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">Endpoint</h3>
             <div className="flex items-center gap-3 overflow-x-auto rounded-lg bg-charcoal-900 px-4 py-3">
-              <span className="shrink-0 rounded bg-accent-500 px-2 py-0.5 text-xs font-bold text-white">GET</span>
+              <span className="shrink-0 rounded bg-accent-500 px-2 py-0.5 text-xs font-bold text-white">
+                GET
+              </span>
               <code className="text-sm text-accent-300">
                 /api/prix-widget?service=&#123;slug&#125;&amp;ville=&#123;slug&#125;&amp;format=json
               </code>
@@ -301,7 +313,9 @@ export default function WidgetPrixPage() {
 
           {/* Example request */}
           <div className="mb-8">
-            <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">Exemple de requête</h3>
+            <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">
+              Exemple de requête
+            </h3>
             <div className="rounded-xl border border-sand-200 bg-white shadow-soft">
               <div className="border-b border-sand-200 px-4 py-3">
                 <span className="text-sm font-semibold text-charcoal-700">JavaScript (fetch)</span>
@@ -314,7 +328,9 @@ export default function WidgetPrixPage() {
 
           {/* Example response */}
           <div className="mb-8">
-            <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">Exemple de réponse</h3>
+            <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">
+              Exemple de réponse
+            </h3>
             <div className="rounded-xl border border-sand-200 bg-white shadow-soft">
               <div className="border-b border-sand-200 px-4 py-3">
                 <span className="text-sm font-semibold text-charcoal-700">JSON</span>
@@ -345,9 +361,9 @@ export default function WidgetPrixPage() {
               Attribution obligatoire
             </h3>
             <p className="mb-3 text-sm text-primary-700">
-              En utilisant le widget ou l'API, vous devez inclure un lien visible vers ServicesArtisans.fr.
-              Le widget HTML inclut automatiquement ce lien. Si vous utilisez l'API JSON,
-              ajoutez le lien suivant sur votre page :
+              En utilisant le widget ou l'API, vous devez inclure un lien visible vers
+              ServicesArtisans.fr. Le widget HTML inclut automatiquement ce lien. Si vous utilisez
+              l'API JSON, ajoutez le lien suivant sur votre page :
             </p>
             <div className="rounded-lg bg-white p-3">
               <code className="text-sm text-charcoal-800">
@@ -371,7 +387,9 @@ export default function WidgetPrixPage() {
                 className="flex items-center justify-between rounded-lg border border-sand-200 bg-white px-4 py-2.5 text-sm"
               >
                 <span className="text-charcoal-700">{name}</span>
-                <code className="rounded bg-sand-100 px-2 py-0.5 font-mono text-xs text-charcoal-500">{slug}</code>
+                <code className="rounded bg-sand-100 px-2 py-0.5 font-mono text-xs text-charcoal-500">
+                  {slug}
+                </code>
               </div>
             ))}
           </div>
@@ -389,7 +407,7 @@ export default function WidgetPrixPage() {
             {[
               {
                 q: 'Le widget est-il vraiment gratuit ?',
-                a: "Oui, 100 % gratuit et sans inscription. Notre seule condition est de conserver le lien \"Powered by ServicesArtisans.fr\" visible dans le widget. Ce lien nous aide à développer le service et à maintenir les données à jour.",
+                a: 'Oui, 100 % gratuit et sans inscription. Notre seule condition est de conserver le lien "Powered by ServicesArtisans.fr" visible dans le widget. Ce lien nous aide à développer le service et à maintenir les données à jour.',
               },
               {
                 q: "D'où viennent les données de prix ?",
@@ -404,15 +422,18 @@ export default function WidgetPrixPage() {
                 a: "Oui, l'usage commercial est autorisé. La seule obligation est d'inclure un lien visible vers ServicesArtisans.fr sur la page ou dans l'application qui affiche les données.",
               },
               {
-                q: "Le widget ralentit-il mon site ?",
-                a: "Non. Le widget est chargé dans une iframe isolée avec l'attribut loading=\"lazy\" (chargement différé). Il ne contient aucun script externe et n'affecte pas les performances de votre page.",
+                q: 'Le widget ralentit-il mon site ?',
+                a: 'Non. Le widget est chargé dans une iframe isolée avec l\'attribut loading="lazy" (chargement différé). Il ne contient aucun script externe et n\'affecte pas les performances de votre page.',
               },
               {
                 q: 'Quelle est la fréquence de mise à jour des prix ?',
                 a: 'Les prix sont mis à jour régulièrement en fonction des évolutions du marché. Les réponses API sont cachées pendant 24 heures pour garantir des performances optimales.',
               },
             ].map(({ q, a }) => (
-              <details key={q} className="group rounded-xl border border-sand-200 bg-white shadow-soft">
+              <details
+                key={q}
+                className="group rounded-xl border border-sand-200 bg-white shadow-soft"
+              >
                 <summary className="flex cursor-pointer items-center justify-between px-6 py-4 text-left font-semibold text-charcoal-900 hover:bg-sand-50">
                   {q}
                   <span className="ml-4 shrink-0 text-charcoal-400 transition-transform group-open:rotate-180">

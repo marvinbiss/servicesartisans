@@ -34,7 +34,6 @@ import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import {
   getBreadcrumbSchema,
   getItemListSchema,
-  getSpeakableSchema,
   getEnrichedLocalServiceSchema,
 } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -216,7 +215,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
         {
           title: `${serviceName} à ${locationName} : ${providerCount} Pros + Devis`,
-          h1: `Trouvez ${naturalTerm.article} à ${locationName}`,
+          h1: `${serviceName} à ${locationName} : pros vérifiés`,
         },
         {
           title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
@@ -238,7 +237,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
         {
           title: `${serviceName} à ${locationName} : Devis Gratuit 2026`,
-          h1: `Trouvez ${naturalTerm.article} à ${locationName}`,
+          h1: `${serviceName} à ${locationName} : pros vérifiés`,
         },
         {
           title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
@@ -313,6 +312,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title,
       description,
+      url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
       type: 'website',
       locale: 'fr_FR',
       images: [
@@ -721,25 +721,19 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   const h1Variants = hasProvidersH1
     ? [
         `${service.name} à ${location.name}`,
-        `Trouvez ${naturalTermH1.article} à ${location.name}`,
+        `${service.name} à ${location.name} : pros vérifiés`,
         `${service.name} à ${location.name} — ${providerCount} pros référencés`,
         `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
         `${naturalTermH1.plural.charAt(0).toUpperCase() + naturalTermH1.plural.slice(1)} de confiance à ${location.name}`,
       ]
     : [
         `${service.name} à ${location.name}`,
-        `Trouvez ${naturalTermH1.article} à ${location.name}`,
+        `${service.name} à ${location.name} : pros vérifiés`,
         `${service.name} à ${location.name} — Artisans qualifiés`,
         `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
         `${naturalTermH1.plural.charAt(0).toUpperCase() + naturalTermH1.plural.slice(1)} de confiance à ${location.name}`,
       ]
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]
-
-  const speakableSchema = getSpeakableSchema({
-    url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
-    title: h1Text,
-  })
-  jsonLdSchemas.push(speakableSchema)
 
   // Enriched FAQ schema from schema-enrichment (supplements existing faqSchema)
   const enrichedFaqSchema = generateFAQSchema(

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   title: 'Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?',
   description:
     "Prix au m² par type de rénovation, budget par pièce, aides financières (MaPrimeRénov', CEE, éco-PTZ), conseils pour établir un budget réaliste et financer vos travaux en 2026.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/budget-renovation'),
   openGraph: {
     title: 'Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?',
     description:

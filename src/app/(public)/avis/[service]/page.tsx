@@ -14,7 +14,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getAvisHubSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
@@ -84,9 +84,9 @@ export async function generateMetadata({
       : ''
   const descHash = Math.abs(hashCode(`avis-desc-${service}`))
   const descTemplates = [
-    `${ratingSnippet}Consultez les avis sur les ${tradeLower}s. Comparez les profils, vérifiez les certifications et choisissez un professionnel de confiance. Tarifs : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
-    `${ratingSnippet}Avis ${tradeLower} : comment bien choisir ? Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, conseils et retours clients vérifiés sur ${SITE_NAME}.`,
-    `${ratingSnippet}Trouvez un ${tradeLower} de confiance grâce aux avis vérifiés. Prix : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite sur ${SITE_NAME}.`,
+    `${ratingSnippet}Avis ${tradeLower}s vérifiés. Comparez les profils, certifications et tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    `${ratingSnippet}Avis ${tradeLower} : tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications et retours clients vérifiés.`,
+    `${ratingSnippet}${trade.name} de confiance : avis vérifiés, prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -95,7 +95,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/avis/${service}` },
+    alternates: getAlternates(`/avis/${service}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -430,10 +430,10 @@ export default async function AvisServicePage({
                 const h1Hash = Math.abs(hashCode(`avis-h1-${service}`))
                 const h1Templates = [
                   `Avis ${tradeLower} — Comment bien choisir`,
-                  `Choisir un bon ${tradeLower} : avis et conseils`,
+                  `Avis ${tradeLower} : conseils pour bien choisir`,
                   `Avis ${tradeLower} : comparez les professionnels`,
                   `${trade.name} : avis vérifiés et recommandations`,
-                  `Trouver un ${tradeLower} de confiance`,
+                  `${trade.name} de confiance : avis vérifiés`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}

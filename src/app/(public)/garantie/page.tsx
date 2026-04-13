@@ -10,13 +10,13 @@ import {
   Star,
   MessageCircle,
 } from 'lucide-react'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Garantie ServicesArtisans — Notre engagement qualité',
   description:
     'Artisans vérifiés, devis gratuits et sans engagement, données protégées. Découvrez les garanties ServicesArtisans pour vos travaux en toute confiance.',
-  alternates: { canonical: `${SITE_URL}/garantie` },
+  alternates: getAlternates(`/garantie`),
   robots: { index: true, follow: true },
   openGraph: {
     title: 'Garantie ServicesArtisans — Notre engagement qualité',

@@ -4,7 +4,7 @@ import { Code, CheckCircle, ArrowRight, ChevronDown, Globe, TrendingUp, Shield }
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { WidgetCopyButton } from './WidgetCopyButton'
 
 const canonicalUrl = `${SITE_URL}/widget`
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: `Widget ${SITE_NAME} — Affichez votre profil`,
   description: `Intégrez le widget ${SITE_NAME} sur votre site web pour renforcer votre crédibilité en ligne. Badge artisan gratuit, installation en 2 minutes.`,
   robots: { index: false, follow: true },
-  alternates: { canonical: canonicalUrl },
+  alternates: getAlternates('/widget'),
   openGraph: {
     locale: 'fr_FR',
     title: `Widget ${SITE_NAME} — Affichez votre profil`,

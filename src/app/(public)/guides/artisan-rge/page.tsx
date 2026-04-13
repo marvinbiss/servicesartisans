@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   title: 'Artisan RGE : Trouver un Pro Certifié (2026)',
   description:
     "Tout savoir sur la certification RGE (Reconnu Garant de l'Environnement) : comment vérifier un artisan RGE, les qualifications Qualibat, QualiPAC, QualiSol et comment bénéficier des aides MaPrimeRénov'.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/artisan-rge'),
   openGraph: {
     title: 'Artisan RGE : Vérifier et Trouver un Professionnel Certifié',
     description:

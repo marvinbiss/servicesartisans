@@ -15,7 +15,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getNationalStats, getTopMetiers, getTopVilles } from '@/lib/barometre/queries'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   title: `Baromètre des Artisans 2026 — Stats par métier`,
   description:
     'Baromètre des artisans en France : statistiques sur 940 000+ professionnels du bâtiment. Notes moyennes, avis, répartition par métier et ville.',
-  alternates: { canonical: canonicalUrl },
+  alternates: getAlternates('/barometre'),
   robots: {
     index: true,
     follow: true,

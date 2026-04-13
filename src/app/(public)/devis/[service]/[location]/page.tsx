@@ -15,7 +15,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
@@ -191,7 +191,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: getAlternates(`/devis/${service}/${location}`),
     robots: { index: !noindex, follow: true },
     openGraph: {
       locale: 'fr_FR',
@@ -1270,7 +1270,7 @@ export default async function DevisServiceLocationPage({
       <section className="py-8 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
-            Voir aussi
+            Comparer les options
           </h2>
           <div className="flex flex-wrap gap-3">
             <Link

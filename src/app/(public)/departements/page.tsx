@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Building2, MapPin, Users, ChevronRight, Map } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { departements, regions, villes, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: 'Artisans par Département — 101 Départements',
   description:
     "Annuaire d'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous. Devis gratuits, sans engagement.",
-  alternates: { canonical: `${SITE_URL}/departements` },
+  alternates: getAlternates(`/departements`),
   openGraph: {
     title: 'Artisans par Département — 101 Départements',
     description:

@@ -36,15 +36,31 @@ const CACHE_TTL_6H = 6 * 60 * 60
  * cohérent avec les autres listings publics.
  */
 const PROVIDER_LIST_SELECT = [
-  'id', 'stable_id', 'name', 'slug', 'specialty',
-  'address_street', 'address_postal_code', 'address_city', 'address_region',
-  'is_verified', 'is_active', 'noindex',
-  'rating_average', 'review_count',
-  'phone', 'siret',
-  'latitude', 'longitude',
+  'id',
+  'stable_id',
+  'name',
+  'slug',
+  'specialty',
+  'address_street',
+  'address_postal_code',
+  'address_city',
+  'address_region',
+  'is_verified',
+  'is_active',
+  'noindex',
+  'rating_average',
+  'review_count',
+  'phone',
+  'siret',
+  'latitude',
+  'longitude',
   'user_id',
-  'created_at', 'updated_at',
-  'rge_qualifications', 'rge_valid_until', 'rge_organismes', 'rge_source_url',
+  'created_at',
+  'updated_at',
+  'rge_qualifications',
+  'rge_valid_until',
+  'rge_organismes',
+  'rge_source_url',
 ].join(',')
 
 /**
@@ -74,7 +90,7 @@ function resolveSpecialtiesForOperation(servicesSlugs: string[]): string[] {
 export async function getCeeProvidersByOperationAndCity(
   operationCode: string,
   villeSlug: string,
-  opts: { limit?: number } = {},
+  opts: { limit?: number } = {}
 ): Promise<Provider[]> {
   if (IS_BUILD) return []
   const limit = opts.limit ?? 50
@@ -116,20 +132,20 @@ export async function getCeeProvidersByOperationAndCity(
           (data || []) as unknown as Array<{
             address_city?: string | null
             address_region?: string | null
-          }>,
+          }>
         ) as unknown as Provider[]
 
         return providers
       } catch (err) {
         logger.error(
           `[getCeeProvidersByOperationAndCity] FAILED for ${operationCode}/${villeSlug}`,
-          { error: err instanceof Error ? err.message : err },
+          { error: err instanceof Error ? err.message : err }
         )
         return []
       }
     },
     CACHE_TTL_6H,
-    { skipNull: true },
+    { skipNull: true }
   )
 }
 
@@ -139,9 +155,9 @@ export async function getCeeProvidersByOperationAndCity(
  */
 export async function getCeeProviderCountByOperationAndCity(
   operationCode: string,
-  villeSlug: string,
+  villeSlug: string
 ): Promise<number> {
-  if (IS_BUILD) return 0
+  if (IS_BUILD) return 1 // fail-open: keep pages indexed during build
 
   const ville = getVilleBySlug(villeSlug)
   if (!ville) return 0
@@ -175,12 +191,12 @@ export async function getCeeProviderCountByOperationAndCity(
       } catch (err) {
         logger.error(
           `[getCeeProviderCountByOperationAndCity] FAILED for ${operationCode}/${villeSlug}`,
-          { error: err instanceof Error ? err.message : err },
+          { error: err instanceof Error ? err.message : err }
         )
         return 0
       }
     },
-    CACHE_TTL_6H,
+    CACHE_TTL_6H
   )
 }
 
@@ -194,9 +210,7 @@ export interface CeeTopCity {
  * Top villes pour une opération donnée — agrégation JS sur sample 500, même
  * pattern que `getRgeServiceStats`. Cache 6h, fail-open [].
  */
-export async function getCeeTopCitiesByOperation(
-  operationCode: string,
-): Promise<CeeTopCity[]> {
+export async function getCeeTopCitiesByOperation(operationCode: string): Promise<CeeTopCity[]> {
   if (IS_BUILD) return []
 
   const operation = await getCeeOperationByCode(operationCode)
@@ -241,7 +255,7 @@ export async function getCeeTopCitiesByOperation(
           .select('code_insee,slug,name')
           .in(
             'code_insee',
-            topInseeCodes.map((t) => t.code),
+            topInseeCodes.map((t) => t.code)
           )
           .eq('is_active', true)
 
@@ -275,6 +289,6 @@ export async function getCeeTopCitiesByOperation(
       }
     },
     CACHE_TTL_6H,
-    { skipNull: true },
+    { skipNull: true }
   )
 }

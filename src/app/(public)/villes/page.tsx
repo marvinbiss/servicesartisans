@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { MapPin, ArrowRight, Building2, Users, ChevronRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { villes, regions, departements, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -13,7 +13,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Artisans par Ville — Annuaire par commune en France',
   description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
-  alternates: { canonical: `${SITE_URL}/villes` },
+  alternates: getAlternates(`/villes`),
   openGraph: {
     title: 'Artisans par Ville — Annuaire par commune en France',
     description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Annuaire par commune dans 101 départements.`,

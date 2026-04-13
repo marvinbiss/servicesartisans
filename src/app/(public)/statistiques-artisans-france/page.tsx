@@ -21,7 +21,7 @@ import {
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { DEPT_ARTISAN_COUNTS } from '@/lib/data/dept-artisan-counts'
 import { DEPARTMENTS } from '@/lib/geography'
 import {
@@ -191,7 +191,7 @@ const pageUrl = `${SITE_URL}/statistiques-artisans-france`
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
-  alternates: { canonical: pageUrl },
+  alternates: getAlternates('/statistiques-artisans-france'),
   robots: {
     index: true,
     follow: true,

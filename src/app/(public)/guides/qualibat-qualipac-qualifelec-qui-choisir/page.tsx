@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: 'Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualif RGE ?',
   description:
     'Comparatif des qualifications RGE 2026 : Qualibat, QualiPAC, QualiSol, QualiPV, Qualifelec, QualiBois. Quelle qualification pour quels travaux ?',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/qualibat-qualipac-qualifelec-qui-choisir'),
   openGraph: {
     title: 'Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualification RGE choisir ?',
     description:

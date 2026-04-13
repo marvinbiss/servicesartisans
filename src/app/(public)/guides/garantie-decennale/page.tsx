@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getInsuranceProductSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: 'Garantie Décennale : Tout Comprendre en 2026',
   description:
     "Tout savoir sur la garantie décennale : définition, durée de 10 ans, travaux couverts, exclusions, comment vérifier l'attestation d'un artisan et que faire en cas de sinistre.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/garantie-decennale'),
   openGraph: {
     title: 'Garantie Décennale : Tout Comprendre en 2026',
     description:

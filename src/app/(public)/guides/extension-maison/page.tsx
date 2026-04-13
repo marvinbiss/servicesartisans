@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   title: 'Extension de Maison : Démarches, Prix et Conseils 2026',
   description:
     "Guide complet extension de maison 2026 : types d'extensions (latérale, surélévation, véranda), démarches administratives, prix au m² (800-2500€), matériaux et artisans.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/extension-maison'),
   openGraph: {
     title: 'Extension de Maison : Démarches, Prix et Conseils 2026',
     description:

@@ -20,7 +20,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
@@ -466,7 +466,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/problemes/${probleme}/${ville}` },
+    alternates: getAlternates(`/problemes/${probleme}/${ville}`),
     robots: { index: true, follow: true },
     openGraph: {
       locale: 'fr_FR',
@@ -521,7 +521,7 @@ export default async function ProblemeVillePage({
   const h1Templates = [
     `${problem.name} à ${villeData.name}`,
     `${problem.name} à ${villeData.name} — Que faire ?`,
-    `Résoudre un problème de ${problem.name.toLowerCase()} à ${villeData.name}`,
+    `${problem.name} à ${villeData.name} : diagnostic et solutions`,
     `${problem.name} : artisans à ${villeData.name}`,
   ]
   const h1 = h1Templates[h1Hash % h1Templates.length]

@@ -5,7 +5,7 @@ import { ArrowRight, Euro, Shield, ChevronDown, ChevronRight } from 'lucide-reac
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
@@ -70,7 +70,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/devis/${service}` },
+    alternates: getAlternates(`/devis/${service}`),
     openGraph: {
       locale: 'fr_FR',
       title,

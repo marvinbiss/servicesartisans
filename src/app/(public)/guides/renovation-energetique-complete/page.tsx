@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   title: 'Rénovation Énergétique : Guide Complet pour Votre Maison',
   description:
     "Guide complet rénovation énergétique 2026 : isolation, chauffage, ventilation, fenêtres. Toutes les aides (MaPrimeRénov, CEE, éco-PTZ) et l'ordre optimal des travaux.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/renovation-energetique-complete'),
   openGraph: {
     title: 'Rénovation Énergétique : Guide Complet pour Votre Maison',
     description:

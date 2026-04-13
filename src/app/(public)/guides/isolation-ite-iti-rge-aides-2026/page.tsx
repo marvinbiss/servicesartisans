@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title: 'Isolation ITE vs ITI 2026 : comparatif, artisan RGE et aides',
   description:
     "ITE ou ITI en 2026 : différences, matériaux, prix au m², MaPrimeRénov' Isolation, Coup de pouce CEE et obligation Qualibat RGE. Guide comparatif complet.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/isolation-ite-iti-rge-aides-2026'),
   openGraph: {
     title: 'Isolation ITE vs ITI 2026 : comparatif, artisan RGE et aides cumulables',
     description:

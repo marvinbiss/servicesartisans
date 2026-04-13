@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   title: 'Changer ses Fenêtres : Matériaux, Prix et Aides 2026',
   description:
     "Guide complet remplacement de fenêtres 2026 : matériaux (PVC, bois, alu), types d'ouverture, vitrage, prix (300-1500€), aides MaPrimeRénov et CEE.",
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/renovation-fenetres'),
   openGraph: {
     title: 'Changer ses Fenêtres : Matériaux, Prix et Aides 2026',
     description:

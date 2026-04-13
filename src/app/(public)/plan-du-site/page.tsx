@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { services, villes, departements, regions, getQuartiersByVille } from '@/lib/data/france'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: 'Plan du site',
   description:
     'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
-  alternates: { canonical: `${SITE_URL}/plan-du-site` },
+  alternates: getAlternates(`/plan-du-site`),
   robots: { index: false, follow: true },
   openGraph: {
     title: 'Plan du site',

@@ -20,7 +20,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
@@ -295,7 +295,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: getAlternates(`/avis/${service}/${ville}`),
     robots: {
       index: !noindex,
       follow: true,
@@ -601,9 +601,9 @@ export default async function AvisServiceVillePage({
                 const h1Hash = Math.abs(hashCode(`avis-loc-h1-${service}-${villeSlug}`))
                 const h1Templates = [
                   `Avis ${tradeLower} à ${villeData.name}`,
-                  `Choisir un ${tradeLower} à ${villeData.name} — Avis et recommandations`,
+                  `Avis ${tradeLower} à ${villeData.name} : recommandations clients`,
                   `${trade.name} à ${villeData.name} : avis clients vérifiés`,
-                  `Trouver un bon ${tradeLower} à ${villeData.name}`,
+                  `${trade.name} à ${villeData.name} : avis et notes clients`,
                   `Avis et recommandations ${tradeLower} à ${villeData.name}`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]

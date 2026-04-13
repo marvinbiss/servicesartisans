@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: 'Isolation des Combles : Guide Prix, Techniques et Aides 2026',
   description:
     'Guide isolation combles 2026 : combles perdus (20-75 €/m²), combles aménagés (48-265 €/m²), techniques (soufflage, rouleau, sarking), aides et artisans RGE.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/guides/isolation-combles'),
   openGraph: {
     title: 'Isolation des Combles : Guide Prix, Techniques et Aides 2026',
     description:

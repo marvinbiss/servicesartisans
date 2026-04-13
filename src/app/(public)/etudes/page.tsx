@@ -4,7 +4,7 @@ import { BarChart3, ArrowRight, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 
 const canonicalUrl = `${SITE_URL}/etudes`
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: '\u00c9tudes et donn\u00e9es sur l\u2019artisanat en France',
   description:
     '\u00c9tudes exclusives sur l\u2019artisanat en France : d\u00e9serts artisanaux, densit\u00e9 par d\u00e9partement, m\u00e9tiers en tension. Donn\u00e9es SIREN officielles.',
-  alternates: { canonical: canonicalUrl },
+  alternates: getAlternates('/etudes'),
   robots: { index: true, follow: true },
   openGraph: {
     locale: 'fr_FR',

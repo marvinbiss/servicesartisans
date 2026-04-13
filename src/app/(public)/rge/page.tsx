@@ -21,7 +21,7 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getRgeNationalStats } from '@/lib/rge/guide-stats'
 import { getRgeLastSyncDate } from '@/lib/rge/last-sync'
@@ -159,7 +159,7 @@ export const metadata: Metadata = {
   title: 'Artisans RGE certifiés : trouvez un pro près de chez vous',
   description:
     'Annuaire national des artisans RGE actifs en France. Données ADEME officielles, mise à jour hebdomadaire. Éligibles MaPrimeRénov\u2019, CEE, TVA 5,5 %. Vérification gratuite.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/rge'),
   openGraph: {
     locale: 'fr_FR',
     title: 'Artisans RGE certifiés en France — Annuaire officiel ADEME',

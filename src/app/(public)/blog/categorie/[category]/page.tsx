@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { Calendar, Clock, ArrowRight, ArrowLeft } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
 import {
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: cat.metaTitle,
     description: cat.metaDescription,
-    alternates: { canonical: `${SITE_URL}/blog/categorie/${categorySlug}` },
+    alternates: getAlternates(`/blog/categorie/${categorySlug}`),
     robots: {
       index: true,
       follow: true,

@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
 import {
   departements,
@@ -94,7 +94,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/departements/${deptSlug}/${serviceSlug}` },
+    alternates: getAlternates(`/departements/${deptSlug}/${serviceSlug}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -261,7 +261,7 @@ export default async function DeptServicePage({ params }: PageProps) {
                   const h1Hash = Math.abs(hashCode(`h1-dept-svc-${deptSlug}-${serviceSlug}`))
                   const h1Templates = [
                     `${trade.name} ${getDeptPreposition(dept.name)}`,
-                    `Trouver un ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)}`,
+                    `${trade.name} ${getDeptPreposition(dept.name)} : pros qualifiés`,
                     `${trade.name} ${dept.name} (${dept.code})`,
                     `${dept.name} : votre ${trade.name.toLowerCase()} qualifié`,
                     `${trade.name} ${getDeptPreposition(dept.name)} (${dept.code})`,

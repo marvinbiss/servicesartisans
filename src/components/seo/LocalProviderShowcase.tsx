@@ -73,12 +73,18 @@ function buildLocalBusinessJsonLd(provider: ShowcaseProvider, cityName: string) 
     },
     url: `${SITE_URL}${getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}`,
   }
-  if (provider.rating_average && provider.rating_average > 0) {
+  if (
+    provider.rating_average &&
+    provider.rating_average > 0 &&
+    provider.review_count &&
+    provider.review_count > 0
+  ) {
     schema.aggregateRating = {
       '@type': 'AggregateRating',
-      ratingValue: provider.rating_average,
-      reviewCount: provider.review_count || 1,
+      ratingValue: Math.min(5, Math.max(1, provider.rating_average)),
+      reviewCount: provider.review_count,
       bestRating: 5,
+      worstRating: 1,
     }
   }
   return schema
@@ -95,9 +101,7 @@ function StarRating({ rating }: { rating: number }) {
 
   for (let i = 0; i < 5; i++) {
     if (i < fullStars) {
-      stars.push(
-        <Star key={i} className="w-4 h-4 text-secondary-400 fill-secondary-400" />
-      )
+      stars.push(<Star key={i} className="w-4 h-4 text-secondary-400 fill-secondary-400" />)
     } else if (i === fullStars && hasHalf) {
       stars.push(
         <span key={i} className="relative inline-flex w-4 h-4">
@@ -108,9 +112,7 @@ function StarRating({ rating }: { rating: number }) {
         </span>
       )
     } else {
-      stars.push(
-        <Star key={i} className="w-4 h-4 text-sand-300" />
-      )
+      stars.push(<Star key={i} className="w-4 h-4 text-sand-300" />)
     }
   }
 
@@ -140,7 +142,9 @@ export default function LocalProviderShowcase({
           <script
             key={`jsonld-${p.id}`}
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: safeJsonStringify(buildLocalBusinessJsonLd(p, cityName)) }}
+            dangerouslySetInnerHTML={{
+              __html: safeJsonStringify(buildLocalBusinessJsonLd(p, cityName)),
+            }}
           />
         ))}
       </>
@@ -148,9 +152,8 @@ export default function LocalProviderShowcase({
   }
 
   // Grid: 1 col if 1-2 providers, 2 cols md / 3 cols lg if 3+
-  const gridCols = sorted.length <= 2
-    ? 'grid-cols-1 max-w-xl'
-    : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+  const gridCols =
+    sorted.length <= 2 ? 'grid-cols-1 max-w-xl' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
 
   return (
     <>
@@ -159,7 +162,9 @@ export default function LocalProviderShowcase({
         <script
           key={`jsonld-${p.id}`}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: safeJsonStringify(buildLocalBusinessJsonLd(p, cityName)) }}
+          dangerouslySetInnerHTML={{
+            __html: safeJsonStringify(buildLocalBusinessJsonLd(p, cityName)),
+          }}
         />
       ))}
 
@@ -171,7 +176,8 @@ export default function LocalProviderShowcase({
                 Artisans disponibles
               </h2>
               <p className="text-sm text-charcoal-500 mt-1">
-                {sorted.length} {serviceName.toLowerCase()}{sorted.length > 1 ? 's' : ''} {cityName ? `à ${cityName}` : ''}
+                {sorted.length} {serviceName.toLowerCase()}
+                {sorted.length > 1 ? 's' : ''} {cityName ? `à ${cityName}` : ''}
               </p>
             </div>
           </div>
@@ -184,8 +190,10 @@ export default function LocalProviderShowcase({
                 specialty: provider.specialty,
                 city: provider.address_city,
               })
-              const hasRating = typeof provider.rating_average === 'number' && provider.rating_average > 0
-              const hasReviews = typeof provider.review_count === 'number' && provider.review_count > 0
+              const hasRating =
+                typeof provider.rating_average === 'number' && provider.rating_average > 0
+              const hasReviews =
+                typeof provider.review_count === 'number' && provider.review_count > 0
 
               return (
                 <div
@@ -205,7 +213,9 @@ export default function LocalProviderShowcase({
                   {/* Header: avatar + name + badges */}
                   <div className="flex items-start gap-3 mb-3">
                     <Link href={providerUrl} className="flex-shrink-0">
-                      <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-base font-bold shadow-soft`}>
+                      <div
+                        className={`w-11 h-11 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-base font-bold shadow-soft`}
+                      >
                         {provider.name.charAt(0).toUpperCase()}
                       </div>
                     </Link>
@@ -223,7 +233,11 @@ export default function LocalProviderShowcase({
                             aria-label="Artisan vérifié"
                             title="Artisan vérifié SIREN"
                           >
-                            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+                            <svg
+                              className="w-3 h-3 text-white"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
                               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                             </svg>
                           </span>
@@ -244,9 +258,9 @@ export default function LocalProviderShowcase({
                   <div className="mb-3">
                     {hasRating && hasReviews ? (
                       <div className="flex items-center gap-2">
-                        <StarRating rating={provider.rating_average!} />
+                        <StarRating rating={provider.rating_average as number} />
                         <span className="text-sm font-semibold text-charcoal-800">
-                          {provider.rating_average!.toFixed(1)}
+                          {(provider.rating_average as number).toFixed(1)}
                         </span>
                         <span className="text-xs text-charcoal-500">
                           ({provider.review_count} avis)
@@ -262,7 +276,10 @@ export default function LocalProviderShowcase({
                   {/* SIREN trust signal */}
                   {provider.siret && (
                     <p className="flex items-center gap-1 text-xs text-charcoal-400 mb-3">
-                      <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0 text-accent-500" aria-hidden="true" />
+                      <ShieldCheck
+                        className="w-3.5 h-3.5 flex-shrink-0 text-accent-500"
+                        aria-hidden="true"
+                      />
                       SIREN {provider.siret.slice(0, 9)}
                     </p>
                   )}

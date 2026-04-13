@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { calendrierTravaux } from '@/lib/data/calendrier-travaux'
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   title: 'Calendrier des Travaux 2026 : Guide Mois par Mois',
   description:
     'Calendrier saisonnier des travaux : quels travaux faire chaque mois, lesquels éviter. Conseils pratiques pour planifier.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/calendrier-travaux'),
   openGraph: {
     title: 'Calendrier des travaux : quand faire quoi ?',
     description:

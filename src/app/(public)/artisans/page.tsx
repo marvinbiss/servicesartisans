@@ -5,7 +5,7 @@ import { MapPin, Star, Phone, Search, Users, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
+import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
 import { resolveProviderCities } from '@/lib/insee-resolver'
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: 'Annuaire Artisans France — SIREN Vérifiés',
   description:
     'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
-  alternates: { canonical: `${SITE_URL}/artisans` },
+  alternates: getAlternates(`/artisans`),
   openGraph: {
     locale: 'fr_FR',
     title: 'Annuaire Artisans France — SIREN Vérifiés',
@@ -130,9 +130,9 @@ export default async function ArtisansPage() {
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
-            Trouvez un{' '}
+            Artisans{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-              artisan qualifié
+              qualifiés
             </span>{' '}
             près de chez vous
           </h1>

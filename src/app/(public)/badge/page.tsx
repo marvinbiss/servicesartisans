@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { Shield, TrendingUp, Heart, Monitor, Globe, Smartphone } from 'lucide-react'
 import CopyCodeButton from '@/components/ui/CopyCodeButton'
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: 'Badge Artisan Vérifié — ServicesArtisans',
   description:
     'Affichez le badge "Artisan Vérifié" sur votre site web. Confiance visiteurs, référencement local et backlink gratuit. 3 variantes, 100% gratuit.',
-  alternates: { canonical: canonicalUrl },
+  alternates: getAlternates('/badge'),
   openGraph: {
     locale: 'fr_FR',
     title: 'Badge Artisan Vérifié — ServicesArtisans',

@@ -3,7 +3,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import CeeCTA from '@/components/cee/CeeCTA'
 import CeeSimulator from '@/components/cee/CeeSimulator'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { services } from '@/lib/data/france-light'
 
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',
   description:
     'Calculez gratuitement le montant de votre prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie). Estimation instantan\u00e9e par type de travaux et code postal.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/simulateur-prime-cee'),
   openGraph: {
     locale: 'fr_FR',
     title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',

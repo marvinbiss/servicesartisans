@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { GeographicNavigation } from '@/components/InternalLinks'
 import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWrapper'
 import { ClayHomePage } from '@/components/home/ClayHomePage'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { getSiteStats, getHomepageData, formatProviderCount } from '@/lib/data/stats'
-import { getFAQSchema, getItemListSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
+import { getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { absolute: absoluteTitle },
     description: metaDescription,
-    alternates: { canonical: SITE_URL },
+    alternates: getAlternates('/'),
     openGraph: {
       title: absoluteTitle,
       description: metaDescription,
@@ -81,8 +81,7 @@ export default async function HomePage() {
     )
   }
 
-  // JSON-LD structured data for homepage
-  const websiteSchema = getWebsiteSchema()
+  // JSON-LD structured data for homepage (WebSite already emitted by root layout)
   const faqSchema = getFAQSchema(faqItems)
   const itemListSchema = getItemListSchema({
     name: 'Services artisans populaires en France',
@@ -115,7 +114,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Homepage-specific JSON-LD: WebSite + FAQ + ItemList + AggregateRating */}
-      <JsonLd data={[websiteSchema, faqSchema, itemListSchema, aggregateRatingSchema]} />
+      <JsonLd data={[faqSchema, itemListSchema, aggregateRatingSchema]} />
 
       {/* Server-rendered H1 for SEO — visually hidden, ClayHomePage shows the visible version */}
       <h1 className="sr-only">L'annuaire des artisans qualifiés en France</h1>

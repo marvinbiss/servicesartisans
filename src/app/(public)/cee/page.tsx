@@ -20,7 +20,7 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import {
   getCeeOperationsByDomaine,
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
   title: 'Primes CEE 2026 : certificats d\u2019\u00e9conomies d\u2019\u00e9nergie',
   description:
     'Catalogue des 19 op\u00e9rations CEE r\u00e9sidentielles couvertes. Qualifications RGE requises, cumul MaPrimeR\u00e9nov\u2019, villes couvertes. Mandataire CEE agr\u00e9\u00e9.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/cee'),
   openGraph: {
     locale: 'fr_FR',
     title: 'Primes CEE 2026 \u2014 Catalogue complet des op\u00e9rations',

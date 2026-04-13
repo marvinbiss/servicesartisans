@@ -10,7 +10,7 @@ import {
   getServicePricingSchema,
   getSpeakableSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { tradeContent, getTasksForService } from '@/lib/data/trade-content'
 import { getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
@@ -121,7 +121,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: getAlternates(`/tarifs/${service}/${villeSlug}/${travail}`),
     robots: { index: true, follow: true },
     openGraph: {
       locale: 'fr_FR',

@@ -4,7 +4,7 @@ import { MapPin, ArrowRight, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { BAROMETRE_REGIONS } from '@/lib/barometre/constants'
 import { regionalIndices } from '@/lib/data/barometre'
 
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: `Baromètre par région — Artisans en France`,
   description:
     "Explorez les statistiques des artisans par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie et les 13 régions métropolitaines. Indices de prix, nombre d'artisans et tendances.",
-  alternates: { canonical: canonicalUrl },
+  alternates: getAlternates('/barometre/regions'),
   robots: { index: true, follow: true },
   openGraph: {
     locale: 'fr_FR',

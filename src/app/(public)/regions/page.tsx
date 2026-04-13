@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { MapPin, ArrowRight, Users, Building2, ChevronRight, Globe } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { regions, departements, villes, services, getVillesByDepartement } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -12,19 +12,29 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Artisans par Région — 18 Régions',
-  description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
-  alternates: { canonical: `${SITE_URL}/regions` },
+  description:
+    'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
+  alternates: getAlternates(`/regions`),
   openGraph: {
     title: 'Artisans par Région — 18 Régions',
-    description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+    description:
+      'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
     url: `${SITE_URL}/regions`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par région' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Artisans par région',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Artisans par Région — 18 Régions',
-    description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+    description:
+      'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
   },
 }
 
@@ -36,9 +46,7 @@ export default async function RegionsIndexPage() {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b border-sand-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -56,33 +64,46 @@ export default async function RegionsIndexPage() {
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        name: 'Artisans par région en France',
-        description: 'Annuaire d\'artisans référencés dans les 18 régions françaises.',
-        url: `${SITE_URL}/regions`,
-        numberOfItems: regions.length,
-        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
-        breadcrumb: {
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: 'Régions' }
-          ]
-        }
-      }) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Artisans par région en France',
+            description: "Annuaire d'artisans référencés dans les 18 régions françaises.",
+            url: `${SITE_URL}/regions`,
+            numberOfItems: regions.length,
+            isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+                { '@type': 'ListItem', position: 2, name: 'Régions' },
+              ],
+            },
+          }),
+        }}
+      />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.10) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
         </div>
 
@@ -99,7 +120,9 @@ export default async function RegionsIndexPage() {
               <Globe className="w-4 h-4 text-accent-400" />
               <span className="text-sm font-medium text-accent-200">Régions</span>
               <span className="w-1 h-1 rounded-full bg-accent-400/50" />
-              <span className="text-sm font-medium text-white/90">France métropolitaine et outre-mer</span>
+              <span className="text-sm font-medium text-white/90">
+                France métropolitaine et outre-mer
+              </span>
             </div>
 
             <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
@@ -155,7 +178,10 @@ export default async function RegionsIndexPage() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {regions.map((region) => {
             const deptCount = region.departments.length
-            const cityCount = region.departments.reduce((acc, d) => acc + getVillesByDepartement(d.code).length, 0)
+            const cityCount = region.departments.reduce(
+              (acc, d) => acc + getVillesByDepartement(d.code).length,
+              0
+            )
 
             return (
               <Link
@@ -174,30 +200,40 @@ export default async function RegionsIndexPage() {
                   </div>
                 </div>
 
-                <p className="text-sm text-charcoal-500 mb-4 line-clamp-2 leading-relaxed">{region.description}</p>
+                <p className="text-sm text-charcoal-500 mb-4 line-clamp-2 leading-relaxed">
+                  {region.description}
+                </p>
 
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-1.5 text-charcoal-500">
                     <Building2 className="w-3.5 h-3.5" />
-                    <span>{deptCount} département{deptCount > 1 ? 's' : ''}</span>
+                    <span>
+                      {deptCount} département{deptCount > 1 ? 's' : ''}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5 text-charcoal-500">
                     <MapPin className="w-3.5 h-3.5" />
-                    <span>{cityCount} ville{cityCount > 1 ? 's' : ''}</span>
+                    <span>
+                      {cityCount} ville{cityCount > 1 ? 's' : ''}
+                    </span>
                   </div>
                 </div>
 
                 {/* Preview cities */}
                 <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-sand-200">
-                  {region.departments.flatMap(d => getVillesByDepartement(d.code)).slice(0, 4).map((city) => (
-                    <span key={city.slug} className="text-xs bg-sand-200 text-charcoal-700 px-2.5 py-1 rounded-full group-hover:bg-primary-50 group-hover:text-primary-700 transition-colors">
-                      {city.name}
-                    </span>
-                  ))}
+                  {region.departments
+                    .flatMap((d) => getVillesByDepartement(d.code))
+                    .slice(0, 4)
+                    .map((city) => (
+                      <span
+                        key={city.slug}
+                        className="text-xs bg-sand-200 text-charcoal-700 px-2.5 py-1 rounded-full group-hover:bg-primary-50 group-hover:text-primary-700 transition-colors"
+                      >
+                        {city.name}
+                      </span>
+                    ))}
                   {cityCount > 4 && (
-                    <span className="text-xs text-charcoal-400 px-2 py-1">
-                      +{cityCount - 4}
-                    </span>
+                    <span className="text-xs text-charcoal-400 px-2 py-1">+{cityCount - 4}</span>
                   )}
                 </div>
               </Link>
@@ -208,9 +244,13 @@ export default async function RegionsIndexPage() {
 
       {/* ─── CTA ────────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
+          }}
+        />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-semibold text-white mb-4 tracking-tight">
             Besoin d'un artisan ?
@@ -219,10 +259,16 @@ export default async function RegionsIndexPage() {
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:bg-primary-500 hover:-translate-y-0.5 transition-all duration-300">
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:bg-primary-500 hover:-translate-y-0.5 transition-all duration-300"
+            >
               Obtenir mon devis gratuit
             </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 text-charcoal-300 hover:text-white font-medium transition-colors"
+            >
               Voir les services <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -238,48 +284,75 @@ export default async function RegionsIndexPage() {
           <div className="grid md:grid-cols-3 gap-10">
             {/* Departements */}
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Départements populaires</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Départements populaires
+              </h3>
               <div className="space-y-2">
                 {departements.slice(0, 8).map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={d.slug}
+                    href={`/departements/${d.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {d.name} ({d.code})
                   </Link>
                 ))}
               </div>
-              <Link href="/departements" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
+              <Link
+                href="/departements"
+                className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3"
+              >
                 Tous les départements <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Villes */}
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Grandes villes</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Grandes villes
+              </h3>
               <div className="space-y-2">
                 {villes.slice(0, 12).map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={v.slug}
+                    href={`/villes/${v.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
+              <Link
+                href="/villes"
+                className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3"
+              >
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Services */}
             <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services populaires</h3>
+              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">
+                Services populaires
+              </h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
+                  <Link
+                    key={s.slug}
+                    href={`/services/${s.slug}`}
+                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors"
+                  >
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3"
+              >
                 Tous les services <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

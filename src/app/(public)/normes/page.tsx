@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title: 'Normes du Bâtiment : DTU, NF et Réglementations Essentielles',
   description:
     'Guide complet des normes du bâtiment en France : NF C 15-100 (électricité), DTU plomberie, chauffage, isolation RE2020, toiture, fenêtres et accessibilité PMR.',
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates('/normes'),
   openGraph: {
     title: 'Normes du Bâtiment : DTU, NF et Réglementations Essentielles',
     description:

@@ -16,7 +16,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import {
   regions,
   getRegionBySlug,
@@ -93,7 +93,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     // Hub pages are always indexed — rich geographic content has value even with 0 providers
     robots: { index: true, follow: true },
-    alternates: { canonical: `${SITE_URL}/regions/${regionSlug}` },
+    alternates: getAlternates(`/regions/${regionSlug}`),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -219,7 +219,7 @@ export default async function RegionPage({ params }: PageProps) {
               const h1Hash = Math.abs(hashCode(`h1-region-${region.slug}`))
               const h1Templates = [
                 `Artisans ${getRegionPreposition(region.name)}`,
-                `Trouver un artisan ${getRegionPreposition(region.name)}`,
+                `Artisans ${getRegionPreposition(region.name)} : annuaire par ville`,
                 `${region.name} : artisans par département`,
                 `Artisans qualifiés ${getRegionPreposition(region.name)}`,
                 `Tous les artisans ${getRegionArticle(region.name)}`,
