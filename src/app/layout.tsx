@@ -29,26 +29,28 @@ const sora = Sora({
 const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
   ssr: false,
 })
-const ServiceWorkerRegistration = dynamic(
-  () => import('@/components/ServiceWorkerRegistration'),
-  { ssr: false }
-)
+const ServiceWorkerRegistration = dynamic(() => import('@/components/ServiceWorkerRegistration'), {
+  ssr: false,
+})
 const CapacitorInit = dynamic(
-  () => import('@/components/CapacitorInit').then(mod => ({ default: mod.CapacitorInit })),
+  () => import('@/components/CapacitorInit').then((mod) => ({ default: mod.CapacitorInit })),
   { ssr: false }
 )
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
   ssr: false,
 })
 const WebVitals = dynamic(
-  () => import('@/components/WebVitals').then(mod => ({ default: mod.WebVitals })),
+  () => import('@/components/WebVitals').then((mod) => ({ default: mod.WebVitals })),
   { ssr: false }
 )
 const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
   ssr: false,
 })
 const CompareProviderWrapper = dynamic(
-  () => import('@/components/compare/CompareProvider').then(mod => ({ default: mod.CompareProviderWrapper })),
+  () =>
+    import('@/components/compare/CompareProvider').then((mod) => ({
+      default: mod.CompareProviderWrapper,
+    })),
   { ssr: false }
 )
 
@@ -67,11 +69,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ServicesArtisans — Annuaire d\'artisans en France',
+    default: "ServicesArtisans — Annuaire d'artisans en France",
     template: '%s | ServicesArtisans',
   },
   description:
-    'Annuaire d\'artisans en France, données SIREN officielles. Plombiers, électriciens, menuisiers et plus dans 101 départements. Devis gratuits.',
+    "Annuaire d'artisans en France, données SIREN officielles. Plombiers, électriciens, menuisiers et plus dans 101 départements. Devis gratuits.",
   authors: [{ name: 'ServicesArtisans' }],
   applicationName: 'ServicesArtisans',
   appleWebApp: {
@@ -91,14 +93,20 @@ export const metadata: Metadata = {
     siteName: 'ServicesArtisans',
     title: 'ServicesArtisans — Annuaire des artisans référencés en France',
     description:
-      'Annuaire d\'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés. Devis gratuits.',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans référencés en France' }],
+      "Annuaire d'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés. Devis gratuits.",
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Annuaire des artisans référencés en France',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ServicesArtisans — Annuaire des artisans référencés en France',
-    description:
-      'Annuaire d\'artisans de France. Devis gratuits, données gouvernementales SIREN.',
+    description: "Annuaire d'artisans de France. Devis gratuits, données gouvernementales SIREN.",
   },
   robots: {
     index: true,
@@ -123,12 +131,8 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180' },
-    ],
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   other: {
     'mobile-web-app-capable': 'yes',
@@ -137,11 +141,7 @@ export const metadata: Metadata = {
 
 // revalidate removed — each page sets its own (86400 for pSEO pages)
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const artisanCount = await getProviderCount()
   return (
     <html lang="fr" className={`scroll-smooth ${dmSans.variable} ${sora.variable}`}>
@@ -155,12 +155,17 @@ export default async function RootLayout({
 
         {/* LLM discovery — llms.txt (GEO/AEO optimization) */}
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM access guidelines" />
-        <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM detailed content" />
+        <link
+          rel="alternate"
+          type="text/plain"
+          href="/llms-full.txt"
+          title="LLM detailed content"
+        />
 
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script
           type="application/ld+json"
-                   dangerouslySetInnerHTML={{
+          dangerouslySetInnerHTML={{
             __html: JSON.stringify([getOrganizationSchema(), getWebsiteSchema()])
               .replace(/</g, '\\u003c')
               .replace(/>/g, '\\u003e')
@@ -187,17 +192,9 @@ gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}',{'send_page_v
           }}
         />
 
-        {/* Preconnect for Meta Pixel */}
-        <link rel="preconnect" href="https://connect.facebook.net" />
-        <link rel="dns-prefetch" href="https://connect.facebook.net" />
-
         {/* Preconnect for Supabase backend */}
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
-
-        {/* Preconnect for images - Unsplash */}
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
         {/* Google Tag Manager — afterInteractive: loads after hydration, before idle (captures early interactions) */}
@@ -245,20 +242,22 @@ fbq('track', 'PageView');`}
         <PageViewTracker />
         <MobileMenuProvider>
           <CompareProviderWrapper>
-          {/* Skip to main content for accessibility */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-          >
-            Aller au contenu principal
-          </a>
-          <Header artisanCount={artisanCount} />
-          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
-          <Footer />
-          <MobileBottomNav />
-          <ServiceWorkerRegistration />
-          <CapacitorInit />
-          <CookieConsent />
+            {/* Skip to main content for accessibility */}
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+            >
+              Aller au contenu principal
+            </a>
+            <Header artisanCount={artisanCount} />
+            <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">
+              {children}
+            </main>
+            <Footer />
+            <MobileBottomNav />
+            <ServiceWorkerRegistration />
+            <CapacitorInit />
+            <CookieConsent />
           </CompareProviderWrapper>
         </MobileMenuProvider>
       </body>

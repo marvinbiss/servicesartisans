@@ -216,15 +216,19 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 
 - Clé : via `INDEXNOW_API_KEY` env var, fallback `d438ef72ba5465680fecf42737f316b4` (fichier de vérification dans `/public/`)
 - `POST /api/indexnow` — soumission d'URLs à Bing/Yandex
-- Cron quotidien `/api/cron/indexnow-submit` — soumet ~500 URLs/jour avec rotation sur 3 jours
+- Cron quotidien `/api/cron/indexnow-submit` — soumet ~2500 URLs/jour avec rotation sur 3 jours (5 intents × 30 villes)
   - Pages prioritaires (homepage, /services, /blog, /tarifs) — toujours
   - 46 services hub (/services/{slug} + /tarifs/{slug}) — rotation 1/3 par jour
   - Service × 10 villes top (/services/{slug}/{city}) — rotation 1/3 par jour
   - Devis pSEO (/devis/{slug}/{city}) × 30 villes — rotation 1/3 par jour
+  - Tarifs pSEO (/tarifs/{slug}/{city}) × 30 villes — rotation 1/3 par jour
+  - Urgence pSEO (/urgence/{slug}/{city}) × 30 villes — rotation 1/3 par jour
+  - Avis pSEO (/avis/{slug}/{city}) × 10 villes top — rotation 1/3 par jour
   - Articles prix (blog/prix-\*) — rotation quotidienne
   - Articles récents (<48h) — toujours
   - Guides — dimanche uniquement
   - Providers hub pages — dynamique (nouveaux providers dernières 24h)
+  - Warning log si le nombre d'URLs dépasse MAX_URLS_PER_DAY (truncation visible dans Vercel logs)
 
 ### Monitoring
 

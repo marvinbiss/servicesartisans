@@ -42,6 +42,7 @@ import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
 import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
@@ -57,7 +58,12 @@ import {
   generateSpeakableSchema,
   generateAggregateRatingSchema,
 } from '@/lib/seo/schema-enrichment'
-import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
+import {
+  getReviewStatsByDept,
+  getTopReviewsByDept,
+  hasProvidersByServiceAndLocation,
+} from '@/lib/supabase'
+import { shouldNoindex } from '@/lib/seo/pruning'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import dynamic from 'next/dynamic'
@@ -235,7 +241,7 @@ export async function generateMetadata({
   if (!trade || !villeData) notFound()
 
   const tradeLower = trade.name.toLowerCase()
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
@@ -263,12 +269,33 @@ export async function generateMetadata({
   const serviceImage = getServiceImageForContext(service, ville)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
 
+  // Gate indexation: avis pages with 0 reviews AND 0 providers are thin content.
+  // Fail-open: hasProvidersByServiceAndLocation returns false on DB error, but
+  // shouldNoindex requires BOTH 0 providers AND hasUniqueData===false to noindex.
+  // Reviews ARE the unique data for /avis/ pages, so hasUniqueData = hasReviews.
+  const hasProviders = await hasProvidersByServiceAndLocation(service, ville)
+  // Quick review existence check via the same getTopProviders+getRecentReviews pattern
+  // would be too heavy for metadata. Instead, check review_stats for this dept.
+  const deptName = villeData.departement
+  let hasReviews = true // fail-open default
+  try {
+    const stats = await getReviewStatsByDept(service, deptName)
+    hasReviews = (stats?.review_count ?? 0) > 0
+  } catch {
+    // fail-open: assume reviews exist if DB is down
+    hasReviews = true
+  }
+  const noindex = shouldNoindex(`/avis/${service}/${ville}`, {
+    providerCount: hasProviders ? 1 : 0,
+    hasUniqueData: hasReviews,
+  })
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
     robots: {
-      index: true,
+      index: !noindex,
       follow: true,
       'max-snippet': -1 as const,
       'max-image-preview': 'large' as const,
@@ -315,7 +342,7 @@ export default async function AvisServiceVillePage({
 
   const commune = await getCommuneBySlug(villeSlug)
 
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
@@ -1339,7 +1366,7 @@ export default async function AvisServiceVillePage({
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
               if (!t) return null
-              const m = getRegionalMultiplier(villeData.region)
+              const m = getRegionalMultiplier(villeData.region, villeData.departementCode)
               return (
                 <Link
                   key={slug}
@@ -1409,6 +1436,7 @@ export default async function AvisServiceVillePage({
         serviceSlug={service}
         serviceName={trade.name}
         villeName={villeData.name}
+        villeSlug={villeSlug}
         climatZone={commune?.climat_zone ?? null}
       />
 
@@ -1433,6 +1461,9 @@ export default async function AvisServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
         regionName={villeData.region}
+        revenuMedian={commune?.revenu_median}
+        prixM2Moyen={commune?.prix_m2_moyen}
+        densite={commune?.densite_population}
       />
 
       <CalendrierSaisonnierBlock
@@ -1440,6 +1471,19 @@ export default async function AvisServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
         climatZone={commune?.climat_zone ?? null}
+        joursGelAnnuels={commune?.jours_gel_annuels}
+        precipitationAnnuelle={commune?.precipitation_annuelle}
+        temperatureMoyenneHiver={commune?.temperature_moyenne_hiver}
+        temperatureMoyenneEte={commune?.temperature_moyenne_ete}
+        moisTravauxExtDebut={commune?.mois_travaux_ext_debut}
+        moisTravauxExtFin={commune?.mois_travaux_ext_fin}
+        altitudeMoyenne={commune?.altitude_moyenne}
+      />
+
+      <CommuneContextBlock
+        communeData={commune}
+        serviceName={trade.name}
+        villeName={villeData.name}
       />
 
       <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />

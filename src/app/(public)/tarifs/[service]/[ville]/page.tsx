@@ -28,7 +28,7 @@ import {
 import { shouldNoindex } from '@/lib/seo/pruning'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
-import { hashCode } from '@/lib/seo/location-content'
+import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import LocalDataInsights from '@/components/seo/LocalDataInsights'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import FallbackProviders from '@/components/seo/FallbackProviders'
@@ -55,6 +55,7 @@ import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
 import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
@@ -118,25 +119,7 @@ export const revalidate = 86400
 // Helpers
 // ---------------------------------------------------------------------------
 
-function getRegionalMultiplier(region: string): number {
-  const multipliers: Record<string, number> = {
-    'Ile-de-France': 1.25,
-    'Île-de-France': 1.25,
-    "Provence-Alpes-Côte d'Azur": 1.1,
-    'Auvergne-Rhône-Alpes': 1.1,
-    Occitanie: 1.05,
-    'Nouvelle-Aquitaine': 1.0,
-    'Hauts-de-France': 0.95,
-    'Grand Est': 0.95,
-    Bretagne: 1.0,
-    'Pays de la Loire': 1.0,
-    Normandie: 0.95,
-    'Centre-Val de Loire': 0.95,
-    'Bourgogne-Franche-Comté': 0.95,
-    Corse: 1.1,
-  }
-  return multipliers[region] ?? 1.0
-}
+// getRegionalMultiplier imported from '@/lib/seo/location-content'
 
 function formatNumber(n: number): string {
   return n.toLocaleString('fr-FR')
@@ -190,7 +173,7 @@ export async function generateMetadata({
   if (!trade || !villeData) notFound()
 
   const tradeLower = trade.name.toLowerCase()
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
   const unit = trade.priceRange.unit
@@ -295,7 +278,7 @@ export default async function TarifsServiceVillePage({
     isFallback = providers.length > 0
   }
 
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
@@ -318,7 +301,7 @@ export default async function TarifsServiceVillePage({
   const author = getDefaultAuthor()
 
   const dbOfferCount = commune?.nb_entreprises_artisanales
-  const offerCount = dbOfferCount || 3 + (Math.abs(hashCode(`offers-${service}`)) % 20)
+  const offerCount = dbOfferCount || 3 + (Math.abs(hashCode(`offers-${service}-${villeSlug}`)) % 20)
 
   const serviceSchema = {
     '@context': 'https://schema.org',
@@ -653,6 +636,7 @@ export default async function TarifsServiceVillePage({
         serviceSlug={service}
         serviceName={trade.name}
         villeName={villeData.name}
+        villeSlug={villeSlug}
         climatZone={commune?.climat_zone ?? null}
       />
 
@@ -677,6 +661,9 @@ export default async function TarifsServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
         regionName={villeData.region}
+        revenuMedian={commune?.revenu_median}
+        prixM2Moyen={commune?.prix_m2_moyen}
+        densite={commune?.densite_population}
       />
 
       <CalendrierSaisonnierBlock
@@ -684,6 +671,19 @@ export default async function TarifsServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
         climatZone={commune?.climat_zone ?? null}
+        joursGelAnnuels={commune?.jours_gel_annuels}
+        precipitationAnnuelle={commune?.precipitation_annuelle}
+        temperatureMoyenneHiver={commune?.temperature_moyenne_hiver}
+        temperatureMoyenneEte={commune?.temperature_moyenne_ete}
+        moisTravauxExtDebut={commune?.mois_travaux_ext_debut}
+        moisTravauxExtFin={commune?.mois_travaux_ext_fin}
+        altitudeMoyenne={commune?.altitude_moyenne}
+      />
+
+      <CommuneContextBlock
+        communeData={commune}
+        serviceName={trade.name}
+        villeName={villeData.name}
       />
 
       <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />
@@ -1011,7 +1011,7 @@ export default async function TarifsServiceVillePage({
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
-              const m = getRegionalMultiplier(villeData.region)
+              const m = getRegionalMultiplier(villeData.region, villeData.departementCode)
               return (
                 <Link
                   key={slug}
@@ -1052,7 +1052,7 @@ export default async function TarifsServiceVillePage({
                 {complementary.map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
-                  const m = getRegionalMultiplier(villeData.region)
+                  const m = getRegionalMultiplier(villeData.region, villeData.departementCode)
                   return (
                     <div
                       key={slug}

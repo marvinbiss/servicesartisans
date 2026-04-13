@@ -51,6 +51,7 @@ import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
 import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
@@ -150,7 +151,7 @@ export async function generateMetadata({
   if (!trade || !villeData) notFound()
 
   const tradeLower = trade.name.toLowerCase()
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
@@ -245,7 +246,7 @@ export default async function DevisServiceLocationPage({
     isFallback = providers.length > 0
   }
 
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
@@ -371,12 +372,13 @@ export default async function DevisServiceLocationPage({
   }))
 
   // ---------------------------------------------------------------------------
-  // Editorial content: 3 sections x 3 variantes = 27 unique combinations
+  // Editorial content: 3 sections x 8 variantes = 512 unique combinations
+  // Hash includes BOTH service AND location for per-city uniqueness
   // ---------------------------------------------------------------------------
 
-  const editorialSeed1 = Math.abs(hashCode(`devis-editorial-${service}-describe`))
-  const editorialSeed2 = Math.abs(hashCode(`devis-editorial-${service}-checklist`))
-  const editorialSeed3 = Math.abs(hashCode(`devis-editorial-${service}-tarifs`))
+  const editorialSeed1 = Math.abs(hashCode(`devis-editorial-${service}-${location}-describe`))
+  const editorialSeed2 = Math.abs(hashCode(`devis-editorial-${service}-${location}-checklist`))
+  const editorialSeed3 = Math.abs(hashCode(`devis-editorial-${service}-${location}-tarifs`))
 
   // Section 1: "Comment bien décrire votre projet ?" (~150 mots)
   const describeProjectVariants = [
@@ -408,6 +410,56 @@ export default async function DevisServiceLocationPage({
         `Mentionnez le budget approximatif que vous envisagez : cela aide le professionnel à proposer des solutions adaptées à votre enveloppe.`,
         `Précisez si des diagnostics préalables existent (DPE, diagnostic amiante, audit énergétique). Ces documents accélèrent l'élaboration du devis.`,
         `Indiquez si vous avez déjà reçu d'autres devis : la transparence permet aux artisans locaux de vous faire une offre compétitive.`,
+      ],
+    },
+    {
+      intro: `Les ${tradeLower}s à ${villeData.name} reçoivent chaque semaine des dizaines de demandes. Pour que la vôtre sorte du lot et obtienne une réponse rapide, structurez-la avec méthode.`,
+      tips: [
+        `Séparez clairement les travaux urgents des améliorations souhaitées : cela permet au ${tradeLower} de prioriser et de vous proposer un phasage réaliste.`,
+        `Indiquez le type de bâtiment : maison individuelle, appartement en copropriété, local commercial. Les contraintes techniques et réglementaires diffèrent à ${villeData.name} selon le cas.`,
+        `Mentionnez les travaux déjà réalisés récemment : un ${tradeLower} expérimenté ${getDeptArticle(villeData.departement)} saura adapter son intervention au chantier existant.`,
+        `Si votre projet concerne une copropriété, précisez si le syndic doit valider les travaux : cela impacte les délais et la planification.`,
+        `Décrivez vos attentes en termes de finition : standard, milieu de gamme ou haut de gamme. Le ${tradeLower} ajustera ses recommandations de matériaux en conséquence.`,
+      ],
+    },
+    {
+      intro: `À ${villeData.name}, les artisans ${tradeLower}s privilégient les demandes de devis précises. Un descriptif complet dès le départ évite les allers-retours et accélère le chiffrage.`,
+      tips: [
+        `Prenez des mesures avant de rédiger votre demande : longueur, largeur, hauteur sous plafond. Ces données sont indispensables pour un devis fiable à ${villeData.name}.`,
+        `Décrivez l'environnement du chantier : y a-t-il des contraintes d'humidité, de poussière ou de bruit ? ${getRegionPreposition(villeData.region)}, les normes de voisinage peuvent influencer les horaires d'intervention.`,
+        `Précisez si une dépose de l'existant est nécessaire : retirer un ancien équipement représente un coût et un temps de travail que le ${tradeLower} doit intégrer.`,
+        `Indiquez si le logement est raccordé au réseau d'assainissement collectif ou individuel : cela peut modifier la nature des travaux.`,
+        `Mentionnez tout permis ou autorisation déjà obtenu : déclaration de travaux, accord de copropriété, validation ABF si secteur protégé à ${villeData.name}.`,
+      ],
+    },
+    {
+      intro: `Votre demande de devis ${tradeLower} à ${villeData.name} est votre premier contact avec l'artisan. Soignez-la pour recevoir une proposition juste et sans mauvaise surprise.`,
+      tips: [
+        `Commencez par expliquer le contexte : pourquoi ces travaux maintenant ? Panne, projet de vente, rénovation énergétique, mise en conformité ? La motivation guide la réponse du ${tradeLower}.`,
+        `Listez les pièces ou zones concernées avec leur superficie : un ${tradeLower} à ${villeData.name} ne chiffrera pas de la même manière 10 m² et 50 m².`,
+        `Indiquez si vous souhaitez un devis pour la fourniture seule, la pose seule ou fourniture + pose : cette distinction impacte fortement le montant final.`,
+        `Précisez votre disponibilité pour un éventuel rendez-vous sur place : les ${tradeLower}s ${getDeptArticle(villeData.departement)} préfèrent souvent voir le chantier avant de chiffrer.`,
+        `Mentionnez si le chantier est accessible aux personnes à mobilité réduite ou si des aménagements PMR sont requis : cela peut influencer les choix techniques.`,
+      ],
+    },
+    {
+      intro: `Les ${tradeLower}s à ${villeData.name} apprécient les clients qui savent ce qu'ils veulent. Voici comment formuler une demande de devis claire et efficace pour ${villeData.departement}.`,
+      tips: [
+        `Distinguez ce qui relève de l'entretien courant et ce qui nécessite une vraie intervention : un simple réglage et une rénovation complète n'ont pas le même budget.`,
+        `Photographiez les éléments existants sous plusieurs angles : plaque signalétique, références, état général. Cela fait gagner un temps précieux au ${tradeLower}.`,
+        `Indiquez si d'autres corps de métier doivent intervenir en parallèle : une coordination ${tradeLower} + autre artisan peut réduire les coûts à ${villeData.name}.`,
+        `Précisez la date souhaitée de fin de travaux : certains ${tradeLower}s à ${villeData.name} ont des carnets de commandes chargés et planifient 3 à 6 semaines à l'avance.`,
+        `Mentionnez les labels ou certifications que vous exigez (RGE, Qualibat, etc.) : cela filtre les artisans éligibles et peut conditionner l'accès à certaines aides.`,
+      ],
+    },
+    {
+      intro: `Obtenir un devis de ${tradeLower} à ${villeData.name} ne demande que quelques clics. Mais la richesse des informations fournies détermine la précision du chiffrage que vous recevrez.`,
+      tips: [
+        `Indiquez la nature du sol, des murs ou du support existant : béton, placo, bois, carrelage. Le ${tradeLower} adaptera ses techniques et ses tarifs en conséquence.`,
+        `Précisez si le chantier se situe en zone inondable ou en secteur classé : à ${villeData.name}, certains quartiers ont des réglementations spécifiques.`,
+        `Mentionnez vos préférences écologiques : matériaux biosourcés, recyclés, faible empreinte carbone. Les ${tradeLower}s ${getDeptArticle(villeData.departement)} proposent de plus en plus d'alternatives durables.`,
+        `Indiquez si vous avez un plan, un croquis ou un devis précédent à partager : tout document existant accélère l'analyse du ${tradeLower}.`,
+        `Décrivez les résultats que vous attendez en termes de performance : isolation phonique, thermique, étanchéité, esthétique. Plus c'est précis, plus le devis sera juste.`,
       ],
     },
   ]
@@ -444,6 +496,56 @@ export default async function DevisServiceLocationPage({
         `Définissez vos priorités : si votre budget est limité, indiquez-le clairement. Un ${tradeLower} honnête à ${villeData.name} saura vous proposer des solutions par étapes.`,
       ],
     },
+    {
+      intro: `Choisir un ${tradeLower} à ${villeData.name} ne se résume pas à comparer des prix. Voici les critères à vérifier pour éviter les déconvenues sur votre chantier ${getDeptArticle(villeData.departement)}.`,
+      items: [
+        `Vérifiez l'ancienneté de l'entreprise : un ${tradeLower} établi depuis plusieurs années à ${villeData.name} a généralement fait ses preuves auprès des habitants.`,
+        `Demandez des références de chantiers similaires au vôtre dans le ${villeData.departementCode} : un professionnel sérieux pourra vous montrer des réalisations comparables.`,
+        `Assurez-vous que le devis précise les normes respectées (NF, DTU, RE2020) : c'est la garantie que les travaux seront conformes à la réglementation en vigueur.`,
+        `Vérifiez les conditions de paiement : un échéancier clair avec des étapes de validation protège aussi bien le client que l'artisan.`,
+        `Renseignez-vous sur le service après-vente : un bon ${tradeLower} à ${villeData.name} garantit son travail et reste joignable après la fin du chantier.`,
+      ],
+    },
+    {
+      intro: `À ${villeData.name}, la demande de ${tradeLower} est soutenue. Pour faire le bon choix parmi les artisans disponibles ${getDeptArticle(villeData.departement)}, adoptez une méthode rigoureuse.`,
+      items: [
+        `Demandez systématiquement une attestation d'assurance en cours de validité : un sinistre sur un chantier non assuré peut coûter très cher.`,
+        `Vérifiez que le ${tradeLower} est bien inscrit au Répertoire des Métiers ou au Registre du Commerce. À ${villeData.name}, vous pouvez vérifier sur le site de la CMA locale.`,
+        `Méfiez-vous des devis trop bas : à ${villeData.name}, un prix anormalement bas cache souvent du travail non déclaré ou des matériaux de mauvaise qualité.`,
+        `Exigez un planning détaillé avec les dates de début, de fin et les étapes intermédiaires. Un ${tradeLower} organisé planifie chaque phase.`,
+        `Négociez les conditions de réception des travaux : une visite contradictoire permet de lister les éventuelles réserves avant le paiement du solde.`,
+      ],
+    },
+    {
+      intro: `Demander un devis de ${tradeLower} à ${villeData.name} est gratuit et sans engagement. Mais pour en tirer le maximum, préparez votre projet en amont avec ces conseils pratiques.`,
+      items: [
+        `Identifiez précisément la qualification nécessaire : tous les ${tradeLower}s ne proposent pas les mêmes spécialités. ${getRegionPreposition(villeData.region)}, les artisans qualifiés RGE sont particulièrement recherchés.`,
+        `Renseignez-vous sur les délais moyens dans le ${villeData.departementCode} : en période de forte activité, les artisans à ${villeData.name} peuvent avoir 4 à 8 semaines de délai.`,
+        `Vérifiez si votre assurance habitation couvre une partie des travaux : dégâts des eaux, tempêtes, bris de glace. Cela peut réduire significativement votre reste à charge.`,
+        `Demandez si le ${tradeLower} sous-traite une partie des travaux : vous avez le droit de savoir qui intervient réellement sur votre chantier à ${villeData.name}.`,
+        `Conservez tous les documents : devis signé, factures, attestations, PV de réception. Ils seront indispensables en cas de litige ou pour la garantie décennale.`,
+      ],
+    },
+    {
+      intro: `Les habitants de ${villeData.name} qui obtiennent les meilleurs devis de ${tradeLower} sont ceux qui posent les bonnes questions. Voici la checklist des points à aborder avec chaque artisan.`,
+      items: [
+        `Demandez le taux de TVA applicable : selon la nature des travaux et l'ancienneté du logement à ${villeData.name}, la TVA varie de 5,5 % à 20 %. Un taux réduit peut représenter une économie substantielle.`,
+        `Interrogez le ${tradeLower} sur sa gestion des déchets de chantier : à ${villeData.name}, l'évacuation des gravats en déchetterie est soumise à des règles strictes et a un coût.`,
+        `Demandez si le prix inclut les finitions : jointage, nettoyage, peinture de raccord. Un devis qui omet ces postes vous réserve des surprises en fin de chantier.`,
+        `Vérifiez les modalités d'annulation : un devis signé engage les deux parties. Lisez les conditions générales avant de signer.`,
+        `Renseignez-vous sur les labels de qualité du ${tradeLower} : Qualibat, RGE, Qualifelec. Ces certifications sont vérifiables en ligne et témoignent d'un engagement professionnel.`,
+      ],
+    },
+    {
+      intro: `Vous êtes sur le point de demander un devis de ${tradeLower} à ${villeData.name}. Pour que cette démarche aboutisse à un chantier serein, voici les fondamentaux à ne pas négliger.`,
+      items: [
+        `Privilégiez les artisans qui se déplacent gratuitement pour évaluer le chantier : à ${villeData.name}, la plupart des ${tradeLower}s sérieux offrent cette visite préalable.`,
+        `Vérifiez que le devis mentionne une date de validité : un devis sans date d'expiration peut devenir caduc si les prix des matériaux évoluent.`,
+        `Demandez une garantie de prix ferme : évitez les clauses de révision de prix qui permettent au ${tradeLower} d'augmenter la facture en cours de chantier.`,
+        `Informez-vous sur les recours possibles : en cas de litige avec un ${tradeLower} à ${villeData.name}, vous pouvez saisir le médiateur de la consommation ou la DDPP ${getDeptArticle(villeData.departement)}.`,
+        `Gardez en tête que le moins-disant n'est pas toujours le meilleur choix : à ${villeData.name}, la qualité de la pose et le respect des délais ont autant de valeur que le prix.`,
+      ],
+    },
   ]
 
   // Section 3: "Tarifs indicatifs" (~100 mots)
@@ -456,6 +558,21 @@ export default async function DevisServiceLocationPage({
     },
     {
       text: `Fourchette de prix constatée à ${villeData.name} pour un ${tradeLower} : de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Cette estimation intègre les spécificités tarifaires ${getRegionArticle(villeData.region)} et ${getDeptArticle(villeData.departement)}. Les facteurs qui influencent le prix final sont la nature des travaux, la difficulté d'accès, le choix des matériaux et la période d'intervention. Pour un chiffrage précis et adapté à votre situation, remplissez le formulaire ci-dessus : vous recevrez un devis gratuit et personnalisé de ${tradeLower}s référencés à ${villeData.name}.`,
+    },
+    {
+      text: `Les tarifs de ${tradeLower} à ${villeData.name} varient de ${minPrice} à ${maxPrice} ${trade.priceRange.unit} selon nos données locales. ${getDeptPreposition(villeData.departement)}, le coût de la main-d'œuvre artisanale reflète le niveau de vie et la concurrence entre professionnels. Un devis bas de gamme peut cacher des matériaux médiocres ou un artisan non assuré. À ${villeData.name}, privilégiez les ${tradeLower}s qui détaillent chaque ligne de leur devis : c'est le meilleur indicateur de transparence.`,
+    },
+    {
+      text: `Combien coûte un ${tradeLower} à ${villeData.name} ? Comptez entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit} pour une intervention standard. Ce tarif inclut généralement le déplacement, la main-d'œuvre et les fournitures courantes. Attention : les travaux nécessitant des matériaux spécifiques ou une intervention en hauteur sont facturés en supplément. ${getRegionPreposition(villeData.region)}, certaines périodes de l'année (printemps, automne) concentrent la demande et peuvent allonger les délais mais pas les prix.`,
+    },
+    {
+      text: `Prix ${tradeLower} à ${villeData.name} : entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit}. Ces tarifs sont basés sur les devis constatés ${getDeptArticle(villeData.departement)} et actualisés régulièrement. Le prix final dépend de trois facteurs : la surface ou le volume de travaux, la gamme de matériaux choisie et les contraintes d'accès au chantier. À ${villeData.name}, un devis gratuit vous permet de comparer sans risque : aucun engagement tant que vous n'avez pas signé.`,
+    },
+    {
+      text: `En moyenne, les habitants de ${villeData.name} dépensent entre ${minPrice} et ${maxPrice} ${trade.priceRange.unit} pour un ${tradeLower}. ${multiplier > 1.0 ? `Le marché local ${getDeptArticle(villeData.departement)} est légèrement au-dessus de la moyenne nationale (+${Math.round((multiplier - 1) * 100)} %), ce qui s'explique par une demande élevée et un coût de la vie supérieur.` : multiplier < 1.0 ? `Les prix ${getDeptArticle(villeData.departement)} sont inférieurs de ${Math.round((1 - multiplier) * 100)} % à la moyenne nationale, un avantage pour les propriétaires locaux.` : `Les prix sont alignés sur la moyenne nationale.`} Pour maîtriser votre budget, demandez plusieurs devis et vérifiez que chaque poste est détaillé.`,
+    },
+    {
+      text: `À ${villeData.name}, le prix d'une prestation de ${tradeLower} se situe dans une fourchette de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Ce tarif varie en fonction de la technicité requise, de l'accessibilité du chantier et du choix des matériaux. Les artisans locaux ${getDeptArticle(villeData.departement)} peuvent appliquer des tarifs différents pour un même type de travaux : d'où l'importance de comparer au moins 2 à 3 devis avant de vous engager. N'oubliez pas : un devis signé vous protège juridiquement en cas de litige.`,
     },
   ]
 
@@ -1051,7 +1168,7 @@ export default async function DevisServiceLocationPage({
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
               if (!t) return null
-              const m = getRegionalMultiplier(villeData.region)
+              const m = getRegionalMultiplier(villeData.region, villeData.departementCode)
               return (
                 <Link
                   key={slug}
@@ -1091,7 +1208,7 @@ export default async function DevisServiceLocationPage({
                 {complementary.map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
-                  const m = getRegionalMultiplier(villeData.region)
+                  const m = getRegionalMultiplier(villeData.region, villeData.departementCode)
                   return (
                     <div
                       key={slug}
@@ -1334,6 +1451,7 @@ export default async function DevisServiceLocationPage({
         serviceSlug={service}
         serviceName={trade.name}
         villeName={villeData.name}
+        villeSlug={location}
         climatZone={commune?.climat_zone ?? null}
       />
 
@@ -1358,6 +1476,9 @@ export default async function DevisServiceLocationPage({
         serviceName={trade.name}
         villeName={villeData.name}
         regionName={villeData.region}
+        revenuMedian={commune?.revenu_median}
+        prixM2Moyen={commune?.prix_m2_moyen}
+        densite={commune?.densite_population}
       />
 
       <CalendrierSaisonnierBlock
@@ -1365,6 +1486,19 @@ export default async function DevisServiceLocationPage({
         serviceName={trade.name}
         villeName={villeData.name}
         climatZone={commune?.climat_zone ?? null}
+        joursGelAnnuels={commune?.jours_gel_annuels}
+        precipitationAnnuelle={commune?.precipitation_annuelle}
+        temperatureMoyenneHiver={commune?.temperature_moyenne_hiver}
+        temperatureMoyenneEte={commune?.temperature_moyenne_ete}
+        moisTravauxExtDebut={commune?.mois_travaux_ext_debut}
+        moisTravauxExtFin={commune?.mois_travaux_ext_fin}
+        altitudeMoyenne={commune?.altitude_moyenne}
+      />
+
+      <CommuneContextBlock
+        communeData={commune}
+        serviceName={trade.name}
+        villeName={villeData.name}
       />
 
       <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />

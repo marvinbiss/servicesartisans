@@ -50,6 +50,7 @@ import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
 import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
@@ -164,6 +165,519 @@ const emergencyMeta: Record<
       'Unité extérieure en panne',
       'Bruit anormal',
       'Climatisation en panne pendant la canicule',
+    ],
+  },
+  couvreur: {
+    gradient: 'from-stone-600 to-stone-800',
+    lightBg: 'bg-stone-50',
+    lightText: 'text-stone-700',
+    problems: [
+      'Tuile cassée ou envolée',
+      'Infiltration toiture après intempéries',
+      'Gouttière arrachée ou percée',
+      'Charpente affaissée',
+      'Dégâts de tempête sur toiture',
+      'Fuite toiture urgente',
+    ],
+  },
+  macon: {
+    gradient: 'from-orange-600 to-orange-800',
+    lightBg: 'bg-orange-50',
+    lightText: 'text-orange-700',
+    problems: [
+      'Fissure structurelle sur mur porteur',
+      'Effondrement partiel de mur',
+      'Affaissement de fondation',
+      'Mur de soutènement fissuré',
+      'Dégâts structurels post-sinistre',
+    ],
+  },
+  menuisier: {
+    gradient: 'from-yellow-700 to-yellow-900',
+    lightBg: 'bg-yellow-50',
+    lightText: 'text-yellow-800',
+    problems: [
+      'Porte bloquée ou fracturée',
+      'Fenêtre cassée (mise en sécurité)',
+      'Volet roulant bloqué',
+      'Huisserie déformée empêchant la fermeture',
+      "Porte d'entrée forcée après cambriolage",
+      'Châssis de fenêtre descellé',
+    ],
+  },
+  'peintre-en-batiment': {
+    gradient: 'from-violet-600 to-violet-800',
+    lightBg: 'bg-violet-50',
+    lightText: 'text-violet-700',
+    problems: [
+      'Remise en état urgente après dégât des eaux',
+      'Moisissures étendues sur murs ou plafonds',
+      'Écaillage peinture au plomb (risque sanitaire)',
+      "Taches d'humidité traversantes",
+      'Sinistre nécessitant remise en peinture rapide',
+    ],
+  },
+  carreleur: {
+    gradient: 'from-teal-600 to-teal-800',
+    lightBg: 'bg-teal-50',
+    lightText: 'text-teal-700',
+    problems: [
+      'Carrelage décollé (risque de chute)',
+      'Fissure douche italienne avec infiltration',
+      'Infiltration sous carrelage',
+      'Carreaux cassés dans zone de passage',
+      'Joint de douche défaillant (fuite active)',
+    ],
+  },
+  plaquiste: {
+    gradient: 'from-slate-600 to-slate-800',
+    lightBg: 'bg-slate-50',
+    lightText: 'text-slate-700',
+    problems: [
+      'Plafond en placo affaissé ou effondré',
+      'Cloison endommagée après choc ou sinistre',
+      'Dégât des eaux sur placo (gonflement)',
+      'Faux plafond décroché',
+      'Mise en sécurité après effondrement partiel',
+    ],
+  },
+  jardinier: {
+    gradient: 'from-lime-600 to-lime-800',
+    lightBg: 'bg-lime-50',
+    lightText: 'text-lime-700',
+    problems: [
+      'Arbre tombé ou menaçant de tomber',
+      'Branche dangereuse menaçant la toiture',
+      'Inondation jardin après fortes pluies',
+      'Haie ou arbre bloquant un accès',
+      'Déblaiement urgent après tempête',
+    ],
+  },
+  cuisiniste: {
+    gradient: 'from-rose-600 to-rose-800',
+    lightBg: 'bg-rose-50',
+    lightText: 'text-rose-700',
+    problems: [
+      'Fuite sous évier encastré',
+      'Plan de travail effondré ou cassé',
+      'Charnière cassée (porte de meuble tombée)',
+      'Façade de cuisine décrochée',
+      'Dégât des eaux sur meubles de cuisine',
+    ],
+  },
+  'salle-de-bain': {
+    gradient: 'from-sky-600 to-sky-800',
+    lightBg: 'bg-sky-50',
+    lightText: 'text-sky-700',
+    problems: [
+      'Fuite douche ou baignoire',
+      'Canalisation de salle de bain bouchée',
+      'Robinetterie cassée (fuite active)',
+      'Bac de douche fissuré avec infiltration',
+      'Colonne de douche arrachée',
+    ],
+  },
+  'poseur-de-parquet': {
+    gradient: 'from-amber-700 to-amber-900',
+    lightBg: 'bg-amber-50',
+    lightText: 'text-amber-800',
+    problems: [
+      'Parquet gondolé après dégât des eaux',
+      'Lame de parquet cassée (risque de blessure)',
+      'Parquet décollé dans zone de passage',
+      'Infiltration sous parquet flottant',
+      'Réparation urgente avant expertise assurance',
+    ],
+  },
+  facadier: {
+    gradient: 'from-zinc-600 to-zinc-800',
+    lightBg: 'bg-zinc-50',
+    lightText: 'text-zinc-700',
+    problems: [
+      'Enduit décollé menaçant de tomber (danger piétons)',
+      'Fissure façade traversante',
+      'Infiltration par façade fissurée',
+      'Crépi qui se détache en plaques',
+      'Mise en sécurité façade après sinistre',
+    ],
+  },
+  charpentier: {
+    gradient: 'from-yellow-800 to-yellow-950',
+    lightBg: 'bg-yellow-50',
+    lightText: 'text-yellow-900',
+    problems: [
+      'Charpente fissurée ou affaissée',
+      'Poutre porteuse cassée ou fléchie',
+      'Attaque de termites (structure menacée)',
+      'Effondrement partiel de charpente',
+      'Dégâts de tempête sur charpente',
+      "Étaiement d'urgence toiture",
+    ],
+  },
+  terrassier: {
+    gradient: 'from-stone-700 to-stone-900',
+    lightBg: 'bg-stone-50',
+    lightText: 'text-stone-800',
+    problems: [
+      'Glissement de terrain',
+      'Effondrement de tranchée',
+      'Inondation terrain nécessitant drainage urgent',
+      'Affaissement de sol menaçant une construction',
+      'Déblaiement urgent après éboulement',
+    ],
+  },
+  'isolation-thermique': {
+    gradient: 'from-emerald-600 to-emerald-800',
+    lightBg: 'bg-emerald-50',
+    lightText: 'text-emerald-700',
+    problems: [
+      'Isolation arrachée par la tempête',
+      'Pont thermique causant condensation massive',
+      "Moisissures dues à défaut d'isolation",
+      "Isolant mouillé après infiltration (perte d'efficacité)",
+      'Déperdition thermique critique en hiver',
+    ],
+  },
+  domoticien: {
+    gradient: 'from-purple-600 to-purple-800',
+    lightBg: 'bg-purple-50',
+    lightText: 'text-purple-700',
+    problems: [
+      "Panne système d'alarme",
+      'Portail automatique bloqué (accès impossible)',
+      'Volets motorisés bloqués ouverts ou fermés',
+      'Panne domotique générale (chauffage, éclairage)',
+      'Interphone ou visiophone en panne',
+    ],
+  },
+  paysagiste: {
+    gradient: 'from-green-700 to-green-900',
+    lightBg: 'bg-green-50',
+    lightText: 'text-green-800',
+    problems: [
+      'Arbre dangereux menaçant habitation',
+      'Mur de soutènement fissuré ou effondré',
+      'Inondation aménagement paysager',
+      'Éboulement enrochement ou talus',
+      'Dégâts de tempête sur jardin paysagé',
+    ],
+  },
+  pisciniste: {
+    gradient: 'from-blue-500 to-blue-700',
+    lightBg: 'bg-blue-50',
+    lightText: 'text-blue-600',
+    problems: [
+      "Fuite piscine (perte d'eau anormale)",
+      'Panne pompe de filtration',
+      "Eau verte nécessitant traitement d'urgence",
+      'Liner déchiré ou décollé',
+      'Effondrement margelle ou plage',
+      'Panne système de traitement automatique',
+    ],
+  },
+  'alarme-securite': {
+    gradient: 'from-red-700 to-red-900',
+    lightBg: 'bg-red-50',
+    lightText: 'text-red-800',
+    problems: [
+      "Panne système d'alarme (domicile non protégé)",
+      'Caméra de surveillance hors service',
+      'Détecteur de mouvement défaillant',
+      'Alarme qui se déclenche en boucle',
+      'Mise en sécurité après intrusion',
+      'Serrure connectée bloquée',
+    ],
+  },
+  platrier: {
+    gradient: 'from-neutral-600 to-neutral-800',
+    lightBg: 'bg-neutral-50',
+    lightText: 'text-neutral-700',
+    problems: [
+      "Plafond en plâtre qui s'effrite ou se fissure",
+      'Fissures plâtre après tassement ou sinistre',
+      'Dégât des eaux sur enduit plâtre',
+      'Moulure ou corniche descellée (danger de chute)',
+      'Mise en sécurité plafond menaçant',
+    ],
+  },
+  antenniste: {
+    gradient: 'from-sky-700 to-sky-900',
+    lightBg: 'bg-sky-50',
+    lightText: 'text-sky-800',
+    problems: [
+      'Antenne arrachée par la tempête',
+      'Perte de signal TV complète',
+      'Parabole déréglée ou cassée',
+      "Mât d'antenne menaçant de tomber",
+      'Câble coaxial sectionné',
+    ],
+  },
+  'architecte-interieur': {
+    gradient: 'from-fuchsia-600 to-fuchsia-800',
+    lightBg: 'bg-fuchsia-50',
+    lightText: 'text-fuchsia-700',
+    problems: [
+      'Restructuration urgente après sinistre (incendie, dégât des eaux)',
+      'Aménagement provisoire après effondrement partiel',
+      "Coordination d'urgence multi-corps de métier post-sinistre",
+      'Remise en état habitable après catastrophe',
+    ],
+  },
+  ascensoriste: {
+    gradient: 'from-gray-600 to-gray-800',
+    lightBg: 'bg-gray-50',
+    lightText: 'text-gray-700',
+    problems: [
+      "Panne d'ascenseur (personne bloquée)",
+      "Porte d'ascenseur bloquée ouverte ou fermée",
+      'Bruit anormal ou vibrations dangereuses',
+      "Bouton d'appel ou commandes HS",
+      'Ascenseur bloqué entre deux étages',
+    ],
+  },
+  'borne-recharge': {
+    gradient: 'from-emerald-700 to-emerald-900',
+    lightBg: 'bg-emerald-50',
+    lightText: 'text-emerald-800',
+    problems: [
+      'Panne de borne de recharge',
+      'Court-circuit sur borne (risque incendie)',
+      'Câble de recharge endommagé',
+      'Borne qui ne délivre plus de courant',
+      'Erreur communication borne-véhicule',
+    ],
+  },
+  decorateur: {
+    gradient: 'from-pink-600 to-pink-800',
+    lightBg: 'bg-pink-50',
+    lightText: 'text-pink-700',
+    problems: [
+      'Remise en état urgente après sinistre',
+      'Coordination rapide des travaux de rénovation post-dégât',
+      'Habillage provisoire de locaux commerciaux endommagés',
+      "Réaménagement d'urgence pour maintien d'activité",
+    ],
+  },
+  demenageur: {
+    gradient: 'from-blue-700 to-blue-900',
+    lightBg: 'bg-blue-50',
+    lightText: 'text-blue-800',
+    problems: [
+      'Déménagement urgent suite à expulsion',
+      'Déménagement urgent pour mutation professionnelle',
+      "Stockage d'urgence (garde-meuble)",
+      'Évacuation de logement après sinistre',
+      'Déménagement last-minute (préavis très court)',
+    ],
+  },
+  deratisation: {
+    gradient: 'from-yellow-600 to-yellow-800',
+    lightBg: 'bg-yellow-50',
+    lightText: 'text-yellow-700',
+    problems: [
+      "Invasion de rats ou souris dans l'habitation",
+      'Nid de rongeurs dans les murs ou le grenier',
+      'Rats dans les canalisations ou le vide sanitaire',
+      'Dégâts de rongeurs sur câbles électriques (risque incendie)',
+      'Rongeurs dans un local alimentaire (fermeture sanitaire)',
+    ],
+  },
+  desinsectisation: {
+    gradient: 'from-amber-700 to-amber-900',
+    lightBg: 'bg-amber-50',
+    lightText: 'text-amber-800',
+    problems: [
+      'Nid de frelons ou de guêpes (danger piqûres)',
+      'Invasion de punaises de lit',
+      'Infestation de cafards/blattes',
+      'Nid de frelons asiatiques (espèce invasive)',
+      'Invasion de fourmis ou termites dans la structure',
+      'Moustiques tigres en zone à risque sanitaire',
+    ],
+  },
+  diagnostiqueur: {
+    gradient: 'from-blue-600 to-blue-800',
+    lightBg: 'bg-blue-50',
+    lightText: 'text-blue-700',
+    problems: [
+      'Diagnostic amiante avant travaux urgents',
+      'DPE ou diagnostic urgent pour vente/location imminente',
+      'Diagnostic plomb (saturnisme suspecté)',
+      'Diagnostic électrique ou gaz suite à incident',
+      'Diagnostic structurel après fissures suspectes',
+    ],
+  },
+  etancheiste: {
+    gradient: 'from-cyan-700 to-cyan-900',
+    lightBg: 'bg-cyan-50',
+    lightText: 'text-cyan-800',
+    problems: [
+      'Infiltration toiture-terrasse',
+      "Fuite d'étanchéité sur toit plat",
+      'Remontée capillaire dans les murs',
+      "Membrane d'étanchéité arrachée par le vent",
+      'Infiltration par joint de dilatation',
+      'Fuite terrasse ou balcon vers logement inférieur',
+    ],
+  },
+  ferronnier: {
+    gradient: 'from-zinc-700 to-zinc-900',
+    lightBg: 'bg-zinc-50',
+    lightText: 'text-zinc-800',
+    problems: [
+      'Grille ou portail en fer forcé (sécurisation)',
+      'Garde-corps descellé ou cassé (danger de chute)',
+      'Serrure de grille en fer forgé cassée',
+      'Barreaux de fenêtre arrachés (mise en sécurité)',
+      "Rampe d'escalier en fer cassée ou branlante",
+    ],
+  },
+  geometre: {
+    gradient: 'from-indigo-700 to-indigo-900',
+    lightBg: 'bg-indigo-50',
+    lightText: 'text-indigo-800',
+    problems: [
+      'Bornage urgent (conflit de voisinage imminent)',
+      'Relevé de sinistre pour expertise assurance',
+      'Implantation urgente pour chantier imminent',
+      'Constat de mitoyenneté en urgence',
+    ],
+  },
+  metallier: {
+    gradient: 'from-gray-700 to-gray-900',
+    lightBg: 'bg-gray-50',
+    lightText: 'text-gray-800',
+    problems: [
+      'Structure métallique endommagée (risque effondrement)',
+      'Escalier métallique dangereux (marche cassée)',
+      'Garde-corps métallique cassé (danger de chute)',
+      'Portail métallique bloqué ou arraché',
+      'Verrière métallique brisée (mise en sécurité)',
+    ],
+  },
+  miroitier: {
+    gradient: 'from-sky-600 to-sky-800',
+    lightBg: 'bg-sky-50',
+    lightText: 'text-sky-700',
+    problems: [
+      'Vitrine brisée (mise en sécurité commerciale)',
+      'Miroir ou paroi vitrée cassée',
+      'Double vitrage cassé ou fissuré',
+      'Porte vitrée brisée (accès non sécurisé)',
+      'Crédence en verre cassée',
+      'Paroi de douche en verre brisée',
+    ],
+  },
+  nettoyage: {
+    gradient: 'from-teal-700 to-teal-900',
+    lightBg: 'bg-teal-50',
+    lightText: 'text-teal-800',
+    problems: [
+      'Nettoyage après sinistre (incendie, inondation)',
+      'Décontamination urgente (moisissures, produits dangereux)',
+      'Nettoyage après dégât des eaux',
+      'Remise en état de locaux après vandalisme',
+      'Nettoyage de scène (insalubrité, syndrome de Diogène)',
+    ],
+  },
+  'panneaux-solaires': {
+    gradient: 'from-yellow-500 to-yellow-700',
+    lightBg: 'bg-yellow-50',
+    lightText: 'text-yellow-600',
+    problems: [
+      'Panneau solaire arraché par la tempête',
+      'Onduleur en panne (plus de production)',
+      'Fuite toiture au niveau des panneaux',
+      'Micro-onduleur défaillant (risque incendie)',
+      'Câblage solaire endommagé',
+      'Hot spot détecté sur panneau (risque incendie)',
+    ],
+  },
+  'pompe-a-chaleur': {
+    gradient: 'from-blue-600 to-blue-800',
+    lightBg: 'bg-blue-50',
+    lightText: 'text-blue-700',
+    problems: [
+      'Panne de pompe à chaleur en plein hiver',
+      'Fuite de fluide frigorigène',
+      'Bruit anormal ou vibrations excessives',
+      'PAC qui ne chauffe plus ou ne refroidit plus',
+      'Erreur critique sur le tableau de commande',
+      'Givre excessif sur unité extérieure',
+    ],
+  },
+  ramoneur: {
+    gradient: 'from-stone-800 to-stone-950',
+    lightBg: 'bg-stone-50',
+    lightText: 'text-stone-800',
+    problems: [
+      'Feu de cheminée (intervention urgente)',
+      'Conduit de cheminée obstrué (refoulement fumée)',
+      "Suspicion d'intoxication au monoxyde de carbone",
+      'Ramonage obligatoire avant remise en service',
+      "Nid d'oiseau obstruant le conduit",
+    ],
+  },
+  'renovation-energetique': {
+    gradient: 'from-green-600 to-green-800',
+    lightBg: 'bg-green-50',
+    lightText: 'text-green-700',
+    problems: [
+      "Isolation d'urgence après sinistre (toiture, murs)",
+      'Remplacement chaudière en urgence (panne hivernale)',
+      'Ventilation HS causant moisissures et humidité',
+      "Fenêtres cassées à remplacer d'urgence (déperdition)",
+      'Système de chauffage vétuste (risque CO)',
+    ],
+  },
+  solier: {
+    gradient: 'from-amber-600 to-amber-800',
+    lightBg: 'bg-amber-50',
+    lightText: 'text-amber-700',
+    problems: [
+      'Sol souple décollé (risque de chute)',
+      'Dégât des eaux sur revêtement de sol',
+      'Moquette ou lino arraché dans zone de passage',
+      'Sol PVC gondolé ou boursouflé',
+      'Réparation urgente sol ERP (sécurité)',
+    ],
+  },
+  storiste: {
+    gradient: 'from-orange-700 to-orange-900',
+    lightBg: 'bg-orange-50',
+    lightText: 'text-orange-800',
+    problems: [
+      'Store bloqué en position sortie (tempête imminente)',
+      'Volet roulant cassé ou bloqué',
+      'Bras de store cassé (store pendant)',
+      'Moteur de volet roulant HS',
+      'Lames de volet arrachées par le vent',
+      'Store banne déchiré menaçant de tomber',
+    ],
+  },
+  zingueur: {
+    gradient: 'from-slate-700 to-slate-900',
+    lightBg: 'bg-slate-50',
+    lightText: 'text-slate-800',
+    problems: [
+      'Gouttière percée ou arrachée',
+      'Noue bouchée provoquant infiltration',
+      'Infiltration par zinguerie défaillante',
+      'Chéneau débordant causant dégât des eaux',
+      'Solin décollé au niveau de la cheminée',
+      "Descente d'eau pluviale cassée",
+    ],
+  },
+  ebeniste: {
+    gradient: 'from-amber-800 to-amber-950',
+    lightBg: 'bg-amber-50',
+    lightText: 'text-amber-900',
+    problems: [
+      'Meuble ancien effondré ou cassé (valeur patrimoniale)',
+      'Escalier en bois avec marche cassée (danger)',
+      'Porte en bois massif fracturée',
+      'Boiserie endommagée après dégât des eaux',
+      'Réparation urgente mobilier avant événement',
     ],
   },
 }
@@ -346,7 +860,7 @@ export default async function UrgenceServiceVillePage({
   }
 
   const tradeLower = trade.name.toLowerCase()
-  const multiplier = getRegionalMultiplier(villeData.region)
+  const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
@@ -1208,6 +1722,7 @@ export default async function UrgenceServiceVillePage({
         serviceSlug={service}
         serviceName={trade.name}
         villeName={villeData.name}
+        villeSlug={villeSlug}
         climatZone={commune?.climat_zone ?? null}
       />
 
@@ -1232,6 +1747,9 @@ export default async function UrgenceServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
         regionName={villeData.region}
+        revenuMedian={commune?.revenu_median}
+        prixM2Moyen={commune?.prix_m2_moyen}
+        densite={commune?.densite_population}
       />
 
       <CalendrierSaisonnierBlock
@@ -1239,6 +1757,19 @@ export default async function UrgenceServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
         climatZone={commune?.climat_zone ?? null}
+        joursGelAnnuels={commune?.jours_gel_annuels}
+        precipitationAnnuelle={commune?.precipitation_annuelle}
+        temperatureMoyenneHiver={commune?.temperature_moyenne_hiver}
+        temperatureMoyenneEte={commune?.temperature_moyenne_ete}
+        moisTravauxExtDebut={commune?.mois_travaux_ext_debut}
+        moisTravauxExtFin={commune?.mois_travaux_ext_fin}
+        altitudeMoyenne={commune?.altitude_moyenne}
+      />
+
+      <CommuneContextBlock
+        communeData={commune}
+        serviceName={trade.name}
+        villeName={villeData.name}
       />
 
       <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />

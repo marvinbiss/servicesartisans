@@ -17,6 +17,11 @@ import { companyIdentity } from '@/lib/config/company-identity'
 import { formatPhoneForTel } from '@/lib/validation/phone'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import FooterClusterLinks from '@/components/seo/FooterClusterLinks'
+import dynamic from 'next/dynamic'
+
+const DynamicFooterLinks = dynamic(() => import('@/components/seo/DynamicFooterLinks'), {
+  ssr: false,
+})
 
 // Navigation links — money pages & essential hubs only (link equity optimization)
 const navigationLinks = [
@@ -46,6 +51,9 @@ export default function Footer() {
 
       {/* ─── Cluster Links (SEO — PageRank equity to top clusters + cities + resources) ── */}
       <FooterClusterLinks />
+
+      {/* Dynamic rotating money page links (SEO — PageRank equity distribution) */}
+      <DynamicFooterLinks />
 
       {/* Newsletter Section Premium */}
       <div className="relative border-b border-charcoal-700">

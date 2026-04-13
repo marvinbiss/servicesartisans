@@ -71,8 +71,8 @@ const GUIDE_SLUGS = [
   'trouver-artisan',
 ]
 
-/** Max URLs per daily run — target 500/day, well under IndexNow 10K limit */
-const MAX_URLS_PER_DAY = 500
+/** Max URLs per daily run — target 2500/day, well under IndexNow 10K limit */
+const MAX_URLS_PER_DAY = 2500
 
 /** Number of rotation buckets (days) to cycle through all URLs */
 const ROTATION_DAYS = 3
@@ -97,17 +97,23 @@ function rotateSlice<T>(items: T[], bucket: number): T[] {
   return items.filter((_, i) => i % ROTATION_DAYS === bucket)
 }
 
+/** Vercel function timeout — 60s is plenty for building URL list + single IndexNow POST */
+export const maxDuration = 60
+
 /**
  * Cron job: Submit strategic URLs to IndexNow after each deploy.
  * Runs daily to ensure Bing always has fresh data.
  *
- * Target: ~500 URLs/day with rotation to cover all pages in ~3 days.
+ * Target: ~2500 URLs/day with rotation to cover all pages in ~3 days.
  *
  * Categories:
  * - Priority pages: homepage, /services index, /blog index (always)
  * - Service hub pages: all 46 services (rotated)
  * - Service × top cities: /services/{slug}/{city} (rotated)
  * - Devis pages: /devis/{slug}/{city} with extended cities (rotated)
+ * - Tarifs pSEO: /tarifs/{slug}/{city} with extended cities (rotated)
+ * - Urgence pSEO: /urgence/{slug}/{city} with extended cities (rotated)
+ * - Avis pSEO: /avis/{slug}/{city} with top cities (rotated)
  * - Blog articles: prix articles + recent articles (rotated + fresh)
  * - New providers: created in last 24h (hub pages impacted)
  * - RGE pSEO: /artisans-rge/{city} top 30 + /rge/{service}/{city} 14×10 (rotated)
@@ -127,6 +133,9 @@ export async function GET(request: Request) {
     strategic: 0,
     serviceHubs: 0,
     devis: 0,
+    tarifs: 0,
+    urgence: 0,
+    avis: 0,
     blog: 0,
     blogPrix: 0,
     providers: 0,
@@ -188,6 +197,39 @@ export async function GET(request: Request) {
   const devisBatch = rotateSlice(allDevisUrls, bucket)
   urls.push(...devisBatch)
   counts.devis = devisBatch.length
+
+  // ── 4b. Tarifs pSEO pages — all services × extended cities (rotated) ──
+  const allTarifsUrls: string[] = []
+  for (const service of services) {
+    for (const city of EXTENDED_CITIES) {
+      allTarifsUrls.push(`${SITE_URL}/tarifs/${service.slug}/${city}`)
+    }
+  }
+  const tarifsBatch = rotateSlice(allTarifsUrls, bucket)
+  urls.push(...tarifsBatch)
+  counts.tarifs = tarifsBatch.length
+
+  // ── 4c. Urgence pSEO pages — all services × top cities (rotated) ──
+  const allUrgenceUrls: string[] = []
+  for (const service of services) {
+    for (const city of EXTENDED_CITIES) {
+      allUrgenceUrls.push(`${SITE_URL}/urgence/${service.slug}/${city}`)
+    }
+  }
+  const urgenceBatch = rotateSlice(allUrgenceUrls, bucket)
+  urls.push(...urgenceBatch)
+  counts.urgence = urgenceBatch.length
+
+  // ── 4d. Avis pSEO pages — all services × top cities (rotated) ──
+  const allAvisUrls: string[] = []
+  for (const service of services) {
+    for (const city of TOP_CITIES) {
+      allAvisUrls.push(`${SITE_URL}/avis/${service.slug}/${city}`)
+    }
+  }
+  const avisBatch = rotateSlice(allAvisUrls, bucket)
+  urls.push(...avisBatch)
+  counts.avis = avisBatch.length
 
   // ── 5. Blog articles — fresh first, then prix articles in rotation ──
   const now = Date.now()
@@ -320,7 +362,18 @@ export async function GET(request: Request) {
   }
 
   // ── Deduplicate and cap at MAX_URLS_PER_DAY ─────────────────────────
-  const uniqueUrls = Array.from(new Set(urls)).slice(0, MAX_URLS_PER_DAY)
+  const allUniqueUrls = Array.from(new Set(urls))
+  const uniqueUrls = allUniqueUrls.slice(0, MAX_URLS_PER_DAY)
+  const wasCapped = allUniqueUrls.length > MAX_URLS_PER_DAY
+
+  if (wasCapped) {
+    logger.warn('IndexNow cron: URL count exceeds MAX_URLS_PER_DAY, truncating', {
+      action: 'indexnow-cron-truncated',
+      totalUnique: allUniqueUrls.length,
+      max: MAX_URLS_PER_DAY,
+      dropped: allUniqueUrls.length - MAX_URLS_PER_DAY,
+    })
+  }
 
   logger.info('IndexNow cron: submitting URLs', {
     action: 'indexnow-cron',
@@ -328,6 +381,9 @@ export async function GET(request: Request) {
     strategic: counts.strategic,
     serviceHubs: counts.serviceHubs,
     devis: counts.devis,
+    tarifs: counts.tarifs,
+    urgence: counts.urgence,
+    avis: counts.avis,
     blog: counts.blog,
     blogPrix: counts.blogPrix,
     providers: counts.providers,
@@ -336,7 +392,7 @@ export async function GET(request: Request) {
     rgeServiceCity: counts.rgeServiceCity,
     totalBeforeCap: urls.length,
     totalUnique: uniqueUrls.length,
-    capped: urls.length > MAX_URLS_PER_DAY,
+    capped: wasCapped,
   })
 
   // ── Submit directly via IndexNow API ────────────────────────────────

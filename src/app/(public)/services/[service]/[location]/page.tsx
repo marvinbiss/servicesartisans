@@ -26,6 +26,7 @@ import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import BarometrePrixBlock from '@/components/seo/BarometrePrixBlock'
 import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
@@ -623,7 +624,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     : null
 
   // Regional pricing multiplier for localized tariffs
-  const pricingMultiplier = ville ? getRegionalMultiplier(ville.region) : 1.0
+  const pricingMultiplier = ville ? getRegionalMultiplier(ville.region, ville.departementCode) : 1.0
 
   // Compute average rating and total reviews from provider data (for ImmediateAnswerBlock)
   const ratedProviders = providers.filter((p) => p.rating_average && p.rating_average > 0)
@@ -1052,6 +1053,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
           serviceSlug={serviceSlug}
           serviceName={service.name}
           villeName={location.name}
+          villeSlug={locationSlug}
           climatZone={communeData?.climat_zone}
         />
 
@@ -1072,6 +1074,9 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
           serviceName={service.name}
           villeName={location.name}
           regionName={location.region_name || ''}
+          revenuMedian={communeData?.revenu_median}
+          prixM2Moyen={communeData?.prix_m2_moyen}
+          densite={communeData?.densite_population}
         />
 
         <CalendrierSaisonnierBlock
@@ -1079,6 +1084,19 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
           serviceName={service.name}
           villeName={location.name}
           climatZone={communeData?.climat_zone ?? null}
+          joursGelAnnuels={communeData?.jours_gel_annuels}
+          precipitationAnnuelle={communeData?.precipitation_annuelle}
+          temperatureMoyenneHiver={communeData?.temperature_moyenne_hiver}
+          temperatureMoyenneEte={communeData?.temperature_moyenne_ete}
+          moisTravauxExtDebut={communeData?.mois_travaux_ext_debut}
+          moisTravauxExtFin={communeData?.mois_travaux_ext_fin}
+          altitudeMoyenne={communeData?.altitude_moyenne}
+        />
+
+        <CommuneContextBlock
+          communeData={communeData}
+          serviceName={service.name}
+          villeName={location.name}
         />
 
         <ComparatifsBlock serviceSlug={serviceSlug} serviceName={service.name} />

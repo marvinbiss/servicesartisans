@@ -18,6 +18,7 @@ interface ProblemesCourantsBlockProps {
   serviceSlug: string
   serviceName: string
   villeName: string
+  villeSlug?: string
   climatZone?: string | null
 }
 
@@ -79,6 +80,7 @@ export default function ProblemesCourantsBlock({
   serviceSlug,
   serviceName,
   villeName,
+  villeSlug,
   climatZone,
 }: ProblemesCourantsBlockProps) {
   const filtered = allProblems.filter(
@@ -140,7 +142,11 @@ export default function ProblemesCourantsBlock({
 
               {/* Link */}
               <Link
-                href={`/problemes/${problem.slug}`}
+                href={
+                  villeSlug
+                    ? `/problemes/${problem.slug}/${villeSlug}`
+                    : `/problemes/${problem.slug}`
+                }
                 className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-primary-700 hover:text-primary-800"
               >
                 En savoir plus <ArrowRight className="h-3.5 w-3.5" />
