@@ -4,7 +4,7 @@ import {
   ShieldCheck,
   Calculator,
   UserCheck,
-  MessageSquareText,
+  MessageSquare,
   FileText,
   ArrowRight,
   CheckCircle2,
@@ -63,7 +63,7 @@ const METHODOLOGY_SECTIONS = [
   },
   {
     id: 'avis',
-    icon: MessageSquareText,
+    icon: MessageSquare,
     title: 'Comment les avis sont modérés',
     intro:
       "Les avis publiés sur ServicesArtisans font l'objet d'un processus de modération rigoureux pour garantir leur authenticité.",
