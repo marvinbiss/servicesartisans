@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import { getClientPortrait } from '@/lib/data/images-faces'
 
 interface Testimonial {
   name: string
@@ -11,6 +13,8 @@ interface Testimonial {
   text: string
   initials: string
   avatarBg: string
+  /** Index into the centralized portrait pool */
+  portraitIndex: number
 }
 
 const testimonials: Testimonial[] = [
@@ -19,45 +23,50 @@ const testimonials: Testimonial[] = [
     city: 'Lyon',
     rating: 5,
     service: 'Plomberie',
-    text: 'Fuite sous l\'évier un dimanche soir. J\'ai envoyé ma demande et dès le lundi matin, un plombier m\'a rappelée. Intervention rapide, prix conforme au devis. Je recommande.',
+    text: "Fuite sous l'évier un dimanche soir. J'ai envoyé ma demande et dès le lundi matin, un plombier m'a rappelée. Intervention rapide, prix conforme au devis. Je recommande.",
     initials: 'ND',
     avatarBg: 'bg-primary-100 text-primary-700',
+    portraitIndex: 0,
   },
   {
     name: 'François M.',
     city: 'Bordeaux',
     rating: 5,
     service: 'Électricité',
-    text: 'Je devais refaire le tableau électrique de ma maison des années 70. J\'ai reçu des devis rapidement et j\'ai pu comparer sereinement. L\'artisan choisi a fait un travail impeccable.',
+    text: "Je devais refaire le tableau électrique de ma maison des années 70. J'ai reçu des devis rapidement et j'ai pu comparer sereinement. L'artisan choisi a fait un travail impeccable.",
     initials: 'FM',
     avatarBg: 'bg-accent-100 text-accent-700',
+    portraitIndex: 1,
   },
   {
     name: 'Sophie L.',
     city: 'Toulouse',
     rating: 4,
     service: 'Peinture',
-    text: 'Appartement de 60m² à repeindre avant emménagement. Le service m\'a permis de trouver un peintre sérieux sans passer des heures au téléphone. Très pratique.',
+    text: "Appartement de 60m² à repeindre avant emménagement. Le service m'a permis de trouver un peintre sérieux sans passer des heures au téléphone. Très pratique.",
     initials: 'SL',
     avatarBg: 'bg-secondary-100 text-secondary-700',
+    portraitIndex: 2,
   },
   {
     name: 'Marc B.',
     city: 'Nantes',
     rating: 5,
     service: 'Couverture',
-    text: 'Toiture qui fuyait après la tempête. J\'étais inquiet du coût. Grâce au devis gratuit, j\'ai trouvé un couvreur compétent à un prix juste. Réparation durable.',
+    text: "Toiture qui fuyait après la tempête. J'étais inquiet du coût. Grâce au devis gratuit, j'ai trouvé un couvreur compétent à un prix juste. Réparation durable.",
     initials: 'MB',
     avatarBg: 'bg-primary-100 text-primary-700',
+    portraitIndex: 3,
   },
   {
     name: 'Isabelle R.',
     city: 'Strasbourg',
     rating: 5,
     service: 'Serrurerie',
-    text: 'Porte claquée avec les clés à l\'intérieur. J\'ai utilisé le service en urgence et un serrurier est intervenu dans l\'heure. Tarif transparent, pas de mauvaise surprise.',
+    text: "Porte claquée avec les clés à l'intérieur. J'ai utilisé le service en urgence et un serrurier est intervenu dans l'heure. Tarif transparent, pas de mauvaise surprise.",
     initials: 'IR',
     avatarBg: 'bg-accent-100 text-accent-700',
+    portraitIndex: 4,
   },
   {
     name: 'Philippe G.',
@@ -67,6 +76,7 @@ const testimonials: Testimonial[] = [
     text: 'Entretien annuel de ma chaudière gaz. Premier devis reçu 2h après ma demande. Le chauffagiste était ponctuel et professionnel. Je réutiliserai le service.',
     initials: 'PG',
     avatarBg: 'bg-secondary-100 text-secondary-700',
+    portraitIndex: 5,
   },
 ]
 
@@ -153,7 +163,11 @@ export default function InlineTestimonial({
 
       <div
         className={`grid gap-3 ${
-          count === 1 ? 'grid-cols-1' : count === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'
+          count === 1
+            ? 'grid-cols-1'
+            : count === 2
+              ? 'grid-cols-1 md:grid-cols-2'
+              : 'grid-cols-1 md:grid-cols-3'
         }`}
       >
         {visible.map((t) => (
@@ -163,16 +177,17 @@ export default function InlineTestimonial({
           >
             <div className="flex items-center gap-3 mb-2.5">
               {/* Avatar */}
-              <span
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${t.avatarBg}`}
-                aria-hidden="true"
-              >
-                {t.initials}
-              </span>
+              <Image
+                src={getClientPortrait(t.portraitIndex).src}
+                alt={t.name}
+                width={36}
+                height={36}
+                sizes="36px"
+                loading="lazy"
+                className="h-9 w-9 shrink-0 rounded-full object-cover border border-sand-200"
+              />
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-charcoal-900 truncate">
-                  {t.name}
-                </p>
+                <p className="text-sm font-semibold text-charcoal-900 truncate">{t.name}</p>
                 <p className="text-2xs text-charcoal-500">
                   {t.city} · {t.service}
                 </p>

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { FileText, Phone } from 'lucide-react'
 import { PHONE_TEL } from '@/lib/seo/config'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { getClientPortrait } from '@/lib/data/images-faces'
 import DevisBottomSheet from './DevisBottomSheet'
 import ScrollNudge from './ScrollNudge'
 
@@ -152,13 +153,28 @@ export default function StickyMobileCTA({
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         >
           <div className="px-3 pt-2.5 pb-2">
-            {/* Social proof line */}
+            {/* Social proof line with avatar stack */}
             {providerCount && providerCount > 0 && (
-              <p className="text-[11px] text-charcoal-500 text-center mb-1.5">
-                <span className="inline-block w-1.5 h-1.5 bg-accent-500 rounded-full mr-1 animate-pulse" />
-                {providerCount} artisan{providerCount > 1 ? 's' : ''} disponible
-                {providerCount > 1 ? 's' : ''} près de chez vous
-              </p>
+              <div className="flex items-center justify-center gap-2 mb-1.5">
+                <div className="flex -space-x-1.5">
+                  {[0, 1, 2].map((i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={i}
+                      src={getClientPortrait(i).src}
+                      alt=""
+                      width={20}
+                      height={20}
+                      className="w-5 h-5 rounded-full border border-white object-cover"
+                    />
+                  ))}
+                </div>
+                <p className="text-[11px] text-charcoal-500">
+                  <span className="inline-block w-1.5 h-1.5 bg-accent-500 rounded-full mr-1 animate-pulse" />
+                  {providerCount} artisan{providerCount > 1 ? 's' : ''} disponible
+                  {providerCount > 1 ? 's' : ''} près de chez vous
+                </p>
+              </div>
             )}
 
             {/* Buttons row */}

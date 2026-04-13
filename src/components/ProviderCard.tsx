@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { MapPin, Star, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Provider } from '@/types'
-import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
+import { getArtisanUrl } from '@/lib/utils'
+import { getDiceBearAvatar } from '@/lib/data/images-faces'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { trackEvent } from '@/lib/analytics/tracking'
 import RgeBadge from '@/components/artisan/RgeBadge'
@@ -72,10 +73,16 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             })
           }
         >
-          <div
-            className={`w-12 h-12 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-lg font-bold shadow-soft`}
-          >
-            {provider.name.charAt(0).toUpperCase()}
+          <div className="w-12 h-12 rounded-full overflow-hidden shadow-soft flex-shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getDiceBearAvatar(provider.siret || provider.slug || provider.name, 96)}
+              alt=""
+              width={48}
+              height={48}
+              loading="lazy"
+              className="w-full h-full"
+            />
           </div>
         </Link>
 
