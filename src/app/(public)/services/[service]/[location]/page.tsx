@@ -283,10 +283,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = descTemplates[descHash % descTemplates.length]
 
   // Pruning: noindex pages with zero providers AND no unique data (fail-open safe)
+  // Only fetch commune data when providerCount is 0 (the only case where hasUniqueData matters)
+  let communeExists = false
+  if (providerCount === 0) {
+    try {
+      communeExists = !!(await getCommuneBySlug(locationSlug))
+    } catch {
+      communeExists = false
+    }
+  }
   const isNoindex = shouldNoindex(`/services/${serviceSlug}/${locationSlug}`, {
     providerCount,
     isQuartierPage: false,
-    hasUniqueData: !!(tradeContent || getCommuneBySlug(locationSlug)),
+    hasUniqueData: !!(tradeContent || communeExists),
   })
 
   return {

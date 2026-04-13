@@ -222,9 +222,10 @@ export async function generateMetadata({
   // Fail-open: hasProvidersByServiceAndLocation returns true during build and
   // on error, so pages stay indexed unless ISR confirms 0 providers.
   const hasProviders = await hasProvidersByServiceAndLocation(service, villeSlug)
+  // hasUniqueData: trade content (pricing, FAQ) and villeData (commune context) are real unique data
   const noindex = shouldNoindex(`/tarifs/${service}/${villeSlug}`, {
     providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: true,
+    hasUniqueData: !!(trade && villeData),
   })
 
   return {

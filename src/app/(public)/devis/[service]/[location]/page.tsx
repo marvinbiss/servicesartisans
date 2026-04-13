@@ -181,9 +181,10 @@ export async function generateMetadata({
 
   // Gate indexation on provider availability (HCU anti-thin). Fail-open during build.
   const hasProviders = await hasProvidersByServiceAndLocation(service, location)
+  // hasUniqueData: trade content (pricing, FAQ) and villeData (commune context) are real unique data
   const noindex = shouldNoindex(`/devis/${service}/${location}`, {
     providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: true,
+    hasUniqueData: !!(trade && villeData),
   })
 
   return {
