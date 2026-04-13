@@ -31,7 +31,10 @@ const artisanSchema = z.object({
   nom: z.string().min(2, 'Le nom est requis'),
   prenom: z.string().min(2, 'Le prénom est requis'),
   email: z.string().email('Email invalide'),
-  telephone: z.string().min(10, 'Téléphone invalide'),
+  telephone: z
+    .string()
+    .transform((v) => v.replace(/[\s.\-()]/g, ''))
+    .pipe(z.string().min(10, 'Téléphone invalide')),
   // Step 3 - Location
   adresse: z.string().min(5, "L'adresse est requise"),
   codePostal: z.string().min(5, 'Code postal invalide'),

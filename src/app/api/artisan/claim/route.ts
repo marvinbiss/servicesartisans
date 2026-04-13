@@ -18,7 +18,10 @@ const claimSchema = z.object({
   siret: z.string().regex(/^\d{9}(\d{5})?$/, 'Entrez un SIREN (9 chiffres) ou SIRET (14 chiffres)'),
   fullName: z.string().min(2, 'Le nom est requis (min. 2 caractères)'),
   email: z.string().email('Email invalide'),
-  phone: z.string().min(10, 'Numéro de téléphone invalide'),
+  phone: z
+    .string()
+    .transform((v) => v.replace(/[\s.\-()]/g, ''))
+    .pipe(z.string().min(10, 'Numéro de téléphone invalide')),
   position: z.string().min(2, 'Le poste est requis'),
 })
 

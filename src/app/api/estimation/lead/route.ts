@@ -15,7 +15,10 @@ export const dynamic = 'force-dynamic'
 
 const estimationLeadSchema = z.object({
   nom: z.string().optional(),
-  telephone: z.string().min(10, 'Numéro de téléphone invalide (min 10 caractères)'),
+  telephone: z
+    .string()
+    .transform((v) => v.replace(/[\s.\-()]/g, ''))
+    .pipe(z.string().min(10, 'Numéro de téléphone invalide (min 10 caractères)')),
   email: z.string().email('Email invalide').optional().or(z.literal('')),
   metier: z.string().min(1, 'Le métier est requis'),
   ville: z.string().min(1, 'La ville est requise'),
@@ -42,7 +45,7 @@ export async function POST(request: Request) {
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: 'Trop de requêtes. Veuillez réessayer dans une minute.' },
-        { status: 429, headers: getRateLimitHeaders(rateLimitResult) },
+        { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
       )
     }
 
@@ -67,7 +70,10 @@ export async function POST(request: Request) {
       } else {
         try {
           const url = new URL(data.page_url)
-          if (url.hostname !== 'servicesartisans.fr' && url.hostname !== 'www.servicesartisans.fr') {
+          if (
+            url.hostname !== 'servicesartisans.fr' &&
+            url.hostname !== 'www.servicesartisans.fr'
+          ) {
             data.page_url = undefined
           }
         } catch {
@@ -103,17 +109,12 @@ export async function POST(request: Request) {
 
     if (dbError) {
       logger.error('Estimation lead DB error', dbError)
-      return NextResponse.json(
-        { error: 'Erreur lors de l\'enregistrement' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: "Erreur lors de l'enregistrement" }, { status: 500 })
     }
 
     // Log in audit_logs via admin client (no user session required)
     const ipAddress =
-      headersList.get('x-forwarded-for')?.split(',')[0] ||
-      headersList.get('x-real-ip') ||
-      null
+      headersList.get('x-forwarded-for')?.split(',')[0] || headersList.get('x-real-ip') || null
     const userAgent = headersList.get('user-agent') || null
 
     supabase
@@ -156,10 +157,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, id: lead.id })
   } catch (error) {
     logger.error('Estimation lead API error', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
@@ -171,12 +169,15 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.f
 
 async function notifyAdminNewEstimationLead(
   data: z.infer<typeof estimationLeadSchema>,
-  leadId: string,
+  leadId: string
 ): Promise<void> {
   const adminEmails = process.env.ADMIN_EMAILS
   if (!adminEmails) return
 
-  const recipients = adminEmails.split(',').map((e) => e.trim()).filter(Boolean)
+  const recipients = adminEmails
+    .split(',')
+    .map((e) => e.trim())
+    .filter(Boolean)
   if (recipients.length === 0) return
 
   const now = new Date()
@@ -254,7 +255,7 @@ function htmlEscape(str: string): string {
 
 async function sendClientConfirmationEmail(
   data: z.infer<typeof estimationLeadSchema>,
-  leadId: string,
+  leadId: string
 ): Promise<void> {
   const clientEmail = data.email
   if (!clientEmail || clientEmail.length === 0) return

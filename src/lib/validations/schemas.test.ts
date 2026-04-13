@@ -40,6 +40,18 @@ describe('phoneSchema', () => {
     expect(phoneSchema.safeParse('+33612345678').success).toBe(true)
   })
 
+  it('accepts phone numbers with spaces, dots, dashes', () => {
+    expect(phoneSchema.safeParse('06 12 34 56 78').success).toBe(true)
+    expect(phoneSchema.safeParse('06.12.34.56.78').success).toBe(true)
+    expect(phoneSchema.safeParse('06-12-34-56-78').success).toBe(true)
+    expect(phoneSchema.safeParse('+33 6 12 34 56 78').success).toBe(true)
+  })
+
+  it('strips spaces/dots/dashes on transform', () => {
+    const result = phoneSchema.safeParse('06 12 34 56 78')
+    expect(result.success && result.data).toBe('0612345678')
+  })
+
   it('strips spaces on transform', () => {
     const result = phoneSchema.safeParse('0612345678')
     expect(result.success && result.data).toBe('0612345678')
@@ -147,11 +159,17 @@ describe('createBookingSchema', () => {
   })
 
   it('rejects invalid artisan UUID', () => {
-    expect(createBookingSchema.safeParse({ ...validBooking, artisanId: 'bad-id' }).success).toBe(false)
+    expect(createBookingSchema.safeParse({ ...validBooking, artisanId: 'bad-id' }).success).toBe(
+      false
+    )
   })
 
   it('accepts optional fields', () => {
-    const withOptional = { ...validBooking, serviceDescription: 'Fuite sous évier', address: '10 rue de la Paix' }
+    const withOptional = {
+      ...validBooking,
+      serviceDescription: 'Fuite sous évier',
+      address: '10 rue de la Paix',
+    }
     expect(createBookingSchema.safeParse(withOptional).success).toBe(true)
   })
 })
@@ -178,7 +196,9 @@ describe('createReviewSchema', () => {
   })
 
   it('accepts optional reviewToken', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, reviewToken: 'abc123' }).success).toBe(true)
+    expect(createReviewSchema.safeParse({ ...validReview, reviewToken: 'abc123' }).success).toBe(
+      true
+    )
   })
 })
 
@@ -200,7 +220,7 @@ describe('signUpSchema', () => {
     const result = signUpSchema.safeParse({ ...validSignUp, confirmPassword: 'Different1' })
     expect(result.success).toBe(false)
     if (!result.success) {
-      const paths = result.error.issues.map(i => i.path.join('.'))
+      const paths = result.error.issues.map((i) => i.path.join('.'))
       expect(paths).toContain('confirmPassword')
     }
   })
@@ -212,7 +232,9 @@ describe('signUpSchema', () => {
 
 describe('signInSchema', () => {
   it('accepts valid credentials', () => {
-    expect(signInSchema.safeParse({ email: 'user@example.com', password: 'anypassword' }).success).toBe(true)
+    expect(
+      signInSchema.safeParse({ email: 'user@example.com', password: 'anypassword' }).success
+    ).toBe(true)
   })
 
   it('rejects empty password', () => {
@@ -220,7 +242,10 @@ describe('signInSchema', () => {
   })
 
   it('accepts optional rememberMe', () => {
-    expect(signInSchema.safeParse({ email: 'user@example.com', password: 'pw', rememberMe: true }).success).toBe(true)
+    expect(
+      signInSchema.safeParse({ email: 'user@example.com', password: 'pw', rememberMe: true })
+        .success
+    ).toBe(true)
   })
 })
 
@@ -265,7 +290,14 @@ describe('validateRequest', () => {
 
 describe('formatZodErrors', () => {
   it('maps ZodError issues to field:message record', () => {
-    const result = signUpSchema.safeParse({ email: 'bad', password: 'weak', confirmPassword: 'x', firstName: 'A', lastName: 'B', acceptTerms: false })
+    const result = signUpSchema.safeParse({
+      email: 'bad',
+      password: 'weak',
+      confirmPassword: 'x',
+      firstName: 'A',
+      lastName: 'B',
+      acceptTerms: false,
+    })
     expect(result.success).toBe(false)
     if (!result.success) {
       const errors = formatZodErrors(result.error)

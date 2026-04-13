@@ -17,8 +17,8 @@ export const emailSchema = z
 
 export const phoneSchema = z
   .string()
-  .regex(/^(?:\+33|0)[1-9](?:[0-9]{8})$/, 'Numero de telephone invalide')
   .transform((val) => val.replace(/[\s.\-()]/g, ''))
+  .pipe(z.string().regex(/^(?:\+33|0)[1-9](?:[0-9]{8})$/, 'Numero de telephone invalide'))
 
 export const passwordSchema = z
   .string()

@@ -28,7 +28,11 @@ export const providerUpdateSchema = z.object({
   email: z.string().email('Email invalide').optional().nullable(),
   website: z.string().url('URL invalide').optional().nullable(),
   address_street: z.string().max(200).optional().nullable(),
-  address_postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional().nullable(),
+  address_postal_code: z
+    .string()
+    .regex(/^\d{5}$/, 'Code postal invalide')
+    .optional()
+    .nullable(),
   address_city: z.string().max(100).optional().nullable(),
   intervention_radius_km: z.number().int().min(5).max(200).optional().default(30),
   free_quote: z.boolean().optional().default(true),
@@ -40,8 +44,14 @@ export const providerUpdateSchema = z.object({
 // ============================================================
 export const dayScheduleSchema = z.object({
   ouvert: z.boolean(),
-  debut: z.string().regex(/^\d{2}:\d{2}$/).or(z.literal('')),
-  fin: z.string().regex(/^\d{2}:\d{2}$/).or(z.literal('')),
+  debut: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/)
+    .or(z.literal('')),
+  fin: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/)
+    .or(z.literal('')),
 })
 
 export const openingHoursSchema = z.object({
@@ -73,20 +83,42 @@ export const faqItemSchema = z.object({
 // ============================================================
 export const providerArtisanUpdateSchema = z.object({
   // Identity
-  name: z.string().min(2).max(100).transform(v => v.trim()).optional(),
-  siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir 14 chiffres').optional().nullable(),
+  name: z
+    .string()
+    .min(2)
+    .max(100)
+    .transform((v) => v.trim())
+    .optional(),
+  siret: z
+    .string()
+    .regex(/^\d{14}$/, 'Le SIRET doit contenir 14 chiffres')
+    .optional()
+    .nullable(),
   team_size: z.number().int().min(1).max(1000).optional().nullable(),
 
   // Contact
-  phone: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/[\s.\-()]/g, '')).optional(),
-  phone_secondary: z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide').transform(v => v.replace(/[\s.\-()]/g, '')).optional().nullable(),
+  phone: z
+    .string()
+    .transform((v) => v.replace(/[\s.\-()]/g, ''))
+    .pipe(z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide'))
+    .optional(),
+  phone_secondary: z
+    .string()
+    .transform((v) => v.replace(/[\s.\-()]/g, ''))
+    .pipe(z.string().regex(/^(\+33|0)[1-9](\d{8})$/, 'Numéro invalide'))
+    .optional()
+    .nullable(),
   email: z.string().email('Email invalide').optional().nullable(),
   website: z.string().url('URL invalide').optional().nullable(),
 
   // Location — address_department, latitude, longitude exist in providers (migrations 009, 007)
   address_street: z.string().max(200).optional().nullable(),
   address_city: z.string().max(100).optional().nullable(),
-  address_postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional().nullable(),
+  address_postal_code: z
+    .string()
+    .regex(/^\d{5}$/, 'Code postal invalide')
+    .optional()
+    .nullable(),
   address_region: z.string().max(50).optional().nullable(),
   address_department: z.string().max(50).optional().nullable(),
   latitude: z.number().min(-90).max(90).optional().nullable(),
