@@ -11,8 +11,8 @@ if (SENTRY_DSN) {
     // Performance Monitoring
     tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
 
-    // Session Replay
-    replaysSessionSampleRate: 0.1,
+    // Session Replay — lazy-loaded to save ~70KB from initial bundle
+    replaysSessionSampleRate: 0.01,
     replaysOnErrorSampleRate: 1.0,
 
     // Only enable in production
@@ -23,15 +23,18 @@ if (SENTRY_DSN) {
       Sentry.replayIntegration({
         maskAllText: true,
         blockAllMedia: true,
+        lazyLoadIntegration: true,
       }),
     ],
 
     // Filter errors
     beforeSend(event) {
       // Don't send events for browser extensions
-      if (event.exception?.values?.[0]?.stacktrace?.frames?.some(
-        frame => frame.filename?.includes('extension')
-      )) {
+      if (
+        event.exception?.values?.[0]?.stacktrace?.frames?.some((frame) =>
+          frame.filename?.includes('extension')
+        )
+      ) {
         return null
       }
       return event
