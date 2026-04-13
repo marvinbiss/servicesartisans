@@ -408,7 +408,7 @@ export default function ServiceLocationPageClient({
                 Devis gratuit de {service.name.toLowerCase()} à {location.name}
               </p>
               <p className="text-primary-100 text-sm hidden sm:block">
-                Comparez les prix et choisissez le meilleur artisan
+                Comparez les prix et choisissez un artisan de confiance
               </p>
             </div>
           </div>

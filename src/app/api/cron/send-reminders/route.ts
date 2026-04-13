@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access attempt to send-reminders')
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Non autorisé' },
         { status: 401 }
       )
     }
@@ -61,7 +61,7 @@ export async function GET(request: Request) {
     if (tomorrowBookings.length === 0) {
       return NextResponse.json({
         success: true,
-        message: 'No bookings for tomorrow',
+        message: 'Aucune réservation pour demain',
         sentCount: 0,
       })
     }
@@ -129,7 +129,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: `Reminders processed`,
+      message: 'Rappels traités',
       sentCount,
       failedCount,
       totalBookings: tomorrowBookings.length,
@@ -137,7 +137,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Cron] Error in send-reminders:', error)
     return NextResponse.json(
-      { error: 'Failed to send reminders' },
+      { error: 'Échec de l\'envoi des rappels' },
       { status: 500 }
     )
   }

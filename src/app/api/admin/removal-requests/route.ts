@@ -91,7 +91,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: 'Donnees invalides', details: validation.error.flatten() },
+          error: { message: 'Données invalides', details: validation.error.flatten() },
         },
         { status: 400 }
       )

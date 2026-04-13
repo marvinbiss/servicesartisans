@@ -20,11 +20,11 @@ export const maxDuration = 60
 
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
   const supabase = createAdminClient()
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
 
     if (fetchError || !providers) {
       logger.error('check-radiees: failed to fetch providers', fetchError)
-      return NextResponse.json({ error: 'DB fetch failed' }, { status: 500 })
+      return NextResponse.json({ error: 'Échec de la récupération en base' }, { status: 500 })
     }
 
     // Filtrer les SIRET valides (14 chiffres)
@@ -148,7 +148,7 @@ export async function GET(request: Request) {
 
       if (updateError) {
         logger.error('check-radiees: failed to deactivate providers', updateError)
-        return NextResponse.json({ error: 'Update failed', stats }, { status: 500 })
+        return NextResponse.json({ error: 'Échec de la mise à jour', stats }, { status: 500 })
       }
 
       stats.radiees = radieIds.length
@@ -159,6 +159,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, stats })
   } catch (err) {
     logger.error('check-radiees: fatal error', err)
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 })
   }
 }

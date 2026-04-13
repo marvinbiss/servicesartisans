@@ -134,7 +134,7 @@ export async function GET(request: Request) {
     if (completedBookings.length === 0) {
       return NextResponse.json({
         success: true,
-        message: 'No completed appointments in window',
+        message: 'Aucun rendez-vous terminé dans la fenêtre',
         sentCount: 0,
       })
     }

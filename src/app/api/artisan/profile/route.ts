@@ -77,7 +77,7 @@ export async function PUT(request: Request) {
     const result = updateProfileSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
+        { error: 'Erreur de validation', details: result.error.flatten() },
         { status: 400 }
       )
     }

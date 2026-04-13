@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron 1h] Unauthorized access attempt')
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Non autorisé' },
         { status: 401 }
       )
     }
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
     if (upcomingBookings.length === 0) {
       return NextResponse.json({
         success: true,
-        message: 'No appointments in the next hour',
+        message: 'Aucun rendez-vous dans la prochaine heure',
         sentCount: 0,
       })
     }
@@ -97,7 +97,7 @@ export async function GET(request: Request) {
     if (bookingsToRemind.length === 0) {
       return NextResponse.json({
         success: true,
-        message: 'All reminders already sent',
+        message: 'Tous les rappels déjà envoyés',
         sentCount: 0,
       })
     }
@@ -145,7 +145,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: '1h reminders processed',
+      message: 'Rappels 1h traités',
       sentCount: result.succeeded,
       failedCount: result.failed,
       totalBookings: upcomingBookings.length,
@@ -153,7 +153,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Cron 1h] Error in send-reminders-1h:', error)
     return NextResponse.json(
-      { error: 'Failed to send 1h reminders' },
+      { error: 'Échec de l\'envoi des rappels 1h' },
       { status: 500 }
     )
   }
