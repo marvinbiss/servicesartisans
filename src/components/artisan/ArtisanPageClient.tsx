@@ -17,7 +17,6 @@ import {
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
 import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
-import SocialProofToast from '@/components/conversion/SocialProofToast'
 
 import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
 import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
@@ -39,6 +38,11 @@ const ArtisanExitIntent = dynamic(
     })),
   { ssr: false }
 )
+
+// Social proof toast — uses framer-motion AnimatePresence, lazy-loaded
+const SocialProofToast = dynamic(() => import('@/components/conversion/SocialProofToast'), {
+  ssr: false,
+})
 
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
