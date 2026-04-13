@@ -681,6 +681,7 @@ export default async function ServiceQuartierPage({
                 {combinedFaq.map((item, i) => (
                   <details
                     key={i}
+                    open={i === 0}
                     className="group bg-sand-50 rounded-xl border border-sand-200 overflow-hidden transition-shadow duration-300 hover:shadow-sm"
                   >
                     <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-sand-100/80 transition-colors duration-200 [&::-webkit-details-marker]:hidden list-none">

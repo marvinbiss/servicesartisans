@@ -740,6 +740,7 @@ export default async function ServicePage({ params }: PageProps) {
               {trade.faq.map((item, i) => (
                 <details
                   key={i}
+                  open={i === 0}
                   className="group bg-white rounded-xl shadow-soft border border-sand-200"
                 >
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">

@@ -922,7 +922,11 @@ export default async function TarifsServiceVillePage({
             {trade.faq.slice(0, 5).map((item, i) => {
               const localQ = item.q.replace(/\?$/, '') + ` à ${villeData.name} ?`
               return (
-                <details key={i} className="bg-white rounded-xl border border-sand-300 group">
+                <details
+                  key={i}
+                  open={i === 0}
+                  className="bg-white rounded-xl border border-sand-300 group"
+                >
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                     <h3 className="text-base font-semibold text-charcoal-900 pr-4">{localQ}</h3>
                     <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />

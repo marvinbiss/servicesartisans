@@ -1289,7 +1289,11 @@ export default async function AvisServiceVillePage({
           </h2>
           <div className="space-y-4 speakable-faq">
             {allFaqItems.map((item, i) => (
-              <details key={i} className="bg-white rounded-xl border border-sand-300 group">
+              <details
+                key={i}
+                open={i === 0}
+                className="bg-white rounded-xl border border-sand-300 group"
+              >
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                   <h3 className="text-base font-semibold text-charcoal-900 pr-4">
                     {item.question}
