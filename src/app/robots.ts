@@ -29,6 +29,7 @@ const PRIVATE_DISALLOW = [
   '/*?*filter=',
   '/*?*q=',
   '/*?*redirect=',
+  '/*?*tag=',
   '/*?*utm_source=',
   '/*?*utm_medium=',
   '/*?*utm_campaign=',

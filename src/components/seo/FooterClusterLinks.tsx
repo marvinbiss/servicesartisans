@@ -8,7 +8,7 @@ import { getServiceWeight } from '@/lib/constants/navigation'
 // devis et guides. Distribue le PageRank vers les pages les plus
 // importantes de chaque cluster thematique.
 //
-// ~35 liens totaux : 6 services + 6 villes + 4 pages utiles + 20 top combos.
+// ~48 liens totaux : 6 services + 6 villes + 13 régions + 4 pages utiles + 20 top combos.
 // Liens statiques, pas de DB — safe pour le footer global.
 // ---------------------------------------------------------------------------
 
@@ -74,6 +74,23 @@ export default function FooterClusterLinks() {
     { href: '/urgence', label: 'Artisan urgence' },
   ]
 
+  // Régions — 13 régions métropolitaines
+  const regionLinks: FooterLink[] = [
+    { href: '/regions/ile-de-france', label: 'Île-de-France' },
+    { href: '/regions/auvergne-rhone-alpes', label: 'Auvergne-Rhône-Alpes' },
+    { href: '/regions/provence-alpes-cote-d-azur', label: "Provence-Alpes-Côte d'Azur" },
+    { href: '/regions/occitanie', label: 'Occitanie' },
+    { href: '/regions/nouvelle-aquitaine', label: 'Nouvelle-Aquitaine' },
+    { href: '/regions/hauts-de-france', label: 'Hauts-de-France' },
+    { href: '/regions/grand-est', label: 'Grand Est' },
+    { href: '/regions/bretagne', label: 'Bretagne' },
+    { href: '/regions/pays-de-la-loire', label: 'Pays de la Loire' },
+    { href: '/regions/normandie', label: 'Normandie' },
+    { href: '/regions/bourgogne-franche-comte', label: 'Bourgogne-Franche-Comté' },
+    { href: '/regions/centre-val-de-loire', label: 'Centre-Val de Loire' },
+    { href: '/regions/corse', label: 'Corse' },
+  ]
+
   // Rénovation énergétique — primes CEE, artisans RGE, attribution ADEME
   const renovationLinks: FooterLink[] = [
     { href: '/cee', label: 'Primes CEE' },
@@ -102,7 +119,7 @@ export default function FooterClusterLinks() {
       {/* ─── Cluster links (services, villes, ressources) ─── */}
       <div className="border-b border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
             {/* Services populaires */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
@@ -128,6 +145,24 @@ export default function FooterClusterLinks() {
               </h4>
               <div className="flex flex-wrap gap-x-4 gap-y-1.5">
                 {cityLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Régions */}
+            <div>
+              <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
+                Régions
+              </h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {regionLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}

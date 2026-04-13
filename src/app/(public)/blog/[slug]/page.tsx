@@ -806,7 +806,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
         {/* Category */}
         <div className="max-w-3xl mx-auto mb-4">
           <Link
-            href={`/blog?tag=${encodeURIComponent(article.category.toLowerCase())}`}
+            href={`/blog/tag/${encodeURIComponent(article.category.toLowerCase())}`}
             className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-amber-200 transition-colors"
           >
             {article.category}
@@ -1122,7 +1122,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
               {article.tags.map((tag) => (
                 <Link
                   key={tag}
-                  href={`/blog?tag=${encodeURIComponent(tag.toLowerCase())}`}
+                  href={`/blog/tag/${encodeURIComponent(tag.toLowerCase())}`}
                   className="bg-sand-100 text-charcoal-700 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 transition-colors"
                 >
                   {tag}
