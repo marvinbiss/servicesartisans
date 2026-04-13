@@ -60,3 +60,4 @@ trigger-vercel-deploy.txt
 *.debug.html
 *.bak
 .gstack/
+src/lib/data/images-generated/_progress.json
