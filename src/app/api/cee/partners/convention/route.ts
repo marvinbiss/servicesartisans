@@ -18,7 +18,10 @@
  * and the rendering is swapped to the full component without route changes.
  */
 
+import type { ReactElement } from 'react'
 import { NextRequest, NextResponse } from 'next/server'
+import { renderToBuffer } from '@react-pdf/renderer'
+import ConventionPDF from '@/app/(private)/espace-artisan/cee/onboarding/ConventionPDF'
 import { validateOrigin } from '@/lib/cee/csrf'
 import { checkRateLimit } from '@/lib/cee/rate-limit'
 import { createSignatureRequest } from '@/lib/cee/yousign'
@@ -36,22 +39,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
-
-/**
- * Minimal placeholder PDF (PDF 1.4 header + empty page).
- * Replaced by ConventionPDF.tsx in PR2.3.
- */
-function buildPlaceholderConventionPdf(): Buffer {
-  const pdf =
-    '%PDF-1.4\n' +
-    '1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n' +
-    '2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n' +
-    '3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]>>endobj\n' +
-    'xref\n0 4\n0000000000 65535 f \n' +
-    '0000000009 00000 n \n0000000052 00000 n \n0000000090 00000 n \n' +
-    'trailer<</Size 4/Root 1 0 R>>\nstartxref\n140\n%%EOF\n'
-  return Buffer.from(pdf, 'utf8')
-}
 
 /** MUST-12 SSRF guard on PDF URL. */
 function isYousignPdfUrl(url: string | null | undefined): boolean {
@@ -128,12 +115,13 @@ export async function POST(request: NextRequest) {
     const admin = createAdminClient()
     const { data: provider } = await admin
       .from('providers')
-      .select('name, email')
+      .select('name, email, siret')
       .eq('id', partner.provider_id)
       .maybeSingle()
 
     const artisanName = provider?.name || ctx.email?.split('@')[0] || 'Artisan'
     const artisanEmail = provider?.email || ctx.email || ''
+    const artisanSiret = provider?.siret ?? undefined
 
     if (!artisanEmail) {
       return NextResponse.json(
@@ -149,7 +137,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Build PDF + create envelope.
-    const pdfBuffer = buildPlaceholderConventionPdf()
+    const pdfBuffer = await renderToBuffer(
+      ConventionPDF({
+        artisanName,
+        artisanEmail,
+        artisanSiret,
+        envelopeId: undefined,
+      }) as ReactElement
+    )
 
     let envelope: { envelopeId: string; procedureId: string; signerUrl: string }
     try {
