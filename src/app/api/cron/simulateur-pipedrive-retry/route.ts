@@ -21,6 +21,7 @@ import {
   MAX_SIM_SYNC_ATTEMPTS,
   type SimulateurLeadInput,
 } from '@/lib/simulateur/pipedrive'
+import { createCallbackRequest, type CallbackPayload } from '@/lib/simulateur/callback-pipedrive'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -68,15 +69,24 @@ export async function GET(request: Request) {
   let failed = 0
 
   for (const row of rows) {
-    const input = row.payload as SimulateurLeadInput
+    const rawPayload = row.payload as { kind?: string } & Record<string, unknown>
+    const kind = rawPayload?.kind === 'callback' ? 'callback' : 'submit'
     try {
-      const result = await createSimulateurDeal(input)
-
-      // Update estimation with deal id
-      await supabase
-        .from('simulateur_estimations')
-        .update({ pipedrive_deal_id: String(result.dealId) })
-        .eq('id', row.estimation_id)
+      let dealId: number | string
+      if (kind === 'callback') {
+        const cb = rawPayload as unknown as CallbackPayload
+        const result = await createCallbackRequest(cb)
+        dealId = result.dealId
+      } else {
+        const input = row.payload as SimulateurLeadInput
+        const result = await createSimulateurDeal(input)
+        dealId = result.dealId
+        // Only submit kind writes pipedrive_deal_id on the estimation
+        await supabase
+          .from('simulateur_estimations')
+          .update({ pipedrive_deal_id: String(result.dealId) })
+          .eq('id', row.estimation_id)
+      }
 
       // Remove from DLQ on success
       await supabase.from('simulateur_pipedrive_failures').delete().eq('id', row.id)
@@ -84,7 +94,8 @@ export async function GET(request: Request) {
       logger.info('simulateur-pipedrive-retry: synced', {
         id: row.id,
         estimationId: row.estimation_id,
-        dealId: result.dealId,
+        kind,
+        dealId,
       })
     } catch (err) {
       failed++

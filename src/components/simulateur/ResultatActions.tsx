@@ -61,9 +61,9 @@ export default function ResultatActions({
       consentDemarchage: fd.get('consentDemarchage') === 'on',
     }
 
-    if (!payload.consentRgpd || !payload.consentDemarchage) {
+    if (!payload.consentRgpd) {
       setStatus('error')
-      setErrorMsg('Merci de cocher les deux consentements.')
+      setErrorMsg('Le consentement RGPD est obligatoire.')
       return
     }
 
@@ -233,10 +233,9 @@ export default function ResultatActions({
               <input
                 type="checkbox"
                 name="consentDemarchage"
-                required
                 className="mt-0.5 h-4 w-4 rounded border-sand-300"
               />
-              <span>J&apos;accepte d&apos;être contacté par téléphone. *</span>
+              <span>J&apos;accepte de recevoir des offres commerciales (optionnel).</span>
             </label>
             {status === 'error' && errorMsg && (
               <div className="flex items-start gap-2 rounded-lg bg-red-50 border border-red-200 p-2">

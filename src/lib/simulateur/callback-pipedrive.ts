@@ -16,7 +16,7 @@
 
 import { logger } from '@/lib/logger'
 
-interface CallbackInput {
+export interface CallbackPayload {
   publicId: string
   prenom: string | null
   nom: string | null
@@ -25,6 +25,8 @@ interface CallbackInput {
   preferredSlot: string | null
   remarquesClient: string | null
 }
+
+type CallbackInput = CallbackPayload
 
 interface CallbackCfg {
   token: string

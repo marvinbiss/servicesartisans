@@ -6,15 +6,18 @@
  * par l'équipe commerciale.
  *
  * Sécurité / RGPD :
- *   - Consent RGPD + démarchage obligatoires.
+ *   - Consent RGPD obligatoire. Consent démarchage optionnel (le user demande
+ *     lui-même le rappel → consentement implicite sur cet échange).
  *   - Rate-limit agressif : 3/heure, 8/jour par IP.
- *   - Téléphone stocké uniquement chez Pipedrive (via upsertPerson).
+ *   - Téléphone stocké uniquement chez Pipedrive (via upsertPerson) + DLQ si
+ *     sync échoue (retry cron 6h).
  *
  * Design :
- *   - Fire-and-forget Pipedrive comme /submit — l'UX renvoie 202 après
- *     validation, l'échec côté Pipedrive est loggé mais ne bloque pas.
- *   - Pas de nouvelle colonne DB : la note/activity Pipedrive est source de
- *     vérité. Duplication possible mais acceptable (sales team déduplique).
+ *   - Await inline le call Pipedrive (~1-2s) : garantit qu'on reçoit success
+ *     ou qu'on pousse en DLQ avant de répondre au client (Vercel serverless
+ *     ne garantit pas l'exécution post-response).
+ *   - DLQ partagée avec /submit via discriminator payload.kind === 'callback'.
+ *     Le cron retry dispatche selon kind.
  */
 
 import { NextResponse, type NextRequest } from 'next/server'
@@ -26,23 +29,28 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import {
   createCallbackRequest,
   isCallbackPipedriveConfigured,
+  type CallbackPayload,
 } from '@/lib/simulateur/callback-pipedrive'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+
+// Téléphone FR strict (aligné Step5Contact : +33 ou 0 + [1-9] + 8 chiffres, espaces tolérés)
+const TEL_FR_RE = /^(?:\+33|0)[1-9](?:\d{8})$/
 
 const callbackSchema = z.object({
   publicId: z.string().min(8).max(64),
   telephone: z
     .string()
     .trim()
-    .min(6)
+    .min(10)
     .max(32)
-    .regex(/^[+0-9 .\-()]+$/, 'Numéro invalide'),
+    .transform((v) => v.replace(/\s/g, ''))
+    .refine((v) => TEL_FR_RE.test(v), { message: 'Téléphone FR invalide' }),
   preferredSlot: z.string().max(80).nullish(),
   remarquesClient: z.string().max(500).nullish(),
   consentRgpd: z.literal(true),
-  consentDemarchage: z.literal(true),
+  consentDemarchage: z.boolean().optional().default(false),
 })
 
 function clientIp(req: NextRequest): string {
@@ -120,6 +128,17 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  const payload: CallbackPayload = {
+    publicId,
+    prenom: (estimation.prenom as string | null) ?? null,
+    nom: (estimation.nom as string | null) ?? null,
+    email,
+    telephone,
+    preferredSlot: preferredSlot ?? null,
+    remarquesClient: remarquesClient ?? null,
+  }
+
+  // Pipedrive non configuré → on accepte quand même (env dev/staging)
   if (!isCallbackPipedriveConfigured()) {
     logger.warn('simulateur/callback Pipedrive not configured — 202 accepted', {
       component: 'api/simulateur/callback',
@@ -128,30 +147,41 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ accepted: true }, { status: 202 })
   }
 
-  void createCallbackRequest({
-    publicId,
-    prenom: (estimation.prenom as string | null) ?? null,
-    nom: (estimation.nom as string | null) ?? null,
-    email,
-    telephone,
-    preferredSlot: preferredSlot ?? null,
-    remarquesClient: remarquesClient ?? null,
-  }).then(
-    ({ dealId }) => {
-      logger.info('simulateur/callback pipedrive attached', {
-        component: 'api/simulateur/callback',
-        publicId,
-        dealId,
+  // Await inline : on veut soit success Pipedrive, soit DLQ bien écrit, avant
+  // de répondre. Fire-and-forget n'est pas fiable en Vercel serverless.
+  try {
+    const result = await createCallbackRequest(payload)
+    logger.info('simulateur/callback pipedrive attached', {
+      component: 'api/simulateur/callback',
+      publicId,
+      dealId: result.dealId,
+    })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    logger.error('simulateur/callback pipedrive failed — inserting DLQ', {
+      component: 'api/simulateur/callback',
+      publicId,
+      error: message,
+    })
+    try {
+      await supabase.from('simulateur_pipedrive_failures').insert({
+        estimation_id: estimation.id as string,
+        // Discriminator : le cron retry dispatche sur payload.kind
+        payload: { kind: 'callback', ...payload } as unknown as Record<string, unknown>,
+        error: message.slice(0, 2000),
+        retry_count: 0,
+        next_retry_at: new Date().toISOString(),
       })
-    },
-    (err: unknown) => {
-      logger.error('simulateur/callback pipedrive failed', {
+    } catch (dlqErr) {
+      // Dernier recours — on log mais on accepte quand même côté UX (l'user
+      // a donné son tel, il peut rappeler). L'incident est visible via logs.
+      logger.error('simulateur/callback DLQ insert failed', {
         component: 'api/simulateur/callback',
         publicId,
-        error: err instanceof Error ? err.message : String(err),
+        error: dlqErr instanceof Error ? dlqErr.message : String(dlqErr),
       })
     }
-  )
+  }
 
   return NextResponse.json(
     { accepted: true },
