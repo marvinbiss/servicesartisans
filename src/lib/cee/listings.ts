@@ -113,14 +113,18 @@ export async function getCeeProvidersByOperationAndCity(
     cacheKey,
     async () => {
       try {
+        // Note: `rge_valid_until IS NOT NULL` ⇔ `rge_qualifications IS NOT NULL`
+        // (cf. migration 380 — colonnes dénormalisées paire). On laisse tomber
+        // le filtre redondant pour permettre au planner d'utiliser
+        // `idx_providers_rge_active` (partial index très sélectif).
         const { data, error } = await supabase
           .from('providers')
           .select(PROVIDER_LIST_SELECT)
           .in('specialty', specialties)
           .in('address_city', cityValues)
           .eq('is_active', true)
-          .not('rge_qualifications', 'is', null)
           .gte('rge_valid_until', today)
+          .order('rge_valid_until', { ascending: false })
           .order('phone', { ascending: false, nullsFirst: false })
           .order('is_verified', { ascending: false })
           .order('name')
@@ -144,8 +148,9 @@ export async function getCeeProvidersByOperationAndCity(
         return []
       }
     },
-    CACHE_TTL_6H,
-    { skipNull: true }
+    CACHE_TTL_6H
+    // Cache aussi les `[]` (skipNull retiré) — évite la tempête de retries
+    // sur 6h quand le fail-open se déclenche (timeouts, DB indispo).
   )
 }
 
@@ -177,13 +182,13 @@ export async function getCeeProviderCountByOperationAndCity(
     cacheKey,
     async () => {
       try {
+        // Filtre rge_qualifications redondant retiré (cf. note ci-dessus).
         const { count, error } = await supabase
           .from('providers')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
           .in('address_city', cityValues)
           .eq('is_active', true)
-          .not('rge_qualifications', 'is', null)
           .gte('rge_valid_until', today)
 
         if (error) throw error
@@ -225,13 +230,15 @@ export async function getCeeTopCitiesByOperation(operationCode: string): Promise
       try {
         const today = new Date().toISOString().slice(0, 10)
 
+        // Filtre rge_qualifications redondant retiré + .order pour aiguiller
+        // le planner vers `idx_providers_rge_active` (partial index sélectif).
         const { data, error } = await supabase
           .from('providers')
           .select('address_city')
           .in('specialty', specialties)
           .eq('is_active', true)
-          .not('rge_qualifications', 'is', null)
           .gte('rge_valid_until', today)
+          .order('rge_valid_until', { ascending: false })
           .limit(500)
 
         if (error) throw error
@@ -288,7 +295,8 @@ export async function getCeeTopCitiesByOperation(operationCode: string): Promise
         return []
       }
     },
-    CACHE_TTL_6H,
-    { skipNull: true }
+    CACHE_TTL_6H
+    // Cache aussi les `[]` (skipNull retiré) — évite la tempête de retries
+    // sur 6h quand le fail-open se déclenche (timeouts, DB indispo).
   )
 }
