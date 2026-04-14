@@ -19,8 +19,9 @@ CREATE TABLE IF NOT EXISTS public.cee_leads (
   nom                   text,
   prenom                text,
   email                 text,
-  email_hash            text GENERATED ALWAYS AS
-                          (encode(digest(lower(coalesce(email,'')), 'sha256'), 'hex')) STORED,
+  -- email_hash rempli par trigger (digest de pgcrypto pas considéré IMMUTABLE par Supabase
+  -- dans les expressions GENERATED STORED — on passe par trigger BEFORE INSERT/UPDATE).
+  email_hash            text,
   telephone_e164        text CHECK (telephone_e164 IS NULL OR telephone_e164 ~ '^\+[1-9][0-9]{6,14}$'),
   adresse               text,
   code_postal           text CHECK (code_postal IS NULL OR code_postal ~ '^[0-9]{5}$'),
@@ -81,6 +82,22 @@ DROP TRIGGER IF EXISTS trg_cee_leads_updated_at ON public.cee_leads;
 CREATE TRIGGER trg_cee_leads_updated_at
   BEFORE UPDATE ON public.cee_leads
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+-- Trigger email_hash: SHA-256(lower(email)) maintenu automatiquement.
+CREATE OR REPLACE FUNCTION public.cee_leads_fill_email_hash()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.email_hash := encode(digest(lower(coalesce(NEW.email,'')), 'sha256'), 'hex');
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_cee_leads_email_hash ON public.cee_leads;
+CREATE TRIGGER trg_cee_leads_email_hash
+  BEFORE INSERT OR UPDATE OF email ON public.cee_leads
+  FOR EACH ROW EXECUTE FUNCTION public.cee_leads_fill_email_hash();
 
 -- RLS
 ALTER TABLE public.cee_leads ENABLE ROW LEVEL SECURITY;
