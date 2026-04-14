@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import {
   Euro,
   Users,
@@ -1032,6 +1033,9 @@ export default function MaPrimeRenov2026Page() {
           </section>
         </div>
       </div>
+
+      {/* Sticky CTA mobile — simulateur aides rénovation */}
+      <SimulateurCTA variant="sticky-bottom" />
     </>
   )
 }

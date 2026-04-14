@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
@@ -554,6 +555,9 @@ export default function CEE2026Page() {
           </div>
         </section>
       </div>
+
+      {/* Sticky CTA mobile — simulateur aides rénovation */}
+      <SimulateurCTA variant="sticky-bottom" />
     </>
   )
 }
