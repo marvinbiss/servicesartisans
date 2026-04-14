@@ -83,7 +83,7 @@ const faqItems = [
   {
     question: 'Est-il obligatoire de mettre aux normes une ancienne installation électrique ?',
     answer:
-      'La mise aux normes n’est pas obligatoire pour un logement que vous occupez vous-même, sauf si l’installation présente un danger avéré. En revanche, elle devient obligatoire dans trois cas : lors d’une rénovation lourde avec intervention sur le tableau électrique, lors de la vente d’un logement (le diagnostic électrique est obligatoire pour les installations de plus de 15 ans), et lors de la mise en location (l’installation doit répondre aux critères de décence). L"objectif est d’assurer la sécurité des personnes.',
+      'La mise aux normes n’est pas obligatoire pour un logement que vous occupez vous-même, sauf si l’installation présente un danger avéré. En revanche, elle devient obligatoire dans trois cas : lors d’une rénovation lourde avec intervention sur le tableau électrique, lors de la vente d’un logement (le diagnostic électrique est obligatoire pour les installations de plus de 15 ans), et lors de la mise en location (l’installation doit répondre aux critères de décence). L’objectif est d’assurer la sécurité des personnes.',
   },
   {
     question: 'Combien coûte une mise aux normes électriques complète ?',

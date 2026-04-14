@@ -592,7 +592,7 @@ export default function DeclarationPrealablePage() {
                   </h3>
                   <p className="text-sm text-charcoal-600 mb-3">
                     {
-                      'Si la mairie ne vous a pas répondu dans le délai d’instruction (1 ou 2 mois), votre déclaration préalable est réputée acceptée. C"est l’accord tacite (ou « non-opposition »). Pour en obtenir la preuve :'
+                      'Si la mairie ne vous a pas répondu dans le délai d’instruction (1 ou 2 mois), votre déclaration préalable est réputée acceptée. C’est l’accord tacite (ou « non-opposition »). Pour en obtenir la preuve :'
                     }
                   </p>
                   <ol className="space-y-2 text-sm text-charcoal-600">
@@ -631,7 +631,7 @@ export default function DeclarationPrealablePage() {
                     </h3>
                     <p className="text-sm text-charcoal-600">
                       {
-                        'La mairie peut retirer une décision de non-opposition (y compris tacite) dans les 3 mois suivant la date de la décision, si elle estime que celle-ci a été obtenue par fraude ou qu’elle est illégale. C"est pourquoi il est important de constituer un dossier complet et conforme au PLU.'
+                        'La mairie peut retirer une décision de non-opposition (y compris tacite) dans les 3 mois suivant la date de la décision, si elle estime que celle-ci a été obtenue par fraude ou qu’elle est illégale. C’est pourquoi il est important de constituer un dossier complet et conforme au PLU.'
                       }
                     </p>
                   </div>

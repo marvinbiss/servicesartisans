@@ -339,7 +339,7 @@ function buildNotificationSpec(
             body: `La mission pour <strong>${lead.service_name}</strong> à ${location} est terminée. Merci de votre confiance !`,
             ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
             ctaLabel: 'Voir le détail',
-            footer: "N'hésitez pas à laisser un avis pour aider d'autres clients.",
+            footer: 'N’hésitez pas à laisser un avis pour aider d’autres clients.',
           }),
         }
       }

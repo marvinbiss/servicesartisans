@@ -491,7 +491,7 @@ export default function PermisConstruirePage() {
                   {
                     step: '3',
                     title: 'Décision et affichage',
-                    desc: 'La mairie notifie sa décision par lettre recommandée. En l’absence de réponse dans le délai d’instruction, le permis est réputé accordé (permis tacite). L"affichage sur le terrain est obligatoire pendant toute la durée du chantier.',
+                    desc: 'La mairie notifie sa décision par lettre recommandée. En l’absence de réponse dans le délai d’instruction, le permis est réputé accordé (permis tacite). L’affichage sur le terrain est obligatoire pendant toute la durée du chantier.',
                     delay: 'J + 2-3 mois',
                   },
                   {
@@ -602,7 +602,7 @@ export default function PermisConstruirePage() {
             <div className="bg-white rounded-xl border border-sand-300 p-6">
               <p className="text-charcoal-700 mb-4">
                 {
-                  'En secteur protégé, les règles sont plus strictes et les délais plus longs. L"avis de l’Architecte des Bâtiments de France (ABF) est souvent requis :'
+                  'En secteur protégé, les règles sont plus strictes et les délais plus longs. L’avis de l’Architecte des Bâtiments de France (ABF) est souvent requis :'
                 }
               </p>
               <div className="space-y-4">
