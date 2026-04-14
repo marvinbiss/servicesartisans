@@ -114,7 +114,28 @@ function makeEstimation(id: string) {
     email: 'bob@example.fr',
     telephone: '+33622222222',
     public_id: 'EST-CB-001',
+    // Submit rehydration fields (ignored by callback flow).
+    categorie_anah: 'modeste',
+    zone_climatique: 'H1',
+    parcours: 'geste',
+    gestes: [{ id: 'isolation_combles' }],
+    bareme_ids: { mpr: 'bar-1' },
+    mpr_total: 4000,
+    cee_fourchette_bas: 500,
+    cee_fourchette_haut: 1500,
+    coup_pouce_estimation: 300,
+    reste_a_charge_bas: 2000,
+    reste_a_charge_haut: 3000,
+    barometre_version: '2026-01',
+    code_postal: '75001',
+    surface_m2: 80,
+    rfr: 25000,
+    rfr_exact: 25000,
   }
+}
+
+function makeSubmitEstimations(ids: string[]) {
+  return ids.map((id) => ({ ...makeEstimation(id), id }))
 }
 
 // ── Chainable query builder ──────────────────────────────────────────
@@ -292,6 +313,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — empty DLQ', () => {
 describe('GET /api/cron/simulateur-pipedrive-retry — submit row', () => {
   it('submit row → createSimulateurDeal called, row deleted, estimation updated with dealId', async () => {
     const submitRow = makeSubmitRow()
+    const est = { ...makeEstimation('est-1'), id: 'est-1' }
     mockCreateSimulateurDeal.mockResolvedValue({ personId: 10, dealId: 20 })
 
     const deleteSpy = vi.fn().mockResolvedValue({ data: null, error: null })
@@ -317,11 +339,11 @@ describe('GET /api/cron/simulateur-pipedrive-retry — submit row', () => {
       if (table === 'simulateur_estimations') {
         if (!estimationUpdateDone) {
           estimationUpdateDone = true
-          // In() call for prefetch (no callback rows, so skipped) — but estimations update
+          // First call = SELECT .in() for prefetch (submit rehydration from DB)
           return {
             update: updateEstimationSpy,
             select: vi.fn().mockReturnThis(),
-            in: vi.fn().mockResolvedValue({ data: [], error: null }),
+            in: vi.fn().mockResolvedValue({ data: [est], error: null }),
           }
         }
         return { update: updateEstimationSpy }
@@ -332,7 +354,11 @@ describe('GET /api/cron/simulateur-pipedrive-retry — submit row', () => {
     const res = await callRoute(buildRequest('secret-123'))
     const body = await res.json()
 
-    expect(mockCreateSimulateurDeal).toHaveBeenCalledWith(submitRow.payload)
+    expect(mockCreateSimulateurDeal).toHaveBeenCalledTimes(1)
+    const callArg = mockCreateSimulateurDeal.mock.calls[0][0]
+    expect(callArg.email).toBe('bob@example.fr')
+    expect(callArg.telephone).toBe('+33622222222')
+    expect(callArg.publicId).toBe('EST-CB-001')
     expect(body.synced).toBe(1)
     expect(body.failed).toBe(0)
   })
@@ -470,6 +496,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
     const rows = Array.from({ length: 8 }, (_, i) =>
       makeSubmitRow({ id: `row-${i}`, estimation_id: `est-${i}` })
     )
+    const ests = makeSubmitEstimations(Array.from({ length: 8 }, (_, i) => `est-${i}`))
 
     let pendingDone = false
     let callCount = 0
@@ -490,7 +517,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
       if (table === 'simulateur_estimations') {
         return {
           select: vi.fn().mockReturnThis(),
-          in: vi.fn().mockResolvedValue({ data: [], error: null }),
+          in: vi.fn().mockResolvedValue({ data: ests, error: null }),
           update: vi
             .fn()
             .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
@@ -519,6 +546,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
       makeSubmitRow({ id: 'row-1', estimation_id: 'est-1' }),
       makeSubmitRow({ id: 'row-2', estimation_id: 'est-2' }),
     ]
+    const ests = makeSubmitEstimations(['est-0', 'est-1', 'est-2'])
 
     let pendingDone = false
     const updateSpy = vi
@@ -541,7 +569,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
       if (table === 'simulateur_estimations') {
         return {
           select: vi.fn().mockReturnThis(),
-          in: vi.fn().mockResolvedValue({ data: [], error: null }),
+          in: vi.fn().mockResolvedValue({ data: ests, error: null }),
           update: vi
             .fn()
             .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
@@ -624,6 +652,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — deadline exceeded', () =>
     const rows = Array.from({ length: 4 }, (_, i) =>
       makeSubmitRow({ id: `row-${i}`, estimation_id: `est-${i}` })
     )
+    const ests = makeSubmitEstimations(['est-0', 'est-1', 'est-2', 'est-3'])
     mockCreateSimulateurDeal.mockResolvedValue({ personId: 1, dealId: 2 })
 
     let pendingDone = false
@@ -643,7 +672,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — deadline exceeded', () =>
       if (table === 'simulateur_estimations') {
         return {
           select: vi.fn().mockReturnThis(),
-          in: vi.fn().mockResolvedValue({ data: [], error: null }),
+          in: vi.fn().mockResolvedValue({ data: ests, error: null }),
           update: vi
             .fn()
             .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),

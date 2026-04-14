@@ -18,7 +18,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
-import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
+import { rateLimitDb, getRateLimitDbHeaders } from '@/lib/rate-limit-db'
 import { submitInputSchema } from '@/lib/simulateur/api-schemas'
 import { runSimulation } from '@/lib/simulateur/engine/pipeline'
 import { classifierCategorieAnah } from '@/lib/simulateur/engine/classifier'
@@ -50,19 +50,20 @@ export async function POST(req: NextRequest) {
     ipKey = ip
   }
 
-  // Rate-limit agressif sur submit : 5/heure, 20/jour (doc archi §12)
-  const rlHour = rateLimit(`simulateur:submit:h:${ipKey}`, 5, 60 * 60_000)
+  // Rate-limit agressif sur submit : 5/heure, 20/jour (doc archi §12).
+  // DB-backed via rate_limit_check RPC (migration 441) pour survivre aux cold-starts Vercel.
+  const rlHour = await rateLimitDb(`simulateur:submit:h:${ipKey}`, 5, 60 * 60_000)
   if (!rlHour.success) {
     return NextResponse.json(
       { error: 'Trop de soumissions. Réessayez plus tard.' },
-      { status: 429, headers: getRateLimitHeaders(rlHour) }
+      { status: 429, headers: getRateLimitDbHeaders(rlHour) }
     )
   }
-  const rlDay = rateLimit(`simulateur:submit:d:${ipKey}`, 20, 24 * 60 * 60_000)
+  const rlDay = await rateLimitDb(`simulateur:submit:d:${ipKey}`, 20, 24 * 60 * 60_000)
   if (!rlDay.success) {
     return NextResponse.json(
       { error: 'Quota journalier atteint.' },
-      { status: 429, headers: getRateLimitHeaders(rlDay) }
+      { status: 429, headers: getRateLimitDbHeaders(rlDay) }
     )
   }
 
@@ -158,6 +159,8 @@ export async function POST(req: NextRequest) {
     idf: situation.idf,
     foyer_taille: situation.foyer,
     rfr: situation.rfr,
+    rfr_exact: situation.rfr,
+    rfr_tranche: `${Math.floor(situation.rfr / 10000) * 10000}-${Math.floor(situation.rfr / 10000) * 10000 + 9999}`,
     categorie_anah: situation.categorie,
 
     // Projet
@@ -188,6 +191,7 @@ export async function POST(req: NextRequest) {
 
     // Consentements
     consent_rgpd: coordonnees.consentRgpd,
+    consent_rgpd_at: coordonnees.consentRgpd ? new Date().toISOString() : null,
     consent_demarchage: coordonnees.consentDemarchage ?? false,
 
     // Budget (migration 440 : sert au recompute admin P5)
@@ -251,5 +255,5 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  return NextResponse.json({ publicId }, { status: 201, headers: getRateLimitHeaders(rlHour) })
+  return NextResponse.json({ publicId }, { status: 201, headers: getRateLimitDbHeaders(rlHour) })
 }

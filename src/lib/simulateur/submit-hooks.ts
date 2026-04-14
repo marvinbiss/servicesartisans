@@ -59,9 +59,12 @@ export async function runPipedriveHook(args: RunPipedriveHookArgs): Promise<void
       message,
     })
     try {
+      // RGPD: ne pas stocker de PII dans le payload JSONB de la DLQ. Le cron
+      // retry rehydratera prenom/nom/email/telephone depuis simulateur_estimations
+      // via estimation_id. On conserve uniquement le discriminator `kind`.
       await supabase.from('simulateur_pipedrive_failures').insert({
         estimation_id: estimationId,
-        payload: input as unknown as Record<string, unknown>,
+        payload: { kind: 'submit' } as unknown as Record<string, unknown>,
         error: message.slice(0, 2000),
         retry_count: 0,
         next_retry_at: new Date().toISOString(),

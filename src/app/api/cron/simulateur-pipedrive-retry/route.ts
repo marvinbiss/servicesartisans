@@ -75,33 +75,43 @@ export async function GET(request: Request) {
   let failed = 0
   const startTs = Date.now()
 
-  // Batch-prefetch estimations for callback rows to avoid N+1 SELECTs.
-  const callbackEstimationIds = rows
-    .filter((r) => (r.payload as { kind?: string })?.kind === 'callback')
-    .map((r) => r.estimation_id)
-  const estimationsMap = new Map<
-    string,
-    {
-      prenom: string | null
-      nom: string | null
-      email: string | null
-      telephone: string | null
-      public_id: string
-    }
-  >()
-  if (callbackEstimationIds.length > 0) {
+  // Batch-prefetch estimations pour TOUTES les rows (callback + submit).
+  // Les submit rows stockent désormais uniquement {kind:'submit'} dans payload
+  // (migration RGPD : pas de PII dans la DLQ) — on rehydrate tout depuis la DB.
+  const allEstimationIds = Array.from(new Set(rows.map((r) => r.estimation_id)))
+  interface EstimationRow {
+    prenom: string | null
+    nom: string | null
+    email: string | null
+    telephone: string | null
+    public_id: string
+    categorie_anah: string | null
+    zone_climatique: string | null
+    parcours: string | null
+    gestes: unknown
+    bareme_ids: unknown
+    mpr_total: number | null
+    cee_fourchette_bas: number | null
+    cee_fourchette_haut: number | null
+    coup_pouce_estimation: number | null
+    reste_a_charge_bas: number | null
+    reste_a_charge_haut: number | null
+    barometre_version: string | null
+    code_postal: string | null
+    surface_m2: number | null
+    rfr: number | null
+    rfr_exact: number | null
+  }
+  const estimationsMap = new Map<string, EstimationRow>()
+  if (allEstimationIds.length > 0) {
     const { data: ests } = await supabase
       .from('simulateur_estimations')
-      .select('id, prenom, nom, email, telephone, public_id')
-      .in('id', callbackEstimationIds)
+      .select(
+        'id, prenom, nom, email, telephone, public_id, categorie_anah, zone_climatique, parcours, gestes, bareme_ids, mpr_total, cee_fourchette_bas, cee_fourchette_haut, coup_pouce_estimation, reste_a_charge_bas, reste_a_charge_haut, barometre_version, code_postal, surface_m2, rfr, rfr_exact'
+      )
+      .in('id', allEstimationIds)
     for (const e of ests ?? []) {
-      estimationsMap.set(e.id as string, {
-        prenom: (e.prenom as string | null) ?? null,
-        nom: (e.nom as string | null) ?? null,
-        email: (e.email as string | null) ?? null,
-        telephone: (e.telephone as string | null) ?? null,
-        public_id: (e.public_id as string) ?? '',
-      })
+      estimationsMap.set(e.id as string, e as unknown as EstimationRow)
     }
   }
 
@@ -152,7 +162,56 @@ export async function GET(request: Request) {
         const result = await createCallbackRequest(cb)
         dealId = result.dealId
       } else {
-        const input = row.payload as SimulateurLeadInput
+        // Rehydrate SimulateurLeadInput depuis la DB (PII retirée du payload RGPD).
+        const est = estimationsMap.get(row.estimation_id)
+        if (
+          !est ||
+          !est.prenom ||
+          !est.nom ||
+          !est.email ||
+          !est.telephone ||
+          !est.categorie_anah ||
+          !est.zone_climatique ||
+          !est.parcours ||
+          !est.barometre_version ||
+          !est.code_postal ||
+          est.surface_m2 == null ||
+          est.mpr_total == null ||
+          est.cee_fourchette_bas == null ||
+          est.cee_fourchette_haut == null ||
+          est.reste_a_charge_bas == null ||
+          est.reste_a_charge_haut == null
+        ) {
+          throw new Error(
+            `Cannot rehydrate submit: estimation ${row.estimation_id} missing required fields`
+          )
+        }
+        const rfrVal = est.rfr ?? est.rfr_exact ?? 0
+        const input: SimulateurLeadInput = {
+          publicId: est.public_id,
+          prenom: est.prenom,
+          nom: est.nom,
+          email: est.email,
+          telephone: est.telephone,
+          estimation: {
+            publicId: est.public_id,
+            categorieAnah: est.categorie_anah,
+            zoneClimatique: est.zone_climatique,
+            parcours: est.parcours,
+            gestes: (est.gestes ?? []) as never,
+            baremeIds: (est.bareme_ids ?? {}) as never,
+            mprTotal: est.mpr_total,
+            ceeFourchetteBas: est.cee_fourchette_bas,
+            ceeFourchetteHaut: est.cee_fourchette_haut,
+            coupPouceEstimation: est.coup_pouce_estimation ?? 0,
+            resteAChargeBas: est.reste_a_charge_bas,
+            resteAChargeHaut: est.reste_a_charge_haut,
+            barometreVersion: est.barometre_version,
+            codePostal: est.code_postal,
+            surface: est.surface_m2,
+            rfr: rfrVal,
+          } as never,
+        }
         const result = await createSimulateurDeal(input)
         dealId = result.dealId
         // Only submit kind writes pipedrive_deal_id on the estimation
