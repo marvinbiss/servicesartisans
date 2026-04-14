@@ -102,9 +102,26 @@ CREATE INDEX IF NOT EXISTS idx_zones_climatiques_zone ON public.zones_climatique
 CREATE INDEX IF NOT EXISTS idx_zones_climatiques_cp   ON public.zones_climatiques_ref(code_postal);
 
 -- ---------------------------------------------------------------------------
--- 424.5  cee_market_prices — EXTENSION pour SPOT (unification avec 420 existant)
--- Ne pas créer cee_spot_prices — on étend la table existante.
+-- 424.5  cee_market_prices — EXTENSION pour SPOT (unification avec 420 si présent)
+-- Si 420 n'a pas été appliqué, on crée la table ici (bootstrap self-contained).
 -- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.cee_market_prices (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  price_type    text NOT NULL,
+  eur_per_mwhc  numeric(8,2) NOT NULL CHECK (eur_per_mwhc > 0),
+  source        text,
+  effective_date date NOT NULL DEFAULT CURRENT_DATE,
+  created_at    timestamptz NOT NULL DEFAULT now(),
+  created_by    uuid REFERENCES auth.users(id)
+);
+
+-- RLS (idempotent)
+ALTER TABLE public.cee_market_prices ENABLE ROW LEVEL SECURITY;
+DO $$ BEGIN
+  CREATE POLICY "Lecture publique cours CEE" ON public.cee_market_prices
+    FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
 -- Drop ancien CHECK sur price_type pour accepter 'spot'
 DO $$ BEGIN
   ALTER TABLE public.cee_market_prices DROP CONSTRAINT cee_market_prices_price_type_check;
