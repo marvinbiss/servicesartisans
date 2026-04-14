@@ -107,7 +107,7 @@ export function generateStaticParams() {
         publicId: q
           .toLowerCase()
           .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[̀-ͯ]/g, '')
           .trim()
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-|-$/g, ''),

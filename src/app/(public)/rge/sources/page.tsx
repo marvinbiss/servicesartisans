@@ -20,9 +20,9 @@ export const revalidate = 86400
 const path = '/rge/sources'
 
 export const metadata: Metadata = {
-  title: 'Sources et m\u00e9thodologie RGE — annuaire ServicesArtisans',
+  title: 'Sources et méthodologie RGE — annuaire ServicesArtisans',
   description:
-    "Comment nous construisons l'annuaire RGE : sources officielles ADEME, Qualit'EnR, Qualifelec, Qualibat, fr\u00e9quence de mise \u00e0 jour et process de v\u00e9rification des qualifications.",
+    "Comment nous construisons l'annuaire RGE : sources officielles ADEME, Qualit'EnR, Qualifelec, Qualibat, fréquence de mise à jour et process de vérification des qualifications.",
   robots: {
     index: true,
     follow: true,
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1 as const,
   },
   openGraph: {
-    title: 'Sources et m\u00e9thodologie RGE',
+    title: 'Sources et méthodologie RGE',
     description:
-      'Sources officielles, fr\u00e9quence de mise \u00e0 jour et process de v\u00e9rification des qualifications RGE affich\u00e9es sur ServicesArtisans.',
+      'Sources officielles, fréquence de mise à jour et process de vérification des qualifications RGE affichées sur ServicesArtisans.',
     type: 'article',
     locale: 'fr_FR',
     url: `${SITE_URL}${path}`,
@@ -45,10 +45,10 @@ const OFFICIAL_SOURCES = [
   {
     name: 'ADEME — Open Data Annuaire RGE',
     url: 'https://data.ademe.fr/datasets/liste-des-entreprises-rge-2',
-    role: 'Source ma\u00eetresse',
+    role: 'Source maîtresse',
     description:
-      "Base officielle publi\u00e9e par l'ADEME sous licence Etalab 2.0. Contient toutes les entreprises titulaires d'une qualification RGE active (SIRET, raison sociale, adresse, organisme, num\u00e9ro de certificat, date de validit\u00e9, domaines de travaux).",
-    frequency: 'Sync hebdomadaire automatis\u00e9e (dimanche nuit)',
+      "Base officielle publiée par l'ADEME sous licence Etalab 2.0. Contient toutes les entreprises titulaires d'une qualification RGE active (SIRET, raison sociale, adresse, organisme, numéro de certificat, date de validité, domaines de travaux).",
+    frequency: 'Sync hebdomadaire automatisée (dimanche nuit)',
     license: 'Licence Ouverte Etalab 2.0',
   },
   {
@@ -56,8 +56,8 @@ const OFFICIAL_SOURCES = [
     url: 'https://www.qualit-enr.org/annuaire/',
     role: 'Organisme certificateur',
     description:
-      "Association loi 1901 accr\u00e9dit\u00e9e COFRAC. D\u00e9livre QualiPAC, QualiSol, QualiBois, QualiPV et Chauffage+. Son annuaire public sert \u00e0 v\u00e9rifier en temps r\u00e9el qu'une qualification est active, suspendue ou retir\u00e9e.",
-    frequency: 'V\u00e9rification ponctuelle cas par cas',
+      "Association loi 1901 accréditée COFRAC. Délivre QualiPAC, QualiSol, QualiBois, QualiPV et Chauffage+. Son annuaire public sert à vérifier en temps réel qu'une qualification est active, suspendue ou retirée.",
+    frequency: 'Vérification ponctuelle cas par cas',
     license: 'Site officiel (consultation)',
   },
   {
@@ -65,8 +65,8 @@ const OFFICIAL_SOURCES = [
     url: 'https://www.qualifelec.fr/annuaire/',
     role: 'Organisme certificateur',
     description:
-      "Organisme historique (1955) de qualification des entreprises d'\u00e9lectricit\u00e9. D\u00e9livre les mentions RGE PV (photovolta\u00efque), SER (\u00e9nergies renouvelables) et IRVE (bornes de recharge).",
-    frequency: 'V\u00e9rification ponctuelle cas par cas',
+      "Organisme historique (1955) de qualification des entreprises d'électricité. Délivre les mentions RGE PV (photovoltaïque), SER (énergies renouvelables) et IRVE (bornes de recharge).",
+    frequency: 'Vérification ponctuelle cas par cas',
     license: 'Site officiel (consultation)',
   },
   {
@@ -74,26 +74,26 @@ const OFFICIAL_SOURCES = [
     url: 'https://www.qualibat.com/rechercher-entreprise/',
     role: 'Organisme certificateur',
     description:
-      'Premier organisme de qualification du b\u00e2timent en France. D\u00e9livre les qualifications RGE \u00e9quivalentes (5911, 7131, 7141, 8621, etc.) reconnues par MaPrimeR\u00e9nov\u2019 et les obligés CEE.',
-    frequency: 'V\u00e9rification ponctuelle cas par cas',
+      'Premier organisme de qualification du bâtiment en France. Délivre les qualifications RGE équivalentes (5911, 7131, 7141, 8621, etc.) reconnues par MaPrimeRénov’ et les obligés CEE.',
+    frequency: 'Vérification ponctuelle cas par cas',
     license: 'Site officiel (consultation)',
   },
   {
-    name: 'France R\u00e9nov\u2019',
+    name: 'France Rénov’',
     url: 'https://france-renov.gouv.fr/annuaire-rge',
-    role: 'Source officielle d\u2019\u00c9tat',
+    role: 'Source officielle d’\u00c9tat',
     description:
-      "Annuaire officiel unifi\u00e9 publi\u00e9 par le Minist\u00e8re de la Transition \u00c9cologique. Consolide les donn\u00e9es Qualit'EnR, Qualifelec, Qualibat et C\u00e9quami. C'est la r\u00e9f\u00e9rence op\u00e9rationnelle pour les dossiers MaPrimeR\u00e9nov\u2019.",
-    frequency: 'Mise \u00e0 jour quotidienne',
+      "Annuaire officiel unifié publié par le Ministère de la Transition Écologique. Consolide les données Qualit'EnR, Qualifelec, Qualibat et Céquami. C'est la référence opérationnelle pour les dossiers MaPrimeRénov’.",
+    frequency: 'Mise à jour quotidienne',
     license: 'Site officiel (consultation)',
   },
   {
-    name: 'DGEC — Arr\u00eat\u00e9 du 22 d\u00e9cembre 2014 modifi\u00e9',
+    name: 'DGEC — Arrêté du 22 décembre 2014 modifié',
     url: 'https://www.legifrance.gouv.fr/loda/id/JORFTEXT000029999204',
-    role: 'Texte de r\u00e9f\u00e9rence r\u00e9glementaire',
+    role: 'Texte de référence réglementaire',
     description:
-      'Arr\u00eat\u00e9 fondateur du catalogue CEE r\u00e9sidentiel (op\u00e9rations BAR-*). D\u00e9finit les conditions techniques, les forfaits kWh cumac et les qualifications RGE exigibles pour chaque fiche.',
-    frequency: 'Consolidation L\u00e9gifrance continue',
+      'Arrêté fondateur du catalogue CEE résidentiel (opérations BAR-*). Définit les conditions techniques, les forfaits kWh cumac et les qualifications RGE exigibles pour chaque fiche.',
+    frequency: 'Consolidation Légifrance continue',
     license: 'Domaine public',
   },
 ]
@@ -102,51 +102,51 @@ const UPDATE_CADENCE = [
   {
     what: 'Sync ADEME',
     when: 'Hebdomadaire (dimanche 02h00)',
-    how: 'Cron Vercel → ingestion CSV officiel → diff sur SIRET + num\u00e9ro de certificat → upsert providers',
+    how: 'Cron Vercel → ingestion CSV officiel → diff sur SIRET + numéro de certificat → upsert providers',
   },
   {
-    what: 'D\u00e9tection des qualifications expir\u00e9es',
+    what: 'Détection des qualifications expirées',
     when: 'Quotidienne',
-    how: 'Job nocturne qui passe en statut inactif toute qualification dont la date de validit\u00e9 est d\u00e9pass\u00e9e',
+    how: 'Job nocturne qui passe en statut inactif toute qualification dont la date de validité est dépassée',
   },
   {
     what: 'Signalement par un utilisateur',
-    when: 'Traitement sous 48h ouvr\u00e9es',
-    how: "Formulaire de signalement + v\u00e9rification manuelle sur france-renov.gouv.fr et l'organisme concern\u00e9",
+    when: 'Traitement sous 48h ouvrées',
+    how: "Formulaire de signalement + vérification manuelle sur france-renov.gouv.fr et l'organisme concerné",
   },
   {
-    what: 'R\u00e9vision \u00e9ditoriale des guides',
-    when: 'Trimestrielle ou \u00e0 chaque \u00e9volution r\u00e9glementaire',
-    how: 'Relecture crois\u00e9e des montants MaPrimeR\u00e9nov\u2019 et des bonifi\u00e9s CEE apr\u00e8s publication au JO',
+    what: 'Révision éditoriale des guides',
+    when: 'Trimestrielle ou à chaque évolution réglementaire',
+    how: 'Relecture croisée des montants MaPrimeRénov’ et des bonifiés CEE après publication au JO',
   },
 ]
 
 const VERIFICATION_STEPS = [
   "Identifier le SIRET de l'entreprise sur son devis (14 chiffres, distinct du SIREN 9 chiffres).",
-  'Consulter france-renov.gouv.fr/annuaire-rge et saisir le SIRET (jamais le nom commercial, trop impr\u00e9cis).',
-  'V\u00e9rifier que la qualification correspond exactement aux travaux \u00e0 r\u00e9aliser (exemple : QualiBois Eau pour une chaudi\u00e8re biomasse, pas QualiBois Air).',
-  "Contr\u00f4ler la date de validit\u00e9 : elle doit \u00eatre post\u00e9rieure \u00e0 la date de signature du devis. Une qualification expir\u00e9e apr\u00e8s signature reste valable, mais l'inverse est un refus CEE syst\u00e9matique.",
-  "Demander l'attestation nominative dat\u00e9e \u00e9mise par l'organisme certificateur (Qualit'EnR, Qualifelec, Qualibat). Un logo sur un site web n'a aucune valeur probante.",
+  'Consulter france-renov.gouv.fr/annuaire-rge et saisir le SIRET (jamais le nom commercial, trop imprécis).',
+  'Vérifier que la qualification correspond exactement aux travaux à réaliser (exemple : QualiBois Eau pour une chaudière biomasse, pas QualiBois Air).',
+  "Contrôler la date de validité : elle doit être postérieure à la date de signature du devis. Une qualification expirée après signature reste valable, mais l'inverse est un refus CEE systématique.",
+  "Demander l'attestation nominative datée émise par l'organisme certificateur (Qualit'EnR, Qualifelec, Qualibat). Un logo sur un site web n'a aucune valeur probante.",
 ]
 
 export default function RgeSourcesPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Artisans RGE', url: '/rge' },
-    { name: 'Sources et m\u00e9thodologie', url: path },
+    { name: 'Sources et méthodologie', url: path },
   ])
 
   const techArticleSchema = {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
-    headline: 'Sources et m\u00e9thodologie RGE — ServicesArtisans',
+    headline: 'Sources et méthodologie RGE — ServicesArtisans',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
     author: { '@type': 'Organization', name: 'ServicesArtisans' },
     publisher: { '@type': 'Organization', name: 'ServicesArtisans' },
     dateModified: '2026-04-09',
     description:
-      "M\u00e9thodologie de construction de l'annuaire RGE de ServicesArtisans : sources officielles ADEME, Qualit'EnR, Qualifelec, Qualibat, France R\u00e9nov\u2019, fr\u00e9quence de mise \u00e0 jour et process de v\u00e9rification.",
+      "Méthodologie de construction de l'annuaire RGE de ServicesArtisans : sources officielles ADEME, Qualit'EnR, Qualifelec, Qualibat, France Rénov’, fréquence de mise à jour et process de vérification.",
     about: OFFICIAL_SOURCES.map((s) => ({ '@type': 'Thing', name: s.name, url: s.url })),
   }
 
@@ -156,7 +156,7 @@ export default function RgeSourcesPage() {
       <JsonLd data={techArticleSchema} />
 
       <Breadcrumb
-        items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Sources et m\u00e9thodologie' }]}
+        items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Sources et méthodologie' }]}
       />
 
       <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-emerald-900 text-white py-16">

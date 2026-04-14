@@ -90,7 +90,7 @@ interface PageProps {
 
 function truncate(text: string, maxLen: number): string {
   if (text.length <= maxLen) return text
-  return text.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return text.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -114,9 +114,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const providerCount = await getCeeProviderCountByOperationAndCity(opCode, villeSlug)
   const isNoindex = providerCount === 0 || !operation
 
-  const title = truncate(`Prime CEE ${opName} \u00e0 ${villeName} \u2014 artisans RGE`, 60)
+  const title = truncate(`Prime CEE ${opName} à ${villeName} — artisans RGE`, 60)
   const description = truncate(
-    `${opName} \u00e0 ${villeName} : artisans RGE qualifi\u00e9s, prime CEE mobilisable, cumul MaPrimeR\u00e9nov\u2019 et TVA 5,5 %. V\u00e9rification ADEME.`,
+    `${opName} à ${villeName} : artisans RGE qualifiés, prime CEE mobilisable, cumul MaPrimeRénov’ et TVA 5,5 %. Vérification ADEME.`,
     158
   )
   const path = `/cee/${urlCode}/${villeSlug}`
@@ -164,7 +164,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const path = `/cee/${urlCode}/${villeSlug}`
 
   // Fail-open strict : si operation null, on rend un shell explicatif neutre.
-  // Metadata aura d\u00e9j\u00e0 pos\u00e9 un noindex.
+  // Metadata aura déjà posé un noindex.
   if (!operation) {
     return (
       <main className="min-h-screen bg-white">
@@ -197,8 +197,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const itemListSchema =
     count > 0
       ? getItemListSchema({
-          name: `${operation.nom} \u00e0 ${villeName}`,
-          description: `Artisans RGE qualifi\u00e9s pour ${operation.nom.toLowerCase()} \u00e0 ${villeName}`,
+          name: `${operation.nom} à ${villeName}`,
+          description: `Artisans RGE qualifiés pour ${operation.nom.toLowerCase()} à ${villeName}`,
           url: path,
           items: providers.slice(0, 10).map((p, idx) => ({
             name: p.name,
@@ -213,7 +213,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `Prime CEE ${operation.nom} \u00e0 ${villeName}`,
+    name: `Prime CEE ${operation.nom} à ${villeName}`,
     url: `${SITE_URL}${path}`,
     about: {
       '@type': 'Service',
@@ -231,11 +231,11 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const faqItems = buildCeeOperationCityFaq(operation, ville, count)
   const faqSchema = buildCeeFaqJsonLd(faqItems)
 
-  // Cross-linking villes : top autres villes pour la m\u00eame op\u00e9ration
+  // Cross-linking villes : top autres villes pour la même opération
   const topCities = await getCeeTopCitiesByOperation(opCode)
   const otherCities = topCities.filter((c) => c.slug !== villeSlug).slice(0, 5)
 
-  // Cross-linking op\u00e9rations du m\u00eame domaine
+  // Cross-linking opérations du même domaine
   const allOps = await getCeeOperations()
   const sameDomainOps = allOps
     .filter((op) => op.domaine === operation.domaine && op.code !== operation.code)
@@ -293,7 +293,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           ))}
         </section>
 
-        {/* CTA inline contextualis\u00e9 */}
+        {/* CTA inline contextualisé */}
         <div className="mb-8">
           <CeeCTA
             variant="inline"
@@ -361,9 +361,9 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             <div>
               <dt className="font-semibold text-charcoal-900">Éligibilité</dt>
               <dd className="text-charcoal-700">
-                {operation.classique_eligible && 'Tous m\u00e9nages'}
+                {operation.classique_eligible && 'Tous ménages'}
                 {operation.classique_eligible && operation.precarite_eligible && ' + '}
-                {operation.precarite_eligible && 'Bonifi\u00e9 pr\u00e9carit\u00e9'}
+                {operation.precarite_eligible && 'Bonifié précarité'}
               </dd>
             </div>
             {operation.coup_de_pouce && (
@@ -420,7 +420,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           </section>
         )}
 
-        {/* Cross-linking m\u00e9tiers RGE */}
+        {/* Cross-linking métiers RGE */}
         {rgeServices.length > 0 && (
           <section aria-labelledby="rge-services" className="mb-12">
             <h2 id="rge-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
@@ -470,7 +470,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           </section>
         )}
 
-        {/* Cross-linking op\u00e9rations */}
+        {/* Cross-linking opérations */}
         {sameDomainOps.length > 0 && (
           <section aria-labelledby="same-domain" className="mb-12">
             <h2 id="same-domain" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">

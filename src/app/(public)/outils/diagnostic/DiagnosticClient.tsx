@@ -91,7 +91,7 @@ export default function DiagnosticClient() {
         .trim()
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[̀-ͯ]/g, '')
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '')
       return `/services/${serviceSlug}/${citySlug}`

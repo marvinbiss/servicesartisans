@@ -169,7 +169,7 @@ export default function GdprAccessForm() {
           placeholder={
             form.requestType === 'rectification'
               ? 'Indiquez quelles données sont inexactes et les corrections souhaitées...'
-              : 'Décrivez votre demande d\u2019accès à vos données personnelles...'
+              : 'Décrivez votre demande d’accès à vos données personnelles...'
           }
         />
       </div>

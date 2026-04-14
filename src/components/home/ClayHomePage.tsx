@@ -223,7 +223,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           profileCity: (p.address_city ?? '')
             .toLowerCase()
             .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[̀-ͯ]/g, '')
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/^-|-$/g, ''),
         }))
@@ -374,7 +374,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                     <div className="text-xs text-charcoal-400">
                       {serviceCounts[slug] > 0
                         ? `${formatProviderCount(serviceCounts[slug])} artisans`
-                        : `À partir de ${price}\u20AC`}
+                        : `À partir de ${price}€`}
                     </div>
                     <ArrowRight className="w-4 h-4 text-charcoal-200 group-hover:text-primary-400 mx-auto mt-2 transition-colors" />
                   </Link>

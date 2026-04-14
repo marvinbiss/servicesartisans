@@ -190,7 +190,7 @@ export default async function VillesIndexPage() {
               href={`#region-${region
                 .toLowerCase()
                 .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[̀-ͯ]/g, '')
                 .replace(/[^a-z0-9]+/g, '-')}`}
               className="text-xs font-medium text-primary-600 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-full transition-colors"
             >
@@ -203,7 +203,7 @@ export default async function VillesIndexPage() {
           const regionId = region
             .toLowerCase()
             .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[̀-ͯ]/g, '')
             .replace(/[^a-z0-9]+/g, '-')
           return (
             <details

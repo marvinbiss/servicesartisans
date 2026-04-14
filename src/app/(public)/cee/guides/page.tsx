@@ -14,9 +14,9 @@ export const revalidate = 86400
 const path = '/cee/guides'
 
 export const metadata: Metadata = {
-  title: 'Guides primes CEE 2026 — PAC, isolation, po\u00eale, chaudi\u00e8re',
+  title: 'Guides primes CEE 2026 — PAC, isolation, poêle, chaudière',
   description:
-    'Guides \u00e9ditoriaux complets sur les 5 primes CEE r\u00e9sidentielles les plus recherch\u00e9es : PAC air/eau, isolation combles, plancher, po\u00eale bois, chaudi\u00e8re biomasse.',
+    'Guides éditoriaux complets sur les 5 primes CEE résidentielles les plus recherchées : PAC air/eau, isolation combles, plancher, poêle bois, chaudière biomasse.',
   robots: {
     index: true,
     follow: true,
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Guides primes CEE 2026',
     description:
-      "5 guides long-format sur les primes CEE r\u00e9sidentielles : conditions techniques, montants, cumul MaPrimeR\u00e9nov' et pi\u00e8ges \u00e0 \u00e9viter.",
+      "5 guides long-format sur les primes CEE résidentielles : conditions techniques, montants, cumul MaPrimeRénov' et pièges à éviter.",
     type: 'website',
     locale: 'fr_FR',
     url: `${SITE_URL}${path}`,
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Guides primes CEE 2026 \u2014 PAC, isolation, po\u00eale, chaudi\u00e8re',
+    title: 'Guides primes CEE 2026 — PAC, isolation, poêle, chaudière',
     description:
-      'Guides \u00e9ditoriaux complets sur les 5 primes CEE r\u00e9sidentielles les plus recherch\u00e9es : PAC air/eau, isolation combles, plancher, po\u00eale bois, chaudi\u00e8re biomasse.',
+      'Guides éditoriaux complets sur les 5 primes CEE résidentielles les plus recherchées : PAC air/eau, isolation combles, plancher, poêle bois, chaudière biomasse.',
   },
   alternates: getAlternates(path),
 }
@@ -55,7 +55,7 @@ export default function CeeGuidesIndexPage() {
     name: 'Guides primes CEE 2026',
     url: `${SITE_URL}${path}`,
     description:
-      'Index des guides \u00e9ditoriaux d\u00e9di\u00e9s aux 5 primes CEE r\u00e9sidentielles les plus recherch\u00e9es.',
+      'Index des guides éditoriaux dédiés aux 5 primes CEE résidentielles les plus recherchées.',
     hasPart: CEE_OPERATIONS_WITH_GUIDE.map((code) => {
       const g = CEE_OPERATION_GUIDES[code]
       return {

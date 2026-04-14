@@ -110,13 +110,13 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
     const serviceSlug = (selectedProvider.specialty || 'artisan')
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[̀-ͯ]/g, '')
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '')
     const citySlug = (selectedProvider.city || 'france')
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[̀-ͯ]/g, '')
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '')
     const publicId = selectedProvider.slug || selectedProvider.stable_id || ''
@@ -132,7 +132,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
       ? service
           .toLowerCase()
           .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[̀-ͯ]/g, '')
           .replace(/\s+/g, '-')
           .replace(/[^a-z0-9-]/g, '')
       : 'artisan'

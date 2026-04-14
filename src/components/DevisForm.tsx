@@ -21,10 +21,10 @@ import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 import CeePrimeEstimateCard from '@/components/devis/CeePrimeEstimateCard'
 
 const budgetOptions = [
-  { value: 'moins-500', label: 'Moins de 500 \u20ac' },
-  { value: '500-2000', label: '500\u20112 000 \u20ac' },
-  { value: '2000-5000', label: '2 000\u20115 000 \u20ac' },
-  { value: 'plus-5000', label: 'Plus de 5 000 \u20ac' },
+  { value: 'moins-500', label: 'Moins de 500 €' },
+  { value: '500-2000', label: '500‑2 000 €' },
+  { value: '2000-5000', label: '2 000‑5 000 €' },
+  { value: 'plus-5000', label: 'Plus de 5 000 €' },
   { value: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
@@ -85,7 +85,7 @@ const stepTitles = [
     subtitle: 'Plus on en sait, meilleurs seront les devis.',
   },
   {
-    title: 'Dernière étape \u2014 comment vous joindre ?',
+    title: 'Dernière étape — comment vous joindre ?',
     subtitle: 'Les artisans vous contacteront avec leurs devis.',
   },
 ]
@@ -781,7 +781,7 @@ export default function DevisForm({
                   className="mt-2 inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-700 font-medium transition-colors disabled:opacity-50"
                 >
                   <MapPin className="w-4 h-4" />
-                  {form.geoLoading ? 'Localisation en cours\u2026' : 'Utiliser ma position'}
+                  {form.geoLoading ? 'Localisation en cours…' : 'Utiliser ma position'}
                 </button>
                 {form.errors.ville && (
                   <p

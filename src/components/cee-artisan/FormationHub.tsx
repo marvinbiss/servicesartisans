@@ -53,14 +53,14 @@ const VIDEO_MODULES: VideoModule[] = [
   },
   {
     id: 'v2',
-    title: 'Les fiches d\u2019op\u00e9rations standardis\u00e9es',
+    title: 'Les fiches d’opérations standardisées',
     description: 'BAR-TH, BAR-EN : comment les lire et les appliquer à vos chantiers.',
     durationMin: 18,
     wistiaId: 'placeholder-v2',
   },
   {
     id: 'v3',
-    title: 'Montage d\u2019un dossier complet',
+    title: 'Montage d’un dossier complet',
     description: 'Pièces obligatoires, délais, erreurs les plus fréquentes.',
     durationMin: 22,
     wistiaId: 'placeholder-v3',

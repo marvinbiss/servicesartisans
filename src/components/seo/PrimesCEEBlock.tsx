@@ -99,7 +99,7 @@ function getEstimatedSavings(
   } else if (s.includes('chauffag') || s.includes('pompe')) {
     baseSaving = 1200
     dpeGain = '1 à 2 classes DPE'
-  } else if (s.includes('menuisier') || s.includes('fen\u00EAtr')) {
+  } else if (s.includes('menuisier') || s.includes('fenêtr')) {
     baseSaving = 400
     dpeGain = '1 classe DPE'
   } else if (s.includes('couv') || s.includes('charpent')) {
@@ -122,13 +122,7 @@ function getEstimatedSavings(
 
   // Bracket adjustment: lower income = higher eligible aid ratio
   const bracketMult =
-    bracket === 'pr\u00E9caire'
-      ? 1.2
-      : bracket === 'modeste'
-        ? 1.1
-        : bracket === 'sup\u00E9rieur'
-          ? 0.8
-          : 1.0
+    bracket === 'précaire' ? 1.2 : bracket === 'modeste' ? 1.1 : bracket === 'supérieur' ? 0.8 : 1.0
 
   const finalSaving = Math.round(baseSaving * climatMult * bracketMult)
 
@@ -150,13 +144,13 @@ function getSavingsContext(
 
   const s = serviceName.toLowerCase()
   const bracketLabel =
-    bracket === 'pr\u00E9caire' || bracket === 'modeste'
-      ? 'les foyers modestes peuvent b\u00E9n\u00E9ficier d\u2019une prise en charge allant jusqu\u2019\u00E0 90\u00A0% du co\u00FBt des travaux'
-      : bracket === 'interm\u00E9diaire'
-        ? 'les foyers aux revenus interm\u00E9diaires b\u00E9n\u00E9ficient d\u2019une aide couvrant 40 \u00E0 60\u00A0% du co\u00FBt'
-        : 'les foyers aux revenus sup\u00E9rieurs acc\u00E8dent \u00E0 une prime CEE de base'
+    bracket === 'précaire' || bracket === 'modeste'
+      ? 'les foyers modestes peuvent bénéficier d’une prise en charge allant jusqu’\u00E0 90\u00A0% du coût des travaux'
+      : bracket === 'intermédiaire'
+        ? 'les foyers aux revenus intermédiaires bénéficient d’une aide couvrant 40 à 60\u00A0% du coût'
+        : 'les foyers aux revenus supérieurs accèdent à une prime CEE de base'
 
-  return `\u00C0 ${villeName}, ${bracketLabel}. Les travaux de ${s} permettent une \u00E9conomie estim\u00E9e \u00E0 ${savings.economieAnnuelle} sur la facture \u00E9nerg\u00E9tique, avec un gain potentiel de ${savings.gainDPE}.`
+  return `À ${villeName}, ${bracketLabel}. Les travaux de ${s} permettent une économie estimée à ${savings.economieAnnuelle} sur la facture énergétique, avec un gain potentiel de ${savings.gainDPE}.`
 }
 
 // ---------------------------------------------------------------------------

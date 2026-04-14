@@ -324,7 +324,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
                   href={`/services/${metierSlug}/${ville
                     .toLowerCase()
                     .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[̀-ͯ]/g, '')
                     .replace(/[^a-z0-9]+/g, '-')}`}
                   className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-50 border border-sand-300 rounded-full text-sm text-charcoal-700 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-600 transition-colors"
                 >

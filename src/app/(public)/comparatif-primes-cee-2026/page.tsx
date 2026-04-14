@@ -25,7 +25,7 @@ const path = '/comparatif-primes-cee-2026'
 export const metadata: Metadata = {
   title: 'Comparatif primes CEE 2026 : Effy, Hellio, Sonergia, PrimesEnergie',
   description:
-    'Comparatif ind\u00e9pendant des 4 principaux acteurs CEE en 2026 : montants, d\u00e9lais de paiement, avis clients, mod\u00e8le \u00e9conomique. Donn\u00e9es v\u00e9rifi\u00e9es avril 2026.',
+    'Comparatif indépendant des 4 principaux acteurs CEE en 2026 : montants, délais de paiement, avis clients, modèle économique. Données vérifiées avril 2026.',
   robots: {
     index: true,
     follow: true,
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Comparatif primes CEE 2026 : qui offre la meilleure prime ?',
     description:
-      'Effy, Hellio, Sonergia, PrimesEnergie : montants, d\u00e9lais, avis clients. Le comparatif que personne ne publie.',
+      'Effy, Hellio, Sonergia, PrimesEnergie : montants, délais, avis clients. Le comparatif que personne ne publie.',
     type: 'article',
     locale: 'fr_FR',
     url: `${SITE_URL}${path}`,
@@ -59,19 +59,19 @@ const ACTORS = [
   {
     name: 'Effy',
     type: 'Mandataire CEE',
-    ca: '> 800 M\u20ac (2021)',
-    delaiPaiement: '15 jours annonc\u00e9s (3+ mois signal\u00e9s)',
+    ca: '> 800 M€ (2021)',
+    delaiPaiement: '15 jours annoncés (3+ mois signalés)',
     avisNote: '4.4/5',
     avisSource: 'Trustpilot',
-    primeMax: "Jusqu'\u00e0 5 560 \u20ac (Prime Effy)",
+    primeMax: "Jusqu'à 5 560 € (Prime Effy)",
     forces: [
       '18-20M visites/an (SEO dominant)',
-      'R\u00e9seau de 2 200 artisans RGE',
-      'Simulateur instantan\u00e9',
-      'Cumul MaPrimeR\u00e9nov\u2019 int\u00e9gr\u00e9',
+      'Réseau de 2 200 artisans RGE',
+      'Simulateur instantané',
+      'Cumul MaPrimeRénov’ intégré',
     ],
     faiblesses: [
-      'Leads partag\u00e9s entre artisans',
+      'Leads partagés entre artisans',
       'Refus de dossiers pour motifs mineurs',
       'SAV difficilement joignable',
       'Artisan = sous-traitant anonyme',
@@ -79,63 +79,63 @@ const ACTORS = [
   },
   {
     name: 'Hellio',
-    type: 'D\u00e9l\u00e9gataire P6',
-    ca: '~169 M\u20ac, 300+ salari\u00e9s',
-    delaiPaiement: 'Non communiqu\u00e9 publiquement',
+    type: 'Délégataire P6',
+    ca: '~169 M€, 300+ salariés',
+    delaiPaiement: 'Non communiqué publiquement',
     avisNote: 'Variable',
     avisSource: 'Avis Pro',
-    primeMax: 'Variable selon op\u00e9ration',
+    primeMax: 'Variable selon opération',
     forces: [
-      'D\u00e9l\u00e9gataire direct (pas interm\u00e9diaire)',
-      'Avance de tr\u00e9sorerie aux artisans',
+      'Délégataire direct (pas intermédiaire)',
+      'Avance de trésorerie aux artisans',
       'Multi-segment (copro, tertiaire, logement social)',
       'Expansion EU (Espagne, Belgique)',
     ],
     faiblesses: [
-      'Structure lourde (300 salari\u00e9s)',
-      'Lock-in artisan dans leur r\u00e9seau',
-      'Rachat en cours par Cr\u00e9dit Mutuel (2026)',
-      'Leads partag\u00e9s',
+      'Structure lourde (300 salariés)',
+      'Lock-in artisan dans leur réseau',
+      'Rachat en cours par Crédit Mutuel (2026)',
+      'Leads partagés',
     ],
   },
   {
     name: 'Sonergia',
-    type: 'D\u00e9l\u00e9gataire P5/P6',
-    ca: '~100 M\u20ac',
-    delaiPaiement: '6 \u00e0 10 mois signal\u00e9s',
+    type: 'Délégataire P5/P6',
+    ca: '~100 M€',
+    delaiPaiement: '6 à 10 mois signalés',
     avisNote: '4.0/5',
-    avisSource: 'Avis V\u00e9rifi\u00e9s',
-    primeMax: 'Variable + Coup de Pouce bonifi\u00e9',
+    avisSource: 'Avis Vérifiés',
+    primeMax: 'Variable + Coup de Pouce bonifié',
     forces: [
-      'Soci\u00e9t\u00e9 \u00e0 mission (confiance)',
-      'Double casquette CEE + MaPrimeR\u00e9nov\u2019',
-      'Contenu \u00e9ditorial SEO solide',
-      'Ind\u00e9pendant (pas filiale grand groupe)',
+      'Société à mission (confiance)',
+      'Double casquette CEE + MaPrimeRénov’',
+      'Contenu éditorial SEO solide',
+      'Indépendant (pas filiale grand groupe)',
     ],
     faiblesses: [
-      'D\u00e9lais de paiement tr\u00e8s longs',
+      'Délais de paiement très longs',
       'Promesses de montants non tenues (certains avis)',
       'Pas de marketplace artisan visible',
-      'Complexit\u00e9 administrative signal\u00e9e',
+      'Complexité administrative signalée',
     ],
   },
   {
     name: 'PrimesEnergie',
-    type: 'D\u00e9l\u00e9gataire P6 (depuis 2026)',
-    ca: 'Non communiqu\u00e9',
-    delaiPaiement: '40 jours annonc\u00e9s (2+ mois signal\u00e9s)',
+    type: 'Délégataire P6 (depuis 2026)',
+    ca: 'Non communiqué',
+    delaiPaiement: '40 jours annoncés (2+ mois signalés)',
     avisNote: '5.0/5',
-    avisSource: 'Avis V\u00e9rifi\u00e9s (5 734 avis)',
-    primeMax: 'Parmi les plus \u00e9lev\u00e9es du march\u00e9',
+    avisSource: 'Avis Vérifiés (5 734 avis)',
+    primeMax: 'Parmi les plus élevées du marché',
     forces: [
       'Note exceptionnelle (5.0/5)',
-      'Primes parmi les plus \u00e9lev\u00e9es',
+      'Primes parmi les plus élevées',
       'Processus 100 % en ligne',
-      'Contenu SEO dense et p\u00e9dagogique',
+      'Contenu SEO dense et pédagogique',
     ],
     faiblesses: [
-      'SAV injoignable (r\u00e9pondeur)',
-      'Dossiers bloqu\u00e9s 2+ mois sans r\u00e9ponse',
+      'SAV injoignable (répondeur)',
+      'Dossiers bloqués 2+ mois sans réponse',
       'Lourdeur administrative (allers-retours)',
       'Pas de marketplace artisan visible',
     ],
@@ -146,72 +146,71 @@ const KEY_OPERATIONS = [
   {
     code: 'BAR-TH-171',
     nom: 'PAC air/eau',
-    primeClassique: '2 500 \u00e0 4 000 \u20ac',
-    primePrecarite: '4 000 \u00e0 5 500 \u20ac',
+    primeClassique: '2 500 à 4 000 €',
+    primePrecarite: '4 000 à 5 500 €',
   },
   {
     code: 'BAR-EN-101',
     nom: 'Isolation combles',
-    primeClassique: '900 \u00e0 1 800 \u20ac',
-    primePrecarite: '1 600 \u00e0 2 700 \u20ac',
+    primeClassique: '900 à 1 800 €',
+    primePrecarite: '1 600 à 2 700 €',
   },
   {
     code: 'BAR-TH-113',
-    nom: 'Chaudi\u00e8re biomasse',
-    primeClassique: '2 500 \u00e0 4 000 \u20ac',
-    primePrecarite: '4 000 \u00e0 5 500 \u20ac',
+    nom: 'Chaudière biomasse',
+    primeClassique: '2 500 à 4 000 €',
+    primePrecarite: '4 000 à 5 500 €',
   },
   {
     code: 'BAR-TH-112',
-    nom: 'Po\u00eale bois/granul\u00e9s',
-    primeClassique: '800 \u00e0 1 500 \u20ac',
-    primePrecarite: '1 500 \u00e0 2 000 \u20ac',
+    nom: 'Poêle bois/granulés',
+    primeClassique: '800 à 1 500 €',
+    primePrecarite: '1 500 à 2 000 €',
   },
   {
     code: 'BAR-EN-103',
     nom: 'Isolation planchers bas',
-    primeClassique: '900 \u00e0 1 800 \u20ac',
-    primePrecarite: '1 600 \u00e0 2 700 \u20ac',
+    primeClassique: '900 à 1 800 €',
+    primePrecarite: '1 600 à 2 700 €',
   },
   {
     code: 'BAR-EN-102',
     nom: 'Isolation murs',
-    primeClassique: '1 200 \u00e0 2 500 \u20ac',
-    primePrecarite: '2 000 \u00e0 3 700 \u20ac',
+    primeClassique: '1 200 à 2 500 €',
+    primePrecarite: '2 000 à 3 700 €',
   },
 ]
 
 const FAQS = [
   {
-    question: 'Les montants de primes CEE sont-ils les m\u00eames chez tous les acteurs\u00a0?',
+    question: 'Les montants de primes CEE sont-ils les mêmes chez tous les acteurs\u00a0?',
     answer:
-      'Non. Chaque d\u00e9l\u00e9gataire ou mandataire n\u00e9gocie ses propres barèmes avec les oblig\u00e9s. Les \u00e9carts peuvent atteindre 20 \u00e0 30 % sur une m\u00eame op\u00e9ration. C\u2019est pourquoi il est important de comparer avant de s\u2019engager. Les montants affich\u00e9s sur les sites sont souvent des fourchettes hautes (cas pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique, zone H1).',
+      'Non. Chaque délégataire ou mandataire négocie ses propres barèmes avec les obligés. Les écarts peuvent atteindre 20 à 30 % sur une même opération. C’est pourquoi il est important de comparer avant de s’engager. Les montants affichés sur les sites sont souvent des fourchettes hautes (cas précarité énergétique, zone H1).',
   },
   {
-    question: 'Peut-on cumuler prime CEE et MaPrimeR\u00e9nov\u2019\u00a0?',
+    question: 'Peut-on cumuler prime CEE et MaPrimeRénov’\u00a0?',
     answer:
-      'Oui, les deux dispositifs sont cumulables depuis 2020. La prime CEE est vers\u00e9e par le d\u00e9l\u00e9gataire/mandataire, MaPrimeR\u00e9nov\u2019 est vers\u00e9e par l\u2019ANAH. Le cumul peut couvrir 80 \u00e0 90 % du co\u00fbt des travaux pour les m\u00e9nages modestes.',
+      'Oui, les deux dispositifs sont cumulables depuis 2020. La prime CEE est versée par le délégataire/mandataire, MaPrimeRénov’ est versée par l’ANAH. Le cumul peut couvrir 80 à 90 % du coût des travaux pour les ménages modestes.',
   },
   {
-    question: 'Quels sont les d\u00e9lais r\u00e9els de paiement des primes CEE\u00a0?',
+    question: 'Quels sont les délais réels de paiement des primes CEE\u00a0?',
     answer:
-      'Les d\u00e9lais annonc\u00e9s (15 jours chez Effy, 40 jours chez PrimesEnergie) sont des minima. En pratique, les retours terrain font \u00e9tat de d\u00e9lais de 2 \u00e0 6 mois, parfois plus en cas de dossier incomplet ou de pic de demandes. Sonergia est r\u00e9guli\u00e8rement critiqu\u00e9 pour des d\u00e9lais de 6 \u00e0 10 mois.',
+      'Les délais annoncés (15 jours chez Effy, 40 jours chez PrimesEnergie) sont des minima. En pratique, les retours terrain font état de délais de 2 à 6 mois, parfois plus en cas de dossier incomplet ou de pic de demandes. Sonergia est régulièrement critiqué pour des délais de 6 à 10 mois.',
   },
   {
-    question:
-      'Quelle est la diff\u00e9rence entre un d\u00e9l\u00e9gataire et un mandataire CEE\u00a0?',
+    question: 'Quelle est la différence entre un délégataire et un mandataire CEE\u00a0?',
     answer:
-      'Le d\u00e9l\u00e9gataire re\u00e7oit une d\u00e9l\u00e9gation d\u2019obligation d\u2019un oblig\u00e9 (EDF, TotalEnergies...) et porte le risque r\u00e9glementaire. Le mandataire agit pour le compte d\u2019un d\u00e9l\u00e9gataire : il source les chantiers, monte les dossiers et les d\u00e9pose au PNCEE. Effy est mandataire, Hellio et Sonergia sont d\u00e9l\u00e9gataires.',
+      'Le délégataire reçoit une délégation d’obligation d’un obligé (EDF, TotalEnergies...) et porte le risque réglementaire. Le mandataire agit pour le compte d’un délégataire : il source les chantiers, monte les dossiers et les dépose au PNCEE. Effy est mandataire, Hellio et Sonergia sont délégataires.',
   },
   {
     question: 'Les primes CEE changent-elles en 2026 avec la P6\u00a0?',
     answer:
-      'Oui. La 6e p\u00e9riode (2026-2030) augmente l\u2019obligation de 27 % (1 050 TWhc/an). Cela soutient les prix des CEE et donc les montants des primes. En revanche, certaines op\u00e9rations ont \u00e9t\u00e9 modifi\u00e9es ou abrog\u00e9es (BAR-TH-104 remplac\u00e9e par BAR-TH-171, BAR-TH-164 remplac\u00e9e par BAR-TH-174/175).',
+      'Oui. La 6e période (2026-2030) augmente l’obligation de 27 % (1 050 TWhc/an). Cela soutient les prix des CEE et donc les montants des primes. En revanche, certaines opérations ont été modifiées ou abrogées (BAR-TH-104 remplacée par BAR-TH-171, BAR-TH-164 remplacée par BAR-TH-174/175).',
   },
   {
-    question: 'Comment \u00e9viter les arnaques aux primes CEE\u00a0?',
+    question: 'Comment éviter les arnaques aux primes CEE\u00a0?',
     answer:
-      'Ne signez jamais un engagement CEE avant d\u2019avoir choisi votre artisan. V\u00e9rifiez que l\u2019entreprise qui vous propose la prime est bien r\u00e9f\u00e9renc\u00e9e comme d\u00e9l\u00e9gataire ou mandataire. M\u00e9fiez-vous des d\u00e9marchages t\u00e9l\u00e9phoniques agressifs promettant des travaux \u00e0 1 \u20ac (dispositif termin\u00e9 depuis 2022). V\u00e9rifiez que votre artisan est bien qualifi\u00e9 RGE sur france-renov.gouv.fr.',
+      'Ne signez jamais un engagement CEE avant d’avoir choisi votre artisan. Vérifiez que l’entreprise qui vous propose la prime est bien référencée comme délégataire ou mandataire. Méfiez-vous des démarchages téléphoniques agressifs promettant des travaux à 1 € (dispositif terminé depuis 2022). Vérifiez que votre artisan est bien qualifié RGE sur france-renov.gouv.fr.',
   },
 ]
 
@@ -238,7 +237,7 @@ export default function ComparatifPrimesCee2026Page() {
     publisher: { '@type': 'Organization', name: 'ServicesArtisans' },
     datePublished: '2026-04-12',
     dateModified: '2026-04-12',
-    description: 'Comparatif ind\u00e9pendant des 4 principaux acteurs CEE en 2026.',
+    description: 'Comparatif indépendant des 4 principaux acteurs CEE en 2026.',
   }
 
   return (
@@ -288,13 +287,13 @@ export default function ComparatifPrimesCee2026Page() {
               icon: TrendingUp,
             },
             {
-              value: '~9 \u20ac/MWhc',
+              value: '~9 €/MWhc',
               label: 'Cours CEE classique (spot)',
               icon: Euro,
             },
             {
-              value: '~16 \u20ac/MWhc',
-              label: 'Cours CEE pr\u00e9carit\u00e9 (2x plus)',
+              value: '~16 €/MWhc',
+              label: 'Cours CEE précarité (2x plus)',
               icon: Star,
             },
           ].map((stat) => {

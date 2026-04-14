@@ -43,17 +43,17 @@ function getIdentitySentence(c: CommuneData): string {
   parts[0] += ` compte ${formatNumber(c.population)} habitants`
 
   if (c.densite_population != null) {
-    parts[0] += ` pour une densit\u00E9 de ${formatNumber(Math.round(c.densite_population))}\u00A0hab/km\u00B2`
+    parts[0] += ` pour une densité de ${formatNumber(Math.round(c.densite_population))}\u00A0hab/km²`
   }
 
   if (c.superficie_km2 != null) {
-    parts[0] += ` sur ${c.superficie_km2.toFixed(1).replace('.', ',')}\u00A0km\u00B2`
+    parts[0] += ` sur ${c.superficie_km2.toFixed(1).replace('.', ',')}\u00A0km²`
   }
 
   parts[0] += '.'
 
   if (gentileStr) {
-    parts.push(`${gentileStr} b\u00E9n\u00E9ficient d\u2019un cadre de vie`)
+    parts.push(`${gentileStr} bénéficient d’un cadre de vie`)
     if (c.altitude_moyenne != null && c.altitude_moyenne > 500) {
       parts[parts.length - 1] += ` en altitude (${Math.round(c.altitude_moyenne)}\u00A0m)`
     }
@@ -75,17 +75,17 @@ function getHousingStockSentence(c: CommuneData, serviceName: string): string | 
   if (c.part_maisons_pct != null) {
     const majMaison = c.part_maisons_pct >= 60
     if (parts.length > 0) {
-      parts[0] += `, compos\u00E9 \u00E0 ${c.part_maisons_pct}\u00A0% de maisons individuelles`
+      parts[0] += `, composé à ${c.part_maisons_pct}\u00A0% de maisons individuelles`
       if (majMaison) {
-        parts[0] += `. Cette pr\u00E9dominance de maisons implique des besoins sp\u00E9cifiques en ${s}\u00A0: toitures, fa\u00E7ades, jardins et acc\u00E8s individuels`
+        parts[0] += `. Cette prédominance de maisons implique des besoins spécifiques en ${s}\u00A0: toitures, façades, jardins et accès individuels`
       } else {
-        parts[0] += `. La proportion \u00E9lev\u00E9e d\u2019appartements (${100 - c.part_maisons_pct}\u00A0%) implique des interventions de ${s} en copropri\u00E9t\u00E9, avec leurs contraintes d\u2019acc\u00E8s et de r\u00E8glement`
+        parts[0] += `. La proportion élevée d’appartements (${100 - c.part_maisons_pct}\u00A0%) implique des interventions de ${s} en copropriété, avec leurs contraintes d’accès et de règlement`
       }
     } else {
       parts.push(
         majMaison
-          ? `Avec ${c.part_maisons_pct}\u00A0% de maisons individuelles, les travaux de ${s} portent majoritairement sur l\u2019habitat individuel`
-          : `Le parc immobilier est domin\u00E9 par les appartements (${100 - c.part_maisons_pct}\u00A0%), orientant les prestations de ${s} vers les copropri\u00E9t\u00E9s`
+          ? `Avec ${c.part_maisons_pct}\u00A0% de maisons individuelles, les travaux de ${s} portent majoritairement sur l’habitat individuel`
+          : `Le parc immobilier est dominé par les appartements (${100 - c.part_maisons_pct}\u00A0%), orientant les prestations de ${s} vers les copropriétés`
       )
     }
   }
@@ -99,18 +99,18 @@ function getClimatSentence(c: CommuneData): string | null {
 
   if (c.climat_zone) {
     const labels: Record<string, string> = {
-      oceanique: 'oc\u00E9anique (doux et humide)',
-      continental: 'continental (hivers froids, \u00E9t\u00E9s chauds)',
-      mediterraneen: 'm\u00E9diterran\u00E9en (doux en hiver, sec en \u00E9t\u00E9)',
-      montagnard: 'montagnard (hivers rigoureux, \u00E9t\u00E9s courts)',
-      'semi-oceanique': 'semi-oc\u00E9anique (temp\u00E9r\u00E9)',
+      oceanique: 'océanique (doux et humide)',
+      continental: 'continental (hivers froids, étés chauds)',
+      mediterraneen: 'méditerranéen (doux en hiver, sec en été)',
+      montagnard: 'montagnard (hivers rigoureux, étés courts)',
+      'semi-oceanique': 'semi-océanique (tempéré)',
     }
     parts.push(`Le climat est ${labels[c.climat_zone] ?? c.climat_zone}`)
   }
 
   if (c.temperature_moyenne_hiver != null && c.temperature_moyenne_ete != null) {
     parts.push(
-      `avec des temp\u00E9ratures moyennes de ${Math.round(c.temperature_moyenne_hiver)}\u00A0\u00B0C en hiver et ${Math.round(c.temperature_moyenne_ete)}\u00A0\u00B0C en \u00E9t\u00E9`
+      `avec des températures moyennes de ${Math.round(c.temperature_moyenne_hiver)}\u00A0\u00B0C en hiver et ${Math.round(c.temperature_moyenne_ete)}\u00A0\u00B0C en été`
     )
   }
 
@@ -119,16 +119,14 @@ function getClimatSentence(c: CommuneData): string | null {
   }
 
   if (c.precipitation_annuelle != null) {
-    parts.push(`${Math.round(c.precipitation_annuelle)}\u00A0mm de pr\u00E9cipitations annuelles`)
+    parts.push(`${Math.round(c.precipitation_annuelle)}\u00A0mm de précipitations annuelles`)
   }
 
   if (c.mois_travaux_ext_debut != null && c.mois_travaux_ext_fin != null) {
     const debut = monthName(c.mois_travaux_ext_debut)
     const fin = monthName(c.mois_travaux_ext_fin)
     if (debut && fin) {
-      parts.push(
-        `la p\u00E9riode id\u00E9ale pour les travaux ext\u00E9rieurs s\u2019\u00E9tend de ${debut} \u00E0 ${fin}`
-      )
+      parts.push(`la période idéale pour les travaux extérieurs s’\u00E9tend de ${debut} à ${fin}`)
     }
   }
 
@@ -141,9 +139,9 @@ function getClimatSentence(c: CommuneData): string | null {
 function getRiskSummarySentence(c: CommuneData): string | null {
   const risks: string[] = []
 
-  if (c.risque_argile === 'fort') risks.push('un retrait-gonflement des argiles marqu\u00E9')
-  if (c.risque_inondation) risks.push('un risque d\u2019inondation identifi\u00E9')
-  if ((c.zone_sismique ?? 0) >= 3) risks.push(`une sismicit\u00E9 de zone ${c.zone_sismique}/5`)
+  if (c.risque_argile === 'fort') risks.push('un retrait-gonflement des argiles marqué')
+  if (c.risque_inondation) risks.push('un risque d’inondation identifié')
+  if ((c.zone_sismique ?? 0) >= 3) risks.push(`une sismicité de zone ${c.zone_sismique}/5`)
   if ((c.risque_radon ?? 0) >= 2) risks.push('une exposition au radon')
 
   if (risks.length === 0) return null
@@ -152,21 +150,19 @@ function getRiskSummarySentence(c: CommuneData): string | null {
     risks.length === 1 ? risks[0] : risks.slice(0, -1).join(', ') + ' et ' + risks[risks.length - 1]
 
   const catnatSuffix =
-    (c.nb_catnat ?? 0) > 5
-      ? ` (${c.nb_catnat} arr\u00EAt\u00E9s de catastrophe naturelle recens\u00E9s)`
-      : ''
+    (c.nb_catnat ?? 0) > 5 ? ` (${c.nb_catnat} arrêtés de catastrophe naturelle recensés)` : ''
 
-  return `Sur le plan des risques naturels, la commune pr\u00E9sente ${riskStr}${catnatSuffix}.`
+  return `Sur le plan des risques naturels, la commune présente ${riskStr}${catnatSuffix}.`
 }
 
 function getDPESummarySentence(c: CommuneData, serviceName: string): string | null {
   if (!c.pct_passoires_dpe || c.pct_passoires_dpe <= 0) return null
   const s = serviceName.toLowerCase()
 
-  let sentence = `${c.pct_passoires_dpe}\u00A0% des logements sont class\u00E9s passoires \u00E9nerg\u00E9tiques (DPE F ou G)`
+  let sentence = `${c.pct_passoires_dpe}\u00A0% des logements sont classés passoires énergétiques (DPE F ou G)`
 
   if (c.nb_maprimerenov_annuel && c.nb_maprimerenov_annuel > 0) {
-    sentence += `, et ${formatNumber(c.nb_maprimerenov_annuel)} dossiers MaPrimeR\u00E9nov\u2019 sont d\u00E9pos\u00E9s chaque ann\u00E9e`
+    sentence += `, et ${formatNumber(c.nb_maprimerenov_annuel)} dossiers MaPrimeRénov’ sont déposés chaque année`
   }
 
   sentence += `, ce qui alimente une demande soutenue en ${s}.`
@@ -177,19 +173,19 @@ function getEconomicSentence(c: CommuneData): string | null {
   const parts: string[] = []
 
   if (c.revenu_median != null) {
-    parts.push(`un revenu m\u00E9dian de ${formatEuro(c.revenu_median)}/an`)
+    parts.push(`un revenu médian de ${formatEuro(c.revenu_median)}/an`)
   }
 
   if (c.prix_m2_moyen != null) {
-    parts.push(`un prix immobilier moyen de ${formatEuro(c.prix_m2_moyen)}/m\u00B2`)
+    parts.push(`un prix immobilier moyen de ${formatEuro(c.prix_m2_moyen)}/m²`)
   }
 
   if (c.nb_transactions_annuelles != null && c.nb_transactions_annuelles > 20) {
-    parts.push(`${formatNumber(c.nb_transactions_annuelles)} transactions immobili\u00E8res par an`)
+    parts.push(`${formatNumber(c.nb_transactions_annuelles)} transactions immobilières par an`)
   }
 
   if (parts.length === 0) return null
-  return `Le contexte \u00E9conomique local se caract\u00E9rise par ${parts.join(', ')}.`
+  return `Le contexte économique local se caractérise par ${parts.join(', ')}.`
 }
 
 function getArtisanMarketSentence(c: CommuneData, serviceName: string): string | null {
@@ -205,12 +201,12 @@ function getArtisanMarketSentence(c: CommuneData, serviceName: string): string |
   }
 
   if (c.nb_artisans_rge) {
-    parts.push(`${formatNumber(c.nb_artisans_rge)} certifi\u00E9es RGE`)
+    parts.push(`${formatNumber(c.nb_artisans_rge)} certifiées RGE`)
   }
 
   if (parts.length === 0) return null
 
-  return `Le tissu artisanal local compte ${parts.join(', ')}, ce qui d\u00E9termine la concurrence et les d\u00E9lais pour les travaux de ${s}.`
+  return `Le tissu artisanal local compte ${parts.join(', ')}, ce qui détermine la concurrence et les délais pour les travaux de ${s}.`
 }
 
 // ---------------------------------------------------------------------------

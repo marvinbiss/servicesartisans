@@ -38,7 +38,7 @@ export default function SnippetBaitSummary({ trades, year = 2026 }: SnippetBaitS
       <p className="text-base text-charcoal-700 leading-relaxed mb-4">
         Le <strong>prix moyen d'un artisan en France</strong> se situe entre{' '}
         <strong>
-          {globalMin} et {globalMax} {trades[0]?.unit || '\u20AC/h'}
+          {globalMin} et {globalMax} {trades[0]?.unit || '€/h'}
         </strong>{' '}
         en {year}. Les tarifs varient selon le corps de métier, la région et la complexité des
         travaux. Voici le barème complet par métier :

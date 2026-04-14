@@ -10,16 +10,12 @@ function getAllVilles(): Promise<Ville[]> {
   if (_allVilles) return Promise.resolve(_allVilles)
   return import('@/lib/data/france').then((m) => {
     _allVilles = m.villes
-    return _allVilles!
+    return m.villes
   })
 }
 
 function normalizeText(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
+  return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
 }
 
 function searchServices(query: string, limit = 6): typeof services {

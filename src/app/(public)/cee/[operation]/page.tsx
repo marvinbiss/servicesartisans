@@ -60,7 +60,7 @@ interface PageProps {
 
 function truncate(text: string, maxLen: number): string {
   if (text.length <= maxLen) return text
-  return text.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return text.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -72,9 +72,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const opName = operation?.nom ?? `Prime CEE ${opCode}`
   const path = `/cee/${opCode.toLowerCase()}`
 
-  const title = truncate(`Prime CEE ${opName} (${opCode}) \u2014 artisans RGE`, 60)
+  const title = truncate(`Prime CEE ${opName} (${opCode}) — artisans RGE`, 60)
   const description = truncate(
-    `${opName} : conditions, qualifications RGE requises, villes couvertes. Prime CEE mobilisable avec MaPrimeR\u00e9nov\u2019 et TVA 5,5 %.`,
+    `${opName} : conditions, qualifications RGE requises, villes couvertes. Prime CEE mobilisable avec MaPrimeRénov’ et TVA 5,5 %.`,
     158
   )
 
@@ -190,7 +190,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             Domaine{' '}
             <strong className="text-white">{domaineInfo?.label || operation.domaine}</strong>
-            {operation.sous_domaine ? ` \u2014 ${operation.sous_domaine.replace(/_/g, ' ')}` : ''}.
+            {operation.sous_domaine ? ` — ${operation.sous_domaine.replace(/_/g, ' ')}` : ''}.
             Opération standardisée résidentielle éligible aux Certificats d’Économies d’Énergie,
             sous conditions de qualification RGE de l’entreprise.
           </p>
@@ -204,7 +204,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Explication compl\u00e8te */}
+      {/* Explication complète */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">
           Comprendre l’opération {operation.code}
@@ -307,12 +307,12 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         )}
       </section>
 
-      {/* CTA inline apr\u00e8s description */}
+      {/* CTA inline après description */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
         <CeeCTA variant="inline" operationCode={operation.code} serviceSlug={rgeServices[0]} />
       </div>
 
-      {/* M\u00e9tiers RGE qualifi\u00e9s */}
+      {/* Métiers RGE qualifiés */}
       {rgeServices.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
@@ -386,7 +386,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         </section>
       )}
 
-      {/* Op\u00e9rations du m\u00eame domaine */}
+      {/* Opérations du même domaine */}
       {sameDomain.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6">

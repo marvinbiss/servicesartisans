@@ -41,9 +41,9 @@ function formatEuros(value: number): string {
 }
 
 const ZONE_DESCRIPTIONS: Record<string, string> = {
-  H1: 'Zone H1 (nord et est de la France, climat froid) : primes plus \u00e9lev\u00e9es car les \u00e9conomies d\u2019\u00e9nergie potentielles sont plus importantes.',
-  H2: 'Zone H2 (ouest et sud-ouest, climat temp\u00e9r\u00e9) : primes interm\u00e9diaires.',
-  H3: 'Zone H3 (pourtour m\u00e9diterran\u00e9en, climat doux) : primes plus basses car les besoins de chauffage sont moindres.',
+  H1: 'Zone H1 (nord et est de la France, climat froid) : primes plus élevées car les économies d’\u00e9nergie potentielles sont plus importantes.',
+  H2: 'Zone H2 (ouest et sud-ouest, climat tempéré) : primes intermédiaires.',
+  H3: 'Zone H3 (pourtour méditerranéen, climat doux) : primes plus basses car les besoins de chauffage sont moindres.',
 }
 
 /* ------------------------------------------------------------------ */
@@ -141,7 +141,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
               required
               className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-charcoal-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition"
             >
-              <option value="">S\u00e9lectionnez un service</option>
+              <option value="">Sélectionnez un service</option>
               {services.map((s) => (
                 <option key={s.slug} value={s.slug}>
                   {s.name}
@@ -221,7 +221,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
         </div>
       )}
 
-      {/* ---- Erreur r\u00e9seau ------------------------------------------------ */}
+      {/* ---- Erreur réseau ------------------------------------------------ */}
       {!loading && error && (
         <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
           <AlertTriangle className="mx-auto h-10 w-10 text-red-400 mb-3" aria-hidden="true" />
@@ -231,12 +231,12 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
             onClick={() => handleSubmit()}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-red-300 text-red-700 font-semibold text-sm hover:bg-red-100 transition"
           >
-            R\u00e9essayer
+            Réessayer
           </button>
         </div>
       )}
 
-      {/* ---- R\u00e9sultats : \u00e9ligible ---------------------------------------- */}
+      {/* ---- Résultats : éligible ---------------------------------------- */}
       {!loading && result?.eligible && result.items.length > 0 && (
         <div className="space-y-6" aria-live="polite">
           {/* Zone climatique */}
@@ -274,22 +274,22 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
                   <div className="rounded-lg bg-sand-50 p-4">
                     <p className="text-sm font-medium text-charcoal-600 mb-1">Prime classique</p>
                     <p className="text-2xl font-bold text-emerald-700">
-                      {formatEuros(est.euros_classique_min)} \u2013{' '}
+                      {formatEuros(est.euros_classique_min)} –{' '}
                       {formatEuros(est.euros_classique_max)}
                     </p>
                   </div>
 
-                  {/* Fourchette pr\u00e9carit\u00e9 */}
+                  {/* Fourchette précarité */}
                   <div className="rounded-lg bg-emerald-50 p-4">
                     <p className="text-sm font-medium text-charcoal-600 mb-1">
-                      Prime pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique
+                      Prime précarité énergétique
                     </p>
                     <p className="text-2xl font-bold text-emerald-700">
-                      {formatEuros(est.euros_precarite_min)} \u2013{' '}
+                      {formatEuros(est.euros_precarite_min)} –{' '}
                       {formatEuros(est.euros_precarite_max)}
                     </p>
                     <p className="mt-1 text-xs text-emerald-600">
-                      M\u00e9nages aux revenus modestes (bar\u00e8me Anah)
+                      Ménages aux revenus modestes (barème Anah)
                     </p>
                   </div>
                 </div>
@@ -318,31 +318,31 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
           <div className="flex items-start gap-2 rounded-lg border border-sand-200 bg-sand-50 p-4">
             <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-charcoal-400" aria-hidden="true" />
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Estimation indicative bas\u00e9e sur les bar\u00e8mes CEE en vigueur (p\u00e9riode
-              P6). Le montant final d\u00e9pend des caract\u00e9ristiques pr\u00e9cises de vos
-              travaux, de votre logement, de vos revenus fiscaux et du cours du kWhc \u00e0 la date
-              de signature. Ces chiffres ne constituent pas une offre contractuelle.
+              Estimation indicative basée sur les barèmes CEE en vigueur (période P6). Le montant
+              final dépend des caractéristiques précises de vos travaux, de votre logement, de vos
+              revenus fiscaux et du cours du kWhc à la date de signature. Ces chiffres ne
+              constituent pas une offre contractuelle.
             </p>
           </div>
         </div>
       )}
 
-      {/* ---- R\u00e9sultats : non \u00e9ligible ------------------------------------ */}
+      {/* ---- Résultats : non éligible ------------------------------------ */}
       {!loading && hasSearched && result && !result.eligible && (
         <div role="alert" className="rounded-xl border border-sand-200 bg-sand-50 p-6 text-center">
           <AlertTriangle className="mx-auto h-10 w-10 text-sand-400 mb-3" aria-hidden="true" />
           <p className="font-heading text-lg font-semibold text-charcoal-800 mb-2">
-            Ce type de travaux n’est pas \u00e9ligible aux CEE
+            Ce type de travaux n’est pas éligible aux CEE
           </p>
           <p className="text-sm text-charcoal-500 mb-4">
-            Tous les services ne donnent pas droit \u00e0 une prime \u00e9nergie. Consultez nos
-            autres aides disponibles ou essayez un autre type de travaux.
+            Tous les services ne donnent pas droit à une prime énergie. Consultez nos autres aides
+            disponibles ou essayez un autre type de travaux.
           </p>
           <Link
             href="/cee"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-sm hover:bg-emerald-700 transition"
           >
-            Voir toutes les op\u00e9rations CEE
+            Voir toutes les opérations CEE
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>

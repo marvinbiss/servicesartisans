@@ -31,9 +31,9 @@ import { slugify } from '@/lib/utils'
 const canonicalUrl = `${SITE_URL}/etudes/deserts-artisanaux`
 
 export const metadata: Metadata = {
-  title: 'Deserts artisanaux en France \u2014 \u00c9tude 2026 par d\u00e9partement',
+  title: 'Deserts artisanaux en France — Étude 2026 par département',
   description:
-    'Carte interactive des d\u00e9serts artisanaux. Classement des 101 d\u00e9partements par nombre d\u2019artisans pour 10\u202f000 habitants. Donn\u00e9es SIREN officielles.',
+    'Carte interactive des déserts artisanaux. Classement des 101 départements par nombre d’artisans pour 10\u202f000 habitants. Données SIREN officielles.',
   alternates: getAlternates('/etudes/deserts-artisanaux'),
   robots: {
     index: true,
@@ -44,9 +44,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     locale: 'fr_FR',
-    title: 'D\u00e9serts artisanaux en France \u2014 \u00c9tude 2026 | ServicesArtisans',
+    title: 'Déserts artisanaux en France — Étude 2026 | ServicesArtisans',
     description:
-      'Quels d\u00e9partements manquent le plus d\u2019artisans ? Classement complet des 101 d\u00e9partements fran\u00e7ais par densit\u00e9 artisanale. Donn\u00e9es SIREN.',
+      'Quels départements manquent le plus d’artisans ? Classement complet des 101 départements français par densité artisanale. Données SIREN.',
     url: canonicalUrl,
     type: 'article',
     images: [
@@ -54,15 +54,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'D\u00e9serts artisanaux en France \u2014 Carte des d\u00e9partements en manque d\u2019artisans',
+        alt: 'Déserts artisanaux en France — Carte des départements en manque d’artisans',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'D\u00e9serts artisanaux en France \u2014 \u00c9tude 2026',
+    title: 'Déserts artisanaux en France — Étude 2026',
     description:
-      'Quels d\u00e9partements manquent le plus d\u2019artisans ? Classement des 101 d\u00e9partements par densit\u00e9 artisanale.',
+      'Quels départements manquent le plus d’artisans ? Classement des 101 départements par densité artisanale.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -136,25 +136,25 @@ function computeTradeShortages() {
       trade: 'Couvreur',
       tension: 72,
       slug: 'couvreur',
-      description: '72 % des entreprises de couverture peinent \u00e0 recruter',
+      description: '72 % des entreprises de couverture peinent à recruter',
     },
     {
-      trade: '\u00c9tanch\u00e9iste',
+      trade: 'Étanchéiste',
       tension: 68,
       slug: 'etancheiste',
-      description: '68 % de postes non pourvus dans l\u2019\u00e9tanch\u00e9it\u00e9',
+      description: '68 % de postes non pourvus dans l’\u00e9tanchéité',
     },
     {
       trade: 'Charpentier',
       tension: 65,
       slug: 'charpentier',
-      description: 'D\u00e9ficit critique de charpentiers qualifi\u00e9s',
+      description: 'Déficit critique de charpentiers qualifiés',
     },
     {
-      trade: 'Ma\u00e7on',
+      trade: 'Maçon',
       tension: 63,
       slug: 'macon',
-      description: '63 % de difficult\u00e9 de recrutement en ma\u00e7onnerie',
+      description: '63 % de difficulté de recrutement en maçonnerie',
     },
     {
       trade: 'Plombier-chauffagiste',
@@ -163,10 +163,10 @@ function computeTradeShortages() {
       description: 'Forte tension sur la plomberie et le chauffage',
     },
     {
-      trade: '\u00c9lectricien',
+      trade: 'Électricien',
       tension: 58,
       slug: 'electricien',
-      description: 'Demande accentu\u00e9e par la r\u00e9novation \u00e9nerg\u00e9tique',
+      description: 'Demande accentuée par la rénovation énergétique',
     },
     {
       trade: 'Carreleur',
@@ -175,22 +175,22 @@ function computeTradeShortages() {
       description: '55 % des artisans carreleurs cherchent des ouvriers',
     },
     {
-      trade: 'Peintre en b\u00e2timent',
+      trade: 'Peintre en bâtiment',
       tension: 52,
       slug: 'peintre-en-batiment',
-      description: 'M\u00e9tier en tension depuis 2022',
+      description: 'Métier en tension depuis 2022',
     },
     {
       trade: 'Menuisier',
       tension: 50,
       slug: 'menuisier',
-      description: '1 menuisier sur 2 ne trouve pas de main-d\u2019\u0153uvre',
+      description: '1 menuisier sur 2 ne trouve pas de main-d’\u0153uvre',
     },
     {
-      trade: 'Fa\u00e7adier',
+      trade: 'Façadier',
       tension: 48,
       slug: 'facadier',
-      description: 'Demande croissante li\u00e9e \u00e0 l\u2019ITE',
+      description: 'Demande croissante liée à l’ITE',
     },
   ]
 }
@@ -232,10 +232,10 @@ function densityColor(density: number, avg: number): string {
 }
 
 function densityBadge(density: number, avg: number): string {
-  if (density < avg * 0.7) return 'D\u00e9sert artisanal'
-  if (density < avg * 0.9) return 'Sous-dot\u00e9'
-  if (density > avg * 1.3) return 'Tr\u00e8s bien dot\u00e9'
-  if (density > avg * 1.1) return 'Bien dot\u00e9'
+  if (density < avg * 0.7) return 'Désert artisanal'
+  if (density < avg * 0.9) return 'Sous-doté'
+  if (density > avg * 1.3) return 'Très bien doté'
+  if (density > avg * 1.1) return 'Bien doté'
   return 'Moyenne'
 }
 
@@ -247,10 +247,10 @@ function getStudySchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Report',
-    headline: 'D\u00e9serts artisanaux : la carte des d\u00e9partements en manque d\u2019artisans',
-    name: 'D\u00e9serts artisanaux en France \u2014 \u00c9tude 2026',
+    headline: 'Déserts artisanaux : la carte des départements en manque d’artisans',
+    name: 'Déserts artisanaux en France — Étude 2026',
     description:
-      'Analyse de la densit\u00e9 artisanale (artisans pour 10\u202f000 habitants) dans les 101 d\u00e9partements fran\u00e7ais. Classement, cartographie et analyse par m\u00e9tier.',
+      'Analyse de la densité artisanale (artisans pour 10\u202f000 habitants) dans les 101 départements français. Classement, cartographie et analyse par métier.',
     datePublished: '2026-03-28',
     dateModified: '2026-03-28',
     author: {
@@ -269,7 +269,7 @@ function getStudySchema() {
       '@type': 'Thing',
       name: 'Artisanat en France',
       description:
-        'R\u00e9partition g\u00e9ographique des entreprises artisanales du b\u00e2timent en France m\u00e9tropolitaine et outre-mer.',
+        'Répartition géographique des entreprises artisanales du bâtiment en France métropolitaine et outre-mer.',
     },
     spatialCoverage: { '@type': 'Country', name: 'France' },
     temporalCoverage: '2026',
@@ -297,8 +297,8 @@ export default function DesertsArtisanauxPage() {
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: '\u00c9tudes', url: '/etudes' },
-    { name: 'D\u00e9serts artisanaux', url: '/etudes/deserts-artisanaux' },
+    { name: 'Études', url: '/etudes' },
+    { name: 'Déserts artisanaux', url: '/etudes/deserts-artisanaux' },
   ])
 
   return (
@@ -309,32 +309,28 @@ export default function DesertsArtisanauxPage() {
       <section className="bg-white border-b">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <Breadcrumb
-            items={[
-              { label: '\u00c9tudes', href: '/etudes' },
-              { label: 'D\u00e9serts artisanaux' },
-            ]}
+            items={[{ label: 'Études', href: '/etudes' }, { label: 'Déserts artisanaux' }]}
             className="mb-6"
           />
 
           <div className="flex items-center gap-2 mb-4">
             <span className="inline-flex items-center gap-1.5 bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">
               <AlertTriangle className="w-3.5 h-3.5" />
-              \u00c9tude exclusive
+              Étude exclusive
             </span>
-            <span className="text-sm text-charcoal-500">Publi\u00e9 le 28 mars 2026</span>
+            <span className="text-sm text-charcoal-500">Publié le 28 mars 2026</span>
           </div>
 
           <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal-900 leading-tight mb-6">
-            D\u00e9serts artisanaux : la carte des d\u00e9partements en manque d&apos;artisans
+            Déserts artisanaux : la carte des départements en manque d&apos;artisans
           </h1>
 
           <p className="text-lg text-charcoal-600 max-w-3xl leading-relaxed mb-8">
             Notre analyse de <strong>{fmt(stats.totalArtisans)}</strong> entreprises artisanales
-            r\u00e9parties dans <strong>{rankings.length} d\u00e9partements</strong>{' '}
-            r\u00e9v\u00e8le de profondes in\u00e9galit\u00e9s territoriales. Certains
-            d\u00e9partements comptent moins de{' '}
+            réparties dans <strong>{rankings.length} départements</strong> révèle de profondes
+            inégalités territoriales. Certains départements comptent moins de{' '}
             <strong>160 artisans pour 10&nbsp;000 habitants</strong>, contre plus de 370 dans les
-            mieux dot\u00e9s.
+            mieux dotés.
           </p>
 
           {/* Key figures */}
@@ -352,12 +348,12 @@ export default function DesertsArtisanauxPage() {
             <KeyFigure
               icon={<BarChart3 className="w-5 h-5 text-emerald-600" />}
               value={`${stats.avgDensity}`}
-              label="densit\u00e9 moyenne / 10k hab"
+              label="densité moyenne / 10k hab"
             />
             <KeyFigure
               icon={<MapPin className="w-5 h-5 text-red-600" />}
               value={`${rankings.length}`}
-              label="d\u00e9partements analys\u00e9s"
+              label="départements analysés"
             />
           </div>
         </div>
@@ -367,30 +363,30 @@ export default function DesertsArtisanauxPage() {
       <section id="key-findings" className="py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900 mb-8">
-            Constats cl\u00e9s
+            Constats clés
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <FindingCard
               color="red"
-              title="D\u00e9serts artisanaux"
+              title="Déserts artisanaux"
               stat={`${deserts[0]?.density ?? 0}`}
               unit="artisans / 10k hab"
-              desc={`Le d\u00e9partement le plus sous-dot\u00e9 est ${deserts[0]?.name ?? ''} (${deserts[0]?.code ?? ''}), avec seulement ${fmt(deserts[0]?.artisans ?? 0)} artisans pour ${fmt(deserts[0]?.population ?? 0)} habitants.`}
+              desc={`Le département le plus sous-doté est ${deserts[0]?.name ?? ''} (${deserts[0]?.code ?? ''}), avec seulement ${fmt(deserts[0]?.artisans ?? 0)} artisans pour ${fmt(deserts[0]?.population ?? 0)} habitants.`}
             />
             <FindingCard
               color="green"
-              title="Mieux dot\u00e9s"
+              title="Mieux dotés"
               stat={`${bestServed[0]?.density ?? 0}`}
               unit="artisans / 10k hab"
-              desc={`${bestServed[0]?.name ?? ''} (${bestServed[0]?.code ?? ''}) est le d\u00e9partement le mieux dot\u00e9 en artisans par habitant, soit ${((bestServed[0]?.density ?? 0) / (deserts[0]?.density ?? 1)).toFixed(1)}x plus que le d\u00e9partement le moins bien dot\u00e9.`}
+              desc={`${bestServed[0]?.name ?? ''} (${bestServed[0]?.code ?? ''}) est le département le mieux doté en artisans par habitant, soit ${((bestServed[0]?.density ?? 0) / (deserts[0]?.density ?? 1)).toFixed(1)}x plus que le département le moins bien doté.`}
             />
             <FindingCard
               color="amber"
-              title="\u00c9cart extr\u00eame"
-              stat={`\u00d7${((bestServed[0]?.density ?? 0) / (deserts[0]?.density ?? 1)).toFixed(1)}`}
+              title="Écart extrême"
+              stat={`×${((bestServed[0]?.density ?? 0) / (deserts[0]?.density ?? 1)).toFixed(1)}`}
               unit="entre le 1er et le dernier"
-              desc={`L\u2019\u00e9cart de densit\u00e9 artisanale entre le d\u00e9partement le mieux et le moins bien dot\u00e9 atteint un facteur ${((bestServed[0]?.density ?? 0) / (deserts[0]?.density ?? 1)).toFixed(1)}.`}
+              desc={`L’\u00e9cart de densité artisanale entre le département le mieux et le moins bien doté atteint un facteur ${((bestServed[0]?.density ?? 0) / (deserts[0]?.density ?? 1)).toFixed(1)}.`}
             />
           </div>
         </div>
@@ -402,13 +398,12 @@ export default function DesertsArtisanauxPage() {
           <div className="flex items-center gap-3 mb-8">
             <TrendingDown className="w-6 h-6 text-red-600" />
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900">
-              Top 10 des d\u00e9serts artisanaux
+              Top 10 des déserts artisanaux
             </h2>
           </div>
           <p className="text-charcoal-600 mb-8 max-w-3xl">
-            Les 10 d\u00e9partements avec le moins d&apos;artisans pour 10&nbsp;000 habitants. Ces
-            territoires souffrent d&apos;un d\u00e9ficit structurel de main-d&apos;\u0153uvre
-            artisanale.
+            Les 10 départements avec le moins d&apos;artisans pour 10&nbsp;000 habitants. Ces
+            territoires souffrent d&apos;un déficit structurel de main-d&apos;œuvre artisanale.
           </p>
 
           <div className="overflow-x-auto">
@@ -416,13 +411,13 @@ export default function DesertsArtisanauxPage() {
               <thead>
                 <tr className="bg-red-50 text-red-900">
                   <th className="px-4 py-3 text-left font-semibold rounded-tl-lg">#</th>
-                  <th className="px-4 py-3 text-left font-semibold">D\u00e9partement</th>
-                  <th className="px-4 py-3 text-left font-semibold">R\u00e9gion</th>
+                  <th className="px-4 py-3 text-left font-semibold">Département</th>
+                  <th className="px-4 py-3 text-left font-semibold">Région</th>
                   <th className="px-4 py-3 text-right font-semibold">Population</th>
                   <th className="px-4 py-3 text-right font-semibold">Artisans</th>
                   <th className="px-4 py-3 text-right font-semibold">BTP</th>
                   <th className="px-4 py-3 text-right font-semibold rounded-tr-lg">
-                    Densit\u00e9 / 10k hab
+                    Densité / 10k hab
                   </th>
                 </tr>
               </thead>
@@ -457,7 +452,7 @@ export default function DesertsArtisanauxPage() {
           </div>
 
           <p className="mt-4 text-xs text-charcoal-400">
-            Densit\u00e9 = nombre d&apos;entreprises artisanales / 10&nbsp;000 habitants. Moyenne
+            Densité = nombre d&apos;entreprises artisanales / 10&nbsp;000 habitants. Moyenne
             nationale : {stats.avgDensity}
           </p>
         </div>
@@ -469,13 +464,12 @@ export default function DesertsArtisanauxPage() {
           <div className="flex items-center gap-3 mb-8">
             <TrendingUp className="w-6 h-6 text-emerald-600" />
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900">
-              Top 10 des d\u00e9partements les mieux dot\u00e9s
+              Top 10 des départements les mieux dotés
             </h2>
           </div>
           <p className="text-charcoal-600 mb-8 max-w-3xl">
-            Les 10 d\u00e9partements o\u00f9 la densit\u00e9 artisanale est la plus
-            \u00e9lev\u00e9e. Territoires attractifs pour les artisans, souvent
-            caract\u00e9ris\u00e9s par un fort dynamisme immobilier ou touristique.
+            Les 10 départements où la densité artisanale est la plus élevée. Territoires attractifs
+            pour les artisans, souvent caractérisés par un fort dynamisme immobilier ou touristique.
           </p>
 
           <div className="overflow-x-auto">
@@ -483,13 +477,13 @@ export default function DesertsArtisanauxPage() {
               <thead>
                 <tr className="bg-emerald-50 text-emerald-900">
                   <th className="px-4 py-3 text-left font-semibold rounded-tl-lg">#</th>
-                  <th className="px-4 py-3 text-left font-semibold">D\u00e9partement</th>
-                  <th className="px-4 py-3 text-left font-semibold">R\u00e9gion</th>
+                  <th className="px-4 py-3 text-left font-semibold">Département</th>
+                  <th className="px-4 py-3 text-left font-semibold">Région</th>
                   <th className="px-4 py-3 text-right font-semibold">Population</th>
                   <th className="px-4 py-3 text-right font-semibold">Artisans</th>
                   <th className="px-4 py-3 text-right font-semibold">BTP</th>
                   <th className="px-4 py-3 text-right font-semibold rounded-tr-lg">
-                    Densit\u00e9 / 10k hab
+                    Densité / 10k hab
                   </th>
                 </tr>
               </thead>
@@ -529,11 +523,10 @@ export default function DesertsArtisanauxPage() {
       <section className="py-12 md:py-16 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900 mb-4">
-            Classement complet des {rankings.length} d\u00e9partements
+            Classement complet des {rankings.length} départements
           </h2>
           <p className="text-charcoal-600 mb-8">
-            Tri\u00e9 par densit\u00e9 artisanale croissante (du d\u00e9sert artisanal au mieux
-            dot\u00e9).
+            Trié par densité artisanale croissante (du désert artisanal au mieux doté).
           </p>
 
           <div className="overflow-x-auto max-h-[600px] overflow-y-auto border border-sand-300 rounded-xl">
@@ -541,9 +534,9 @@ export default function DesertsArtisanauxPage() {
               <thead className="sticky top-0 z-10">
                 <tr className="bg-sand-100 text-charcoal-700">
                   <th className="px-3 py-2.5 text-left font-semibold">#</th>
-                  <th className="px-3 py-2.5 text-left font-semibold">D\u00e9partement</th>
+                  <th className="px-3 py-2.5 text-left font-semibold">Département</th>
                   <th className="px-3 py-2.5 text-left font-semibold hidden md:table-cell">
-                    R\u00e9gion
+                    Région
                   </th>
                   <th className="px-3 py-2.5 text-right font-semibold hidden sm:table-cell">
                     Pop.
@@ -606,7 +599,7 @@ export default function DesertsArtisanauxPage() {
       <section className="py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900 mb-8">
-            Densit\u00e9 artisanale par r\u00e9gion
+            Densité artisanale par région
           </h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -664,13 +657,13 @@ export default function DesertsArtisanauxPage() {
           <div className="flex items-center gap-3 mb-8">
             <Wrench className="w-6 h-6 text-amber-600" />
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900">
-              M\u00e9tiers en tension : les p\u00e9nuries par corps de m\u00e9tier
+              Métiers en tension : les pénuries par corps de métier
             </h2>
           </div>
           <p className="text-charcoal-600 mb-8 max-w-3xl">
-            Selon les donn\u00e9es de la CAPEB et de la FFB (2024-2025), certains m\u00e9tiers du
-            b\u00e2timent sont particuli\u00e8rement en tension. Le pourcentage indique la part des
-            entreprises d\u00e9clarant des difficult\u00e9s de recrutement.
+            Selon les données de la CAPEB et de la FFB (2024-2025), certains métiers du bâtiment
+            sont particulièrement en tension. Le pourcentage indique la part des entreprises
+            déclarant des difficultés de recrutement.
           </p>
 
           <div className="space-y-4">
@@ -706,9 +699,8 @@ export default function DesertsArtisanauxPage() {
           </div>
 
           <p className="mt-6 text-xs text-charcoal-400">
-            Source : CAPEB Chiffres Cl\u00e9s 2024, FFB Observatoire des m\u00e9tiers du BTP
-            2024-2025. Taux de tension = % d&apos;entreprises d\u00e9clarant des difficult\u00e9s de
-            recrutement.
+            Source : CAPEB Chiffres Clés 2024, FFB Observatoire des métiers du BTP 2024-2025. Taux
+            de tension = % d&apos;entreprises déclarant des difficultés de recrutement.
           </p>
         </div>
       </section>
@@ -717,54 +709,52 @@ export default function DesertsArtisanauxPage() {
       <section id="methodology" className="py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900 mb-8">
-            M\u00e9thodologie
+            Méthodologie
           </h2>
 
           <div className="bg-white border border-sand-300 rounded-xl p-6 md:p-8 space-y-6">
             <div>
-              <h3 className="font-semibold text-charcoal-900 mb-2">Sources de donn\u00e9es</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-2">Sources de données</h3>
               <ul className="list-disc list-inside text-charcoal-600 space-y-1 text-sm">
                 <li>
                   <strong>Entreprises artisanales</strong> : registre SIREN/SIRET (INSEE, base
-                  Sirene), crois\u00e9 avec les donn\u00e9es CAPEB Chiffres Cl\u00e9s 2024
-                  (621&nbsp;803 entreprises artisanales du b\u00e2timent) et CMA (chambres des
-                  m\u00e9tiers et de l&apos;artisanat).
+                  Sirene), croisé avec les données CAPEB Chiffres Clés 2024 (621&nbsp;803
+                  entreprises artisanales du bâtiment) et CMA (chambres des métiers et de
+                  l&apos;artisanat).
                 </li>
                 <li>
-                  <strong>Population</strong> : INSEE, populations l\u00e9gales 2024 (mill\u00e9sime
-                  2021).
+                  <strong>Population</strong> : INSEE, populations légales 2024 (millésime 2021).
                 </li>
                 <li>
-                  <strong>Densit\u00e9 artisanale</strong> : Le Moniteur, CMA \u00cele-de-France,
-                  ISM/MAAF Barom\u00e8tre de l&apos;Artisanat 2025, U2P Chiffres Cl\u00e9s 2024.
+                  <strong>Densité artisanale</strong> : Le Moniteur, CMA Île-de-France, ISM/MAAF
+                  Baromètre de l&apos;Artisanat 2025, U2P Chiffres Clés 2024.
                 </li>
                 <li>
-                  <strong>Tensions m\u00e9tiers</strong> : CAPEB, FFB Observatoire des m\u00e9tiers
-                  du BTP 2024-2025.
+                  <strong>Tensions métiers</strong> : CAPEB, FFB Observatoire des métiers du BTP
+                  2024-2025.
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-semibold text-charcoal-900 mb-2">D\u00e9finitions</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-2">Définitions</h3>
               <ul className="list-disc list-inside text-charcoal-600 space-y-1 text-sm">
                 <li>
-                  <strong>Entreprise artisanale</strong> : entreprise inscrite au R\u00e9pertoire
-                  des M\u00e9tiers, toutes activit\u00e9s artisanales confondues (alimentation,
-                  fabrication, services, b\u00e2timent).
+                  <strong>Entreprise artisanale</strong> : entreprise inscrite au Répertoire des
+                  Métiers, toutes activités artisanales confondues (alimentation, fabrication,
+                  services, bâtiment).
                 </li>
                 <li>
                   <strong>BTP</strong> : sous-ensemble des entreprises artisanales dont le code NAF
                   principal est dans la division 41-43 (construction).
                 </li>
                 <li>
-                  <strong>Densit\u00e9 artisanale</strong> : nombre d&apos;entreprises artisanales
-                  pour 10&nbsp;000 habitants.
+                  <strong>Densité artisanale</strong> : nombre d&apos;entreprises artisanales pour
+                  10&nbsp;000 habitants.
                 </li>
                 <li>
-                  <strong>D\u00e9sert artisanal</strong> : d\u00e9partement dont la densit\u00e9
-                  artisanale est inf\u00e9rieure \u00e0 70 % de la moyenne nationale (
-                  {(stats.avgDensity * 0.7).toFixed(1)}).
+                  <strong>Désert artisanal</strong> : département dont la densité artisanale est
+                  inférieure à 70 % de la moyenne nationale ({(stats.avgDensity * 0.7).toFixed(1)}).
                 </li>
               </ul>
             </div>
@@ -773,14 +763,13 @@ export default function DesertsArtisanauxPage() {
               <h3 className="font-semibold text-charcoal-900 mb-2">Limites</h3>
               <ul className="list-disc list-inside text-charcoal-600 space-y-1 text-sm">
                 <li>
-                  Les donn\u00e9es comptent les <em>entreprises</em>, pas les <em>individus</em>.
-                  Une entreprise peut employer plusieurs artisans.
+                  Les données comptent les <em>entreprises</em>, pas les <em>individus</em>. Une
+                  entreprise peut employer plusieurs artisans.
                 </li>
                 <li>Les auto-entrepreneurs artisans sont inclus dans les comptages SIREN.</li>
                 <li>
-                  La densit\u00e9 par habitant ne refl\u00e8te pas la demande r\u00e9elle (qui
-                  d\u00e9pend du parc immobilier, de l&apos;\u00e2ge des logements, du tourisme,
-                  etc.).
+                  La densité par habitant ne reflète pas la demande réelle (qui dépend du parc
+                  immobilier, de l&apos;âge des logements, du tourisme, etc.).
                 </li>
               </ul>
             </div>
@@ -798,17 +787,17 @@ export default function DesertsArtisanauxPage() {
               </div>
               <div className="flex-1">
                 <h2 className="font-heading text-xl font-bold text-primary-800 mb-3">
-                  Source citable pour les m\u00e9dias
+                  Source citable pour les médias
                 </h2>
                 <p className="text-primary-800 text-sm mb-4">
-                  Vous \u00eates journaliste ou blogueur ? Vous pouvez reprendre librement les
-                  donn\u00e9es de cette \u00e9tude en citant la source :
+                  Vous êtes journaliste ou blogueur ? Vous pouvez reprendre librement les données de
+                  cette étude en citant la source :
                 </p>
 
                 <div className="bg-white border border-primary-200 rounded-lg p-4 mb-4">
                   <p className="text-sm text-charcoal-700 font-mono leading-relaxed">
-                    «&nbsp;D\u00e9serts artisanaux en France — \u00c9tude 2026&nbsp;»,
-                    ServicesArtisans, mars 2026.
+                    «&nbsp;Déserts artisanaux en France — Étude 2026&nbsp;», ServicesArtisans, mars
+                    2026.
                     <br />
                     <span className="text-primary-500">{canonicalUrl}</span>
                   </p>
@@ -842,13 +831,11 @@ export default function DesertsArtisanauxPage() {
             <div className="flex items-start gap-4">
               <Download className="w-8 h-8 text-charcoal-400 flex-shrink-0 mt-1" />
               <div>
-                <h2 className="font-heading text-xl font-bold mb-2">
-                  T\u00e9l\u00e9charger les donn\u00e9es
-                </h2>
+                <h2 className="font-heading text-xl font-bold mb-2">Télécharger les données</h2>
                 <p className="text-charcoal-400 text-sm mb-4">
-                  Les donn\u00e9es brutes de cette \u00e9tude sont accessibles via notre API
-                  publique. Vous pouvez \u00e9galement r\u00e9utiliser le tableau complet ci-dessus
-                  (licence CC BY 4.0, avec mention de la source).
+                  Les données brutes de cette étude sont accessibles via notre API publique. Vous
+                  pouvez également réutiliser le tableau complet ci-dessus (licence CC BY 4.0, avec
+                  mention de la source).
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link
@@ -856,14 +843,14 @@ export default function DesertsArtisanauxPage() {
                     className="inline-flex items-center gap-2 bg-white text-charcoal-900 text-sm font-medium px-4 py-2 rounded-lg hover:bg-sand-100 transition-colors"
                   >
                     <BarChart3 className="w-4 h-4" />
-                    Barom\u00e8tre des artisans
+                    Baromètre des artisans
                   </Link>
                   <Link
                     href="/departements"
                     className="inline-flex items-center gap-2 bg-charcoal-800 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-charcoal-700 transition-colors border border-charcoal-700"
                   >
                     <MapPin className="w-4 h-4" />
-                    Annuaire par d\u00e9partement
+                    Annuaire par département
                   </Link>
                 </div>
               </div>
@@ -876,7 +863,7 @@ export default function DesertsArtisanauxPage() {
       <section className="py-12 md:py-16 bg-white border-t">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">
-            Explorer par d\u00e9partement
+            Explorer par département
           </h2>
           <div className="flex flex-wrap gap-2">
             {rankings.slice(0, 20).map((d) => (
@@ -893,13 +880,13 @@ export default function DesertsArtisanauxPage() {
               href="/departements"
               className="inline-flex items-center gap-1.5 bg-primary-500 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-primary-600 transition-colors"
             >
-              Tous les d\u00e9partements
+              Tous les départements
               <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
           <h3 className="font-heading text-lg font-bold text-charcoal-900 mt-8 mb-4">
-            M\u00e9tiers les plus recherch\u00e9s
+            Métiers les plus recherchés
           </h3>
           <div className="flex flex-wrap gap-2">
             {services.slice(0, 15).map((s) => (

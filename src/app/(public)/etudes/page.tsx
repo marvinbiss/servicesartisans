@@ -9,16 +9,16 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 const canonicalUrl = `${SITE_URL}/etudes`
 
 export const metadata: Metadata = {
-  title: '\u00c9tudes et donn\u00e9es sur l\u2019artisanat en France',
+  title: 'Études et données sur l’artisanat en France',
   description:
-    '\u00c9tudes exclusives sur l\u2019artisanat en France : d\u00e9serts artisanaux, densit\u00e9 par d\u00e9partement, m\u00e9tiers en tension. Donn\u00e9es SIREN officielles.',
+    'Études exclusives sur l’artisanat en France : déserts artisanaux, densité par département, métiers en tension. Données SIREN officielles.',
   alternates: getAlternates('/etudes'),
   robots: { index: true, follow: true },
   openGraph: {
     locale: 'fr_FR',
-    title: `\u00c9tudes et donn\u00e9es | ${SITE_NAME}`,
+    title: `Études et données | ${SITE_NAME}`,
     description:
-      '\u00c9tudes exclusives sur l\u2019artisanat en France. Donn\u00e9es officielles, analyses par d\u00e9partement et par m\u00e9tier.',
+      'Études exclusives sur l’artisanat en France. Données officielles, analyses par département et par métier.',
     url: canonicalUrl,
     type: 'website',
     images: [
@@ -26,14 +26,14 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: `\u00c9tudes artisanat \u2014 ${SITE_NAME}`,
+        alt: `Études artisanat — ${SITE_NAME}`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `\u00c9tudes et donn\u00e9es | ${SITE_NAME}`,
-    description: '\u00c9tudes exclusives sur l\u2019artisanat en France.',
+    title: `Études et données | ${SITE_NAME}`,
+    description: 'Études exclusives sur l’artisanat en France.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -43,10 +43,10 @@ export const revalidate = 86400
 const studies = [
   {
     slug: 'deserts-artisanaux',
-    title: 'D\u00e9serts artisanaux : la carte des d\u00e9partements en manque d\u2019artisans',
+    title: 'Déserts artisanaux : la carte des départements en manque d’artisans',
     date: '28 mars 2026',
     description:
-      'Analyse de la densit\u00e9 artisanale dans les 101 d\u00e9partements fran\u00e7ais. Classement complet, top 10 des d\u00e9serts, m\u00e9tiers en tension.',
+      'Analyse de la densité artisanale dans les 101 départements français. Classement complet, top 10 des déserts, métiers en tension.',
     icon: MapPin,
     color: 'bg-red-50 text-red-600 border-red-200',
   },
@@ -55,7 +55,7 @@ const studies = [
 export default function EtudesPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: '\u00c9tudes', url: '/etudes' },
+    { name: 'Études', url: '/etudes' },
   ])
 
   return (
@@ -64,16 +64,14 @@ export default function EtudesPage() {
 
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <Breadcrumb items={[{ label: '\u00c9tudes' }]} className="mb-4" />
+          <Breadcrumb items={[{ label: 'Études' }]} className="mb-4" />
           <div className="flex items-center gap-3 mb-4">
             <BarChart3 className="w-8 h-8 text-primary-500" />
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              \u00c9tudes et donn\u00e9es
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">Études et données</h1>
           </div>
           <p className="text-lg text-charcoal-600 max-w-2xl">
-            Analyses exclusives sur l&apos;artisanat en France, bas\u00e9es sur les donn\u00e9es
-            SIREN officielles et les statistiques des chambres des m\u00e9tiers.
+            Analyses exclusives sur l&apos;artisanat en France, basées sur les données SIREN
+            officielles et les statistiques des chambres des métiers.
           </p>
         </div>
       </section>

@@ -46,8 +46,8 @@ interface MatchedProvider {
 /** Budget option value → human-readable label */
 const budgetLabels: Record<string, string> = {
   'moins-500': 'Moins de 500 €',
-  '500-2000': '500\u20112 000 €',
-  '2000-5000': '2 000\u20115 000 €',
+  '500-2000': '500‑2 000 €',
+  '2000-5000': '2 000‑5 000 €',
   'plus-5000': 'Plus de 5 000 €',
   'ne-sais-pas': 'Je ne sais pas',
 }
@@ -399,7 +399,7 @@ export default function DevisConfirmation({
               {[
                 'Facture des travaux',
                 'Photos avant/après les travaux (avec géolocalisation activée)',
-                'Attestation sur l\u2019honneur signée',
+                'Attestation sur l’honneur signée',
                 'Justificatif de propriété ou bail',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
@@ -601,7 +601,7 @@ export default function DevisConfirmation({
           >
             <ThumbsUp className="w-4 h-4 text-primary-500 flex-shrink-0" />
             <span className={`text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
-              Lire les avis de {serviceLabel.toLowerCase()}s {'\u00e0'} {city}
+              Lire les avis de {serviceLabel.toLowerCase()}s {'à'} {city}
             </span>
           </Link>
           <Link
@@ -610,7 +610,7 @@ export default function DevisConfirmation({
           >
             <FileText className="w-4 h-4 text-primary-500 flex-shrink-0" />
             <span className={`text-charcoal-700 ${compact ? 'text-xs' : 'text-sm'}`}>
-              Consulter les tarifs {serviceLabel.toLowerCase()} {'\u00e0'} {city}
+              Consulter les tarifs {serviceLabel.toLowerCase()} {'à'} {city}
             </span>
           </Link>
           <Link

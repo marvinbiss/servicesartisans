@@ -98,7 +98,7 @@ export default function FooterClusterLinks() {
     { href: '/rge/qualifications', label: 'Qualifications RGE' },
     { href: '/cee/coup-de-pouce-2026', label: 'Coup de pouce 2026' },
     { href: '/cee/mandataire-vs-direct', label: 'Mandataire vs direct' },
-    { href: '/maprimerenov-cumulaison-cee', label: 'Cumul MaPrimeRénov\u2019 & CEE' },
+    { href: '/maprimerenov-cumulaison-cee', label: 'Cumul MaPrimeRénov’ & CEE' },
     { href: '/rge/comment-devenir-rge', label: 'Devenir artisan RGE' },
     { href: '/rge/fraude-rge-comment-verifier', label: 'Vérifier un RGE' },
     { href: '/rge/tarifs-audit-energetique', label: 'Tarifs audit énergétique' },

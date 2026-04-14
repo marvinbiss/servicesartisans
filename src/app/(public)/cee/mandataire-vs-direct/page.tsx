@@ -486,7 +486,7 @@ export default function MandataireVsDirectPage() {
               text: "Lisez attentivement le contrat de mandat proposé&nbsp;: durée, conditions de résiliation, rémunération, exclusivité ou non, identité du délégataire partenaire. Un contrat flou ou l'absence de mention explicite du statut de mandataire sont des signaux d'alerte.",
             },
             {
-              title: 'Attestation sur l\u2019honneur pré-remplie',
+              title: 'Attestation sur l’honneur pré-remplie',
               text: "Refusez de signer une attestation sur l'honneur pré-remplie dont vous n'avez pas vérifié chaque ligne (performance de l'équipement, surface isolée, résistance thermique). C'est un document juridiquement engageant&nbsp;: des déclarations inexactes peuvent entra&icirc;ner un redressement, voire des poursuites pour fraude.",
             },
             {
@@ -494,7 +494,7 @@ export default function MandataireVsDirectPage() {
               text: "Recoupez les avis sur plusieurs sources indépendantes (Signal-Arnaques, forums de consommateurs, Trustpilot en vérifiant les avis suspects). Un volume d'avis négatifs convergents sur des problèmes de délai de paiement ou de contrat opaque doit faire redémarrer l'analyse.",
             },
             {
-              title: 'Respect de l\u2019interdiction du démarchage',
+              title: 'Respect de l’interdiction du démarchage',
               text: "Depuis la loi du 24 juillet 2020, le démarchage téléphonique est interdit pour les travaux d'économies d'énergie. Un acteur qui vous appelle sans sollicitation préalable pour vous proposer une prime est, par construction, hors-la-loi&nbsp;: ne lui confiez aucun dossier.",
             },
           ].map((item, i) => (
@@ -594,7 +594,7 @@ export default function MandataireVsDirectPage() {
         </ul>
       </section>
 
-      {/* CTA inline - page de d\u00e9cision */}
+      {/* CTA inline - page de décision */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <CeeCTA variant="inline" />
       </div>

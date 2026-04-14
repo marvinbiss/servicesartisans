@@ -16,7 +16,7 @@ const trustPoints: TrustPoint[] = [
   },
   {
     icon: <Shield className="h-4 w-4 text-primary-600 shrink-0" aria-hidden="true" />,
-    label: 'Artisans v\u00e9rifi\u00e9s SIREN',
+    label: 'Artisans vérifiés SIREN',
   },
   {
     icon: <Star className="h-4 w-4 text-primary-600 shrink-0" aria-hidden="true" />,

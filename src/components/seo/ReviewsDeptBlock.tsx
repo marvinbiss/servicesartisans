@@ -56,7 +56,7 @@ function StarRating({ rating }: { rating: number }) {
 
 /** Extract first name from full name, or fallback */
 function displayAuthor(authorName: string | null): string {
-  if (!authorName || authorName.trim().length === 0) return 'Client v\u00e9rifi\u00e9'
+  if (!authorName || authorName.trim().length === 0) return 'Client vérifié'
   const firstName = authorName.trim().split(/\s+/)[0]
   return firstName.charAt(0).toUpperCase() + firstName.slice(1)
 }
@@ -64,7 +64,7 @@ function displayAuthor(authorName: string | null): string {
 /** Truncate text to maxLen chars with ellipsis */
 function truncate(text: string, maxLen: number): string {
   if (text.length <= maxLen) return text
-  return text.slice(0, maxLen).trimEnd() + '\u2026'
+  return text.slice(0, maxLen).trimEnd() + '…'
 }
 
 /** Relative date in French */
@@ -117,7 +117,7 @@ export default function ReviewsDeptBlock({
               {stats.avg_rating.toFixed(1)}
             </span>
             <span className="text-sm text-charcoal-500">
-              ({stats.review_count} avis v{'\u00e9'}rifi{'\u00e9'}
+              ({stats.review_count} avis v{'é'}rifi{'é'}
               {stats.review_count > 1 ? 's' : ''})
             </span>
           </div>

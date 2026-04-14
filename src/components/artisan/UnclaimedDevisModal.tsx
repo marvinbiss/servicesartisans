@@ -96,9 +96,9 @@ const DEFAULT_SERVICES = [
 ]
 
 const URGENCY_OPTIONS = [
-  { value: 'urgent', label: 'Urgent', icon: '\uD83D\uDD34' },
-  { value: 'semaine', label: 'Cette semaine', icon: '\uD83D\uDFE0' },
-  { value: 'flexible', label: 'Flexible', icon: '\uD83D\uDFE2' },
+  { value: 'urgent', label: 'Urgent', icon: '🔴' },
+  { value: 'semaine', label: 'Cette semaine', icon: '🟠' },
+  { value: 'flexible', label: 'Flexible', icon: '🟢' },
 ]
 
 // ---------------------------------------------------------------------------
@@ -267,6 +267,7 @@ export function UnclaimedDevisModal({
     } finally {
       setSubmitting(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [telephone, consent, submitting, specialtySlug, urgency, city, serviceType, citySlug])
 
   if (!isOpen) return null

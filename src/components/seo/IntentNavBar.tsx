@@ -57,7 +57,7 @@ export default function IntentNavBar({
 }: IntentNavBarProps) {
   return (
     <nav
-      aria-label={`Navigation ${serviceName} \u00e0 ${villeName}`}
+      aria-label={`Navigation ${serviceName} à ${villeName}`}
       className="sticky top-[64px] z-30 bg-white border-b border-sand-200 shadow-sm"
     >
       <div className="max-w-5xl mx-auto px-4">
@@ -74,8 +74,8 @@ export default function IntentNavBar({
             // Badge for Avis tab
             if (intent === 'avis' && avgRating && avgRating > 0) {
               badge = reviewCount
-                ? `\u2605${avgRating.toFixed(1)} (${reviewCount})`
-                : `\u2605${avgRating.toFixed(1)}`
+                ? `★${avgRating.toFixed(1)} (${reviewCount})`
+                : `★${avgRating.toFixed(1)}`
             }
 
             if (isCurrent) {

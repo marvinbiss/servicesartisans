@@ -40,7 +40,7 @@ function getServiceDPEContext(serviceName: string, pct: number, villeName: strin
   if (s.includes('chauffag') || s.includes('pompe')) {
     return `${pct}\u00A0% des logements à ${villeName} sont des passoires énergétiques. Le remplacement du système de chauffage par une solution performante (PAC, chaudière à condensation) est un levier majeur pour améliorer le DPE.`
   }
-  if (s.includes('menuisier') || s.includes('fen\u00EAtr')) {
+  if (s.includes('menuisier') || s.includes('fenêtr')) {
     return `${pct}\u00A0% de passoires énergétiques à ${villeName} signifient une forte demande de remplacement de menuiseries. Le passage au double ou triple vitrage améliore significativement le DPE.`
   }
   if (s.includes('couv') || s.includes('charpent')) {
@@ -49,7 +49,7 @@ function getServiceDPEContext(serviceName: string, pct: number, villeName: strin
   if (s.includes('plomb')) {
     return `${pct}\u00A0% de passoires énergétiques à ${villeName} incluent souvent des systèmes d'eau chaude vétustes. Un plombier peut installer un chauffe-eau thermodynamique pour améliorer le DPE.`
   }
-  if (s.includes('\u00E9lectric')) {
+  if (s.includes('électric')) {
     return `${pct}\u00A0% de passoires énergétiques à ${villeName} nécessitent souvent une mise aux normes électrique lors de la rénovation globale. L'éclairage LED et la domotique contribuent aussi au DPE.`
   }
 
@@ -68,7 +68,7 @@ function getRenovationDemandContext(
   // MaPrimeRénov context
   if (communeData.nb_maprimerenov_annuel && communeData.nb_maprimerenov_annuel > 0) {
     parts.push(
-      `${formatNumber(communeData.nb_maprimerenov_annuel)} dossiers MaPrimeR\u00E9nov\u2019 sont déposés chaque année à ${villeName}, témoignant d\u2019une dynamique active de rénovation énergétique`
+      `${formatNumber(communeData.nb_maprimerenov_annuel)} dossiers MaPrimeRénov’ sont déposés chaque année à ${villeName}, témoignant d’une dynamique active de rénovation énergétique`
     )
   }
 
@@ -110,9 +110,9 @@ function getDPERecommendation(
   if (pct >= 25) {
     const aidePart =
       revenuMedian != null && revenuMedian <= 21805
-        ? ' Les ménages de cette commune peuvent prétendre aux aides maximales (MaPrimeR\u00E9nov\u2019 S\u00E9r\u00E9nit\u00E9 + CEE bonifi\u00E9s).'
+        ? ' Les ménages de cette commune peuvent prétendre aux aides maximales (MaPrimeRénov’ Sérénité + CEE bonifiés).'
         : revenuMedian != null && revenuMedian <= 30549
-          ? ' Les aides MaPrimeR\u00E9nov\u2019 et CEE sont accessibles pour la majorit\u00E9 des foyers.'
+          ? ' Les aides MaPrimeRénov’ et CEE sont accessibles pour la majorité des foyers.'
           : ''
     if (
       s.includes('isolation') ||
@@ -120,9 +120,9 @@ function getDPERecommendation(
       s.includes('pompe') ||
       s.includes('menuisier')
     ) {
-      return `Recommandation\u00A0: avec un taux de passoires aussi \u00E9lev\u00E9, un audit \u00E9nerg\u00E9tique pr\u00E9alable permet de prioriser les travaux de ${s} les plus rentables.${aidePart}`
+      return `Recommandation\u00A0: avec un taux de passoires aussi élevé, un audit énergétique préalable permet de prioriser les travaux de ${s} les plus rentables.${aidePart}`
     }
-    return `Avec ce taux de logements mal class\u00E9s, les travaux de ${s} s\u2019inscrivent souvent dans un projet de r\u00E9novation \u00E9nerg\u00E9tique globale.${aidePart}`
+    return `Avec ce taux de logements mal classés, les travaux de ${s} s’inscrivent souvent dans un projet de rénovation énergétique globale.${aidePart}`
   }
 
   return null

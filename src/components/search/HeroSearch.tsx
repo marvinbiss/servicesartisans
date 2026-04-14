@@ -133,11 +133,7 @@ const services = [
 
 // ── Normalize text (strip accents, lowercase) ───────────────────────
 function normalizeText(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
+  return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
 }
 
 // ── Format population for display ───────────────────────────────────

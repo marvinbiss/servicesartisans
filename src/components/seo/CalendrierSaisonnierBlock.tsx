@@ -38,17 +38,17 @@ function getCurrentMonthIndex(): number {
 
 const MONTH_NAMES_CAL = [
   'janvier',
-  'f\u00E9vrier',
+  'février',
   'mars',
   'avril',
   'mai',
   'juin',
   'juillet',
-  'ao\u00FBt',
+  'août',
   'septembre',
   'octobre',
   'novembre',
-  'd\u00E9cembre',
+  'décembre',
 ]
 
 /** Generate city-specific weather context paragraph */
@@ -69,15 +69,15 @@ function getCityWeatherContext(
   if (joursGel != null && joursGel > 0) {
     if (joursGel > 60) {
       parts.push(
-        `les temp\u00E9ratures descendent sous 0\u00A0\u00B0C en moyenne ${joursGel} jours par an, rendant les interventions ext\u00E9rieures de ${s} complexes en hiver`
+        `les températures descendent sous 0\u00A0\u00B0C en moyenne ${joursGel} jours par an, rendant les interventions extérieures de ${s} complexes en hiver`
       )
     } else if (joursGel > 20) {
       parts.push(
-        `${joursGel} jours de gel par an n\u00E9cessitent d\u2019anticiper les travaux ext\u00E9rieurs de ${s} avant les premi\u00E8res gel\u00E9es`
+        `${joursGel} jours de gel par an nécessitent d’anticiper les travaux extérieurs de ${s} avant les premières gelées`
       )
     } else {
       parts.push(
-        `avec seulement ${joursGel} jours de gel par an, les travaux de ${s} en ext\u00E9rieur restent possibles une grande partie de l\u2019ann\u00E9e`
+        `avec seulement ${joursGel} jours de gel par an, les travaux de ${s} en extérieur restent possibles une grande partie de l’année`
       )
     }
   }
@@ -85,11 +85,11 @@ function getCityWeatherContext(
   if (precipitations != null && precipitations > 0) {
     if (precipitations > 1000) {
       parts.push(
-        `la pluviom\u00E9trie \u00E9lev\u00E9e (${Math.round(precipitations)}\u00A0mm/an) impose de prot\u00E9ger les chantiers et de privil\u00E9gier les mat\u00E9riaux r\u00E9sistants \u00E0 l\u2019humidit\u00E9`
+        `la pluviométrie élevée (${Math.round(precipitations)}\u00A0mm/an) impose de protéger les chantiers et de privilégier les matériaux résistants à l’humidité`
       )
     } else if (precipitations < 600) {
       parts.push(
-        `la faible pluviom\u00E9trie (${Math.round(precipitations)}\u00A0mm/an) est favorable aux travaux ext\u00E9rieurs mais impose une vigilance sur la s\u00E9cheresse des mat\u00E9riaux`
+        `la faible pluviométrie (${Math.round(precipitations)}\u00A0mm/an) est favorable aux travaux extérieurs mais impose une vigilance sur la sécheresse des matériaux`
       )
     }
   }
@@ -99,7 +99,7 @@ function getCityWeatherContext(
     const finLabel = MONTH_NAMES_CAL[moisFin - 1] || ''
     if (debutLabel && finLabel) {
       parts.push(
-        `la fen\u00EAtre optimale pour les travaux ext\u00E9rieurs s\u2019\u00E9tend de ${debutLabel} \u00E0 ${finLabel}`
+        `la fenêtre optimale pour les travaux extérieurs s’\u00E9tend de ${debutLabel} à ${finLabel}`
       )
     }
   }
@@ -108,20 +108,20 @@ function getCityWeatherContext(
     const amplitude = Math.round(tempEte - tempHiver)
     if (amplitude > 20) {
       parts.push(
-        `l\u2019amplitude thermique de ${amplitude}\u00A0\u00B0C entre hiver (${Math.round(tempHiver)}\u00A0\u00B0C) et \u00E9t\u00E9 (${Math.round(tempEte)}\u00A0\u00B0C) sollicite fortement les mat\u00E9riaux et justifie un entretien r\u00E9gulier`
+        `l’amplitude thermique de ${amplitude}\u00A0\u00B0C entre hiver (${Math.round(tempHiver)}\u00A0\u00B0C) et été (${Math.round(tempEte)}\u00A0\u00B0C) sollicite fortement les matériaux et justifie un entretien régulier`
       )
     }
   }
 
   if (altitude != null && altitude > 800) {
     parts.push(
-      `l\u2019altitude de ${Math.round(altitude)}\u00A0m impose des contraintes sp\u00E9cifiques : pression atmosph\u00E9rique r\u00E9duite, UV intenses et acc\u00E8s parfois difficile en hiver`
+      `l’altitude de ${Math.round(altitude)}\u00A0m impose des contraintes spécifiques : pression atmosphérique réduite, UV intenses et accès parfois difficile en hiver`
     )
   }
 
   if (parts.length === 0) return null
 
-  return `\u00C0 ${villeName}, ${parts.join('. De plus, ')}.`
+  return `À ${villeName}, ${parts.join('. De plus, ')}.`
 }
 
 function getClimatTip(climatZone: string | null): string | null {
@@ -132,7 +132,7 @@ function getClimatTip(climatZone: string | null): string | null {
       default:
         'Le climat océanique offre des hivers doux mais humides. Privilégiez les travaux extérieurs entre avril et octobre.',
       hiver:
-        'L\u2019humidité océanique hivernale complique le séchage des enduits et peintures extérieures. Planifiez les travaux intérieurs.',
+        'L’humidité océanique hivernale complique le séchage des enduits et peintures extérieures. Planifiez les travaux intérieurs.',
       ete: 'Les étés tempérés du climat océanique sont idéaux pour les travaux extérieurs, avec peu de risque de canicule.',
     },
     continental: {
@@ -144,7 +144,7 @@ function getClimatTip(climatZone: string | null): string | null {
     },
     mediterraneen: {
       default:
-        'Le climat méditerranéen permet des travaux extérieurs presque toute l\u2019année, avec une pause en plein été pour la chaleur.',
+        'Le climat méditerranéen permet des travaux extérieurs presque toute l’année, avec une pause en plein été pour la chaleur.',
       hiver:
         'Les hivers doux méditerranéens permettent de poursuivre la plupart des travaux extérieurs.',
       ete: 'Attention aux températures élevées qui accélèrent le séchage du béton et des enduits. Travaillez tôt le matin.',
@@ -153,7 +153,7 @@ function getClimatTip(climatZone: string | null): string | null {
       default:
         'Le climat montagnard réduit la fenêtre de travaux extérieurs à mai-septembre. Anticipez les délais.',
       hiver:
-        'L\u2019enneigement et le gel prolongé limitent drastiquement les travaux. Préparez les chantiers pour le printemps.',
+        'L’enneigement et le gel prolongé limitent drastiquement les travaux. Préparez les chantiers pour le printemps.',
       ete: 'La belle saison en montagne est courte mais intense. Concentrez les chantiers extérieurs entre juin et septembre.',
     },
     'semi-oceanique': {

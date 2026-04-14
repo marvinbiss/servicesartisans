@@ -27,7 +27,7 @@ const path = '/devenir-partenaire-cee'
 export const metadata: Metadata = {
   title: 'Devenir partenaire CEE — Leads exclusifs et gestion des primes pour artisans RGE',
   description:
-    'Programme partenaire CEE pour artisans RGE : leads exclusifs (1 demande = 1 artisan), gestion des primes \u00e9nergie, z\u00e9ro engagement. Inscription gratuite, 0 \u20ac de commission en phase de lancement.',
+    'Programme partenaire CEE pour artisans RGE : leads exclusifs (1 demande = 1 artisan), gestion des primes énergie, zéro engagement. Inscription gratuite, 0 € de commission en phase de lancement.',
   robots: {
     index: true,
     follow: true,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Devenir partenaire CEE — Leads exclusifs pour artisans RGE',
     description:
-      "Leads exclusifs, gestion des primes CEE, z\u00e9ro engagement. Le programme partenaire qui respecte l'artisan.",
+      "Leads exclusifs, gestion des primes CEE, zéro engagement. Le programme partenaire qui respecte l'artisan.",
     type: 'website',
     locale: 'fr_FR',
     url: `${SITE_URL}${path}`,
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Devenir partenaire CEE — Leads exclusifs pour artisans RGE',
     description:
-      "Leads exclusifs, gestion des primes CEE, z\u00e9ro engagement. Le programme partenaire qui respecte l'artisan.",
+      "Leads exclusifs, gestion des primes CEE, zéro engagement. Le programme partenaire qui respecte l'artisan.",
   },
   alternates: getAlternates(path),
 }
@@ -62,11 +62,11 @@ const BENEFITS = [
     icon: Lock,
     title: '1 demande = 1 artisan',
     description:
-      'Chaque lead vous est envoy\u00e9 en exclusivit\u00e9. Jamais partag\u00e9 avec 5 concurrents comme chez Habitatpresto ou Travaux.com. Vous ne courez plus apr\u00e8s le prospect.',
+      'Chaque lead vous est envoyé en exclusivité. Jamais partagé avec 5 concurrents comme chez Habitatpresto ou Travaux.com. Vous ne courez plus après le prospect.',
   },
   {
     icon: Euro,
-    title: '0 \u20ac en phase de lancement',
+    title: '0 € en phase de lancement',
     description:
       "Pas d'abonnement, pas de commission, pas d'engagement pendant la phase de rodage. Vous testez le service sans risque financier.",
   },
@@ -74,44 +74,44 @@ const BENEFITS = [
     icon: FileCheck2,
     title: 'Gestion des primes CEE',
     description:
-      'On monte les dossiers CEE pour vous. Vous vous concentrez sur le chantier, on g\u00e8re la paperasse et le suivi aupr\u00e8s du d\u00e9l\u00e9gataire.',
+      'On monte les dossiers CEE pour vous. Vous vous concentrez sur le chantier, on gère la paperasse et le suivi auprès du délégataire.',
   },
   {
     icon: ShieldCheck,
     title: 'Fiche pro enrichie',
     description:
-      "Votre fiche artisan avec vos qualifications RGE, vos avis clients v\u00e9rifi\u00e9s et votre zone d'intervention. Vous gardez votre marque et votre identit\u00e9.",
+      "Votre fiche artisan avec vos qualifications RGE, vos avis clients vérifiés et votre zone d'intervention. Vous gardez votre marque et votre identité.",
   },
   {
     icon: BarChart3,
-    title: 'Suivi temps r\u00e9el',
+    title: 'Suivi temps réel',
     description:
-      "Dashboard artisan : suivez vos leads, vos devis, le statut de vos dossiers CEE et vos paiements en un coup d'\u0153il.",
+      "Dashboard artisan : suivez vos leads, vos devis, le statut de vos dossiers CEE et vos paiements en un coup d'œil.",
   },
   {
     icon: Target,
-    title: 'Leads g\u00e9olocalis\u00e9s',
+    title: 'Leads géolocalisés',
     description:
-      "Recevez uniquement des demandes dans votre zone d'intervention. Pas de leads \u00e0 2h de route. Pas de projets fantaisistes.",
+      "Recevez uniquement des demandes dans votre zone d'intervention. Pas de leads à 2h de route. Pas de projets fantaisistes.",
   },
 ]
 
 const STEPS = [
   {
     name: 'Inscription en 2 minutes',
-    text: 'Entrez votre SIRET. On r\u00e9cup\u00e8re automatiquement vos qualifications RGE depuis la base ADEME : raison sociale, adresse, certifications en cours de validit\u00e9. Z\u00e9ro paperasse.',
+    text: 'Entrez votre SIRET. On récupère automatiquement vos qualifications RGE depuis la base ADEME : raison sociale, adresse, certifications en cours de validité. Zéro paperasse.',
   },
   {
     name: 'Validation de votre profil',
-    text: 'On v\u00e9rifie que votre qualification RGE est active et que votre assurance d\u00e9cennale est \u00e0 jour. D\u00e9lai : 24 \u00e0 48h ouvr\u00e9es.',
+    text: 'On vérifie que votre qualification RGE est active et que votre assurance décennale est à jour. Délai : 24 à 48h ouvrées.',
   },
   {
     name: 'Premier lead sous 7 jours',
-    text: 'Votre fiche est publi\u00e9e sur ServicesArtisans. Les demandes de devis dans votre zone et votre m\u00e9tier vous sont envoy\u00e9es en exclusivit\u00e9.',
+    text: 'Votre fiche est publiée sur ServicesArtisans. Les demandes de devis dans votre zone et votre métier vous sont envoyées en exclusivité.',
   },
   {
-    name: 'Chantier CEE \u00e9ligible ? On g\u00e8re',
-    text: "Pour chaque chantier \u00e9ligible aux primes CEE, on monte le dossier complet : attestation sur l'honneur, pi\u00e8ces justificatives, soumission au d\u00e9l\u00e9gataire. Vous n'avez rien \u00e0 faire.",
+    name: 'Chantier CEE éligible ? On gère',
+    text: "Pour chaque chantier éligible aux primes CEE, on monte le dossier complet : attestation sur l'honneur, pièces justificatives, soumission au délégataire. Vous n'avez rien à faire.",
   },
 ]
 
@@ -121,75 +121,75 @@ const COMPARISONS = [
     us: true,
     them: false,
     detail: '1 lead = 1 artisan',
-    detailThem: 'Partag\u00e9 entre 3 \u00e0 10 artisans',
+    detailThem: 'Partagé entre 3 à 10 artisans',
   },
   {
-    label: 'Co\u00fbt mensuel',
+    label: 'Coût mensuel',
     us: true,
     them: false,
-    detail: '0 \u20ac (phase de lancement)',
-    detailThem: '70 \u00e0 220 \u20ac/mois (Habitatpresto)',
+    detail: '0 € (phase de lancement)',
+    detailThem: '70 à 220 €/mois (Habitatpresto)',
   },
   {
     label: 'Engagement',
     us: true,
     them: false,
-    detail: 'Z\u00e9ro engagement',
-    detailThem: '6 \u00e0 12 mois',
+    detail: 'Zéro engagement',
+    detailThem: '6 à 12 mois',
   },
   {
     label: 'Gestion primes CEE',
     us: true,
     them: false,
     detail: 'Montage dossier inclus',
-    detailThem: 'Non propos\u00e9',
+    detailThem: 'Non proposé',
   },
   {
     label: 'Fiche artisan enrichie',
     us: true,
     them: false,
     detail: 'Avis, qualifs RGE, portfolio',
-    detailThem: 'Nom + t\u00e9l\u00e9phone uniquement',
+    detailThem: 'Nom + téléphone uniquement',
   },
   {
-    label: 'Donn\u00e9es ADEME int\u00e9gr\u00e9es',
+    label: 'Données ADEME intégrées',
     us: true,
     them: false,
-    detail: 'Qualifications RGE v\u00e9rifi\u00e9es automatiquement',
-    detailThem: 'D\u00e9claratif',
+    detail: 'Qualifications RGE vérifiées automatiquement',
+    detailThem: 'Déclaratif',
   },
 ]
 
 const ELIGIBLE_OPERATIONS = [
   {
     code: 'BAR-TH-171',
-    nom: 'Pompe \u00e0 chaleur air/eau',
-    prime: '2 500 \u00e0 5 000 \u20ac',
+    nom: 'Pompe à chaleur air/eau',
+    prime: '2 500 à 5 000 €',
   },
   {
     code: 'BAR-TH-172',
-    nom: 'Pompe \u00e0 chaleur eau/eau',
-    prime: '2 500 \u00e0 5 000 \u20ac',
+    nom: 'Pompe à chaleur eau/eau',
+    prime: '2 500 à 5 000 €',
   },
   {
     code: 'BAR-EN-101',
     nom: 'Isolation des combles perdus',
-    prime: '900 \u00e0 2 700 \u20ac',
+    prime: '900 à 2 700 €',
   },
   {
     code: 'BAR-EN-103',
     nom: 'Isolation des planchers bas',
-    prime: '900 \u00e0 2 700 \u20ac',
+    prime: '900 à 2 700 €',
   },
   {
     code: 'BAR-TH-113',
-    nom: 'Chaudi\u00e8re biomasse',
-    prime: '2 500 \u00e0 5 500 \u20ac',
+    nom: 'Chaudière biomasse',
+    prime: '2 500 à 5 500 €',
   },
   {
     code: 'BAR-TH-112',
-    nom: 'Po\u00eale \u00e0 bois / granul\u00e9s',
-    prime: '800 \u00e0 2 000 \u20ac',
+    nom: 'Poêle à bois / granulés',
+    prime: '800 à 2 000 €',
   },
 ]
 
@@ -197,42 +197,42 @@ const FAQS = [
   {
     question: 'Qui peut devenir partenaire CEE sur ServicesArtisans\u00a0?',
     answer:
-      "Tout artisan ou entreprise du b\u00e2timent disposant d'une qualification RGE active (Qualibat, Qualit'EnR, Qualifelec ou \u00e9quivalent) et d'une assurance d\u00e9cennale \u00e0 jour. Pas de condition d'anciennet\u00e9 ni de chiffre d'affaires minimum.",
+      "Tout artisan ou entreprise du bâtiment disposant d'une qualification RGE active (Qualibat, Qualit'EnR, Qualifelec ou équivalent) et d'une assurance décennale à jour. Pas de condition d'ancienneté ni de chiffre d'affaires minimum.",
   },
   {
-    question: 'Combien co\u00fbte le programme partenaire\u00a0?',
+    question: 'Combien coûte le programme partenaire\u00a0?',
     answer:
-      "0 \u20ac pendant la phase de lancement. Aucun abonnement, aucune commission, aucun engagement. L'objectif est de prouver la valeur du service avant toute mon\u00e9tisation. \u00c0 terme, la commission sur les primes CEE sera de 10 \u00e0 15\u00a0% du montant de la prime, jamais pr\u00e9lev\u00e9e sur le devis de l'artisan.",
+      "0 € pendant la phase de lancement. Aucun abonnement, aucune commission, aucun engagement. L'objectif est de prouver la valeur du service avant toute monétisation. À terme, la commission sur les primes CEE sera de 10 à 15\u00a0% du montant de la prime, jamais prélevée sur le devis de l'artisan.",
   },
   {
-    question: 'Que signifie \u00ab\u00a0leads exclusifs\u00a0\u00bb concr\u00e8tement\u00a0?',
+    question: 'Que signifie «\u00a0leads exclusifs\u00a0\u00bb concrètement\u00a0?',
     answer:
-      "Chaque demande de devis est envoy\u00e9e \u00e0 un seul artisan. Pas 3, pas 5, pas 10. Un seul. C'est notre r\u00e8gle non-n\u00e9gociable. Vous ne perdez plus de temps en comp\u00e9tition avec d'autres artisans sur le m\u00eame prospect.",
+      "Chaque demande de devis est envoyée à un seul artisan. Pas 3, pas 5, pas 10. Un seul. C'est notre règle non-négociable. Vous ne perdez plus de temps en compétition avec d'autres artisans sur le même prospect.",
   },
   {
     question: 'Comment fonctionne la gestion des primes CEE\u00a0?',
     answer:
-      "Apr\u00e8s chaque chantier \u00e9ligible, vous nous transmettez la facture et les pi\u00e8ces (attestation sur l'honneur, photos avant/apr\u00e8s). On monte le dossier complet, on le soumet au d\u00e9l\u00e9gataire CEE et on suit le traitement jusqu'au paiement. Vous recevez la prime sur votre compte, d\u00e9duction faite de la commission (0\u00a0% en phase de lancement).",
+      "Après chaque chantier éligible, vous nous transmettez la facture et les pièces (attestation sur l'honneur, photos avant/après). On monte le dossier complet, on le soumet au délégataire CEE et on suit le traitement jusqu'au paiement. Vous recevez la prime sur votre compte, déduction faite de la commission (0\u00a0% en phase de lancement).",
   },
   {
-    question: 'Quelles qualifications RGE sont accept\u00e9es\u00a0?',
+    question: 'Quelles qualifications RGE sont acceptées\u00a0?',
     answer:
-      "Toutes les qualifications RGE d\u00e9livr\u00e9es par un organisme accr\u00e9dit\u00e9 COFRAC : Qualibat (5911, 7131, 7141, 8611...), Qualit'EnR (QualiPAC, QualiBois, QualiSol...), Qualifelec (RGE SER, RGE PV, IRVE). Votre qualification est v\u00e9rifi\u00e9e automatiquement via la base officielle ADEME.",
+      "Toutes les qualifications RGE délivrées par un organisme accrédité COFRAC : Qualibat (5911, 7131, 7141, 8611...), Qualit'EnR (QualiPAC, QualiBois, QualiSol...), Qualifelec (RGE SER, RGE PV, IRVE). Votre qualification est vérifiée automatiquement via la base officielle ADEME.",
   },
   {
     question: 'Combien de temps pour recevoir mon premier lead\u00a0?',
     answer:
-      'Apr\u00e8s validation de votre profil (24 \u00e0 48h), votre fiche est publi\u00e9e et vous commencez \u00e0 recevoir des demandes de devis. Le d\u00e9lai d\u00e9pend de votre zone g\u00e9ographique et de votre m\u00e9tier, mais la plupart des artisans re\u00e7oivent leur premier lead dans les 7 jours.',
+      'Après validation de votre profil (24 à 48h), votre fiche est publiée et vous commencez à recevoir des demandes de devis. Le délai dépend de votre zone géographique et de votre métier, mais la plupart des artisans reçoivent leur premier lead dans les 7 jours.',
   },
   {
-    question: 'Puis-je arr\u00eater \u00e0 tout moment\u00a0?',
+    question: 'Puis-je arrêter à tout moment\u00a0?',
     answer:
-      'Oui, z\u00e9ro engagement. Vous pouvez d\u00e9sactiver votre compte partenaire \u00e0 tout moment depuis votre espace artisan. Pas de p\u00e9nalit\u00e9, pas de frais de r\u00e9siliation, pas de pr\u00e9avis.',
+      'Oui, zéro engagement. Vous pouvez désactiver votre compte partenaire à tout moment depuis votre espace artisan. Pas de pénalité, pas de frais de résiliation, pas de préavis.',
   },
   {
-    question: 'Quelle diff\u00e9rence avec Effy, Hellio ou Habitatpresto\u00a0?',
+    question: 'Quelle différence avec Effy, Hellio ou Habitatpresto\u00a0?',
     answer:
-      "Trois diff\u00e9rences majeures. 1) Leads exclusifs : chez nous, 1 demande = 1 artisan. Chez eux, le m\u00eame lead est partag\u00e9 entre 3 \u00e0 10 artisans. 2) Ind\u00e9pendance : vous gardez votre marque, vos clients, votre identit\u00e9. Vous n'\u00eates pas un sous-traitant anonyme. 3) Transparence : suivi temps r\u00e9el de vos dossiers, pas de bo\u00eete noire.",
+      "Trois différences majeures. 1) Leads exclusifs : chez nous, 1 demande = 1 artisan. Chez eux, le même lead est partagé entre 3 à 10 artisans. 2) Indépendance : vous gardez votre marque, vos clients, votre identité. Vous n'êtes pas un sous-traitant anonyme. 3) Transparence : suivi temps réel de vos dossiers, pas de boîte noire.",
   },
 ]
 
@@ -256,7 +256,7 @@ export default function DevenirPartenaireCeePage() {
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
     description:
-      'Programme partenaire CEE pour artisans RGE : leads exclusifs, gestion des primes \u00e9nergie, z\u00e9ro engagement.',
+      'Programme partenaire CEE pour artisans RGE : leads exclusifs, gestion des primes énergie, zéro engagement.',
     publisher: { '@type': 'Organization', name: 'ServicesArtisans' },
   }
 
@@ -306,8 +306,8 @@ export default function DevenirPartenaireCeePage() {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
             {[
-              { value: '60\u00a0000+', label: 'artisans RGE r\u00e9f\u00e9renc\u00e9s' },
-              { value: '19', label: 'op\u00e9rations CEE couvertes' },
+              { value: '60\u00a0000+', label: 'artisans RGE référencés' },
+              { value: '19', label: 'opérations CEE couvertes' },
               { value: '100\u00a0%', label: 'leads exclusifs' },
               { value: '0\u00a0\u20ac', label: 'pendant le lancement' },
             ].map((stat) => (

@@ -49,47 +49,47 @@ const DOMAINE_ICONS: Record<CeeDomaine, React.ComponentType<{ className?: string
 
 const FAQ: Array<{ question: string; answer: string }> = [
   {
-    question: 'Qu\u2019est-ce qu\u2019une prime CEE exactement\u00a0?',
+    question: 'Qu’est-ce qu’une prime CEE exactement\u00a0?',
     answer:
-      'Les Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie (CEE) sont un dispositif obligatoire cr\u00e9\u00e9 par la loi POPE de 2005. L\u2019\u00c9tat impose aux vendeurs d\u2019\u00e9nergie (EDF, Engie, TotalEnergies, Auchan, Leclerc\u2026) de financer des travaux d\u2019\u00e9conomies d\u2019\u00e9nergie chez les particuliers et les entreprises. En contrepartie, ces obligés collectent des certificats (kWh cumac) qu\u2019ils d\u00e9posent au PNCEE. La prime CEE que vous recevez correspond au rachat de votre gain \u00e9nerg\u00e9tique par un obligé ou un d\u00e9l\u00e9gataire. La p\u00e9riode P6 a d\u00e9marr\u00e9 le 1er janvier 2026 avec une obligation annuelle de 1050 TWhc dont 280 TWhc r\u00e9serv\u00e9s au segment pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique.',
+      'Les Certificats d’\u00c9conomies d’\u00c9nergie (CEE) sont un dispositif obligatoire cré\u00e9 par la loi POPE de 2005. L’\u00c9tat impose aux vendeurs d’\u00e9nergie (EDF, Engie, TotalEnergies, Auchan, Leclerc…) de financer des travaux d’\u00e9conomies d’\u00e9nergie chez les particuliers et les entreprises. En contrepartie, ces obligés collectent des certificats (kWh cumac) qu’ils déposent au PNCEE. La prime CEE que vous recevez correspond au rachat de votre gain énergétique par un obligé ou un délégataire. La période P6 a démarré le 1er janvier 2026 avec une obligation annuelle de 1050 TWhc dont 280 TWhc réservés au segment précarité énergétique.',
   },
   {
-    question: 'Prime CEE et MaPrimeR\u00e9nov\u2019 : peut-on cumuler les deux\u00a0?',
+    question: 'Prime CEE et MaPrimeRénov’ : peut-on cumuler les deux\u00a0?',
     answer:
-      'Oui, c\u2019est m\u00eame la r\u00e8gle. La prime CEE est un dispositif priv\u00e9 (financement obligataire) tandis que MaPrimeR\u00e9nov\u2019 est une aide publique de l\u2019Anah. Les deux sont cumulables sans plafond sp\u00e9cifique, \u00e0 condition que le total des aides ne d\u00e9passe pas 100 % du co\u00fbt TTC des travaux \u2014 plafond atteint uniquement dans quelques cas de m\u00e9nages tr\u00e8s modestes sur des op\u00e9rations fortement bonifi\u00e9es. S\u2019ajoutent aussi la TVA r\u00e9duite \u00e0 5,5 %, l\u2019\u00e9co-PTZ jusqu\u2019\u00e0 50 000 \u20ac et d\u2019\u00e9ventuelles aides locales. La r\u00e8gle d\u2019or : l\u2019entreprise doit \u00eatre RGE \u00e0 la signature du devis.',
+      'Oui, c’est même la règle. La prime CEE est un dispositif privé (financement obligataire) tandis que MaPrimeRénov’ est une aide publique de l’Anah. Les deux sont cumulables sans plafond spécifique, à condition que le total des aides ne dépasse pas 100 % du coût TTC des travaux — plafond atteint uniquement dans quelques cas de ménages très modestes sur des opérations fortement bonifiées. S’ajoutent aussi la TVA réduite à 5,5 %, l’\u00e9co-PTZ jusqu’\u00e0 50 000 € et d’\u00e9ventuelles aides locales. La règle d’or : l’entreprise doit être RGE à la signature du devis.',
   },
   {
-    question: 'Quelles sont les op\u00e9rations CEE les plus rentables\u00a0?',
+    question: 'Quelles sont les opérations CEE les plus rentables\u00a0?',
     answer:
-      'Les op\u00e9rations "Coup de pouce" sont historiquement celles qui affichent le meilleur rapport travaux/prime. En 2026, les chartes "Coup de pouce Chauffage" (remplacement de chaudi\u00e8re fioul/gaz par une pompe \u00e0 chaleur ou une chaudi\u00e8re biomasse) et "Coup de pouce Isolation" (combles perdus, planchers bas) sont les plus mobilis\u00e9es. La fiche BAR-TH-174 (r\u00e9novation d\u2019ampleur d\u2019une maison individuelle), qui remplace depuis 2024 l\u2019ancienne BAR-TH-164 abrog\u00e9e, est \u00e9galement un levier majeur car elle cumule les gains de plusieurs postes. En pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique, les cours de prime sont environ deux fois sup\u00e9rieurs \u00e0 ceux du segment classique.',
+      'Les opérations "Coup de pouce" sont historiquement celles qui affichent le meilleur rapport travaux/prime. En 2026, les chartes "Coup de pouce Chauffage" (remplacement de chaudière fioul/gaz par une pompe à chaleur ou une chaudière biomasse) et "Coup de pouce Isolation" (combles perdus, planchers bas) sont les plus mobilisées. La fiche BAR-TH-174 (rénovation d’ampleur d’une maison individuelle), qui remplace depuis 2024 l’ancienne BAR-TH-164 abrogée, est également un levier majeur car elle cumule les gains de plusieurs postes. En précarité énergétique, les cours de prime sont environ deux fois supérieurs à ceux du segment classique.',
   },
   {
-    question: 'Mon artisan doit-il \u00eatre RGE pour obtenir une prime CEE\u00a0?',
+    question: 'Mon artisan doit-il être RGE pour obtenir une prime CEE\u00a0?',
     answer:
-      'Oui, sans exception depuis 2020 pour la quasi-totalit\u00e9 des op\u00e9rations standardis\u00e9es r\u00e9sidentielles. La qualification RGE (Reconnu Garant de l\u2019Environnement) doit \u00eatre en cours de validit\u00e9 \u00e0 la date de signature du devis (et non au d\u00e9marrage du chantier). Elle est d\u00e9livr\u00e9e par un organisme accr\u00e9dit\u00e9 COFRAC : Qualibat, Qualit\u2019EnR, Qualifelec, Certibat ou OPQIBI. Chaque fiche d\u2019op\u00e9ration standardis\u00e9e pr\u00e9cise la ou les qualifications accept\u00e9es \u2014 par exemple Qualibat-7141/7143 pour l\u2019isolation de toiture, QualiPAC pour les pompes \u00e0 chaleur, QualiBois pour les po\u00eales et chaudi\u00e8res bois.',
+      'Oui, sans exception depuis 2020 pour la quasi-totalité des opérations standardisées résidentielles. La qualification RGE (Reconnu Garant de l’Environnement) doit être en cours de validité à la date de signature du devis (et non au démarrage du chantier). Elle est délivrée par un organisme accrédité COFRAC : Qualibat, Qualit’EnR, Qualifelec, Certibat ou OPQIBI. Chaque fiche d’opération standardisée précise la ou les qualifications acceptées — par exemple Qualibat-7141/7143 pour l’isolation de toiture, QualiPAC pour les pompes à chaleur, QualiBois pour les poêles et chaudières bois.',
   },
   {
-    question: 'Combien de temps prend le versement d\u2019une prime CEE\u00a0?',
+    question: 'Combien de temps prend le versement d’une prime CEE\u00a0?',
     answer:
-      'Le d\u00e9lai standard est de 4 \u00e0 12 semaines apr\u00e8s la r\u00e9ception du dossier complet par le d\u00e9l\u00e9gataire obligé. Le dossier doit contenir : la facture de travaux acquitt\u00e9e, l\u2019attestation sur l\u2019honneur sign\u00e9e, les photos avant/apr\u00e8s chantier g\u00e9otagg\u00e9es et horodat\u00e9es (obligatoires depuis la loi du 30 juin 2025), et l\u2019avis d\u2019imposition N-2 pour le segment pr\u00e9carit\u00e9. La dur\u00e9e varie fortement selon l\u2019obligé choisi : les acteurs sp\u00e9cialis\u00e9s CEE (Effy, Sonergia) sont historiquement plus rapides que les obligés g\u00e9n\u00e9ralistes. C\u2019est un crit\u00e8re de choix \u00e0 prendre en compte.',
+      'Le délai standard est de 4 à 12 semaines après la réception du dossier complet par le délégataire obligé. Le dossier doit contenir : la facture de travaux acquittée, l’attestation sur l’honneur signée, les photos avant/après chantier géotaggées et horodatées (obligatoires depuis la loi du 30 juin 2025), et l’avis d’imposition N-2 pour le segment précarité. La durée varie fortement selon l’obligé choisi : les acteurs spécialisés CEE (Effy, Sonergia) sont historiquement plus rapides que les obligés généralistes. C’est un critère de choix à prendre en compte.',
   },
   {
     question: 'Puis-je obtenir une prime CEE sans passer par un mandataire\u00a0?',
     answer:
-      'Oui, c\u2019est m\u00eame la voie historique : vous pouvez d\u00e9poser votre dossier directement aupr\u00e8s d\u2019un d\u00e9l\u00e9gataire obligé (Effy, Sonergia, TotalEnergies\u2026) ou de votre fournisseur d\u2019\u00e9nergie. Le passage par un mandataire CEE tiers s\u2019av\u00e8re utile quand vous voulez comparer plusieurs obligés, mutualiser plusieurs op\u00e9rations sur un m\u00eame chantier, ou s\u00e9curiser la conformit\u00e9 r\u00e9glementaire (photos, AH, OCR factures). Dans tous les cas, la prime finale est identique \u2014 seul le service d\u2019accompagnement et le d\u00e9lai de versement varient.',
+      'Oui, c’est même la voie historique : vous pouvez déposer votre dossier directement auprès d’un délégataire obligé (Effy, Sonergia, TotalEnergies…) ou de votre fournisseur d’\u00e9nergie. Le passage par un mandataire CEE tiers s’avère utile quand vous voulez comparer plusieurs obligés, mutualiser plusieurs opérations sur un même chantier, ou sécuriser la conformité réglementaire (photos, AH, OCR factures). Dans tous les cas, la prime finale est identique — seul le service d’accompagnement et le délai de versement varient.',
   },
 ]
 
 export const metadata: Metadata = {
-  title: 'Primes CEE 2026 : certificats d\u2019\u00e9conomies d\u2019\u00e9nergie',
+  title: 'Primes CEE 2026 : certificats d’\u00e9conomies d’\u00e9nergie',
   description:
-    'Catalogue des 19 op\u00e9rations CEE r\u00e9sidentielles couvertes. Qualifications RGE requises, cumul MaPrimeR\u00e9nov\u2019, villes couvertes. Mandataire CEE agr\u00e9\u00e9.',
+    'Catalogue des 19 opérations CEE résidentielles couvertes. Qualifications RGE requises, cumul MaPrimeRénov’, villes couvertes. Mandataire CEE agré\u00e9.',
   alternates: getAlternates('/cee'),
   openGraph: {
     locale: 'fr_FR',
-    title: 'Primes CEE 2026 \u2014 Catalogue complet des op\u00e9rations',
+    title: 'Primes CEE 2026 — Catalogue complet des opérations',
     description:
-      'Toutes les primes CEE r\u00e9sidentielles 2026 : isolation, chauffage, ventilation, r\u00e9gulation. Cumul MaPrimeR\u00e9nov\u2019 possible.',
+      'Toutes les primes CEE résidentielles 2026 : isolation, chauffage, ventilation, régulation. Cumul MaPrimeRénov’ possible.',
     url: PAGE_URL,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -98,7 +98,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Primes CEE 2026 : catalogue complet',
     description:
-      'Les 19 op\u00e9rations CEE r\u00e9sidentielles \u00e9ligibles en 2026. Cumul MaPrimeR\u00e9nov\u2019, TVA 5,5 %, artisans RGE.',
+      'Les 19 opérations CEE résidentielles éligibles en 2026. Cumul MaPrimeRénov’, TVA 5,5 %, artisans RGE.',
   },
 }
 
@@ -124,9 +124,9 @@ export default async function CeeHubPage() {
   ])
 
   const collectionSchema = getCollectionPageSchema({
-    name: 'Primes CEE 2026 : catalogue des op\u00e9rations standardis\u00e9es',
+    name: 'Primes CEE 2026 : catalogue des opérations standardisées',
     description:
-      'Catalogue complet des op\u00e9rations standardis\u00e9es CEE r\u00e9sidentielles, couvertes par ServicesArtisans en tant que mandataire CEE. P\u00e9riode P6 \u00e0 compter du 1er janvier 2026.',
+      'Catalogue complet des opérations standardisées CEE résidentielles, couvertes par ServicesArtisans en tant que mandataire CEE. Période P6 à compter du 1er janvier 2026.',
     url: PAGE_PATH,
     itemCount: totalOps,
   })
@@ -147,7 +147,7 @@ export default async function CeeHubPage() {
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldCheck className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">
-              P\u00e9riode P6 \u2014 1050 TWhc/an dont 280 pr\u00e9carit\u00e9
+              Période P6 — 1050 TWhc/an dont 280 précarité
             </span>
           </div>
           <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
@@ -214,7 +214,7 @@ export default async function CeeHubPage() {
         </div>
       </section>
 
-      {/* B\u00e9n\u00e9fices */}
+      {/* Bénéfices */}
       <section className="bg-emerald-50/60 border-b border-emerald-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="flex items-start gap-3">
@@ -316,7 +316,7 @@ export default async function CeeHubPage() {
         </div>
       </section>
 
-      {/* \u00c9tapes */}
+      {/* Étapes */}
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-10">
@@ -327,22 +327,22 @@ export default async function CeeHubPage() {
               {
                 n: 1,
                 title: 'Qualifier le projet',
-                text: 'Identifiez la fiche d\u2019op\u00e9ration qui correspond \u00e0 vos travaux (isolation, chauffage, ventilation, r\u00e9gulation). Le catalogue ci-dessus liste les 19 fiches r\u00e9sidentielles couvertes.',
+                text: 'Identifiez la fiche d’opération qui correspond à vos travaux (isolation, chauffage, ventilation, régulation). Le catalogue ci-dessus liste les 19 fiches résidentielles couvertes.',
               },
               {
                 n: 2,
                 title: 'Choisir un artisan RGE',
-                text: 'La qualification RGE de l\u2019entreprise doit \u00eatre active \u00e0 la signature du devis. Utilisez nos pages ville pour trouver les artisans qualifi\u00e9s et v\u00e9rifi\u00e9s.',
+                text: 'La qualification RGE de l’entreprise doit être active à la signature du devis. Utilisez nos pages ville pour trouver les artisans qualifiés et vérifiés.',
               },
               {
                 n: 3,
                 title: 'Signer le devis + AH',
-                text: 'Le devis et l\u2019attestation sur l\u2019honneur doivent \u00eatre sign\u00e9s avant le d\u00e9but des travaux. C\u2019est cette date qui fige le cours de la prime.',
+                text: 'Le devis et l’attestation sur l’honneur doivent être signés avant le début des travaux. C’est cette date qui fige le cours de la prime.',
               },
               {
                 n: 4,
-                title: 'D\u00e9poser le dossier',
-                text: 'Apr\u00e8s les travaux, r\u00e9unissez factures, photos g\u00e9otagg\u00e9es et justificatifs puis d\u00e9posez le dossier aupr\u00e8s du d\u00e9l\u00e9gataire. Versement 4 \u00e0 12 semaines.',
+                title: 'Déposer le dossier',
+                text: 'Après les travaux, réunissez factures, photos géotaggées et justificatifs puis déposez le dossier auprès du délégataire. Versement 4 à 12 semaines.',
               },
             ].map((step) => (
               <li key={step.n} className="bg-white rounded-xl border border-charcoal-200 p-5">
@@ -380,7 +380,7 @@ export default async function CeeHubPage() {
         </div>
       </section>
 
-      {/* Comprendre le circuit CEE — liens vers pages satellites \u00e9ditoriales */}
+      {/* Comprendre le circuit CEE — liens vers pages satellites éditoriales */}
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
@@ -509,7 +509,7 @@ export default async function CeeHubPage() {
         </div>
       </section>
 
-      {/* Ressources compl\u00e9mentaires — cross-linking RGE / Qualifications / ADEME */}
+      {/* Ressources complémentaires — cross-linking RGE / Qualifications / ADEME */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
           Comprendre l’écosystème RGE

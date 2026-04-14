@@ -117,10 +117,7 @@ export function CeePrimeEstimateCard({ serviceSlug, postalCode }: CeePrimeEstima
       .catch((err: unknown) => {
         if (controller.signal.aborted) return
         if (err instanceof Error && err.name === 'AbortError') return
-        console.warn(
-          '[CeePrimeEstimateCard] Fetch /api/cee/estimate \u00e9chou\u00e9 (best-effort):',
-          err
-        )
+        console.warn('[CeePrimeEstimateCard] Fetch /api/cee/estimate échoué (best-effort):', err)
         setData(null)
         setLoading(false)
       })

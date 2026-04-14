@@ -459,7 +459,7 @@ export default async function AdemePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {[
               {
-                name: 'France Rénov\u2019',
+                name: 'France Rénov’',
                 url: 'https://france-renov.gouv.fr',
                 description:
                   "Portail officiel du service public de la rénovation de l'habitat. Annuaire RGE en temps réel, conseillers gratuits, simulateurs d'aides.",
@@ -471,7 +471,7 @@ export default async function AdemePage() {
                   "Plateforme open data de l'ADEME. Référentiel RGE, étiquettes énergétiques, bases carbone, données de consommation — toutes en Licence Ouverte.",
               },
               {
-                name: 'MaPrimeRénov\u2019 (Anah)',
+                name: 'MaPrimeRénov’ (Anah)',
                 url: 'https://www.maprimerenov.gouv.fr',
                 description:
                   "Portail officiel de l'Agence Nationale de l'Habitat. Dépôt de dossier, suivi d'avancement, barèmes 2026 et conditions d'éligibilité.",
@@ -489,7 +489,7 @@ export default async function AdemePage() {
                   'Organisme certificateur principal pour les qualifications RGE isolation, maçonnerie, couverture et enveloppe du bâti.',
               },
               {
-                name: 'Qualit\u2019EnR',
+                name: 'Qualit’EnR',
                 url: 'https://www.qualit-enr.org',
                 description:
                   'Organisme certificateur des qualifications RGE énergies renouvelables : QualiPAC, QualiSol, QualiPV, QualiBois.',

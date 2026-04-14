@@ -363,7 +363,7 @@ export default function CoupDePouce2026Page() {
         </div>
       </section>
 
-      {/* CTA inline apr\u00e8s explication */}
+      {/* CTA inline après explication */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <CeeCTA variant="inline" />
       </div>

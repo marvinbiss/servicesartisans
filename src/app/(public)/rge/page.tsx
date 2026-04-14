@@ -45,12 +45,11 @@ const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: string }> = {
   'pompe-a-chaleur': {
     title: 'Pompe à chaleur',
-    tagline: 'Aérothermie, géothermie et PAC hybrides — le poste n°1 de MaPrimeRénov\u2019.',
+    tagline: 'Aérothermie, géothermie et PAC hybrides — le poste n°1 de MaPrimeRénov’.',
   },
   'isolation-thermique': {
     title: 'Isolation thermique',
-    tagline:
-      'ITE, ITI, combles perdus et planchers bas — la brique n°1 des économies d\u2019énergie.',
+    tagline: 'ITE, ITI, combles perdus et planchers bas — la brique n°1 des économies d’énergie.',
   },
   chauffagiste: {
     title: 'Chauffage performant',
@@ -58,13 +57,12 @@ const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: strin
   },
   'panneaux-solaires': {
     title: 'Panneaux solaires',
-    tagline:
-      'Photovoltaïque, solaire thermique et autoconsommation — prime à l\u2019investissement.',
+    tagline: 'Photovoltaïque, solaire thermique et autoconsommation — prime à l’investissement.',
   },
   'renovation-energetique': {
     title: 'Rénovation énergétique globale',
     tagline:
-      'Accompagnement Mon Accompagnateur Rénov\u2019 et parcours MaPrimeRénov\u2019 Parcours Accompagné.',
+      'Accompagnement Mon Accompagnateur Rénov’ et parcours MaPrimeRénov’ Parcours Accompagné.',
   },
   electricien: {
     title: 'Électricien RGE',
@@ -72,12 +70,11 @@ const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: strin
   },
   menuisier: {
     title: 'Menuiserie performante',
-    tagline:
-      'Remplacement de fenêtres, portes d\u2019entrée et baies à haute performance thermique.',
+    tagline: 'Remplacement de fenêtres, portes d’entrée et baies à haute performance thermique.',
   },
   couvreur: {
     title: 'Couverture & toiture',
-    tagline: 'Isolation de toiture par l\u2019extérieur, sarking et couverture éco-performante.',
+    tagline: 'Isolation de toiture par l’extérieur, sarking et couverture éco-performante.',
   },
   plombier: {
     title: 'Plomberie performante',
@@ -89,7 +86,7 @@ const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: strin
   },
   ramoneur: {
     title: 'Ramonage certifié',
-    tagline: 'Entretien annuel d\u2019appareils bois, condition de maintien des aides.',
+    tagline: 'Entretien annuel d’appareils bois, condition de maintien des aides.',
   },
   zingueur: {
     title: 'Zinguerie & couverture',
@@ -97,11 +94,11 @@ const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: strin
   },
   facadier: {
     title: 'Façade & ITE',
-    tagline: 'Isolation thermique par l\u2019extérieur et ravalement performant.',
+    tagline: 'Isolation thermique par l’extérieur et ravalement performant.',
   },
   platrier: {
     title: 'Plâtrerie & ITI',
-    tagline: 'Isolation thermique par l\u2019intérieur et cloisons à haute performance.',
+    tagline: 'Isolation thermique par l’intérieur et cloisons à haute performance.',
   },
 }
 
@@ -129,42 +126,42 @@ const SERVICE_ICONS: Record<RgeAllowedService, React.ComponentType<{ className?:
 // accrédités COFRAC et les dispositifs en vigueur au 1er janvier 2026.
 const FAQ: Array<{ question: string; answer: string }> = [
   {
-    question: 'Qu\u2019est-ce que la certification RGE exactement ?',
+    question: 'Qu’est-ce que la certification RGE exactement ?',
     answer:
-      'RGE signifie « Reconnu Garant de l\u2019Environnement ». C\u2019est une mention délivrée par des organismes de qualification accrédités COFRAC (Qualibat, Qualit\u2019EnR, Qualifelec, Certibat, OPQIBI) à des entreprises du bâtiment qui prouvent, preuves de formation et audits chantier à l\u2019appui, leur maîtrise des travaux de rénovation énergétique. La mention est valable quatre ans, renouvelable, et fait l\u2019objet de contrôles sur site périodiques. Sans qualification RGE active au moment de la signature du devis, aucune aide publique à la rénovation énergétique (MaPrimeRénov\u2019, CEE, Éco-PTZ, TVA 5,5 %) n\u2019est mobilisable.',
+      'RGE signifie « Reconnu Garant de l’Environnement ». C’est une mention délivrée par des organismes de qualification accrédités COFRAC (Qualibat, Qualit’EnR, Qualifelec, Certibat, OPQIBI) à des entreprises du bâtiment qui prouvent, preuves de formation et audits chantier à l’appui, leur maîtrise des travaux de rénovation énergétique. La mention est valable quatre ans, renouvelable, et fait l’objet de contrôles sur site périodiques. Sans qualification RGE active au moment de la signature du devis, aucune aide publique à la rénovation énergétique (MaPrimeRénov’, CEE, Éco-PTZ, TVA 5,5 %) n’est mobilisable.',
   },
   {
-    question: 'Comment vérifier qu\u2019un artisan est réellement RGE ?',
+    question: 'Comment vérifier qu’un artisan est réellement RGE ?',
     answer:
-      'Le référentiel officiel est l\u2019annuaire France Rénov\u2019 piloté par l\u2019ADEME, consultable sur france-renov.gouv.fr. Il recense l\u2019ensemble des entreprises titulaires d\u2019une qualification RGE active avec leur SIRET, leurs domaines de travaux couverts et la date de fin de validité. Chez ServicesArtisans, notre moteur interne de vérification croise directement ce référentiel avec le SIRET de l\u2019entreprise que vous voulez auditer : une recherche suffit pour savoir si la mention est en cours de validité, expirée ou inexistante. Ne vous contentez jamais d\u2019un logo RGE imprimé sur un devis, c\u2019est la première fraude rencontrée sur le terrain.',
+      'Le référentiel officiel est l’annuaire France Rénov’ piloté par l’ADEME, consultable sur france-renov.gouv.fr. Il recense l’ensemble des entreprises titulaires d’une qualification RGE active avec leur SIRET, leurs domaines de travaux couverts et la date de fin de validité. Chez ServicesArtisans, notre moteur interne de vérification croise directement ce référentiel avec le SIRET de l’entreprise que vous voulez auditer : une recherche suffit pour savoir si la mention est en cours de validité, expirée ou inexistante. Ne vous contentez jamais d’un logo RGE imprimé sur un devis, c’est la première fraude rencontrée sur le terrain.',
   },
   {
     question: 'Quelles aides obtient-on en passant par un artisan RGE ?',
     answer:
-      'Trois dispositifs majeurs sont conditionnés au recours à un professionnel RGE : MaPrimeRénov\u2019 (aide directe de l\u2019Anah, barème selon revenus et gains énergétiques), les Certificats d\u2019Économies d\u2019Énergie dits « primes CEE » (versés par les délégataires obligés, Effy, Sonergia, TotalEnergies, EDF, Engie) et le taux de TVA réduit à 5,5 % sur la main-d\u2019œuvre et les matériaux énergétiques. S\u2019y ajoutent l\u2019Éco-PTZ (prêt à taux zéro jusqu\u2019à 50 000 € pour une rénovation globale) et certaines aides locales (régions, départements, métropoles). La règle d\u2019or : la qualification RGE doit être active à la date de signature du devis, pas au démarrage du chantier.',
+      'Trois dispositifs majeurs sont conditionnés au recours à un professionnel RGE : MaPrimeRénov’ (aide directe de l’Anah, barème selon revenus et gains énergétiques), les Certificats d’Économies d’Énergie dits « primes CEE » (versés par les délégataires obligés, Effy, Sonergia, TotalEnergies, EDF, Engie) et le taux de TVA réduit à 5,5 % sur la main-d’œuvre et les matériaux énergétiques. S’y ajoutent l’Éco-PTZ (prêt à taux zéro jusqu’à 50 000 € pour une rénovation globale) et certaines aides locales (régions, départements, métropoles). La règle d’or : la qualification RGE doit être active à la date de signature du devis, pas au démarrage du chantier.',
   },
   {
-    question: 'Quelle différence entre Qualibat, Qualit\u2019EnR, Qualifelec ?',
+    question: 'Quelle différence entre Qualibat, Qualit’EnR, Qualifelec ?',
     answer:
-      'Ces trois organismes sont accrédités COFRAC pour délivrer la mention RGE, mais ils ne couvrent pas les mêmes métiers. Qualibat (le plus large) traite l\u2019isolation thermique (ITE, ITI), la maçonnerie, la couverture et l\u2019enveloppe du bâti via ses qualifications 7xxx et 8xxx. Qualit\u2019EnR est dédié aux énergies renouvelables avec ses signatures QualiPAC (pompes à chaleur), QualiSol et QualiPV (solaire thermique et photovoltaïque), QualiBois (chauffage bois). Qualifelec cible les électriciens pour les bornes IRVE, le photovoltaïque et les solutions électriques performantes. Un artisan peut cumuler plusieurs qualifications s\u2019il exerce plusieurs métiers — c\u2019est courant pour les plaquistes ITE et les chauffagistes PAC.',
+      'Ces trois organismes sont accrédités COFRAC pour délivrer la mention RGE, mais ils ne couvrent pas les mêmes métiers. Qualibat (le plus large) traite l’isolation thermique (ITE, ITI), la maçonnerie, la couverture et l’enveloppe du bâti via ses qualifications 7xxx et 8xxx. Qualit’EnR est dédié aux énergies renouvelables avec ses signatures QualiPAC (pompes à chaleur), QualiSol et QualiPV (solaire thermique et photovoltaïque), QualiBois (chauffage bois). Qualifelec cible les électriciens pour les bornes IRVE, le photovoltaïque et les solutions électriques performantes. Un artisan peut cumuler plusieurs qualifications s’il exerce plusieurs métiers — c’est courant pour les plaquistes ITE et les chauffagistes PAC.',
   },
   {
     question: 'Comment trouver un artisan RGE près de chez moi ?',
     answer:
-      'Trois chemins complémentaires selon votre besoin. Pour une recherche par ville, utilisez nos annuaires dédiés /artisans-rge/[votre-ville] — ils affichent tous les artisans RGE actifs dans la commune, toutes spécialités confondues, synchronisés chaque semaine avec l\u2019ADEME. Pour une recherche par métier ciblé, passez par /rge/[service]/[ville] (exemple : /rge/pompe-a-chaleur/lyon). Enfin, si vous connaissez déjà le nom de l\u2019entreprise, notre vérificateur /verifier-artisan vous confirme en temps réel si sa mention RGE est en cours de validité. Dans tous les cas, comparez toujours au moins trois devis d\u2019artisans RGE avant de signer : c\u2019est la seule manière d\u2019objectiver les prix et de détecter les anomalies techniques.',
+      'Trois chemins complémentaires selon votre besoin. Pour une recherche par ville, utilisez nos annuaires dédiés /artisans-rge/[votre-ville] — ils affichent tous les artisans RGE actifs dans la commune, toutes spécialités confondues, synchronisés chaque semaine avec l’ADEME. Pour une recherche par métier ciblé, passez par /rge/[service]/[ville] (exemple : /rge/pompe-a-chaleur/lyon). Enfin, si vous connaissez déjà le nom de l’entreprise, notre vérificateur /verifier-artisan vous confirme en temps réel si sa mention RGE est en cours de validité. Dans tous les cas, comparez toujours au moins trois devis d’artisans RGE avant de signer : c’est la seule manière d’objectiver les prix et de détecter les anomalies techniques.',
   },
 ]
 
 export const metadata: Metadata = {
   title: 'Artisans RGE certifiés : trouvez un pro près de chez vous',
   description:
-    'Annuaire national des artisans RGE actifs en France. Données ADEME officielles, mise à jour hebdomadaire. Éligibles MaPrimeRénov\u2019, CEE, TVA 5,5 %. Vérification gratuite.',
+    'Annuaire national des artisans RGE actifs en France. Données ADEME officielles, mise à jour hebdomadaire. Éligibles MaPrimeRénov’, CEE, TVA 5,5 %. Vérification gratuite.',
   alternates: getAlternates('/rge'),
   openGraph: {
     locale: 'fr_FR',
     title: 'Artisans RGE certifiés en France — Annuaire officiel ADEME',
     description:
-      'Tous les artisans RGE actifs en France, sourcés ADEME. MaPrimeRénov\u2019, CEE, TVA 5,5 %. Vérification gratuite en temps réel.',
+      'Tous les artisans RGE actifs en France, sourcés ADEME. MaPrimeRénov’, CEE, TVA 5,5 %. Vérification gratuite en temps réel.',
     url: PAGE_URL,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -203,7 +200,7 @@ export default async function RgeHubPage() {
   const collectionSchema = getCollectionPageSchema({
     name: 'Artisans RGE certifiés en France',
     description:
-      'Annuaire national des artisans titulaires d\u2019une qualification RGE active, sourcé depuis le référentiel ADEME. Éligibles MaPrimeRénov\u2019, CEE et TVA réduite à 5,5 %.',
+      'Annuaire national des artisans titulaires d’une qualification RGE active, sourcé depuis le référentiel ADEME. Éligibles MaPrimeRénov’, CEE et TVA réduite à 5,5 %.',
     url: PAGE_PATH,
     itemCount: totalActive,
   })
@@ -459,7 +456,7 @@ export default async function RgeHubPage() {
         </div>
       </section>
 
-      {/* Guides RGE pratiques — devenir RGE, v\u00e9rifier un RGE, tarifs audit */}
+      {/* Guides RGE pratiques — devenir RGE, vérifier un RGE, tarifs audit */}
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
@@ -531,7 +528,7 @@ export default async function RgeHubPage() {
         </div>
       </section>
 
-      {/* Ressources compl\u00e9mentaires — cross-linking CEE / Qualifications / ADEME */}
+      {/* Ressources complémentaires — cross-linking CEE / Qualifications / ADEME */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
           Aller plus loin

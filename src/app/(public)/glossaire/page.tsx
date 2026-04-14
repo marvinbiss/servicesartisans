@@ -108,13 +108,7 @@ const categoryColors: Record<string, { bg: string; text: string; border: string;
 // Build alphabetical index
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 const termsFirstLetters = new Set(
-  glossaireTerms.map((t) =>
-    t.term
-      .charAt(0)
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toUpperCase()
-  )
+  glossaireTerms.map((t) => t.term.charAt(0).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase())
 )
 
 export default function GlossairePage() {
@@ -161,12 +155,7 @@ export default function GlossairePage() {
   const termsByLetter = alphabet.reduce(
     (acc, letter) => {
       const matching = glossaireTerms.filter(
-        (t) =>
-          t.term
-            .charAt(0)
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toUpperCase() === letter
+        (t) => t.term.charAt(0).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase() === letter
       )
       if (matching.length > 0) {
         acc[letter] = matching.sort((a, b) => a.term.localeCompare(b.term, 'fr'))

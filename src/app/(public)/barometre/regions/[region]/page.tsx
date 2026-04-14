@@ -278,7 +278,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
                   href={`/departements/${dept.nom
                     .toLowerCase()
                     .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[̀-ͯ]/g, '')
                     .replace(/[^a-z0-9]+/g, '-')}`}
                   className="flex items-center gap-3 bg-sand-50 rounded-lg border border-sand-300 p-4 hover:bg-primary-50 hover:border-primary-200 transition-colors"
                 >

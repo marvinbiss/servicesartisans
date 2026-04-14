@@ -66,21 +66,21 @@ function getHousingInsight(
 ): string | null {
   if (partMaisonsPct != null) {
     if (partMaisonsPct >= 70) {
-      return `Avec ${partMaisonsPct}\u00A0% de maisons individuelles, les interventions de ${serviceName.toLowerCase()} concernent majoritairement des logements individuels (toiture, jardin, fa\u00E7ade, acc\u00E8s direct).`
+      return `Avec ${partMaisonsPct}\u00A0% de maisons individuelles, les interventions de ${serviceName.toLowerCase()} concernent majoritairement des logements individuels (toiture, jardin, façade, accès direct).`
     }
     if (partMaisonsPct >= 40) {
-      return `Le parc immobilier est mixte (${partMaisonsPct}\u00A0% de maisons, ${100 - partMaisonsPct}\u00A0% d'appartements), impliquant une diversit\u00E9 d'interventions de ${serviceName.toLowerCase()} : copropri\u00E9t\u00E9s et maisons individuelles.`
+      return `Le parc immobilier est mixte (${partMaisonsPct}\u00A0% de maisons, ${100 - partMaisonsPct}\u00A0% d'appartements), impliquant une diversité d'interventions de ${serviceName.toLowerCase()} : copropriétés et maisons individuelles.`
     }
-    return `Avec ${100 - partMaisonsPct}\u00A0% d'appartements, les interventions de ${serviceName.toLowerCase()} se font souvent en copropri\u00E9t\u00E9, avec des contraintes d'acc\u00E8s et de r\u00E8glement int\u00E9rieur.`
+    return `Avec ${100 - partMaisonsPct}\u00A0% d'appartements, les interventions de ${serviceName.toLowerCase()} se font souvent en copropriété, avec des contraintes d'accès et de règlement intérieur.`
   }
 
   // Fallback: infer from density
   if (density == null) return null
   if (density > 2000) {
-    return `La forte densit\u00E9 urbaine (${formatNumber(Math.round(density))}\u00A0hab/km\u00B2) sugg\u00E8re une pr\u00E9dominance d'appartements. Les interventions de ${serviceName.toLowerCase()} s'effectuent souvent en immeuble.`
+    return `La forte densité urbaine (${formatNumber(Math.round(density))}\u00A0hab/km²) suggère une prédominance d'appartements. Les interventions de ${serviceName.toLowerCase()} s'effectuent souvent en immeuble.`
   }
   if (density < 200) {
-    return `La faible densit\u00E9 (${formatNumber(Math.round(density))}\u00A0hab/km\u00B2) indique un habitat principalement individuel. Les travaux de ${serviceName.toLowerCase()} concernent surtout des maisons.`
+    return `La faible densité (${formatNumber(Math.round(density))}\u00A0hab/km²) indique un habitat principalement individuel. Les travaux de ${serviceName.toLowerCase()} concernent surtout des maisons.`
   }
   return null
 }
@@ -90,8 +90,8 @@ function getPricePositioning(multiplier: number, regionName: string | null): str
   if (multiplier === 1) return null
   const pct = Math.abs(Math.round((multiplier - 1) * 100))
   const direction = multiplier > 1 ? 'au-dessus' : 'en-dessous'
-  const regionLabel = regionName ?? 'cette r\u00E9gion'
-  return `Les tarifs \u00E0 ${regionLabel} sont ${pct}\u00A0% ${direction} de la moyenne nationale`
+  const regionLabel = regionName ?? 'cette région'
+  return `Les tarifs à ${regionLabel} sont ${pct}\u00A0% ${direction} de la moyenne nationale`
 }
 
 /** Revenue impact insight — budget capacity for services */
@@ -104,13 +104,13 @@ function getRevenueInsight(
   const s = serviceName.toLowerCase()
 
   if (revenuMedian <= 17009) {
-    return `Le revenu m\u00E9dian de ${formatNumber(revenuMedian)}\u00A0\u20AC/an \u00E0 ${villeName} classe la commune parmi les territoires \u00E9ligibles aux aides maximales. Pour les travaux de ${s}, cela signifie un reste \u00E0 charge r\u00E9duit gr\u00E2ce \u00E0 MaPrimeR\u00E9nov\u2019 S\u00E9r\u00E9nit\u00E9 et aux CEE bonifi\u00E9s.`
+    return `Le revenu médian de ${formatNumber(revenuMedian)}\u00A0\u20AC/an à ${villeName} classe la commune parmi les territoires éligibles aux aides maximales. Pour les travaux de ${s}, cela signifie un reste à charge réduit grâce à MaPrimeRénov’ Sérénité et aux CEE bonifiés.`
   }
   if (revenuMedian <= 21805) {
-    return `Avec un revenu m\u00E9dian de ${formatNumber(revenuMedian)}\u00A0\u20AC/an, les habitants de ${villeName} acc\u00E8dent aux aides renforc\u00E9es pour les travaux de ${s} (MaPrimeR\u00E9nov\u2019 jaune/bleu + primes CEE major\u00E9es).`
+    return `Avec un revenu médian de ${formatNumber(revenuMedian)}\u00A0\u20AC/an, les habitants de ${villeName} accèdent aux aides renforcées pour les travaux de ${s} (MaPrimeRénov’ jaune/bleu + primes CEE majorées).`
   }
   if (revenuMedian >= 35000) {
-    return `Le revenu m\u00E9dian \u00E9lev\u00E9 (${formatNumber(revenuMedian)}\u00A0\u20AC/an) indique une capacit\u00E9 d\u2019investissement sup\u00E9rieure pour les travaux de ${s}, avec une pr\u00E9f\u00E9rence fr\u00E9quente pour des prestations haut de gamme et des mat\u00E9riaux durables.`
+    return `Le revenu médian élevé (${formatNumber(revenuMedian)}\u00A0\u20AC/an) indique une capacité d’investissement supérieure pour les travaux de ${s}, avec une préférence fréquente pour des prestations haut de gamme et des matériaux durables.`
   }
   return null
 }
@@ -122,7 +122,7 @@ function getImmobilierInsight(communeData: CommuneData, serviceName: string): st
 
   if (communeData.nb_transactions_annuelles && communeData.nb_transactions_annuelles > 50) {
     parts.push(
-      `${formatNumber(communeData.nb_transactions_annuelles)} transactions immobili\u00E8res par an g\u00E9n\u00E8rent une demande r\u00E9guli\u00E8re en travaux de ${s} (remise aux normes, am\u00E9nagements apr\u00E8s achat)`
+      `${formatNumber(communeData.nb_transactions_annuelles)} transactions immobilières par an génèrent une demande régulière en travaux de ${s} (remise aux normes, aménagements après achat)`
     )
   }
 
@@ -132,12 +132,12 @@ function getImmobilierInsight(communeData: CommuneData, serviceName: string): st
       const plusCher =
         communeData.prix_m2_maison > communeData.prix_m2_appartement ? 'maisons' : 'appartements'
       parts.push(
-        `les ${plusCher} affichent un prix au m\u00B2 nettement sup\u00E9rieur, ce qui incite les propri\u00E9taires \u00E0 investir dans l\u2019entretien et la valorisation de leur bien`
+        `les ${plusCher} affichent un prix au m² nettement supérieur, ce qui incite les propriétaires à investir dans l’entretien et la valorisation de leur bien`
       )
     }
   } else if (communeData.prix_m2_moyen && communeData.prix_m2_moyen > 3000) {
     parts.push(
-      `avec un prix moyen de ${formatNumber(communeData.prix_m2_moyen)}\u00A0\u20AC/m\u00B2, les propri\u00E9taires ont int\u00E9r\u00EAt \u00E0 maintenir la valeur de leur bien par des travaux de ${s} r\u00E9guliers`
+      `avec un prix moyen de ${formatNumber(communeData.prix_m2_moyen)}\u00A0\u20AC/m², les propriétaires ont intérêt à maintenir la valeur de leur bien par des travaux de ${s} réguliers`
     )
   }
 
@@ -159,19 +159,19 @@ function getRGEInsight(
       ? Math.round((communeData.nb_artisans_rge / communeData.nb_artisans_btp) * 100)
       : null
 
-  let text = `${formatNumber(communeData.nb_artisans_rge)} artisans certifi\u00E9s RGE exercent \u00E0 ${villeName}`
+  let text = `${formatNumber(communeData.nb_artisans_rge)} artisans certifiés RGE exercent à ${villeName}`
 
   if (coverage != null) {
     text += `, soit ${coverage}\u00A0% des entreprises BTP de la commune`
     if (coverage < 20) {
-      text += `. Ce ratio relativement faible allonge les d\u00E9lais pour les travaux de ${s} \u00E9ligibles aux aides.`
+      text += `. Ce ratio relativement faible allonge les délais pour les travaux de ${s} éligibles aux aides.`
     } else if (coverage > 50) {
-      text += `. Cette forte proportion facilite l\u2019acc\u00E8s aux aides publiques pour les travaux de ${s}.`
+      text += `. Cette forte proportion facilite l’accès aux aides publiques pour les travaux de ${s}.`
     } else {
       text += '.'
     }
   } else {
-    text += `, ce qui garantit l\u2019acc\u00E8s aux aides publiques pour les travaux de ${s}.`
+    text += `, ce qui garantit l’accès aux aides publiques pour les travaux de ${s}.`
   }
 
   return text
@@ -307,8 +307,8 @@ export default function LocalInsightsBlock({
                       {'\u00A0'}
                       {'€'}/an){' '}
                       {c.revenu_median > 25000
-                        ? 'soutient une demande r\u00E9guli\u00E8re de prestations de qualit\u00E9'
-                        : 'favorise l\u2019acc\u00E8s aux aides publiques (MaPrimeR\u00E9nov\u2019, CEE)'}
+                        ? 'soutient une demande régulière de prestations de qualité'
+                        : 'favorise l’accès aux aides publiques (MaPrimeRénov’, CEE)'}
                       .
                     </>
                   )}
@@ -338,10 +338,10 @@ export default function LocalInsightsBlock({
                   {c.nb_artisans_btp ? `, dont ${formatNumber(c.nb_artisans_btp)} dans le BTP` : ''}
                   .
                   {c.nb_entreprises_artisanales > 500
-                    ? ' La concurrence soutenue maintient des tarifs comp\u00E9titifs.'
+                    ? ' La concurrence soutenue maintient des tarifs compétitifs.'
                     : c.nb_entreprises_artisanales > 100
-                      ? ' Le march\u00E9 offre un choix raisonnable de professionnels.'
-                      : ' Le nombre limit\u00E9 de professionnels peut impacter les d\u00E9lais et les tarifs.'}
+                      ? ' Le marché offre un choix raisonnable de professionnels.'
+                      : ' Le nombre limité de professionnels peut impacter les délais et les tarifs.'}
                 </p>
               </div>
             )}

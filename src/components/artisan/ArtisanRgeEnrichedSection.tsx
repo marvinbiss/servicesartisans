@@ -323,8 +323,8 @@ export function ArtisanRgeEnrichedSection({
               className="font-heading text-xl md:text-2xl font-extrabold leading-tight"
             >
               {fallback
-                ? 'Artisan reconnu RGE par l\u2019ADEME'
-                : 'Qualifications RGE \u0026 aides débloquées'}
+                ? 'Artisan reconnu RGE par l’ADEME'
+                : 'Qualifications RGE & aides débloquées'}
             </h2>
             <p className="text-sm text-emerald-50/90 mt-1 leading-relaxed">
               Certifications officielles issues de l’annuaire ADEME.{' '}

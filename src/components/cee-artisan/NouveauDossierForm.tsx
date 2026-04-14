@@ -115,7 +115,7 @@ const CEE_OPERATIONS_BY_QUAL: Record<
     },
     {
       code: 'BAR-EN-103',
-      label: 'Isolation murs par l\u2019ext\u00e9rieur',
+      label: 'Isolation murs par l’extérieur',
       params: [
         { key: 'resistance', label: 'Résistance thermique R (m².K/W)', unit: 'm².K/W' },
         { key: 'classe_ite', label: 'Classe ITE', unit: '' },
@@ -265,7 +265,7 @@ export default function NouveauDossierForm({
       !/^(\+33|0)[1-9][\d\s]{7,}$/.test(clientData.phone.replace(/\s/g, ''))
     )
       errors.phone = 'Numéro de téléphone invalide.'
-    if (!clientData.adresse.trim()) errors.adresse = 'L\u2019adresse est requise.'
+    if (!clientData.adresse.trim()) errors.adresse = 'L’adresse est requise.'
     if (!clientData.codePostal.trim() || !/^\d{5}$/.test(clientData.codePostal))
       errors.codePostal = 'Code postal invalide (5 chiffres).'
     setClientErrors(errors)
@@ -877,9 +877,7 @@ export default function NouveauDossierForm({
 
 // ── Hook-like helper (pas de hook ici — juste useMemo inline) ─────────────────
 
-function useMemo_ops(
-  rgeQualifications: RgeQualification[]
-): Array<{
+function useMemo_ops(rgeQualifications: RgeQualification[]): Array<{
   code: string
   label: string
   params: Array<{ key: string; label: string; unit: string }>

@@ -56,16 +56,16 @@ interface PageProps {
 /** Tronque un title à ~58 chars pour Google */
 function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 /** Contenu de l'intro métier-spécifique (100-150 mots) */
 function buildIntroParagraph(serviceName: string, villeName: string, serviceSlug: string): string {
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
   const labelPart = qualif
-    ? `Les artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE \u00e0 ${villeName} d\u00e9tiennent le label ${qualif.label} (d\u00e9livr\u00e9 par ${qualif.organisme}), garantissant leur comp\u00e9tence pour ${qualif.specifics}.`
-    : `Les artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE (Reconnu Garant de l\u2019Environnement) \u00e0 ${villeName} r\u00e9pondent aux crit\u00e8res officiels d\u2019\u00e9co-conditionnalit\u00e9 fix\u00e9s par l\u2019\u00c9tat.`
-  return `${labelPart} Cette certification est indispensable pour b\u00e9n\u00e9ficier des aides publiques \u00e0 la r\u00e9novation \u00e9nerg\u00e9tique : MaPrimeR\u00e9nov\u2019, Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie (CEE), \u00e9co-pr\u00eat \u00e0 taux z\u00e9ro et TVA r\u00e9duite \u00e0 5,5 %. Sans artisan RGE, aucune de ces aides n\u2019est mobilisable. Tous les professionnels list\u00e9s ci-dessous \u00e0 ${villeName} ont une qualification v\u00e9rifi\u00e9e et toujours active, sourc\u00e9e directement depuis le registre officiel ADEME / France R\u00e9nov\u2019.`
+    ? `Les artisans ${serviceName.toLowerCase()} certifiés RGE à ${villeName} détiennent le label ${qualif.label} (délivré par ${qualif.organisme}), garantissant leur compétence pour ${qualif.specifics}.`
+    : `Les artisans ${serviceName.toLowerCase()} certifiés RGE (Reconnu Garant de l’Environnement) à ${villeName} répondent aux critères officiels d’\u00e9co-conditionnalité fixés par l’\u00c9tat.`
+  return `${labelPart} Cette certification est indispensable pour bénéficier des aides publiques à la rénovation énergétique : MaPrimeRénov’, Certificats d’\u00c9conomies d’\u00c9nergie (CEE), éco-prêt à taux zéro et TVA réduite à 5,5 %. Sans artisan RGE, aucune de ces aides n’est mobilisable. Tous les professionnels listés ci-dessous à ${villeName} ont une qualification vérifiée et toujours active, sourcée directement depuis le registre officiel ADEME / France Rénov’.`
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -91,11 +91,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, { limit: 1 })
   const isNoindex = count === 0
 
-  const rawTitle = `${serviceName} RGE \u00e0 ${villeName} \u2014 Certifi\u00e9 MaPrimeR\u00e9nov\u2019`
+  const rawTitle = `${serviceName} RGE à ${villeName} — Certifié MaPrimeRénov’`
   const title = truncateTitle(rawTitle)
 
-  const rawDesc = `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE \u00e0 ${villeName}. \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Qualifications v\u00e9rifi\u00e9es ADEME \u00e0 jour.`
-  const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '\u2026'
+  const rawDesc = `Artisans ${serviceName.toLowerCase()} certifiés RGE à ${villeName}. Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Qualifications vérifiées ADEME à jour.`
+  const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '…'
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
 
@@ -163,8 +163,8 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
   // JSON-LD ItemList (top 10 providers pour éviter un payload lourd)
   const itemListSchema = getItemListSchema({
-    name: `${serviceName} RGE \u00e0 ${villeName}`,
-    description: `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE \u00e0 ${villeName}`,
+    name: `${serviceName} RGE à ${villeName}`,
+    description: `Artisans ${serviceName.toLowerCase()} certifiés RGE à ${villeName}`,
     url: path,
     items: providers.slice(0, 10).map((p, idx) => ({
       name: p.name,
@@ -179,11 +179,11 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${serviceName} RGE \u00e0 ${villeName}`,
+    name: `${serviceName} RGE à ${villeName}`,
     url: pageUrl,
     about: {
       '@type': 'Service',
-      name: `${serviceName} certifi\u00e9 RGE`,
+      name: `${serviceName} certifié RGE`,
       areaServed: { '@type': 'City', name: villeName },
       provider: {
         '@type': 'Organization',

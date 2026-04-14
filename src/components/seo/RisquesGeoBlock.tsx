@@ -35,8 +35,8 @@ interface RiskItem {
 function getArgileAdvice(serviceName: string): string {
   const s = serviceName.toLowerCase()
   if (s.includes('plomb'))
-    return 'Les mouvements de terrain liés à l\u2019argile peuvent provoquer des ruptures de canalisations et des fuites souterraines.'
-  if (s.includes('ma\u00E7on') || s.includes('macon'))
+    return 'Les mouvements de terrain liés à l’argile peuvent provoquer des ruptures de canalisations et des fuites souterraines.'
+  if (s.includes('maçon') || s.includes('macon'))
     return 'Le retrait-gonflement des argiles fragilise les fondations. Des fondations profondes et des joints de dilatation sont indispensables.'
   if (s.includes('carrel'))
     return 'Les mouvements de sol provoquent des fissures de carrelage. Un ragréage souple et des joints de dilatation sont recommandés.'
@@ -44,7 +44,7 @@ function getArgileAdvice(serviceName: string): string {
     return 'Les mouvements de terrain peuvent affecter les réseaux enterrés de chauffage et les pompes à chaleur géothermiques.'
   if (s.includes('couv') || s.includes('charpent'))
     return 'Les mouvements de terrain déforment la structure et provoquent des désordres en toiture.'
-  return `Les mouvements de terrain liés à l\u2019argile impactent le bâti et justifient le recours à un ${s} qualifié.`
+  return `Les mouvements de terrain liés à l’argile impactent le bâti et justifient le recours à un ${s} qualifié.`
 }
 
 function getSismiqueAdvice(serviceName: string, zone: number): string {
@@ -52,9 +52,9 @@ function getSismiqueAdvice(serviceName: string, zone: number): string {
   const severity = zone >= 4 ? 'élevée' : 'modérée'
   if (s.includes('plomb'))
     return `En zone sismique ${severity}, les canalisations souples (PER, multicouche) sont recommandées pour absorber les vibrations.`
-  if (s.includes('ma\u00E7on') || s.includes('macon'))
+  if (s.includes('maçon') || s.includes('macon'))
     return `La zone sismique ${severity} impose des règles parasismiques (chaînages, ferraillage renforcé) pour toute construction ou extension.`
-  if (s.includes('\u00E9lectric'))
+  if (s.includes('électric'))
     return `En zone sismique ${severity}, les tableaux électriques doivent être fixés selon les normes parasismiques pour éviter les courts-circuits.`
   return `La sismicité ${severity} (zone ${zone}/5) implique des précautions spécifiques pour les travaux de ${s}.`
 }
@@ -64,9 +64,9 @@ function getRadonAdvice(serviceName: string, level: number): string {
   const severity = level >= 3 ? 'élevé' : 'modéré'
   if (s.includes('plomb') || s.includes('ventil') || s.includes('chauffag'))
     return `Le potentiel radon ${severity} nécessite une ventilation performante (VMC, extracteurs) pour évacuer ce gaz radioactif naturel.`
-  if (s.includes('ma\u00E7on') || s.includes('macon'))
+  if (s.includes('maçon') || s.includes('macon'))
     return `Le potentiel radon ${severity} impose une membrane anti-radon sous dalle et des systèmes de dépressurisation du sol.`
-  return `Le potentiel radon ${severity} (catégorie ${level}/3) justifie des mesures d\u2019étanchéité et de ventilation lors des travaux de ${s}.`
+  return `Le potentiel radon ${severity} (catégorie ${level}/3) justifie des mesures d’étanchéité et de ventilation lors des travaux de ${s}.`
 }
 
 function getCatnatAdvice(serviceName: string, count: number): string {
@@ -76,16 +76,16 @@ function getCatnatAdvice(serviceName: string, count: number): string {
 function getInondationAdvice(serviceName: string): string {
   const s = serviceName.toLowerCase()
   if (s.includes('plomb'))
-    return 'Les inondations endommagent les réseaux d\u2019assainissement et d\u2019eau potable. Un clapet anti-retour et des canalisations étanches sont indispensables en zone inondable.'
+    return 'Les inondations endommagent les réseaux d’assainissement et d’eau potable. Un clapet anti-retour et des canalisations étanches sont indispensables en zone inondable.'
   if (s.includes('électric'))
     return 'En zone inondable, le tableau électrique doit être installé en hauteur et les circuits enterrés protégés par des gaines étanches IP68.'
   if (s.includes('maçon') || s.includes('macon'))
-    return 'Les fondations en zone inondable nécessitent un cuvelage étanche et des matériaux résistants à l\u2019immersion prolongée (parpaings hydrofugés, enduits spéciaux).'
+    return 'Les fondations en zone inondable nécessitent un cuvelage étanche et des matériaux résistants à l’immersion prolongée (parpaings hydrofugés, enduits spéciaux).'
   if (s.includes('chauffag') || s.includes('pompe'))
     return 'En zone inondable, la chaudière et la pompe à chaleur doivent être surélevées. Les réseaux de chauffage au sol nécessitent une isolation étanche spécifique.'
   if (s.includes('peintr'))
     return 'Après une inondation, les murs doivent sécher complètement (3 à 6 mois) avant toute remise en peinture. Des peintures anti-humidité sont recommandées en zone inondable.'
-  return `Le risque d\u2019inondation impose des précautions spécifiques pour les travaux de ${s} : matériaux résistants à l\u2019eau, installations surélevées et systèmes de protection.`
+  return `Le risque d’inondation impose des précautions spécifiques pour les travaux de ${s} : matériaux résistants à l’eau, installations surélevées et systèmes de protection.`
 }
 
 /** Generate a contextual prose paragraph combining multiple risks and their impact on the service */
@@ -104,7 +104,7 @@ function getRiskSynthesis(
   }
 
   if (communeData.risque_inondation) {
-    parts.push('une exposition au risque d\u2019inondation')
+    parts.push('une exposition au risque d’inondation')
   }
 
   if ((communeData.zone_sismique ?? 0) >= 3) {
@@ -123,7 +123,7 @@ function getRiskSynthesis(
 
   const catnatSuffix =
     (communeData.nb_catnat ?? 0) > 5
-      ? ` La commune a fait l\u2019objet de ${communeData.nb_catnat} arrêtés de catastrophe naturelle, ce qui confirme l\u2019importance de faire appel à un professionnel expérimenté.`
+      ? ` La commune a fait l’objet de ${communeData.nb_catnat} arrêtés de catastrophe naturelle, ce qui confirme l’importance de faire appel à un professionnel expérimenté.`
       : ''
 
   return `${villeName} présente ${riskList}. Ces caractéristiques géologiques influencent directement les interventions de ${s} : le choix des matériaux, les techniques de pose et les normes à respecter doivent être adaptés au contexte local.${catnatSuffix}`
@@ -250,7 +250,7 @@ export default function RisquesGeoBlock({
             Risques identifiés par Géorisques pour {villeName} :
           </p>
           <p className="text-xs text-charcoal-600 leading-relaxed">
-            {c.risques_principaux.join(' \u00B7 ')}
+            {c.risques_principaux.join(' · ')}
           </p>
         </div>
       )}

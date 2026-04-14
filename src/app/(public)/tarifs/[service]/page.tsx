@@ -73,7 +73,7 @@ function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
   const endsWithQuestion = title.trimEnd().endsWith('?')
   const truncated = title.slice(0, maxLen - (endsWithQuestion ? 2 : 1)).replace(/\s+\S*$/, '')
-  return endsWithQuestion ? truncated + ' ?' : truncated + '\u2026'
+  return endsWithQuestion ? truncated + ' ?' : truncated + '…'
 }
 
 export async function generateMetadata({

@@ -137,7 +137,7 @@ export default function CeeSavingsComparator({
         if (controller.signal.aborted) return
         if (err.name === 'AbortError') return
         setData(null)
-        setError('Une erreur est survenue lors du chargement des donn\u00e9es.')
+        setError('Une erreur est survenue lors du chargement des données.')
         setLoading(false)
       })
 
@@ -197,7 +197,7 @@ export default function CeeSavingsComparator({
             onClick={() => fetchEstimate()}
             className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-100 transition"
           >
-            R\u00e9essayer
+            Réessayer
           </button>
         </div>
       </div>

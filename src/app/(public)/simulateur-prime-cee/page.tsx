@@ -17,24 +17,24 @@ const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 /* ------------------------------------------------------------------ */
 
 export const metadata: Metadata = {
-  title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',
+  title: 'Simulateur Prime CEE Gratuit — Estimez votre Aide Énergie | ServicesArtisans',
   description:
-    'Calculez gratuitement le montant de votre prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie). Estimation instantan\u00e9e par type de travaux et code postal.',
+    'Calculez gratuitement le montant de votre prime CEE (Certificats d’\u00c9conomies d’\u00c9nergie). Estimation instantanée par type de travaux et code postal.',
   alternates: getAlternates('/simulateur-prime-cee'),
   openGraph: {
     locale: 'fr_FR',
-    title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',
+    title: 'Simulateur Prime CEE Gratuit — Estimez votre Aide Énergie | ServicesArtisans',
     description:
-      'Calculez gratuitement le montant de votre prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie). Estimation instantan\u00e9e par type de travaux et code postal.',
+      'Calculez gratuitement le montant de votre prime CEE (Certificats d’\u00c9conomies d’\u00c9nergie). Estimation instantanée par type de travaux et code postal.',
     url: PAGE_URL,
     siteName: 'ServicesArtisans',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Simulateur Prime CEE Gratuit \u2014 Estimez votre Aide \u00c9nergie | ServicesArtisans',
+    title: 'Simulateur Prime CEE Gratuit — Estimez votre Aide Énergie | ServicesArtisans',
     description:
-      'Calculez gratuitement le montant de votre prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie). Estimation instantan\u00e9e par type de travaux et code postal.',
+      'Calculez gratuitement le montant de votre prime CEE (Certificats d’\u00c9conomies d’\u00c9nergie). Estimation instantanée par type de travaux et code postal.',
   },
 }
 
@@ -44,29 +44,29 @@ export const metadata: Metadata = {
 
 const FAQ: Array<{ question: string; answer: string }> = [
   {
-    question: 'Qu\u2019est-ce que la prime CEE\u00a0?',
+    question: 'Qu’est-ce que la prime CEE\u00a0?',
     answer:
-      'La prime CEE (Certificats d\u2019\u00c9conomies d\u2019\u00c9nergie) est une aide financi\u00e8re vers\u00e9e par les fournisseurs d\u2019\u00e9nergie pour encourager les travaux de r\u00e9novation \u00e9nerg\u00e9tique. Cr\u00e9\u00e9 par la loi POPE de 2005, ce dispositif oblige les vendeurs d\u2019\u00e9nergie (EDF, Engie, TotalEnergies\u2026) \u00e0 financer des \u00e9conomies d\u2019\u00e9nergie chez les particuliers et les entreprises.',
+      'La prime CEE (Certificats d’\u00c9conomies d’\u00c9nergie) est une aide financière versée par les fournisseurs d’\u00e9nergie pour encourager les travaux de rénovation énergétique. Cré\u00e9 par la loi POPE de 2005, ce dispositif oblige les vendeurs d’\u00e9nergie (EDF, Engie, TotalEnergies…) à financer des économies d’\u00e9nergie chez les particuliers et les entreprises.',
   },
   {
-    question: 'Comment est calcul\u00e9 le montant de la prime CEE\u00a0?',
+    question: 'Comment est calculé le montant de la prime CEE\u00a0?',
     answer:
-      'Le montant d\u00e9pend de plusieurs crit\u00e8res : le type de travaux (fiche d\u2019op\u00e9ration standardis\u00e9e), votre zone climatique (H1, H2 ou H3), la surface ou la puissance concern\u00e9e, et vos revenus fiscaux (bar\u00e8me classique ou pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique). Le cours du kWhc au moment de la signature du devis influence \u00e9galement le montant final.',
+      'Le montant dépend de plusieurs critères : le type de travaux (fiche d’opération standardisée), votre zone climatique (H1, H2 ou H3), la surface ou la puissance concernée, et vos revenus fiscaux (barème classique ou précarité énergétique). Le cours du kWhc au moment de la signature du devis influence également le montant final.',
   },
   {
-    question: 'Qui peut b\u00e9n\u00e9ficier de la prime CEE\u00a0?',
+    question: 'Qui peut bénéficier de la prime CEE\u00a0?',
     answer:
-      'Tous les m\u00e9nages fran\u00e7ais peuvent b\u00e9n\u00e9ficier de la prime CEE, sans condition de revenus pour le bar\u00e8me classique. Les m\u00e9nages aux revenus modestes (selon les seuils de l\u2019Anah) acc\u00e8dent au bar\u00e8me pr\u00e9carit\u00e9 \u00e9nerg\u00e9tique, avec des primes environ deux fois sup\u00e9rieures. Le logement doit avoir plus de 2 ans et les travaux doivent \u00eatre r\u00e9alis\u00e9s par un artisan RGE.',
+      'Tous les ménages français peuvent bénéficier de la prime CEE, sans condition de revenus pour le barème classique. Les ménages aux revenus modestes (selon les seuils de l’Anah) accèdent au barème précarité énergétique, avec des primes environ deux fois supérieures. Le logement doit avoir plus de 2 ans et les travaux doivent être réalisés par un artisan RGE.',
   },
   {
-    question: 'Quels travaux sont \u00e9ligibles aux CEE\u00a0?',
+    question: 'Quels travaux sont éligibles aux CEE\u00a0?',
     answer:
-      'Les principales cat\u00e9gories de travaux \u00e9ligibles sont : l\u2019isolation (combles, murs, planchers, fen\u00eatres), le chauffage (pompe \u00e0 chaleur, chaudi\u00e8re biomasse, po\u00eale \u00e0 bois), la ventilation (VMC double flux), la r\u00e9gulation (thermostat programmable) et la production d\u2019eau chaude sanitaire (chauffe-eau thermodynamique ou solaire). Chaque op\u00e9ration est d\u00e9finie par une fiche standardis\u00e9e du minist\u00e8re.',
+      'Les principales catégories de travaux éligibles sont : l’isolation (combles, murs, planchers, fenêtres), le chauffage (pompe à chaleur, chaudière biomasse, poêle à bois), la ventilation (VMC double flux), la régulation (thermostat programmable) et la production d’eau chaude sanitaire (chauffe-eau thermodynamique ou solaire). Chaque opération est définie par une fiche standardisée du ministère.',
   },
   {
-    question: 'La prime CEE est-elle cumulable avec MaPrimeR\u00e9nov\u2019\u00a0?',
+    question: 'La prime CEE est-elle cumulable avec MaPrimeRénov’\u00a0?',
     answer:
-      'Oui, la prime CEE est cumulable avec MaPrimeR\u00e9nov\u2019, la TVA r\u00e9duite \u00e0 5,5\u00a0% et l\u2019\u00e9co-pr\u00eat \u00e0 taux z\u00e9ro (jusqu\u2019\u00e0 50\u00a0000\u00a0\u20ac). La seule limite est que le total des aides ne doit pas d\u00e9passer 100\u00a0% du co\u00fbt TTC des travaux. Pour en profiter, l\u2019artisan doit \u00eatre certifi\u00e9 RGE \u00e0 la date de signature du devis.',
+      'Oui, la prime CEE est cumulable avec MaPrimeRénov’, la TVA réduite à 5,5\u00a0% et l’\u00e9co-prêt à taux zéro (jusqu’\u00e0 50\u00a0000\u00a0\u20ac). La seule limite est que le total des aides ne doit pas dépasser 100\u00a0% du coût TTC des travaux. Pour en profiter, l’artisan doit être certifié RGE à la date de signature du devis.',
   },
 ]
 
@@ -121,7 +121,7 @@ export default function SimulateurPrimeCeePage() {
       <section className="bg-sand-50 py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-8 text-center">
-            Questions fr\u00e9quentes sur la prime CEE
+            Questions fréquentes sur la prime CEE
           </h2>
           <div className="space-y-6">
             {FAQ.map((item, i) => (

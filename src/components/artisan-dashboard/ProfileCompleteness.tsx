@@ -53,7 +53,7 @@ interface FieldDef {
 const FIELDS: FieldDef[] = [
   {
     key: 'name',
-    label: 'Nom de l\u2019entreprise',
+    label: 'Nom de l’entreprise',
     weight: 10,
     icon: <Building2 className="w-4 h-4" aria-hidden="true" />,
     tab: 'identite',
@@ -61,7 +61,7 @@ const FIELDS: FieldDef[] = [
   },
   {
     key: 'description',
-    label: 'Description / pr\u00e9sentation',
+    label: 'Description / présentation',
     weight: 15,
     icon: <FileText className="w-4 h-4" aria-hidden="true" />,
     tab: 'presentation',
@@ -69,7 +69,7 @@ const FIELDS: FieldDef[] = [
   },
   {
     key: 'phone',
-    label: 'T\u00e9l\u00e9phone',
+    label: 'Téléphone',
     weight: 10,
     icon: <Phone className="w-4 h-4" aria-hidden="true" />,
     tab: 'contact',
@@ -85,7 +85,7 @@ const FIELDS: FieldDef[] = [
   },
   {
     key: 'siret',
-    label: 'Num\u00e9ro SIRET',
+    label: 'Numéro SIRET',
     weight: 10,
     icon: <CreditCard className="w-4 h-4" aria-hidden="true" />,
     tab: 'identite',
@@ -109,7 +109,7 @@ const FIELDS: FieldDef[] = [
   },
   {
     key: 'services',
-    label: 'Services propos\u00e9s',
+    label: 'Services proposés',
     weight: 10,
     icon: <Wrench className="w-4 h-4" aria-hidden="true" />,
     tab: 'services',
@@ -125,7 +125,7 @@ const FIELDS: FieldDef[] = [
   },
   {
     key: 'hours',
-    label: 'Horaires d\u2019ouverture',
+    label: 'Horaires d’ouverture',
     weight: 10,
     icon: <Clock className="w-4 h-4" aria-hidden="true" />,
     tab: 'disponibilite',
@@ -175,9 +175,9 @@ function getScoreColor(score: number): { bar: string; bg: string; text: string }
 
 function getMessage(score: number): string {
   if (score >= 100) return 'Parfait ! Votre profil est complet.'
-  if (score >= 80) return 'Excellent ! Plus que quelques d\u00e9tails.'
-  if (score >= 50) return 'Bon d\u00e9but ! Continuez \u00e0 compl\u00e9ter.'
-  return 'Compl\u00e9tez votre profil pour plus de visibilit\u00e9.'
+  if (score >= 80) return 'Excellent ! Plus que quelques détails.'
+  if (score >= 50) return 'Bon début ! Continuez à compléter.'
+  return 'Complétez votre profil pour plus de visibilité.'
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -201,7 +201,7 @@ const ProfileCompleteness = React.memo(function ProfileCompleteness({
     <div className="bg-white rounded-xl border border-charcoal-200 p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-charcoal-900">Compl\u00e9tude du profil</h3>
+        <h3 className="text-base font-semibold text-charcoal-900">Complétude du profil</h3>
         <span className={`text-sm font-bold ${colors.text}`}>{score}%</span>
       </div>
 
@@ -214,7 +214,7 @@ const ProfileCompleteness = React.memo(function ProfileCompleteness({
           aria-valuenow={score}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label={`Compl\u00e9tude du profil : ${score}%`}
+          aria-label={`Complétude du profil : ${score}%`}
         />
       </div>
 
@@ -225,7 +225,7 @@ const ProfileCompleteness = React.memo(function ProfileCompleteness({
       {missing.length > 0 && (
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wide text-charcoal-500 mb-2">
-            \u00c0 compl\u00e9ter
+            À compléter
           </p>
           <ul className="space-y-1.5">
             {missing.map((field) => (
@@ -256,7 +256,7 @@ const ProfileCompleteness = React.memo(function ProfileCompleteness({
       {completed.length > 0 && (
         <div className="mt-4 pt-4 border-t border-charcoal-100">
           <p className="text-xs font-semibold uppercase tracking-wide text-charcoal-400 mb-2">
-            Compl\u00e9t\u00e9 ({completed.length}/{FIELDS.length})
+            Complété ({completed.length}/{FIELDS.length})
           </p>
           <ul className="space-y-1">
             {completed.map((field) => (

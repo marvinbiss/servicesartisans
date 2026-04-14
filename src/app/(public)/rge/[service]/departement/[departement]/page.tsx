@@ -43,7 +43,7 @@ interface PageProps {
 
 function truncateTitle(title: string, maxLen = 58): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -61,11 +61,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   })
   const isNoindex = count === 0
 
-  const title = truncateTitle(
-    `${serviceName} RGE ${dept.name} (${dept.code}) \u2014 MaPrimeR\u00e9nov\u2019`
-  )
-  const rawDesc = `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE ${getDeptPreposition(dept.name)} (${dept.code}). \u00c9ligibles MaPrimeR\u00e9nov\u2019, CEE et TVA 5,5 %. Donn\u00e9es ADEME.`
-  const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '\u2026'
+  const title = truncateTitle(`${serviceName} RGE ${dept.name} (${dept.code}) — MaPrimeRénov’`)
+  const rawDesc = `Artisans ${serviceName.toLowerCase()} certifiés RGE ${getDeptPreposition(dept.name)} (${dept.code}). Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Données ADEME.`
+  const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '…'
 
   const path = `/rge/${serviceSlug}/departement/${deptSlug}`
 
@@ -121,7 +119,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
   const itemListSchema = getItemListSchema({
     name: `${serviceName} RGE ${getDeptPreposition(dept.name)}`,
-    description: `Artisans ${serviceName.toLowerCase()} certifi\u00e9s RGE ${getDeptPreposition(dept.name)} (${dept.code})`,
+    description: `Artisans ${serviceName.toLowerCase()} certifiés RGE ${getDeptPreposition(dept.name)} (${dept.code})`,
     url: path,
     items: providers.slice(0, 10).map((p, idx) => ({
       name: p.name,
@@ -139,7 +137,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
     url: pageUrl,
     about: {
       '@type': 'Service',
-      name: `${serviceName} certifi\u00e9 RGE`,
+      name: `${serviceName} certifié RGE`,
       areaServed: {
         '@type': 'AdministrativeArea',
         name: dept.name,

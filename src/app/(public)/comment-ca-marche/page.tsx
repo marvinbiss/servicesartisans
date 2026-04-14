@@ -70,7 +70,7 @@ const steps = [
       "Trouvez le bon professionnel en quelques secondes dans notre annuaire d'artisans. Recherchez par type de service et par ville dans les 101 départements français.",
     details: [
       "Des milliers d'artisans référencés en France",
-      'Recherche par métier : plombier, électricien, couvreur\u2026',
+      'Recherche par métier : plombier, électricien, couvreur…',
       'Filtrage par ville et département',
       'Résultats instantanés et à jour',
     ],

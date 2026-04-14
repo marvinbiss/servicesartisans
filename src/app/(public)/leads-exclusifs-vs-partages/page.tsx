@@ -24,9 +24,9 @@ export const revalidate = 86400
 const path = '/leads-exclusifs-vs-partages'
 
 export const metadata: Metadata = {
-  title: 'Leads exclusifs vs leads partag\u00e9s : comparatif pour artisans du b\u00e2timent',
+  title: 'Leads exclusifs vs leads partagés : comparatif pour artisans du bâtiment',
   description:
-    'Comparatif objectif entre leads exclusifs et leads partag\u00e9s pour les artisans. Co\u00fbt r\u00e9el, taux de conversion, ROI. Donn\u00e9es Habitatpresto, Travaux.com, Effy.',
+    'Comparatif objectif entre leads exclusifs et leads partagés pour les artisans. Coût réel, taux de conversion, ROI. Données Habitatpresto, Travaux.com, Effy.',
   robots: {
     index: true,
     follow: true,
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1 as const,
   },
   openGraph: {
-    title: 'Leads exclusifs vs leads partag\u00e9s : le vrai comparatif artisan',
+    title: 'Leads exclusifs vs leads partagés : le vrai comparatif artisan',
     description:
-      'Quel mod\u00e8le de leads est le plus rentable pour un artisan du b\u00e2timent ? Chiffres, retours terrain et analyse.',
+      'Quel modèle de leads est le plus rentable pour un artisan du bâtiment ? Chiffres, retours terrain et analyse.',
     type: 'article',
     locale: 'fr_FR',
     url: `${SITE_URL}${path}`,
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Leads exclusifs vs leads partag\u00e9s : comparatif artisan',
+    title: 'Leads exclusifs vs leads partagés : comparatif artisan',
     description:
-      'Co\u00fbt r\u00e9el, taux de conversion, ROI. Le comparatif que les plateformes ne vous montrent pas.',
+      'Coût réel, taux de conversion, ROI. Le comparatif que les plateformes ne vous montrent pas.',
   },
   alternates: getAlternates(path),
 }
@@ -58,65 +58,64 @@ export const metadata: Metadata = {
 
 const COMPARISON_TABLE = [
   {
-    criteria: 'Nombre d\u2019artisans par lead',
+    criteria: 'Nombre d’artisans par lead',
     exclusif: '1 seul',
-    partage: '3 \u00e0 10 (parfois plus)',
+    partage: '3 à 10 (parfois plus)',
   },
   {
     criteria: 'Taux de conversion moyen',
-    exclusif: '20 \u00e0 35 %',
-    partage: '5 \u00e0 12 %',
+    exclusif: '20 à 35 %',
+    partage: '5 à 12 %',
   },
   {
-    criteria: 'Co\u00fbt par lead (ordre de grandeur)',
-    exclusif: '15 \u00e0 50 \u20ac',
-    partage: '1 \u00e0 15 \u20ac par lead (mais x5 artisans)',
+    criteria: 'Coût par lead (ordre de grandeur)',
+    exclusif: '15 à 50 €',
+    partage: '1 à 15 € par lead (mais x5 artisans)',
   },
   {
-    criteria: 'Co\u00fbt par chantier sign\u00e9 (CPA)',
-    exclusif: '50 \u00e0 150 \u20ac',
-    partage: '80 \u00e0 300 \u20ac (leads perdus inclus)',
+    criteria: 'Coût par chantier signé (CPA)',
+    exclusif: '50 à 150 €',
+    partage: '80 à 300 € (leads perdus inclus)',
   },
   {
-    criteria: 'Temps pass\u00e9 en rappel prospect',
-    exclusif: '1 appel, 0 comp\u00e9tition',
-    partage: 'Course au rappel, 3 \u00e0 5 appels concurrents',
+    criteria: 'Temps passé en rappel prospect',
+    exclusif: '1 appel, 0 compétition',
+    partage: 'Course au rappel, 3 à 5 appels concurrents',
   },
   {
-    criteria: 'Qualit\u00e9 de la relation client',
-    exclusif: '\u00c9lev\u00e9e (premier contact = confiance)',
-    partage: 'D\u00e9grad\u00e9e (client d\u00e9j\u00e0 sollicit\u00e9 5 fois)',
+    criteria: 'Qualité de la relation client',
+    exclusif: 'Élevée (premier contact = confiance)',
+    partage: 'Dégradée (client déjà sollicité 5 fois)',
   },
   {
     criteria: 'Engagement plateforme',
-    exclusif: 'Variable (0 \u00e0 mensuel)',
-    partage: 'Abonnement 70 \u00e0 220 \u20ac/mois (Habitatpresto)',
+    exclusif: 'Variable (0 à mensuel)',
+    partage: 'Abonnement 70 à 220 €/mois (Habitatpresto)',
   },
 ]
 
 const PLATFORMS = [
   {
     name: 'Habitatpresto',
-    model: 'Leads partag\u00e9s',
-    cost: '70 \u00e0 220 \u20ac/mois (abonnement)',
-    sharing: '5 artisans par lead, puis 5 autres si pas de r\u00e9ponse',
-    engagement: '6 \u00e0 12 mois',
-    rating: '4.1/5 Trustpilot (22 % de 1 \u00e9toile)',
-    weakness:
-      'Leads froids, zones inactives, r\u00e9siliation p\u00e9nalis\u00e9e \u00e0 50 % du restant',
+    model: 'Leads partagés',
+    cost: '70 à 220 €/mois (abonnement)',
+    sharing: '5 artisans par lead, puis 5 autres si pas de réponse',
+    engagement: '6 à 12 mois',
+    rating: '4.1/5 Trustpilot (22 % de 1 étoile)',
+    weakness: 'Leads froids, zones inactives, résiliation pénalisée à 50 % du restant',
   },
   {
     name: 'Travaux.com',
-    model: 'Leads partag\u00e9s',
-    cost: '1 \u00e0 90 \u20ac par contact',
-    sharing: '3 \u00e0 5 artisans (jusqu\u2019\u00e0 10 en zone dense)',
+    model: 'Leads partagés',
+    cost: '1 à 90 € par contact',
+    sharing: '3 à 5 artisans (jusqu’\u00e0 10 en zone dense)',
     engagement: 'Au lead',
     rating: '4.0/5 Trustpilot (10 000+ avis)',
-    weakness: 'Contacts injoignables, projets fictifs, co\u00fbt \u00e9lev\u00e9 sans garantie',
+    weakness: 'Contacts injoignables, projets fictifs, coût élevé sans garantie',
   },
   {
     name: 'Effy',
-    model: 'Leads partag\u00e9s (r\u00e9seau partenaire)',
+    model: 'Leads partagés (réseau partenaire)',
     cost: 'Commission sur prime CEE',
     sharing: 'Plusieurs artisans par zone',
     engagement: 'Contractuel',
@@ -126,9 +125,9 @@ const PLATFORMS = [
   {
     name: 'ServicesArtisans',
     model: 'Leads exclusifs',
-    cost: '0 \u20ac (phase de lancement)',
+    cost: '0 € (phase de lancement)',
     sharing: '1 artisan par lead, toujours',
-    engagement: 'Z\u00e9ro engagement',
+    engagement: 'Zéro engagement',
     rating: 'Nouveau (2026)',
     weakness: 'Volume en croissance (phase de lancement)',
   },
@@ -136,35 +135,34 @@ const PLATFORMS = [
 
 const FAQS = [
   {
-    question:
-      'Un lead exclusif est-il vraiment plus rentable qu\u2019un lead partag\u00e9 moins cher\u00a0?',
+    question: 'Un lead exclusif est-il vraiment plus rentable qu’un lead partagé moins cher\u00a0?',
     answer:
-      'Oui, dans la majorit\u00e9 des cas. Un lead partag\u00e9 \u00e0 5 \u20ac envoy\u00e9 \u00e0 5 artisans co\u00fbte en r\u00e9alit\u00e9 25 \u20ac au total pour le march\u00e9. Avec un taux de conversion de 5 \u00e0 12 %, le co\u00fbt par chantier sign\u00e9 d\u00e9passe souvent 200 \u20ac. Un lead exclusif \u00e0 30 \u20ac avec 25 % de conversion co\u00fbte 120 \u20ac par chantier sign\u00e9. Le calcul est vite fait.',
+      'Oui, dans la majorité des cas. Un lead partagé à 5 € envoyé à 5 artisans coûte en réalité 25 € au total pour le marché. Avec un taux de conversion de 5 à 12 %, le coût par chantier signé dépasse souvent 200 €. Un lead exclusif à 30 € avec 25 % de conversion coûte 120 € par chantier signé. Le calcul est vite fait.',
   },
   {
-    question: 'Pourquoi les plateformes vendent-elles des leads partag\u00e9s\u00a0?',
+    question: 'Pourquoi les plateformes vendent-elles des leads partagés\u00a0?',
     answer:
-      'Parce que c\u2019est plus rentable pour la plateforme. Un m\u00eame lead vendu 5 fois rapporte 5 fois plus qu\u2019un lead exclusif. Le mod\u00e8le avantage la plateforme, pas l\u2019artisan.',
+      'Parce que c’est plus rentable pour la plateforme. Un même lead vendu 5 fois rapporte 5 fois plus qu’un lead exclusif. Le modèle avantage la plateforme, pas l’artisan.',
   },
   {
-    question: 'Comment v\u00e9rifier qu\u2019un lead est vraiment exclusif\u00a0?',
+    question: 'Comment vérifier qu’un lead est vraiment exclusif\u00a0?',
     answer:
-      'Demandez la garantie par \u00e9crit dans les CGV de la plateforme. Si la plateforme ne s\u2019engage pas contractuellement sur l\u2019exclusivit\u00e9, c\u2019est qu\u2019elle partage. Chez ServicesArtisans, l\u2019exclusivit\u00e9 est une r\u00e8gle non-n\u00e9gociable inscrite dans nos conditions d\u2019utilisation.',
+      'Demandez la garantie par écrit dans les CGV de la plateforme. Si la plateforme ne s’engage pas contractuellement sur l’exclusivité, c’est qu’elle partage. Chez ServicesArtisans, l’exclusivité est une règle non-négociable inscrite dans nos conditions d’utilisation.',
   },
   {
-    question: 'Quel volume de leads exclusifs peut-on esp\u00e9rer par mois\u00a0?',
+    question: 'Quel volume de leads exclusifs peut-on espérer par mois\u00a0?',
     answer:
-      'Le volume d\u00e9pend de votre zone g\u00e9ographique, de votre m\u00e9tier et de la demande locale. Un plombier-chauffagiste en zone urbaine re\u00e7oit plus de demandes qu\u2019un fa\u00e7adier en zone rurale. L\u2019avantage de l\u2019exclusivit\u00e9, c\u2019est que chaque lead a une probabilit\u00e9 de conversion 3 \u00e0 5 fois sup\u00e9rieure.',
+      'Le volume dépend de votre zone géographique, de votre métier et de la demande locale. Un plombier-chauffagiste en zone urbaine reçoit plus de demandes qu’un façadier en zone rurale. L’avantage de l’exclusivité, c’est que chaque lead a une probabilité de conversion 3 à 5 fois supérieure.',
   },
   {
-    question: 'Les leads partag\u00e9s sont-ils totalement \u00e0 \u00e9viter\u00a0?',
+    question: 'Les leads partagés sont-ils totalement à éviter\u00a0?',
     answer:
-      'Pas forc\u00e9ment. Pour un artisan qui d\u00e9marre et a besoin de volume rapidement, les leads partag\u00e9s peuvent servir de compl\u00e9ment. Mais le c\u0153ur de l\u2019acquisition devrait reposer sur des leads exclusifs ou du bouche-\u00e0-oreille. Les artisans exp\u00e9riment\u00e9s qui ont calcul\u00e9 leur co\u00fbt r\u00e9el par chantier sign\u00e9 quittent g\u00e9n\u00e9ralement les plateformes de leads partag\u00e9s.',
+      'Pas forcément. Pour un artisan qui démarre et a besoin de volume rapidement, les leads partagés peuvent servir de complément. Mais le cœur de l’acquisition devrait reposer sur des leads exclusifs ou du bouche-à-oreille. Les artisans expérimentés qui ont calculé leur coût réel par chantier signé quittent généralement les plateformes de leads partagés.',
   },
   {
-    question: 'Quelle diff\u00e9rence entre un lead exclusif et un lead qualifi\u00e9\u00a0?',
+    question: 'Quelle différence entre un lead exclusif et un lead qualifié\u00a0?',
     answer:
-      'Un lead qualifi\u00e9 a \u00e9t\u00e9 filtr\u00e9 pour correspondre \u00e0 vos crit\u00e8res (zone, m\u00e9tier, budget). Un lead exclusif n\u2019est envoy\u00e9 qu\u2019\u00e0 vous. L\u2019id\u00e9al, c\u2019est un lead \u00e0 la fois qualifi\u00e9 ET exclusif. C\u2019est ce que propose ServicesArtisans : filtrage par m\u00e9tier et zone, envoi \u00e0 un seul artisan.',
+      'Un lead qualifié a été filtré pour correspondre à vos critères (zone, métier, budget). Un lead exclusif n’est envoyé qu’\u00e0 vous. L’idéal, c’est un lead à la fois qualifié ET exclusif. C’est ce que propose ServicesArtisans : filtrage par métier et zone, envoi à un seul artisan.',
   },
 ]
 
@@ -175,7 +173,7 @@ const FAQS = [
 export default function LeadsExclusifsVsPartagesPage() {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Leads exclusifs vs partag\u00e9s', url: path },
+    { name: 'Leads exclusifs vs partagés', url: path },
   ])
 
   const faqSchema = getFAQSchema(FAQS)
@@ -183,7 +181,7 @@ export default function LeadsExclusifsVsPartagesPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Leads exclusifs vs leads partag\u00e9s : comparatif pour artisans du b\u00e2timent',
+    headline: 'Leads exclusifs vs leads partagés : comparatif pour artisans du bâtiment',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
     author: { '@type': 'Organization', name: 'ServicesArtisans' },
@@ -191,7 +189,7 @@ export default function LeadsExclusifsVsPartagesPage() {
     datePublished: '2026-04-12',
     dateModified: '2026-04-12',
     description:
-      'Comparatif objectif entre leads exclusifs et leads partag\u00e9s. Co\u00fbt r\u00e9el, taux de conversion, ROI pour les artisans.',
+      'Comparatif objectif entre leads exclusifs et leads partagés. Coût réel, taux de conversion, ROI pour les artisans.',
   }
 
   return (
@@ -200,7 +198,7 @@ export default function LeadsExclusifsVsPartagesPage() {
       <JsonLd data={articleSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
-      <Breadcrumb items={[{ label: 'Leads exclusifs vs partag\u00e9s' }]} />
+      <Breadcrumb items={[{ label: 'Leads exclusifs vs partagés' }]} />
 
       {/* ============================================================ */}
       {/*  HERO                                                        */}

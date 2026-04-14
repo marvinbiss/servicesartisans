@@ -73,7 +73,7 @@ export default function SmartSuggestions({
 }: SmartSuggestionsProps) {
   const [dismissed, setDismissed] = useState<Set<string>>(new Set())
 
-  const subcategories = serviceSubcategories[service] || []
+  const subcategories = useMemo(() => serviceSubcategories[service] || [], [service])
 
   const suggestions = useMemo(() => {
     if (!description || description.length < 2) {
@@ -81,18 +81,12 @@ export default function SmartSuggestions({
       return subcategories
     }
 
-    const query = description
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+    const query = description.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
     return subcategories.filter((sub) => {
       if (dismissed.has(sub)) return false
 
-      const normalizedSub = sub
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
+      const normalizedSub = sub.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
       // Fuzzy match: check if any word in query matches any word in subcategory
       const queryWords = query.split(/\s+/).filter((w) => w.length >= 2)
