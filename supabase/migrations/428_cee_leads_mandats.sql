@@ -7,6 +7,17 @@ BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+-- Guard: garantir l'existence de public.set_updated_at (défini en 102, idempotent)
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.updated_at := now();
+  RETURN NEW;
+END;
+$$;
+
 -- ---------------------------------------------------------------------------
 -- 428.1  cee_leads — Funnel simulateur → paiement
 -- email_hash RGPD pour dédoublonnage sans exposer PII
