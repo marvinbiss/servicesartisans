@@ -175,9 +175,7 @@ describe('Notifications V1 — Lead Event Processor', () => {
   })
 
   it('viewed event is in-app only (no email)', () => {
-    expect(processorCode).toContain(
-      "viewed:     { channels: ['in_app'],          targetRoles: ['client'] }"
-    )
+    expect(processorCode).toContain("viewed: { channels: ['in_app'], targetRoles: ['client'] }")
   })
 
   it('does not expose provider IDs in client-facing notification messages', () => {

@@ -52,14 +52,14 @@ let webhookUpdateResult: BuilderResult = { data: null, error: null }
 // Track what update/insert calls were made (assignments used for debugging)
 
 // Track which call to from() we are on for each createAdminClient invocation
-let fromCallIndex = 0
+let _fromCallIndex = 0
 let fromCallLog: string[] = []
 
 function buildMockSupabaseAdmin() {
   return {
     from: vi.fn().mockImplementation((table: string) => {
       fromCallLog.push(table)
-      fromCallIndex++
+      _fromCallIndex++
 
       if (table === 'webhook_events') {
         // First webhook_events call: insert (idempotency check)
@@ -211,7 +211,7 @@ async function callPOST(request: Request): Promise<ResponseLike> {
 
 beforeEach(async () => {
   vi.clearAllMocks()
-  fromCallIndex = 0
+  _fromCallIndex = 0
   fromCallLog = []
 
   // Default results: success paths
@@ -247,7 +247,7 @@ describe('POST /api/stripe/webhook', () => {
     const result = await callPOST(request)
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toBe('Missing signature')
+    expect(result.body.error).toBe('Signature manquante')
   })
 
   // ---- 2. Invalid signature returns 400 ----
@@ -264,7 +264,7 @@ describe('POST /api/stripe/webhook', () => {
     const result = await callPOST(makeWebhookRequest('{}', 'invalid_sig'))
 
     expect(result.status).toBe(400)
-    expect(result.body.error).toBe('Webhook signature verification failed')
+    expect(result.body.error).toBe('Échec de la vérification de signature webhook')
   })
 
   // ---- 3. Already processed event returns already_processed ----
@@ -472,6 +472,6 @@ describe('POST /api/stripe/webhook', () => {
     const result = await callPOST(makeWebhookRequest('{}', 'valid_sig'))
 
     expect(result.status).toBe(500)
-    expect(result.body.error).toBe('Webhook handler failed')
+    expect(result.body.error).toBe('Échec du traitement webhook')
   })
 })
