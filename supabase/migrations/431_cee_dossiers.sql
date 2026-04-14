@@ -8,6 +8,14 @@ BEGIN;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- ---------------------------------------------------------------------------
+-- 431.0  Drop ancien schéma 402 (table vide, remplacée par V3 artisan-first)
+-- ---------------------------------------------------------------------------
+DROP MATERIALIZED VIEW IF EXISTS public.mv_cee_dossiers_stats;
+DROP TABLE IF EXISTS public.cee_dossier_events     CASCADE;
+DROP TABLE IF EXISTS public.cee_dossier_documents  CASCADE;
+DROP TABLE IF EXISTS public.cee_dossiers           CASCADE;
+
+-- ---------------------------------------------------------------------------
 -- 431.1  cee_dossiers — Dossier CEE monté par artisan partenaire
 -- PII chiffrées (pgcrypto côté app) + email_hash généré pour dédoublonnage
 -- expires_at = 10 ans (conservation pièces CEE R.221-1)
