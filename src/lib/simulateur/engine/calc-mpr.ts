@@ -13,11 +13,42 @@ import type { BaremeId, CategorieAnah, GesteId, SautsDpe } from '../types'
 import { asBaremeId } from '../types'
 import {
   MPR_GESTE_PAC_AIREAU,
+  MPR_GESTE_PAC_GEOTHERMIE,
+  MPR_GESTE_CET,
+  MPR_GESTE_CESI,
+  MPR_GESTE_POELE_GRANULES,
+  MPR_GESTE_POELE_BUCHES,
+  MPR_GESTE_VMC_2FLUX,
+  MPR_GESTE_AUDIT_ENERGETIQUE,
   MPR_GESTE_SUPPRIMES,
+  MPR_GESTE_UNCONFIRMED,
+  MPR_GESTE_NEEDS_SURFACE,
   MPR_ACCOMPAGNE,
   MPR_GESTE_PLAFOND_DEPENSES,
 } from '../baremes/2026-01'
 import { logger } from '@/lib/logger'
+
+type UnconfirmedGeste = (typeof MPR_GESTE_UNCONFIRMED)[number]
+type NeedsSurfaceGeste = (typeof MPR_GESTE_NEEDS_SURFACE)[number]
+
+const GESTE_FORFAITS: Partial<Record<GesteId, Record<CategorieAnah, number>>> = {
+  PAC_AIREAU: MPR_GESTE_PAC_AIREAU,
+  PAC_GEOTHERMIE: MPR_GESTE_PAC_GEOTHERMIE,
+  CET: MPR_GESTE_CET,
+  CESI: MPR_GESTE_CESI,
+  POELE_GRANULES: MPR_GESTE_POELE_GRANULES,
+  POELE_BUCHES: MPR_GESTE_POELE_BUCHES,
+  VMC_2FLUX: MPR_GESTE_VMC_2FLUX,
+  AUDIT_ENERGETIQUE: MPR_GESTE_AUDIT_ENERGETIQUE,
+}
+
+function isUnconfirmed(g: GesteId): g is UnconfirmedGeste {
+  return (MPR_GESTE_UNCONFIRMED as ReadonlyArray<string>).includes(g)
+}
+
+function isNeedsSurface(g: GesteId): g is NeedsSurfaceGeste {
+  return (MPR_GESTE_NEEDS_SURFACE as ReadonlyArray<string>).includes(g)
+}
 
 export interface MprGesteBreakdownItem {
   geste: GesteId
@@ -37,16 +68,25 @@ function categorieUpper(cat: CategorieAnah): string {
 /**
  * Calcule MPR parcours geste pour un ensemble de gestes retenus.
  *
- * Règles :
- * - PAC_AIREAU : forfait selon catégorie (doc 07 §5)
- * - BIOMASSE : 0 € (supprimée depuis 01/01/2026), warning loggué
- * - Autres gestes : 0 € pour l'instant (barèmes à ajouter par P1)
+ * Règles (doc 01 §70-120, sources economie.gouv.fr / service-public.gouv.fr) :
+ * - Rose → forfait = 0 systématiquement (non éligible parcours geste)
+ * - SUPPRIMES (BIOMASSE, ITE, ITI) → 0 €, baremeId `.SUPPRIME.`, warning loggué
+ * - NEEDS_SURFACE (ISO_TOITURE_*, ISO_PLANCHERS_BAS) → 0 €, baremeId `.NEEDS_SURFACE.`,
+ *   warning loggué (TODO : input `surfaceIsolation_m2` requis)
+ * - UNCONFIRMED (CESI, POELE_BUCHES) → forfait appliqué, baremeId `.UNCONFIRMED.`
+ *   (back-office sait que la valeur est à confirmer par arrêté)
+ * - Autres gestes avec forfait défini (PAC_AIREAU, PAC_GEOTHERMIE, CET, POELE_GRANULES,
+ *   VMC_2FLUX, AUDIT_ENERGETIQUE) → forfait standard, baremeId `2026-01`
+ * - Gestes inconnus (ex: SSC, MENUISERIES, VMC_SF, ISOLATION_MURS/TOITURE/PLANCHER legacy)
+ *   → 0 €, baremeId `.STUB.` (à implémenter)
  */
 export function calcMPRGeste(gestes: GesteId[], categorie: CategorieAnah): MprGesteResult {
   const breakdown: MprGesteBreakdownItem[] = []
   let total = 0
+  const catU = categorieUpper(categorie)
 
   for (const g of gestes) {
+    // 1. Gestes supprimés du parcours geste depuis 01/01/2026
     if (MPR_GESTE_SUPPRIMES.includes(g)) {
       logger.warn(`MPR monogeste supprimée pour ${g} depuis 01/01/2026 — forfait 0 appliqué.`, {
         action: 'calcMPRGeste',
@@ -55,27 +95,58 @@ export function calcMPRGeste(gestes: GesteId[], categorie: CategorieAnah): MprGe
       breakdown.push({
         geste: g,
         forfait: 0,
-        baremeId: asBaremeId(`MPR.${g}.${categorieUpper(categorie)}.SUPPRIME.2026-01`),
+        baremeId: asBaremeId(`MPR.${g}.${catU}.SUPPRIME.2026-01`),
       })
       continue
     }
 
-    if (g === 'PAC_AIREAU') {
-      const forfait = MPR_GESTE_PAC_AIREAU[categorie]
+    // 2. Rose : non éligible parcours geste → 0 quelle que soit la nature du geste
+    if (categorie === 'rose') {
+      breakdown.push({
+        geste: g,
+        forfait: 0,
+        baremeId: asBaremeId(`MPR.${g}.ROSE.NON_ELIGIBLE.2026-01`),
+      })
+      continue
+    }
+
+    // 3. Gestes nécessitant une surface d'isolation (€/m²) — non implémenté
+    if (isNeedsSurface(g)) {
+      logger.warn(
+        `MPR geste ${g} nécessite un input 'surfaceIsolation_m2' non disponible — forfait 0 appliqué.`,
+        {
+          action: 'calcMPRGeste',
+          geste: g,
+          todo: 'Ajouter input surfaceIsolation_m2 + barème €/m² par catégorie',
+        }
+      )
+      breakdown.push({
+        geste: g,
+        forfait: 0,
+        baremeId: asBaremeId(`MPR.${g}.${catU}.NEEDS_SURFACE.2026-01`),
+      })
+      continue
+    }
+
+    // 4. Gestes avec forfait défini (incl. UNCONFIRMED)
+    const table = GESTE_FORFAITS[g]
+    if (table) {
+      const forfait = table[categorie]
       total += forfait
+      const suffix = isUnconfirmed(g) ? '.UNCONFIRMED.2026-01' : '.2026-01'
       breakdown.push({
         geste: g,
         forfait,
-        baremeId: asBaremeId(`MPR.PAC_AIREAU.${categorieUpper(categorie)}.2026-01`),
+        baremeId: asBaremeId(`MPR.${g}.${catU}${suffix}`),
       })
       continue
     }
 
-    // Gestes sans forfait MPR défini (stub — P1 owner)
+    // 5. Geste inconnu / non implémenté → stub
     breakdown.push({
       geste: g,
       forfait: 0,
-      baremeId: asBaremeId(`MPR.${g}.${categorieUpper(categorie)}.STUB.2026-01`),
+      baremeId: asBaremeId(`MPR.${g}.${catU}.STUB.2026-01`),
     })
   }
 

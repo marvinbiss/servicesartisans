@@ -102,8 +102,81 @@ export const MPR_GESTE_PAC_AIREAU: Record<CategorieAnah, number> = {
 
 export const MPR_GESTE_PLAFOND_DEPENSES = 12000
 
-/** Gestes dont le forfait MPR monogeste est SUPPRIMÉ depuis 01/01/2026. */
-export const MPR_GESTE_SUPPRIMES: GesteId[] = ['BIOMASSE']
+/**
+ * MPR parcours geste — autres forfaits par catégorie (doc 01 §70-120).
+ * Sources officielles : economie.gouv.fr / service-public.gouv.fr (arrêté 2026).
+ * Rose : 0 € systématiquement (non éligible parcours geste).
+ */
+export const MPR_GESTE_PAC_GEOTHERMIE: Record<CategorieAnah, number> = {
+  bleu: 11000,
+  jaune: 9000,
+  violet: 6000,
+  rose: 0,
+}
+
+export const MPR_GESTE_CET: Record<CategorieAnah, number> = {
+  bleu: 1200,
+  jaune: 800,
+  violet: 400,
+  rose: 0,
+}
+
+/** ⚠️ Valeurs à confirmer contre l'arrêté officiel 2026 (baremeId `.UNCONFIRMED.`). */
+export const MPR_GESTE_CESI: Record<CategorieAnah, number> = {
+  bleu: 4000,
+  jaune: 3000,
+  violet: 2000,
+  rose: 0,
+}
+
+export const MPR_GESTE_POELE_GRANULES: Record<CategorieAnah, number> = {
+  bleu: 1250,
+  jaune: 1000,
+  violet: 750,
+  rose: 0,
+}
+
+/** ⚠️ Valeurs à confirmer contre l'arrêté officiel 2026 (baremeId `.UNCONFIRMED.`). */
+export const MPR_GESTE_POELE_BUCHES: Record<CategorieAnah, number> = {
+  bleu: 1000,
+  jaune: 800,
+  violet: 500,
+  rose: 0,
+}
+
+export const MPR_GESTE_VMC_2FLUX: Record<CategorieAnah, number> = {
+  bleu: 2500,
+  jaune: 2000,
+  violet: 1500,
+  rose: 0,
+}
+
+export const MPR_GESTE_AUDIT_ENERGETIQUE: Record<CategorieAnah, number> = {
+  bleu: 500,
+  jaune: 400,
+  violet: 300,
+  rose: 0,
+}
+
+/** Gestes dont les forfaits 2026 doivent encore être confirmés par arrêté officiel. */
+export const MPR_GESTE_UNCONFIRMED = ['CESI', 'POELE_BUCHES'] as const
+
+/**
+ * Gestes nécessitant un input `surfaceIsolation_m2` pour calculer le forfait (€/m²).
+ * TODO: ajouter input surfaceIsolation_m2 au stepper + calcul barème €/m² par catégorie.
+ */
+export const MPR_GESTE_NEEDS_SURFACE = [
+  'ISO_TOITURE_RAMPANTS',
+  'ISO_TOITURE_TERRASSE',
+  'ISO_PLANCHERS_BAS',
+] as const
+
+/**
+ * Gestes dont le forfait MPR monogeste est SUPPRIMÉ depuis 01/01/2026.
+ * - BIOMASSE : supprimée (CEE seuls actifs)
+ * - ITE / ITI : supprimés du parcours geste (doc 01 §70-120)
+ */
+export const MPR_GESTE_SUPPRIMES: GesteId[] = ['BIOMASSE', 'ITE', 'ITI']
 
 // =============================================================================
 // 6. Fiches CEE (doc 07 §6)

@@ -23,13 +23,24 @@ export type SautsDpe = 2 | 3 | 4
 
 export type GesteId =
   | 'PAC_AIREAU'
+  | 'PAC_GEOTHERMIE'
   | 'CET'
+  | 'CESI'
   | 'SSC'
   | 'BIOMASSE'
+  | 'POELE_GRANULES'
+  | 'POELE_BUCHES'
   | 'VMC_SF'
+  | 'VMC_2FLUX'
+  | 'AUDIT_ENERGETIQUE'
   | 'ISOLATION_MURS'
   | 'ISOLATION_TOITURE'
   | 'ISOLATION_PLANCHER'
+  | 'ISO_TOITURE_RAMPANTS'
+  | 'ISO_TOITURE_TERRASSE'
+  | 'ISO_PLANCHERS_BAS'
+  | 'ITE'
+  | 'ITI'
   | 'MENUISERIES'
 
 // Branded type for ID stables (doc archi §4)
