@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 
 import CeeCTA from '@/components/cee/CeeCTA'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
@@ -591,6 +592,13 @@ export default function MaprimeRenovCumulCeePage() {
           performances techniques (COP, résistance thermique, rendement…) précisées dans chaque
           fiche d’opération.
         </p>
+      </section>
+
+      {/* Simulateur CTA — capte l'intent juste après le tableau de cumul */}
+      <section className="bg-white border-b border-charcoal-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+          <SimulateurCTA variant="banner" />
+        </div>
       </section>
 
       {/* 4. Plafonds */}
