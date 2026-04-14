@@ -635,7 +635,7 @@ describe('processDevis', () => {
       codes: ['BAR-TH-160', 'BAR-TH-104'],
     })
 
-    const _leadId = setupHappyPathMocks()
+    setupHappyPathMocks()
     const input = makeDevisInput({ service: 'chauffagiste' })
     const result = await processDevis(input, null)
 

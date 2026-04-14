@@ -41,7 +41,7 @@ export default function DossierListCard({ dossier }: DossierListCardProps) {
   return (
     <Link
       href={href}
-      className="group block rounded-xl border border-sand-300 bg-white p-5 transition-all hover:border-primary-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+      className="group block rounded-xl border border-sand-300 bg-white p-5 motion-safe:transition-all hover:border-primary-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
       aria-label={`Voir le dossier CEE ${dossier.operation_code}`}
     >
       <div className="flex items-start justify-between gap-3">

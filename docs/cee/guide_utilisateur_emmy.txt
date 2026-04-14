@@ -1,0 +1,1409 @@
+Guide utilisateur ­
+plateforme EMMY
+
+25.01.2022
+Paris
+Version 1.0
+Table des Matières
+
+Contents
+
+1.   Préambule                                                  6
+
+2.   Espace public EMMY                                         7
+
+2.1  Sections informatives                                      7
+
+2.2  Ouvrir un compte                                           7
+
+2.3  Données mensuelles publiées                                9
+
+2.4  Profil utilisateurs                                        9
+
+3.   Mon espace                                                 10
+
+3.1  Informations personnelles et modification du mot de passe  10
+
+3.2  Gestion et historique des mails                            11
+
+3.2.1 Gestion des mails                                         11
+
+3.2.2 Historique des mails                                      12
+
+4.   Compte                                                     13
+
+4.1  Généralités                                                13
+
+4.2  Ouverture d'un compte                                      13
+
+4.2.1 Saisie par le titulaire                                   13
+
+4.2.2 Nouvelle demande                                          14
+
+4.2.3 Attente d'ouverture                                       15
+
+4.2.4 Statuts du compte                                         15
+
+4.3  Tenue des comptes                                          16
+
+4.3.1 Tableau de bord                                           16
+
+4.3.2 Informations et documents                                 17
+
+4.3.3 Gestion des utilisateurs                                  18
+
+4.3.4 Groupe                                                    20
+
+4.3.5 Membre                                                    21
+
+Guide utilisateur ­ plateforme EMMY                                           Page 2
+Release 1.0                           Public, © EEX AG ­ part of eex group
+4.3.6 Gestion des mails                                                 21
+
+5.   Dossier                                                            23
+
+5.1  Créer un dossier                                                   23
+
+5.2  Gérer un dossier                                                   24
+
+5.3  Dépôt d'un dossier de demande                                      25
+
+5.3.1 Indentification                                                   25
+
+5.3.2 Eligibilité                                                       26
+
+5.3.3 Regroupement (facultatif)                                         27
+
+5.3.4 Opérations                                                        28
+
+5.3.5 Destinataires                                                     34
+
+5.3.6 Pièces jointes                                                    36
+
+5.3.7 Validation                                                        37
+
+6.   Transferts                                                         40
+
+6.1  Accéder à l'espace transferts                                      40
+
+6.2  Apparaître dans la liste des acheteurs / vendeurs                  42
+
+6.3  Initier une transaction                                            43
+
+6.4  Choisir un signataire                                              45
+
+6.5  Accepter la transaction                                            46
+
+6.6  Sélectionner des CEE                                               47
+
+6.7  Confirmer la transaction                                           49
+
+6.8  Signer la transaction                                              49
+
+6.8.1 Procédure signature manuscrite                                    49
+
+6.8.2 Procédure signature électronique                                  50
+
+6.9  Gestion des transferts                                             51
+
+7.   Annexe 1 : Guide utilisateur mandataire                            52
+
+7.1  Gestion d'un mandataire                                            52
+
+7.1.1 Création d'un mandataire                                          52
+
+7.2  Gestion des dossiers                                               58
+
+7.2.1 Création d'un dossier par un mandataire                           58
+
+7.2.2 Rattacher un dossier déjà créé à un mandataire                    61
+
+8.   Annexe 2 : Procédure détaillée de première signature électronique  65
+
+Guide utilisateur ­ plateforme EMMY                                                    Page 3
+Release 1.0                                    Public, © EEX AG ­ part of eex group
+8.1  Sur ordinateur                                  65
+
+8.2  Sur téléphone portable                          66
+
+8.3  Questions fréquentes                            66
+
+9.   Annexe 3 : Communication prix spot              67
+
+9.1  Modalités opérationnelles du prix SPOT          67
+
+9.1.1 Définition de l'indice SPOT                    67
+
+9.1.2 Définition de la transaction SPOT              67
+
+9.1.3 Mise en place de l'indice SPOT                 67
+
+9.1.4 Contrôle et fiabilité de l'indice SPOT         67
+
+9.1.5 Condition de non-publication de l'indice SPOT  68
+
+9.2  Communication du prix SPOT                      68
+
+9.2.1 Publication de l'indice SPOT                   68
+
+9.2.2 Mise en ligne du prix SPOT                     68
+
+Guide utilisateur ­ plateforme EMMY                                                          Page 4
+Release 1.0                                          Public, © EEX AG ­ part of eex group
+Versions
+
+Version   Date   Raison de la modification  Section modifiée
+                       Première version
+V1.0 25.01.2022
+
+Guide utilisateur ­ plateforme EMMY                                          Page 5
+Release 1.0                          Public, © EEX AG ­ part of eex group
+1. Préambule
+
+La plateforme EMMY permet de déposer des dossiers de demande de certificats d'économies
+d'énergie, de visualiser et gérer des certificats et de rentrer en contact avec des acheteurs ou des
+vendeurs de certificats.
+
+L'ensemble des informations partagées dans ce document à travers les captures d'écrans sont
+anonymisées ou factices.
+
+Guide utilisateur ­ plateforme EMMY                                          Page 6
+Release 1.0                          Public, © EEX AG ­ part of eex group
+2. Espace public EMMY
+
+2.1 Sections informatives
+
+La section publique du registre EMMY contient plusieurs onglets :
+    · Un onglet « Accueil » décrivant sommairement les fonctionnalités de la plateforme. Il y a lien
+         vers le site du Ministère de la Transition Energétique et Solidaire (« MTES »)
+    · Un onglet « Le registre » décrivant les missions du registre
+    · Un onglet « FAQ » recensant les questions fréquentes liées à l'utilisation du registre
+    · Un onglet « Données mensuelles » avec les cotations des prix des CEE mensuellement
+    · Un onglet « Liste des titulaires » recensant les questions fréquentes liées à l'utilisation du
+         registre
+    · Un onglet « Contact » recensant les questions fréquentes liées à l'utilisation du registre
+
+La partie en haut à droite de la page d'accueil permet à l'utilisateur de se connecter à son compte. Il a
+la possibilité, s'il a oublié son mot de passe de cliquer sur « Mot de passe oublié ». Cela permet de
+réinitialiser son mot de passe.
+
+2.2 Ouvrir un compte
+
+Guide utilisateur ­ plateforme EMMY                                          Page 7
+Release 1.0                          Public, © EEX AG ­ part of eex group
+L'inscription au registre se fait en 4 étapes décrites ci-dessus :
+    · Etape 1 :
+         · Vous faites une demande d'inscription en cliquant sur le lien « S'inscrire auprès du teneur
+              du registre » en bas de page qui vous donne accès au Registre.
+         · Choisissez un identifiant et un mot de passe que vous utiliserez pour accéder à votre
+              compte. Valider pour créer votre « espace temporaire ». Un courriel vous confirme ces
+              informations. Il vous permet d'accéder à un espace personnel.
+    · Etape 2 :
+         · Vous remplissez la fiche de renseignements en ligne dans votre espace personnel, et
+              validez ces informations. Vous recevrez un courriel contenant une documentation, les
+              conditions générales de service et un bulletin d'acceptation qui reprend les informations
+              que vous avez données. Vous transmettez alors votre dossier d'admission contenant les
+              pièces justificatives relatives à votre statut par voie électronique au département admission
+              d'EEX.
+    · Etape 3 :
+         · A la réception du dossier du candidat Titulaire, le Teneur de Registre vérifie l'ensemble des
+              pièces demandées. Le dossier d'ouverture de compte est validé dès que le dossier est
+              complet et les frais d'ouverture réglés.
+    · Etape 4 :
+         · Dès validation du dossier, le Teneur de Registre avise, par courrier électronique, le Titulaire
+              de l'ouverture effective de son compte en communiquant le numéro de son compte. Le
+              titulaire a alors accès à son compte sur lequel il retrouve la facture acquittée attestant du
+              règlement des frais d'ouverture de compte.
+
+Guide utilisateur ­ plateforme EMMY                                          Page 8
+Release 1.0                          Public, © EEX AG ­ part of eex group
+2.3 Données mensuelles publiées
+
+L'annexe 3 décrit le processus de publication des données mensuelles.
+
+2.4 Profil utilisateurs
+
+Il existe quatre types de profils différents sur EMMY :
+         · Demandeurs
+         · Teneur de registre
+         · DGEC
+         · PNCEE
+
+Guide utilisateur ­ plateforme EMMY                                          Page 9
+Release 1.0                          Public, © EEX AG ­ part of eex group
+3. Mon espace
+
+3.1 Informations personnelles et modification du mot de passe
+
+La page « Informations personnelles » permet à l'utilisateur connecté de modifier les informations
+relatives à son compte utilisateur.
+
+Le formulaire contenant les informations suivantes :
+    · Nom
+    · Prénom
+    · Fonction
+    · Adresse
+    · Adresse électronique de contact
+    · Téléphone
+    · Identifiant
+
+La modification de ces informations peut se faire à tout moment, les informations modifiées sont
+soumises à validation pour respecter les contraintes d'intégrités de la base de données et les règles
+de gestion relatives à la sécurité et autres règles métiers (ex. Champ identifiant unique, minimum 6
+caractères).
+
+La page modification du mot de passe accessible depuis informations personnelles permet à
+l'utilisateur connecté de modifier son mot de passe.
+
+Formulaire contenant les informations suivantes :
+    · Nouveau mot de passe
+    · Confirmation du mot de passe
+
+Le mot de passe doit contenir au minimum 8 caractères dont 1 chiffre [0-9] et 1 majuscule [A-Z] et 1
+caractère spécial [#@%* !$;:_?+-].
+
+Un indicateur permet à l'utilisateur de visualiser le niveau de sécurité de son mot de passe. La
+modification du mot de passe prend effet immédiatement sans confirmation par mail.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 10
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Un indicateur de niveau de sécurité permet à l'utilisateur de se rendre compte de la robustesse du mot
+de passe choisi.
+
+3.2 Gestion et historique des mails
+3.2.1 Gestion des mails
+
+Cette page permet à l'utilisateur de gérer l'envoi et la réception des notifications via des mails.
+Le formulaire en haut de page permet d'ajouter/supprimer les adresses électroniques relatives à
+l'utilisateur connecté. Il est possible d'ajouter jusqu'à 3 adresses mails en plus de l'adresse principale
+qui est obligatoire.
+
+Les notifications sont triées en 5 catégories correspondant aux entités qui les concernent :
+    · Dossier
+    · Compte
+    · Lettre d'information
+
+Guide utilisateur ­ plateforme EMMY                                         Page 11
+Release 1.0                          Public, © EEX AG ­ part of eex group
+    · Transfert
+    · Annulations
+
+Les tableaux indiquent les types de notifications et leurs statuts correspondants aux différentes
+adresses mails : P = Principale, E1 = Externe 1, E2 = Externe2, E3 = Externe 3.
+
+Les statuts de notifications sont représentés par les icônes suivantes :
+    · Actif : représenté par un signe valide sur fond vert
+    · Inactif : représenté par une croix blanche sur fond rouge
+
+Les colonnes correspondantes aux emails secondaires sont dynamiques et s'affichent en fonction du
+nombre d'emails secondaires renseignés par l'utilisateur. Lorsqu'un utilisateur ajoute une adresse, une
+nouvelle colonne correspondant à la numérotation de l'adresse externe est mise en place et toutes les
+notifications relatives à cette adresse sont initialisées en « inactif ».
+
+Le clic sur une icône de statut permet de modifier le statut d'une notification, la modification est faite
+en temps réel.
+
+Certaines notifications sont obligatoires au moins pour l'adresse principale, représentées par une icône
+cadenas (Ex. : modification du mot de passe, confirmation de la réception du dossier par le PNCEE).
+
+Les notifications dépendent du type de compte de l'utilisateur. Certaines notifications sont communes
+alors que d'autres sont spécifiques à un type de compte en particulier, la capture d'écran ci-dessus ne
+représente que les notifications relatives au type de compte demandeur.
+
+3.2.2 Historique des mails
+
+La page historique des mails liste les emails envoyés par l'application à destination de l'utilisateur
+connecté (sur ses adresses mails définies au point précédent).
+
+Un bloc de recherche permet à l'utilisateur connecté de filtrer les résultats par :
+    · Statut : type de notification (compte, dossier, transfert, annulation, lettre d'information)
+    · Intervalle de date d'envoi
+
+Il est possible d'envoyer / renvoyer un mail en cliquant sur l'icône de la colonne « Envoyer ». Il est
+aussi possible de visualiser le contenu du mail en cliquant sur l'icône de la colonne « contenu ».
+
+Guide utilisateur ­ plateforme EMMY                                         Page 12
+Release 1.0                          Public, © EEX AG ­ part of eex group
+4. Compte
+
+4.1 Généralités
+
+Il existe 6 statuts pour les comptes :
+         · Saisie pour le titulaire
+         · Nouvelle demande
+         · Attente d'ouverture
+         · Ouvert
+         · Suspendu
+         · Clôturé
+
+Ces statuts définissent un état bien précis du compte et permettent de définir un ensemble de
+fonctionnalités disponibles ou non.
+
+Les différentes modalités relatives aux statuts et les changements de statut sont définis dans les points
+suivants.
+
+La liste des comptes est visible depuis les portails Teneur de registre, PNCEE et DGEC. La page «
+Comptes » contient :
+
+         · Un formulaire de recherche permettant d'affiner les résultats en fonction de critères
+         · Une liste de comptes et leur solde total
+         · Le total du solde de la recherche effectuée
+
+Il est possible d'accéder au détail d'un compte en cliquant sur le numéro du compte correspondant.
+
+4.2 Ouverture d'un compte
+
+4.2.1 Saisie par le titulaire
+
+Le compte vient d'être créé dans la base de données depuis l'espace public (cf. partie 1.1.3. de ce
+document).
+
+Un utilisateur relié à ce compte qui se connecte sur l'application Emmy ne dispose pas d'un accès
+complet à l'application, il peut uniquement accéder à son espace temporaire :
+
+Guide utilisateur ­ plateforme EMMY                                         Page 13
+Release 1.0                          Public, © EEX AG ­ part of eex group
+4.2.2 Nouvelle demande
+
+La visualisation d'un compte en statut « Nouvelle demande » permet de :
+         · Visualiser et modifier les informations saisies dans l'espace temporaire du demandeur
+              depuis l'onglet « Informations »
+         · Gérer les utilisateurs liés au compte
+         · Gérer les groupes relatifs au compte
+         · Gérer les membres relatifs au compte
+         · Modifier le statut du compte
+
+L'onglet « Accès » permet de valider la demande. Lorsque la demande est validée, le compte passe
+dans le statut « Attente d'ouverture ».
+
+Guide utilisateur ­ plateforme EMMY                                         Page 14
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Une nouvelle ligne d'historique indique au demandeur le changement de statut de son compte.
+
+4.2.3 Attente d'ouverture
+
+Un onglet « Documents » permet au teneur de registre d'uploader dans l'application différents
+documents relatifs au compte.
+
+Pour pouvoir changer le statut du compte à « Ouvert » et donc ouvrir l'accès complet à l'application
+aux utilisateurs du compte, le contrat qui lie demandeur au teneur de registre doit être uploadé.
+
+Le contrat uploadé permet de débloquer la fonctionnalité « Ouvrir le compte ».
+
+Toutes les entrées de type « Fichier » sont validées par l'application en s'appuyant sur :
+         · Le format (csv / xls / PDF ...) adéquat
+         · Le poids maximal adéquat
+         · Un contrôle antivirus
+
+4.2.4 Statuts du compte
+
+4.2.4.1 Ouvert
+Dans le périmètre de son activité, un compte ouvert a accès à toutes les fonctionnalités de son rôle.
+
+4.2.4.2 Suspendu
+Si un compte est suspendu, les utilisateurs n'ont plus accès à l'application de manière temporaire.
+
+4.2.4.3 Clôturé
+Il s'agit du Teneur du registre qui est en charge de clôturer les comptes. En amont, il s'assure qu'il n'y
+ait plus de dossiers en cours associés au compte en question. Les utilisateurs d'un compte clôturé
+n'ont plus accès à l'application de manière définitive.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 15
+Release 1.0                          Public, © EEX AG ­ part of eex group
+4.3 Tenue des comptes
+
+L'objectif de cette partie est de présenter les différentes fonctionnalités relatives aux comptes dans
+l'application.
+
+4.3.1 Tableau de bord
+
+Le tableau de bord permet de recenser tous les mouvements effectués sur votre compte.
+
+La « Nature » d'une décision de délivrance dépend de la façon dont les CEE ont été délivrés :
+    · D : Dossier
+              o Il s'agit d'une délivrance de certificats d'énergie classiques
+    · Dm : Décision modificative
+              o Il s'agit d'une décision venant modifier la précédente (suite à une action du PNCEE)
+    · T : Transfert
+              o Il s'agit d'un transfert de certificats d'énergie classiques
+
+    · DP : Dossier Précarité
+
+              o Il s'agit d'une délivrance de certificats d'énergie précarités
+
+    · DPm : Dossier Précarité modificatif
+
+Guide utilisateur ­ plateforme EMMY                                         Page 16
+Release 1.0                          Public, © EEX AG ­ part of eex group
+              o Il s'agit d'un dossier venant modifier le précédent (suite à une action du PNCEE)
+    · TP : Transfert précarité
+
+              o Il s'agit d'un transfert de certificats précarité
+    · A : Annulation
+
+              o Il s'agit d'une annulation de certificats
+    · AP : Annulation Précarité
+
+              o Il s'agit d'une annulation précarité
+
+4.3.2 Informations et documents
+
+4.3.2.1 Informations
+
+L'onglet « Informations » permet de prendre connaissance de l'ensemble des données administratives
+du compte.
+
+Y sont regroupés les informations administratives, les informations du contact associé au compte, les
+coordonnées, le représentant légal signataire, le contact facturation.
+
+C'est dans cette rubrique qu'il est possible d'ajouter ou modifier un signataire.
+Attention : Certaines informations ne sont modifiables que par le Teneur.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 17
+Release 1.0                          Public, © EEX AG ­ part of eex group
+4.3.2.2 Documents
+
+Dans cette rubrique, l'utilisateur peut télécharger les documents justificatifs :
+    · Kbis
+    · Justificatif d'un statut obligé
+    · Identité du titulaire
+
+L'utilisateur peut aussi télécharger les factures liées au frais de service mis à disposition par la
+plateforme.
+
+4.3.3 Gestion des utilisateurs
+
+Cette rubrique permet à l'utilisateur d'avoir une vision sur les utilisateurs liés au compte. Un menu
+déroulant permet de filtrer un certain type d'utilisateur.
+
+Le bouton « + Créer un nouvel utilisateur » permet de créer un nouvel profil associé au compte.
+
+Les rôles sont :
+
+    · Lecture seule
+              o L'utilisateur a accès à l'ensemble des fonctionnalités de l'application en lecture seule
+                   uniquement.
+
+    · Lecture seule ­ Dossiers
+              o L'utilisateur n'a accès qu'à la section « Dossiers » en lecture seule.
+
+    · Responsable Achats/Ventes
+              o L'utilisateur n'a accès qu'à la section « Transferts » en lecture seule.
+
+    · Responsable de Dossiers
+              o L'utilisateur n'a accès qu'à la section « Dossiers » et aux dossiers qui lui sont
+                   assignés uniquement ou sans assignation.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 18
+Release 1.0                          Public, © EEX AG ­ part of eex group
+· Responsable de Saisie
+         o L'utilisateur n'a accès qu'à la section « Dossiers » et aux dossiers qui lui sont
+              assignés uniquement, il ne peut que saisir des opérations et ne peut pas faire
+              d'actions sur le dossier : pas de création, de validation de statuts ou de changements
+              relatifs aux modalités du dossier.
+
+· Responsable Général
+         o L'utilisateur a accès à l'ensemble des fonctionnalités de l'application.
+
+L'icône « Croix » permet de supprimer un utilisateur. La suppression d'un utilisateur n'est possible
+que si cet utilisateur n'est pas relié à un dossier.
+Si la suppression d'un utilisateur relié à un dossier est demandée, il faut réassigner tous les dossiers
+relatifs à cet utilisateur vers un autre utilisateur du même compte.
+
+Il est possible de choisir dans la liste des utilisateurs qui ont les rôles :
+    · Responsable général
+    · Responsable de dossier
+
+Il est possible de réassigner massivement les dossiers liés à l'utilisateur.
+La page de réassignation des dossiers liste le détail des dossiers qui doivent être réassignés, la liste
+est paginée et il est par ailleurs possible d'afficher un nombre défini de dossiers ou tous les résultats
+sur la même page.
+L'ajout d'un utilisateur ouvre une page dont les informations suivantes sont demandées :
+
+Guide utilisateur ­ plateforme EMMY                                         Page 19
+Release 1.0                          Public, © EEX AG ­ part of eex group
+L'ajout d'un utilisateur est soumis à une vérification par rapport à l'intégrité des données, aux règles
+de gestion de l'application, aux règles de sécurité et à d'autres règles métier.
+
+4.3.4 Groupe
+
+L'onglet groupe est constitué de :
+· Un bouton « ajouter un nouveau groupe »
+· De la liste des groupes associés au compte
+
+L'ajout d'un groupe est constitué d'un formulaire contenant uniquement un champ « Libellé ». Chaque
+groupe d'un compte doit avoir un libellé unique. Les groupes permettent de créer un lien entre plusieurs
+utilisateurs, dossiers et transferts.
+
+Un dossier ou transfert créé ou instancié par un utilisateur faisant partie d'un groupe se voit assigner
+le même groupe. La fonctionnalité groupe permet entre autres de filtrer les utilisateurs, dossiers et
+transferts par groupe.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 20
+Release 1.0                          Public, © EEX AG ­ part of eex group
+4.3.5 Membre
+
+L'onglet « Membres » permet d'administrer une liste de membres propres à un compte. Ces membres
+pourront faire ultérieurement partie d'un dossier de regroupement.
+
+L'onglet est constitué :
+    · D'un bouton « Ajouter un membre »
+    · De la liste des membres du compte, il est possible de supprimer directement un membre depuis
+         la liste.
+
+Un membre faisant partie d'un dossier de regroupement ne peut pas être supprimé.
+
+Si l'utilisateur souhaite ajouter un nouveau membre, il clique sur « + Ajouter un nouveau membre ».
+
+Il doit ensuite remplir un formulaire de renseignements avec les informations suivantes :
+    · Numéro d'identification
+    · Raison sociale
+    · SIREN
+    · Adresse
+    · Forme juridique
+
+Tous ces champs sont marqués d'une étoile « rouge » : ils sont obligatoires. Les informations saisies
+seront soumises à validation.
+
+4.3.6 Gestion des mails
+
+La gestion des mails est similaire à la description apportée dans la partie 3.2.1 de ce présent
+document.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 21
+Release 1.0                          Public, © EEX AG ­ part of eex group
+La différence réside dans le fait que la gestion des mails ne se fait pas pour un utilisateur en
+particulier mais à un ensemble d'utilisateurs ayant chacun un rôle précis.
+
+L'utilisateur peut gérer l'envoi des mails par rapport à un événement et l'utilisateur lié à cet
+événement (exemple : lorsque la DD est validée, lorsqu'un transfert est effectué etc...).
+
+Guide utilisateur ­ plateforme EMMY                                         Page 22
+Release 1.0                          Public, © EEX AG ­ part of eex group
+5. Dossier
+
+5.1 Créer un dossier
+
+Depuis l'onglet « Dossier », l'utilisateur peut créer un dossier en cliquant sur le bouton « créer un
+nouveau dossier ».
+
+Une nouvelle page apparait, permettant à l'utilisateur de nommer son dossier.
+
+Le tableau affiché, indique si l'utilisation de la dérogation annuelle permettant la validation d'un dossier
+dont le solde est inférieur au seuil indiqué a été utilisé ou pas.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 23
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Une fois nommée, l'utilisateur clique sur « créer » afin de finaliser la création de son dossier.
+
+5.2 Gérer un dossier
+
+Une fois le dossier créé, l'utilisateur est redirigé vers l'interface de gestion de dossier. Cette interface
+permet à l'utilisateur de saisir les informations liées au dossier de demande, de réaliser différentes
+actions sur le dossier ou de suivre l'avancement du dossier.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 24
+Release 1.0                          Public, © EEX AG ­ part of eex group
+5.3 Dépôt d'un dossier de demande
+
+Depuis l'onglet Dossiers > dossier de demande, l'utilisateur doit remplir l'ensemble des étapes, afin de
+valider son dossier
+
+5.3.1 Identification
+
+L'onglet « identification » recense des informations sur le titulaire déposant le dossier de demande, il
+
+se décompose en 3 parties :
+
+-  Informations administratives (raison sociale du demandeur, la forme juridique, le SIREN...)
+
+-  Les coordonnées
+
+-  Mandataire cf : guide utilisateur mandataire en annexe 1
+
+Guide utilisateur ­ plateforme EMMY                                         Page 25
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Pour modifier ces informations, le titulaire doit se rapprocher auprès du teneur de registre.
+
+1er dépôt :
+Si le dossier concerne un premier dépôt, l'utilisateur doit attester la validité des informations
+préremplies en cochant la case
+
+A partir du 2ème dépôt :
+
+Si le titulaire a déjà déposé au moins un dossier de demande, l'utilisateur doit :
+    · Attester la validité des informations préremplies
+    · Attester que la structure juridique n'a pas été modifié depuis de dernier dépôt En cochant la
+         case
+
+En cliquant sur le bouton « enregistrer » le titulaire sauvegarde les informations saisies et reste sur la
+page affichée. En cliquant sur le bouton « étape suivante » l'utilisateur est redirigé vers l'onglet suivant
+et les informations saisies sont sauvegardés.
+
+5.3.2 Eligibilité
+
+L'onglet « éligibilité » recense les différentes pièces justificatives rattachées au compte permettant au
+PNCEE de valider le dossier.
+Les documents doivent être à jour et daté de moins de 3 mois. L'ajout d'un document d'éligibilité met
+à jour l'ensemble des dossiers en cours de saisie et/ou en cours de déverrouillages.
+L'ajout des documents justificatifs s'effectue depuis la partie Compte > Documents.
+
+5.3.2.1 Le titulaire est un obligé
+Le titulaire doit obligatoirement télécharger sur la plateforme les documents suivants :
+
+    · Justificatif du statut d'obligé
+    · Justificatif d'éligibilité (extrait de K-bis ou autres pièces selon la catégorie d'acteur)
+Le titulaire doit cocher la case « j'atteste sur l'honneur ne pas avoir délégué la totalité de mon obligation
+et demeurer obligé au titre de l'article L.221-1 du code de l'énergie.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 26
+Release 1.0                          Public, © EEX AG ­ part of eex group
+En cliquant sur le bouton « étape précédente », l'utilisateur est redirigé vers l'onglet « identification »
+En cliquant sur le bouton « étape suivante », l'utilisateur est redirigé vers l'onglet « regroupement ».
+
+5.3.2.2 Le titulaire est un non-obligé
+Le titulaire doit obligatoirement télécharger sur la plateforme un justificatif d'éligibilité (extrait K-bis ou
+autres pièces selon la catégorie d'acteur).
+
+En cliquant sur le bouton « étape précédente », l'utilisateur est redirigé vers l'onglet « identification »
+En cliquant sur le bouton « étape suivante », l'utilisateur est redirigé vers l'onglet « regroupement ».
+
+5.3.3 Regroupement (facultatif)
+
+Le titulaire peut déposer un dossier dans le cadre d'un regroupement. L'utilisateur saisit le dossier pour
+N membres, créés préalablement depuis la partie Compte > membres.
+En cochant la case « la demande est déposée dans le cadre d'un regroupement » une sous-partie
+apparait avec la part des membres.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 27
+Release 1.0                          Public, © EEX AG ­ part of eex group
+En cliquant sur le bouton « étape précédente », l'utilisateur est redirigé vers l'onglet « identification »
+En cliquant sur le bouton « étape suivante », l'utilisateur est redirigé vers l'onglet « regroupement ».
+
+A noter
+La part des membres est renseignée automatiquement dès lors qu'une et/ou plusieurs opérations sont
+rattachées à un membre de ce dossier
+
+5.3.4 Opérations
+
+L'onglet « opérations » permet de saisir les opérations qui vont constituer le dossier de demande. Afin
+de saisir correctement les opérations, l'utilisateur doit :
+· Identifier le type d'opération
+· Saisir l'opération
+
+5.3.4.1 Sélection du type d'opérations                                                     Page 28
+Il existe 3 types d'opérations sur la plateforme :  Public, © EEX AG ­ part of eex group
+· Les opérations standards ;
+· Les programmes ;
+
+Guide utilisateur ­ plateforme EMMY
+Release 1.0
+· Les opérations spécifiques.
+En cliquant sur la liste déroulante, l'utilisateur peut modifier le type d'opération qui est par défaut
+positionné sur « opérations standards ».
+
+La sélection du type d'opération recharge la page.
+Un dossier de demande ne peut contenir différents types d'opérations
+
+5.3.4.2 Saisir une opération
+Une fois le type d'opération identifiée, l'utilisateur peut saisir son ou ses opération(s). Il peut :
+· Saisir une opération via la plateforme ;
+· Importer un fichier csv.
+
+Saisir une opération via la plateforme
+L'utilisateur clique sur le bouton « saisir une opération » et est redirigé vers la page de saisie d'une
+opération.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 29
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Saisie d'une opération standardisée
+Afin de saisir correctement une opération standard, l'utilisateur doit :
+
+Etapes Actions                       Obligatoire ?  Commentaires
+
+   Saisir les dates de début et                     Il existe 6 catégories d'équipements
+                                                    standardisés
+1  de fin d'opération                Oui            · AGRI : agriculture
+                                                    · BAR : bâtiment résidentiel
+2  Sélectionner la catégorie         Oui            · BAT : bâtiment tertiaire
+   d'équipement                                     · IND : industrie
+                                                    · RES : réseau
+3  Sélectionner le type              Oui            · TRA : transport
+   d'équipement                                     Le type d'équipement affiché
+                                                    apparait selon la catégorie
+4  Sélectionner l'équipement         Oui            d'équipement sélectionnée.
+
+5  Sélectionner le département                      Une liste d'équipement respectant
+                                                    les conditions des étapes 2 et 3
+   concerné par l'opération          Oui            apparait
+
+                                                    Le département sélectionné
+                                                    permettra d'identifier la zone
+                                                    climatique qu'Emmy doit attribuer.
+                                                    Dans le cas d'un cas précarité, le
+                                                    département permettre d'appliquer
+                                                    le bon Rp
+
+6  Saisir les paramètres de          Oui
+   calcul
+
+7  Sélectionner la bonification Si applicable
+
+Guide utilisateur ­ plateforme EMMY                                                        Page 30
+Release 1.0                                         Public, © EEX AG ­ part of eex group
+8   Identifier les cas précarité     Si applicable
+
+9   Saisir la référence interne      Oui            La référence interne doit être unique
+                                                    dans un dossier.
+
+    Choisir le type de                               Si le bénéficiaire de l'opération
+                                                     est :
+10  bénéficiaire                     Oui
+                                                        · Personne morale
+11  Saisir les trames                Oui                · Particuliers
+
+                                                    Les trames s'adaptent selon la
+                                                    sélection du type de bénéficiaire
+
+12  Sélectionner le RAI              Oui
+
+    Indiquer      le SIRET
+
+13  de l'organisme ayant réalisé Oui
+
+    l'opération Si applicable
+
+14  Saisir les informations sur      Oui
+    l'organisme de contrôle
+
+Saisie d'une opération spécifique
+Afin de saisir correctement une opération spécifique, l'utilisateur doit :
+
+Etapes Actions                       Obligatoire ?  Commentaires
+
+    Saisir les dates de début et                    Il existe 6 catégories d'équipements
+                                                    standardisés
+1   de fin d'opération               Oui            · AGRI : agriculture
+                                                    · BAR : bâtiment résidentiel
+2   Sélectionner la catégorie        Oui            · BAT : bâtiment tertiaire
+    d'équipement                                    · IND : industrie
+                                                    · RES : réseau
+
+Guide utilisateur ­ plateforme EMMY                                                        Page 31
+Release 1.0                                         Public, © EEX AG ­ part of eex group
+                                                                · TRA : transport
+
+3   Saisir une description           Non
+
+4   Sélectionner le département                                 Le département sélectionné
+                                                                permettra d'identifier la zone
+    concerné par l'opération         Oui                        climatique qu'Emmy doit attribuer.
+                                                                Dans le cas d'un cas précarité, le
+                                                                département permettre d'appliquer
+                                                                le bon Rp
+
+5   Saisir les paramètres de         Oui
+    calcul
+
+6   Sélectionner la bonification Si applicable
+
+7   Identifier les cas précarité     Si applicable
+
+8   Saisir la référence interne      Oui                        La référence interne doit être unique
+                                                                dans un dossier.
+
+9   Choisir le type de                                           Si le bénéficiaire de l'opération
+                                                                 est :
+    bénéficiaire                     Oui
+                                                                    · Personne morale
+10  Saisir les trames                Oui                            · Particuliers
+
+                                                                Les trames s'adaptent selon la
+                                                                sélection du type de bénéficiaire
+
+    Indiquer      le SIRET
+
+11  de l'organisme ayant réalisé Oui
+
+    l'opération Si applicable
+
+12  Saisir les informations sur      Oui
+    l'organisme de contrôle
+
+Saisie d'un programme
+Afin de saisir correctement un programme, l'utilisateur doit :
+
+Guide utilisateur ­ plateforme EMMY                                                                    Page 32
+Release 1.0                                                     Public, © EEX AG ­ part of eex group
+Etapes Actions                       Obligatoire ?  Commentaires
+
+   Saisir les dates de début et                     Il existe 5 types de programme :
+
+1  de fin d'opération                Oui            · PE : précarité énergétique
+                                                    · INFO : information
+2  Sélectionner la catégorie du      Oui            · FOR : formation
+                                                    · INNO : innovation
+   programme                                        · FGRE : fonds de garantie
+
+3  Sélectionner le type du           Oui            Une liste d'équipement respectant
+   programme                                        les conditions des étapes 2 et 3
+                                                    apparait
+4  Sélectionner l'équipement         Oui
+                                                    Le département sélectionné
+5  Sélectionner le département                      permettra d'identifier la zone
+                                                    climatique qu'Emmy doit attribuer.
+   concerné par l'opération          Oui            Dans le cas d'un cas précarité, le
+                                                    département permettre d'appliquer
+6  Saisir les paramètres de          Oui            le bon Rp
+   calcul
+                                                    La référence interne doit être unique
+7  Saisir la référence interne       Oui            dans un dossier
+                                                    Si le bénéficiaire de l'opération est :
+8  Choisir le type de bénéficiaire Oui              · Personne morale
+                                                    · Particuliers
+9  Saisir les trames                 Oui            Les trames s'adaptent selon la
+                                                    sélection du type de bénéficiaire
+
+Guide utilisateur ­ plateforme EMMY                                                        Page 33
+Release 1.0                                         Public, © EEX AG ­ part of eex group
+Importer un fichier csv
+Le fichier csv vous permet d'importer plusieurs opérations en une fois.
+Le format du fichier est fourni par le teneur de registre. (Un template d'import est mis à votre disposition
+sur le registre.)
+
+A noter :
+Afin de connaitre la bonne saisie, il est conseillé d'effectuer une saisie manuelle en sélectionnant la
+bonne fiche, puis réaliser faire un export machine.
+
+Tableaux récapitulatifs
+
+Les tableaux récapitulatifs peuvent être :
+    · Importer en PJ via une saisie manuelle si les opérations saisies sont :
+              · Des opérations standards  uniquement pour les fiches TRANSPORTS
+              · Des opérations spécifiques
+              · Des programmes
+    · Générer automatiquement par la plateforme.
+
+Les tableaux récapitulatifs sont rattachés au dossier lors de sa validation
+
+5.3.5 Destinataires
+
+L'onglet « destinataire » permet aux utilisateurs renseignés d'être informés des notifications/alertes sur
+le dossier.
+Il se décompose de 3 sous-parties :
+· Méthode de correspondance
+· Destinataires
+· Adresse postale de contact
+
+Guide utilisateur ­ plateforme EMMY                                         Page 34
+Release 1.0                          Public, © EEX AG ­ part of eex group
+5.3.5.1 Méthode de correspondance
+L'utilisateur sélectionne le mode de correspondance privilégié pour ses échanges avec le PNCEE. Il a
+le choix entre :
+· Une correspondance par voie postale
+· Une correspondance par voie électronique
+
+5.3.5.2 Utilisateurs
+La liste de gauche recense les utilisateurs du compte :
+
+La liste de droite affiche les utilisateurs qui recevront les notifications/alertes du dossier par mail
+
+Guide utilisateur ­ plateforme EMMY                                         Page 35
+Release 1.0                          Public, © EEX AG ­ part of eex group
+A noter
+Un ou plusieurs utilisateurs peuvent être sélectionnés en tant que destinataires.
+
+5.3.5.3 Adresse postale de contact
+
+L'adresse postale de contact permet d'être contacté par courrier postal.
+
+A noter
+Le formulaire peut être rempli par défaut si l'utilisateur renseigne l'adresse depuis la section Compte
+> Destinataires
+
+5.3.6 Pièces jointes
+
+L'onglet « pièces jointes » permet d'insérer des documents complémentaires (PDF ou zip) afin de
+préciser une demande ou compléter un dossier.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 36
+Release 1.0                          Public, © EEX AG ­ part of eex group
+5.3.7 Validation
+
+L'utilisateur accède à l'onglet « validation » lorsque toutes les étapes précédentes ont été remplies. Il
+permet de vérifier l'intégrité du dossier, ainsi si certains éléments sont invalides un message informera
+le titulaire.
+
+Une fois que les éléments ont été correctement complété, le titulaire sélectionne la période concernée
+par le dossier déposé.
+
+Une fois la période sélectionnée, deux choix s'offrent à lui :
+    · Le dépôt d'un dossier par voie postale
+    · Le dépôt d'un dossier par voie électronique.
+
+Le dépôt d'un dossier par voie postale
+Le dépôt d'un dossier par voie postale est possible. L'utilisateur clique sur « je souhaite transmettre
+ma demande par voie postale ».
+
+Une boîte de dialogue s'ouvre et lui permet de valider ou d'annuler son action.
+
+En cliquant sur « Transmettre la demande », le dossier passe au statut « en attente de réception par
+le PNCEE ». En cliquant sur « Annuler » l'utilisateur est redirigé sur la page de validation.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 37
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Le dépôt d'un dossier par voie électronique :
+Le registre des CEE permet de déposer des dossiers par voie électronique. Pour ce faire, le registre
+utilise le prestataire de signature électronique « Docusign ».
+L'utilisateur sélectionne « je souhaite transmettre ma demande par voie électronique », puis clique sur
+le bouton « Signer électroniquement ».
+
+L'utilisateur est redirigé vers une pop-in de l'application Docusign et suit les indications sur la signature
+électronique.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 38
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Une fois signé, l'utilisateur valide et le dossier passe du statut « en saisie » à celui « en attente de
+réception par le PNCEE ». A ce stade, l'utilisateur ne peut plus modifier son dossier sans effectuer une
+demande auprès du PNCEE via le bouton « demande de déverrouillage ».
+
+Guide utilisateur ­ plateforme EMMY                                         Page 39
+Release 1.0                          Public, © EEX AG ­ part of eex group
+6. Transferts
+
+Un ODT (Ordre de Transfert) est une transaction entre deux parties : acheteur et vendeur.
+Cela permet de transférer un volume de CEE d'un compte vers un autre pour un montant en euros/kWh
+cumac. Sur un même ODT, les types de CEE classiques et précarités peuvent être sélectionnés.
+Une fois un accord conclu entre les deux parties, l'ODT doit être signé par chacune des parties.
+Attention : les parties doivent s'accorder sur le type de signature apposée sur l'ODT ; électroniquement
+ou manuscritement.
+
+Etapes
+    · Etape 1 : Accéder à l'espace transferts
+    · Etape 2 : Apparaître dans la liste des Vendeurs
+    · Etape 3 : Initier une transaction (acheteur/vendeur)
+    · Etape 4 : Choisir un signataire
+    · Etape 5 : Accepter la transaction
+    · Etape 6 : Sélectionner des CEE
+    · Etape 7 : Confirmer la transaction
+    · Etape 8 : Signer la transaction - Focus sur la signature qualifiée : première signature
+
+6.1 Accéder à l'espace transferts
+
+Une fois connecté à votre compte, cliquer sur « Transferts ».
+
+Guide utilisateur ­ plateforme EMMY                                         Page 40
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Cet écran permet de visualiser deux types de graphiques en fonction des CEE classiques ou
+précarités :
+· Graphique des cotations des CEE
+· Graphique des cotations « SPOT » des CEE
+
+Le procédé de publication est présenté en annexe.
+
+Si l'utilisateur souhaite avoir les graphiques sur les années précédentes, il peut se rendre sur la
+partie publique d'Emmy : lien
+
+Guide utilisateur ­ plateforme EMMY                                         Page 41
+Release 1.0                          Public, © EEX AG ­ part of eex group
+6.2 Apparaître dans la liste des acheteurs / vendeurs
+
+Par défaut l'utilisateur accède à l'onglet « Tableau de bord », cliquer sur « Effectuer une transaction ».
+
+Renseigner les informations Achats de CEE ou Ventes de CEE.
+Afin d'être visible dans le tableau « Recherche acheteur / vendeur », l'utilisateur doit :
+
+    1. Cocher la case « Désirer apparaitre dans la liste des acheteurs/vendeurs »
+    2. Cliquer sur le bouton « Enregistrer » afin que les données saisies soient prises en compte.
+
+Règles :
+Tous les champs peuvent être remplis (prix de vente + montant offert classique ET prix de vente +
+montant offert précarité) ou laissés vides.
+Dans les champs « montant classique offert » et « montant précarité offert » ne pas mettre d'espace
+lors de la saisie.
+
+Dans les champs « Prix de vente classique minimum » et « Prix de vente précarité minimum » mettre
+un « , » lors de la saisie.
+
+N.B: Un nouveau bouton va apparaître « se retirer de la liste des vendeurs », il faut se retirer
+manuellement sinon l'utilisateur reste affiché publiquement.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 42
+Release 1.0                          Public, © EEX AG ­ part of eex group
+6.3 Initier une transaction
+
+Sélectionner la contrepartie souhaitée pour effectuer une transaction et accéder au détail de la
+transaction afin de l'initier
+
+N.B La vue est la même côté acheteur ou vendeur, seul le libellé du bouton vert change (vendeur /
+acheteur).
+
+Guide utilisateur ­ plateforme EMMY                                         Page 43
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Saisir les informations relatives à la transaction :
+    1. Désormais pour chaque transaction, vous pouvez remplir une proposition pour un volume
+         Classique ET un volume Précarité ou pour l'un des deux types de CEE
+    2. Les informations saisies sont automatiquement calculées et préremplies dans le champ
+         « Total »
+    3. Une fois la proposition saisie, sélectionner le type de signature souhaitée pour finaliser la
+         transaction***
+    4. Indiquer si la transaction concerne une transaction intra-groupe
+    5. Indiquer la date de la signature de l'accord commercial.
+
+Attention : Les 2 contreparties doivent s'accorder pour utiliser la même signature afin de continuer la
+transaction.
+
+ATTENTION : Si l'utilisateur ne souhaite qu'un seul type de CEE, dans ce cas-là les champs
+non concernés doivent être OBLIGATOIREMENT complétés par 0 (volume et prix)
+
+Guide utilisateur ­ plateforme EMMY                                         Page 44
+Release 1.0                          Public, © EEX AG ­ part of eex group
+6.4 Choisir un signataire
+
+Sélectionner le signataire qui recevra et signera l'ordre de transfert.
+
+N.B.: Seul le teneur de registre peut ajouter / modifier un signataire pour des raisons de sécurité. Pour
+tout ajout, contacter le support CEE. Par défaut, il s'agit du représentatn légal du signataire.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 45
+Release 1.0                          Public, © EEX AG ­ part of eex group
+L'utilisateur clique sur le bouton "Soumettre la demande", un pop-up de confirmation apparait
+récapitulant la proposition.
+· En cliquant sur « Oui », la transaction est validée et passe au statut « En Attente d'acceptation »
+· En cliquant sur « Non » la transaction n'est pas validée et reste à l'état initial.
+
+N.B : Si le vendeur a initié la transaction, la validation sera à faire par l'acheteur « soumettre la
+demande à l'acheteur ».
+
+6.5 Accepter la transaction
+
+En cliquant sur "accepter la transaction", une pop-up de confirmation apparait recapitulant l'ensemble
+des informations saisies
+
+    · Sélection du signataire via une liste déroulante
+
+Guide utilisateur ­ plateforme EMMY                                         Page 46
+Release 1.0                          Public, © EEX AG ­ part of eex group
+· En cliquant sur "accepter la transaction", le statut de la transaction est "le vendeur sélectionne
+    ses CEE"
+
+· En cliquant sur "refuser la transaction" le statut de la transaction est "annulé.
+
+Lors de l'acceptation de la transaction, une pop-up de confirmation + sélection du signataire s'affiche
+
+Lors de l'acceptation de la transaction, les deux contreparties recevront un lien Docusign par email
+dans le cas d'une signature électronique.
+
+6.6 Sélectionner des CEE
+
+Le vendeur sélectionne ses CEE en cliquant sur le bouton "+ Ajouter des CEE"
+
+Guide utilisateur ­ plateforme EMMY                                         Page 47
+Release 1.0                          Public, © EEX AG ­ part of eex group
+L'utilisateur peut :
+· Sélectionner automatiquement les CEE nécessaire pour la transaction
+· Sélectionner la DD manuellement et saisir le volume nécessaire.
+
+Dans le cas d'une transaction avec les 2 types de CEE (PR+CL), l'utilisateur doit cliquer 2 fois sur le
+bouton « ajouter des CEE », une première fois pour les CL et une seconde fois pour les PR.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 48
+Release 1.0                          Public, © EEX AG ­ part of eex group
+6.7 Confirmer la transaction
+
+Une fois la confirmation de la vente effectuée, la transaction passe au statut « En attente de validation
+par le teneur »
+
+6.8 Signer la transaction
+
+Deux options sont offertes :
+· Procédure manuelle
+· Procédure électronique
+
+Le vendeur et l'acheteur doivent se mettre d'accord sur UNE modalité de signature commune
+(manuscrite ou électronique).
+
+6.8.1 Procédure signature manuscrite
+
+Impression de l'ODT avec signature manuscrite des 2 parties
+Envoi de l'ODT signé par mail à CEE-support@powernext.com (durant la procédure Covid)
+La contrepartie doit être en copie du mail et doit confirmer les modalités de la transaction (volume et
+prix).
+Le support procède à des appels téléphoniques pour vérifier les transactions.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 49
+Release 1.0                          Public, © EEX AG ­ part of eex group
+6.8.2 Procédure signature électronique
+
+Afin de sécuriser les transactions, le PNCEE/DGEC a décidé d'imposer une qualification de toutes les
+signatures.
+
+Pour la première signature (procédure détaillée en annexe)
+ Docusign vérifiera l'identité du signataire via son service de vérification IDNow
+
+     La signature intervient en étape finale d'un ordre de transfert. Veillez à respecter tous les
+         prérequis de validation d'un transfert
+
+     Vous serez invité à effectuer la vérification via l'ouverture automatique d'une page WEB qu'il
+         ne faut pas fermer. Il sera affiché notamment votre position dans la liste d'attente.
+
+     Entretien vidéo de quelques minutes avec le signataire. L'appel dure en moyenne 5 minutes
+     Par Webcam ou avec l'application IDNow sur Smartphone
+     Le signataire doit avoir une pièce d'identité (carte d'identité ou passeport) en cours de validité
+
+         avec lui ainsi que son téléphone (envoi d'un code par SMS)
+ Le signataire créé un mot de passe
+
+Signatures suivantes
+ Lors des prochains ODT lors de la signature, Docusign notifie par mail (avec un lien) le signataire
+
+    qu'un document est en attente de signature.
+ Après avoir cliqué sur le lien, le signataire s'identifie sur la plateforme de Docusign avec le mot de
+
+    passe créé à la première utilisation
+NB : Un nouvel entretien vidéo est nécessaire tous les deux ans.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 50
+Release 1.0                          Public, © EEX AG ­ part of eex group
+6.9 Gestion des transferts
+
+Cette rubrique permet à l'utilisateur de visualiser l'ensemble des transferts effectués. Il est possible
+aussi de faire des exports Excel des données liées aux transferts.
+L'utilisateur peut aussi effectuer une recherche par « champs » pour trouver un ordre de transfert.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 51
+Release 1.0                          Public, © EEX AG ­ part of eex group
+7. Annexe 1 : Guide utilisateur mandataire
+
+7.1 Gestion d'un mandataire
+7.1.1 Création d'un mandataire
+
+La création du mandataire pour un compte doit obligatoirement se faire par le titulaire.
+7.1.1.1 Etape 1 : SIREN et Raison sociale
+Depuis l'onglet compte > mandataire
+Cliquer sur le bouton « ajouter un nouveau mandataire »
+
+Le titulaire de compte doit saisir :
+              o N° de SIREN du mandataire : aucun espace ne doit être mis
+              o La raison sociale du mandataire
+
+La saisie des deux champs est obligatoire.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 52
+Release 1.0                          Public, © EEX AG ­ part of eex group
+En sauvegardant les informations saisies, l'utilisateur est redirigé vers la page des mandataires.
+
+7.1.1.2  Etape 2 : Télécharger le mandat
+
+Cliquer sur le n° de SIREN afin de compléter la création du mandataire.
+
+Guide utilisateur ­ plateforme EMMY                                              Page 53
+Release 1.0                               Public, © EEX AG ­ part of eex group
+Le titulaire de compte doit préciser les habilitations de/des futur(s) mandataire(s) après l'expiration du
+mandat.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 54
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Par défaut, EMMY affiche que les mandataires ne pourront plus se connecter à la plateforme.
+
+L'utilisateur doit :
+    - Sélectionner son mandat depuis son poste (en format PDF)
+    - Saisir une date de début et une date de fin
+
+En cliquant sur le bouton « ajouter un mandat », le mandat sélectionné, ainsi que les dates saisies
+précédemment sont sauvegardés par la plateforme.
+
+7.1.1.3 Etape 3 : Créer un identifiant EMMY
+Le titulaire doit ensuite créer un utilisateur EMMY pour son mandataire.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 55
+Release 1.0                          Public, © EEX AG ­ part of eex group
+En cliquant sur le bouton « créer un nouvel utilisateur », le titulaire est redirigé vers une nouvelle page.
+
+Le titulaire remplit le formulaire, puis clique sur le bouton « ajouter l'utilisateur ».
+
+Guide utilisateur ­ plateforme EMMY                                         Page 56
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Informations complémentaires :
+
+Le titulaire attribut au mandataire un rôle.
+    - « Responsable général » : possède tous les droits (création et gestion de dossier, gestion
+         des transferts gestion des utilisateurs etc...)
+    - « Responsable dossier » : possède certains droits (création et gestion de dossier)
+    - « Responsable de saisie » : peut uniquement saisir des dossiers.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 57
+Release 1.0                          Public, © EEX AG ­ part of eex group
+7.2 Gestion des dossiers
+
+Les étapes décrites en « 7.1. Créer un mandataire » doivent être dument remplies afin de pouvoir
+gérer des dossiers
+
+7.2.1 Création d'un dossier par un mandataire
+
+En utilisant son identifiant EMMY, le mandataire peut créer des dossiers à la place du titulaire du
+compte.
+Pour rattacher le dossier à un mandataire, l'utilisateur doit se rendre à l'onglet Dossier > Dossier de
+demande > identification partie « mandataire » où il verra une liste déroulante s'afficher avec le/les
+mandataire(s) créés pour le compte concerné.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 58
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Afin de rattacher le dossier à un mandataire, l'utilisateur doit : sélectionner le mandataire.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 59
+Release 1.0                          Public, © EEX AG ­ part of eex group
+En cochant la case « le mandataire est le signataire », le mandataire déclare qu'il est habilité à signer
+à la place du titulaire du compte.
+
+L'utilisateur peut poursuivre la création du dossier normalement.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 60
+Release 1.0                          Public, © EEX AG ­ part of eex group
+7.2.2 Rattacher un dossier déjà créé à un mandataire
+
+Il est possible dans Emmy de rattaché un dossier déjà crée à une tierce personne.
+Depuis l'onglet Dossier > Responsable :
+
+ATTENTION : le dossier doit être déverrouillé                                         Page 61
+                                               Public, © EEX AG ­ part of eex group
+Guide utilisateur ­ plateforme EMMY
+Release 1.0
+Cliquer sur le bouton « sélectionner », et une pop-in apparait.
+
+Guide utilisateur ­ plateforme EMMY                                                                     Page 62
+Release 1.0                                                      Public, © EEX AG ­ part of eex group
+Sélectionner la personne responsable du dossier
+
+Guide utilisateur ­ plateforme EMMY                                                     Page 63
+Release 1.0                                      Public, © EEX AG ­ part of eex group
+Cliquer sur le bouton « Confirmer » pour sauvegarder l'information.
+
+En rattachant un dossier à un responsable, seuls les utilisateurs ayant pour rôle « responsable
+général » et « responsable de dossier pourront voir ses dossiers.
+
+Remarque : pour remplacer la gestion d'un dossier par un autre mandataire, il faut modifier le
+responsable du dossier.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 64
+Release 1.0                          Public, © EEX AG ­ part of eex group
+8. Annexe 2 : Procédure détaillée de première signature
+électronique
+
+En cas de question sur la procédure de signature, vous pouvez contacter Docusign :
+https://support.docusign.com/fr/
+
+8.1 Sur ordinateur
+
+Guide utilisateur ­ plateforme EMMY                                         Page 65
+Release 1.0                          Public, © EEX AG ­ part of eex group
+8.2 Sur téléphone portable
+
+8.3 Questions fréquentes
+
+     Liste des documents d'identité pris en charge : permis de conduire, passeport ou carte
+         d'identité nationale (https://go.dev.idnow.de/bafin2017/documents )
+
+     Langue prise en charge pour l'entretien par vidéo-identification : DE, FR, EN (choisie par défaut
+         en fonction de la langue du navigateur)
+
+     Heures de disponibilité du service de vidéo-identification : Appels FR : 8h-21h LUN-SAM. QES
+         avec authentification par porte-monnaie est disponible 24 heures sur 24, 7 jours sur 7.
+
+     En cas de changement d'adresse électronique ou de téléphone portable, une nouvelle vidéo-
+         identification est nécessaire.
+
+     Un deuxième examen hors ligne est effectué après la vidéo-identification : cela peut entraîner
+         un retard dans la réception du document signé. Le signataire n'a pas besoin d'attendre, une
+         notification est envoyée par e-mail dès que le document est disponible.
+
+     Certaines infrastructures de réseau d'entreprise ou certains navigateurs peuvent ne pas
+         supporter le flux vidéo. Dans ce cas, il est recommandé d'utiliser l'application mobile avec une
+         connexion 4G.
+
+     Les identifications ne sont prises en charge que par les navigateurs Chrome, Firefox, Edge et
+         Safari. ID Now conseille l'utilisation de Chrome
+
+     Mettre plusieurs fichiers avec le même nom dans une enveloppe n'est pas supporté par Idnow.
+     Le compte portefeuille est identifié par l'adresse email. Veuillez-vous assurer que le signataire
+
+         est défini avec
+     La bonne adresse email afin de déclencher l'authentification du portefeuille au lieu d'une
+
+         nouvelle identification vidéo.
+     L'exécution des signatures numériques dans un ordre parallèle peut entraîner des erreurs et
+
+         des blocages. Veuillez-vous assurer que vous définissez toujours l'ordre de signature lorsque
+         vous utilisez un QES dans une enveloppe
+     Un changement de numéro déclenche automatiquement une nouvelle identification vidéo, car
+         IDNow se sert également de cette information pour retrouver l'identification vidéo déjà passée,
+         en plus du mail et du mot de passe.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 66
+Release 1.0                          Public, © EEX AG ­ part of eex group
+9. Annexe 3 : Communication prix spot
+
+9.1 Modalités opérationnelles du prix SPOT
+
+9.1.1 Définition de l'indice SPOT
+
+L'indice spot est compris comme la moyenne des prix pondérée des volumes des transactions spot. Il
+est mis en place à la fois pour les CEE « classiques » et les CEE « précarité ».
+
+9.1.2 Définition de la transaction SPOT
+
+Il s'agit des transactions dont la valeur numérique des paramètres (date, volume, prix) est totalement
+déterminée par des accords commerciaux signés au plus tôt au 1er du mois M-1, M étant le mois en
+cours au moment de la validation de la transaction par le teneur, et entre sociétés n'appartenant pas
+aux mêmes groupes. Sont considérées comme transactions intra-groupe les transactions dont
+l'acheteur et le vendeur sont contrôlées par une même personne morale ou physique.
+
+Cela signifie que seules les transactions contractualisées et livrées durant le même mois ou sur le
+mois précédent sont considérées.
+
+Les transactions à 0 ne sont pas intégrées dans l'indice du prix SPOT.
+
+9.1.3 Mise en place de l'indice SPOT
+
+L'indice SPOT est disponible depuis le mois de janvier 2019.
+
+9.1.4 Contrôle et fiabilité de l'indice SPOT
+
+Les acteurs sont obligés d'indiquer le prix de chaque transaction réalisée et de le faire de bonne foi.
+Toutes les transactions spot sur les CEE sont enregistrées sur le registre et ont un prix renseigné par
+les acteurs. Il s'agit donc d'une base de données importante et complète.
+
+EEX n'est cependant ni responsable ni en mesure de vérifier les données de prix indiquées par les
+titulaires de compte. La DGEC peut cependant solliciter le teneur du registre pour vérifier des
+transactions suspectes (par exemple si le prix d'une transaction est bien inférieur au prix spot des
+derniers mois). Dans ce cas, le teneur de registre et/ou la DGEC peut contacter les contreparties pour
+vérifier qu'il n'y ait pas eu d'erreurs de saisie notamment.
+
+Partant des données transmises par les titulaires, des graphiques sont constitués automatiquement
+sur la plateforme.
+
+Guide utilisateur ­ plateforme EMMY                                         Page 67
+Release 1.0                          Public, © EEX AG ­ part of eex group
+9.1.5 Condition de non-publication de l'indice SPOT
+
+La fiabilité de cet indice dépend du nombre de transactions rapportées comme étant « SPOT ». L'indice
+« SPOT » peut théoriquement ne pas être publié tous les mois si sa fiabilité est considérée comme
+étant trop faible par la DGEC. Il a cependant été publié tous les mois depuis janvier 2019.
+
+9.2 Communication du prix SPOT
+9.2.1 Publication de l'indice SPOT
+
+L'indice SPOT est publié automatiquement tous les 1ers du mois à 00h01 pour le mois précédent.
+
+9.2.2 Mise en ligne du prix SPOT
+L'indice SPOT est publié publiquement sur la plateforme Emmy : lien
+
+Il est aussi diffusé sur les comptes titulaires dans la partie « transferts ».
+
+Guide utilisateur ­ plateforme EMMY                                         Page 68
+Release 1.0                          Public, © EEX AG ­ part of eex group
+Fin du document
+
+Guide utilisateur ­ plateforme EMMY                                         Page 69
+Release 1.0                          Public, © EEX AG ­ part of eex group
+

@@ -96,7 +96,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.INTERNAL_ERROR,
-          authError?.message || 'Erreur lors de la creation du compte'
+          authError?.message || 'Erreur lors de la création du compte'
         ),
         { status: 500 }
       )

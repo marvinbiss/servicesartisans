@@ -87,17 +87,17 @@ const faqItems = [
     question:
       'Quelle est la différence entre un permis de construire et une déclaration préalable ?',
     answer:
-      'Le permis de construire est obligatoire pour les travaux importants : construction neuve de plus de 20 m² (ou 40 m² en zone PLU avec document d"urbanisme), changement de destination avec modification de structure. La déclaration préalable suffit pour les travaux de moindre ampleur : entre 5 et 20 m² de surface de plancher, modification de façade, pose de clôture. La déclaration préalable est plus simple et plus rapide (délai d"instruction d"un mois contre deux à trois mois pour le permis).',
+      'Le permis de construire est obligatoire pour les travaux importants : construction neuve de plus de 20 m² (ou 40 m² en zone PLU avec document d’urbanisme), changement de destination avec modification de structure. La déclaration préalable suffit pour les travaux de moindre ampleur : entre 5 et 20 m² de surface de plancher, modification de façade, pose de clôture. La déclaration préalable est plus simple et plus rapide (délai d’instruction d’un mois contre deux à trois mois pour le permis).',
   },
   {
     question: 'Combien de temps est valable un permis de construire ?',
     answer:
-      'Un permis de construire est valable 3 ans à compter de sa notification. Ce délai peut être prolongé deux fois pour une durée d"un an chacune, soit 5 ans au total. La demande de prolongation doit être adressée à la mairie au moins 2 mois avant l"expiration du délai. Attention : les travaux doivent avoir commencé dans ce délai et ne doivent pas être interrompus pendant plus d"un an.',
+      'Un permis de construire est valable 3 ans à compter de sa notification. Ce délai peut être prolongé deux fois pour une durée d’un an chacune, soit 5 ans au total. La demande de prolongation doit être adressée à la mairie au moins 2 mois avant l’expiration du délai. Attention : les travaux doivent avoir commencé dans ce délai et ne doivent pas être interrompus pendant plus d’un an.',
   },
   {
-    question: 'Peut-on commencer les travaux dès l"obtention du permis ?',
+    question: 'Peut-on commencer les travaux dès l’obtention du permis ?',
     answer:
-      'Non, il faut attendre l"expiration du délai de recours des tiers, soit 2 mois après l"affichage du permis sur le terrain. Cet affichage est obligatoire et doit être visible depuis la voie publique pendant toute la durée du chantier. Il est fortement recommandé de faire constater l"affichage par un huissier pour se prémunir contre d"éventuels recours.',
+      'Non, il faut attendre l’expiration du délai de recours des tiers, soit 2 mois après l’affichage du permis sur le terrain. Cet affichage est obligatoire et doit être visible depuis la voie publique pendant toute la durée du chantier. Il est fortement recommandé de faire constater l’affichage par un huissier pour se prémunir contre d’éventuels recours.',
   },
   {
     question: 'Faut-il un architecte pour déposer un permis de construire ?',
@@ -107,12 +107,12 @@ const faqItems = [
   {
     question: 'Que faire en cas de refus du permis de construire ?',
     answer:
-      'En cas de refus, vous disposez de 2 mois pour contester la décision. Vous pouvez d"abord tenter un recours gracieux auprès du maire, en demandant un réexamen de votre dossier. Si le refus est maintenu, vous pouvez saisir le tribunal administratif dans les 2 mois suivant la notification du refus (ou du rejet du recours gracieux). Il est souvent plus efficace de modifier le projet pour le rendre conforme au PLU avant de redéposer une nouvelle demande.',
+      'En cas de refus, vous disposez de 2 mois pour contester la décision. Vous pouvez d’abord tenter un recours gracieux auprès du maire, en demandant un réexamen de votre dossier. Si le refus est maintenu, vous pouvez saisir le tribunal administratif dans les 2 mois suivant la notification du refus (ou du rejet du recours gracieux). Il est souvent plus efficace de modifier le projet pour le rendre conforme au PLU avant de redéposer une nouvelle demande.',
   },
   {
     question: 'Quelles sont les sanctions en cas de travaux sans permis de construire ?',
     answer:
-      'Construire sans permis de construire est un délit passible d"une amende de 1 200 à 6 000 € par m² de surface construite illégalement, soit jusqu"à 300 000 € pour les cas les plus graves. Le tribunal peut également ordonner la démolition de la construction et la remise en état du terrain. Le délai de prescription est de 6 ans pour les poursuites pénales, mais l"action civile en démolition peut être engagée jusqu"à 10 ans après l"achèvement des travaux.',
+      'Construire sans permis de construire est un délit passible d’une amende de 1 200 à 6 000 € par m² de surface construite illégalement, soit jusqu’à 300 000 € pour les cas les plus graves. Le tribunal peut également ordonner la démolition de la construction et la remise en état du terrain. Le délai de prescription est de 6 ans pour les poursuites pénales, mais l’action civile en démolition peut être engagée jusqu’à 10 ans après l’achèvement des travaux.',
   },
 ]
 
@@ -131,7 +131,7 @@ const keyFigures = [
   {
     icon: Clock,
     value: '2-3 mois',
-    label: 'Délai moyen d"instruction',
+    label: 'Délai moyen d’instruction',
     color: 'text-amber-600',
     bg: 'bg-amber-50',
   },
@@ -157,8 +157,8 @@ const documentsRequis = [
   { code: 'PCMI3', label: 'Plan en coupe du terrain et de la construction' },
   { code: 'PCMI4', label: 'Notice décrivant le terrain et le projet' },
   { code: 'PCMI5', label: 'Plan des façades et des toitures' },
-  { code: 'PCMI6', label: 'Document graphique d"insertion dans l"environnement' },
-  { code: 'PCMI7', label: 'Photographie situant le terrain dans l"environnement proche' },
+  { code: 'PCMI6', label: 'Document graphique d’insertion dans l’environnement' },
+  { code: 'PCMI7', label: 'Photographie situant le terrain dans l’environnement proche' },
   { code: 'PCMI8', label: 'Photographie situant le terrain dans le paysage lointain' },
 ]
 
@@ -200,7 +200,7 @@ export default function PermisConstruirePage() {
             </h1>
             <p className="text-lg text-charcoal-600 max-w-3xl">
               {
-                'Tout savoir sur le permis de construire : seuils de surface, documents à fournir, délais d"instruction et cas particuliers. Guide complet pour éviter les erreurs et les sanctions.'
+                'Tout savoir sur le permis de construire : seuils de surface, documents à fournir, délais d’instruction et cas particuliers. Guide complet pour éviter les erreurs et les sanctions.'
               }
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm text-charcoal-500">
@@ -240,7 +240,7 @@ export default function PermisConstruirePage() {
               {[
                 'Quand le permis de construire est-il obligatoire ?',
                 'Quand la déclaration préalable suffit-elle ?',
-                'Quand aucune autorisation n"est nécessaire',
+                'Quand aucune autorisation n’est nécessaire',
                 'Documents requis pour le permis de construire',
                 'Délais et procédure',
                 'Coût du permis de construire',
@@ -272,7 +272,7 @@ export default function PermisConstruirePage() {
             <div className="bg-white rounded-xl border border-sand-300 p-6 mb-6">
               <p className="text-charcoal-700 mb-4">
                 {
-                  'Le permis de construire est exigé pour tout projet de construction ou d"agrandissement dépassant certains seuils de surface. Voici les cas les plus fréquents :'
+                  'Le permis de construire est exigé pour tout projet de construction ou d’agrandissement dépassant certains seuils de surface. Voici les cas les plus fréquents :'
                 }
               </p>
               <div className="space-y-4">
@@ -284,7 +284,7 @@ export default function PermisConstruirePage() {
                     </h3>
                     <p className="text-sm text-charcoal-600 mt-1">
                       {
-                        'Toute construction nouvelle créant plus de 20 m² de surface de plancher ou d"emprise au sol nécessite un permis de construire. Cela inclut les maisons individuelles, garages, abris de jardin de grande taille, extensions, etc.'
+                        'Toute construction nouvelle créant plus de 20 m² de surface de plancher ou d’emprise au sol nécessite un permis de construire. Cela inclut les maisons individuelles, garages, abris de jardin de grande taille, extensions, etc.'
                       }
                     </p>
                   </div>
@@ -297,7 +297,7 @@ export default function PermisConstruirePage() {
                     </h3>
                     <p className="text-sm text-charcoal-600 mt-1">
                       {
-                        'En zone urbaine couverte par un Plan Local d"Urbanisme (PLU), le seuil est relevé à 40 m² pour les extensions de bâtiments existants. Au-delà de 40 m² de surface créée, le permis est obligatoire. Attention : si la surface totale après travaux dépasse 150 m², le recours à un architecte est obligatoire.'
+                        'En zone urbaine couverte par un Plan Local d’Urbanisme (PLU), le seuil est relevé à 40 m² pour les extensions de bâtiments existants. Au-delà de 40 m² de surface créée, le permis est obligatoire. Attention : si la surface totale après travaux dépasse 150 m², le recours à un architecte est obligatoire.'
                       }
                     </p>
                   </div>
@@ -322,7 +322,7 @@ export default function PermisConstruirePage() {
               <Info className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
               <p className="text-sm text-amber-800">
                 {
-                  'La surface de plancher correspond à la somme des surfaces de chaque niveau clos et couvert, calculée à partir du nu intérieur des façades, après déduction des surfaces sous une hauteur de plafond inférieure ou égale à 1,80 m, des trémies d"escaliers et d"ascenseurs, et des surfaces de stationnement.'
+                  'La surface de plancher correspond à la somme des surfaces de chaque niveau clos et couvert, calculée à partir du nu intérieur des façades, après déduction des surfaces sous une hauteur de plafond inférieure ou égale à 1,80 m, des trémies d’escaliers et d’ascenseurs, et des surfaces de stationnement.'
                 }
               </p>
             </div>
@@ -342,7 +342,7 @@ export default function PermisConstruirePage() {
             <div className="bg-white rounded-xl border border-sand-300 p-6">
               <p className="text-charcoal-700 mb-4">
                 {
-                  'La déclaration préalable de travaux est une autorisation d"urbanisme simplifiée, suffisante pour les projets de moindre envergure :'
+                  'La déclaration préalable de travaux est une autorisation d’urbanisme simplifiée, suffisante pour les projets de moindre envergure :'
                 }
               </p>
               <div className="grid md:grid-cols-2 gap-4">
@@ -395,13 +395,13 @@ export default function PermisConstruirePage() {
                 <CheckCircle2 className="w-5 h-5 text-green-600" />
               </div>
               <h2 className="text-2xl font-bold text-charcoal-900">
-                {'Quand aucune autorisation n"est nécessaire'}
+                {'Quand aucune autorisation n’est nécessaire'}
               </h2>
             </div>
 
             <div className="bg-white rounded-xl border border-sand-300 p-6">
               <p className="text-charcoal-700 mb-4">
-                {'Certains travaux sont dispensés de toute formalité d"urbanisme :'}
+                {'Certains travaux sont dispensés de toute formalité d’urbanisme :'}
               </p>
               <div className="space-y-3">
                 {[
@@ -409,7 +409,7 @@ export default function PermisConstruirePage() {
                   'Terrasses de plain-pied (non couvertes, non surélevées)',
                   'Piscines de moins de 10 m² (hors secteur protégé)',
                   'Murs de soutènement et clôtures de moins de 2 m (hors secteur protégé)',
-                  'Travaux d"entretien et de réparation ordinaires (remplacement à l"identique de toiture, fenêtres, etc.)',
+                  'Travaux d’entretien et de réparation ordinaires (remplacement à l’identique de toiture, fenêtres, etc.)',
                   'Aménagements intérieurs sans changement de destination ni modification de la structure',
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3">
@@ -458,7 +458,7 @@ export default function PermisConstruirePage() {
               </div>
               <p className="text-sm text-charcoal-500 mt-4">
                 {
-                  'Des pièces complémentaires peuvent être demandées selon la localisation du projet (zone inondable, secteur protégé, lotissement, etc.). Renseignez-vous auprès du service d"urbanisme de votre mairie.'
+                  'Des pièces complémentaires peuvent être demandées selon la localisation du projet (zone inondable, secteur protégé, lotissement, etc.). Renseignez-vous auprès du service d’urbanisme de votre mairie.'
                 }
               </p>
             </div>
@@ -479,25 +479,25 @@ export default function PermisConstruirePage() {
                   {
                     step: '1',
                     title: 'Dépôt du dossier en mairie',
-                    desc: 'En 4 exemplaires minimum (5 pour les projets en zone ABF). Le dossier peut être déposé en personne, envoyé par courrier recommandé ou déposé en ligne sur le portail d"urbanisme de votre commune.',
+                    desc: 'En 4 exemplaires minimum (5 pour les projets en zone ABF). Le dossier peut être déposé en personne, envoyé par courrier recommandé ou déposé en ligne sur le portail d’urbanisme de votre commune.',
                     delay: 'Jour J',
                   },
                   {
                     step: '2',
                     title: 'Accusé de réception et instruction',
-                    desc: 'La mairie délivre un récépissé indiquant le délai d"instruction. Elle dispose d"un mois pour demander des pièces complémentaires. Le délai d"instruction est de 2 mois pour une maison individuelle, 3 mois pour les autres projets.',
+                    desc: 'La mairie délivre un récépissé indiquant le délai d’instruction. Elle dispose d’un mois pour demander des pièces complémentaires. Le délai d’instruction est de 2 mois pour une maison individuelle, 3 mois pour les autres projets.',
                     delay: '2-3 mois',
                   },
                   {
                     step: '3',
                     title: 'Décision et affichage',
-                    desc: 'La mairie notifie sa décision par lettre recommandée. En l"absence de réponse dans le délai d"instruction, le permis est réputé accordé (permis tacite). L"affichage sur le terrain est obligatoire pendant toute la durée du chantier.',
+                    desc: 'La mairie notifie sa décision par lettre recommandée. En l’absence de réponse dans le délai d’instruction, le permis est réputé accordé (permis tacite). L"affichage sur le terrain est obligatoire pendant toute la durée du chantier.',
                     delay: 'J + 2-3 mois',
                   },
                   {
                     step: '4',
                     title: 'Purge du recours des tiers',
-                    desc: 'Un délai de 2 mois après affichage permet aux tiers (voisins) de contester le permis. Il est recommandé de ne commencer les travaux qu"après l"expiration de ce délai.',
+                    desc: 'Un délai de 2 mois après affichage permet aux tiers (voisins) de contester le permis. Il est recommandé de ne commencer les travaux qu’après l’expiration de ce délai.',
                     delay: 'J + 4-5 mois',
                   },
                 ].map((item) => (
@@ -539,7 +539,7 @@ export default function PermisConstruirePage() {
                   </h3>
                   <p className="text-sm text-charcoal-600">
                     {
-                      'Le dépôt du dossier en mairie est totalement gratuit. Aucune taxe n"est perçue au moment du dépôt.'
+                      'Le dépôt du dossier en mairie est totalement gratuit. Aucune taxe n’est perçue au moment du dépôt.'
                     }
                   </p>
                 </div>
@@ -565,7 +565,7 @@ export default function PermisConstruirePage() {
                         { poste: 'Étude de sol (zone argileuse)', cout: '1 500 € à 2 500 €' },
                         { poste: 'Étude thermique RE 2020', cout: '800 € à 2 000 €' },
                         {
-                          poste: 'Taxe d"aménagement (après obtention)',
+                          poste: 'Taxe d’aménagement (après obtention)',
                           cout: 'Variable selon commune',
                         },
                       ].map((row) => (
@@ -581,7 +581,7 @@ export default function PermisConstruirePage() {
                 </div>
                 <p className="text-sm text-charcoal-500">
                   {
-                    'La taxe d"aménagement est calculée après obtention du permis. Son montant dépend de la surface créée et du taux fixé par la commune. Elle est payable en deux fractions (à 12 et 24 mois après délivrance du permis).'
+                    'La taxe d’aménagement est calculée après obtention du permis. Son montant dépend de la surface créée et du taux fixé par la commune. Elle est payable en deux fractions (à 12 et 24 mois après délivrance du permis).'
                   }
                 </p>
               </div>
@@ -602,29 +602,29 @@ export default function PermisConstruirePage() {
             <div className="bg-white rounded-xl border border-sand-300 p-6">
               <p className="text-charcoal-700 mb-4">
                 {
-                  'En secteur protégé, les règles sont plus strictes et les délais plus longs. L"avis de l"Architecte des Bâtiments de France (ABF) est souvent requis :'
+                  'En secteur protégé, les règles sont plus strictes et les délais plus longs. L"avis de l’Architecte des Bâtiments de France (ABF) est souvent requis :'
                 }
               </p>
               <div className="space-y-4">
                 {[
                   {
                     title: 'Abords de monument historique (500 m)',
-                    desc: 'Avis conforme de l"ABF obligatoire. Le délai d"instruction passe à 3 mois minimum. Les matériaux, couleurs et volumes doivent respecter l"harmonie du site.',
+                    desc: 'Avis conforme de l’ABF obligatoire. Le délai d’instruction passe à 3 mois minimum. Les matériaux, couleurs et volumes doivent respecter l’harmonie du site.',
                     color: 'bg-purple-50',
                   },
                   {
                     title: 'Sites classés et inscrits',
-                    desc: 'Autorisation spéciale du préfet de région requise en plus du permis de construire. Délai d"instruction de 6 mois minimum en site classé.',
+                    desc: 'Autorisation spéciale du préfet de région requise en plus du permis de construire. Délai d’instruction de 6 mois minimum en site classé.',
                     color: 'bg-purple-50',
                   },
                   {
                     title: 'Sites patrimoniaux remarquables (SPR)',
-                    desc: 'L"ABF rend un avis conforme. Le Plan de Sauvegarde et de Mise en Valeur (PSMV) ou le Plan de Valorisation de l"Architecture et du Patrimoine (PVAP) fixe les règles architecturales à respecter.',
+                    desc: 'L"ABF rend un avis conforme. Le Plan de Sauvegarde et de Mise en Valeur (PSMV) ou le Plan de Valorisation de l’Architecture et du Patrimoine (PVAP) fixe les règles architecturales à respecter.',
                     color: 'bg-purple-50',
                   },
                   {
                     title: 'Zones naturelles et Natura 2000',
-                    desc: 'Une étude d"impact environnemental peut être exigée. Les constructions sont généralement très limitées voire interdites dans les espaces naturels protégés.',
+                    desc: 'Une étude d’impact environnemental peut être exigée. Les constructions sont généralement très limitées voire interdites dans les espaces naturels protégés.',
                     color: 'bg-purple-50',
                   },
                 ].map((item) => (
@@ -668,7 +668,7 @@ export default function PermisConstruirePage() {
           <section className="mb-12">
             <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-8 text-white">
               <h2 className="text-2xl font-bold mb-3">
-                {'Besoin d"un professionnel pour votre projet ?'}
+                {'Besoin d’un professionnel pour votre projet ?'}
               </h2>
               <p className="text-primary-100 mb-6 max-w-2xl">
                 {

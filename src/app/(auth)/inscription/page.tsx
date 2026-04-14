@@ -338,7 +338,7 @@ export default function InscriptionPage() {
                       ))}
                     </div>
                     <p className="text-xs text-charcoal-500">
-                      Force\u00A0:{' '}
+                      Force&nbsp;:{' '}
                       {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Très faible'}
                     </p>
                   </div>

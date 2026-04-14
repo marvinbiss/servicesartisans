@@ -1217,7 +1217,6 @@ describe('refuseOtherQuotes', () => {
     builder.neq = vi.fn().mockReturnValue(builder)
     builder.update = vi.fn().mockReturnValue(builder)
     // The last chained call resolves
-    const _lastEq = vi.fn().mockResolvedValue({ error: null })
     let eqCallCount = 0
     builder.eq = vi.fn().mockImplementation(() => {
       eqCallCount++

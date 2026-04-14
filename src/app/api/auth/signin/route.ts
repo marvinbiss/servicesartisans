@@ -101,7 +101,7 @@ export async function POST(request: Request) {
 
     if (!data.user || !data.session) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, "Echec de l'authentification"),
+        createErrorResponse(ErrorCode.UNAUTHORIZED, "Échec de l'authentification"),
         { status: 401 }
       )
     }

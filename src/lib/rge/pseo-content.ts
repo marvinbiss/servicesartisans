@@ -76,7 +76,7 @@ export function buildGenericRgeParagraphs(ville: Ville, count: number): string[]
           ? `Même si ${ville.name} ne compte que ${countLabel} ${artisanWord} RGE recensés en direct, les professionnels certifiés des communes voisines interviennent couramment sur l'ensemble du bassin de vie.`
           : `Le nombre d'artisans RGE référencés à ${ville.name} varie au fil des renouvellements de qualifications auprès de Qualibat, Qualit'EnR et Qualifelec — notre base est synchronisée chaque semaine depuis l'ADEME.`
 
-  const p2 = `${p2Count} Choisir un artisan RGE n'est pas une option : c'est la condition réglementaire fixée par l'État pour débloquer MaPrimeRénov', les Certificats d'Économies d'Énergie (CEE), l'éco-prêt à taux zéro et la TVA réduite à 5,5 % sur la main d'œuvre et les matériaux.`
+  const p2 = `${p2Count} Choisir un artisan RGE n'est pas une option : c'est la condition réglementaire fixée par l'État pour débloquer MaPrimeRénov', les Certificats d'Économies d'Énergie (CEE), l'éco-prêt à taux zéro et la TVA réduite à 5,5 % sur la main-d'œuvre et les matériaux.`
 
   // Paragraphe 3 — aides disponibles (détaillées)
   const p3 = `À ${ville.name} comme partout en France, un foyer aux revenus "bleus" (très modestes) peut cumuler MaPrimeRénov' Sérénité (jusqu'à 50 % du montant TTC des travaux) avec les primes CEE versées par les délégataires (Effy, Sonergia, TotalEnergies, Engie). Pour un remplacement de chaudière fioul par une pompe à chaleur air/eau, l'addition des aides dépasse fréquemment 10 000 € sur un projet de 18 000 €. L'éco-PTZ permet ensuite de financer le reste à charge sans intérêts, jusqu'à 50 000 € remboursables sur 20 ans.`
@@ -190,7 +190,7 @@ const SERVICE_COPY: Record<
   },
   couvreur: {
     intro: `L'isolation des combles perdus et rampants est la première mesure recommandée par l'ADEME pour réduire la facture énergétique. Un couvreur Qualibat RGE "couverture isolation" peut intervenir sur l'isolation par soufflage de ouate, laine de verre ou laine de roche en combles perdus, sur l'isolation entre chevrons ou en sarking pour les combles aménagés, et sur la couverture éco-performante (tuiles photovoltaïques, toiture végétalisée).`,
-    aides: `L'isolation de combles perdus reste éligible à MaPrimeRénov' et aux CEE en 2026. Le "Coup de pouce isolation" a été recentré sur les ménages très modestes, mais les forfaits CEE classiques demeurent pour tous les revenus. La TVA à 5,5 % s'applique à la main d'œuvre et aux matériaux, et l'éco-PTZ peut financer le reste à charge.`,
+    aides: `L'isolation de combles perdus reste éligible à MaPrimeRénov' et aux CEE en 2026. Le "Coup de pouce isolation" a été recentré sur les ménages très modestes, mais les forfaits CEE classiques demeurent pour tous les revenus. La TVA à 5,5 % s'applique à la main-d'œuvre et aux matériaux, et l'éco-PTZ peut financer le reste à charge.`,
   },
   zingueur: {
     intro: `Un zingueur RGE peut intervenir sur la couverture métallique (zinc, aluminium, acier), l'étanchéité toiture-terrasse et l'isolation thermique de toiture, avec une qualification Qualibat RGE couverture. Les travaux d'isolation par sarking (par l'extérieur de la charpente) sont particulièrement efficaces pour les combles aménagés car ils ne sacrifient pas la hauteur sous plafond.`,

@@ -33,12 +33,12 @@ const createSlotSchema = z
     is_available: z.boolean().optional().default(true),
   })
   .refine((d) => d.end_time > d.start_time, {
-    message: "L'heure de fin doit etre superieure a l'heure de debut",
+    message: "L'heure de fin doit être supérieure à l'heure de début",
     path: ['end_time'],
   })
 
 const deleteSlotSchema = z.object({
-  slotId: z.string().uuid('Identifiant de creneau invalide'),
+  slotId: z.string().uuid('Identifiant de créneau invalide'),
 })
 
 export const dynamic = 'force-dynamic'
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
     if (overlapErr) {
       logger.error('Erreur DB overlap check', overlapErr)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la verification des chevauchements' } },
+        { success: false, error: { message: 'Erreur lors de la vérification des chevauchements' } },
         { status: 500 }
       )
     }
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: 'Ce creneau chevauche un creneau existant sur cette date' },
+          error: { message: 'Ce créneau chevauche un créneau existant sur cette date' },
         },
         { status: 409 }
       )
@@ -136,7 +136,7 @@ export async function POST(request: Request) {
     if (insertErr) {
       logger.error('Erreur DB insert availability_slot', insertErr)
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur lors de la creation du creneau' } },
+        { success: false, error: { message: 'Erreur lors de la création du créneau' } },
         { status: 500 }
       )
     }
@@ -167,7 +167,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: 'Parametre slotId invalide', details: parsed.error.flatten() },
+          error: { message: 'Paramètre slotId invalide', details: parsed.error.flatten() },
         },
         { status: 400 }
       )
@@ -180,7 +180,7 @@ export async function DELETE(request: Request) {
 
     if (fetchErr || !slot) {
       return NextResponse.json(
-        { success: false, error: { message: 'Creneau introuvable' } },
+        { success: false, error: { message: 'Créneau introuvable' } },
         { status: 404 }
       )
     }

@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
   if (isRateLimited(ip)) {
     return NextResponse.json(
       {
-        error: 'Trop de requetes. Veuillez patienter une minute avant de reessayer.',
+        error: 'Trop de requêtes. Veuillez patienter une minute avant de réessayer.',
         rateLimited: true,
       },
       { status: 429 }
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('SIRET/SIREN public verification error', error)
     return NextResponse.json(
-      { error: 'Erreur lors de la verification. Veuillez reessayer.' },
+      { error: 'Erreur lors de la vérification. Veuillez réessayer.' },
       { status: 500 }
     )
   }

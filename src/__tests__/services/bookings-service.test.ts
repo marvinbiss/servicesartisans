@@ -37,7 +37,6 @@ function createMockQueryBuilder(finalResult: Record<string, unknown> = {}) {
   builder.limit = vi.fn().mockResolvedValue(finalResult)
 
   // For non-terminal select (after insert/update) keep chaining
-  const _originalSelect = builder.select
   builder.select = vi.fn().mockImplementation((...args: unknown[]) => {
     // If called with count option, use original chain
     if (args.length > 1) return builder

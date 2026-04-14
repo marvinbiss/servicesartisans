@@ -1,5 +1,5 @@
 /**
- * Tableau des dossiers CEE recents avec badge colore par statut.
+ * Tableau des dossiers CEE récents avec badge coloré par statut.
  */
 
 import type { CeeDossierStatus } from '@/lib/cee/dossier-types'
@@ -87,18 +87,18 @@ export function CeeStatusTable({ rows }: CeeStatusTableProps) {
   return (
     <div className="bg-white border border-sand-200 shadow-sm rounded-xl overflow-hidden">
       <div className="px-5 py-4 border-b border-gray-100">
-        <h3 className="text-sm font-semibold text-gray-700">Dossiers recents</h3>
+        <h3 className="text-sm font-semibold text-gray-700">Dossiers récents</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-100 text-left text-xs text-gray-500 uppercase tracking-wider">
               <th className="px-5 py-3">ID</th>
-              <th className="px-5 py-3">Operation</th>
+              <th className="px-5 py-3">Opération</th>
               <th className="px-5 py-3">Artisan</th>
               <th className="px-5 py-3">Statut</th>
               <th className="px-5 py-3 text-right">kWhc est.</th>
-              <th className="px-5 py-3">Cree le</th>
+              <th className="px-5 py-3">Créé le</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">

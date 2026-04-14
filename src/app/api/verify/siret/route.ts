@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
           success: false,
           error: {
             code: 9001,
-            message: 'Service de verification temporairement indisponible'
+            message: 'Service de vérification temporairement indisponible'
           }
         },
         { status: 503 }
@@ -185,7 +185,7 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 9002,
-          message: 'Erreur lors de la verification du SIRET'
+          message: 'Erreur lors de la vérification du SIRET'
         }
       },
       { status: 500 }

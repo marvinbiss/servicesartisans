@@ -175,3 +175,259 @@ export async function sendCeeEligibilityEmail(params: CeeEligibilityEmailParams)
     operationCode: params.operationCode,
   })
 }
+
+// ---------------------------------------------------------------------------
+// PR2 — Activation partenaire CEE (invite / certification / activation)
+// ---------------------------------------------------------------------------
+
+export interface CeePartnerInviteEmailParams {
+  to: string
+  artisanName: string
+  invitationUrl: string
+}
+
+export interface CeeCertificationEmailParams {
+  to: string
+  artisanName: string
+  score: number
+  certificatePdfUrl: string | null
+}
+
+export interface CeePartnerActivatedEmailParams {
+  to: string
+  artisanName: string
+  dashboardUrl: string
+}
+
+// ---------------------------------------------------------------------------
+// Invite (onboarding CTA)
+// ---------------------------------------------------------------------------
+
+function buildCeePartnerInviteHtml(params: CeePartnerInviteEmailParams): string {
+  const { artisanName, invitationUrl } = params
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 600px; margin: 0 auto; padding: 0; background-color: #ffffff;">
+  <div style="padding: 32px 24px;">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <h1 style="color: #059669; margin: 0; font-size: 24px;">ServicesArtisans</h1>
+      <div style="display: inline-block; background-color: #ecfdf5; color: #065f46; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+        Invitation partenaire CEE
+      </div>
+    </div>
+
+    <p style="font-size: 16px; margin: 0 0 16px 0;">Bonjour ${esc(artisanName)},</p>
+
+    <p style="font-size: 15px; margin: 0 0 16px 0;">
+      Vous \u00eates invit\u00e9 \u00e0 rejoindre le r\u00e9seau d\u2019artisans partenaires de <strong>SA Energy</strong>, mandataire CEE. Notre \u00e9quipe d\u00e9pose pour vous les dossiers CEE et vous reverse la prime apr\u00e8s validation PNCEE.
+    </p>
+
+    <div style="background-color: #f0fdf4; border-radius: 8px; padding: 16px 20px; margin: 24px 0;">
+      <p style="margin: 0 0 8px 0; font-size: 14px; color: #166534; font-weight: 600;">Parcours d\u2019activation (environ 30 minutes)</p>
+      <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #166534;">
+        <li>Renseigner votre IBAN (chiffr\u00e9)</li>
+        <li>Signer la convention \u00e9lectroniquement (Yousign)</li>
+        <li>Suivre la formation et r\u00e9ussir le quiz (8/10 min.)</li>
+        <li>D\u00e9marrer les dossiers CEE</li>
+      </ol>
+    </div>
+
+    <div style="text-align: center; margin: 32px 0;">
+      <a href="${esc(invitationUrl)}" style="display: inline-block; background: #059669; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+        D\u00e9marrer mon activation
+      </a>
+    </div>
+
+    <p style="color: #6b7280; font-size: 13px; margin: 16px 0 0 0;">
+      Ce lien expire dans 7 jours. Pour toute question : <a href="mailto:partenaires@servicesartisans.fr" style="color: #059669;">partenaires@servicesartisans.fr</a>.
+    </p>
+
+    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0 16px 0;">
+    <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 0;">
+      ServicesArtisans \u2014 SA Energy, mandataire CEE<br>
+      <a href="https://servicesartisans.fr" style="color: #9ca3af;">servicesartisans.fr</a>
+    </p>
+  </div>
+</body>
+</html>`
+}
+
+/**
+ * Envoie un email d'invitation partenaire CEE (onboarding).
+ * Fail-open : retourne `{ success: false }` sur erreur, log warn.
+ */
+export async function sendCeePartnerInvite(
+  params: CeePartnerInviteEmailParams
+): Promise<{ success: boolean }> {
+  try {
+    await sendEmail({
+      to: params.to,
+      subject: 'Invitation \u2014 Devenez partenaire CEE de ServicesArtisans',
+      html: buildCeePartnerInviteHtml(params),
+      from: process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+      tags: [{ name: 'type', value: 'cee_partner_invite' }],
+    })
+    logger.info('cee-email: invitation partenaire envoyée', {
+      action: 'cee-email-partner-invite',
+    })
+    return { success: true }
+  } catch (error) {
+    logger.warn('cee-email: échec invitation partenaire (fail-open)', {
+      action: 'cee-email-partner-invite-failed',
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return { success: false }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Certification (après quiz réussi)
+// ---------------------------------------------------------------------------
+
+function buildCeeCertificationHtml(params: CeeCertificationEmailParams): string {
+  const { artisanName, score, certificatePdfUrl } = params
+  const certificateSection = certificatePdfUrl
+    ? `
+    <div style="text-align: center; margin: 28px 0;">
+      <a href="${esc(certificatePdfUrl)}" style="display: inline-block; background: #059669; color: white; padding: 12px 28px; text-decoration: none; border-radius: 8px; font-weight: 600;">
+        T\u00e9l\u00e9charger mon attestation
+      </a>
+    </div>`
+    : ''
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 600px; margin: 0 auto; padding: 0; background-color: #ffffff;">
+  <div style="padding: 32px 24px;">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <h1 style="color: #059669; margin: 0; font-size: 24px;">ServicesArtisans</h1>
+      <div style="display: inline-block; background-color: #ecfdf5; color: #065f46; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+        F\u00e9licitations \u2014 certifi\u00e9 CEE
+      </div>
+    </div>
+
+    <p style="font-size: 16px; margin: 0 0 16px 0;">Bonjour ${esc(artisanName)},</p>
+
+    <p style="font-size: 15px; margin: 0 0 16px 0;">
+      Vous avez valid\u00e9 la formation partenaire CEE avec un score de <strong>${score}/10</strong>. Votre compte va \u00eatre activ\u00e9 d\u00e8s validation finale de notre \u00e9quipe.
+    </p>
+
+    ${certificateSection}
+
+    <p style="color: #6b7280; font-size: 13px; margin: 16px 0 0 0;">
+      Vous recevrez un second email d\u00e8s que votre compte sera pleinement op\u00e9rationnel.
+    </p>
+
+    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0 16px 0;">
+    <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 0;">
+      ServicesArtisans \u2014 SA Energy, mandataire CEE
+    </p>
+  </div>
+</body>
+</html>`
+}
+
+/**
+ * Envoie l'email de certification après quiz réussi (score >= 8/10).
+ * Fail-open.
+ */
+export async function sendCeeCertificationEmail(
+  params: CeeCertificationEmailParams
+): Promise<{ success: boolean }> {
+  try {
+    await sendEmail({
+      to: params.to,
+      subject: 'Certification CEE valid\u00e9e',
+      html: buildCeeCertificationHtml(params),
+      from: process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+      tags: [
+        { name: 'type', value: 'cee_partner_certification' },
+        { name: 'score', value: String(params.score) },
+      ],
+    })
+    logger.info('cee-email: certification envoyée', {
+      action: 'cee-email-certification',
+      score: params.score,
+    })
+    return { success: true }
+  } catch (error) {
+    logger.warn('cee-email: échec certification (fail-open)', {
+      action: 'cee-email-certification-failed',
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return { success: false }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Partner activated (status → active)
+// ---------------------------------------------------------------------------
+
+function buildCeePartnerActivatedHtml(
+  params: CeePartnerActivatedEmailParams
+): string {
+  const { artisanName, dashboardUrl } = params
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 600px; margin: 0 auto; padding: 0; background-color: #ffffff;">
+  <div style="padding: 32px 24px;">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <h1 style="color: #059669; margin: 0; font-size: 24px;">ServicesArtisans</h1>
+      <div style="display: inline-block; background-color: #ecfdf5; color: #065f46; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+        Compte activ\u00e9
+      </div>
+    </div>
+
+    <p style="font-size: 16px; margin: 0 0 16px 0;">Bonjour ${esc(artisanName)},</p>
+
+    <p style="font-size: 15px; margin: 0 0 16px 0;">
+      Votre compte partenaire CEE est <strong>actif</strong>. Vous pouvez maintenant recevoir des dossiers CEE qualifi\u00e9s et suivre vos commissions depuis votre espace.
+    </p>
+
+    <div style="text-align: center; margin: 32px 0;">
+      <a href="${esc(dashboardUrl)}" style="display: inline-block; background: #059669; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+        Acc\u00e9der \u00e0 mon espace CEE
+      </a>
+    </div>
+
+    <p style="color: #6b7280; font-size: 13px; margin: 16px 0 0 0;">
+      Besoin d\u2019aide ? <a href="mailto:partenaires@servicesartisans.fr" style="color: #059669;">partenaires@servicesartisans.fr</a>
+    </p>
+
+    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0 16px 0;">
+    <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 0;">
+      ServicesArtisans \u2014 SA Energy, mandataire CEE
+    </p>
+  </div>
+</body>
+</html>`
+}
+
+/**
+ * Envoie l'email d'activation finale (status → active). Fail-open.
+ */
+export async function sendCeePartnerActivatedEmail(
+  params: CeePartnerActivatedEmailParams
+): Promise<{ success: boolean }> {
+  try {
+    await sendEmail({
+      to: params.to,
+      subject: 'Votre compte partenaire CEE est activ\u00e9',
+      html: buildCeePartnerActivatedHtml(params),
+      from: process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+      tags: [{ name: 'type', value: 'cee_partner_activated' }],
+    })
+    logger.info('cee-email: activation partenaire envoyée', {
+      action: 'cee-email-partner-activated',
+    })
+    return { success: true }
+  } catch (error) {
+    logger.warn('cee-email: échec activation partenaire (fail-open)', {
+      action: 'cee-email-partner-activated-failed',
+      error: error instanceof Error ? error.message : String(error),
+    })
+    return { success: false }
+  }
+}

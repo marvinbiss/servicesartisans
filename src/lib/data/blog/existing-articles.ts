@@ -710,7 +710,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     updatedDate: '2026-02-12',
     readTime: '13 min',
     category: 'Aides & Subventions',
-    tags: ['MaPrimeRenov', 'Aides', 'Renovation'],
+    tags: ['MaPrimeRénov', 'Aides', 'Renovation'],
     faq: [
       {
         question: "MaPrimeRénov' est-elle cumulable avec les CEE ?",

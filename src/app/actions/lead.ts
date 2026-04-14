@@ -16,10 +16,10 @@ const leadSchema = z.object({
   phone: z
     .string()
     .transform(cleanPhone)
-    .pipe(z.string().regex(/^(?:\+33|0033|0)[1-9](?:[0-9]{8})$/, 'Numero de telephone invalide')),
+    .pipe(z.string().regex(/^(?:\+33|0033|0)[1-9](?:[0-9]{8})$/, 'Numéro de téléphone invalide')),
   postalCode: z.string().optional(),
   city: z.string().optional(),
-  description: z.string().min(20, 'Description trop courte (min 20 caracteres)'),
+  description: z.string().min(20, 'Description trop courte (min 20 caractères)'),
   urgency: z.enum(['normal', 'urgent', 'flexible']).default('normal'),
 })
 

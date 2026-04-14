@@ -83,27 +83,27 @@ const faqItems = [
   {
     question: 'Est-il obligatoire de mettre aux normes une ancienne installation électrique ?',
     answer:
-      'La mise aux normes n"est pas obligatoire pour un logement que vous occupez vous-même, sauf si l"installation présente un danger avéré. En revanche, elle devient obligatoire dans trois cas : lors d"une rénovation lourde avec intervention sur le tableau électrique, lors de la vente d"un logement (le diagnostic électrique est obligatoire pour les installations de plus de 15 ans), et lors de la mise en location (l"installation doit répondre aux critères de décence). L"objectif est d"assurer la sécurité des personnes.',
+      'La mise aux normes n’est pas obligatoire pour un logement que vous occupez vous-même, sauf si l’installation présente un danger avéré. En revanche, elle devient obligatoire dans trois cas : lors d’une rénovation lourde avec intervention sur le tableau électrique, lors de la vente d’un logement (le diagnostic électrique est obligatoire pour les installations de plus de 15 ans), et lors de la mise en location (l’installation doit répondre aux critères de décence). L"objectif est d’assurer la sécurité des personnes.',
   },
   {
     question: 'Combien coûte une mise aux normes électriques complète ?',
     answer:
-      'Le coût d"une mise aux normes électriques complète dépend de la surface du logement et de l"état de l"installation existante. En moyenne, comptez entre 80 et 120 € par m² pour une rénovation complète (remplacement du tableau, nouveau câblage, prises et interrupteurs). Pour un appartement de 60 m², le budget se situe entre 4 800 et 7 200 €. Pour une maison de 100 m², entre 8 000 et 12 000 €. Une mise aux normes partielle (tableau seul) coûte entre 1 500 et 3 000 €.',
+      'Le coût d’une mise aux normes électriques complète dépend de la surface du logement et de l’état de l’installation existante. En moyenne, comptez entre 80 et 120 € par m² pour une rénovation complète (remplacement du tableau, nouveau câblage, prises et interrupteurs). Pour un appartement de 60 m², le budget se situe entre 4 800 et 7 200 €. Pour une maison de 100 m², entre 8 000 et 12 000 €. Une mise aux normes partielle (tableau seul) coûte entre 1 500 et 3 000 €.',
   },
   {
     question: 'Puis-je faire les travaux électriques moi-même ?',
     answer:
-      'Oui, un particulier peut réaliser les travaux électriques de son propre logement. Il n"est pas obligatoire de faire appel à un électricien professionnel. Cependant, l"installation doit impérativement respecter la norme NF C 15-100. En cas de sinistre (incendie, électrocution), votre assurance pourra refuser de vous indemniser si l"installation n"est pas conforme. Pour une construction neuve, un Consuel (Comité National pour la Sécurité des Usagers de l"Électricité) est obligatoire avant la mise en service. Nous recommandons fortement de faire appel à un électricien qualifié.',
+      'Oui, un particulier peut réaliser les travaux électriques de son propre logement. Il n’est pas obligatoire de faire appel à un électricien professionnel. Cependant, l’installation doit impérativement respecter la norme NF C 15-100. En cas de sinistre (incendie, électrocution), votre assurance pourra refuser de vous indemniser si l’installation n’est pas conforme. Pour une construction neuve, un Consuel (Comité National pour la Sécurité des Usagers de l’Électricité) est obligatoire avant la mise en service. Nous recommandons fortement de faire appel à un électricien qualifié.',
   },
   {
     question: 'Quelle est la durée de validité du diagnostic électrique ?',
     answer:
-      'Le diagnostic électrique (état de l"installation intérieure d"électricité) a une durée de validité de 3 ans pour une vente et de 6 ans pour une location. Il est obligatoire pour toute installation de plus de 15 ans. Le diagnostic doit être réalisé par un diagnostiqueur certifié. Son coût varie entre 100 et 200 € selon la taille du logement. Il porte sur 87 points de contrôle couvrant le tableau électrique, les dispositifs de protection, les prises de terre et les zones humides.',
+      'Le diagnostic électrique (état de l’installation intérieure d’électricité) a une durée de validité de 3 ans pour une vente et de 6 ans pour une location. Il est obligatoire pour toute installation de plus de 15 ans. Le diagnostic doit être réalisé par un diagnostiqueur certifié. Son coût varie entre 100 et 200 € selon la taille du logement. Il porte sur 87 points de contrôle couvrant le tableau électrique, les dispositifs de protection, les prises de terre et les zones humides.',
   },
   {
-    question: 'Quels sont les risques d"une installation électrique non conforme ?',
+    question: 'Quels sont les risques d’une installation électrique non conforme ?',
     answer:
-      'Une installation non conforme présente des risques majeurs : électrocution (environ 100 décès par an en France), incendie d"origine électrique (environ 50 000 par an, soit 25 % des incendies domestiques), et dommages matériels. En cas de sinistre, l"assurance peut refuser l"indemnisation si l"installation est non conforme. En cas de location, le propriétaire engage sa responsabilité civile et pénale. Les signes d"alerte sont : disjoncteurs qui sautent fréquemment, prises qui chauffent, odeur de brûlé, absence de prise de terre.',
+      'Une installation non conforme présente des risques majeurs : électrocution (environ 100 décès par an en France), incendie d’origine électrique (environ 50 000 par an, soit 25 % des incendies domestiques), et dommages matériels. En cas de sinistre, l’assurance peut refuser l’indemnisation si l’installation est non conforme. En cas de location, le propriétaire engage sa responsabilité civile et pénale. Les signes d’alerte sont : disjoncteurs qui sautent fréquemment, prises qui chauffent, odeur de brûlé, absence de prise de terre.',
   },
 ]
 
@@ -197,14 +197,14 @@ const zonesVolumesBain = [
   },
   {
     volume: 'Volume 1',
-    zone: 'Au-dessus de la baignoire/douche, jusqu"à 2,25 m de hauteur',
+    zone: 'Au-dessus de la baignoire/douche, jusqu’à 2,25 m de hauteur',
     appareils: 'Chauffe-eau instantané TBTS 12V uniquement',
-    protection: 'IPX5 (jets d"eau)',
+    protection: 'IPX5 (jets d’eau)',
     color: 'bg-orange-50 border-orange-200',
   },
   {
     volume: 'Volume 2',
-    zone: '60 cm autour de la baignoire/douche, jusqu"à 2,25 m',
+    zone: '60 cm autour de la baignoire/douche, jusqu’à 2,25 m',
     appareils: 'Luminaires, chauffages classe II + 30 mA',
     protection: 'IPX4 (éclaboussures)',
     color: 'bg-amber-50 border-amber-200',
@@ -297,12 +297,12 @@ export default function NormesElectriquesPage() {
             <h2 className="text-lg font-semibold text-charcoal-900 mb-4">{'Sommaire'}</h2>
             <ol className="space-y-2 text-sm">
               {[
-                'Qu"est-ce que la norme NF C 15-100 ?',
+                'Qu’est-ce que la norme NF C 15-100 ?',
                 'Exigences par pièce : prises, éclairage et communication',
                 'Protection des circuits : disjoncteurs et différentiels',
                 'Zones de sécurité en salle de bain',
                 'Quand la mise aux normes est-elle obligatoire ?',
-                'Coût d"une rénovation électrique',
+                'Coût d’une rénovation électrique',
                 'Diagnostic électrique obligatoire',
                 'Questions fréquentes',
               ].map((item, i) => (
@@ -324,14 +324,14 @@ export default function NormesElectriquesPage() {
                 <CircuitBoard className="w-5 h-5 text-amber-600" />
               </div>
               <h2 className="text-2xl font-bold text-charcoal-900">
-                {'Qu"est-ce que la norme NF C 15-100 ?'}
+                {'Qu’est-ce que la norme NF C 15-100 ?'}
               </h2>
             </div>
 
             <div className="bg-white rounded-xl border border-sand-300 p-6">
               <p className="text-charcoal-700 mb-4">
                 {
-                  'La norme NF C 15-100 est la norme française qui régit la conception, la réalisation et l"entretien des installations électriques basse tension (jusqu"à 1 000 V en courant alternatif). Elle s"applique à tous les bâtiments d"habitation, neufs et rénovés, et définit les règles minimales de sécurité pour protéger les personnes et les biens.'
+                  'La norme NF C 15-100 est la norme française qui régit la conception, la réalisation et l’entretien des installations électriques basse tension (jusqu’à 1 000 V en courant alternatif). Elle s’applique à tous les bâtiments d’habitation, neufs et rénovés, et définit les règles minimales de sécurité pour protéger les personnes et les biens.'
                 }
               </p>
               <p className="text-charcoal-700 mb-4">
@@ -434,7 +434,7 @@ export default function NormesElectriquesPage() {
                   </h3>
                   <p className="text-sm text-charcoal-600">
                     {
-                      'Tous les circuits doivent être protégés par des interrupteurs différentiels 30 mA. La norme impose au minimum 2 interrupteurs différentiels de type AC (pour l"éclairage et les prises) et 1 de type A (pour les circuits spécialisés : plaque de cuisson, lave-linge, borne de recharge VE). Chaque interrupteur différentiel protège au maximum 8 circuits.'
+                      'Tous les circuits doivent être protégés par des interrupteurs différentiels 30 mA. La norme impose au minimum 2 interrupteurs différentiels de type AC (pour l’éclairage et les prises) et 1 de type A (pour les circuits spécialisés : plaque de cuisson, lave-linge, borne de recharge VE). Chaque interrupteur différentiel protège au maximum 8 circuits.'
                     }
                   </p>
                 </div>
@@ -482,7 +482,7 @@ export default function NormesElectriquesPage() {
                   </h3>
                   <p className="text-sm text-charcoal-600">
                     {
-                      'Toute installation électrique doit disposer d"une prise de terre dont la résistance ne dépasse pas 100 ohms. La prise de terre assure l"évacuation des courants de défaut et le fonctionnement correct des dispositifs différentiels. Sans prise de terre, les interrupteurs différentiels ne peuvent pas assurer la protection des personnes.'
+                      'Toute installation électrique doit disposer d’une prise de terre dont la résistance ne dépasse pas 100 ohms. La prise de terre assure l’évacuation des courants de défaut et le fonctionnement correct des dispositifs différentiels. Sans prise de terre, les interrupteurs différentiels ne peuvent pas assurer la protection des personnes.'
                     }
                   </p>
                 </div>
@@ -544,22 +544,22 @@ export default function NormesElectriquesPage() {
                 {[
                   {
                     title: 'Construction neuve',
-                    desc: 'Toute construction neuve doit respecter intégralement la norme NF C 15-100 en vigueur. Le Consuel (certificat de conformité) est obligatoire avant la mise en service de l"installation par Enedis.',
+                    desc: 'Toute construction neuve doit respecter intégralement la norme NF C 15-100 en vigueur. Le Consuel (certificat de conformité) est obligatoire avant la mise en service de l’installation par Enedis.',
                     color: 'bg-red-50',
                   },
                   {
                     title: 'Rénovation lourde',
-                    desc: 'Lors d"une rénovation complète de l"installation électrique (remplacement du tableau, modification du câblage), la nouvelle installation doit être conforme à la norme en vigueur. Un Consuel peut être demandé.',
+                    desc: 'Lors d’une rénovation complète de l’installation électrique (remplacement du tableau, modification du câblage), la nouvelle installation doit être conforme à la norme en vigueur. Un Consuel peut être demandé.',
                     color: 'bg-red-50',
                   },
                   {
-                    title: 'Vente d"un logement (installation > 15 ans)',
-                    desc: 'Le vendeur doit fournir un diagnostic de l"état de l"installation électrique. Si des anomalies sont détectées, l"acheteur est informé mais les travaux de mise aux normes ne sont pas obligatoires pour conclure la vente.',
+                    title: 'Vente d’un logement (installation > 15 ans)',
+                    desc: 'Le vendeur doit fournir un diagnostic de l’état de l’installation électrique. Si des anomalies sont détectées, l’acheteur est informé mais les travaux de mise aux normes ne sont pas obligatoires pour conclure la vente.',
                     color: 'bg-amber-50',
                   },
                   {
                     title: 'Mise en location',
-                    desc: 'Le logement loué doit disposer d"une installation électrique conforme aux critères de décence (loi Alur). Un diagnostic électrique est obligatoire pour les installations de plus de 15 ans. Le propriétaire doit garantir la sécurité de l"installation.',
+                    desc: 'Le logement loué doit disposer d’une installation électrique conforme aux critères de décence (loi Alur). Un diagnostic électrique est obligatoire pour les installations de plus de 15 ans. Le propriétaire doit garantir la sécurité de l’installation.',
                     color: 'bg-amber-50',
                   },
                 ].map((item) => (
@@ -579,7 +579,7 @@ export default function NormesElectriquesPage() {
                 <Euro className="w-5 h-5 text-green-600" />
               </div>
               <h2 className="text-2xl font-bold text-charcoal-900">
-                {'Coût d"une rénovation électrique'}
+                {'Coût d’une rénovation électrique'}
               </h2>
             </div>
 
@@ -608,8 +608,8 @@ export default function NormesElectriquesPage() {
                         cout: '4 800 € à 7 200 €',
                       },
                       { travaux: 'Rénovation complète maison 100 m²', cout: '8 000 € à 12 000 €' },
-                      { travaux: 'Ajout d"un circuit spécialisé', cout: '200 € à 500 €' },
-                      { travaux: 'Pose d"une prise de terre', cout: '500 € à 1 500 €' },
+                      { travaux: 'Ajout d’un circuit spécialisé', cout: '200 € à 500 €' },
+                      { travaux: 'Pose d’une prise de terre', cout: '500 € à 1 500 €' },
                       { travaux: 'Diagnostic électrique (obligatoire)', cout: '100 € à 200 €' },
                     ].map((row) => (
                       <tr key={row.travaux}>
@@ -647,7 +647,7 @@ export default function NormesElectriquesPage() {
             <div className="bg-white rounded-xl border border-sand-300 p-6">
               <p className="text-charcoal-700 mb-4">
                 {
-                  'Le diagnostic de l"état de l"installation intérieure d"électricité est un document obligatoire qui informe l"acheteur ou le locataire sur la sécurité de l"installation :'
+                  'Le diagnostic de l’état de l’installation intérieure d’électricité est un document obligatoire qui informe l’acheteur ou le locataire sur la sécurité de l’installation :'
                 }
               </p>
               <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -672,7 +672,7 @@ export default function NormesElectriquesPage() {
                 <p className="text-sm text-amber-800">
                   <strong>{'Important :'}</strong>
                   {
-                    ' le diagnostic doit être réalisé par un diagnostiqueur certifié par un organisme accrédité COFRAC. Un diagnostic réalisé par un non-certifié est nul et peut entraîner l"annulation de la vente.'
+                    ' le diagnostic doit être réalisé par un diagnostiqueur certifié par un organisme accrédité COFRAC. Un diagnostic réalisé par un non-certifié est nul et peut entraîner l’annulation de la vente.'
                   }
                 </p>
               </div>
@@ -710,7 +710,7 @@ export default function NormesElectriquesPage() {
           <section className="mb-12">
             <div className="bg-gradient-to-r from-amber-500 to-amber-600 rounded-2xl p-8 text-white">
               <h2 className="text-2xl font-bold mb-3">
-                {'Besoin d"un électricien ou d"un diagnostiqueur ?'}
+                {'Besoin d’un électricien ou d’un diagnostiqueur ?'}
               </h2>
               <p className="text-amber-100 mb-6 max-w-2xl">
                 {

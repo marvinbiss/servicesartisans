@@ -58,7 +58,7 @@ export async function GET(request: Request) {
       return NextResponse.json(
         createErrorResponse(
           ErrorCode.VALIDATION_ERROR,
-          queryValidation.error.issues[0]?.message || 'Parametres invalides'
+          queryValidation.error.issues[0]?.message || 'Paramètres invalides'
         ),
         { status: 400 }
       )
@@ -87,7 +87,7 @@ export async function GET(request: Request) {
 
       if (error || !booking) {
         return NextResponse.json(
-          createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
+          createErrorResponse(ErrorCode.NOT_FOUND, 'Réservation non trouvée'),
           { status: 404 }
         )
       }
@@ -148,7 +148,7 @@ export async function GET(request: Request) {
       if (error) {
         logger.error('Database error:', error)
         return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la recuperation des avis'),
+          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la récupération des avis'),
           { status: 500 }
         )
       }
@@ -262,7 +262,7 @@ export async function POST(request: Request) {
       switch (result.code) {
         case 'booking_not_found':
           return NextResponse.json(
-            createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
+            createErrorResponse(ErrorCode.NOT_FOUND, 'Réservation non trouvée'),
             { status: 404 }
           )
         case 'not_owner':
@@ -300,7 +300,7 @@ export async function POST(request: Request) {
           )
         case 'db_error':
           return NextResponse.json(
-            createErrorResponse(ErrorCode.DATABASE_ERROR, "Erreur lors de la creation de l'avis"),
+            createErrorResponse(ErrorCode.DATABASE_ERROR, "Erreur lors de la création de l'avis"),
             { status: 500 }
           )
       }
@@ -314,7 +314,7 @@ export async function POST(request: Request) {
         },
         message:
           result.success && result.fraudDetected
-            ? 'Votre avis sera publie apres verification'
+            ? 'Votre avis sera publié après vérification'
             : 'Merci pour votre avis !',
       }),
       { status: 201 }

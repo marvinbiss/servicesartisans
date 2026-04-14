@@ -41,9 +41,9 @@ const METHODOLOGY_SECTIONS = [
       'Les fourchettes de prix affichées sur ServicesArtisans sont construites à partir de données de marché réelles, jamais inventées.',
     points: [
       'Nous partons de prix de référence nationaux issus de bases professionnelles (artisans, fédérations du bâtiment, observatoires des prix).',
-      "Ces prix sont ajustés par des multiplicateurs départementaux qui reflètent les écarts de coût de la vie, de main-d'oeuvre et de matériaux entre les territoires (par exemple, l'Île-de-France est plus chère que la Creuse).",
+      "Ces prix sont ajustés par des multiplicateurs départementaux qui reflètent les écarts de coût de la vie, de main-d'œuvre et de matériaux entre les territoires (par exemple, l'Île-de-France est plus chère que la Creuse).",
       "Les fourchettes basses et hautes tiennent compte de la complexité des travaux, de la qualité des matériaux et des conditions d'accès au chantier.",
-      "Les prix sont révisés régulièrement pour intégrer l'évolution des coûts des matériaux et de la main-d'oeuvre.",
+      "Les prix sont révisés régulièrement pour intégrer l'évolution des coûts des matériaux et de la main-d'œuvre.",
       "Lorsqu'aucune donnée fiable n'est disponible pour un type de travaux, nous ne publions pas de prix plutôt que d'afficher une estimation douteuse.",
     ],
   },

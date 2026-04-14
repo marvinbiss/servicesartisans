@@ -19,6 +19,10 @@ import {
   Menu,
   X,
   Users,
+  Zap,
+  GraduationCap,
+  Banknote,
+  Plus,
 } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
@@ -53,6 +57,10 @@ interface ArtisanSidebarProps {
     | 'abonnement'
     | 'equipe'
     | 'parametres'
+    | 'cee-dashboard'
+    | 'cee-nouveau'
+    | 'cee-formation'
+    | 'cee-commissions'
   newDemandesCount?: number
   unreadMessagesCount?: number
   publicUrl?: string | null
@@ -111,6 +119,35 @@ const navSections: NavSection[] = [
         label: 'Statistiques',
       },
       { key: 'avis-recus', href: '/espace-artisan/avis-recus', icon: Star, label: 'Avis reçus' },
+    ],
+  },
+  {
+    title: 'CEE — SA Energy',
+    items: [
+      {
+        key: 'cee-dashboard',
+        href: '/espace-artisan/cee',
+        icon: Zap,
+        label: 'Dashboard CEE',
+      },
+      {
+        key: 'cee-nouveau',
+        href: '/espace-artisan/cee/nouveau',
+        icon: Plus,
+        label: 'Nouveau dossier',
+      },
+      {
+        key: 'cee-formation',
+        href: '/espace-artisan/cee/formation',
+        icon: GraduationCap,
+        label: 'Formation',
+      },
+      {
+        key: 'cee-commissions',
+        href: '/espace-artisan/cee/commissions',
+        icon: Banknote,
+        label: 'Commissions',
+      },
     ],
   },
   {

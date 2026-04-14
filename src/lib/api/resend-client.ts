@@ -246,7 +246,7 @@ export async function sendWelcomeEmail(params: {
   ` : `
   <p>Vous pouvez maintenant :</p>
   <ul>
-    <li>Rechercher des artisans qualifies</li>
+    <li>Rechercher des artisans qualifiés</li>
     <li>Demander des devis gratuits</li>
     <li>Prendre rendez-vous en ligne</li>
   </ul>
@@ -254,18 +254,18 @@ export async function sendWelcomeEmail(params: {
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${process.env.NEXT_PUBLIC_SITE_URL}${isArtisan ? '/espace-artisan' : '/espace-client'}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Acceder a mon compte
+      Accéder à mon compte
     </a>
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Si vous avez des questions, n'hesitez pas a nous contacter a support@servicesartisans.fr
+    Si vous avez des questions, n'hésitez pas à nous contacter à support@servicesartisans.fr
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    ServicesArtisans - La plateforme des artisans qualifiés
   </p>
 </body>
 </html>
@@ -303,15 +303,15 @@ export async function sendPasswordResetEmail(params: {
     <h1 style="color: #2563eb; margin: 0;">ServicesArtisans</h1>
   </div>
 
-  <h2>Reinitialisation de mot de passe</h2>
+  <h2>Réinitialisation de mot de passe</h2>
 
   <p>Bonjour ${name},</p>
 
-  <p>Vous avez demande a reinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour creer un nouveau mot de passe :</p>
+  <p>Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe :</p>
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${resetLink}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Reinitialiser mon mot de passe
+      Réinitialiser mon mot de passe
     </a>
   </div>
 
@@ -322,7 +322,7 @@ export async function sendPasswordResetEmail(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    ServicesArtisans - La plateforme des artisans qualifiés
   </p>
 </body>
 </html>
@@ -330,7 +330,7 @@ export async function sendPasswordResetEmail(params: {
 
   return sendEmail({
     to,
-    subject: 'Reinitialisation de votre mot de passe - ServicesArtisans',
+    subject: 'Réinitialisation de votre mot de passe - ServicesArtisans',
     html,
     tags: [{ name: 'type', value: 'password_reset' }],
   })
@@ -360,24 +360,24 @@ export async function sendClaimApprovedEmail(params: {
 
   <h2 style="color: #333;">Bonne nouvelle, ${name} !</h2>
 
-  <p>Votre demande de revendication pour <strong>${providerName}</strong> a ete approuvee par notre equipe.</p>
+  <p>Votre demande de revendication pour <strong>${providerName}</strong> a été approuvée par notre équipe.</p>
 
-  <p>Votre fiche artisan est desormais active. Pour acceder a votre espace et gerer vos leads, definissez votre mot de passe :</p>
+  <p>Votre fiche artisan est désormais active. Pour accéder à votre espace et gérer vos leads, définissez votre mot de passe :</p>
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${passwordLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-      Definir mon mot de passe
+      Définir mon mot de passe
     </a>
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Ce lien est valable pendant 24 heures. Apres ce delai, vous pourrez utiliser la fonction "Mot de passe oublie" pour en generer un nouveau.
+    Ce lien est valable pendant 24 heures. Après ce délai, vous pourrez utiliser la fonction "Mot de passe oublié" pour en générer un nouveau.
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies<br>
+    ServicesArtisans - La plateforme des artisans qualifiés<br>
     <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
   </p>
 </body>
@@ -386,7 +386,7 @@ export async function sendClaimApprovedEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Votre fiche "${providerName}" a ete validee - ServicesArtisans`,
+    subject: `Votre fiche "${providerName}" a été validée - ServicesArtisans`,
     html,
     tags: [
       { name: 'type', value: 'claim_approved' },
@@ -420,11 +420,11 @@ export async function sendBookingConfirmationEmail(params: {
     <h1 style="color: #2563eb; margin: 0;">ServicesArtisans</h1>
   </div>
 
-  <h2>Reservation confirmee !</h2>
+  <h2>Réservation confirmée !</h2>
 
   <p>Bonjour ${clientName},</p>
 
-  <p>Votre rendez-vous avec <strong>${artisanName}</strong> est confirme.</p>
+  <p>Votre rendez-vous avec <strong>${artisanName}</strong> est confirmé.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
     <p style="margin: 0 0 10px 0;"><strong>Service :</strong> ${serviceName}</p>
@@ -435,7 +435,7 @@ export async function sendBookingConfirmationEmail(params: {
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${process.env.NEXT_PUBLIC_SITE_URL}/reservations/${bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Voir ma reservation
+      Voir ma réservation
     </a>
   </div>
 
@@ -446,7 +446,7 @@ export async function sendBookingConfirmationEmail(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    ServicesArtisans - La plateforme des artisans qualifiés
   </p>
 </body>
 </html>
@@ -454,7 +454,7 @@ export async function sendBookingConfirmationEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Rendez-vous confirme avec ${artisanName} - ${date}`,
+    subject: `Rendez-vous confirmé avec ${artisanName} - ${date}`,
     html,
     tags: [
       { name: 'type', value: 'booking_confirmation' },
@@ -506,13 +506,13 @@ export async function sendQuoteRequestEmail(params: {
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    Repondez rapidement pour augmenter vos chances de decrocher ce projet !
+    Répondez rapidement pour augmenter vos chances de décrocher ce projet !
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifies
+    ServicesArtisans - La plateforme des artisans qualifiés
   </p>
 </body>
 </html>

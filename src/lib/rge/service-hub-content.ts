@@ -180,7 +180,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
       {
         question: 'ITE ou ITI : que choisir pour un logement ancien ?',
         answer:
-          "L'ITE est techniquement supérieure : elle supprime les ponts thermiques, préserve l'inertie des murs anciens, ne réduit pas la surface habitable et permet une ravalement simultané. Mais elle modifie l'aspect extérieur et nécessite souvent une autorisation en secteur protégé (ABF). L'ITI est moins coûteuse, indiquée pour les façades patrimoniales ou en copropriété où l'ITE est refusée. MaPrimeRénov' favorise l'ITE (75 €/m² max contre 25 €/m² pour l'ITI) car elle est plus performante. Un bon artisan Qualibat RGE sait orienter selon le diagnostic.",
+          "L'ITE est techniquement supérieure : elle supprime les ponts thermiques, préserve l'inertie des murs anciens, ne réduit pas la surface habitable et permet un ravalement simultané. Mais elle modifie l'aspect extérieur et nécessite souvent une autorisation en secteur protégé (ABF). L'ITI est moins coûteuse, indiquée pour les façades patrimoniales ou en copropriété où l'ITE est refusée. MaPrimeRénov' favorise l'ITE (75 €/m² max contre 25 €/m² pour l'ITI) car elle est plus performante. Un bon artisan Qualibat RGE sait orienter selon le diagnostic.",
       },
       {
         question: 'Les aides « isolation à 1 € » existent-elles encore en 2026 ?',

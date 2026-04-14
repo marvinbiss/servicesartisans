@@ -172,33 +172,33 @@ const FAMILLES: FamilleRow[] = [
 const FAQ: Array<{ question: string; answer: string }> = [
   {
     question:
-      'Puis-je cumuler MaPrimeRénov\u2019, la prime CEE et l\u2019Éco-PTZ sur le même chantier?',
+      'Puis-je cumuler MaPrimeRénov\u2019, la prime CEE et l\u2019Éco-PTZ sur le même chantier\u202f?',
     answer:
       'Oui, les trois dispositifs sont cumulables et c\u2019est même une pratique courante. MaPrimeRénov\u2019 est une aide publique versée par l\u2019Anah, la prime CEE est une aide privée financée par les obligés (Effy, Sonergia, TotalEnergies, EDF, Engie\u2026), et l\u2019Éco-prêt à taux zéro (jusqu\u2019à 50\u202f000\u202f€ sur 20 ans) est un crédit bancaire sans intérêts. Les trois peuvent s\u2019additionner sur le même devis, sous trois conditions : l\u2019entreprise est RGE à la date de signature du devis, le total des aides ne dépasse pas 100\u202f% du coût TTC du chantier, et un reste à charge minimum est conservé (règle de l\u2019arrêté du 14 janvier 2020 modifié). En pratique, l\u2019Éco-PTZ finance justement le reste à charge.',
   },
   {
-    question: 'La prime CEE est-elle imposable?',
+    question: 'La prime CEE est-elle imposable\u202f?',
     answer:
       'Non. La prime CEE versée à un particulier pour des travaux d\u2019économies d\u2019énergie dans sa résidence principale ou secondaire n\u2019est pas soumise à l\u2019impôt sur le revenu. C\u2019est juridiquement une aide et non un revenu. MaPrimeRénov\u2019 n\u2019est pas non plus imposable. Les deux sommes n\u2019ont donc pas à figurer dans la déclaration annuelle de revenus, sauf cas très particuliers des locations meublées soumises à BIC, pour lesquels il faut se rapprocher d\u2019un expert-comptable.',
   },
   {
-    question: 'Mon artisan propose un «\u202freste à charge zéro\u202f». Est-ce légal?',
+    question: 'Mon artisan propose un «\u202freste à charge zéro\u202f». Est-ce légal\u202f?',
     answer:
       'Non, c\u2019est un signal d\u2019alarme. Depuis l\u2019arrêté du 14 janvier 2020 modifié et la loi Climat et Résilience, un reste à charge minimum du ménage est obligatoire dès lors que MaPrimeRénov\u2019 est mobilisée. Seul le segment très précaire, sur quelques opérations fortement bonifiées, peut approcher d\u2019un cumul proche de 100\u202f%, sans jamais l\u2019atteindre légalement. Un commercial qui promet «\u202f1\u202f€\u202f» ou «\u202f0\u202f€\u202f» de reste à charge sur un geste isolé en dehors de ce cadre détourne le dispositif. Avant de signer, vérifiez la qualification RGE de l\u2019entreprise sur france-renov.gouv.fr et ne versez jamais d\u2019acompte avant l\u2019accord écrit de MaPrimeRénov\u2019.',
   },
   {
-    question: 'Combien de temps entre le dépôt du dossier et le versement des aides?',
+    question: 'Combien de temps entre le dépôt du dossier et le versement des aides\u202f?',
     answer:
       'Pour MaPrimeRénov\u2019, comptez 2 à 4 mois en moyenne entre l\u2019envoi du dossier complet à l\u2019Anah et le versement sur votre compte bancaire, avec des pics pouvant aller à 6 mois en période de forte affluence. Pour la prime CEE, le délai dépend de l\u2019obligé ou délégataire : 4 à 12 semaines après réception du dossier complet (facture acquittée, attestation sur l\u2019honneur, photos géotaggées obligatoires depuis la loi du 30 juin 2025). Les délégataires spécialisés (Effy, Sonergia) sont historiquement plus rapides que les obligés généralistes. En Parcours Accompagné, le versement MPR est échelonné selon l\u2019avancement des travaux.',
   },
   {
     question:
-      'Qu\u2019est-ce que «\u202fMon Accompagnateur Rénov\u2019\u202f» et est-ce obligatoire?',
+      'Qu\u2019est-ce que «\u202fMon Accompagnateur Rénov\u2019\u202f» et est-ce obligatoire\u202f?',
     answer:
       'Mon Accompagnateur Rénov\u2019 est un tiers agréé par l\u2019État (décret n\u00b0\u202f2022-1035 du 22 juillet 2022) qui accompagne le ménage dans toutes les étapes de la rénovation: audit énergétique, choix des travaux, aide au montage des dossiers, suivi de chantier, réception. Il est obligatoire pour tout dossier en Parcours Accompagné MaPrimeRénov\u2019 (bouquet de travaux avec gain énergétique \u2265\u202f35\u202f%). Il reste facultatif pour MaPrimeRénov\u2019 par geste, sauf cas particuliers (dossiers majorés pour les ménages très modestes ou sortie de passoire énergétique). Son coût peut être pris en charge partiellement par l\u2019Anah (jusqu\u2019à 2\u202f000\u202f€ pour les ménages bleu).',
   },
   {
-    question: 'Si mes travaux dépassent le plafond d\u2019aides, qui paie la différence?',
+    question: 'Si mes travaux dépassent le plafond d\u2019aides, qui paie la différence\u202f?',
     answer:
       'Le ménage, via ses fonds propres ou un financement bancaire. Plusieurs outils limitent l\u2019impact: l\u2019Éco-PTZ (50\u202f000\u202f€ maximum sur 20 ans, sans intérêts), le prêt avance rénovation pour les propriétaires âgés, les aides locales (régions, départements, intercommunalités), la TVA à taux réduit 5,5\u202f% qui s\u2019applique de plein droit à toute opération d\u2019économies d\u2019énergie éligible CGI art.\u202f278-0 bis A, et parfois des prêts employeurs Action Logement. La règle d\u2019or reste de bâtir le plan de financement \u00ab\u202ftoutes aides comprises\u202f\u00bb avant la signature du devis, jamais après.',
   },

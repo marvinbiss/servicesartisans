@@ -13,8 +13,6 @@ import {
   computeReviewStats,
   updateArtisanRating,
   createReview,
-  type _ReviewStats,
-  type _BookingWithRelations,
 } from '@/lib/services/review-service'
 
 // ---------------------------------------------------------------------------
@@ -45,71 +43,6 @@ vi.mock('@/lib/utils', () => ({
 // ---------------------------------------------------------------------------
 // Supabase mock helpers
 // ---------------------------------------------------------------------------
-
-function _createMockQueryBuilder(resolvedValue: { data: unknown; error: unknown }) {
-  const builder: Record<string, unknown> = {}
-  const methods = [
-    'from',
-    'select',
-    'insert',
-    'update',
-    'eq',
-    'single',
-    'order',
-    'range',
-    'limit',
-    'in',
-    'neq',
-    'gte',
-    'lte',
-    'is',
-    'match',
-  ]
-  for (const method of methods) {
-    builder[method] = vi.fn().mockReturnValue(builder)
-  }
-  // Terminal methods resolve
-  builder['single'] = vi.fn().mockResolvedValue(resolvedValue)
-  // Make select also work as terminal (for queries without .single())
-  const _originalSelect = builder['select']
-  builder['select'] = vi.fn().mockReturnValue({
-    ...builder,
-    eq: vi.fn().mockReturnValue({
-      ...builder,
-      single: vi.fn().mockResolvedValue(resolvedValue),
-      eq: vi.fn().mockReturnValue({
-        single: vi.fn().mockResolvedValue(resolvedValue),
-      }),
-    }),
-    single: vi.fn().mockResolvedValue(resolvedValue),
-  })
-  builder['from'] = vi.fn().mockReturnValue(builder)
-  return builder
-}
-
-function _createChainedSupabase(handlers: Record<string, { data: unknown; error: unknown }>) {
-  const supabase = {
-    from: vi.fn((table: string) => {
-      const resolved = handlers[table] || { data: null, error: null }
-      const chain: Record<string, unknown> = {}
-
-      const _self = () => chain
-
-      chain.select = vi.fn().mockReturnValue(chain)
-      chain.insert = vi.fn().mockReturnValue(chain)
-      chain.update = vi.fn().mockReturnValue(chain)
-      chain.eq = vi.fn().mockReturnValue(chain)
-      chain.neq = vi.fn().mockReturnValue(chain)
-      chain.single = vi.fn().mockResolvedValue(resolved)
-      chain.order = vi.fn().mockReturnValue(chain)
-      chain.range = vi.fn().mockReturnValue(chain)
-      chain.limit = vi.fn().mockReturnValue(chain)
-
-      return chain
-    }),
-  }
-  return supabase as unknown
-}
 
 // ---------------------------------------------------------------------------
 // getArtisanDisplayName

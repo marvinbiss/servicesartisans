@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: 'Parametres invalides', details: result.error.flatten() },
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
         },
         { status: 400 }
       )

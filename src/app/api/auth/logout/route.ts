@@ -16,7 +16,7 @@ export async function POST() {
           success: false,
           error: {
             code: 1004,
-            message: 'Erreur lors de la deconnexion'
+            message: 'Erreur lors de la déconnexion'
           }
         },
         { status: 500 }
@@ -25,7 +25,7 @@ export async function POST() {
 
     const response = NextResponse.json({
       success: true,
-      message: 'Deconnexion reussie'
+      message: 'Déconnexion réussie'
     })
 
     // Explicitly clear the refresh token cookie

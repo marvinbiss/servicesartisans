@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Parametres invalides' } },
+        { success: false, error: { message: 'Paramètres invalides' } },
         { status: 400 }
       )
     }

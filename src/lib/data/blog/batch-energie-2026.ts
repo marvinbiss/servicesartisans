@@ -15,7 +15,7 @@ export const energieArticles: Record<string, BlogArticle> = {
     tags: ['pompe à chaleur', 'chauffage', 'prix', 'énergie', 'PAC'],
     keyTakeaways: [
       "Une PAC air-eau coûte entre 8 000 et 16 000 € pose comprise en 2026, contre 15 000 à 30 000 € pour une PAC géothermique.",
-      "MaPrimeRenov' peut couvrir jusqu'à 5 000 € pour les ménages modestes, cumulable avec les CEE et l'éco-PTZ.",
+      "MaPrimeRénov' peut couvrir jusqu'à 5 000 € pour les ménages modestes, cumulable avec les CEE et l'éco-PTZ.",
       "Le COP moyen d'une PAC air-eau est de 3 à 4, soit 3 à 4 kWh de chaleur produits pour 1 kWh d'électricité consommé.",
       "Le retour sur investissement se situe entre 5 et 10 ans selon le système remplacé et la zone climatique.",
       "Depuis mars 2025, les chaudières gaz et fioul sont soumises à la TVA à 20 %, rendant la PAC encore plus compétitive.",
@@ -29,7 +29,7 @@ export const energieArticles: Record<string, BlogArticle> = {
       {
         question: "Quelles aides pour installer une pompe à chaleur en 2026 ?",
         answer:
-          "Vous pouvez cumuler MaPrimeRenov' (jusqu'à 5 000 €), les CEE (2 000 à 4 000 €), l'éco-PTZ (jusqu'à 50 000 € à taux zéro) et la TVA réduite à 5,5 %. Le reste à charge peut descendre à 3 000-5 000 € pour les ménages aux revenus modestes.",
+          "Vous pouvez cumuler MaPrimeRénov' (jusqu'à 5 000 €), les CEE (2 000 à 4 000 €), l'éco-PTZ (jusqu'à 50 000 € à taux zéro) et la TVA réduite à 5,5 %. Le reste à charge peut descendre à 3 000-5 000 € pour les ménages aux revenus modestes.",
       },
       {
         question: "PAC air-eau ou géothermique : laquelle choisir ?",
@@ -58,7 +58,7 @@ Ce guide détaille les prix réels constatés, les aides cumulables et le retour
 
 Le coût total dépend du type de PAC, de la puissance nécessaire et de la configuration de votre logement :
 
-**PAC air-air (climatisation réversible)** : 3 000 à 8 000 € pour un modèle mono-split, 5 000 à 15 000 € pour un multi-split (3 à 5 unités intérieures). Avantage : prix accessible. Inconvénient : ne chauffe pas l'eau sanitaire et n'est pas éligible à MaPrimeRenov'.
+**PAC air-air (climatisation réversible)** : 3 000 à 8 000 € pour un modèle mono-split, 5 000 à 15 000 € pour un multi-split (3 à 5 unités intérieures). Avantage : prix accessible. Inconvénient : ne chauffe pas l'eau sanitaire et n'est pas éligible à MaPrimeRénov'.
 
 **PAC air-eau** : 8 000 à 16 000 € pose comprise. C'est le modèle le plus installé en France. Elle alimente le circuit de chauffage central (radiateurs ou plancher chauffant) et peut produire l'eau chaude sanitaire via un ballon intégré.
 
@@ -80,7 +80,7 @@ Plusieurs paramètres font varier la facture finale :
 
 Le bouquet d'aides rend la PAC très accessible :
 
-**MaPrimeRenov'** : jusqu'à 5 000 € pour une PAC air-eau et jusqu'à 10 000 € pour une PAC géothermique. Le montant dépend de vos revenus fiscaux (4 catégories : bleu, jaune, violet, rose).
+**MaPrimeRénov'** : jusqu'à 5 000 € pour une PAC air-eau et jusqu'à 10 000 € pour une PAC géothermique. Le montant dépend de vos revenus fiscaux (4 catégories : bleu, jaune, violet, rose).
 
 **Certificats d'Économies d'Énergie (CEE)** : 2 000 à 4 000 € selon le fournisseur d'énergie et le type de PAC. Les primes Coup de Pouce Chauffage bonifient les CEE pour le remplacement d'une chaudière fossile.
 
@@ -507,9 +507,9 @@ La rénovation globale (tous les postes en une fois) est plus efficace et mieux 
 
 Les propriétaires disposent de plusieurs leviers :
 
-- **MaPrimeRenov' Parcours accompagné** : jusqu'à 63 000 € pour une rénovation globale permettant un gain de 2 classes DPE minimum. Financement de 30 à 90 % selon les revenus.
-- **MaPrimeRenov' par geste** : aides unitaires pour chaque type de travaux (isolation, chauffage, ventilation). Montants de 15 à 75 € par m² pour l'isolation, 2 000 à 10 000 € pour le chauffage.
-- **CEE (Certificats d'Économies d'Énergie)** : primes versées par les fournisseurs d'énergie, cumulables avec MaPrimeRenov'.
+- **MaPrimeRénov' Parcours accompagné** : jusqu'à 63 000 € pour une rénovation globale permettant un gain de 2 classes DPE minimum. Financement de 30 à 90 % selon les revenus.
+- **MaPrimeRénov' par geste** : aides unitaires pour chaque type de travaux (isolation, chauffage, ventilation). Montants de 15 à 75 € par m² pour l'isolation, 2 000 à 10 000 € pour le chauffage.
+- **CEE (Certificats d'Économies d'Énergie)** : primes versées par les fournisseurs d'énergie, cumulables avec MaPrimeRénov'.
 - **Éco-PTZ** : prêt à taux zéro jusqu'à 50 000 € sur 20 ans.
 - **Loc'Avantages** : réduction d'impôt pour les propriétaires bailleurs qui louent à un loyer modéré après rénovation.`,
 
@@ -518,7 +518,7 @@ Les propriétaires disposent de plusieurs leviers :
 **Propriétaire d'un logement G (déjà interdit) :**
 1. Réalisez un audit énergétique immédiatement
 2. Planifiez les travaux de rénovation globale
-3. Demandez les aides (MaPrimeRenov', CEE, éco-PTZ)
+3. Demandez les aides (MaPrimeRénov', CEE, éco-PTZ)
 4. Réalisez les travaux dans les 6 à 12 mois
 5. Faites réaliser un nouveau DPE après travaux
 
@@ -550,7 +550,7 @@ Ne tardez pas : les artisans RGE sont de plus en plus sollicités et les délais
     keyTakeaways: [
       "1,6 million de logements classés G sont concernés par l'interdiction de location en vigueur depuis le 1er janvier 2025.",
       "Le gel des loyers concerne tous les logements classés F et G, sans exception.",
-      "MaPrimeRenov' Parcours accompagné finance jusqu'à 90 % des travaux pour les ménages très modestes.",
+      "MaPrimeRénov' Parcours accompagné finance jusqu'à 90 % des travaux pour les ménages très modestes.",
       "La rénovation globale d'une passoire thermique coûte en moyenne 25 000 à 50 000 €, avec un reste à charge de 3 000 à 15 000 € selon les revenus.",
     ],
     faq: [
@@ -625,7 +625,7 @@ Les propriétaires de passoires thermiques font face à un choix :
 
       `## Comment financer la rénovation ?
 
-**MaPrimeRenov' Parcours accompagné** (rénovation globale) :
+**MaPrimeRénov' Parcours accompagné** (rénovation globale) :
 - Ménages très modestes : 90 % du montant, plafonné à 63 000 €
 - Ménages modestes : 75 % du montant, plafonné à 52 500 €
 - Ménages intermédiaires : 60 % du montant, plafonné à 42 000 €
@@ -689,7 +689,7 @@ N'attendez pas : faites réaliser un audit énergétique et commencez les démar
       "L'éco-PTZ permet d'emprunter jusqu'à 50 000 € à taux zéro pour des travaux de rénovation énergétique.",
       "Aucune condition de revenus n'est requise : tous les propriétaires y ont droit.",
       "La durée de remboursement maximale est de 20 ans (240 mensualités).",
-      "L'éco-PTZ est cumulable avec MaPrimeRenov', les CEE et la TVA réduite.",
+      "L'éco-PTZ est cumulable avec MaPrimeRénov', les CEE et la TVA réduite.",
     ],
     faq: [
       {
@@ -700,7 +700,7 @@ N'attendez pas : faites réaliser un audit énergétique et commencez les démar
       {
         question: "Quel montant maximum pour l'éco-PTZ en 2026 ?",
         answer:
-          "Le montant maximal est de 50 000 € pour une rénovation globale permettant un gain de 35 % de consommation d'énergie. Pour des actions simples : 15 000 € (1 action), 25 000 € (2 actions) ou 30 000 € (3 actions ou plus). L'éco-PTZ « MaPrimeRenov' » est plafonné à 50 000 €.",
+          "Le montant maximal est de 50 000 € pour une rénovation globale permettant un gain de 35 % de consommation d'énergie. Pour des actions simples : 15 000 € (1 action), 25 000 € (2 actions) ou 30 000 € (3 actions ou plus). L'éco-PTZ « MaPrimeRénov' » est plafonné à 50 000 €.",
       },
       {
         question: "Quelles banques proposent l'éco-PTZ ?",
@@ -708,15 +708,15 @@ N'attendez pas : faites réaliser un audit énergétique et commencez les démar
           "Les principales banques partenaires sont : Crédit Agricole, BNP Paribas, Société Générale, Banque Populaire, Caisse d'Épargne, CIC, Crédit Mutuel, LCL et La Banque Postale. Toutes les agences ne le proposent pas, renseignez-vous en amont.",
       },
       {
-        question: "Peut-on cumuler l'éco-PTZ avec MaPrimeRenov' ?",
+        question: "Peut-on cumuler l'éco-PTZ avec MaPrimeRénov' ?",
         answer:
-          "Oui, le cumul est non seulement possible mais encouragé. Depuis 2022, un éco-PTZ « complémentaire MaPrimeRenov' » permet d'emprunter le reste à charge après déduction de MaPrimeRenov', dans la limite de 50 000 €. Il suffit de présenter la notification d'attribution de MaPrimeRenov' à la banque.",
+          "Oui, le cumul est non seulement possible mais encouragé. Depuis 2022, un éco-PTZ « complémentaire MaPrimeRénov' » permet d'emprunter le reste à charge après déduction de MaPrimeRénov', dans la limite de 50 000 €. Il suffit de présenter la notification d'attribution de MaPrimeRénov' à la banque.",
       },
     ],
     content: [
       `# Éco-PTZ 2026 : Conditions, Montants et Comment en Bénéficier
 
-L'éco-prêt à taux zéro (éco-PTZ) est l'un des dispositifs les plus avantageux pour financer la rénovation énergétique de son logement. Sans condition de revenus et à taux zéro, il complète parfaitement MaPrimeRenov' et les CEE. Voici tout ce que vous devez savoir pour en bénéficier en 2026.`,
+L'éco-prêt à taux zéro (éco-PTZ) est l'un des dispositifs les plus avantageux pour financer la rénovation énergétique de son logement. Sans condition de revenus et à taux zéro, il complète parfaitement MaPrimeRénov' et les CEE. Voici tout ce que vous devez savoir pour en bénéficier en 2026.`,
 
       `## Les conditions d'éligibilité
 
@@ -743,9 +743,9 @@ L'éco-PTZ se décline en plusieurs formules :
 - Jusqu'à 50 000 € pour une rénovation globale permettant un gain de 35 % de consommation d'énergie primaire
 - Durée de remboursement : jusqu'à 20 ans
 
-**Éco-PTZ « MaPrimeRenov' »** :
-- Jusqu'à 50 000 € pour financer le reste à charge après déduction de MaPrimeRenov'
-- Procédure simplifiée : il suffit de présenter la notification de MaPrimeRenov'
+**Éco-PTZ « MaPrimeRénov' »** :
+- Jusqu'à 50 000 € pour financer le reste à charge après déduction de MaPrimeRénov'
+- Procédure simplifiée : il suffit de présenter la notification de MaPrimeRénov'
 
 Les actions éligibles : isolation thermique (toiture, murs, planchers, fenêtres), chauffage (PAC, chaudière biomasse, solaire thermique), ventilation (VMC double flux), raccordement à un réseau de chaleur.`,
 
@@ -755,7 +755,7 @@ Les actions éligibles : isolation thermique (toiture, murs, planchers, fenêtre
 Faites réaliser au minimum 2 devis par des artisans certifiés RGE. Les devis doivent détailler les travaux, les matériaux et les performances attendues.
 
 **Étape 2 : Constituer le dossier bancaire**
-Rendez-vous dans une banque partenaire avec : les devis détaillés, le justificatif RGE des artisans, un justificatif de propriété (taxe foncière ou acte notarié), le DPE du logement et, le cas échéant, la notification MaPrimeRenov'.
+Rendez-vous dans une banque partenaire avec : les devis détaillés, le justificatif RGE des artisans, un justificatif de propriété (taxe foncière ou acte notarié), le DPE du logement et, le cas échéant, la notification MaPrimeRénov'.
 
 **Étape 3 : Obtenir l'offre de prêt**
 La banque instruit le dossier en 2 à 6 semaines. Après acceptation, vous disposez d'un délai de réflexion de 10 jours avant de signer.
@@ -772,7 +772,7 @@ L'éco-PTZ est cumulable avec toutes les aides existantes :
 
 | Aide | Cumulable | Commentaire |
 |------|-----------|-------------|
-| MaPrimeRenov' | Oui | Éco-PTZ "complémentaire" simplifié |
+| MaPrimeRénov' | Oui | Éco-PTZ "complémentaire" simplifié |
 | CEE | Oui | À déduire du montant emprunté |
 | TVA 5,5 % | Oui | Automatique si logement > 2 ans |
 | Aides locales | Oui | Régions, départements, communes |
@@ -780,7 +780,7 @@ L'éco-PTZ est cumulable avec toutes les aides existantes :
 
 **Exemple concret** : rénovation globale d'une maison de 100 m² classée G :
 - Coût total des travaux : 45 000 €
-- MaPrimeRenov' Parcours accompagné (revenus modestes) : 33 750 € (75 %)
+- MaPrimeRénov' Parcours accompagné (revenus modestes) : 33 750 € (75 %)
 - CEE : 3 000 €
 - Reste à charge : 8 250 €
 - Éco-PTZ : 8 250 € sur 15 ans = 46 € par mois, sans intérêts`,
@@ -797,7 +797,7 @@ Quelques erreurs fréquentes à ne pas commettre :
 
       `## Conclusion : un outil de financement incontournable
 
-L'éco-PTZ est le complément idéal de MaPrimeRenov' pour financer le reste à charge de votre rénovation énergétique. Sans condition de revenus, à taux zéro et remboursable sur 20 ans, il rend les travaux accessibles même aux ménages sans épargne.
+L'éco-PTZ est le complément idéal de MaPrimeRénov' pour financer le reste à charge de votre rénovation énergétique. Sans condition de revenus, à taux zéro et remboursable sur 20 ans, il rend les travaux accessibles même aux ménages sans épargne.
 
 En 2026, avec l'interdiction de location des logements G et l'échéance de 2028 pour les logements F, l'éco-PTZ est un outil indispensable pour les propriétaires qui doivent rénover.
 
@@ -966,7 +966,7 @@ Pour trouver un vérandaliste ou un menuisier qualifié près de chez vous, comp
       {
         question: "Quelles aides pour financer une extension ?",
         answer:
-          "Les extensions ne sont pas éligibles à MaPrimeRenov' (réservée à la rénovation). En revanche, vous pouvez bénéficier de la TVA à 10 % si les travaux sont réalisés dans un logement de plus de 2 ans et de l'éco-PTZ si l'extension inclut des travaux de performance énergétique. Le PTZ classique est réservé à l'acquisition dans le neuf.",
+          "Les extensions ne sont pas éligibles à MaPrimeRénov' (réservée à la rénovation). En revanche, vous pouvez bénéficier de la TVA à 10 % si les travaux sont réalisés dans un logement de plus de 2 ans et de l'éco-PTZ si l'extension inclut des travaux de performance énergétique. Le PTZ classique est réservé à l'acquisition dans le neuf.",
       },
     ],
     content: [
@@ -1035,7 +1035,7 @@ Le principal inconvénient : l'entretien du bardage bois extérieur (lasure tous
 
       `## Comment financer son extension ?
 
-Les extensions de maison ne bénéficient pas des aides à la rénovation énergétique (MaPrimeRenov', CEE). Voici les solutions de financement :
+Les extensions de maison ne bénéficient pas des aides à la rénovation énergétique (MaPrimeRénov', CEE). Voici les solutions de financement :
 
 - **Prêt travaux** : taux de 3 à 6 % sur 10 à 15 ans. Montant : 10 000 à 75 000 €.
 - **Prêt immobilier** : taux plus bas (2,5 à 4 %) mais nécessite une hypothèque. Pertinent pour les projets > 50 000 €.

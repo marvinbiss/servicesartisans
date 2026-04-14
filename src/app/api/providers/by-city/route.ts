@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     if (!queryValidation.success) {
       return NextResponse.json(
-        { error: queryValidation.error.issues[0]?.message || 'Parametres invalides' },
+        { error: queryValidation.error.issues[0]?.message || 'Paramètres invalides' },
         { status: 400 }
       )
     }

@@ -18,11 +18,11 @@ export const emailSchema = z
 export const phoneSchema = z
   .string()
   .transform((val) => val.replace(/[\s.\-()]/g, ''))
-  .pipe(z.string().regex(/^(?:\+33|0)[1-9](?:[0-9]{8})$/, 'Numero de telephone invalide'))
+  .pipe(z.string().regex(/^(?:\+33|0)[1-9](?:[0-9]{8})$/, 'Numéro de téléphone invalide'))
 
 export const passwordSchema = z
   .string()
-  .min(8, 'Le mot de passe doit contenir au moins 8 caracteres')
+  .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
   .max(128, 'Le mot de passe est trop long')
   .regex(/[A-Z]/, 'Le mot de passe doit contenir au moins une majuscule')
   .regex(/[a-z]/, 'Le mot de passe doit contenir au moins une minuscule')

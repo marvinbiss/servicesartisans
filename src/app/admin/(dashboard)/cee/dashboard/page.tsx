@@ -227,14 +227,14 @@ export default async function AdminCeeDashboardPage() {
               Dashboard CEE — Tableau de bord mandataire
             </h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              KPIs temps reel du pipeline de dossiers CEE.
+              KPIs temps réel du pipeline de dossiers CEE.
             </p>
           </div>
         </div>
 
         {hasError && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-            Certaines donnees n&apos;ont pas pu etre chargees. Les KPIs affiches peuvent etre
+            Certaines données n&apos;ont pas pu être chargées. Les KPIs affichés peuvent être
             incomplets.
           </div>
         )}

@@ -12,6 +12,7 @@ export interface AdminPermissions {
   audit: { read: boolean }
   prospection: { read: boolean; write: boolean; send: boolean; ai: boolean }
   content: { read: boolean; write: boolean; delete: boolean; publish: boolean }
+  cee_partners: { read: boolean; write: boolean }
 }
 
 export interface AdminUser {
@@ -207,6 +208,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     audit: { read: true },
     prospection: { read: true, write: true, send: true, ai: true },
     content: { read: true, write: true, delete: true, publish: true },
+    cee_partners: { read: true, write: true },
   },
   admin: {
     users: { read: true, write: true, delete: false },
@@ -218,6 +220,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     audit: { read: true },
     prospection: { read: true, write: true, send: true, ai: true },
     content: { read: true, write: true, delete: false, publish: true },
+    cee_partners: { read: true, write: true },
   },
   moderator: {
     users: { read: true, write: false, delete: false },
@@ -229,6 +232,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     audit: { read: false },
     prospection: { read: true, write: false, send: false, ai: false },
     content: { read: true, write: true, delete: false, publish: false },
+    cee_partners: { read: true, write: false },
   },
   viewer: {
     users: { read: true, write: false, delete: false },
@@ -240,6 +244,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     audit: { read: false },
     prospection: { read: false, write: false, send: false, ai: false },
     content: { read: true, write: false, delete: false, publish: false },
+    cee_partners: { read: true, write: false },
   },
 }
 

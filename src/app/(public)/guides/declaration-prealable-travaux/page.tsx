@@ -28,7 +28,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Déclaration Préalable de Travaux : Guide 2026',
   description:
-    'Guide complet déclaration préalable de travaux 2026 : quand est-elle nécessaire (5-20m², façade, clôture, piscine), formulaire Cerfa 13703, délai d"instruction d"un mois et accord tacite.',
+    'Guide complet déclaration préalable de travaux 2026 : quand est-elle nécessaire (5-20m², façade, clôture, piscine), formulaire Cerfa 13703, délai d’instruction d’un mois et accord tacite.',
   keywords: [
     'déclaration préalable de travaux',
     'déclaration préalable travaux 2026',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Déclaration Préalable de Travaux : Guide et Formulaire 2026',
     description:
-      'Tout savoir sur la déclaration préalable : cas concernés, formulaire Cerfa, délai d"instruction et accord tacite.',
+      'Tout savoir sur la déclaration préalable : cas concernés, formulaire Cerfa, délai d’instruction et accord tacite.',
     url: `${SITE_URL}/guides/declaration-prealable-travaux`,
     type: 'article',
     images: [
@@ -83,27 +83,27 @@ const faqItems = [
     question:
       'Quelle est la différence entre une déclaration préalable et un permis de construire ?',
     answer:
-      'La déclaration préalable concerne les travaux de faible à moyenne importance : entre 5 et 20 m² de surface créée (ou 40 m² en zone PLU), modification de façade, pose de clôture, piscine de moins de 100 m². Le permis de construire est exigé pour les projets plus importants : construction neuve de plus de 20 m², extension de plus de 40 m² en zone PLU, changement de destination avec modification de structure. La déclaration préalable a un délai d"instruction d"un mois (contre 2-3 mois pour le permis) et un dossier simplifié.',
+      'La déclaration préalable concerne les travaux de faible à moyenne importance : entre 5 et 20 m² de surface créée (ou 40 m² en zone PLU), modification de façade, pose de clôture, piscine de moins de 100 m². Le permis de construire est exigé pour les projets plus importants : construction neuve de plus de 20 m², extension de plus de 40 m² en zone PLU, changement de destination avec modification de structure. La déclaration préalable a un délai d’instruction d’un mois (contre 2-3 mois pour le permis) et un dossier simplifié.',
   },
   {
     question: 'Que se passe-t-il si je ne fais pas de déclaration préalable ?',
     answer:
-      'Réaliser des travaux sans déclaration préalable constitue une infraction au Code de l"urbanisme. Vous risquez une amende de 1 200 à 6 000 € par m² de surface construite ou aménagée irrégulièrement. La mairie peut exiger la mise en conformité ou la remise en état des lieux. Le délai de prescription est de 6 ans pour les poursuites pénales. De plus, en cas de revente, l"absence de déclaration peut poser des problèmes avec le notaire et l"acheteur.',
+      'Réaliser des travaux sans déclaration préalable constitue une infraction au Code de l’urbanisme. Vous risquez une amende de 1 200 à 6 000 € par m² de surface construite ou aménagée irrégulièrement. La mairie peut exiger la mise en conformité ou la remise en état des lieux. Le délai de prescription est de 6 ans pour les poursuites pénales. De plus, en cas de revente, l’absence de déclaration peut poser des problèmes avec le notaire et l’acheteur.',
   },
   {
     question: 'Comment savoir si ma commune est couverte par un PLU ?',
     answer:
-      'La très grande majorité des communes françaises (environ 87 %) sont couvertes par un Plan Local d"Urbanisme (PLU ou PLUi intercommunal). Pour le vérifier, consultez le site du Géoportail de l"urbanisme (www.geoportail-urbanisme.gouv.fr) ou contactez le service urbanisme de votre mairie. Le PLU détermine les règles de constructibilité (hauteur, emprise au sol, implantation, aspect extérieur) et influe sur les seuils de surface applicables.',
+      'La très grande majorité des communes françaises (environ 87 %) sont couvertes par un Plan Local d’Urbanisme (PLU ou PLUi intercommunal). Pour le vérifier, consultez le site du Géoportail de l’urbanisme (www.geoportail-urbanisme.gouv.fr) ou contactez le service urbanisme de votre mairie. Le PLU détermine les règles de constructibilité (hauteur, emprise au sol, implantation, aspect extérieur) et influe sur les seuils de surface applicables.',
   },
   {
     question: 'La déclaration préalable est-elle gratuite ?',
     answer:
-      'Oui, le dépôt de la déclaration préalable en mairie est totalement gratuit. Aucun frais de dossier n"est perçu. Cependant, vous devrez peut-être payer la taxe d"aménagement si vos travaux créent de la surface de plancher (le taux varie selon la commune). Si vous faites appel à un professionnel pour constituer le dossier (plans, notice descriptive), comptez entre 500 et 2 000 € selon la complexité du projet.',
+      'Oui, le dépôt de la déclaration préalable en mairie est totalement gratuit. Aucun frais de dossier n’est perçu. Cependant, vous devrez peut-être payer la taxe d’aménagement si vos travaux créent de la surface de plancher (le taux varie selon la commune). Si vous faites appel à un professionnel pour constituer le dossier (plans, notice descriptive), comptez entre 500 et 2 000 € selon la complexité du projet.',
   },
   {
     question: 'Peut-on déposer une déclaration préalable en ligne ?',
     answer:
-      'Oui, depuis le 1er janvier 2022, toutes les communes doivent permettre le dépôt en ligne des demandes d"autorisation d"urbanisme, y compris la déclaration préalable. Vous pouvez utiliser le portail national www.service-public.fr ou le portail d"urbanisme de votre commune si elle en dispose. Le dépôt en ligne simplifie le suivi de votre dossier et vous recevez un accusé de réception électronique immédiat. Le dépôt papier en mairie reste toutefois possible.',
+      'Oui, depuis le 1er janvier 2022, toutes les communes doivent permettre le dépôt en ligne des demandes d’autorisation d’urbanisme, y compris la déclaration préalable. Vous pouvez utiliser le portail national www.service-public.fr ou le portail d’urbanisme de votre commune si elle en dispose. Le dépôt en ligne simplifie le suivi de votre dossier et vous recevez un accusé de réception électronique immédiat. Le dépôt papier en mairie reste toutefois possible.',
   },
 ]
 
@@ -122,7 +122,7 @@ const keyFigures = [
   {
     icon: Clock,
     value: '1 mois',
-    label: 'Délai d"instruction',
+    label: 'Délai d’instruction',
     color: 'text-amber-600',
     bg: 'bg-amber-50',
   },
@@ -151,7 +151,7 @@ const casConcernes = [
   },
   {
     title: 'Modification de façade ou de toiture',
-    desc: 'Changement de fenêtres, de volets, de matériaux de façade, de couleur de ravalement, remplacement de la toiture par un matériau différent, création d"une ouverture (fenêtre, porte). Ces travaux modifient l"aspect extérieur du bâtiment.',
+    desc: 'Changement de fenêtres, de volets, de matériaux de façade, de couleur de ravalement, remplacement de la toiture par un matériau différent, création d’une ouverture (fenêtre, porte). Ces travaux modifient l’aspect extérieur du bâtiment.',
     icon: Paintbrush,
     color: 'bg-amber-50',
   },
@@ -222,7 +222,7 @@ export default function DeclarationPrealablePage() {
             </h1>
             <p className="text-lg text-charcoal-600 max-w-3xl">
               {
-                'La déclaration préalable de travaux est une autorisation d"urbanisme simplifiée, obligatoire pour de nombreux projets : extension, modification de façade, clôture, piscine. Ce guide vous explique quand elle est nécessaire, comment remplir le formulaire et les délais à respecter.'
+                'La déclaration préalable de travaux est une autorisation d’urbanisme simplifiée, obligatoire pour de nombreux projets : extension, modification de façade, clôture, piscine. Ce guide vous explique quand elle est nécessaire, comment remplir le formulaire et les délais à respecter.'
               }
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm text-charcoal-500">
@@ -264,7 +264,7 @@ export default function DeclarationPrealablePage() {
                 'Différence avec le permis de construire',
                 'Comment remplir le formulaire (Cerfa 13703*10)',
                 'Pièces à joindre au dossier',
-                'Délai d"instruction et accord tacite',
+                'Délai d’instruction et accord tacite',
                 'Questions fréquentes',
               ].map((item, i) => (
                 <li
@@ -342,7 +342,7 @@ export default function DeclarationPrealablePage() {
                         dp: '5 à 20 m² (40 m² en zone PLU)',
                         pc: '> 20 m² (> 40 m² en zone PLU)',
                       },
-                      { critere: 'Délai d"instruction', dp: '1 mois', pc: '2 à 3 mois' },
+                      { critere: 'Délai d’instruction', dp: '1 mois', pc: '2 à 3 mois' },
                       {
                         critere: 'Formulaire',
                         dp: 'Cerfa 13703*10',
@@ -453,7 +453,7 @@ export default function DeclarationPrealablePage() {
                 <p className="text-sm text-green-800">
                   <strong>{'Téléchargement :'}</strong>
                   {
-                    ' le formulaire Cerfa 13703*10 est téléchargeable gratuitement sur service-public.fr. Vous pouvez également le retirer en mairie ou le remplir directement en ligne sur le portail d"urbanisme de votre commune.'
+                    ' le formulaire Cerfa 13703*10 est téléchargeable gratuitement sur service-public.fr. Vous pouvez également le retirer en mairie ou le remplir directement en ligne sur le portail d’urbanisme de votre commune.'
                   }
                 </p>
               </div>
@@ -487,7 +487,7 @@ export default function DeclarationPrealablePage() {
                   {
                     code: 'DP2',
                     label:
-                      'Plan de masse coté dans les 3 dimensions (si création de surface ou modification d"emprise)',
+                      'Plan de masse coté dans les 3 dimensions (si création de surface ou modification d’emprise)',
                     obligatoire: true,
                   },
                   {
@@ -499,27 +499,27 @@ export default function DeclarationPrealablePage() {
                   {
                     code: 'DP4',
                     label:
-                      'Plan des façades et des toitures (si modification de l"aspect extérieur)',
+                      'Plan des façades et des toitures (si modification de l’aspect extérieur)',
                     obligatoire: true,
                   },
                   {
                     code: 'DP5',
-                    label: 'Représentation de l"aspect extérieur (photo ou dessin du projet)',
+                    label: 'Représentation de l’aspect extérieur (photo ou dessin du projet)',
                     obligatoire: false,
                   },
                   {
                     code: 'DP6',
-                    label: 'Document graphique d"insertion paysagère',
+                    label: 'Document graphique d’insertion paysagère',
                     obligatoire: false,
                   },
                   {
                     code: 'DP7',
-                    label: 'Photographie de l"environnement proche',
+                    label: 'Photographie de l’environnement proche',
                     obligatoire: true,
                   },
                   {
                     code: 'DP8',
-                    label: 'Photographie de l"environnement lointain',
+                    label: 'Photographie de l’environnement lointain',
                     obligatoire: true,
                   },
                 ].map((doc) => (
@@ -540,7 +540,7 @@ export default function DeclarationPrealablePage() {
                 <p className="text-sm text-amber-800">
                   <strong>{'Conseil :'}</strong>
                   {
-                    ' des pièces complémentaires peuvent être demandées en secteur protégé (avis de l"ABF). Renseignez-vous auprès du service urbanisme de votre mairie pour connaître les pièces spécifiques à votre commune.'
+                    ' des pièces complémentaires peuvent être demandées en secteur protégé (avis de l’ABF). Renseignez-vous auprès du service urbanisme de votre mairie pour connaître les pièces spécifiques à votre commune.'
                   }
                 </p>
               </div>
@@ -554,7 +554,7 @@ export default function DeclarationPrealablePage() {
                 <Clock className="w-5 h-5 text-amber-600" />
               </div>
               <h2 className="text-2xl font-bold text-charcoal-900">
-                {'Délai d"instruction et accord tacite'}
+                {'Délai d’instruction et accord tacite'}
               </h2>
             </div>
 
@@ -592,7 +592,7 @@ export default function DeclarationPrealablePage() {
                   </h3>
                   <p className="text-sm text-charcoal-600 mb-3">
                     {
-                      'Si la mairie ne vous a pas répondu dans le délai d"instruction (1 ou 2 mois), votre déclaration préalable est réputée acceptée. C"est l"accord tacite (ou « non-opposition »). Pour en obtenir la preuve :'
+                      'Si la mairie ne vous a pas répondu dans le délai d’instruction (1 ou 2 mois), votre déclaration préalable est réputée acceptée. C"est l’accord tacite (ou « non-opposition »). Pour en obtenir la preuve :'
                     }
                   </p>
                   <ol className="space-y-2 text-sm text-charcoal-600">
@@ -608,7 +608,7 @@ export default function DeclarationPrealablePage() {
                       <span className="font-semibold text-primary-500">{'2.'}</span>
                       <span>
                         {
-                          'La mairie doit vous répondre sous 15 jours. Sans réponse, l"accord tacite est définitivement acquis.'
+                          'La mairie doit vous répondre sous 15 jours. Sans réponse, l’accord tacite est définitivement acquis.'
                         }
                       </span>
                     </li>
@@ -616,7 +616,7 @@ export default function DeclarationPrealablePage() {
                       <span className="font-semibold text-primary-500">{'3.'}</span>
                       <span>
                         {
-                          'Affichez la décision (ou l"attestation de non-opposition) sur votre terrain pendant 2 mois.'
+                          'Affichez la décision (ou l’attestation de non-opposition) sur votre terrain pendant 2 mois.'
                         }
                       </span>
                     </li>
@@ -631,7 +631,7 @@ export default function DeclarationPrealablePage() {
                     </h3>
                     <p className="text-sm text-charcoal-600">
                       {
-                        'La mairie peut retirer une décision de non-opposition (y compris tacite) dans les 3 mois suivant la date de la décision, si elle estime que celle-ci a été obtenue par fraude ou qu"elle est illégale. C"est pourquoi il est important de constituer un dossier complet et conforme au PLU.'
+                        'La mairie peut retirer une décision de non-opposition (y compris tacite) dans les 3 mois suivant la date de la décision, si elle estime que celle-ci a été obtenue par fraude ou qu’elle est illégale. C"est pourquoi il est important de constituer un dossier complet et conforme au PLU.'
                       }
                     </p>
                   </div>
@@ -671,7 +671,7 @@ export default function DeclarationPrealablePage() {
           <section className="mb-12">
             <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-8 text-white">
               <h2 className="text-2xl font-bold mb-3">
-                {'Besoin d"un professionnel pour vos travaux ?'}
+                {'Besoin d’un professionnel pour vos travaux ?'}
               </h2>
               <p className="text-green-100 mb-6 max-w-2xl">
                 {

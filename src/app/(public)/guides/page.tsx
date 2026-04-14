@@ -105,7 +105,7 @@ const guides = [
   {
     title: 'Déclaration Préalable de Travaux',
     description:
-      'Quand la déclaration préalable est nécessaire, formulaire Cerfa 13703, délai d"instruction d"un mois et accord tacite.',
+      'Quand la déclaration préalable est nécessaire, formulaire Cerfa 13703, délai d’instruction d’un mois et accord tacite.',
     href: '/guides/declaration-prealable-travaux',
     icon: FileText,
     badge: 'Nouveau',

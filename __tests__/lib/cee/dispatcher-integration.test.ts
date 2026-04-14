@@ -112,7 +112,12 @@ function createSupabaseMock(
 
       // .update().eq() chain (pour persistCeeDossierLink)
       chain.update = vi.fn((data: unknown) => {
-        const updateEntry = { table, data, eqCol: '', eqVal: '' }
+        const updateEntry: { table: string; data: unknown; eqCol: string; eqVal: unknown } = {
+          table,
+          data,
+          eqCol: '',
+          eqVal: '',
+        }
         updateCalls.push(updateEntry)
         return {
           eq: vi.fn((col: string, val: unknown) => {

@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Reservation non trouvee' },
+          error: { code: 2002, message: 'Réservation non trouvée' },
         },
         { status: 404 }
       )

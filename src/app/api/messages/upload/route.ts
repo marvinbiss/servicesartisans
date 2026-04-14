@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: metadataValidation.error.issues[0]?.message || 'Parametres invalides' },
+          error: { message: metadataValidation.error.issues[0]?.message || 'Paramètres invalides' },
         },
         { status: 400 }
       )
