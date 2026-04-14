@@ -19,6 +19,7 @@ import {
   ClipboardList,
 } from 'lucide-react'
 import { ClayHeroSearch } from './ClayHeroSearch'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import { ClayReviewsCarousel } from './ClayReviewsCarousel'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import {
@@ -334,6 +335,15 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           </div>
         </div>
       </section>
+
+      {/* ─── SIMULATEUR AIDES — CTA post-hero, pré-services ─── */}
+      <ScrollReveal as="section">
+        <div className="bg-white pt-10 md:pt-12">
+          <div className="max-w-4xl mx-auto px-5 md:px-10">
+            <SimulateurCTA variant="card" />
+          </div>
+        </div>
+      </ScrollReveal>
 
       {/* ─── SERVICES POPULAIRES — Grid 4x2 ─────────────────── */}
       <ScrollReveal as="section">
