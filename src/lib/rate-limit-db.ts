@@ -39,7 +39,15 @@ export async function rateLimitDb(
       })
       return { success: true, remaining: limit, resetAt: new Date(Date.now() + windowMs) }
     }
-    const row = data[0] as { allowed: boolean; remaining: number; reset_at: string }
+    const row = data[0] as { allowed?: unknown; remaining?: unknown; reset_at?: unknown }
+    if (
+      typeof row.allowed !== 'boolean' ||
+      typeof row.remaining !== 'number' ||
+      typeof row.reset_at !== 'string'
+    ) {
+      logger.warn('rate_limit_check RPC returned unexpected shape — failing open', { key })
+      return { success: true, remaining: limit, resetAt: new Date(Date.now() + windowMs) }
+    }
     return {
       success: row.allowed,
       remaining: row.remaining,

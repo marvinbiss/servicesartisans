@@ -40,6 +40,12 @@ export const maxDuration = 30
 // Téléphone FR strict (aligné Step5Contact : +33 ou 0 + [1-9] + 8 chiffres, espaces tolérés)
 const TEL_FR_RE = /^(?:\+33|0)[1-9](?:\d{8})$/
 
+type CallbackDlqPayload = {
+  kind: 'callback'
+  preferredSlot: string | null
+  remarquesClient: string | null
+}
+
 const callbackSchema = z.object({
   publicId: z.string().min(8).max(64),
   callbackToken: z.string().min(10).max(256),
@@ -175,12 +181,13 @@ export async function POST(req: NextRequest) {
         estimation_id: estimation.id as string,
         // No PII in DLQ — only discriminator + callback-specific context.
         // Cron retry re-hydrates email/prénom/nom from simulateur_estimations.
+        // No PII in DLQ — telephone/email/prénom/nom re-hydrated from
+        // simulateur_estimations at cron replay time via estimation_id.
         payload: {
           kind: 'callback',
-          telephone,
           preferredSlot: preferredSlot ?? null,
           remarquesClient: remarquesClient ?? null,
-        } as unknown as Record<string, unknown>,
+        } satisfies CallbackDlqPayload as unknown as Record<string, unknown>,
         error: message.slice(0, 2000),
         retry_count: 0,
         next_retry_at: new Date().toISOString(),

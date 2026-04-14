@@ -26,7 +26,7 @@ import { createCallbackRequest, type CallbackPayload } from '@/lib/simulateur/ca
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-const BATCH_SIZE = 15
+const BATCH_SIZE = 8
 const DEADLINE_MS = 50_000
 
 interface FailureRow {
@@ -70,6 +70,36 @@ export async function GET(request: Request) {
   let failed = 0
   const startTs = Date.now()
 
+  // Batch-prefetch estimations for callback rows to avoid N+1 SELECTs.
+  const callbackEstimationIds = rows
+    .filter((r) => (r.payload as { kind?: string })?.kind === 'callback')
+    .map((r) => r.estimation_id)
+  const estimationsMap = new Map<
+    string,
+    {
+      prenom: string | null
+      nom: string | null
+      email: string | null
+      telephone: string | null
+      public_id: string
+    }
+  >()
+  if (callbackEstimationIds.length > 0) {
+    const { data: ests } = await supabase
+      .from('simulateur_estimations')
+      .select('id, prenom, nom, email, telephone, public_id')
+      .in('id', callbackEstimationIds)
+    for (const e of ests ?? []) {
+      estimationsMap.set(e.id as string, {
+        prenom: (e.prenom as string | null) ?? null,
+        nom: (e.nom as string | null) ?? null,
+        email: (e.email as string | null) ?? null,
+        telephone: (e.telephone as string | null) ?? null,
+        public_id: (e.public_id as string) ?? '',
+      })
+    }
+  }
+
   for (const row of rows) {
     if (Date.now() - startTs > DEADLINE_MS) {
       logger.warn('simulateur-pipedrive-retry: deadline reached, stopping batch', {
@@ -79,35 +109,35 @@ export async function GET(request: Request) {
       break
     }
     const rawPayload = row.payload as { kind?: string } & Record<string, unknown>
-    const kind = rawPayload?.kind === 'callback' ? 'callback' : 'submit'
+    const rawKind = rawPayload?.kind
+    if (rawKind !== undefined && rawKind !== 'callback' && rawKind !== 'submit') {
+      failed++
+      logger.error('simulateur-pipedrive-retry: unknown kind — skipping', {
+        id: row.id,
+        kind: rawKind,
+      })
+      continue
+    }
+    const kind: 'callback' | 'submit' = rawKind === 'callback' ? 'callback' : 'submit'
     try {
       let dealId: number | string
       if (kind === 'callback') {
-        // Re-hydrate PII from the estimation row (DLQ stores minimal info only)
-        const { data: est, error: estErr } = await supabase
-          .from('simulateur_estimations')
-          .select('prenom, nom, email, public_id')
-          .eq('id', row.estimation_id)
-          .maybeSingle()
-        if (estErr || !est || !est.email) {
+        const est = estimationsMap.get(row.estimation_id)
+        if (!est || !est.email || !est.telephone) {
           throw new Error(
-            `Cannot rehydrate callback: estimation ${row.estimation_id} missing or no email`
+            `Cannot rehydrate callback: estimation ${row.estimation_id} missing email/telephone`
           )
         }
         const ctx = rawPayload as {
-          telephone?: string
           preferredSlot?: string | null
           remarquesClient?: string | null
         }
-        if (!ctx.telephone) {
-          throw new Error(`Callback DLQ row ${row.id} missing telephone`)
-        }
         const cb: CallbackPayload = {
-          publicId: (est.public_id as string) ?? '',
-          prenom: (est.prenom as string | null) ?? null,
-          nom: (est.nom as string | null) ?? null,
-          email: est.email as string,
-          telephone: ctx.telephone,
+          publicId: est.public_id,
+          prenom: est.prenom,
+          nom: est.nom,
+          email: est.email,
+          telephone: est.telephone,
           preferredSlot: ctx.preferredSlot ?? null,
           remarquesClient: ctx.remarquesClient ?? null,
         }

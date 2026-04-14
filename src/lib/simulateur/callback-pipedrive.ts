@@ -26,8 +26,6 @@ export interface CallbackPayload {
   remarquesClient: string | null
 }
 
-type CallbackInput = CallbackPayload
-
 interface CallbackCfg {
   token: string
   baseUrl: string
@@ -72,6 +70,9 @@ async function pdFetch<T>(
       Accept: 'application/json',
       ...(init.headers || {}),
     },
+    // Hard per-call timeout to prevent a single slow Pipedrive call from
+    // consuming the entire 30s maxDuration budget.
+    signal: AbortSignal.timeout(8000),
   })
   const json = (await res.json().catch(() => ({}))) as PdResponse<T>
   if (!res.ok || !json.success) {
@@ -92,7 +93,7 @@ async function findPersonByEmail(cfg: CallbackCfg, email: string): Promise<numbe
   return res.data?.items?.[0]?.item.id ?? null
 }
 
-async function upsertPerson(cfg: CallbackCfg, input: CallbackInput): Promise<number> {
+async function upsertPerson(cfg: CallbackCfg, input: CallbackPayload): Promise<number> {
   const existingId = await findPersonByEmail(cfg, input.email)
   if (existingId) return existingId
 
@@ -125,7 +126,7 @@ async function findOpenDeal(cfg: CallbackCfg, personId: number): Promise<number 
 async function createCallbackDeal(
   cfg: CallbackCfg,
   personId: number,
-  input: CallbackInput
+  input: CallbackPayload
 ): Promise<number> {
   const title =
     `[RAPPEL] Simulateur — ${input.prenom ?? ''} ${input.nom ?? ''}`.trim() ||
@@ -154,7 +155,7 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;')
 }
 
-function buildNote(input: CallbackInput): string {
+function buildNote(input: CallbackPayload): string {
   const lines = [
     `<b>🔔 RAPPEL CONSEILLER DEMANDÉ</b>`,
     `<b>Estimation:</b> ${escapeHtml(input.publicId)}`,
@@ -167,7 +168,11 @@ function buildNote(input: CallbackInput): string {
   return lines.join('<br/>')
 }
 
-async function addDealNote(cfg: CallbackCfg, dealId: number, input: CallbackInput): Promise<void> {
+async function addDealNote(
+  cfg: CallbackCfg,
+  dealId: number,
+  input: CallbackPayload
+): Promise<void> {
   await pdFetch<unknown>(cfg, '/notes', {
     method: 'POST',
     body: JSON.stringify({ deal_id: dealId, content: buildNote(input) }),
@@ -178,12 +183,14 @@ async function addCallActivity(
   cfg: CallbackCfg,
   dealId: number,
   personId: number,
-  input: CallbackInput
+  input: CallbackPayload
 ): Promise<void> {
-  const subject = `Rappel conseiller — ${input.publicId}`
-  const note = `Téléphone: ${input.telephone}${
-    input.preferredSlot ? ` · Créneau: ${input.preferredSlot}` : ''
-  }${input.remarquesClient ? ` · Note: ${input.remarquesClient}` : ''}`
+  const subject = `Rappel conseiller — ${escapeHtml(input.publicId)}`
+  // Escape user-controlled fields defensively — Pipedrive activity note may be
+  // rendered as HTML in the sales UI depending on account config.
+  const note = `Téléphone: ${escapeHtml(input.telephone)}${
+    input.preferredSlot ? ` · Créneau: ${escapeHtml(input.preferredSlot)}` : ''
+  }${input.remarquesClient ? ` · Note: ${escapeHtml(input.remarquesClient)}` : ''}`
   // Due today, no specific time — sales team picks up ASAP.
   const dueDate = new Date().toISOString().slice(0, 10)
   await pdFetch<unknown>(cfg, '/activities', {
@@ -208,7 +215,7 @@ export interface CallbackResult {
  * Create or attach a callback request in Pipedrive. Throws on hard failure so
  * the caller can decide what to do; activity failure falls back to a note.
  */
-export async function createCallbackRequest(input: CallbackInput): Promise<CallbackResult> {
+export async function createCallbackRequest(input: CallbackPayload): Promise<CallbackResult> {
   const cfg = getConfig()
   if (!cfg) throw new Error('Pipedrive simulateur not configured')
 
