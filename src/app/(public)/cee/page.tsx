@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import CeeCTA from '@/components/cee/CeeCTA'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import {
   ShieldCheck,
   Home,
@@ -183,6 +184,13 @@ export default async function CeeHubPage() {
               Guide aides 2026
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Simulateur CTA — surface le simulateur unifié au-dessus du catalogue */}
+      <section className="bg-white border-b border-charcoal-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+          <SimulateurCTA variant="card" />
         </div>
       </section>
 
